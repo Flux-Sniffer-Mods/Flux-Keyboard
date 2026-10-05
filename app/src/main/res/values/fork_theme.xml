@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="keyboard_theme_wallpaper_colours_title">Colours from wallpaper</string>
+    <string name="keyboard_theme_wallpaper_colours_description">The keyboard takes its colours from your wallpaper, in light or dark mode. The theme\'s shape and sizes stay.</string>
+    <string name="keyboard_background_image_title">Background picture</string>
+    <string name="keyboard_background_image_description">A picture of yours behind the keys, over any theme.</string>
+    <string name="keyboard_background_image_choose">Choose</string>
+    <string name="keyboard_background_image_change">Change</string>
+    <string name="keyboard_background_image_remove">Remove</string>
+    <string name="keyboard_background_image_failed">Couldn\'t open that picture</string>
+    <string name="keyboard_background_auto_colours_title">Auto colours</string>
+    <string name="keyboard_background_auto_colours_description">See-through keys shaded against the picture: dark keys over a bright picture, light keys over a dark one, with text to match.</string>
+    <string name="keyboard_background_key_opacity_title">Key opacity: %1$d%%</string>
+    <string name="keyboard_background_key_opacity_search">Key opacity</string>
+    <string name="punctuation_name_full_stop">Full stop</string>
+    <string name="punctuation_name_comma">Comma</string>
+    <string name="punctuation_name_semicolon">Semicolon</string>
+    <string name="punctuation_name_colon">Colon</string>
+    <string name="punctuation_name_exclamation">Exclamation mark</string>
+    <string name="punctuation_name_question">Question mark</string>
+    <string name="keyboard_background_position_title">Picture position</string>
+    <string name="keyboard_background_position_description">Drag the picture behind the bar to move it; the slider zooms in. Pages like SYM and emoji show more of it.</string>
+    <string name="keyboard_background_zoom_title">Zoom: %1$d%%</string>
+    <string name="keyboard_background_position_reset">Reset position</string>
+    <string name="keyboard_background_rotate">↻ Rotate</string>
+</resources>
