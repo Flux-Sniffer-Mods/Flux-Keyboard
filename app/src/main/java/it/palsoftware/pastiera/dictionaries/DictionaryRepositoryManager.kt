@@ -58,6 +58,9 @@ object DictionaryRepositoryManager {
      * Fetches the dictionary manifest from the online repository.
      */
     suspend fun fetchManifest(): Result<DictionaryManifest> = withContext(Dispatchers.IO) {
+        if (it.palsoftware.pastiera.OfflineMode.enabled) {
+            return@withContext Result.failure(java.io.IOException("Offline mode is on"))
+        }
         try {
             Log.d(TAG, "Fetching manifest from: $MANIFEST_URL")
             val request = Request.Builder()
@@ -100,6 +103,7 @@ object DictionaryRepositoryManager {
         item: DictionaryItem,
         onProgress: ((Long, Long) -> Unit)? = null
     ): DownloadResult = withContext(Dispatchers.IO) {
+        if (it.palsoftware.pastiera.OfflineMode.enabled) return@withContext DownloadResult.NetworkError
         try {
             val request = Request.Builder()
                 .url(item.url)

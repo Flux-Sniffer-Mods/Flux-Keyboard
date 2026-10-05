@@ -40,7 +40,11 @@ object SuggestionButtonHandler {
                 shouldDisableAutoCapitalize = shouldDisableAutoCapitalize
             ) && SettingsManager.getAutoCapitalizeFirstLetter(context)
 
-            val committed = replaceCurrentWord(inputConnection, suggestion, forceLeadingCapital)
+            val committed = if (EmojiSuggestion.isEmoji(suggestion)) {
+                EmojiSuggestion.commitAfterWord(inputConnection, suggestion)
+            } else {
+                replaceCurrentWord(inputConnection, suggestion, forceLeadingCapital)
+            }
             if (committed) {
                 onSuggestionCommitted?.invoke()
             }
@@ -106,6 +110,9 @@ object SuggestionButtonHandler {
         }
 
         val wordBeforeCursor = before.substring(start)
+        // Typing in front of a word: a new word keeps the word after the cursor
+        val keepAfter = it.palsoftware.pastiera.core.suggestions.WordInFront.keepsWordAfter(suggestion, wordBeforeCursor, after.substring(0, end))
+        if (keepAfter) end = 0
         val wordAfterCursor = after.substring(0, end)
         val currentWord = wordBeforeCursor + wordAfterCursor
 

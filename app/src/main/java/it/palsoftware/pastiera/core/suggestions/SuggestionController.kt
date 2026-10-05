@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.core.suggestions
 
+import it.palsoftware.pastiera.SettingsManager
 import android.content.Context
 import android.content.res.AssetManager
 import android.os.Handler
@@ -60,6 +61,7 @@ class SuggestionController(
     )
     private var autoReplaceController = createAutoReplaceController()
     private val nextWordPredictor = nextWordPredictorOverride ?: NextWordPredictor(UserNGramStore(appContext))
+    private val frequentWordLearner by lazy { FrequentWordLearner(SettingsManager.getPreferences(appContext)) }
     private val extraSuggestionEngines = mutableMapOf<String, SuggestionLanguageEngine>()
 
     private data class SuggestionLanguageEngine(
@@ -174,6 +176,13 @@ class SuggestionController(
     private val cursorDebounceMs = 120L
     private var pendingAddUserWord: String? = null
     private var previousCompletedWord: String? = null
+
+    /**
+     * Incognito: nothing typed is learned (next words, sentence starts); predictions already
+     * learned are still offered. Set per field by the input method.
+     */
+    @Volatile
+    var incognito: Boolean = false
     private var pendingInitialContextConnection: InputConnection? = null
     @Volatile private var pendingPrimaryRefreshAfterLoad: Boolean = false
     @Volatile private var pendingExtraRefreshAfterLoad: Boolean = false
@@ -185,6 +194,15 @@ class SuggestionController(
         suggestionJob?.cancel()
         suggestionJob = null
     }
+
+    /**
+     * A second opinion for a word the dictionaries don't know (the phone's own spell checker):
+     * given the word and language, it answers with corrections, or not at all.
+     */
+    var externalSuggestions: ((word: String, locale: Locale, onResult: (List<String>) -> Unit) -> Unit)? = null
+
+    /** The text right after the cursor, for typing in front of a word ([WordInFront]). */
+    var textAfterCursorProvider: (() -> CharSequence?)? = null
 
     private fun updateSuggestionsForWord(word: String) {
         val settings = settingsProvider()
@@ -204,6 +222,8 @@ class SuggestionController(
         suggestionJob?.cancel()
 
         val wordSnapshot = word
+        WordInFront.trackedWord = word
+        val following = WordInFront.followingWord(runCatching { textAfterCursorProvider?.invoke() }.getOrNull())
         val localeSnapshot = currentLocale
         val layoutSnapshot = keyboardLayoutProvider()
         val primaryRepository = dictionaryRepository
@@ -243,7 +263,13 @@ class SuggestionController(
                 )
             }
 
-            val next = mergeSuggestionResults(primary, extraSuggestions, settings.maxSuggestions, localeSnapshot)
+            val merged = mergeSuggestionResults(primary, extraSuggestions, settings.maxSuggestions, localeSnapshot)
+            // In front of a word: the two joined, when that's a word too ("some|thing")
+            val joined = following.takeIf { it.isNotEmpty() && wordSnapshot.isNotEmpty() }?.let { wordSnapshot + it }
+                ?.takeIf { primaryRepository.isReady && isKnownWordInActiveDictionaries(it) }
+            val next = if (joined != null && merged.none { it.candidate.equals(joined, ignoreCase = true) }) {
+                (merged.take(1) + SuggestionResult(joined, 0, 1.0, SuggestionSource.MAIN) + merged.drop(1)).take(maxOf(settings.maxSuggestions, 3))
+            } else merged
             val pendingCandidate = addWordCandidateFor(wordSnapshot, primaryRepository)
 
             cursorHandler.post {
@@ -253,6 +279,20 @@ class SuggestionController(
                 pendingAddUserWord = pendingCandidate
                 latestSuggestions.set(next)
                 suggestionsListener?.invoke(next)
+                // Not a word Flux Keyboard knows as typed: the phone's spell checker's corrections join in
+                val exact = next.firstOrNull()?.let { it.distance == 0 && it.candidate.equals(wordSnapshot, ignoreCase = true) } == true
+                if (!exact && !incognito) externalSuggestions?.invoke(wordSnapshot, localeSnapshot) { extra ->
+                    cursorHandler.post {
+                        if (generation != suggestionGeneration || tracker.currentWord != wordSnapshot) return@post
+                        val fresh = extra.filter { candidate -> next.none { it.candidate.equals(candidate, ignoreCase = true) } }
+                            .map { SuggestionResult(it, 1, 0.5, SuggestionSource.MAIN) }
+                        if (fresh.isEmpty()) return@post
+                        val limit = maxOf(settings.maxSuggestions, 3)
+                        val merged = (next.take(1) + fresh + next.drop(1)).take(limit)
+                        latestSuggestions.set(merged)
+                        suggestionsListener?.invoke(merged)
+                    }
+                }
             }
         }
     }
@@ -263,6 +303,24 @@ class SuggestionController(
         if (!repository.isReady) return null
         return if (repository.isKnownWord(candidate)) null else candidate
     }
+    /**
+     * For the spell checker: whether [word] is in this keyboard's dictionary for [language], or
+     * null when that dictionary isn't the loaded one (or isn't loaded yet).
+     */
+    fun spellCheck(language: String, word: String, limit: Int): SpellCheckResult? {
+        if (!currentLocale.language.equals(language, ignoreCase = true)) return null
+        val repository = dictionaryRepository
+        if (!repository.isReady) return null
+        if (repository.isKnownWord(word)) return SpellCheckResult(true, emptyList())
+        val suggestions = suggestionEngine.suggest(word, limit).map { it.candidate }
+        return SpellCheckResult(false, suggestions)
+    }
+
+    data class SpellCheckResult(val known: Boolean, val suggestions: List<String>)
+
+    /** The word being typed, as the suggestions see it. */
+    fun currentWord(): String = tracker.currentWord
+
     var suggestionsListener: ((List<SuggestionResult>) -> Unit)? = onSuggestionsUpdated
 
     fun onCharacterCommitted(text: CharSequence, inputConnection: InputConnection?) {
@@ -530,7 +588,7 @@ class SuggestionController(
     }
 
     fun handleBackspaceUndo(keyCode: Int, inputConnection: InputConnection?): Boolean {
-        if (!isEnabled()) return false
+        // Text replacements apply with suggestions off too, so their undo does as well
         val undone = autoReplaceController.handleBackspaceUndo(keyCode, inputConnection)
         if (undone) {
             pendingAddUserWord = autoReplaceController.consumeLastUndoOriginalWord()
@@ -559,6 +617,14 @@ class SuggestionController(
         nextWordPredictor.destroy()
     }
 
+    /** A word outside the dictionary, typed often enough, goes into it ("Learn words you use often"). */
+    private fun learnIfUsedOften(word: String) {
+        if (!SettingsManager.getLearnFrequentWords(appContext)) return
+        // Until the dictionary is loaded every word would look new
+        if (!dictionaryRepository.isReady || isKnownWordInActiveDictionaries(word)) return
+        frequentWordLearner.countUse(word)?.let(::addUserWord)
+    }
+
     private fun handleCompletedWordBoundary(completedWord: String?, boundaryChar: Char?) {
         val settings = settingsProvider()
         if (!settings.suggestionsEnabled) {
@@ -569,13 +635,14 @@ class SuggestionController(
         }
 
         val cleanWord = completedWord?.trim()?.takeIf { it.any { ch -> ch.isLetterOrDigit() } }
-        if (cleanWord != null) {
+        if (cleanWord != null && !incognito) {
             if (sentenceStartPending) {
                 nextWordPredictor.learnSentenceStart(currentLocale, cleanWord)
             }
             previousCompletedWord?.let { previous ->
                 nextWordPredictor.learn(currentLocale, previous, cleanWord)
             }
+            learnIfUsedOften(cleanWord)
         }
 
         when {

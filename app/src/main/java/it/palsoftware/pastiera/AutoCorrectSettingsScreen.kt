@@ -80,7 +80,7 @@ private fun LanguageItem(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .heightIn(min = 64.dp)
             .clickable { onEdit() }
     ) {
         Row(
@@ -103,23 +103,20 @@ private fun LanguageItem(
                 Text(
                     text = languageName,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 if (isSystemLanguage) {
                     Text(
                         text = stringResource(R.string.auto_correct_system_language),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 if (isRicettePastiera) {
                     Text(
                         text = stringResource(R.string.auto_correct_ricette_pastiera_description),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -345,7 +342,7 @@ fun AutoCorrectSettingsScreen(
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
+                            .heightIn(min = 56.dp)
                     ) {
                         Box(
                             modifier = Modifier
@@ -400,7 +397,7 @@ fun AutoCorrectSettingsScreen(
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(48.dp)
+                                .heightIn(min = 48.dp)
                         ) {
                             Box(
                                 modifier = Modifier
@@ -442,7 +439,7 @@ fun AutoCorrectSettingsScreen(
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(48.dp)
+                                .heightIn(min = 48.dp)
                         ) {
                             Box(
                                 modifier = Modifier

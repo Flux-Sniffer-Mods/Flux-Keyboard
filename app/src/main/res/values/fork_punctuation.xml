@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emoticon_punctuation_title">Emoticons keep their shape</string>
+    <string name="emoticon_punctuation_description">Punctuation typed straight into more, as in :-) ;( :D or :\'(, gets no space after it. If a word follows (:Do), the space comes back. Full stops always keep their space.</string>
+    <string name="auto_cap_after_emoticon_title">Capital after an emoticon</string>
+    <string name="auto_cap_after_emoticon_description">A text emoticon such as :) ;D or &lt;3 ends a sentence like a full stop, so the next word starts with a capital.</string>
+</resources>

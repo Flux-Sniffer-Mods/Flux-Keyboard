@@ -533,8 +533,9 @@ class AutoReplaceController(
         keyCode: Int,
         inputConnection: InputConnection?
     ): Boolean {
-        val settings = settingsProvider()
-        if (!settings.autoReplaceOnSpaceEnter || keyCode != KeyEvent.KEYCODE_DEL || inputConnection == null) {
+        // Any replacement can be undone: auto-replace and text replacements (which apply even with
+        // auto-replace off), so no settings check here
+        if (keyCode != KeyEvent.KEYCODE_DEL || inputConnection == null) {
             return false
         }
 
@@ -581,9 +582,12 @@ class AutoReplaceController(
             deleteCount
         }
 
+        // Keep the space (or punctuation) typed after the word: undo brings the word back, and
+        // typing carries on where it was (palsoftware/pastiera#316)
+        val trailing = textBeforeCursor.takeLast(charsToDelete - replacement.replacedWord.length)
         inputConnection.beginBatchEdit()
         inputConnection.deleteSurroundingText(charsToDelete, 0)
-        inputConnection.commitText(replacement.originalWord, 1)
+        inputConnection.commitText(replacement.originalWord + trailing, 1)
         inputConnection.endBatchEdit()
         
         // Mark word as rejected so it won't be auto-corrected again

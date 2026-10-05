@@ -269,6 +269,7 @@ class AndroidDictionaryRepository(
     override fun isKnownWord(word: String): Boolean {
         if (!isReady) return false
         val normalized = normalize(word)
+        if (normalized.isEmpty()) return false
         return normalizedIndex[normalized]?.isNotEmpty() == true
     }
 
@@ -562,6 +563,8 @@ class AndroidDictionaryRepository(
 
         entries.forEach { entry ->
             val normalized = normalize(entry.word)
+            // No letters (a phone number): kept in the user dictionary, never matched as a word
+            if (normalized.isEmpty()) return@forEach
             val bucket = normalizedIndex.getOrPut(normalized) { mutableListOf() }
             bucket.removeAll { it.word.equals(entry.word, ignoreCase = true) && it.source == entry.source }
             bucket.add(entry)
@@ -654,6 +657,7 @@ class AndroidDictionaryRepository(
         }
         entries.forEach { entry ->
             val normalized = normalize(entry.word)
+            if (normalized.isEmpty()) return@forEach
             engine.addWord(normalized, effectiveFrequency(entry))
         }
     }
