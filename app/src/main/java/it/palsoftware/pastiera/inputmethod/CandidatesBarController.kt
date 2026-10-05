@@ -142,6 +142,113 @@ class CandidatesBarController(
             candidatesStatusBar.onSymCloseRequested = value
         }
 
+    var onEmojiLayerSearchRequested: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onEmojiLayerSearchRequested = value
+            candidatesStatusBar.onEmojiLayerSearchRequested = value
+        }
+
+    var onEmojiLayerRecentsToggled: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onEmojiLayerRecentsToggled = value
+            candidatesStatusBar.onEmojiLayerRecentsToggled = value
+        }
+
+    var onKaomojiKeyTapped: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onKaomojiKeyTapped = value
+            candidatesStatusBar.onKaomojiKeyTapped = value
+        }
+
+    var onKaomojiBackTapped: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onKaomojiBackTapped = value
+            candidatesStatusBar.onKaomojiBackTapped = value
+        }
+
+    var onLayerNextTapped: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onLayerNextTapped = value
+            candidatesStatusBar.onLayerNextTapped = value
+        }
+
+    var onEmojiVariantsRequested: ((String) -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onEmojiVariantsRequested = value
+            candidatesStatusBar.onEmojiVariantsRequested = value
+        }
+
+    var onEmojiLayerTyped: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onEmojiLayerTyped = value
+            candidatesStatusBar.onEmojiLayerTyped = value
+        }
+
+    var onKaomojiSearchRequested: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onKaomojiSearchRequested = value
+            candidatesStatusBar.onKaomojiSearchRequested = value
+        }
+
+    var onEmojiLayerGifRequested: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onEmojiLayerGifRequested = value
+            candidatesStatusBar.onEmojiLayerGifRequested = value
+        }
+
+    var onGifChosen: ((it.palsoftware.pastiera.data.gif.GifResult) -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onGifChosen = value
+            candidatesStatusBar.onGifChosen = value
+        }
+
+    var onSymbolSearchRequested: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onSymbolSearchRequested = value
+            candidatesStatusBar.onSymbolSearchRequested = value
+        }
+
+    /** The next time the emoji picker shows, open its symbol search. */
+    fun requestSymbolSearch(initialText: String? = null) {
+        inputStatusBar.requestSymbolSearch(initialText)
+        candidatesStatusBar.requestSymbolSearch(initialText)
+    }
+
+    /** The next time the emoji picker shows, open its kaomoji search. */
+    fun requestKaomojiSearch() {
+        inputStatusBar.requestKaomojiSearch()
+        candidatesStatusBar.requestKaomojiSearch()
+    }
+
+    /** The next time the emoji picker shows, open its GIF search. */
+    fun requestEmojiPickerGifs() {
+        inputStatusBar.requestEmojiPickerGifs()
+        candidatesStatusBar.requestEmojiPickerGifs()
+    }
+
+    /** The emoji picker is showing: its search (or GIF/symbol search) takes typing. */
+    fun focusEmojiPickerSearch() {
+        inputStatusBar.focusEmojiPickerSearch()
+        candidatesStatusBar.focusEmojiPickerSearch()
+    }
+
+    /** The next time the emoji picker shows, open its search. */
+    fun requestEmojiPickerSearch(initialText: String? = null) {
+        inputStatusBar.requestEmojiPickerSearch(initialText)
+        candidatesStatusBar.requestEmojiPickerSearch(initialText)
+    }
+
     var onUndoRequested: (() -> Unit)? = null
         set(value) {
             field = value
@@ -274,6 +381,12 @@ class CandidatesBarController(
         return bounds
     }
 
+    /** Hidden app with "Show status LEDs only": both surfaces draw only the LED strip. */
+    fun setLedsOnlyMode(active: Boolean) {
+        inputStatusBar.ledsOnlyMode = active
+        candidatesStatusBar.ledsOnlyMode = active
+    }
+
     fun setPastierinaModeActive(active: Boolean) {
         inputStatusBar.setPastierinaModeActive(active)
         candidatesStatusBar.setPastierinaModeActive(active)
@@ -376,6 +489,26 @@ class CandidatesBarController(
     fun showExpansionSuggestions(suggestions: List<String>, onSelected: (String) -> Unit) {
         inputStatusBar.showExpansionSuggestions(suggestions, onSelected)
         candidatesStatusBar.showExpansionSuggestions(suggestions, onSelected)
+    }
+
+    /** Autofill chips for the bar on screen: a chip can only be in one place. */
+    fun showInlineAutofill(views: List<android.view.View>) {
+        if (candidatesSurfaceActive) {
+            inputStatusBar.clearInlineAutofill()
+            candidatesStatusBar.showInlineAutofill(views)
+        } else {
+            candidatesStatusBar.clearInlineAutofill()
+            inputStatusBar.showInlineAutofill(views)
+        }
+    }
+
+    fun suggestionChipColours(): Pair<Int, Int> = inputStatusBar.suggestionChipColours()
+
+    fun suggestionChipHeight(): Int? = inputStatusBar.suggestionChipHeight()
+
+    fun clearInlineAutofill() {
+        inputStatusBar.clearInlineAutofill()
+        candidatesStatusBar.clearInlineAutofill()
     }
 
     fun clearExpansionSuggestions() {

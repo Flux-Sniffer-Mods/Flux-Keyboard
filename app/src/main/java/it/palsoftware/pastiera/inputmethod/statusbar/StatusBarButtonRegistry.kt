@@ -5,6 +5,7 @@ import android.view.View
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.statusbar.button.ClipboardButtonFactory
 import it.palsoftware.pastiera.inputmethod.statusbar.button.EmojiButtonFactory
+import it.palsoftware.pastiera.inputmethod.statusbar.button.GifButtonFactory
 import it.palsoftware.pastiera.inputmethod.statusbar.button.HamburgerButtonFactory
 import it.palsoftware.pastiera.inputmethod.statusbar.button.LanguageButtonFactory
 import it.palsoftware.pastiera.inputmethod.statusbar.button.MinimalUiButtonFactory
@@ -42,6 +43,7 @@ class StatusBarButtonRegistry {
     private val microphoneFactory = MicrophoneButtonFactory()
     private val languageFactory = LanguageButtonFactory()
     private val emojiFactory = EmojiButtonFactory()
+    private val gifFactory = GifButtonFactory()
     private val hamburgerFactory = HamburgerButtonFactory()
     private val minimalUiFactory = MinimalUiButtonFactory()
     private val softwareKeyboardModeFactory = SoftwareKeyboardModeButtonFactory()
@@ -56,6 +58,7 @@ class StatusBarButtonRegistry {
         factories[StatusBarButtonId.Microphone] = microphoneFactory
         factories[StatusBarButtonId.Language] = languageFactory
         factories[StatusBarButtonId.Emoji] = emojiFactory
+        factories[StatusBarButtonId.Gif] = gifFactory
         factories[StatusBarButtonId.Hamburger] = hamburgerFactory
         factories[StatusBarButtonId.MinimalUi] = minimalUiFactory
         factories[StatusBarButtonId.SoftwareKeyboardMode] = softwareKeyboardModeFactory
@@ -84,7 +87,7 @@ class StatusBarButtonRegistry {
      * @return true if the factory was removed, false if it wasn't registered or is built-in
      */
     fun unregister(id: StatusBarButtonId): Boolean {
-        if (id in listOf(StatusBarButtonId.Clipboard, StatusBarButtonId.Microphone, StatusBarButtonId.Language, StatusBarButtonId.Emoji, StatusBarButtonId.Hamburger, StatusBarButtonId.MinimalUi, StatusBarButtonId.SoftwareKeyboardMode, StatusBarButtonId.Settings, StatusBarButtonId.Symbols, StatusBarButtonId.Undo, StatusBarButtonId.Redo)) {
+        if (id in listOf(StatusBarButtonId.Clipboard, StatusBarButtonId.Microphone, StatusBarButtonId.Language, StatusBarButtonId.Emoji, StatusBarButtonId.Gif, StatusBarButtonId.Hamburger, StatusBarButtonId.MinimalUi, StatusBarButtonId.SoftwareKeyboardMode, StatusBarButtonId.Settings, StatusBarButtonId.Symbols, StatusBarButtonId.Undo, StatusBarButtonId.Redo)) {
             return false // Cannot unregister built-in buttons
         }
         return factories.remove(id) != null
@@ -156,14 +159,24 @@ class StatusBarButtonRegistry {
         return getEnabledButtons(
             leftSlots = SettingsManager.getStatusBarSlotsLeft(context),
             rightSlots = SettingsManager.getStatusBarSlotsRight(context)
-        )
+        ).filterNot { it.id in hiddenForApp }
     }
 
     fun getEnabledPastierinaButtons(context: Context): List<StatusBarButtonConfig> {
         return getEnabledButtons(
             leftSlots = SettingsManager.getPastierinaStatusBarSlotsLeft(context),
             rightSlots = SettingsManager.getPastierinaStatusBarSlotsRight(context)
-        )
+        ).filterNot { it.id in hiddenForApp }
+    }
+
+    companion object {
+        /** Buttons the current app has no use for: the microphone in terminal apps. */
+        @Volatile
+        var hiddenForApp: Set<StatusBarButtonId> = emptySet()
+
+        fun setTerminalApp(terminal: Boolean) {
+            hiddenForApp = if (terminal) setOf(StatusBarButtonId.Microphone) else emptySet()
+        }
     }
 
     fun getEnabledButtons(
@@ -206,6 +219,7 @@ class StatusBarButtonRegistry {
             SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD -> StatusBarButtonId.Clipboard
             SettingsManager.STATUS_BAR_BUTTON_MICROPHONE -> StatusBarButtonId.Microphone
             SettingsManager.STATUS_BAR_BUTTON_EMOJI -> StatusBarButtonId.Emoji
+            SettingsManager.STATUS_BAR_BUTTON_GIF -> StatusBarButtonId.Gif
             SettingsManager.STATUS_BAR_BUTTON_LANGUAGE -> StatusBarButtonId.Language
             SettingsManager.STATUS_BAR_BUTTON_HAMBURGER -> StatusBarButtonId.Hamburger
             SettingsManager.STATUS_BAR_BUTTON_MINIMAL_UI -> StatusBarButtonId.MinimalUi

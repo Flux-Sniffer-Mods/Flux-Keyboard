@@ -2,6 +2,7 @@ package it.palsoftware.pastiera
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.foundation.clickable
@@ -55,16 +59,6 @@ fun StatusBarButtonsScreen(
     var dynamicVariationsResizeToContent by remember {
         mutableStateOf(SettingsManager.getDynamicVariationBarResizeToContent(context))
     }
-    var titan2EliteRoundedCornerInsetsEnabled by remember {
-        mutableStateOf(SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context))
-    }
-    var titan2EliteFillBottomCorners by remember {
-        mutableStateOf(SettingsManager.getTitan2EliteFillBottomCorners(context))
-    }
-    var topCornerMultiplier by remember {
-        mutableStateOf(SettingsManager.getTitan2EliteTopCornerMultiplier(context))
-    }
-    var maxIconShrink by remember { mutableStateOf(SettingsManager.getTitan2EliteMaxIconShrink(context)) }
     var editorMode by remember {
         mutableStateOf(
             if (
@@ -267,91 +261,6 @@ fun StatusBarButtonsScreen(
                 stringResource(R.string.pastierina_preview_suggestions)
             } else null
         )
-
-        SettingsSectionDivider(stringResource(R.string.device_specific_interface_section))
-        Surface(modifier = Modifier.fillMaxWidth().settingRow("status_bar.rounded_corners")) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.titan2_elite_rounded_corners_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = stringResource(R.string.titan2_elite_rounded_corners_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                FeatureStatusIcon(FeatureStatus.Construction)
-                Switch(
-                    checked = titan2EliteRoundedCornerInsetsEnabled,
-                    onCheckedChange = { enabled ->
-                        titan2EliteRoundedCornerInsetsEnabled = enabled
-                        SettingsManager.setTitan2EliteRoundedCornerInsetsEnabled(context, enabled)
-                    }
-                )
-            }
-        }
-
-        if (titan2EliteRoundedCornerInsetsEnabled) {
-            Surface(modifier = Modifier.fillMaxWidth().settingRow("status_bar.fill_bottom_corners")) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.titan2_elite_fill_bottom_corners_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Text(
-                            text = stringResource(R.string.titan2_elite_fill_bottom_corners_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    Switch(
-                        checked = titan2EliteFillBottomCorners,
-                        onCheckedChange = { enabled ->
-                            titan2EliteFillBottomCorners = enabled
-                            SettingsManager.setTitan2EliteFillBottomCorners(context, enabled)
-                        }
-                    )
-                }
-            }
-            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)) {
-                Text(stringResource(R.string.titan2_elite_top_corner_title), modifier = Modifier.fillMaxWidth().settingRow("status_bar.top_corner"), style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface)
-                Text(stringResource(R.string.titan2_elite_top_corner_description),
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf(1, 2, 4, 6).forEach { multiplier ->
-                        FilterChip(
-                            selected = topCornerMultiplier == multiplier,
-                            onClick = {
-                                topCornerMultiplier = multiplier
-                                SettingsManager.setTitan2EliteTopCornerMultiplier(context, multiplier)
-                            },
-                            label = { Text("${multiplier}×") }
-                        )
-                    }
-                }
-                Text(stringResource(R.string.titan2_elite_max_icon_shrink_title, maxIconShrink),
-                    modifier = Modifier.fillMaxWidth().settingRow("status_bar.max_icon_shrink"), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-                Text(stringResource(R.string.titan2_elite_max_icon_shrink_description),
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Slider(value = maxIconShrink.toFloat(), valueRange = 0f..90f, steps = 8,
-                    onValueChange = { maxIconShrink = (it / 10f).toInt() * 10 },
-                    onValueChangeFinished = { SettingsManager.setTitan2EliteMaxIconShrink(context, maxIconShrink) })
-            }
-        }
 
         if (editorMode == StatusBarEditorMode.Extended) {
             SettingsSectionDivider(stringResource(R.string.extended_status_bar_features_section))
@@ -569,7 +478,126 @@ fun StatusBarButtonsScreen(
             )
         }
 
+        SettingsSectionDivider(stringResource(R.string.menu_bar_section))
+        MenuBarEditor()
+
         Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+/** The menu bar (opened with ☰): which buttons it shows and in what order. */
+@Composable
+private fun MenuBarEditor() {
+    val context = LocalContext.current
+    var shown by remember { mutableStateOf(SettingsManager.getMenuBarButtons(context)) }
+    val hidden = SettingsManager.MENU_BAR_BUTTON_OPTIONS.filter { it !in shown }
+    fun save(buttons: List<String>) {
+        shown = buttons
+        SettingsManager.setMenuBarButtons(context, buttons)
+    }
+    Text(
+        text = stringResource(R.string.menu_bar_description),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).settingRow("status_bar.menu_bar")
+    )
+    // The menu bar as it will look: close first, then your buttons, sharing the width equally
+    // like the real bar
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
+            .padding(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        @Composable
+        fun RowScope.PreviewKey(content: @Composable () -> Unit) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    // The bar's height stays put: fewer buttons make each one wider, not taller
+                    .height(40.dp)
+                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
+                contentAlignment = Alignment.Center
+            ) { content() }
+        }
+        PreviewKey {
+            Icon(
+                Icons.Filled.Close,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(22.dp)
+            )
+        }
+        shown.forEach { buttonId ->
+            PreviewKey {
+                Icon(
+                    painter = painterResource(getButtonIconRes(buttonId)),
+                    contentDescription = getButtonDisplayName(buttonId),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+        }
+    }
+    (shown + hidden).forEach { buttonId ->
+        val index = shown.indexOf(buttonId)
+        Row(
+            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val on = index >= 0
+            // Explicit colours: these rows aren't inside a Surface, so nothing else sets them
+            val textColor = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+            Icon(
+                painter = painterResource(getButtonIconRes(buttonId)),
+                contentDescription = null,
+                tint = if (on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(24.dp)
+            )
+            Text(
+                text = getButtonDisplayName(buttonId),
+                style = MaterialTheme.typography.bodyLarge,
+                color = textColor,
+                modifier = Modifier.weight(1f)
+            )
+            if (on) {
+                val arrowColors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
+                )
+                IconButton(
+                    onClick = { save(shown.toMutableList().also { it.add(index - 1, it.removeAt(index)) }) },
+                    enabled = index > 0,
+                    colors = arrowColors
+                ) {
+                    Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.menu_bar_move_up))
+                }
+                IconButton(
+                    onClick = { save(shown.toMutableList().also { it.add(index + 1, it.removeAt(index)) }) },
+                    enabled = index < shown.size - 1,
+                    colors = arrowColors
+                ) {
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.menu_bar_move_down))
+                }
+            }
+            Switch(
+                checked = index >= 0,
+                onCheckedChange = { on -> save(if (on) shown + buttonId else shown - buttonId) }
+            )
+        }
+    }
+    TextButton(
+        onClick = {
+            SettingsManager.resetMenuBarButtons(context)
+            shown = SettingsManager.getMenuBarButtons(context)
+        },
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
+        Text(stringResource(R.string.menu_bar_reset))
     }
 }
 @Composable
@@ -734,35 +762,13 @@ fun ModifierIndicatorMultiSelect(
                         if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
                     )
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = getModifierIndicatorLabel(indicator),
-                            style = if (
-                                indicator == SettingsManager.MODIFIER_INDICATOR_BOTTOM_STRIP ||
-                                indicator == SettingsManager.MODIFIER_INDICATOR_STATUS_BAR
-                            ) {
-                                MaterialTheme.typography.labelSmall
-                            } else {
-                                MaterialTheme.typography.labelMedium
-                            },
+                            style = MaterialTheme.typography.labelMedium,
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
                             maxLines = 1
                         )
-                        if (
-                            indicator == SettingsManager.MODIFIER_INDICATOR_BOTTOM_STRIP ||
-                            indicator == SettingsManager.MODIFIER_INDICATOR_STATUS_BAR
-                        ) {
-                            Text(
-                                text = "WIP",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
                     }
                 }
             }
@@ -958,6 +964,7 @@ private fun getButtonDisplayName(buttonId: String): String {
         SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD -> stringResource(R.string.status_bar_button_clipboard)
         SettingsManager.STATUS_BAR_BUTTON_MICROPHONE -> stringResource(R.string.status_bar_button_microphone)
         SettingsManager.STATUS_BAR_BUTTON_EMOJI -> stringResource(R.string.status_bar_button_emoji)
+        SettingsManager.STATUS_BAR_BUTTON_GIF -> stringResource(R.string.status_bar_button_gif)
         SettingsManager.STATUS_BAR_BUTTON_LANGUAGE -> stringResource(R.string.status_bar_button_language)
         SettingsManager.STATUS_BAR_BUTTON_HAMBURGER -> stringResource(R.string.status_bar_button_hamburger)
         SettingsManager.STATUS_BAR_BUTTON_MINIMAL_UI -> stringResource(R.string.status_bar_button_minimal_ui)
@@ -977,6 +984,7 @@ private fun getButtonDescription(buttonId: String): String {
         SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD -> stringResource(R.string.status_bar_button_clipboard_description)
         SettingsManager.STATUS_BAR_BUTTON_MICROPHONE -> stringResource(R.string.status_bar_button_microphone_description)
         SettingsManager.STATUS_BAR_BUTTON_EMOJI -> stringResource(R.string.status_bar_button_emoji_description)
+        SettingsManager.STATUS_BAR_BUTTON_GIF -> stringResource(R.string.status_bar_button_gif_description)
         SettingsManager.STATUS_BAR_BUTTON_LANGUAGE -> stringResource(R.string.status_bar_button_language_description)
         SettingsManager.STATUS_BAR_BUTTON_HAMBURGER -> stringResource(R.string.status_bar_button_hamburger_description)
         SettingsManager.STATUS_BAR_BUTTON_MINIMAL_UI -> stringResource(R.string.status_bar_button_minimal_ui_description)
@@ -998,6 +1006,7 @@ private fun getButtonIconRes(buttonId: String): Int {
         SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD -> R.drawable.ic_content_paste_24
         SettingsManager.STATUS_BAR_BUTTON_MICROPHONE -> R.drawable.ic_baseline_mic_24
         SettingsManager.STATUS_BAR_BUTTON_EMOJI -> R.drawable.ic_emoji_emotions_24
+        SettingsManager.STATUS_BAR_BUTTON_GIF -> R.drawable.ic_gif_24
         SettingsManager.STATUS_BAR_BUTTON_LANGUAGE -> R.drawable.ic_globe_24
         SettingsManager.STATUS_BAR_BUTTON_HAMBURGER -> R.drawable.ic_menu_24
         SettingsManager.STATUS_BAR_BUTTON_MINIMAL_UI -> R.drawable.ic_minimal_ui_24

@@ -11,6 +11,7 @@ sealed class StatusBarButtonId(val key: String) {
     object Microphone : StatusBarButtonId("microphone")
     object Language : StatusBarButtonId("language")
     object Emoji : StatusBarButtonId("emoji")
+    object Gif : StatusBarButtonId("gif")
     object Hamburger : StatusBarButtonId("hamburger")
     object MinimalUi : StatusBarButtonId("minimal_ui")
     object SoftwareKeyboardMode : StatusBarButtonId("software_keyboard_mode")
@@ -76,6 +77,9 @@ data class StatusBarCallbacks(
     
     /** Called when emoji button is clicked */
     val onEmojiPickerRequested: (() -> Unit)? = null,
+
+    /** Called when the GIF button is clicked (the picker, in GIF search) */
+    val onGifSearchRequested: (() -> Unit)? = null,
     
     /** Called when language button is clicked */
     val onLanguageSwitchRequested: (() -> Unit)? = null,

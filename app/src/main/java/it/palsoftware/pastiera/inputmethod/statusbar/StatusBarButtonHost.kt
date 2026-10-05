@@ -105,17 +105,22 @@ class StatusBarButtonHost(
     fun setOuterEdge(id: StatusBarButtonId, edge: StatusBarButtonPosition?) {
         val hosted = hostedButtons[id] ?: return
         if (edge == null) outerEdges.remove(hosted.button) else outerEdges[hosted.button] = edge
+        // Lets the chrome find the corner buttons (straight outer buttons reach into the corners)
+        hosted.button.setTag(it.palsoftware.pastiera.R.id.tag_outer_edge_button, edge)
         applyTheme(hosted.button, resolveThemeHeight(hosted))
     }
 
     fun updateButtonLayout(id: StatusBarButtonId, width: Int, height: Int) {
         val hosted = hostedButtons[id] ?: return
         if (hosted.container is FrameLayout) {
-            val params = (hosted.button.layoutParams as? FrameLayout.LayoutParams)
-                ?: FrameLayout.LayoutParams(width, height)
-            params.width = width
-            params.height = height
-            hosted.button.layoutParams = params
+            val current = hosted.button.layoutParams as? FrameLayout.LayoutParams
+            // Skip unchanged sizes: re-assigning requests another layout pass every time
+            if (current == null || current.width != width || current.height != height) {
+                hosted.button.layoutParams = (current ?: FrameLayout.LayoutParams(width, height)).apply {
+                    this.width = width
+                    this.height = height
+                }
+            }
         }
     }
 
@@ -208,9 +213,9 @@ class StatusBarButtonHost(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     Gravity.END or Gravity.TOP
                 ).apply {
-                    val margin = dpToPx(2f)
-                    val offset = dpToPx(2f)
-                    setMargins(margin, margin + offset, margin, margin)
+                    // Tucked into the top corner
+                    val margin = dpToPx(3f)
+                    setMargins(margin, margin, margin, margin)
                 }
             )
         }
@@ -238,7 +243,7 @@ class StatusBarButtonHost(
                 it.palsoftware.pastiera.SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)
             badge.setTextSize(TypedValue.COMPLEX_UNIT_SP, if (enlargedPastierinaButton) 14f else 10f)
             (badge.layoutParams as? FrameLayout.LayoutParams)?.let { badgeParams ->
-                val rightMargin = dpToPx(if (enlargedPastierinaButton) 12f else 2f)
+                val rightMargin = dpToPx(if (enlargedPastierinaButton) 12f else 3f)
                 if (badgeParams.rightMargin != rightMargin) {
                     badgeParams.rightMargin = rightMargin
                     badge.layoutParams = badgeParams
@@ -246,7 +251,12 @@ class StatusBarButtonHost(
             }
         }
         val theme = themeOverride ?: return
-        (view.getTag(it.palsoftware.pastiera.R.id.tag_badge_view) as? TextView)?.setTextColor(theme.iconColor)
+        (view.getTag(it.palsoftware.pastiera.R.id.tag_badge_view) as? TextView)?.let { badge ->
+            // An accent-coloured pill, with whichever of black or white reads on it
+            (badge.background as? android.graphics.drawable.GradientDrawable)?.setColor(theme.pressedColor)
+            val light = androidx.core.graphics.ColorUtils.calculateLuminance(theme.pressedColor) > 0.5
+            badge.setTextColor(if (light) android.graphics.Color.BLACK else android.graphics.Color.WHITE)
+        }
         val height = view.layoutParams?.height?.takeIf { it > 0 }
             ?: view.height.takeIf { it > 0 }
             ?: fallbackHeight?.takeIf { it > 0 }
@@ -263,7 +273,8 @@ class StatusBarButtonHost(
             )
             view.background = if (
                 outerEdges[view] != null &&
-                it.palsoftware.pastiera.SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)
+                it.palsoftware.pastiera.SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context) &&
+                !it.palsoftware.pastiera.SettingsManager.getTitan2EliteStraightOuterButtons(context)
             ) {
                 CurvedCornerButtonDrawable(
                     view, normalColor,
