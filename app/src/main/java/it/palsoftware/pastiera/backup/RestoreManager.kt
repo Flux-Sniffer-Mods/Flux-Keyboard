@@ -88,7 +88,23 @@ object RestoreManager {
             context.contentResolver.openInputStream(sourceUri)?.use { input ->
                 ZipHelper.unzip(input, extractedDir)
             } ?: return@withContext RestoreResult.Failure("Unable to open source backup")
+            restoreExtracted(context, extractedDir, importMode)
+        } catch (e: Exception) {
+            Log.e(TAG, "Restore failed", e)
+            RestoreResult.Failure(e.message ?: "Restore failed")
+        } finally {
+            extractedDir.deleteRecursively()
+            workingDir.deleteRecursively()
+        }
+    }
 
+    /** Restores an unpacked backup (a backup_meta.json with prefs/ and files/ next to it). */
+    internal fun restoreExtracted(
+        context: Context,
+        extractedDir: File,
+        importMode: ImportMode = ImportMode.UNCHANGED
+    ): RestoreResult {
+        try {
             val metadata = BackupMetadata.fromFile(File(extractedDir, "backup_meta.json"))
             val prefsDir = File(extractedDir, "prefs")
             val filesDir = File(extractedDir, "files")
@@ -115,7 +131,7 @@ object RestoreManager {
             val postRestoreActions = collectTriggeredPostRestoreActions(prefsSummary, fileSummary)
             notifyPostRestoreEffects(context, postRestoreActions)
 
-            RestoreResult.Success(
+            return RestoreResult.Success(
                 metadata = metadata,
                 preferencesSummary = prefsSummary,
                 fileSummary = fileSummary,
@@ -123,10 +139,7 @@ object RestoreManager {
             )
         } catch (e: Exception) {
             Log.e(TAG, "Restore failed", e)
-            RestoreResult.Failure(e.message ?: "Restore failed")
-        } finally {
-            extractedDir.deleteRecursively()
-            workingDir.deleteRecursively()
+            return RestoreResult.Failure(e.message ?: "Restore failed")
         }
     }
 

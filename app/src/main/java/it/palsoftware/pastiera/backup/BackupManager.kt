@@ -281,7 +281,8 @@ object FileBackupHelper {
         "ctrl_key_mappings.json",
         "variations.json",
         "user_defaults.json",
-        "locale_layout_mapping.json"
+        "locale_layout_mapping.json",
+        it.palsoftware.pastiera.KeyboardBackgroundImage.FILE_NAME
     )
     private val allowedDirectories = setOf(
         "keyboard_layouts"
