@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="one_time_codes_title">One-time codes</string>
+    <string name="one_time_codes_description">Offer a code from a text or email as a chip in the next text field. Needs notification access; only the code is kept, in memory, for 3 minutes.</string>
+    <string name="one_time_code_chip">Code %1$s</string>
+</resources>
