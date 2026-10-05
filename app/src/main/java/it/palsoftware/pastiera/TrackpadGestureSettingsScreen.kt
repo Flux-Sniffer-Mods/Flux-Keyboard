@@ -50,8 +50,12 @@ fun TrackpadGestureSettingsScreen(
     var deleteSwipeThreshold by remember {
         mutableStateOf(SettingsManager.getTrackpadDeleteSwipeThreshold(context))
     }
+    var sideSwipeThreshold by remember {
+        mutableStateOf(SettingsManager.getTrackpadSideSwipeThreshold(context))
+    }
     var showTutorialDialog by remember { mutableStateOf(false) }
-    var showSensitivitySettings by remember { mutableStateOf(settingsChild(context, "trackpad") == "sensitivity") }
+    // The sensitivity sliders are on the main page now; an old link to their page lands there
+    var showSensitivitySettings by remember { mutableStateOf(false) }
     var shizukuStatus by remember { mutableStateOf(ShizukuStatus.NotConnected) }
     var trackpadProvider by remember { mutableStateOf(SettingsManager.getTrackpadProvider(context)) }
     var providerMenuExpanded by remember { mutableStateOf(false) }
@@ -60,9 +64,17 @@ fun TrackpadGestureSettingsScreen(
     var shizukuDevices by remember { mutableStateOf<List<TrackpadInputDevice>>(emptyList()) }
     var shizukuDeviceDiscoveryFailed by remember { mutableStateOf(false) }
     var swipeToDelete by remember { mutableStateOf(SettingsManager.getSwipeToDelete(context)) }
+    var swipeDirections by remember { mutableStateOf(SettingsManager.getTrackpadSuggestionSwipeDirections(context)) }
+    var swipeDownDeletes by remember { mutableStateOf(SettingsManager.getTrackpadSwipeDownDeletesWord(context)) }
     var swipeToDeleteProvider by remember { mutableStateOf(SettingsManager.getSwipeToDeleteProvider(context)) }
     var swipeToDeleteProviderMenuExpanded by remember { mutableStateOf(false) }
     val highlightedSettingId = LocalSettingHighlightId.current
+    // Adding words needs the dictionary: suggestions on
+    val dictionaryOn = SettingsManager.isExperimentalSuggestionsEnabled(context) &&
+        SettingsManager.getSuggestionsEnabled(context)
+    // Trackpad swipes need a trackpad: the Titan 2's or Titan 2 Elite's, or one read through Shizuku
+    val hasTrackpad = it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2Device() ||
+        trackpadProvider == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU
     val trackpadProviderOptions = listOf(
         SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME to stringResource(R.string.trackpad_provider_native_ime),
         SettingsManager.TRACKPAD_PROVIDER_SHIZUKU to stringResource(R.string.trackpad_provider_shizuku)
@@ -76,11 +88,14 @@ fun TrackpadGestureSettingsScreen(
     LaunchedEffect(highlightedSettingId) {
         when (highlightedSettingId) {
             SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
-            SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD -> showSensitivitySettings = true
+            SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD -> showSensitivitySettings = false
             "trackpad.add_word",
             "trackpad.add_word_full_width",
             "trackpad.swipe_to_delete",
             "trackpad.swipe_to_delete_provider",
+            "trackpad.suggestion_swipe_directions",
+            "trackpad.phone_settings",
             SettingLinkIds.TRACKPAD_GESTURES_ENABLED,
             SettingLinkIds.TRACKPAD_PROVIDER,
             SettingLinkIds.TRACKPAD_SHIZUKU_DEVICE,
@@ -168,6 +183,11 @@ fun TrackpadGestureSettingsScreen(
                         suggestionSwipeThreshold = newValue
                         SettingsManager.setTrackpadSuggestionSwipeThreshold(context, newValue)
                     },
+                    sideSwipeThreshold = sideSwipeThreshold,
+                    onSideSwipeThresholdChange = { newValue ->
+                        sideSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSideSwipeThreshold(context, newValue)
+                    },
                     deleteSwipeThreshold = deleteSwipeThreshold,
                     onDeleteSwipeThresholdChange = { newValue ->
                         deleteSwipeThreshold = newValue
@@ -181,7 +201,7 @@ fun TrackpadGestureSettingsScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .heightIn(min = 64.dp)
                     .settingRow(SettingLinkIds.TRACKPAD_GESTURES_ENABLED)
             ) {
                 Row(
@@ -201,14 +221,12 @@ fun TrackpadGestureSettingsScreen(
                         Text(
                             text = stringResource(R.string.trackpad_gestures_enabled_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.trackpad_gestures_enabled_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     FeatureStatusIcon(FeatureStatus.Experimental)
@@ -225,7 +243,7 @@ fun TrackpadGestureSettingsScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .heightIn(min = 64.dp)
                     .settingRow("trackpad.add_word")
             ) {
                 Row(
@@ -240,19 +258,24 @@ fun TrackpadGestureSettingsScreen(
                         Text(
                             text = stringResource(R.string.trackpad_gesture_add_word_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.trackpad_gesture_add_word_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        if (!dictionaryOn) {
+                            Text(
+                                text = stringResource(R.string.trackpad_gesture_add_word_needs_dictionary),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                     Switch(
                         checked = trackpadGestureAddWordEnabled,
-                        enabled = trackpadGesturesEnabled,
+                        enabled = trackpadGesturesEnabled && dictionaryOn,
                         onCheckedChange = { enabled ->
                             trackpadGestureAddWordEnabled = enabled
                             SettingsManager.setTrackpadGestureAddWordEnabled(context, enabled)
@@ -264,7 +287,7 @@ fun TrackpadGestureSettingsScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .heightIn(min = 64.dp)
                     .settingRow("trackpad.add_word_full_width")
             ) {
                 Row(
@@ -279,19 +302,17 @@ fun TrackpadGestureSettingsScreen(
                         Text(
                             text = stringResource(R.string.trackpad_gesture_add_word_full_width_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.trackpad_gesture_add_word_full_width_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Switch(
                         checked = trackpadGestureAddWordFullWidthEnabled,
-                        enabled = trackpadGesturesEnabled && trackpadGestureAddWordEnabled,
+                        enabled = trackpadGesturesEnabled && trackpadGestureAddWordEnabled && dictionaryOn,
                         onCheckedChange = { enabled ->
                             trackpadGestureAddWordFullWidthEnabled = enabled
                             SettingsManager.setTrackpadGestureAddWordFullWidthEnabled(context, enabled)
@@ -484,192 +505,188 @@ fun TrackpadGestureSettingsScreen(
                 }
             }
 
+            SettingsSectionDivider(stringResource(R.string.trackpad_section_swipes))
+            // While typing, the keyboard's swipes are kept from the app, whatever Scroll assistant's list
+            var captureWhileTyping by remember { mutableStateOf(SettingsManager.getTrackpadCaptureWhileTyping(context)) }
+            FluxSwitchRow(
+                linkId = "trackpad.capture_while_typing",
+                title = stringResource(R.string.trackpad_capture_title),
+                description = stringResource(R.string.trackpad_capture_description),
+                checked = captureWhileTyping,
+                onCheckedChange = {
+                    captureWhileTyping = it
+                    SettingsManager.setTrackpadCaptureWhileTyping(context, it)
+                }
+            )
+            TrackpadAppsSection()
+            FluxSwitchRow(
+                linkId = "trackpad.suggestion_swipe_directions",
+                title = stringResource(R.string.trackpad_swipe_directions_title),
+                description = stringResource(R.string.trackpad_swipe_directions_description),
+                checked = swipeDirections,
+                onCheckedChange = {
+                    swipeDirections = it
+                    SettingsManager.setTrackpadSuggestionSwipeDirections(context, it)
+                    // Left becomes a suggestion swipe: a left delete moves down instead
+                    if (it && swipeToDelete) {
+                        swipeToDelete = false
+                        SettingsManager.setSwipeToDelete(context, false)
+                        swipeDownDeletes = true
+                        SettingsManager.setTrackpadSwipeDownDeletesWord(context, true)
+                    }
+                }
+            )
+
+            // One choice for deleting a word with a swipe: off, left or down
+            val deleteSwipe = when {
+                swipeToDelete && !swipeDirections -> "left"
+                swipeDownDeletes -> "down"
+                else -> "off"
+            }
+            val deleteSwipeOptions = listOf(
+                "off" to stringResource(R.string.swipe_delete_off),
+                "left" to stringResource(if (swipeDirections) R.string.swipe_delete_left_taken else R.string.swipe_delete_left),
+                "down" to stringResource(R.string.swipe_delete_down)
+            )
+            var deleteSwipeMenuExpanded by remember { mutableStateOf(false) }
             ExposedDropdownMenuBox(
-                expanded = swipeToDeleteProviderMenuExpanded,
-                onExpandedChange = { swipeToDeleteProviderMenuExpanded = it },
+                expanded = deleteSwipeMenuExpanded,
+                onExpandedChange = { deleteSwipeMenuExpanded = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-                    .settingRow("trackpad.swipe_to_delete_provider")
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .settingRow("trackpad.swipe_to_delete")
             ) {
                 OutlinedTextField(
-                    value = swipeToDeleteProviderOptions.firstOrNull { it.first == swipeToDeleteProvider }?.second ?: swipeToDeleteProvider,
+                    value = deleteSwipeOptions.first { it.first == deleteSwipe }.second,
                     onValueChange = {},
                     readOnly = true,
-                    enabled = swipeToDelete,
                     singleLine = true,
-                    label = { Text(stringResource(R.string.swipe_to_delete_provider_title)) },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = swipeToDeleteProviderMenuExpanded) },
+                    label = { Text(stringResource(R.string.swipe_to_delete_title)) },
+                    supportingText = { Text(stringResource(R.string.swipe_to_delete_description)) },
+                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.Backspace, contentDescription = null) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = deleteSwipeMenuExpanded) },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                     modifier = Modifier
                         .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth()
                 )
                 ExposedDropdownMenu(
-                    expanded = swipeToDeleteProviderMenuExpanded,
-                    onDismissRequest = { swipeToDeleteProviderMenuExpanded = false }
+                    expanded = deleteSwipeMenuExpanded,
+                    onDismissRequest = { deleteSwipeMenuExpanded = false }
                 ) {
-                    swipeToDeleteProviderOptions.forEach { (value, label) ->
+                    deleteSwipeOptions.forEach { (value, label) ->
                         DropdownMenuItem(
                             text = { Text(label) },
+                            enabled = !(value == "left" && swipeDirections),
                             onClick = {
-                                swipeToDeleteProvider = value
-                                SettingsManager.setSwipeToDeleteProvider(context, value)
-                                swipeToDeleteProviderMenuExpanded = false
+                                swipeToDelete = value == "left"
+                                swipeDownDeletes = value == "down"
+                                SettingsManager.setSwipeToDelete(context, swipeToDelete)
+                                SettingsManager.setTrackpadSwipeDownDeletesWord(context, swipeDownDeletes)
+                                deleteSwipeMenuExpanded = false
                             },
                             leadingIcon = {
-                                if (swipeToDeleteProvider == value) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null
-                                    )
-                                }
+                                if (deleteSwipe == value) Icon(Icons.Filled.Check, contentDescription = null)
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                         )
                     }
                 }
             }
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .settingRow("trackpad.swipe_to_delete")
-            ) {
-                Row(
+            // How a left swipe is read (only while a left swipe deletes)
+            if (deleteSwipe == "left") {
+                ExposedDropdownMenuBox(
+                    expanded = swipeToDeleteProviderMenuExpanded,
+                    onExpandedChange = { swipeToDeleteProviderMenuExpanded = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                        .settingRow("trackpad.swipe_to_delete_provider")
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Backspace,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
+                    OutlinedTextField(
+                        value = swipeToDeleteProviderOptions.firstOrNull { it.first == swipeToDeleteProvider }?.second ?: swipeToDeleteProvider,
+                        onValueChange = {},
+                        readOnly = true,
+                        singleLine = true,
+                        label = { Text(stringResource(R.string.swipe_to_delete_provider_title)) },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = swipeToDeleteProviderMenuExpanded) },
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                        modifier = Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth()
                     )
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.swipe_to_delete_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
-                        )
-                        Text(
-                            text = stringResource(R.string.swipe_to_delete_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
-                        )
-                    }
-                    Switch(
-                        checked = swipeToDelete,
-                        onCheckedChange = { enabled ->
-                            swipeToDelete = enabled
-                            SettingsManager.setSwipeToDelete(context, enabled)
+                    ExposedDropdownMenu(
+                        expanded = swipeToDeleteProviderMenuExpanded,
+                        onDismissRequest = { swipeToDeleteProviderMenuExpanded = false }
+                    ) {
+                        swipeToDeleteProviderOptions.forEach { (value, label) ->
+                            DropdownMenuItem(
+                                text = { Text(label) },
+                                onClick = {
+                                    swipeToDeleteProvider = value
+                                    SettingsManager.setSwipeToDeleteProvider(context, value)
+                                    swipeToDeleteProviderMenuExpanded = false
+                                },
+                                leadingIcon = {
+                                    if (swipeToDeleteProvider == value) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Check,
+                                            contentDescription = null
+                                        )
+                                    }
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            )
                         }
-                    )
+                    }
                 }
             }
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .settingRow(SettingLinkIds.TRACKPAD_SENSITIVITY) {
-                        openSettingsChild(context, "trackpad", "sensitivity")
-                    }
-            ) {
-                Row(
+            // How far each swipe goes, right here (only with a trackpad to swipe on)
+            if (hasTrackpad) {
+                Text(
+                    text = stringResource(R.string.trackpad_sensitivity_title),
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Speed,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.trackpad_sensitivity_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
-                        )
-                        Text(
-                            text = stringResource(R.string.trackpad_sensitivity_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
-                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .settingRow(SettingLinkIds.TRACKPAD_SENSITIVITY)
+                )
+                TrackpadSensitivitySettings(
+                    suggestionSwipeThreshold = suggestionSwipeThreshold,
+                    onSuggestionSwipeThresholdChange = { newValue ->
+                        suggestionSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSuggestionSwipeThreshold(context, newValue)
+                    },
+                    sideSwipeThreshold = sideSwipeThreshold,
+                    onSideSwipeThresholdChange = { newValue ->
+                        sideSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSideSwipeThreshold(context, newValue)
+                    },
+                    deleteSwipeThreshold = deleteSwipeThreshold,
+                    onDeleteSwipeThresholdChange = { newValue ->
+                        deleteSwipeThreshold = newValue
+                        SettingsManager.setTrackpadDeleteSwipeThreshold(context, newValue)
                     }
-                    Text(
-                        text = "${suggestionSwipeThreshold.toInt()} / ${deleteSwipeThreshold.toInt()}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                )
             }
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .settingRow(SettingLinkIds.TRACKPAD_DEBUG) {
-                        context.startActivity(Intent(context, TrackpadDebugActivity::class.java))
-                    }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.BugReport,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.trackpad_debug_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
-                        )
-                        Text(
-                            text = stringResource(R.string.trackpad_debug_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
-                        )
-                    }
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+            if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
+                SettingsSectionDivider(stringResource(R.string.trackpad_section_phone))
+                FluxActionRow(
+                    linkId = "trackpad.phone_settings",
+                    title = stringResource(R.string.phone_trackpad_settings_title),
+                    description = stringResource(R.string.phone_trackpad_settings_description),
+                    onClick = { PhoneTrackpadSettings.open(context) }
+                )
             }
 
             // Show Tutorial Button
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .heightIn(min = 64.dp)
                     .clickable { showTutorialDialog = true }
             ) {
                 Row(
@@ -689,14 +706,12 @@ fun TrackpadGestureSettingsScreen(
                         Text(
                             text = stringResource(R.string.trackpad_gestures_show_tutorial),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.trackpad_gestures_tutorial_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Icon(
@@ -711,7 +726,7 @@ fun TrackpadGestureSettingsScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp)
+                        .heightIn(min = 64.dp)
                         .clickable {
                             val url = context.getString(R.string.trackpad_gestures_shizuku_url)
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -735,14 +750,12 @@ fun TrackpadGestureSettingsScreen(
                             Text(
                                 text = stringResource(R.string.trackpad_gestures_install_shizuku),
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Medium,
-                                maxLines = 1
+                                fontWeight = FontWeight.Medium
                             )
                             Text(
                                 text = stringResource(R.string.trackpad_gestures_install_shizuku_description),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                         Icon(
@@ -753,6 +766,10 @@ fun TrackpadGestureSettingsScreen(
                     }
                 }
             }
+
+            // The status bar's swipe pad: moving the cursor by swiping along the bar
+            SettingsSectionDivider(stringResource(R.string.settings_section_swipe_pad))
+            SwipePadThresholdRow()
         }
     }
 
@@ -768,6 +785,8 @@ fun TrackpadGestureSettingsScreen(
 private fun TrackpadSensitivitySettings(
     suggestionSwipeThreshold: Float,
     onSuggestionSwipeThresholdChange: (Float) -> Unit,
+    sideSwipeThreshold: Float,
+    onSideSwipeThresholdChange: (Float) -> Unit,
     deleteSwipeThreshold: Float,
     onDeleteSwipeThresholdChange: (Float) -> Unit
 ) {
@@ -784,11 +803,59 @@ private fun TrackpadSensitivitySettings(
             onValueChange = onSuggestionSwipeThresholdChange
         )
         TrackpadSensitivitySlider(
+            title = stringResource(R.string.trackpad_side_swipe_threshold_title),
+            description = stringResource(R.string.trackpad_side_swipe_threshold_description),
+            value = sideSwipeThreshold,
+            linkId = SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            onValueChange = onSideSwipeThresholdChange
+        )
+        TrackpadSensitivitySlider(
             title = stringResource(R.string.trackpad_delete_swipe_threshold_title),
             description = stringResource(R.string.trackpad_delete_swipe_threshold_description),
             value = deleteSwipeThreshold,
             linkId = SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
             onValueChange = onDeleteSwipeThresholdChange
+        )
+        SuggestionSwipeLearningSettings()
+    }
+}
+
+/** Suggestion swipes that learn from your picks and undos, and a pause after which they scroll. */
+@Composable
+private fun SuggestionSwipeLearningSettings() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val learning = it.palsoftware.pastiera.core.SuggestionSwipeLearning
+    var learn by remember { mutableStateOf(learning.enabled(context)) }
+    var idle by remember { mutableStateOf(learning.idleSeconds(context)) }
+    FluxSwitchRow(
+        linkId = "trackpad.swipe_learning",
+        title = stringResource(R.string.suggestion_swipe_learning_title),
+        description = stringResource(R.string.suggestion_swipe_learning_description),
+        checked = learn,
+        onCheckedChange = { enabled -> learn = enabled; learning.setEnabled(context, enabled) }
+    )
+    if (learn) {
+        androidx.compose.material3.TextButton(
+            onClick = {
+                learning.resetLearned(context)
+                android.widget.Toast.makeText(context, R.string.suggestion_swipe_learning_reset_done, android.widget.Toast.LENGTH_SHORT).show()
+            },
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) { Text(stringResource(R.string.suggestion_swipe_learning_reset)) }
+    }
+    Column(modifier = Modifier.fillMaxWidth().settingRow("trackpad.swipe_idle").padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text(stringResource(R.string.suggestion_swipe_idle_title), style = MaterialTheme.typography.titleMedium)
+        Text(
+            if (idle == 0) stringResource(R.string.suggestion_swipe_idle_off)
+            else stringResource(R.string.suggestion_swipe_idle_value, idle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        androidx.compose.material3.Slider(
+            value = idle.toFloat(),
+            onValueChange = { value -> idle = value.toInt(); learning.setIdleSeconds(context, idle) },
+            valueRange = 0f..30f,
+            steps = 29
         )
     }
 }
@@ -828,14 +895,12 @@ private fun TrackpadSensitivitySlider(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1
+                        fontWeight = FontWeight.Medium
                     )
                     Text(
                         text = description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Text(
@@ -973,3 +1038,90 @@ private data class TutorialPage(
     val description: String,
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 )
+
+/**
+ * Keyboard swipes per app: with Scroll assistant on for every app, the swipes scroll only where
+ * you want; the accessibility service keeps them from the other apps.
+ */
+@Composable
+private fun TrackpadAppsSection() {
+    val context = LocalContext.current
+    var mode by remember { mutableStateOf(SettingsManager.getTrackpadAppMode(context)) }
+    var apps by remember { mutableStateOf(SettingsManager.getTrackpadApps(context)) }
+    var choosingMode by remember { mutableStateOf(false) }
+    var choosingApps by remember { mutableStateOf(false) }
+    val names = remember { AppListHelper.getInstalledApps(context).associate { it.packageName to it.appName } }
+    @Composable
+    fun modeLabel(m: SettingsManager.TrackpadAppMode) = stringResource(
+        when (m) {
+            SettingsManager.TrackpadAppMode.OFF -> R.string.trackpad_apps_mode_off
+            SettingsManager.TrackpadAppMode.BLOCK -> R.string.trackpad_apps_mode_block
+            SettingsManager.TrackpadAppMode.KEEP -> R.string.trackpad_apps_mode_keep
+        }
+    )
+    SettingsSectionDivider(stringResource(R.string.trackpad_apps_section))
+    FluxNote(stringResource(R.string.trackpad_apps_note))
+    FluxActionRow(
+        linkId = "trackpad.apps_mode",
+        title = stringResource(R.string.trackpad_apps_mode_title),
+        description = modeLabel(mode),
+        icon = "\u21C5"
+    ) { choosingMode = true }
+    if (mode != SettingsManager.TrackpadAppMode.OFF) {
+        apps.sortedBy { (names[it] ?: it).lowercase() }.forEach { pkg ->
+            FluxActionRow(
+                linkId = null,
+                title = names[pkg] ?: pkg,
+                description = stringResource(R.string.trackpad_apps_remove),
+                appPackage = pkg
+            ) {
+                apps = apps - pkg
+                SettingsManager.setTrackpadApps(context, apps)
+            }
+        }
+        FluxActionRow(
+            linkId = null,
+            title = stringResource(R.string.trackpad_apps_choose_title),
+            description = stringResource(R.string.trackpad_apps_choose_description, apps.size),
+            icon = "+"
+        ) { choosingApps = true }
+    }
+    if (choosingMode) {
+        AlertDialog(
+            onDismissRequest = { choosingMode = false },
+            title = { Text(stringResource(R.string.trackpad_apps_mode_title)) },
+            text = {
+                Column {
+                    SettingsManager.TrackpadAppMode.entries.forEach { m ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().clickable {
+                                mode = m
+                                SettingsManager.setTrackpadAppMode(context, m)
+                                choosingMode = false
+                                if (m != SettingsManager.TrackpadAppMode.OFF && apps.isEmpty()) choosingApps = true
+                            }.padding(vertical = 6.dp)
+                        ) {
+                            RadioButton(selected = m == mode, onClick = null)
+                            Text(modeLabel(m), modifier = Modifier.padding(start = 12.dp))
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { choosingMode = false }) { Text(stringResource(R.string.cancel)) } }
+        )
+    }
+    if (choosingApps) {
+        MultiAppPickerDialog(
+            title = modeLabel(mode),
+            initial = apps.toSet(),
+            onDone = { chosen ->
+                apps = chosen.toList()
+                SettingsManager.setTrackpadApps(context, apps)
+                choosingApps = false
+            },
+            onDismiss = { choosingApps = false }
+        )
+    }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flux Keyboard's trackpad gestures -->
+<resources>
+    <string name="trackpad_swipe_directions_title">Swipe direction picks the suggestion</string>
+    <string name="trackpad_swipe_directions_description">Swipe left, up or right anywhere on the trackpad for the left, middle or right suggestion. Swipe left no longer deletes a word.</string>
+    <string name="swipe_delete_off">Off</string>
+    <string name="swipe_delete_left">Swipe left</string>
+    <string name="swipe_delete_down">Swipe down</string>
+    <string name="swipe_delete_left_taken">Swipe left (picks a suggestion while Swipe direction is on)</string>
+    <string name="phone_trackpad_settings_title">Phone trackpad settings</string>
+    <string name="phone_trackpad_settings_description">Opens the phone\'s Scroll assistant: turn it on, the mode suggestion swipes and flicks need, since without it the phone passes no swipes to the keyboard. Also in the quick launcher as \"Trackpad scroll &amp; cursor\".</string>
+    <string name="trackpad_side_swipe_threshold_title">Left and right swipes</string>
+    <string name="trackpad_side_swipe_threshold_description">Distance to swipe left or right to take the left or right suggestion (with Swipe directions on).</string>
+    <string name="trackpad_section_swipes">Swipes</string>
+    <string name="trackpad_section_phone">The phone\'s own trackpad</string>
+    <string name="phone_trackpad_settings_query">Keyboard gesture</string>
+    <string name="phone_trackpad_settings_fallback">Search Settings for \"%1$s\": it\'s copied, ready to paste.</string>
+</resources>
