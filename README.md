@@ -1,269 +1,263 @@
-# Pastiera
+# Flux Keyboard
+
+**The companion app for the Unihertz Titan 2 Elite.** A keyboard first, built around its physical
+keys and trackpad, and an app that makes the rest of the phone better too: the
+keyboard light, screen size per app and shortcuts for things the phone hides away, all without
+root. It works on any Android phone with a hardware keyboard, and is at its best on the Titan 2 Elite.
+
+<p align="center"><img src="docs/screenshots/hero.png" alt="Flux Keyboard's emoji pages in a chat on the Titan 2 Elite" width="420"></p>
+
+> **Flux Keyboard** is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera),
+> created by Andrea Palumbo (PalSoftware) and developed by Andrea Palumbo, Patrick Zauner and the
+> Pastiera contributors. Most of what makes it a keyboard is their work, credited
+> [below](#built-on-pastiera). Flux Keyboard is not affiliated with or endorsed by the Pastiera
+> team, so please report problems to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues),
+> not upstream.
+
+Flux Keyboard is up to date with **Pastiera 0.86**, Pastiera's final planned feature release, and
+merges Pastiera's later changes as they land. Pastiera keeps receiving security fixes, and its
+development continues as [Plektra](https://github.com/pkb-rocks/plektra).
+
+## Highlights
+
+### For the Titan 2 Elite
+- **Trackpad swipes**: swipe left, up or right on the keyboard to pick a suggestion, or down to delete a word, in every app while you type; it learns how far you swipe.
+- **Keyboard light, no root (Shizuku)**: on with the screen and off with it, following the screen's brightness as it changes (adaptive brightness and fades included), or flashing for notifications.
 
 <p align="center">
-  <img src="docs/branding/pastiera-logo.png" alt="Pastiera" width="152">
-  <img src="docs/branding/transition-arrow.svg" alt="continues as" width="48">
-  <img src="docs/branding/plektra-logo.svg" alt="Plektra" width="152">
+  <img src="docs/screenshots/shizuku-light.png" alt="Keyboard light settings in Shizuku extras" width="300">
 </p>
 
-## Pastiera continues as Plektra
+- **Screen size presets** for the whole phone, each applied with one tap: Default (300 dpi), Tablet and Desktop (about 200 dpi on the Titan 2 Elite).
 
-Pastiera 0.86 is the final planned Pastiera release with new features. Security-relevant issues will continue to be fixed and released as updates. Active development continues as [Plektra](https://github.com/pkb-rocks/plektra).
+<p align="center">
+  <img src="docs/screenshots/screen-size.png" alt="Screen size presets, each with its own Apply button" width="300">
+</p>
 
-**[Continue with Plektra →](https://github.com/pkb-rocks/plektra)**
+- **Screen size per app**: each app at its own size, kept through the recent apps screen and back to yours when you leave. Plus shortcuts to force-stop the app in front, toggle Battery Saver or cut an app off the network.
 
-## What’s new in 0.86
+<p align="center">
+  <img src="docs/screenshots/screen-size-per-app.png" alt="Screen size per app: Discord at Desktop, Instagram at Tablet, WhatsApp at Default" width="300">
+</p>
 
-- Redesigned, searchable Settings with direct links, reliable navigation, and clearer device-specific sections.
-- A cleaner fit for the Titan 2 Elite’s rounded display and dedicated controls for Clicks keyboards.
-- A more capable on-screen keyboard with custom themes, presets, software modifiers, a number row, and better accessibility.
-- Faster input through snippets, emoji and symbol shortcodes, additional layout-switch shortcuts, and refined smart punctuation.
-- Better suggestions using multiple dictionaries and locally learned next-word sequences.
-- More reliable candidate and emoji surfaces, stricter validation for imports and backup archives, and support for custom typing sounds.
-- New language resources, including Greek, plus updated Unicode and emoji data.
+- **The same app at two sizes**: Instagram at the phone's own size, then at Desktop, with more on the screen.
 
-Support the project on [OpenCollective](https://pastiera.eu/donate)
+<p align="center">
+  <img src="docs/screenshots/instagram-default.png" alt="Instagram at the phone's own size" width="270">
+  <img src="docs/screenshots/instagram-desktop.png" alt="Instagram at the Desktop size" width="270">
+</p>
 
-<details>
-<summary>Alternative direct support options</summary>
+- **Recommended settings**: the setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates as a "from → to" list.
 
-> **Notice:** The following payments are made directly to individual maintainers and are not administered through OpenCollective. Depending on the terms of Pastiera's future fiscal host, these options may be discontinued and all project contributions may subsequently be processed exclusively through OpenCollective.
+<p align="center">
+  <img src="docs/screenshots/recommended.png" alt="Recommended settings offered as from and to" width="280">
+</p>
 
-### Current maintainer
+- **Modifier LEDs** under the suggestions, with a colour each: Shift, Alt, SYM, Ctrl, and a fifth for the emoji key.
 
-| | |
-|---|---|
-| Account holder | Patrick Alexander Zauner |
-| IBAN | DE25660702130058075300 |
-| BIC | DEUTDESMP12 |
+<p align="center">
+  <img src="docs/screenshots/led-strip.png" alt="The status LEDs under the suggestion bar" width="520">
+</p>
 
-For everyone who sees an IBAN and quietly gives up:  
-[Support via PayPal](https://www.paypal.me/zaunerpa)
+### A keyboard built around physical keys
+- **Emoji, symbols and kaomoji as pages**: Q and P turn through every emoji by category, symbols (arrows, maths, currency, punctuation, shapes) and over 300 kaomoji, each going round on its own, opening on what you use most.
 
-### Original developer
+<p align="center">
+  <img src="docs/screenshots/symbols.png" alt="Symbols as pages" width="420">
+  <img src="docs/screenshots/kaomoji.png" alt="Kaomoji as pages" width="420">
+</p>
 
-[![Support the original developer on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C31OHWF2)
+- **Skin tones**: hold an emoji for its skin tones, one per key on the pages or in a row in the picker, and pick a default one.
 
-</details>
+<p align="center">
+  <img src="docs/screenshots/skin-tones.png" alt="An emoji held for its skin tones" width="420">
+  <img src="docs/screenshots/picker-skin-tones.png" alt="An emoji held in the picker for its skin tones" width="420">
+</p>
 
-Input method for physical keyboards android devices (e.g. Unihertz Titan 2), designed to make typing faster through shortcuts, gestures, and customization.
+- **Search everything**: emoji by name, every Unicode symbol, and kaomoji (here "double" among the emoji). Each search has its own tabs in the bottom bar: emoji categories, the symbols' groups (# → ∑ € § ★ ♪) and the kaomoji's moods (Joy, Love, Sad, Mad and more), each jumping straight to its place.
 
-## Quick overview
-- Compact status bar with LED indicators for Shift/SYM/Ctrl/Alt, variants/suggestions bar, and swipe-pad gestures to move the cursor.
-- Multiple layouts (QWERTY/AZERTY/QWERTZ, Greek, Cyrillic, Arabic, translit, etc.) fully configurable; JSON import/export directly from the app. A web frontend for editing layouts is available at https://pastierakeyedit.vercel.app/
-- SYM pages usable via touch or physical keys (emoji + symbols), reorderable/disableable, with an integrated layout editor.
-- Clipboard support with multiple entries and pinnable items.
-- Support for dictionary based suggestions/Autocorrections + swipe gestures to accept a suggestion (requires Shizuku)
-- Full backup/restore (settings, layouts, variations, dictionaries), UI translated into multiple languages, and built-in GitHub update checks.
+<p align="center">
+  <img src="docs/screenshots/emoji-search.png" alt="Emoji search: double, with the emoji categories in the bar" width="280">
+  <img src="docs/screenshots/symbol-search.png" alt="Symbol search, with the symbols' groups in the bar" width="280">
+  <img src="docs/screenshots/kaomoji-search.png" alt="Kaomoji search, with their moods in the bar" width="280">
+</p>
 
-## Typing and modifiers
-- Long press on a key can input Alt+key or Shift+Key (uppercase) timing configurable.
-- Shift/Ctrl/Alt in one-shot or lock mode (double tap), option to clear Alt on space.
-- Current behaviour note: `Ctrl` used as a physically held shortcut modifier (e.g. hold `Ctrl` + `A`) intentionally follows the app shortcut path and is not the same flow as Nav Mode (`Ctrl` double-tap latch outside text fields). Nav Mode remains a separate implementation/state.
-- Multi-tap support for keys with layout-defined variants (e.g. Cyrillic)
-- Standard shortcuts: Ctrl+C/X/V, Ctrl+A, Ctrl+Backspace, Ctrl+E/D/S/F or I/J/K/L for arrows, Ctrl+W/R for selection, Ctrl+T for Tab, Ctrl+Y/H for Page Up/Down, Ctrl+Q for Esc (all customizable in the Customize Nav screen).
+- **Kaomoji by mood, action or name**: happy, sad, lenny face and hundreds more.
 
-## QOL features
-- **Nav Mode**: double tap Ctrl outside text fields to use ESDF or IJKL as arrows, and many more useful mappings (everything is customizable in Customize Nav Mode settings)
-- **Variations bar as swipe pad**: drag to move the cursor, with adjustable threshold.
-- **Launcher shortcuts**: in the launcher, press a letter to open/assign an app.
-- **Power shortcuts**: press SYM (5s timeout) then a letter to use the same shortcuts anywhere, even outside the launcher.
-- Change language with a tap on language code in the status bar, longpress to enter pastiera settings
+<p align="center">
+  <img src="docs/screenshots/kaomoji-happy.png" alt="Kaomoji search: happy" width="280">
+  <img src="docs/screenshots/kaomoji-sad.png" alt="Kaomoji search: sad" width="280">
+  <img src="docs/screenshots/kaomoji-lenny.png" alt="Kaomoji search: lenny" width="280">
+</p>
 
-## Keyboard layouts
-- Included layouts: qwerty, azerty, qwertz, greek, arabic, russian/armenian phonetic translit, plus dedicated Alt maps for Titan 2.
-- Layout switching: select from the enabled layouts list (configurable).
-- Multi-tap support and mapping for complex characters.
-- JSON import/export directly from the app, with visual preview and list management (enable/disable, delete).
-- Layout maps are stored in `files/keyboard_layouts` and can also be edited manually. A web frontend for editing layouts is available at https://pastierakeyedit.vercel.app/
-- Device/firmware behaviour snapshots for physical keyboards are archived under [docs/device-archives](docs/device-archives/).
+- **GIFs**: search them from the emoji pages or the picker, with quick searches (LOL, Love, Sad, Wow, Yes, No, Bye) in the bar, and star one to keep it in your **favourites** (★), with the ones you sent last under them.
 
-## Symbols, emoji, and variations
-- Two touch-based SYM pages (emoji + symbols): reorderable/enableable, auto-close after input, customizable keycaps.
-- In-app SYM editor with emoji grid and Unicode picker.
-- Variations bar above the keyboard: shows accents/variants of the last typed letter or static sets (utility/email) when needed.
-- Dedicated variations editor to replace/add variants via JSON or Unicode picker; optional static bar.
+<p align="center">
+  <img src="docs/screenshots/gif-search.png" alt="GIF search: cat" width="420">
+  <img src="docs/screenshots/gif-favourites.png" alt="GIF favourites and recents" width="420">
+</p>
 
-## Suggestions and autocorrection
+- **Tap SYM or the emoji key** for one symbol or emoji, with no screen in the way; a dedicated **emoji key** (Right Shift by default) for the picker.
+- **Shortcuts everywhere**: Ctrl+Z undo in any app, the same app shortcuts in every app, Ctrl+Shift+Q/W/E to pick a suggestion, Enter that sends or adds a line the way each app expects, and Nav Mode for arrows on the letters.
 
-- Experimental support for dictionary based autocorrection/suggestions
-- User dictionary with search and edit abilities.
-- Per-language auto substituion editor, quick search, and a global “Pastiera Recipes” set shared across all languages.
-- Change language/keymap with a tap on the language code button or ctrl+space
+<p align="center">
+  <img src="docs/screenshots/app-shortcuts.png" alt="App shortcuts: the same standard combos in every app" width="300">
+</p>
 
+- **Shift, Alt and Ctrl your way**, side by side: what a tap does, whether two taps lock it, what Space does, whether it lets go after use, and Backspace deleting forwards.
 
+<p align="center">
+  <img src="docs/screenshots/modifiers.png" alt="Shift, Alt and Ctrl side by side" width="320">
+</p>
 
-## Comfort and extra input
-- Double space → period + space + uppercase; 
-- Swipe left on the keyboard to delete a word (Titan 2).
-- Optional Alt+Ctrl shortcut to start Google Voice Typing; microphone always available on the variants bar.
-- Compact status bar to minimize vertical space. With on-screen keyboard disabled from the IME selector, it uses even less space (aka Pastierina mode)
-- Translated UI (it/en/de/es/fr/pl/ru/hy) and onboarding tutorial.
+- **A quick launcher that does more**: apps, their own shortcuts (Discord's "New message"), contacts to call or message, websites, Termux scripts and tasks, and Niagara search if you prefer it.
 
-## Backup, updates, and data
-- UI-based backup/restore in ZIP format: includes preferences, custom layouts, variations, SYM/Ctrl maps, and user dictionaries.
-- Restore merges saved variations with defaults to avoid losing newly added keys.
-- Built-in GitHub update check when opening settings (with option to ignore a release).
-- Customizable files in `files/`: `variations.json`, `ctrl_key_mappings.json`, `sym_key_mappings*.json`, `keyboard_layouts/*.json`, user dictionaries.
-- Android autobackup function 
+<p align="center">
+  <img src="docs/screenshots/quick-launcher.png" alt="The quick launcher: Discord and its own New message shortcut" width="320">
+</p>
+
+### Typing that keeps up
+- **Suggestions as you type**, in the bar above the keys.
+
+<p align="center">
+  <img src="docs/screenshots/suggestions.png" alt="Suggestions in the bar while typing" width="520">
+</p>
+
+- **Spell checking in every app**, working with Gboard's corrections, plus password managers' autofill chips, **one-time codes** from your notifications and copied passwords offered without ever being shown.
+
+<p align="center">
+  <img src="docs/screenshots/autofill.png" alt="Bitwarden's autofill chips in the suggestion bar" width="520">
+</p>
+
+- **Learns as you go** (words you use, the emails and numbers you type) and **forgets when asked**: Incognito typing and **Offline mode**, together as a private mode on one key.
+- **Clean links**: tracking and Google, Facebook and Instagram redirects gone from what you copy and paste.
+- **Small things right**: capitals after a full stop or an emoticon, no stray spaces in emails, web addresses or numbers, emoticons that keep their shape, and voice input that keeps listening.
+
+### Yours
+- **A background picture** you place behind the keys.
+
+<p align="center">
+  <img src="docs/screenshots/background-picture.png" alt="A picture behind the keys" width="480">
+</p>
+
+- **Themes**: one for light mode and one for dark, colours from your wallpaper, and every colour editable.
+
+<p align="center">
+  <img src="docs/screenshots/theme-picker.png" alt="Choosing themes: following the system, wallpaper colours and a background picture" width="300">
+  <img src="docs/screenshots/theme-colours.png" alt="Editing a theme's colours" width="300">
+</p>
+
+- **Edit layouts in the app**, and keyboard-free apps like Termux:X11 and Niagara that still get the keys (and the LEDs).
+- **Terminal mode** for Termux: the keyboard stays out of sight with just its LEDs showing, Alt and SYM type their symbols, Ctrl stays Ctrl, and Termux is set up for the keyboard with one pasted command.
+
+<p align="center">
+  <img src="docs/screenshots/terminal-mode.png" alt="Terminal mode settings: the LEDs, the emoji key and Termux set up for the keyboard" width="300">
+</p>
+
+- **A tutorial** that sets up the extras for you, and **updates from the app**, full releases or dev builds.
+
+<p align="center">
+  <img src="docs/screenshots/tutorial.png" alt="The tutorial's welcome page" width="280">
+</p>
+
+Everything else, including per-app exact typing and languages, automatic Shift by field type,
+snippet placeholders and voice input that keeps listening, is in the [changelog](FORK_CHANGES.md).
+
+## Built on Pastiera
+
+These are the Pastiera team's work, which Flux Keyboard builds on and keeps. Thank you to Andrea
+Palumbo, Patrick Zauner and every Pastiera contributor.
+
+**Typing and modifiers**
+- Long press for Alt or Shift characters, with configurable timing.
+- Shift, Ctrl and Alt as one-shot or locked (double tap), configurable latching, and clearing Alt on space.
+- Multi-tap for keys with several characters (for example Cyrillic), and bounce keys.
+- Standard shortcuts: Ctrl+C/X/V/A, Ctrl+Backspace, arrows on Ctrl+E/S/D/F or I/J/K/L, selection, Tab, Page Up/Down and Esc, all customisable.
+- **Nav Mode**: double tap Ctrl outside text fields for arrows and many more mappings, with word navigation and media controls.
+- Double space for a full stop and a capital, configurable punctuation spacing (French spacing, brackets, commas) and smart quotes.
+
+**Layouts and languages**
+- QWERTY, AZERTY, QWERTZ, Greek, Arabic, Russian and Armenian phonetic transliteration and more, with Alt maps for the Titan 2, Titan 2 Elite and original Titan.
+- Layout switching with a tap on the language code, Ctrl+Space or Alt+Enter; JSON import and export with a preview.
+- The layout web editor at [pastierakeyedit.vercel.app](https://pastierakeyedit.vercel.app/).
+- A translated interface (English, Italian, German, Greek, Spanish, French, Armenian, Polish, Russian, Ukrainian, Vietnamese) and the onboarding tutorial.
+
+**Status bar, symbols and variations**
+- The compact status bar with modifier LEDs, the variations and suggestions bar, and Solderina, the smallest bar (Pastierina in Pastiera).
+- The Titan 2 Elite's rounded-display geometry, its display contour calibration and Pastiera's contour LEDs, which Flux Keyboard's contoured LEDs grew from.
+- SYM pages for emoji, symbols and the clipboard, usable by touch or keys, with an in-app SYM editor, emoji grid and Unicode picker.
+- The variations bar: accents of the last letter or static sets, its editor, and dragging it as a swipe pad to move the cursor.
+- Clipboard history with pinned items, hidden while the phone is locked.
+
+**Suggestions and corrections**
+- Dictionary suggestions and auto-correction, suggestions from several dictionaries, learned next words, and adding words from a swipe or a substitution.
+- The user dictionary with search and editing, per-language substitutions and the shared "Pastiera Recipes".
+- Snippet expansion, and emoji and symbol shortcodes.
+- Native trackpad gestures on the Titan 2 and Titan 2 Elite (directly or through Shizuku), with separate sensitivities.
+
+**Apps and extras**
+- Launcher shortcuts (press a letter to open an app), power shortcuts with SYM anywhere, and the QuickLauncher with Niagara search.
+- Enter behaviour per app.
+- Speech input from Alt+Ctrl or the microphone on the bar.
+- The on-screen keyboard mode with themes, a theme editor, per-app themes, presets, a number row and long-press layers.
+- Clicks Power Keyboard support: controls, firmware status and SYM profiles.
+- Backup and restore in a ZIP (settings, layouts, variations, SYM and Ctrl maps, dictionaries, themes and typing sounds), Android auto-backup, and the searchable settings with shareable links.
+
+The full list of what Pastiera 0.86 added over 0.85 is in the [changelog](FORK_CHANGES.md#from-the-pastiera-team-085-to-086).
 
 ## Installation
-1. Build the APK or install an existing build.
+
+1. Download the APK from the [latest release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases).
 2. Android Settings → System → Languages & input → Virtual keyboard → Manage keyboards.
-3. Enable “Pastiera” and select it from the input selector when typing.
+3. Enable "Flux Keyboard" and pick it when typing.
+
+Flux Keyboard (app ID `io.github.fluxsniffermods.fluxkeyboard`) installs next to Pastiera and
+doesn't replace or update it.
 
 ## Requirements
-- Android 10 (API 29) or higher.
-- Device with a physical keyboard (profiled on Unihertz Titan 2, adaptable via JSON).
+
+- Android 10 (API 29) or newer.
+- A phone with a physical keyboard (profiled on the Unihertz Titan 2 and Titan 2 Elite, adaptable with JSON layouts).
+
+## Building
+
+- Build a debug APK with `./gradlew :app:assembleStableDebug` and run the tests with `./gradlew :app:testStableDebugUnitTest`.
+- Signed builds come from `.github/workflows/fork-build.yml`, picked by the branch it runs on:
+  - **`flux-release` (the default branch): full releases** such as `1.0.0`, tagged `flux/v1.0.0`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
+  - **`flux-dev`: dev builds** such as `1.0.1-flux.202610061200`, named after the next patch release (so the next full release, patch or minor, supersedes and installs over them) plus the build time, published as pre-releases.
+- Each release lists only what changed since the build before it (a full release since the previous full release, a dev build since the previous build of either kind), from the What's new entries' `"after"` times.
+- The repository's "Latest" release is always the latest full release. The app's update check reads the release tags: Stable offers full releases, Dev offers both.
+- Dev work goes on `flux-dev` as individual commits, one per change, and Pastiera's changes are merged into it as they land. For a full release, add it to `"releases"`, fold the commits since the last full release into category commits, move `flux-release` up to the result and run the workflow on `flux-release`. Commits at or below `flux-release` are never rewritten.
+- A full release deletes the dev builds before it (their releases and tags) when it publishes; builds run one at a time.
+- `tools/find-keyboard-gesture-page.sh` (as root from Termux, with the page open) prints which screen a phone's keyboard gesture settings are.
+
+Pastiera's release, nightly and CI workflows aren't kept: Flux Keyboard builds only with
+`fork-build.yml`. When Pastiera changes them, a merge keeps them deleted.
 
 ## Contributing
 
-Pastiera now accepts security, compatibility, and maintenance changes. Active feature development continues in [Plektra](https://github.com/pkb-rocks/plektra).
+Issues and suggestions for Flux Keyboard go to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues).
+Pastiera itself now accepts security, compatibility and maintenance changes, with feature work in
+Plektra.
 
-### Forking policy
+Flux Keyboard follows [Pastiera's forking policy](https://github.com/palsoftware/pastiera#forking-policy):
+its own name, application ID, update feed and branding, the copyright and licence notices kept, and
+no claim to be an official Pastiera release.
 
-Pastiera is free software under the GPLv3. You can fork, modify, and redistribute the code under the terms of that licence.
+## Licence and credits
 
-A distributed fork must use its own distinct identity. Its project, repository, application, and release names must not contain “Pastiera” as a standalone word, prefix, suffix, or other name component.
+Pastiera is licensed under the [GNU General Public License v3](LICENSE), and Flux Keyboard is
+distributed under the same licence. Pastiera was created by Andrea Palumbo (PalSoftware) and is
+developed by Andrea Palumbo, Patrick Zauner and the contributors credited in the app's About screen
+and in the [upstream repository](https://github.com/palsoftware/pastiera). Third-party components
+are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and the fork's changes in
+[FORK_CHANGES.md](FORK_CHANGES.md).
 
-Forks must retain the required copyright and licence notices. They must not present themselves as an official Pastiera release. Before distribution, a fork must use its own application ID, update endpoints, and branding.
+The Titan 2 Elite's keyboard light through Shizuku (the vendor service's timeout, the
+never-off value and the broadcast that turns the light off) follows what
+[PhysiBoard](https://github.com/brobata/physiboard) by brobata found and documented on the
+phone. Thank you to brobata.
 
-## Development / Tests
-- Run core + routing + service modifier regression tests:
-  - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.core.ModifierStateControllerTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterModifierE2ETest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest`
-- Run release/update flavor coverage tests:
-  - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.FlavorBuildConfigTest --tests it.palsoftware.pastiera.update.UpdateCheckerFlavorLogicTest`
-  - `./gradlew :app:testNightlyDebugUnitTest --tests it.palsoftware.pastiera.FlavorBuildConfigTest --tests it.palsoftware.pastiera.update.UpdateCheckerFlavorLogicTest`
-- Run the stable F-Droid-path tests:
-  - `./gradlew :app:testStableDebugUnitTest -PPASTIERA_FDROID_BUILD=true`
-- Service-level (device-near) modifier behaviour regressions:
-  - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest`
-- Router-level input pipeline modifier/SYM tests:
-  - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterModifierE2ETest`
-- Core modifier state machine tests:
-  - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.core.ModifierStateControllerTest`
-- Build nightly debug APK with dynamic nightly version code:
-  - `./scripts/build-nightly-debug.sh 0.86`
-  - `./scripts/build-nightly-debug.sh 0.86 --install`
-  - `./scripts/build-nightly-debug.sh 0.86 --install --device <adb-serial>`
-
-## Continuous Integration
-- Pushes to `main` and pull requests run `.github/workflows/ci.yml`.
-- The CI job runs, in order:
-  - `:app:testStableDebugUnitTest`
-  - `:app:testStableDebugUnitTest -PPASTIERA_FDROID_BUILD=true`
-  - `:app:testNightlyDebugUnitTest`
-
-## Manual release CI
-- The repository includes a manually triggered GitHub Actions workflow at `.github/workflows/release.yml`.
-- Required GitHub Actions secrets:
-  - `PASTIERA_KEYSTORE_B64`
-  - `PASTIERA_KEYSTORE_PASSWORD`
-  - `PASTIERA_KEY_ALIAS`
-  - `PASTIERA_KEY_PASSWORD`
-- The workflow:
-  - runs stable flavor unit tests
-  - optionally runs the stable F-Droid-path unit tests
-  - builds a signed stable release APK
-  - optionally builds an unsigned stable APK for the official F-Droid path
-  - verifies APK signing
-  - uploads the signed APK and its SHA256 checksum as artifacts
-  - uploads the unsigned F-Droid APK and its SHA256 checksum as artifacts
-  - optionally creates a GitHub Release
-- Release versioning is injected via Gradle properties:
-  - `-PPASTIERA_VERSION_CODE=...`
-  - `-PPASTIERA_VERSION_NAME=...`
-- Local release builds can use the same mechanism:
-  - `./gradlew :app:assembleStableRelease -PPASTIERA_VERSION_CODE=86 -PPASTIERA_VERSION_NAME=0.86`
-  - `./scripts/build-release.sh 0.86 86`
-  - `./scripts/build-fdroid.sh 0.86 86`
-
-### Local signing config (`release/keystore.properties`)
-- Local wrapper scripts read signing config from `release/keystore.properties` (gitignored).
-- You can provide file paths, embedded Base64, or both (path + B64 for parity with CI secrets storage).
-- CI-style variable names are supported directly:
-  - Stable:
-    - `PASTIERA_KEYSTORE_FILE`, `PASTIERA_KEYSTORE_PASSWORD`, `PASTIERA_KEY_ALIAS`, `PASTIERA_KEY_PASSWORD`, optional `PASTIERA_KEYSTORE_B64`
-  - Nightly:
-    - `NIGHTLY_KEYSTORE_FILE`, `PASTIERA_NIGHTLY_KEYSTORE_PASSWORD`, `PASTIERA_NIGHTLY_KEY_ALIAS`, `PASTIERA_NIGHTLY_KEY_PASSWORD`, optional `PASTIERA_NIGHTLY_KEYSTORE_B64`
-- Legacy Gradle property names are still supported (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`, `nightlyStoreFile`, `nightlyStorePassword`, `nightlyKeyAlias`, `nightlyKeyPassword`).
-- When `PASTIERA_KEYSTORE_B64` or `PASTIERA_NIGHTLY_KEYSTORE_B64` is present, local scripts materialize the corresponding `.jks` only if the target file is missing.
-
-## Manual nightly CI
-- The repository includes a manually triggered nightly workflow at `.github/workflows/debug.yml`.
-- Required GitHub Actions secrets:
-  - `PASTIERA_NIGHTLY_KEYSTORE_B64`
-  - `PASTIERA_NIGHTLY_KEYSTORE_PASSWORD`
-  - `PASTIERA_NIGHTLY_KEY_ALIAS`
-  - `PASTIERA_NIGHTLY_KEY_PASSWORD`
-- The workflow:
-  - runs nightly flavor debug-unit tests
-  - builds a nightly release APK signed with the shared nightly key
-  - computes a SHA256 checksum
-  - uploads the APK and checksum as workflow artifacts
-  - automatically turns a base version like `0.86` into a unique nightly version like `0.86-nightly.20260306.195412`
-  - optionally publishes a GitHub pre-release under the `nightly/v*` tag scheme using that full nightly version
-- The nightly flavor uses a separate application ID so it installs alongside the stable release.
-- The nightly flavor is signed with a shared nightly key so local and CI nightly builds remain upgrade-compatible.
-- Nightly version names follow the pattern `BASE-nightly.YYYYMMDD.HHMMSS`, for example `0.86-nightly.20260307.005731`.
-- GitHub Nightly builds and private F-Droid Nightly builds share the same application ID and signing key, but F-Droid Nightly builds disable GitHub update checks so updates come from the F-Droid repo.
-- Nightly pre-release disclaimer text is maintained in `.github/release-templates/debug-prerelease.md`.
-- The same versioning can be generated locally:
-  - `./scripts/nightly-version.sh 0.86`
-  - `./gradlew :app:assembleNightlyRelease -PPASTIERA_VERSION_NAME=0.86 -PPASTIERA_NIGHTLY_VERSION_SUFFIX=-nightly.$(./scripts/nightly-version.sh 0.86 | awk -F= '/^timestamp=/{print $2}')`
-- Local wrappers are available:
-  - `./scripts/build-nightly.sh 0.86`
-  - `./scripts/build-nightly.sh 0.86 --publish`
-  - `./scripts/build-nightly-debug.sh 0.86`
-  - `./scripts/build-nightly-debug.sh 0.86 --install`
-  - `./scripts/build-nightly-debug.sh 0.86 --install --device <adb-serial>`
-  - `./scripts/publish-private-fdroid-nightly.sh 0.86`
-  - `./scripts/publish-private-fdroid-nightly.sh 0.86 ../palsoftware-web/apps/docs/public https://pastiera.eu/fdroid/nightly/repo`
-  - `./scripts/publish-private-fdroid-nightly.sh 0.86 --timestamp 20260307.005731`
-  - `./scripts/publish-private-fdroid-nightly.sh 0.86 ../palsoftware-web/apps/docs/public https://pastiera.eu/fdroid/nightly/repo --no-push-pages`
-  - `./scripts/build-release.sh 0.86 86`
-  - `./scripts/build-release.sh 0.86 86 --publish`
-
-## Private F-Droid Nightly Repo
-- Docs landing page:
-  - `https://pastiera.eu/`
-- Local Pages target:
-  - `../palsoftware-web/apps/docs/public/fdroid/nightly/repo`
-- Public repo URL:
-  - `https://pastiera.eu/fdroid/nightly/repo`
-- GitHub Nightly releases:
-  - `https://github.com/palsoftware/pastiera/releases?q=nightly%2F`
-- Local publish flow:
-  - install `fdroidserver`
-  - make sure nightly signing is configured
-  - run `./scripts/publish-private-fdroid-nightly.sh 0.86`
-  - pass `--timestamp YYYYMMDD.HHMMSS` when mirroring a GitHub Nightly pre-release so the F-Droid build uses the same version name and version code
-  - optional: add `--no-push-pages` if you explicitly do not want the generated Pages repo changes committed and pushed
-- The script:
-  - builds the signed nightly APK
-  - initializes or reuses a local F-Droid repo under `.fdroid/nightly`
-  - stores each APK under a versioned filename so older Nightly builds can remain in the repo
-  - updates the repo metadata with `fdroid update`
-  - syncs the generated `repo/` contents into the Pages public directory
-  - by default commits and pushes only `apps/docs/public/fdroid/nightly/repo` in `palsoftware-web`, which triggers the GitHub Pages deployment
-
-## Signing Attestations
-These attestations document the public signing certificates and Android proof-of-rotation lineages used for stable and Nightly builds.
-The current PKB.rocks attestations include complete YubiKey hardware attestations and manufacturer certificates on additional pages, with QR codes and PEM text. Android lineages are provided under signing/lineages and referenced by hash.
-The Markdown files are the browser-friendly references. The PDFs are the archival artifacts prepared for qualified electronic signatures.
-The legacy signed PDFs remain available under explicit legacy names.
-
-| Channel | Current source | Prepared PDF | Signed PDF | Legacy signed PDF |
-| --- | --- | --- | --- | --- |
-| Stable | [docs/stable-signing-key-attestation.md](docs/stable-signing-key-attestation.md) | [docs/stable-signing-key-attestation.pdf](docs/stable-signing-key-attestation.pdf) | [docs/stable-signing-key-attestation_signed_signed.pdf](docs/stable-signing-key-attestation_signed_signed.pdf) | [docs/pastiera-legacy-release-signing-certificate-attestation_signed.pdf](docs/pastiera-legacy-release-signing-certificate-attestation_signed.pdf) |
-| Nightly | [docs/nightly-signing-key-attestation.md](docs/nightly-signing-key-attestation.md) | [docs/nightly-signing-key-attestation.pdf](docs/nightly-signing-key-attestation.pdf) | [docs/nightly-signing-key-attestation_signed_signed.pdf](docs/nightly-signing-key-attestation_signed_signed.pdf) | [docs/pastiera-legacy-nightly-signing-certificate-attestation_signed.pdf](docs/pastiera-legacy-nightly-signing-certificate-attestation_signed.pdf) |
-
-The signed PDF variants do not turn APK signing certificates into identity certificates. They authenticate the signer's statement about the documented Android signing keys and evidence.
-Where a qualified electronic signature is present, validate it with the EU DSS validator and interpret it in the context of the eIDAS trust-services framework.
-
-External verification references:
-
-| Reference | Link | Purpose |
-| --- | --- | --- |
-| EU DSS Validator Demo | [ec.europa.eu/digital-building-blocks/DSS/webapp-demo/validation](https://ec.europa.eu/digital-building-blocks/DSS/webapp-demo/validation) | Validate the signed PDF attestations with the European Commission DSS demo service. |
-| eIDAS overview | [digital-strategy.ec.europa.eu/en/policies/eidas-regulation](https://digital-strategy.ec.europa.eu/en/policies/eidas-regulation) | Background on the EU trust-services framework under which qualified electronic signatures are defined. |
+If you enjoy Flux Keyboard, consider supporting the people it's built on:
+[Pastiera on Open Collective](https://pastiera.eu/donate) and
+[Andrea Palumbo on Ko-fi](https://ko-fi.com/palsoftware).
