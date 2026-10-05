@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.content.res.Configuration
 import android.content.SharedPreferences
@@ -61,12 +62,41 @@ object SettingsManager {
     private const val KEY_COMMA_SPACE = "comma_space"
     private const val KEY_AUTO_SPACE_PUNCTUATION = "auto_space_punctuation"
     private const val KEY_SPACE_AFTER_PUNCTUATION = "space_after_punctuation"
+    private const val KEY_EMOTICON_PUNCTUATION = "emoticon_punctuation"
     private const val KEY_SMART_QUOTES = "smart_quotes"
     private const val KEY_SMART_QUOTES_STYLE = "smart_quotes_style"
     private const val KEY_SWIPE_TO_DELETE = "swipe_to_delete"
     private const val KEY_SWIPE_TO_DELETE_PROVIDER = "swipe_to_delete_provider"
     private const val KEY_AUTO_SHOW_KEYBOARD = "auto_show_keyboard"
     private const val KEY_CLEAR_ALT_ON_SPACE = "clear_alt_on_space"
+    private const val KEY_SMART_ALT_OFF_AFTER_OPENING = "smart_alt_off_after_opening"
+    private const val KEY_DEVELOPER_OPTIONS_ENABLED = "developer_options_enabled"
+    private const val KEY_INCOGNITO_ALWAYS = "incognito_always"
+    private const val KEY_PASTE_SUGGESTION = "paste_suggestion_enabled"
+    private const val KEY_PASTE_SUGGESTION_PASSWORD_FIELDS = "paste_suggestion_password_fields"
+    private const val KEY_LANGUAGE_PER_APP = "language_per_app_enabled"
+    private const val KEY_KEYBOARD_WALLPAPER_COLOURS = "keyboard_theme_wallpaper_colours"
+    private const val KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS = "keyboard_background_auto_colours"
+    private const val KEY_KEYBOARD_BACKGROUND_KEY_OPACITY = "keyboard_background_key_opacity"
+    const val KEY_KEYBOARD_BACKGROUND_UPDATED = "keyboard_background_updated"
+    private const val KEY_KEYBOARD_BACKGROUND_FRAMING = "keyboard_background_framing"
+    private const val KEY_ONE_TIME_CODES = "one_time_codes_enabled"
+    private const val KEY_AUTO_SHIFT_FIELD_TYPES = "auto_shift_field_types"
+    private const val KEY_SEARCH_BAR_WAITS_FOR_TYPING = "search_bar_waits_for_typing"
+    // Each app's last language, kept apart from settings (not in backups)
+    private const val APP_LANGUAGES_PREFS = "app_languages"
+    private const val KEY_CLEAN_PASTED_LINKS = "clean_pasted_links" // Strip tracking from pasted links
+    private const val KEY_EMOJI_SUGGESTIONS = "emoji_suggestions_enabled"
+    private const val KEY_SUGGESTIONS_BOLD = "suggestions_bold" // Suggestion bar words in bold
+    private const val KEY_SUGGESTION_KEYS = "suggestion_keys" // Keys that pick a suggestion
+    private const val KEY_SPEECH_KEEP_LISTENING = "speech_keep_listening" // Voice input carries on through pauses
+    private const val KEY_CLICKS_KEYBOARD_SEEN = "clicks_keyboard_seen" // A Clicks Power Keyboard has been connected here
+    private const val KEY_INLINE_AUTOFILL = "inline_autofill_enabled"
+    private const val KEY_LED_INDIVIDUAL_COLORS = "led_individual_colors"
+    private const val KEY_LED_LOCKED_ANIMATION = "led_locked_animation"
+    private const val LED_COLOR_KEY_PREFIX = "led_color_"
+    private const val KEY_INCOGNITO_FOLLOW_APPS = "incognito_follow_apps"
+    private const val KEY_SMART_CTRL_OFF_AFTER_SHORTCUT = "smart_ctrl_off_after_shortcut"
     private const val KEY_ALT_CTRL_SPEECH_SHORTCUT = "alt_ctrl_speech_shortcut"
     private const val KEY_LAYOUT_AWARE_CTRL_SHORTCUTS = "layout_aware_ctrl_shortcuts"
     private const val KEY_SYM_MAPPINGS_CUSTOM = "sym_mappings_custom"
@@ -139,9 +169,48 @@ object SettingsManager {
     private const val KEY_SHIFT_TAP_LATCHES = "shift_tap_latches"
     private const val KEY_ALT_TAP_LATCHES = "alt_tap_latches"
     private const val KEY_CTRL_TAP_LATCHES = "ctrl_tap_latches"
+    private const val KEY_SHIFT_DOUBLE_TAP_LOCKS = "shift_double_tap_locks"
+    private const val KEY_ALT_DOUBLE_TAP_LOCKS = "alt_double_tap_locks"
+    private const val KEY_CTRL_DOUBLE_TAP_LOCKS = "ctrl_double_tap_locks"
     private const val KEY_ALT_LATCH_STAYS_ON_SPACE = "alt_latch_stays_on_space"
     private const val KEY_CTRL_LATCH_STAYS_ON_SPACE = "ctrl_latch_stays_on_space"
     private const val KEY_EMOJI_PICKER_EXPANDED_HEIGHT = "emoji_picker_expanded_height"
+    private const val KEY_HIDDEN_KEYBOARD_APPS = "hidden_keyboard_apps" // Packages where Pastiera stays hidden
+    private const val KEY_TERMINAL_MODE_ENABLED = "terminal_mode_enabled"
+    private const val KEY_TERMINAL_MODE_APPS = "terminal_mode_apps"
+    private const val KEY_TERMINAL_MODE_SHOW_LEDS = "terminal_mode_show_leds"
+    private const val KEY_TERMINAL_MODE_TERMUX_ADDED = "terminal_mode_termux_added"
+    private const val KEY_EXACT_TYPING_APPS = "exact_typing_apps" // Apps where every character stays as typed
+    private const val KEY_EXACT_TYPING_NO_SUGGESTIONS = "exact_typing_no_suggestions" // Honour the app's no-suggestions flag
+    private const val KEY_TERMINAL_MODE_HIDE_KEYBOARD = "terminal_mode_hide_keyboard"
+    private const val KEY_TERMINAL_MODE_EMOJI_KEY = "terminal_mode_emoji_key"
+    const val TERMUX_PACKAGE = "com.termux"
+    // Earlier global switches; still read once, as the default for apps hidden at the time
+    private const val KEY_HIDDEN_APPS_SHOW_LEDS = "hidden_keyboard_apps_show_leds"
+    private const val KEY_HIDDEN_APPS_ALLOW_PANELS = "hidden_keyboard_apps_allow_panels"
+    // Per hidden app (package names, one per line)
+    private const val KEY_HIDDEN_APPS_LEDS = "hidden_keyboard_apps_leds"
+    private const val KEY_HIDDEN_APPS_PANELS = "hidden_keyboard_apps_panels"
+    private const val KEY_EMOJI_PICKER_KEY = "emoji_picker_key" // Physical key that toggles the emoji picker (KEYCODE_UNKNOWN = off)
+    private const val KEY_EMOJI_KEY_OPENS_LAYER = "emoji_key_opens_layer" // Emoji key opens the emoji layer instead of the picker
+    private const val KEY_EMOJI_KEY_AUTO_CLOSE = "emoji_key_auto_close" // Emoji key screens close after an emoji
+    private const val KEY_EMOJI_LAYER_RECENTS_KEY = "emoji_layer_recents_key" // Emoji layer key that shows recents
+    private const val KEY_EMOJI_LAYER_GIF_KEY = "emoji_layer_gif_key" // Emoji layer key that opens GIF search
+    private const val KEY_HIDDEN_APP_STANDARD_MODIFIERS = "hidden_app_standard_modifiers" // Titan Ctrl/Sym as standard keys
+    private const val KEY_EMOJI_SEARCH_ENTER_PICKS = "emoji_search_enter_picks" // Enter: first emoji, close
+    private const val KEY_SYMBOL_SEARCH_ENTER_PICKS = "symbol_search_enter_picks" // Enter: first symbol, close
+    private const val KEY_GIF_SEARCH_ENTER_PICKS = "gif_search_enter_picks" // Enter: first GIF (closes)
+    private const val KEY_RECENTS_FIRST_IN_SEARCH = "recents_first_in_search" // recently used first in searches
+    private const val KEY_OFFLINE_MODE = "offline_mode" // nothing goes online (see OfflineMode)
+    private const val KEY_SEARCH_KEY = "search_key" // opens search on the emoji layer, symbols pages, picker
+    private const val KEY_GIF_SHOW_FAVOURITES = "gif_show_favourites" // Favourites section in GIF search
+    private const val KEY_GIF_SHOW_RECENTS = "gif_show_recents" // Recent section in GIF search
+    private const val KEY_EMOJI_PICKER_FOCUS_SEARCH = "emoji_picker_focus_search" // typing searches on open
+    private const val KEY_GIF_FOCUS_SEARCH = "gif_focus_search" // typing searches GIFs on open
+    private const val KEY_EMOJI_LAYER_TYPE_TO_SEARCH = "emoji_layer_type_to_search" // a letter starts emoji search
+    private const val KEY_SYMBOLS_TYPE_TO_SEARCH = "symbols_type_to_search" // a letter starts symbol search
+    private const val KEY_GIFS_ENABLED = "gifs_enabled" // GIF key on the emoji layer, GIF tab in the picker
+    private const val KEY_KLIPY_API_KEY = "klipy_api_key" // User's own KLIPY key (not backed up)
     private const val KEY_DISMISSED_RELEASES = "dismissed_releases" // Set of release tag_names that were dismissed
     private const val KEY_TUTORIAL_COMPLETED = "tutorial_completed" // Whether the first-run tutorial has been completed
     private const val KEY_LAST_SEEN_WHATS_NEW_VERSION = "last_seen_whats_new_version"
@@ -160,9 +229,14 @@ object SettingsManager {
     private const val KEY_TRACKPAD_SWIPE_THRESHOLD = "trackpad_swipe_threshold" // Threshold for swipe detection on trackpad
     private const val KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad_suggestion_swipe_threshold"
     private const val KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad_delete_swipe_threshold"
+    private const val KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad_side_swipe_threshold"
     private const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
     private const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     private const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
+    const val KEY_SHOW_ADD_WORD_SUGGESTION = "show_add_word_suggestion" // Offer "add to dictionary" in the suggestions
+    const val KEY_LEARN_CONTACT_DETAILS = "learn_contact_details" // Keep emails and phone numbers typed by hand
+    const val KEY_LEARN_FREQUENT_WORDS = "learn_frequent_words" // Add words typed often to the dictionary
+    const val KEY_ADD_LAST_WORD_SHORTCUT = "add_last_word_shortcut" // Ctrl + Shift + D adds the last word to the dictionary
     private const val KEY_ALT_BACKSPACE_DELETE = "alt_backspace_delete" // Alt + Backspace performs forward delete
     private const val KEY_BACKSPACE_AT_START_DELETE = "backspace_at_start_delete" // Backspace at line start performs forward delete
     private const val KEY_PASTIERINA_MODE_OVERRIDE = "pastierina_mode_override" // pastierina | full_status_bar
@@ -180,7 +254,11 @@ object SettingsManager {
     const val KEY_TITAN2_ELITE_MAX_ICON_SHRINK = "titan2_elite_max_icon_shrink"
     const val KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER = "titan2_elite_top_corner_multiplier"
     const val KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS = "titan2_elite_rounded_corner_insets"
-    const val KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS = "titan2_elite_fill_bottom_corners"
+    const val KEY_TITAN2_ELITE_FILL_CORNERS = "titan2_elite_fill_corners"
+    const val KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS = "titan2_elite_straight_outer_buttons"
+    const val KEY_TITAN2_ELITE_STATUS_BAR_LIFT = "titan2_elite_status_bar_lift_dp"
+    const val KEY_TITAN2_ELITE_CONTOUR_LEDS = "titan2_elite_contour_leds"
+    const val TITAN2_ELITE_DEFAULT_LIFT_DP = 5
     private const val KEY_ACCESSIBILITY_LIVE_ANNOUNCEMENTS_ENABLED = "accessibility_live_announcements_enabled" // Whether status bar accessibility live announcements are enabled
     private const val KEY_ACCESSIBILITY_READ_SECOND_ROW_ENABLED = "accessibility_read_second_row_enabled" // Whether TalkBack should read quick settings/variations row
     private const val KEY_ACCESSIBILITY_SUGGESTIONS_ANNOUNCEMENT_DELAY_MS = "accessibility_suggestions_announcement_delay_ms" // Delay before suggestions become accessible again while typing
@@ -224,6 +302,7 @@ object SettingsManager {
     private const val KEY_STATUS_BAR_SLOTS_LEFT = "status_bar_slots_left"
     private const val KEY_STATUS_BAR_SLOTS_RIGHT = "status_bar_slots_right"
     private const val KEY_PASTIERINA_STATUS_BAR_SLOTS_LEFT = "pastierina_status_bar_slots_left"
+    private const val KEY_MENU_BAR_BUTTONS = "menu_bar_buttons" // The menu bar's buttons, in order
     private const val KEY_PASTIERINA_STATUS_BAR_SLOTS_RIGHT = "pastierina_status_bar_slots_right"
     private const val KEY_STATUS_BAR_VARIATIONS_VISIBLE = "status_bar_variations_visible"
     private const val KEY_DYNAMIC_VARIATION_BAR_SLOT_COUNT = "dynamic_variation_bar_slot_count"
@@ -235,6 +314,7 @@ object SettingsManager {
     const val STATUS_BAR_BUTTON_CLIPBOARD = "clipboard"
     const val STATUS_BAR_BUTTON_MICROPHONE = "microphone"
     const val STATUS_BAR_BUTTON_EMOJI = "emoji"
+    const val STATUS_BAR_BUTTON_GIF = "gif"
     const val STATUS_BAR_BUTTON_LANGUAGE = "language"
     const val STATUS_BAR_BUTTON_HAMBURGER = "hamburger"
     const val STATUS_BAR_BUTTON_MINIMAL_UI = "minimal_ui"
@@ -261,12 +341,14 @@ object SettingsManager {
     const val ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE = "enter_send_shift_newline"
     const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND = "enter_newline_ctrl_send"
     const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY = "enter_newline_only"
+    const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND = "enter_newline_shift_send"
     const val ENTER_BEHAVIOR_PRESET_CUSTOM = "custom"
 
     const val ENTER_BEHAVIOR_APP_DEFAULT = "app_default"
     const val ENTER_BEHAVIOR_ENTER_NEWLINE = "enter_newline"
     const val ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE = "enter_send_shift_newline"
     const val ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND = "enter_newline_ctrl_send"
+    const val ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND = "enter_newline_shift_send"
 
     const val ENTER_SEND_STRATEGY_AUTO = "auto"
     const val ENTER_SEND_STRATEGY_EDITOR_ACTION = "editor_action"
@@ -320,7 +402,7 @@ object SettingsManager {
     private const val DEFAULT_AUTO_CAPITALIZE_FIRST_LETTER = true
     private const val DEFAULT_AUTO_CAPITALIZE_RESPECT_MANUAL_SHIFT_OFF = true
     private const val DEFAULT_AUTO_CAPITALIZE_RESTRICTED_FIELDS = false
-    private const val DEFAULT_DOUBLE_SPACE_TO_PERIOD = true
+    private const val DEFAULT_DOUBLE_SPACE_TO_PERIOD = false
     private const val DEFAULT_SPACED_HYPHEN_TO_EN_DASH = false
     const val DASH_STYLE_EN = "en_dash"
     const val DASH_STYLE_EM = "em_dash"
@@ -369,8 +451,8 @@ object SettingsManager {
     private const val DEFAULT_CLICKS_SHOW_KEYBOARD_ONLY_WITH_TEXT_FOCUS = true
     private const val DEFAULT_CLICKS_CHARGING_START_PERCENT = 50
     private const val DEFAULT_CLICKS_CHARGING_STOP_PERCENT = 55
-    private const val DEFAULT_SYM_AUTO_CLOSE = true
-    private const val DEFAULT_SYM_AUTO_CLOSE_ON_TOUCH = true
+    private const val DEFAULT_SYM_AUTO_CLOSE = false
+    private const val DEFAULT_SYM_AUTO_CLOSE_ON_TOUCH = false
     private const val DEFAULT_MODIFIER_TAP_LATCHES = false
     private const val DEFAULT_MODIFIER_LATCH_STAYS_ON_SPACE = false
     private const val DEFAULT_BOUNCE_KEYS_ENABLED = false
@@ -384,7 +466,17 @@ object SettingsManager {
     private const val DEFAULT_BOUNCE_KEYS_BACKSPACE_ENABLED = true
     private const val DEFAULT_OVERLAPPING_KEYS_ENABLED = false
     private const val DEFAULT_EMOJI_PICKER_EXPANDED_HEIGHT = true
-    private val DEFAULT_SYM_PAGES_CONFIG = SymPagesConfig()
+    private const val DEFAULT_EMOJI_PICKER_KEY = KeyEvent.KEYCODE_SHIFT_RIGHT // fork default
+    // Until chosen: only the symbols layer, first; the emoji and device layers are opt-in
+    private val DEFAULT_SYM_PAGES_CONFIG = SymPagesConfig(
+        deviceEnabled = false,
+        emojiEnabled = false,
+        symbolsEnabled = true,
+        symPageOrder = listOf(
+            SymPagesConfig.PAGE_SYMBOLS, SymPagesConfig.PAGE_EMOJI, SymPagesConfig.PAGE_DEVICE,
+            SymPagesConfig.PAGE_CLIPBOARD, SymPagesConfig.PAGE_EMOJI_PICKER
+        )
+    )
     private const val SYM_PAGES_SCHEMA_VERSION = 2
     private const val DEFAULT_STATIC_VARIATION_BAR_MODE = false
     private const val DEFAULT_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED = false
@@ -406,9 +498,10 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
-    private const val DEFAULT_TRACKPAD_DELETE_SWIPE_THRESHOLD = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
-    private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 120f
+    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 40f
+    private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 40f
+    /** Flux Keyboard: a deliberate swipe, so scrolling past the suggestions doesn't pick one. */
+    private const val DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = 100f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
     const val TRACKPAD_PROVIDER_NATIVE_IME = "native_ime"
@@ -730,23 +823,65 @@ object SettingsManager {
             ?: defaultValue
     }
 
-    fun defaultKeyboardTheme(): KeyboardThemeSettings =
-        KeyboardThemeSettings(
-            background = 0xFFF2F2F2.toInt(),
-            divider = 0xFFB8B8B8.toInt(),
-            normalKey = 0xFFFAFAFA.toInt(),
-            specialKey = 0xFFDDDDDD.toInt(),
-            textAndIcons = 0xFF111111.toInt(),
-            ledInactive = 0xFFB0B0B0.toInt(),
-            ledActive = 0xFF555555.toInt(),
-            ledLocked = 0xFF111111.toInt(),
-            accent = 0xFF3F8C96.toInt(),
-            cursorSwipe = 0xFF3F8C96.toInt(),
-            keyPopup = 0xFFDDDDDD.toInt(),
-            keyPopupSelected = 0xFF3F8C96.toInt(),
-            suggestion = 0xFFFAFAFA.toInt(),
-            statusBarButton = 0xFFDDDDDD.toInt()
-        )
+    /** Classic Cloud: the light built-in theme, and the default for a fixed theme. */
+    private val CLASSIC_CLOUD = KeyboardThemeSettings(
+        background = 0xFFCCD2DC.toInt(),
+        divider = 0xFF9EA5AF.toInt(),
+        normalKey = 0xFFFFFFFF.toInt(),
+        specialKey = 0xFFAFB6C2.toInt(),
+        textAndIcons = 0xFF000000.toInt(),
+        ledInactive = 0xFFAEB5C0.toInt(),
+        ledActive = 0xFF007AFF.toInt(),
+        ledLocked = 0xFFFF9500.toInt(),
+        accent = 0xFF007AFF.toInt(),
+        cursorSwipe = 0xFF007AFF.toInt(),
+        keyPopup = 0xFFFFFFFF.toInt(),
+        keyPopupSelected = 0xFF007AFF.toInt(),
+        suggestion = 0xFFCCD2DC.toInt(),
+        statusBarButton = 0xFFAFB6C2.toInt(),
+        keyCornerRadiusRatio = 0.118f,
+        chromeCornerRadiusRatio = 0.09f,
+        // Sizes from Flux Keyboard's own Titan 2 Elite configuration
+        keyHeightScale = 1.259f,
+        numberRowHeightScale = 0.971f,
+        keyWidthScale = 0.941f,
+        rowGapScale = 1.05f,
+        showLeds = false,
+        suggestionsHeightScale = 0.9f,
+        variationsHeightScale = 0.88f,
+        keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
+    )
+
+    /** Classic Midnight: the dark built-in theme. */
+    private val CLASSIC_MIDNIGHT = KeyboardThemeSettings(
+        background = 0xFF1C1C1E.toInt(),
+        divider = 0xFF4A4A4D.toInt(),
+        normalKey = 0xFF3A3A3C.toInt(),
+        specialKey = 0xFF2C2C2E.toInt(),
+        textAndIcons = 0xFFFFFFFF.toInt(),
+        ledInactive = 0xFF404044.toInt(),
+        ledActive = 0xFF0A84FF.toInt(),
+        ledLocked = 0xFFFF9F0A.toInt(),
+        accent = 0xFF0A84FF.toInt(),
+        cursorSwipe = 0xFF0A84FF.toInt(),
+        keyPopup = 0xFF3A3A3C.toInt(),
+        keyPopupSelected = 0xFF0A84FF.toInt(),
+        suggestion = 0xFF202124.toInt(),
+        statusBarButton = 0xFF2C2C2E.toInt(),
+        keyCornerRadiusRatio = 0.118f,
+        chromeCornerRadiusRatio = 0.09f,
+        // Sizes from Flux Keyboard's own Titan 2 Elite configuration
+        keyHeightScale = 1.259f,
+        numberRowHeightScale = 0.971f,
+        keyWidthScale = 0.941f,
+        rowGapScale = 1.05f,
+        showLeds = false,
+        suggestionsHeightScale = 0.9f,
+        variationsHeightScale = 0.88f,
+        keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
+    )
+
+    fun defaultKeyboardTheme(): KeyboardThemeSettings = CLASSIC_CLOUD
 
     private fun defaultKeyboardTheme(target: KeyboardThemeTarget): KeyboardThemeSettings =
         when (target) {
@@ -764,46 +899,9 @@ object SettingsManager {
             )
         }
 
+    /** Following the system: Classic Midnight in dark mode, Classic Cloud in light mode. */
     private fun defaultSystemKeyboardTheme(target: KeyboardThemeTarget, dark: Boolean): KeyboardThemeSettings {
-        val base = if (dark) {
-            KeyboardThemeSettings(
-                background = 0xFF000000.toInt(),
-                divider = 0xFF2C3136.toInt(),
-                normalKey = 0xFF15191D.toInt(),
-                specialKey = 0xFF2B3138.toInt(),
-                textAndIcons = 0xFFEFEFEF.toInt(),
-                ledInactive = 0xFF303030.toInt(),
-                ledActive = 0xFF6496FF.toInt(),
-                ledLocked = 0xFFF76300.toInt(),
-                accent = 0xFF6496FF.toInt(),
-                cursorSwipe = 0xFF6496FF.toInt(),
-                keyPopup = 0xFF2B3138.toInt(),
-                keyPopupSelected = 0xFF6496FF.toInt(),
-                suggestion = 0xFF15191D.toInt(),
-                statusBarButton = 0xFF2B3138.toInt(),
-                keyCornerRadiusRatio = 0.10f,
-                chromeCornerRadiusRatio = 0.10f
-            )
-        } else {
-            KeyboardThemeSettings(
-                background = 0xFFF8FAFC.toInt(),
-                divider = 0xFFC7CDD4.toInt(),
-                normalKey = 0xFFFFFFFF.toInt(),
-                specialKey = 0xFFE0E6EE.toInt(),
-                textAndIcons = 0xFF171A1F.toInt(),
-                ledInactive = 0xFFD1D5DB.toInt(),
-                ledActive = 0xFF276EF1.toInt(),
-                ledLocked = 0xFFD65A00.toInt(),
-                accent = 0xFF276EF1.toInt(),
-                cursorSwipe = 0xFF276EF1.toInt(),
-                keyPopup = 0xFFE0E6EE.toInt(),
-                keyPopupSelected = 0xFF276EF1.toInt(),
-                suggestion = 0xFFFFFFFF.toInt(),
-                statusBarButton = 0xFFE0E6EE.toInt(),
-                keyCornerRadiusRatio = 0.10f,
-                chromeCornerRadiusRatio = 0.10f
-            )
-        }
+        val base = if (dark) CLASSIC_MIDNIGHT else CLASSIC_CLOUD
         return when (target) {
             KeyboardThemeTarget.HARDWARE -> base
             KeyboardThemeTarget.SOFTWARE -> base.copy(
@@ -851,7 +949,10 @@ object SettingsManager {
         }
 
     fun isKeyboardThemePreferenceKey(key: String?): Boolean {
-        return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE
+        return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE ||
+            key == KEY_KEYBOARD_WALLPAPER_COLOURS || key == KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS ||
+            key == KEY_KEYBOARD_BACKGROUND_KEY_OPACITY || key == KEY_KEYBOARD_BACKGROUND_UPDATED ||
+            key == KEY_KEYBOARD_BACKGROUND_FRAMING
     }
 
     fun isModifierIndicatorPreferenceKey(key: String?): Boolean {
@@ -922,7 +1023,8 @@ object SettingsManager {
     fun getKeyboardThemeAssignmentMode(context: Context, target: KeyboardThemeTarget): String {
         val stored = getPreferences(context).getString(
             keyboardThemeAssignmentModeKeyForTarget(target),
-            KEYBOARD_THEME_ASSIGNMENT_MODE_FIXED
+            // Until chosen, the keyboard follows the system's dark or light mode
+            KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM
         )
         return if (stored == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
             KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM
@@ -979,18 +1081,100 @@ object SettingsManager {
         return getEffectiveKeyboardTheme(context, target, locale = null, layout = null)
     }
 
+    private const val KEY_REMOVED_THEMES_MIGRATED = "removed_builtin_themes_migrated"
+
+    /**
+     * Once: a keyboard still coloured like a built-in theme that's gone (Flux Dark, Nord…) moves
+     * to the system-matched classic theme. Themes are saved as colours, so they're recognised by
+     * their colours; your own and your saved themes stay.
+     */
+    fun migrateRemovedBuiltInThemes(context: Context) {
+        val prefs = getPreferences(context)
+        if (prefs.getBoolean(KEY_REMOVED_THEMES_MIGRATED, false)) return
+        val removed = removedBuiltInThemes()
+        fun wasBuiltIn(key: String): Boolean {
+            val stored = prefs.getString(key, null) ?: return false
+            val json = runCatching { JSONObject(stored) }.getOrNull() ?: return false
+            return removed.any { preset ->
+                json.optInt("background") == preset.background &&
+                    json.optInt("normal_key") == preset.normalKey &&
+                    json.optInt("text_and_icons") == preset.textAndIcons &&
+                    json.optInt("accent") == preset.accent
+            }
+        }
+        val editor = prefs.edit()
+        KeyboardThemeTarget.values().forEach { target ->
+            if (wasBuiltIn(keyboardThemeKeyForTarget(target))) {
+                editor.remove(keyboardThemeKeyForTarget(target))
+                editor.putString(keyboardThemeAssignmentModeKeyForTarget(target), KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM)
+            }
+            listOf(keyboardThemeDarkKeyForTarget(target), keyboardThemeLightKeyForTarget(target)).forEach { key ->
+                if (wasBuiltIn(key)) editor.remove(key)
+            }
+        }
+        editor.putBoolean(KEY_REMOVED_THEMES_MIGRATED, true).apply()
+    }
+
     fun getEffectiveKeyboardTheme(
         context: Context,
         target: KeyboardThemeTarget,
         locale: String?,
         layout: String?
     ): KeyboardThemeSettings {
-        findKeyboardThemeLayoutOverride(context, target, locale, layout)?.let { return it.theme }
-        return if (getKeyboardThemeAssignmentMode(context, target) == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
-            getKeyboardThemeSystemSlot(context, target, dark = isSystemDarkTheme(context))
-        } else {
-            getKeyboardTheme(context, target)
-        }
+        migrateRemovedBuiltInThemes(context)
+        val theme = findKeyboardThemeLayoutOverride(context, target, locale, layout)?.theme
+            ?: if (getKeyboardThemeAssignmentMode(context, target) == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
+                getKeyboardThemeSystemSlot(context, target, dark = isSystemDarkTheme(context))
+            } else {
+                getKeyboardTheme(context, target)
+            }
+        // Flux Keyboard: colours from the wallpaper, over whichever theme applies
+        val coloured = if (getKeyboardWallpaperColours(context)) WallpaperKeyboardColours.recolour(context, theme) else theme
+        // Flux Keyboard: a picture behind the keyboard, keys shaded against it
+        val luminance = KeyboardBackgroundImage.luminance(context) ?: return coloured
+        return KeyboardBackgroundImage.recolour(
+            coloured, luminance, getKeyboardBackgroundAutoColours(context), getKeyboardBackgroundKeyOpacity(context),
+            KeyboardBackgroundImage.averageColour(context)
+        )
+    }
+
+    /** Over a background picture: keys see-through and shaded against it. */
+    fun getKeyboardBackgroundAutoColours(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS, true)
+
+    fun setKeyboardBackgroundAutoColours(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS, enabled).apply()
+    }
+
+    const val KEYBOARD_BACKGROUND_KEY_OPACITY_DEFAULT = 35
+
+    /** How solid the keys are over a background picture, in percent. */
+    fun getKeyboardBackgroundKeyOpacity(context: Context): Int =
+        getPreferences(context).getInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, KEYBOARD_BACKGROUND_KEY_OPACITY_DEFAULT).coerceIn(0, 100)
+
+    fun setKeyboardBackgroundKeyOpacity(context: Context, percent: Int) {
+        getPreferences(context).edit().putInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, percent.coerceIn(0, 100)).apply()
+    }
+
+    /** Where the background picture sits behind the keyboard. */
+    fun getKeyboardBackgroundFraming(context: Context): KeyboardBackgroundImage.Framing =
+        KeyboardBackgroundImage.Framing.decode(getPreferences(context).getString(KEY_KEYBOARD_BACKGROUND_FRAMING, null))
+
+    fun setKeyboardBackgroundFraming(context: Context, framing: KeyboardBackgroundImage.Framing) {
+        getPreferences(context).edit().putString(KEY_KEYBOARD_BACKGROUND_FRAMING, framing.encode()).apply()
+    }
+
+    /** Tells the keyboard the picture changed. */
+    fun touchKeyboardBackgroundImage(context: Context) {
+        getPreferences(context).edit().putLong(KEY_KEYBOARD_BACKGROUND_UPDATED, System.currentTimeMillis()).apply()
+    }
+
+    /** Keyboard colours from the wallpaper (Material You, Android 12+). */
+    fun getKeyboardWallpaperColours(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_KEYBOARD_WALLPAPER_COLOURS, false)
+
+    fun setKeyboardWallpaperColours(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_KEYBOARD_WALLPAPER_COLOURS, enabled).apply()
     }
 
     fun getKeyboardThemeLayoutOverrides(
@@ -1431,7 +1615,7 @@ object SettingsManager {
         if (prefs.contains(KEY_TITAN2_LAYOUT_ENABLED)) {
             return prefs.getBoolean(KEY_TITAN2_LAYOUT_ENABLED, false)
         }
-        return DeviceSpecific.isTitan2Device()
+        return false // Flux Keyboard: centred by default; aligning is an option
     }
 
     fun setTitan2LayoutEnabled(context: Context, enabled: Boolean) {
@@ -1445,15 +1629,6 @@ object SettingsManager {
             KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS,
             DeviceSpecific.isTitan2EliteDevice()
         )
-
-    fun getTitan2EliteFillBottomCorners(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS, true)
-
-    fun setTitan2EliteFillBottomCorners(context: Context, enabled: Boolean) {
-        getPreferences(context).edit()
-            .putBoolean(KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS, enabled)
-            .apply()
-    }
 
     fun getTitan2EliteTopCornerMultiplier(context: Context): Int =
         getPreferences(context).getInt(KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER, 2).let {
@@ -1478,6 +1653,42 @@ object SettingsManager {
             .putBoolean(KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS, enabled)
             .apply()
     }
+
+    /**
+     * Paint the keyboard background into the display's rounded corners instead of clipping to them.
+     * On by default on a Titan 2 Elite. Off while the LEDs are contoured: the rail runs along the
+     * display curve, which a filled corner would cover.
+     */
+    fun getTitan2EliteFillCorners(context: Context): Boolean =
+        !getTitan2EliteContourLeds(context) &&
+            getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, DeviceSpecific.isTitan2EliteDevice())
+
+    fun setTitan2EliteFillCorners(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, enabled).apply()
+    }
+
+    /**
+     * Titan 2 Elite corner style. Contoured LEDs (true): the outer
+     * buttons follow the display curve and one LED rail runs round it beneath them. Straight
+     * buttons (false, the default): the outer buttons reach straight down into the corners, and the bar is
+     * lifted [TITAN2_ELITE_DEFAULT_LIFT_DP] above the LEDs running along the corners.
+     */
+    fun getTitan2EliteContourLeds(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, false)
+
+    fun setTitan2EliteContourLeds(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, enabled).apply()
+    }
+
+    /** Straight outer buttons: the corner style that isn't contoured LEDs. */
+    fun getTitan2EliteStraightOuterButtons(context: Context): Boolean = !getTitan2EliteContourLeds(context)
+
+    /** How far the status bar sits above the modifier LEDs, in dp: fixed with straight buttons, none when contoured. */
+    fun getTitan2EliteStatusBarLiftDp(context: Context): Int =
+        if (getTitan2EliteContourLeds(context)) 0 else TITAN2_ELITE_DEFAULT_LIFT_DP
+
+    fun getTitan2EliteStatusBarLiftPx(context: Context): Int =
+        Math.round(getTitan2EliteStatusBarLiftDp(context) * context.resources.displayMetrics.density)
 
     /**
      * Enables the calibrated rounded-corner layout once for Titan 2 Elite users receiving this
@@ -1573,6 +1784,28 @@ object SettingsManager {
         getPreferences(context).edit()
             .putBoolean(KEY_CTRL_TAP_LATCHES, enabled)
             .apply()
+    }
+
+    /** Two quick taps lock the modifier (Caps Lock for Shift); off, the second tap lets it go. */
+    fun getShiftDoubleTapLocks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SHIFT_DOUBLE_TAP_LOCKS, true)
+
+    fun setShiftDoubleTapLocks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SHIFT_DOUBLE_TAP_LOCKS, enabled).apply()
+    }
+
+    fun getAltDoubleTapLocks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_ALT_DOUBLE_TAP_LOCKS, true)
+
+    fun setAltDoubleTapLocks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_ALT_DOUBLE_TAP_LOCKS, enabled).apply()
+    }
+
+    fun getCtrlDoubleTapLocks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_CTRL_DOUBLE_TAP_LOCKS, true)
+
+    fun setCtrlDoubleTapLocks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_CTRL_DOUBLE_TAP_LOCKS, enabled).apply()
     }
 
     fun getAltLatchStaysOnSpace(context: Context): Boolean {
@@ -1913,6 +2146,15 @@ object SettingsManager {
     /**
      * Returns the state of auto-capitalization after period.
      */
+    /** A text emoticon (:) ;D <3) ends a sentence, so the next word gets a capital (on by default). */
+    fun getAutoCapAfterEmoticon(context: Context): Boolean =
+        getPreferences(context).getBoolean("auto_cap_after_emoticon", true)
+
+    fun setAutoCapAfterEmoticon(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("auto_cap_after_emoticon", enabled).apply()
+        it.palsoftware.pastiera.core.EmoticonSentences.enabled = enabled
+    }
+
     fun getAutoCapitalizeAfterPeriod(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_AUTO_CAPITALIZE_AFTER_PERIOD, DEFAULT_AUTO_CAPITALIZE_AFTER_PERIOD)
     }
@@ -2050,6 +2292,17 @@ object SettingsManager {
         )
     }
 
+    /**
+     * Flux Keyboard: "Space after comma" is Punctuation spacing's comma row now. Turned on, it
+     * moves there (no space before a comma, one after) and switches itself off.
+     */
+    fun foldCommaSpaceIntoPunctuationSpacing(context: Context) {
+        if (!getCommaSpace(context)) return
+        setAutoSpacePunctuation(context, getAutoSpacePunctuation(context) + ",")
+        setSpaceAfterPunctuation(context, getSpaceAfterPunctuation(context) + ",")
+        setCommaSpace(context, false)
+    }
+
     fun setCommaSpace(context: Context, enabled: Boolean) {
         getPreferences(context).edit()
             .putBoolean(KEY_COMMA_SPACE, enabled)
@@ -2068,6 +2321,14 @@ object SettingsManager {
         getPreferences(context).edit()
             .putString(KEY_AUTO_SPACE_PUNCTUATION, normalizeAutoSpacePunctuation(punctuation))
             .apply()
+    }
+
+    /** Punctuation typed straight into more (":-)", ":D") skips its space after, so emoticons keep their shape */
+    fun getEmoticonPunctuation(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOTICON_PUNCTUATION, true)
+
+    fun setEmoticonPunctuation(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOTICON_PUNCTUATION, enabled).apply()
     }
 
     fun getSpaceAfterPunctuation(context: Context): String {
@@ -2142,6 +2403,26 @@ object SettingsManager {
         getPreferences(context).edit()
             .putBoolean(KEY_SWIPE_TO_DELETE, enabled)
             .apply()
+    }
+
+    // Flux Keyboard: trackpad swipe directions
+    private const val KEY_TRACKPAD_SUGGESTION_SWIPE_DIRECTIONS = "trackpad_suggestion_swipe_directions"
+    private const val KEY_TRACKPAD_SWIPE_DOWN_DELETES_WORD = "trackpad_swipe_down_deletes_word"
+
+    /** Left, up and right swipes pick the left, middle and right suggestion, wherever they start. */
+    fun getTrackpadSuggestionSwipeDirections(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TRACKPAD_SUGGESTION_SWIPE_DIRECTIONS, false)
+
+    fun setTrackpadSuggestionSwipeDirections(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TRACKPAD_SUGGESTION_SWIPE_DIRECTIONS, enabled).apply()
+    }
+
+    /** A swipe down on the trackpad deletes the previous word. */
+    fun getTrackpadSwipeDownDeletesWord(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TRACKPAD_SWIPE_DOWN_DELETES_WORD, false)
+
+    fun setTrackpadSwipeDownDeletesWord(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TRACKPAD_SWIPE_DOWN_DELETES_WORD, enabled).apply()
     }
 
     fun getSwipeToDeleteProvider(context: Context): String {
@@ -2557,6 +2838,41 @@ object SettingsManager {
     /**
      * Returns whether Shift+Backspace performs forward delete.
      */
+    /** Whether a word outside the dictionary typed three times is added to it (on by default). */
+    fun getLearnFrequentWords(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LEARN_FREQUENT_WORDS, true)
+
+    fun setLearnFrequentWords(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LEARN_FREQUENT_WORDS, enabled).apply()
+    }
+
+    /**
+     * Whether emails and phone numbers typed by hand are kept in the user dictionary and offered
+     * again in email and phone fields (on by default; never while typing incognito).
+     */
+    fun getLearnContactDetails(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LEARN_CONTACT_DETAILS, true)
+
+    fun setLearnContactDetails(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LEARN_CONTACT_DETAILS, enabled).apply()
+    }
+
+    /** Whether the suggestions offer to add an unknown word to the dictionary (on by default). */
+    fun getShowAddWordSuggestion(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, true)
+
+    fun setShowAddWordSuggestion(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, enabled).apply()
+    }
+
+    /** Whether Ctrl + Shift + D adds the last word typed to the dictionary (on by default). */
+    fun getAddLastWordShortcut(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_ADD_LAST_WORD_SHORTCUT, true)
+
+    fun setAddLastWordShortcut(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_ADD_LAST_WORD_SHORTCUT, enabled).apply()
+    }
+
     fun getShiftBackspaceDelete(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_SHIFT_BACKSPACE_DELETE, DEFAULT_SHIFT_BACKSPACE_DELETE)
     }
@@ -2627,6 +2943,8 @@ object SettingsManager {
     fun getStaticVariationBarPreset(context: Context): String {
         val prefs = getPreferences(context)
         val stored = prefs.getString(KEY_STATIC_VARIATION_BAR_PRESET, null)
+        // Nothing chosen yet (not even the older on/off switch): Dev's choice
+        if (stored == null && !prefs.contains(KEY_STATIC_VARIATION_BAR_MODE)) return STATIC_VARIATION_PRESET_DEV_CHOICE
         val fallback = if (prefs.getBoolean(KEY_STATIC_VARIATION_BAR_MODE, DEFAULT_STATIC_VARIATION_BAR_MODE)) {
             if (prefs.getBoolean(
                     KEY_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED,
@@ -2767,6 +3085,274 @@ object SettingsManager {
             .apply()
     }
     
+    /** Offer what you just copied as a suggestion to paste when you start typing in a field. */
+    /** Each status LED in its own colour (LedColors); off keeps the theme's LED colours. */
+    fun getLedIndividualColorsEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LED_INDIVIDUAL_COLORS, false)
+
+    fun setLedIndividualColorsEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LED_INDIVIDUAL_COLORS, enabled).apply()
+    }
+
+    /** Locked LEDs sweep a gradient of their colour (off: a steady colour). */
+    fun getLedLockedAnimationEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LED_LOCKED_ANIMATION, false)
+
+    fun setLedLockedAnimationEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LED_LOCKED_ANIMATION, enabled).apply()
+    }
+
+    /** One LED's colour ([led]: shift, ctrl, alt or sym). */
+    fun getLedColor(context: Context, led: String, default: Int): Int =
+        getPreferences(context).getInt(LED_COLOR_KEY_PREFIX + led, default)
+
+    fun setLedColor(context: Context, led: String, color: Int) {
+        getPreferences(context).edit().putInt(LED_COLOR_KEY_PREFIX + led, color).apply()
+    }
+
+    /** Password managers' chips (logins, one-time codes) in the suggestion bar, Android 11+. */
+    /** Keyboard swipes stay with the keyboard while a field is typed in, not the app (on by default). */
+    fun getTrackpadCaptureWhileTyping(context: Context): Boolean =
+        getPreferences(context).getBoolean("trackpad_capture_while_typing", true)
+
+    fun setTrackpadCaptureWhileTyping(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("trackpad_capture_while_typing", enabled).apply()
+    }
+
+    /**
+     * Keyboard swipes per app, with Scroll assistant on for every app: off, kept from the listed
+     * apps (blocked there), or kept only in the listed apps (blocked everywhere else).
+     */
+    enum class TrackpadAppMode(val id: String) { OFF("off"), BLOCK("block"), KEEP("keep") }
+
+    fun getTrackpadAppMode(context: Context): TrackpadAppMode {
+        val id = getPreferences(context).getString("trackpad_app_mode", null)
+        return TrackpadAppMode.entries.firstOrNull { it.id == id } ?: TrackpadAppMode.OFF
+    }
+
+    fun setTrackpadAppMode(context: Context, mode: TrackpadAppMode) {
+        getPreferences(context).edit().putString("trackpad_app_mode", mode.id).apply()
+        it.palsoftware.pastiera.inputmethod.ClicksAccessibilityKeyBridge.refreshTrackpadClaim()
+    }
+
+    fun getTrackpadApps(context: Context): List<String> =
+        parsePackageList(getPreferences(context).getString("trackpad_apps", null) ?: "")
+
+    fun setTrackpadApps(context: Context, packages: Collection<String>) {
+        val clean = packages.joinToString("\n").let(::parsePackageList)
+        getPreferences(context).edit().putString("trackpad_apps", clean.joinToString("\n")).apply()
+        it.palsoftware.pastiera.inputmethod.ClicksAccessibilityKeyBridge.refreshTrackpadClaim()
+    }
+
+    /** Whether keyboard swipes are kept from [packageName] (it doesn't scroll with them). */
+    fun trackpadBlockedIn(context: Context, packageName: String): Boolean = when (getTrackpadAppMode(context)) {
+        TrackpadAppMode.OFF -> false
+        TrackpadAppMode.BLOCK -> packageName in getTrackpadApps(context)
+        TrackpadAppMode.KEEP -> packageName !in getTrackpadApps(context)
+    }
+
+    fun getInlineAutofillEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_INLINE_AUTOFILL, true)
+
+    fun setInlineAutofillEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_INLINE_AUTOFILL, enabled).apply()
+    }
+
+    /** An emoji for the word you're typing, in the suggestion bar. */
+    /** Suggestion bar words in bold, easier to spot when typing fast (palsoftware/pastiera#310). */
+    fun getSuggestionsBold(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SUGGESTIONS_BOLD, false)
+
+    fun setSuggestionsBold(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SUGGESTIONS_BOLD, enabled).apply()
+    }
+
+    /** Keys that pick a suggestion (an [it.palsoftware.pastiera.inputmethod.SuggestionKeys] option). */
+    /** Until chosen: Ctrl+Shift+Q/W/E, or off while trackpad swipes pick the suggestions. */
+    fun getSuggestionKeys(context: Context): String =
+        getPreferences(context).getString(KEY_SUGGESTION_KEYS, null)
+            ?.takeIf { option -> option in it.palsoftware.pastiera.inputmethod.SuggestionKeys.OPTIONS }
+            ?: if (getTrackpadGesturesEnabled(context) && getTrackpadSuggestionSwipeDirections(context)) {
+                it.palsoftware.pastiera.inputmethod.SuggestionKeys.OFF
+            } else {
+                it.palsoftware.pastiera.inputmethod.SuggestionKeys.CTRL_SHIFT_QWE
+            }
+
+    fun setSuggestionKeys(context: Context, option: String) {
+        getPreferences(context).edit().putString(KEY_SUGGESTION_KEYS, option).apply()
+    }
+
+    /** Voice input keeps listening through pauses until you stop it or stay silent. On by default. */
+    fun getSpeechKeepListening(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SPEECH_KEEP_LISTENING, true)
+
+    /** How long a pause (seconds) ends voice input while it keeps listening. 3 s by default. */
+    fun getSpeechPauseTimeoutSeconds(context: Context): Int =
+        getPreferences(context).getInt("speech_pause_timeout_seconds", 3).coerceIn(1, 20)
+
+    fun setSpeechPauseTimeoutSeconds(context: Context, seconds: Int) {
+        getPreferences(context).edit().putInt("speech_pause_timeout_seconds", seconds.coerceIn(1, 20)).apply()
+    }
+
+    fun setSpeechKeepListening(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SPEECH_KEEP_LISTENING, enabled).apply()
+    }
+
+    /**
+     * The Clicks Power Keyboard's settings apply here: one is connected now or has been before.
+     * Phones that never had one don't see its settings.
+     */
+    fun hasClicksKeyboard(context: Context): Boolean {
+        if (getPreferences(context).getBoolean(KEY_CLICKS_KEYBOARD_SEEN, false)) return true
+        val connected = runCatching {
+            android.view.InputDevice.getDeviceIds().asSequence()
+                .mapNotNull(android.view.InputDevice::getDevice)
+                .any(it.palsoftware.pastiera.inputmethod.DeviceSpecific::isClicksPowerKeyboard)
+        }.getOrDefault(false)
+        if (connected) markClicksKeyboardSeen(context)
+        return connected
+    }
+
+    fun markClicksKeyboardSeen(context: Context) {
+        val prefs = getPreferences(context)
+        if (!prefs.getBoolean(KEY_CLICKS_KEYBOARD_SEEN, false)) {
+            prefs.edit().putBoolean(KEY_CLICKS_KEYBOARD_SEEN, true).apply()
+        }
+    }
+
+    /** The Titan 2 layout option applies here: a Titan 2, or it's already on elsewhere (so it can be turned off). */
+    fun titan2LayoutApplies(context: Context): Boolean =
+        it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2Device() || isTitan2LayoutEnabled(context)
+
+    fun getEmojiSuggestionsEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOJI_SUGGESTIONS, true)
+
+    fun setEmojiSuggestionsEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_SUGGESTIONS, enabled).apply()
+    }
+
+    /** Links Pastiera pastes lose their tracking parameters and mobile hosts. On by default. */
+    fun getCleanPastedLinks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_CLEAN_PASTED_LINKS, true)
+
+    fun setCleanPastedLinks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_CLEAN_PASTED_LINKS, enabled).apply()
+    }
+
+    /** [text] as Pastiera pastes it: links cleaned when that's on. */
+    fun textToPaste(context: Context, text: String): String =
+        if (getCleanPastedLinks(context)) it.palsoftware.pastiera.clipboard.LinkCleaner.clean(text) else text
+
+    /** Remember the language per app: each app gets back the language last used in it. */
+    fun getLanguagePerAppEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LANGUAGE_PER_APP, true)
+
+    fun setLanguagePerAppEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LANGUAGE_PER_APP, enabled).apply()
+        if (!enabled) context.getSharedPreferences(APP_LANGUAGES_PREFS, Context.MODE_PRIVATE).edit().clear().apply()
+    }
+
+    /** The language (a subtype key, see SubtypeCycler.subtypeKey) last used in [packageName]. */
+    fun getAppLanguage(context: Context, packageName: String): String? =
+        context.getSharedPreferences(APP_LANGUAGES_PREFS, Context.MODE_PRIVATE).getString(packageName, null)
+
+    fun setAppLanguage(context: Context, packageName: String, subtypeKey: String) {
+        context.getSharedPreferences(APP_LANGUAGES_PREFS, Context.MODE_PRIVATE).edit()
+            .putString(packageName, subtypeKey).apply()
+    }
+
+    /** In a search bar an app focuses as it opens, the keyboard bar shows only once you type. */
+    fun getSearchBarWaitsForTyping(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SEARCH_BAR_WAITS_FOR_TYPING, false)
+
+    fun setSearchBarWaitsForTyping(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SEARCH_BAR_WAITS_FOR_TYPING, enabled).apply()
+    }
+
+    /** The kinds of text field with automatic Shift (ShiftFieldTypes ids); null before it was set. */
+    fun getAutoShiftFieldTypes(context: Context): Set<String>? =
+        getPreferences(context).getString(KEY_AUTO_SHIFT_FIELD_TYPES, null)
+            ?.split(',')?.filter { it.isNotBlank() }?.toSet()
+
+    fun setAutoShiftFieldTypes(context: Context, ids: Set<String>) {
+        getPreferences(context).edit().putString(KEY_AUTO_SHIFT_FIELD_TYPES, ids.sorted().joinToString(",")).apply()
+    }
+
+    /** One-time codes from notifications, offered as a chip (needs notification access). */
+    fun getOneTimeCodesEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_ONE_TIME_CODES, false)
+
+    fun setOneTimeCodesEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_ONE_TIME_CODES, enabled).apply()
+        if (!enabled) it.palsoftware.pastiera.otp.OneTimeCodes.consume()
+    }
+
+    /** Whether Android lets the app read notifications (for one-time codes). */
+    fun hasNotificationAccess(context: Context): Boolean =
+        androidx.core.app.NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)
+
+    fun getPasteSuggestionEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_PASTE_SUGGESTION, true)
+
+    fun setPasteSuggestionEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION, enabled).apply()
+    }
+
+    /** The paste suggestion in password fields too, masked (a password you just copied). */
+    fun getPasteSuggestionInPasswordFields(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, true)
+
+    fun setPasteSuggestionInPasswordFields(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, enabled).apply()
+    }
+
+    /** Incognito typing everywhere: Pastiera learns nothing from what you type. */
+    fun getIncognitoAlways(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_INCOGNITO_ALWAYS, false)
+
+    fun setIncognitoAlways(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_INCOGNITO_ALWAYS, enabled).apply()
+    }
+
+    /** Incognito in fields whose app asks keyboards not to learn (private tabs, some messengers). */
+    fun getIncognitoFollowApps(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_INCOGNITO_FOLLOW_APPS, true)
+
+    fun setIncognitoFollowApps(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_INCOGNITO_FOLLOW_APPS, enabled).apply()
+    }
+
+    /** Whether typing in this field is incognito (see [getIncognitoAlways], [getIncognitoFollowApps]). */
+    fun isIncognitoField(context: Context, imeOptions: Int): Boolean =
+        getIncognitoAlways(context) ||
+            (getIncognitoFollowApps(context) &&
+                imeOptions and android.view.inputmethod.EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0)
+
+    /** Developer options (calibration, debugging and preview tools) are shown in the settings. */
+    /** Developer options: on by default in dev builds (x.yy-flux.<time>), off in full releases. */
+    fun getDeveloperOptionsEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, BuildConfig.VERSION_NAME.contains("-flux."))
+
+    fun setDeveloperOptionsEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, enabled).apply()
+    }
+
+    /** Smart toggle: Alt lock switches off after an opening quote or bracket typed with Alt. */
+    fun getSmartAltOffAfterOpening(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SMART_ALT_OFF_AFTER_OPENING, false)
+
+    fun setSmartAltOffAfterOpening(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SMART_ALT_OFF_AFTER_OPENING, enabled).apply()
+    }
+
+    /** Smart toggle: a tapped Ctrl latch switches off after one shortcut (not after cursor moves). */
+    fun getSmartCtrlOffAfterShortcut(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SMART_CTRL_OFF_AFTER_SHORTCUT, true)
+
+    fun setSmartCtrlOffAfterShortcut(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SMART_CTRL_OFF_AFTER_SHORTCUT, enabled).apply()
+    }
+
     /**
      * Returns custom SYM mappings.
      * Returns an empty map if there are no custom mappings.
@@ -3583,8 +4169,8 @@ object SettingsManager {
             commandId = PastieraCommandSource.COMMAND_QUICK_LAUNCHER,
             source = CommandSourceId.Pastiera.storageValue,
             kind = "PastieraAction",
-            title = "Pastiera QuickLauncher",
-            subtitle = "Open Pastiera search",
+            title = "${it.palsoftware.pastiera.BuildConfig.APP_NAME} QuickLauncher",
+            subtitle = "Open ${it.palsoftware.pastiera.BuildConfig.APP_NAME} search",
             launch = CommandLaunchSpec.InternalAction(PastieraCommandSource.ACTION_OPEN_QUICK_LAUNCHER)
         )
         getPreferences(context).edit()
@@ -3888,9 +4474,9 @@ object SettingsManager {
         return listOf(
             CommandSourceVisibility(CommandSourceId.Apps.storageValue, quickLauncherEnabled = true),
             CommandSourceVisibility(CommandSourceId.Pastiera.storageValue, quickLauncherEnabled = true),
-            CommandSourceVisibility(CommandSourceId.AppActions.storageValue, quickLauncherEnabled = false),
-            CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = false),
-            CommandSourceVisibility(CommandSourceId.NavActions.storageValue, quickLauncherEnabled = false)
+            CommandSourceVisibility(CommandSourceId.AppActions.storageValue, quickLauncherEnabled = true),
+            CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = true),
+            CommandSourceVisibility(CommandSourceId.NavActions.storageValue, quickLauncherEnabled = true)
         )
     }
 
@@ -4067,6 +4653,79 @@ object SettingsManager {
         getPreferences(context).edit()
             .putBoolean(KEY_QUICK_LAUNCHER_TEXT_FIELD_SHORTCUTS, enabled)
             .apply()
+    }
+
+    // Flux Keyboard: which releases updates offer
+    private const val KEY_FORK_UPDATE_CHANNEL = "fork_update_channel"
+    const val FORK_UPDATE_CHANNEL_STABLE = "stable"
+    const val FORK_UPDATE_CHANNEL_DEV = "dev"
+
+    /**
+     * Stable: full releases only (0.92). Dev: also each dev build (0.93-flux.<time>). Until
+     * chosen, it follows the installed build: a dev build stays on dev builds, a release on releases.
+     */
+    fun getForkUpdateChannel(context: Context): String =
+        when (getPreferences(context).getString(KEY_FORK_UPDATE_CHANNEL, null)) {
+            FORK_UPDATE_CHANNEL_DEV -> FORK_UPDATE_CHANNEL_DEV
+            FORK_UPDATE_CHANNEL_STABLE -> FORK_UPDATE_CHANNEL_STABLE
+            else -> if (BuildConfig.VERSION_NAME.contains("-flux.")) FORK_UPDATE_CHANNEL_DEV else FORK_UPDATE_CHANNEL_STABLE
+        }
+
+    /**
+     * A dev build's choices stay when it updates to a full release: the Dev update channel and
+     * Developer options, which otherwise follow the installed build, are kept as settings. Also
+     * for a release installed over a dev build, while What's new still remembers the dev build.
+     */
+    fun keepDevBuildChoices(context: Context) {
+        val prefs = getPreferences(context)
+        val onDevBuild = BuildConfig.VERSION_NAME.contains("-flux.") ||
+            prefs.getString(KEY_LAST_SEEN_WHATS_NEW_VERSION, null)?.contains("-flux.") == true
+        if (!onDevBuild) return
+        val edit = prefs.edit()
+        if (!prefs.contains(KEY_FORK_UPDATE_CHANNEL)) edit.putString(KEY_FORK_UPDATE_CHANNEL, FORK_UPDATE_CHANNEL_DEV)
+        if (!prefs.contains(KEY_DEVELOPER_OPTIONS_ENABLED)) edit.putBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, true)
+        edit.apply()
+    }
+
+    fun setForkUpdateChannel(context: Context, channel: String) {
+        getPreferences(context).edit().putString(KEY_FORK_UPDATE_CHANNEL, channel).apply()
+    }
+
+    // Flux Keyboard: quick launcher extras
+    private const val KEY_QUICK_LAUNCHER_APP_SHORTCUTS = "quick_launcher_app_shortcuts"
+    private const val KEY_NIAGARA_BACK_RETURNS = "quick_launcher_niagara_back_returns"
+    private const val KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS = "quick_launcher_listed_app_shortcuts"
+
+    /** Flux Keyboard's own shortcuts (New message, Search) for the apps in its shortcut and Enter lists. */
+    /** Apps whose Flux Keyboard shortcuts you turned off (from their long-press menu). */
+    fun getQuickLauncherListedAppsOff(context: Context): Set<String> =
+        getPreferences(context).getStringSet("quick_launcher_listed_apps_off", null).orEmpty()
+
+    fun setQuickLauncherListedAppOff(context: Context, packageName: String, off: Boolean) {
+        val current = getQuickLauncherListedAppsOff(context)
+        getPreferences(context).edit()
+            .putStringSet("quick_launcher_listed_apps_off", if (off) current + packageName else current - packageName)
+            .apply()
+    }
+
+    fun getQuickLauncherListedAppShortcuts(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS, true)
+    fun setQuickLauncherListedAppShortcuts(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS, enabled).apply()
+    }
+
+    /** Apps' own launcher shortcuts ("New message") are quick launcher results. */
+    fun getQuickLauncherAppShortcuts(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_QUICK_LAUNCHER_APP_SHORTCUTS, true)
+    fun setQuickLauncherAppShortcuts(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_QUICK_LAUNCHER_APP_SHORTCUTS, enabled).apply()
+    }
+
+    /** Back from Niagara's search, before opening anything, returns to the app it was opened from. */
+    fun getNiagaraBackReturns(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_NIAGARA_BACK_RETURNS, true)
+    fun setNiagaraBackReturns(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_NIAGARA_BACK_RETURNS, enabled).apply()
     }
 
     fun getQuickLauncherAltSpaceInTextFields(context: Context): Boolean {
@@ -4311,7 +4970,7 @@ object SettingsManager {
                 )
             }
 
-            mappingsFile.writeText(jsonObject.toString())
+            mappingsFile.writeTextAtomically(jsonObject.toString())
             prefs.edit()
                 .putInt(KEY_NAV_MODE_DEFAULT_MAPPINGS_VERSION, CURRENT_NAV_MODE_DEFAULT_MAPPINGS_VERSION)
                 .putLong(KEY_NAV_MODE_MAPPINGS_UPDATED, System.currentTimeMillis())
@@ -4386,7 +5045,7 @@ object SettingsManager {
             jsonObject.put("mappings", mappingsObject)
             
             val mappingsFile = getNavModeMappingsFile(context)
-            mappingsFile.writeText(jsonObject.toString())
+            mappingsFile.writeTextAtomically(jsonObject.toString())
             
             // Update timestamp in SharedPreferences to notify the service
             getPreferences(context).edit()
@@ -4499,11 +5158,38 @@ object SettingsManager {
      * Returns the symbol used for dedicated hardware currency keys.
      */
     fun getPhysicalKeyboardCurrencySymbol(context: Context): String {
-        val value = getPreferences(context).getString(
-            KEY_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL,
-            DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
-        ) ?: DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
+        // Until chosen: the phone's own currency (its region's), when it's one of ours
+        val value = getPreferences(context).getString(KEY_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL, null)
+            ?: return localCurrencySymbol()
         return normalizePhysicalKeyboardCurrencySymbol(value)
+    }
+
+    private fun localCurrencySymbol(): String {
+        val code = runCatching { java.util.Currency.getInstance(java.util.Locale.getDefault()).currencyCode }.getOrNull()
+        return when (code) {
+            "USD", "CAD", "AUD", "NZD", "MXN", "SGD", "HKD" -> "$"
+            "GBP" -> "£"
+            "JPY", "CNY" -> "¥"
+            "INR" -> "₹"
+            "RUB" -> "₽"
+            else -> DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
+        }
+    }
+
+    /**
+     * The symbols page's defaults made yours: N holds your currency (Keyboard > Currency
+     * symbol), M a second one, $ or, when yours is $, €.
+     */
+    fun personaliseSymbolsDefaults(context: Context, mappings: Map<Int, String>): Map<Int, String> {
+        val currency = getPhysicalKeyboardCurrencySymbol(context)
+        return mappings.mapValues { (keyCode, symbol) ->
+            when {
+                symbol == "\u00A4" -> currency
+                // Two of the same would waste a key
+                keyCode == KeyEvent.KEYCODE_M && symbol == "$" && currency == "$" -> "€"
+                else -> symbol
+            }
+        }
     }
 
     /**
@@ -5134,6 +5820,74 @@ object SettingsManager {
             .apply()
     }
 
+    /** The emoji layer as pages (Q back, P on), recent emoji first. On by default. */
+    fun getEmojiLayerPages(context: Context): Boolean =
+        getPreferences(context).getBoolean("emoji_layer_pages", true)
+
+    fun setEmojiLayerPages(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("emoji_layer_pages", enabled).apply()
+    }
+
+    /** The symbols page as pages (Q back, P on), recent symbols first, kaomoji last. On by default. */
+    fun getSymbolsPages(context: Context): Boolean =
+        getPreferences(context).getBoolean("symbols_pages", true)
+
+    fun setSymbolsPages(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("symbols_pages", enabled).apply()
+    }
+
+    /** An emoji typed with its key closes the emoji layer (until changed, as SYM auto-close was). */
+    fun getEmojiLayerCloseOnKey(context: Context): Boolean =
+        getPreferences(context).getBoolean("emoji_layer_close_on_key", getSymAutoClose(context))
+
+    fun setEmojiLayerCloseOnKey(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("emoji_layer_close_on_key", enabled).apply()
+    }
+
+    /** An emoji tapped on the layer closes it (until changed, as SYM auto-close on touch was). */
+    fun getEmojiLayerCloseOnTap(context: Context): Boolean =
+        getPreferences(context).getBoolean(
+            "emoji_layer_close_on_tap", getSymAutoClose(context) && getSymAutoCloseOnTouch(context)
+        )
+
+    fun setEmojiLayerCloseOnTap(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("emoji_layer_close_on_tap", enabled).apply()
+    }
+
+    /** A symbol typed with its key closes the symbols page (until changed, as SYM auto-close was). */
+    fun getSymbolsCloseOnKey(context: Context): Boolean =
+        getPreferences(context).getBoolean("symbols_close_on_key", getSymAutoClose(context))
+
+    fun setSymbolsCloseOnKey(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("symbols_close_on_key", enabled).apply()
+    }
+
+    /** A symbol tapped on the symbols page closes it (until changed, as SYM auto-close on touch was). */
+    fun getSymbolsCloseOnTap(context: Context): Boolean =
+        getPreferences(context).getBoolean(
+            "symbols_close_on_tap", getSymAutoClose(context) && getSymAutoCloseOnTouch(context)
+        )
+
+    fun setSymbolsCloseOnTap(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("symbols_close_on_tap", enabled).apply()
+    }
+
+    /** A kaomoji typed with its key closes the symbols page (off until changed). */
+    fun getKaomojiCloseOnKey(context: Context): Boolean =
+        getPreferences(context).getBoolean("kaomoji_close_on_key", false)
+
+    fun setKaomojiCloseOnKey(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("kaomoji_close_on_key", enabled).apply()
+    }
+
+    /** A kaomoji tapped on screen closes the symbols page (off until changed). */
+    fun getKaomojiCloseOnTap(context: Context): Boolean =
+        getPreferences(context).getBoolean("kaomoji_close_on_tap", false)
+
+    fun setKaomojiCloseOnTap(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("kaomoji_close_on_tap", enabled).apply()
+    }
+
     fun getSymAutoCloseOnTouch(context: Context): Boolean {
         return getPreferences(context).getBoolean(
             KEY_SYM_AUTO_CLOSE_ON_TOUCH,
@@ -5158,6 +5912,477 @@ object SettingsManager {
         getPreferences(context).edit()
             .putBoolean(KEY_EMOJI_PICKER_EXPANDED_HEIGHT, enabled)
             .apply()
+    }
+
+    /** Keys that type or edit text, or that Android and Pastiera need while typing. */
+    private val EMOJI_PICKER_KEY_DENYLIST: Set<Int> = setOf(
+        KeyEvent.KEYCODE_SPACE,
+        KeyEvent.KEYCODE_ENTER,
+        KeyEvent.KEYCODE_NUMPAD_ENTER,
+        KeyEvent.KEYCODE_DEL,
+        KeyEvent.KEYCODE_FORWARD_DEL,
+        KeyEvent.KEYCODE_TAB,
+        KeyEvent.KEYCODE_ESCAPE,
+        KeyEvent.KEYCODE_BACK,
+        KeyEvent.KEYCODE_HOME,
+        KeyEvent.KEYCODE_POWER,
+        KeyEvent.KEYCODE_APP_SWITCH,
+        KeyEvent.KEYCODE_SYM,
+        KeyEvent.KEYCODE_DPAD_UP,
+        KeyEvent.KEYCODE_DPAD_DOWN,
+        KeyEvent.KEYCODE_DPAD_LEFT,
+        KeyEvent.KEYCODE_DPAD_RIGHT,
+        KeyEvent.KEYCODE_DPAD_CENTER
+    )
+
+    /**
+     * True if [keyCode] can be dedicated to the emoji picker. Any key the device has is fine
+     * except ones that type text ([isPrintingKey], letters, digits) or are needed while typing.
+     */
+    fun isAllowedEmojiPickerKey(keyCode: Int, isPrintingKey: Boolean = false): Boolean =
+        keyCode > KeyEvent.KEYCODE_UNKNOWN &&
+            !isPrintingKey &&
+            keyCode !in EMOJI_PICKER_KEY_DENYLIST &&
+            keyCode !in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 &&
+            keyCode !in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z
+
+    /** The dedicated emoji picker key, or KEYCODE_UNKNOWN when the feature is off. */
+    fun getEmojiPickerKey(context: Context): Int {
+        val keyCode = getPreferences(context).getInt(KEY_EMOJI_PICKER_KEY, DEFAULT_EMOJI_PICKER_KEY)
+        return if (keyCode == KeyEvent.KEYCODE_UNKNOWN || isAllowedEmojiPickerKey(keyCode)) {
+            keyCode
+        } else {
+            DEFAULT_EMOJI_PICKER_KEY
+        }
+    }
+
+    private val PACKAGE_NAME_REGEX = Regex("[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+")
+
+    /** Package names from free text (one per line, or separated by spaces, commas or semicolons). */
+    fun parsePackageList(text: String): List<String> =
+        text.split(Regex("[\\s,;]+"))
+            .map { it.trim() }
+            .filter { PACKAGE_NAME_REGEX.matches(it) }
+            .distinct()
+
+    /**
+     * Apps where Pastiera shows nothing and leaves every key to the app, e.g. an X11 desktop
+     * such as Termux:X11 that handles the keyboard itself.
+     */
+    /** Niagara Launcher by default: its own search reads keys directly, so Pastiera stays out of sight. */
+    fun getHiddenKeyboardApps(context: Context): List<String> =
+        parsePackageList(getPreferences(context).getString(KEY_HIDDEN_KEYBOARD_APPS, DEFAULT_HIDDEN_KEYBOARD_APPS) ?: "")
+
+    // Niagara Launcher and Termux:X11 take the keys without the keyboard on screen
+    const val DEFAULT_HIDDEN_KEYBOARD_APPS = "bitpit.launcher\ncom.termux.x11"
+
+    fun setHiddenKeyboardApps(context: Context, packages: Collection<String>) {
+        val clean = packages.joinToString("\n").let(::parsePackageList)
+        getPreferences(context).edit()
+            .putString(KEY_HIDDEN_KEYBOARD_APPS, clean.joinToString("\n"))
+            .apply()
+    }
+
+    /**
+     * Terminal mode: in these apps (Termux unless changed) the terminal is typed into like a
+     * text field without smart features, so Alt and SYM type Pastiera's symbols, and every Ctrl
+     * (held, tapped or latched) reaches the terminal as a real Ctrl.
+     */
+    fun getTerminalModeEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TERMINAL_MODE_ENABLED, true)
+
+    /**
+     * Terminal mode keeps Pastiera out of sight, as for the Linux desktop: Alt and SYM still type
+     * Pastiera's characters, only the clipboard and emoji picker show while open.
+     */
+    fun getTerminalModeHideKeyboard(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TERMINAL_MODE_HIDE_KEYBOARD, true)
+
+    fun setTerminalModeHideKeyboard(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_HIDE_KEYBOARD, enabled).apply()
+    }
+
+    /** With the keyboard hidden in terminals, its status LEDs still show (on until changed). */
+    fun getTerminalModeShowLeds(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TERMINAL_MODE_SHOW_LEDS, true)
+
+    fun setTerminalModeShowLeds(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_SHOW_LEDS, enabled).apply()
+    }
+
+    /** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id (the previous command until chosen). */
+    fun getTerminalModeEmojiKeyAction(context: Context): String =
+        getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "up") ?: "up"
+
+    fun setTerminalModeEmojiKeyAction(context: Context, id: String) {
+        getPreferences(context).edit().putString(KEY_TERMINAL_MODE_EMOJI_KEY, id).apply()
+    }
+
+    fun setTerminalModeEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_ENABLED, enabled).apply()
+    }
+
+    fun getTerminalModeApps(context: Context): List<String> {
+        val prefs = getPreferences(context)
+        val stored = prefs.getString(KEY_TERMINAL_MODE_APPS, null) ?: return listOf(TERMUX_PACKAGE)
+        val apps = parsePackageList(stored)
+        // Termux joins a list saved before it was the default, once (removing it later sticks)
+        if (!prefs.getBoolean(KEY_TERMINAL_MODE_TERMUX_ADDED, false)) {
+            val withTermux = if (TERMUX_PACKAGE in apps) apps else listOf(TERMUX_PACKAGE) + apps
+            prefs.edit()
+                .putString(KEY_TERMINAL_MODE_APPS, withTermux.joinToString("\n"))
+                .putBoolean(KEY_TERMINAL_MODE_TERMUX_ADDED, true)
+                .apply()
+            return withTermux
+        }
+        return apps
+    }
+
+    fun setTerminalModeApps(context: Context, packages: Collection<String>) {
+        val clean = packages.joinToString("\n").let(::parsePackageList)
+        getPreferences(context).edit()
+            .putString(KEY_TERMINAL_MODE_APPS, clean.joinToString("\n"))
+            .putBoolean(KEY_TERMINAL_MODE_TERMUX_ADDED, true)
+            .apply()
+    }
+
+    /** Apps where Pastiera types exactly what you key: no auto-correct, replacements or auto-capitals. */
+    fun getExactTypingApps(context: Context): List<String> =
+        parsePackageList(getPreferences(context).getString(KEY_EXACT_TYPING_APPS, "") ?: "")
+
+    fun setExactTypingApps(context: Context, packages: Collection<String>) {
+        val clean = packages.joinToString("\n").let(::parsePackageList)
+        getPreferences(context).edit().putString(KEY_EXACT_TYPING_APPS, clean.joinToString("\n")).apply()
+    }
+
+    /** Fields that ask for no suggestions (TYPE_TEXT_FLAG_NO_SUGGESTIONS) also get exact typing. Off by default. */
+    fun getExactTypingForNoSuggestionFields(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EXACT_TYPING_NO_SUGGESTIONS, false)
+
+    fun setExactTypingForNoSuggestionFields(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EXACT_TYPING_NO_SUGGESTIONS, enabled).apply()
+    }
+
+    /** Exact typing applies to this field: its app is on the list, or it asks for no suggestions and that's honoured. */
+    fun isExactTypingField(context: Context, packageName: String?, inputType: Int): Boolean =
+        (!packageName.isNullOrBlank() && packageName in getExactTypingApps(context)) ||
+            (getExactTypingForNoSuggestionFields(context) &&
+                (inputType and android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS) != 0 &&
+                // A field that also asks for auto-correct wants smart typing, whatever its
+                // no-suggestions flag says (Instagram's message box asks for both)
+                (inputType and android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT) == 0)
+
+    /** Terminal mode applies to [packageName] (never while Pastiera is hidden for it). */
+    fun isTerminalModeApp(context: Context, packageName: String?): Boolean =
+        !packageName.isNullOrBlank() &&
+            getTerminalModeEnabled(context) &&
+            packageName in getTerminalModeApps(context) &&
+            !isKeyboardHiddenForApp(context, packageName)
+
+    fun isKeyboardHiddenForApp(context: Context, packageName: String?): Boolean =
+        !packageName.isNullOrBlank() && packageName in getHiddenKeyboardApps(context)
+
+    /**
+     * Hidden apps with a per-app option on. Until the first per-app change, the earlier global
+     * switch ([legacyKey]) still applies to every app that was hidden.
+     */
+    private fun hiddenAppsWithOption(context: Context, key: String, legacyKey: String): Set<String> {
+        val prefs = getPreferences(context)
+        if (!prefs.contains(key)) {
+            // Until chosen: Niagara keeps its LEDs and the emoji and symbols panels, for quick
+            // replies from its notifications
+            return if (prefs.getBoolean(legacyKey, false)) getHiddenKeyboardApps(context).toSet()
+            else setOf("bitpit.launcher").intersect(getHiddenKeyboardApps(context).toSet())
+        }
+        return parsePackageList(prefs.getString(key, "").orEmpty()).toSet()
+    }
+
+    private fun setHiddenAppOption(context: Context, key: String, legacyKey: String, packageName: String, enabled: Boolean) {
+        val apps = hiddenAppsWithOption(context, key, legacyKey).toMutableSet()
+        if (enabled) apps += packageName else apps -= packageName
+        getPreferences(context).edit()
+            .putString(key, apps.sorted().joinToString("\n"))
+            .remove(legacyKey)
+            .apply()
+    }
+
+    /** This hidden app keeps the modifier LEDs visible, drawn over it. */
+    fun hiddenAppShowsLeds(context: Context, packageName: String?): Boolean =
+        !packageName.isNullOrBlank() &&
+            packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_LEDS, KEY_HIDDEN_APPS_SHOW_LEDS)
+
+    fun setHiddenAppShowsLeds(context: Context, packageName: String, enabled: Boolean) =
+        setHiddenAppOption(context, KEY_HIDDEN_APPS_LEDS, KEY_HIDDEN_APPS_SHOW_LEDS, packageName, enabled)
+
+    /** In this hidden app, the emoji picker key and Sym still open Pastiera's emoji and symbols. */
+    fun hiddenAppAllowsPanels(context: Context, packageName: String?): Boolean =
+        !packageName.isNullOrBlank() &&
+            packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_PANELS, KEY_HIDDEN_APPS_ALLOW_PANELS)
+
+    fun setHiddenAppAllowsPanels(context: Context, packageName: String, enabled: Boolean) =
+        setHiddenAppOption(context, KEY_HIDDEN_APPS_PANELS, KEY_HIDDEN_APPS_ALLOW_PANELS, packageName, enabled)
+
+    /** Stores [keyCode] (KEYCODE_UNKNOWN turns the feature off). Returns false if not allowed. */
+    fun setEmojiPickerKey(context: Context, keyCode: Int): Boolean {
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && !isAllowedEmojiPickerKey(keyCode)) return false
+        getPreferences(context).edit()
+            .putInt(KEY_EMOJI_PICKER_KEY, keyCode)
+            .apply()
+        return true
+    }
+
+    // Flux Keyboard: sticky SYM and emoji keys, and the emoji key's own LED
+    private const val KEY_SYM_STICKY_TAP = "sym_sticky_tap"
+    private const val KEY_EMOJI_STICKY_TAP = "emoji_sticky_tap"
+    private const val KEY_EMOJI_KEY_LED = "emoji_key_led"
+
+    /** A tap on SYM applies it to the next key (its symbol); a second tap opens the symbols. */
+    fun getSymStickyTap(context: Context): Boolean = getPreferences(context).getBoolean(KEY_SYM_STICKY_TAP, false)
+    fun setSymStickyTap(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SYM_STICKY_TAP, enabled).apply()
+    }
+
+    /** A tap on the emoji key applies it to the next key (its emoji); a second tap opens the emoji screen. */
+    fun getEmojiStickyTap(context: Context): Boolean = getPreferences(context).getBoolean(KEY_EMOJI_STICKY_TAP, false)
+    fun setEmojiStickyTap(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_STICKY_TAP, enabled).apply()
+    }
+
+    /** A fifth status LED for the emoji key; the other four shrink to make room. */
+    fun getEmojiKeyLedEnabled(context: Context): Boolean = getPreferences(context).getBoolean(KEY_EMOJI_KEY_LED, true)
+    fun setEmojiKeyLedEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_KEY_LED, enabled).apply()
+    }
+
+    /** The emoji key opens the emoji layer (SYM page 1) instead of the emoji picker. */
+    fun getEmojiKeyOpensLayer(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOJI_KEY_OPENS_LAYER, false)
+
+    fun setEmojiKeyOpensLayer(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_KEY_OPENS_LAYER, enabled).apply()
+    }
+
+    /** Emoji screens of the emoji key close after an emoji is entered (separate from SYM auto-close). */
+    fun getEmojiKeyAutoClose(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOJI_KEY_AUTO_CLOSE, false)
+
+    fun setEmojiKeyAutoClose(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_KEY_AUTO_CLOSE, enabled).apply()
+    }
+
+    /**
+     * Whether an emoji screen closes after an emoji is entered. With an emoji key set, the emoji
+     * picker, and the emoji layer when the emoji key opened it, follow the emoji key's own
+     * setting; everything else follows SYM auto-close ([byTouch]: also needs "close after
+     * on-screen SYM keys").
+     */
+    fun emojiScreenClosesAfterInput(
+        context: Context,
+        isPicker: Boolean,
+        openedByEmojiKey: Boolean,
+        byTouch: Boolean
+    ): Boolean {
+        if (getEmojiPickerKey(context) != KeyEvent.KEYCODE_UNKNOWN && (isPicker || openedByEmojiKey)) {
+            return getEmojiKeyAutoClose(context)
+        }
+        // The emoji layer: its own switches for typed and tapped emoji
+        if (!isPicker) return if (byTouch) getEmojiLayerCloseOnTap(context) else getEmojiLayerCloseOnKey(context)
+        return if (byTouch) getSymAutoCloseOnTouch(context) else getSymAutoClose(context)
+    }
+
+    /** Keys of the emoji layer (letters) that can become its Recents key. */
+    val EMOJI_LAYER_KEYS: List<Int> = listOf(
+        KeyEvent.KEYCODE_Q, KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_E, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_T,
+        KeyEvent.KEYCODE_Y, KeyEvent.KEYCODE_U, KeyEvent.KEYCODE_I, KeyEvent.KEYCODE_O, KeyEvent.KEYCODE_P,
+        KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D, KeyEvent.KEYCODE_F, KeyEvent.KEYCODE_G,
+        KeyEvent.KEYCODE_H, KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_K, KeyEvent.KEYCODE_L,
+        KeyEvent.KEYCODE_Z, KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_C, KeyEvent.KEYCODE_V,
+        KeyEvent.KEYCODE_B, KeyEvent.KEYCODE_N, KeyEvent.KEYCODE_M
+    )
+
+    /**
+     * In apps with Pastiera hidden (Termux:X11), send the Titan's Ctrl and Sym on as standard Left
+     * Ctrl and Right Alt: Android gives them Unihertz key codes such apps can't use. On by default.
+     */
+    fun getHiddenAppStandardModifiers(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_HIDDEN_APP_STANDARD_MODIFIERS, true)
+
+    fun setHiddenAppStandardModifiers(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_HIDDEN_APP_STANDARD_MODIFIERS, enabled).apply()
+    }
+
+    /** The emoji picker opens with its search taking typing. On by default. */
+    fun getEmojiPickerFocusSearch(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOJI_PICKER_FOCUS_SEARCH, true)
+
+    fun setEmojiPickerFocusSearch(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_PICKER_FOCUS_SEARCH, enabled).apply()
+    }
+
+    /** GIF search opens with its search taking typing. On by default. */
+    fun getGifFocusSearch(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_GIF_FOCUS_SEARCH, true)
+
+    fun setGifFocusSearch(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_GIF_FOCUS_SEARCH, enabled).apply()
+    }
+
+    /** On the emoji layer, a letter key starts emoji search with that letter (off: it types its emoji). */
+    fun getEmojiLayerTypeToSearch(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOJI_LAYER_TYPE_TO_SEARCH, false)
+
+    fun setEmojiLayerTypeToSearch(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_LAYER_TYPE_TO_SEARCH, enabled).apply()
+    }
+
+    /** On the symbols pages, a letter key starts symbol search with that letter (off: it types its symbol). */
+    fun getSymbolsTypeToSearch(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SYMBOLS_TYPE_TO_SEARCH, false)
+
+    fun setSymbolsTypeToSearch(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SYMBOLS_TYPE_TO_SEARCH, enabled).apply()
+    }
+
+    /**
+     * The key that opens search on the emoji layer and the symbols pages, and puts typing into
+     * the emoji and GIF picker's search: A unless changed (KEYCODE_UNKNOWN = off).
+     */
+    fun getSearchKey(context: Context): Int {
+        val keyCode = getPreferences(context).getInt(KEY_SEARCH_KEY, KeyEvent.KEYCODE_Q)
+        return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
+    }
+
+    fun setSearchKey(context: Context, keyCode: Int): Boolean {
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN) {
+            if (keyCode !in EMOJI_LAYER_KEYS) return false
+            // One key, one job: not the Recents or GIF key
+            if (keyCode == getEmojiLayerRecentsKey(context) || keyCode == getEmojiLayerGifKey(context)) return false
+        }
+        getPreferences(context).edit().putInt(KEY_SEARCH_KEY, keyCode).apply()
+        return true
+    }
+
+    /** Offline mode (see [OfflineMode]): nothing in Pastiera goes online. Off by default. */
+    fun isOfflineMode(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_OFFLINE_MODE, false)
+
+    fun setOfflineMode(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_OFFLINE_MODE, enabled).apply()
+        OfflineMode.update(enabled)
+    }
+
+    /** GIF search is switched on and allowed online (not in offline mode). */
+    fun gifsAvailable(context: Context): Boolean = getGifsEnabled(context) && !isOfflineMode(context)
+
+    /**
+     * Emoji, symbols and GIFs used recently (and favourite GIFs) come first in their searches.
+     * On by default.
+     */
+    fun getRecentsFirstInSearch(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_RECENTS_FIRST_IN_SEARCH, true)
+
+    fun setRecentsFirstInSearch(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_RECENTS_FIRST_IN_SEARCH, enabled).apply()
+    }
+
+    /** GIF search shows the favourite GIFs at its top (with an empty search). On by default. */
+    fun getGifShowFavourites(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_GIF_SHOW_FAVOURITES, true)
+
+    fun setGifShowFavourites(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_GIF_SHOW_FAVOURITES, enabled).apply()
+    }
+
+    /** GIF search shows the recently sent GIFs (with an empty search). On by default. */
+    fun getGifShowRecents(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_GIF_SHOW_RECENTS, true)
+
+    fun setGifShowRecents(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_GIF_SHOW_RECENTS, enabled).apply()
+    }
+
+    /** Enter in emoji search picks the first emoji and closes (after a pick, only closes). On by default. */
+    fun getEmojiSearchEnterPicks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOJI_SEARCH_ENTER_PICKS, true)
+
+    fun setEmojiSearchEnterPicks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOJI_SEARCH_ENTER_PICKS, enabled).apply()
+    }
+
+    /** Enter in symbol search picks the first symbol and closes (after a pick, only closes). On by default. */
+    fun getSymbolSearchEnterPicks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SYMBOL_SEARCH_ENTER_PICKS, true)
+
+    fun setSymbolSearchEnterPicks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SYMBOL_SEARCH_ENTER_PICKS, enabled).apply()
+    }
+
+    /** Enter in GIF search sends the first GIF (which closes the picker). On by default. */
+    fun getGifSearchEnterPicks(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_GIF_SEARCH_ENTER_PICKS, true)
+
+    fun setGifSearchEnterPicks(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_GIF_SEARCH_ENTER_PICKS, enabled).apply()
+    }
+
+    /** The emoji layer key that opens GIF search (while it's on): P unless changed (KEYCODE_UNKNOWN = off). */
+    fun getEmojiLayerGifKey(context: Context): Int {
+        val keyCode = getPreferences(context).getInt(KEY_EMOJI_LAYER_GIF_KEY, KeyEvent.KEYCODE_P)
+        return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
+    }
+
+    fun setEmojiLayerGifKey(context: Context, keyCode: Int): Boolean {
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && keyCode !in EMOJI_LAYER_KEYS) return false
+        // One key, one job: not the Recents key or the search key
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && keyCode == getEmojiLayerRecentsKey(context)) return false
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && keyCode == getSearchKey(context)) return false
+        getPreferences(context).edit().putInt(KEY_EMOJI_LAYER_GIF_KEY, keyCode).apply()
+        return true
+    }
+
+    /** The emoji layer's GIF key while GIF search is on and it isn't also the Recents key, else KEYCODE_UNKNOWN. */
+    fun activeEmojiLayerGifKey(context: Context): Int {
+        if (!gifsAvailable(context)) return KeyEvent.KEYCODE_UNKNOWN
+        val keyCode = getEmojiLayerGifKey(context)
+        return if (keyCode == getEmojiLayerRecentsKey(context)) KeyEvent.KEYCODE_UNKNOWN else keyCode
+    }
+
+    /** GIF search (KLIPY): a GIF key on the emoji layer and a GIF tab in the emoji picker. */
+    fun getGifsEnabled(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_GIFS_ENABLED, false)
+
+    fun setGifsEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_GIFS_ENABLED, enabled).apply()
+    }
+
+    /** The KLIPY key GIF search uses: the user's own, else the build's built-in one (may be empty). */
+    fun getKlipyApiKey(context: Context): String =
+        getUserKlipyApiKey(context).ifEmpty { BuildConfig.KLIPY_API_KEY.trim() }
+
+    /** Only the key the user entered (the settings field never shows the built-in one). */
+    fun getUserKlipyApiKey(context: Context): String =
+        getPreferences(context).getString(KEY_KLIPY_API_KEY, "").orEmpty().trim()
+
+    /** This build has a KLIPY key built in (set as a CI secret when it was built). */
+    fun hasBuiltInKlipyApiKey(): Boolean = BuildConfig.KLIPY_API_KEY.isNotBlank()
+
+    fun setKlipyApiKey(context: Context, apiKey: String) {
+        getPreferences(context).edit().putString(KEY_KLIPY_API_KEY, apiKey.trim()).apply()
+    }
+
+    /** The emoji layer key that shows recent emoji instead of its own: Q unless changed (KEYCODE_UNKNOWN = off). */
+    fun getEmojiLayerRecentsKey(context: Context): Int {
+        val keyCode = getPreferences(context).getInt(KEY_EMOJI_LAYER_RECENTS_KEY, KeyEvent.KEYCODE_A)
+        return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
+    }
+
+    fun setEmojiLayerRecentsKey(context: Context, keyCode: Int): Boolean {
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && keyCode !in EMOJI_LAYER_KEYS) return false
+        // One key, one job: not the GIF key while GIF search is on, nor the search key
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && getGifsEnabled(context) && keyCode == getEmojiLayerGifKey(context)) return false
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN && keyCode == getSearchKey(context)) return false
+        getPreferences(context).edit().putInt(KEY_EMOJI_LAYER_RECENTS_KEY, keyCode).apply()
+        return true
     }
 
     /**
@@ -5345,7 +6570,7 @@ object SettingsManager {
      * Returns the swipe threshold for trackpad gestures.
      */
     fun getTrackpadSwipeThreshold(context: Context): Float {
-        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SWIPE_THRESHOLD)
+        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
             .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -5362,7 +6587,16 @@ object SettingsManager {
 
     fun getMinTrackpadSwipeThreshold(): Float = MIN_TRACKPAD_SWIPE_THRESHOLD
     fun getMaxTrackpadSwipeThreshold(): Float = MAX_TRACKPAD_SWIPE_THRESHOLD
-    fun getDefaultTrackpadSwipeThreshold(): Float = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
+    fun getDefaultTrackpadSwipeThreshold(): Float = defaultTrackpadSwipeThreshold()
+
+    /**
+     * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
+     * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
+     * swipes there; 120, less than one key, catches a flick across a single key.
+     */
+    private fun defaultTrackpadSwipeThreshold(): Float =
+        if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
+        else DEFAULT_TRACKPAD_SWIPE_THRESHOLD
 
     fun getTrackpadSuggestionSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
@@ -5379,11 +6613,27 @@ object SettingsManager {
             .commit()
     }
 
+    /**
+     * How far a left or right swipe goes to take the left or right suggestion (Swipe
+     * directions). Until set, the same as the suggestion swipe's default.
+     */
+    fun getTrackpadSideSwipeThreshold(context: Context): Float {
+        val prefs = getPreferences(context)
+        return prefs.getFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD)
+            .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
+    }
+
+    fun setTrackpadSideSwipeThreshold(context: Context, threshold: Float) {
+        getPreferences(context).edit()
+            .putFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD))
+            .apply()
+    }
+
     fun getTrackpadDeleteSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
         return prefs.getFloat(
             KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD,
-            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_DELETE_SWIPE_THRESHOLD)
+            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD)
         ).coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -5855,6 +7105,65 @@ object SettingsManager {
         return defaults
     }
 
+    /** Buttons the menu bar (the ☰ button's row) can show, in their default order. */
+    val MENU_BAR_BUTTON_OPTIONS: List<String> = listOf(
+        STATUS_BAR_BUTTON_SYMBOLS,
+        STATUS_BAR_BUTTON_EMOJI,
+        STATUS_BAR_BUTTON_GIF,
+        STATUS_BAR_BUTTON_MICROPHONE,
+        STATUS_BAR_BUTTON_CLIPBOARD,
+        STATUS_BAR_BUTTON_UNDO,
+        STATUS_BAR_BUTTON_REDO,
+        STATUS_BAR_BUTTON_LANGUAGE,
+        STATUS_BAR_BUTTON_MINIMAL_UI,
+        STATUS_BAR_BUTTON_SOFTWARE_KEYBOARD_MODE,
+        STATUS_BAR_BUTTON_SETTINGS
+    )
+
+    /**
+     * Until chosen, the menu bar leaves out the symbols, emoji and GIF buttons (the SYM and emoji
+     * keys open those), Solderina and keyboard mode; and the language button while only one
+     * input language is on.
+     */
+    private val MENU_BAR_OFF_BY_DEFAULT = setOf(
+        STATUS_BAR_BUTTON_SYMBOLS,
+        STATUS_BAR_BUTTON_EMOJI,
+        STATUS_BAR_BUTTON_GIF,
+        STATUS_BAR_BUTTON_MINIMAL_UI,
+        STATUS_BAR_BUTTON_SOFTWARE_KEYBOARD_MODE
+    )
+
+    fun defaultMenuBarButtons(context: Context): List<String> =
+        MENU_BAR_BUTTON_OPTIONS.filter { button ->
+            button !in MENU_BAR_OFF_BY_DEFAULT &&
+                !(button == STATUS_BAR_BUTTON_LANGUAGE && hasSingleInputLanguage(context))
+        }
+
+    /** Whether only one input language is on for this keyboard (false when it can't tell). */
+    fun hasSingleInputLanguage(context: Context): Boolean = runCatching {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE)
+            as? android.view.inputmethod.InputMethodManager ?: return false
+        val ime = imm.enabledInputMethodList.firstOrNull { it.packageName == context.packageName }
+            ?: return false
+        imm.getEnabledInputMethodSubtypeList(ime, true).size <= 1
+    }.getOrDefault(false)
+
+    /** The menu bar's buttons, in order (its close button always comes first). */
+    fun getMenuBarButtons(context: Context): List<String> {
+        val stored = getPreferences(context).getString(KEY_MENU_BAR_BUTTONS, null)
+            ?: return defaultMenuBarButtons(context)
+        return stored.split(',').map { it.trim() }.filter { it in MENU_BAR_BUTTON_OPTIONS }.distinct()
+    }
+
+    fun setMenuBarButtons(context: Context, buttons: List<String>) {
+        val clean = buttons.filter { it in MENU_BAR_BUTTON_OPTIONS }.distinct()
+        getPreferences(context).edit().putString(KEY_MENU_BAR_BUTTONS, clean.joinToString(",")).apply()
+    }
+
+    fun resetMenuBarButtons(context: Context) {
+        getPreferences(context).edit().remove(KEY_MENU_BAR_BUTTONS).apply()
+    }
+
     fun getStatusBarSlotsLeft(context: Context): List<String> {
         return getStatusBarSlotsList(
             context = context,
@@ -6131,6 +7440,7 @@ object SettingsManager {
             STATUS_BAR_BUTTON_NONE,
             STATUS_BAR_BUTTON_CLIPBOARD,
             STATUS_BAR_BUTTON_EMOJI,
+            STATUS_BAR_BUTTON_GIF,
             STATUS_BAR_BUTTON_MICROPHONE,
             STATUS_BAR_BUTTON_LANGUAGE,
             STATUS_BAR_BUTTON_HAMBURGER,
@@ -6244,6 +7554,7 @@ object SettingsManager {
             ENTER_BEHAVIOR_PRESET_APP_DEFAULT,
             ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE,
             ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND,
+            ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND,
             ENTER_BEHAVIOR_PRESET_CUSTOM -> preset
             else -> ENTER_BEHAVIOR_PRESET_APP_DEFAULT
         }
@@ -6254,7 +7565,8 @@ object SettingsManager {
             ENTER_BEHAVIOR_APP_DEFAULT,
             ENTER_BEHAVIOR_ENTER_NEWLINE,
             ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
-            ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND -> behavior
+            ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND,
+            ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND -> behavior
             else -> ENTER_BEHAVIOR_APP_DEFAULT
         }
     }
