@@ -24,14 +24,55 @@ object EmojiRepository {
         val emojis: List<EmojiEntry>
     )
 
+    /** Everything in the assets, unfiltered, plus which sequences the system font can draw. */
+    private class LoadedData(
+        val all: List<EmojiCategory>,
+        val known: Set<String>,
+        val systemAvailable: Set<String>,
+        val availability: EmojiAvailability
+    )
+
+    @Volatile
+    private var loadedData: LoadedData? = null
     private var cachedCategories: List<EmojiCategory>? = null
 
+    /** Emoji the phone's own font can draw. */
     suspend fun getEmojiCategories(context: Context): List<EmojiCategory> {
-        return cachedCategories ?: loadEmojiCategories(context).also { cachedCategories = it }
+        return cachedCategories
+            ?: filterCategories(loadAll(context)) { false }.also { cachedCategories = it }
+    }
+
+    /**
+     * Emoji the phone's own font can draw, plus any for which [extraAvailable] returns true
+     * (e.g. emoji the current text field renders through EmojiCompat).
+     */
+    suspend fun getEmojiCategories(
+        context: Context,
+        extraAvailable: ((String) -> Boolean)?
+    ): List<EmojiCategory> {
+        if (extraAvailable == null) return getEmojiCategories(context)
+        return filterCategories(loadAll(context), extraAvailable)
+    }
+
+    /** Every emoji in the assets, including ones this phone cannot draw. */
+    suspend fun getAllEmojiCategories(context: Context): List<EmojiCategory> = loadAll(context).all
+
+    /** True if the phone's own font can draw [emoji]. True for everything before the data loads. */
+    fun isSystemAvailable(emoji: String): Boolean {
+        val data = loadedData ?: return true
+        if (emoji in data.systemAvailable) return true
+        return emoji !in data.known && data.availability.isAvailable(emoji)
+    }
+
+    /** [entry] with only the allowed variants, or null if its base emoji isn't allowed. */
+    fun filterEntry(entry: EmojiEntry, isAllowed: (String) -> Boolean): EmojiEntry? {
+        if (!isAllowed(entry.base)) return null
+        return entry.copy(variants = entry.variants.filter(isAllowed))
     }
 
     fun clearCache() {
         cachedCategories = null
+        loadedData = null
     }
 
     /**
@@ -39,7 +80,7 @@ object EmojiRepository {
      * Returns empty list if not found or cache not loaded.
      */
     fun getVariantsForEmoji(emoji: String): List<String> {
-        val categories = cachedCategories ?: return emptyList()
+        val categories = loadedData?.all ?: cachedCategories ?: return emptyList()
         for (category in categories) {
             for (entry in category.emojis) {
                 if (entry.base == emoji) {
@@ -67,7 +108,21 @@ object EmojiRepository {
         }
     }
 
-    private suspend fun loadEmojiCategories(context: Context): List<EmojiCategory> = withContext(Dispatchers.IO) {
+    private fun filterCategories(
+        data: LoadedData,
+        extraAvailable: (String) -> Boolean
+    ): List<EmojiCategory> {
+        val allowed: (String) -> Boolean = { it in data.systemAvailable || extraAvailable(it) }
+        return data.all.mapNotNull { category ->
+            val emojis = category.emojis.mapNotNull { filterEntry(it, allowed) }
+            if (emojis.isEmpty()) null else category.copy(emojis = emojis)
+        }
+    }
+
+    private suspend fun loadAll(context: Context): LoadedData =
+        loadedData ?: loadEmojiData(context).also { loadedData = it }
+
+    private suspend fun loadEmojiData(context: Context): LoadedData = withContext(Dispatchers.IO) {
         val assetManager = context.assets
         val files = assetManager.list(EMOJI_ASSET_DIR)
             ?.filter { it.endsWith(".txt") && it != "minApi.txt" }
@@ -93,8 +148,8 @@ object EmojiRepository {
 
         val availability = EmojiAvailability.fromAssets(assetManager)
 
-        sortedFiles.mapNotNull { fileName ->
-            val emojis = parseEmojiFile(context, fileName, availability)
+        val all = sortedFiles.mapNotNull { fileName ->
+            val emojis = parseEmojiFile(context, fileName)
             if (emojis.isEmpty()) return@mapNotNull null
             EmojiCategory(
                 id = fileName.substringBefore(".txt"),
@@ -102,13 +157,18 @@ object EmojiRepository {
                 emojis = emojis
             )
         }
+        val known = all.flatMap { category ->
+            category.emojis.flatMap { listOf(it.base) + it.variants }
+        }.toSet()
+        LoadedData(
+            all = all,
+            known = known,
+            systemAvailable = known.filterTo(HashSet()) { availability.isAvailable(it) },
+            availability = availability
+        )
     }
 
-    private fun parseEmojiFile(
-        context: Context,
-        fileName: String,
-        availability: EmojiAvailability
-    ): List<EmojiEntry> {
+    private fun parseEmojiFile(context: Context, fileName: String): List<EmojiEntry> {
         val assetPath = "$EMOJI_ASSET_DIR/$fileName"
 
         return runCatching {
@@ -116,18 +176,7 @@ object EmojiRepository {
                 BufferedReader(InputStreamReader(input)).lineSequence().mapNotNull { line ->
                     val tokens = line.split(" ").filter { it.isNotBlank() }
                     if (tokens.isEmpty()) return@mapNotNull null
-
-                    val base = tokens.first()
-                    val variants = tokens.drop(1)
-
-                    val allowedBase = availability.isAvailable(base)
-                    val allowedVariants = variants.filter(availability::isAvailable)
-
-                    if (!allowedBase) {
-                        null
-                    } else {
-                        EmojiEntry(base = base, variants = allowedVariants)
-                    }
+                    EmojiEntry(base = tokens.first(), variants = tokens.drop(1))
                 }.toList()
             }
         }.getOrElse { emptyList() }

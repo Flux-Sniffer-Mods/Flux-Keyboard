@@ -90,10 +90,15 @@ object EmojiSearchRepository {
         }
     }
 
+    /**
+     * Results are limited to emoji the system font can draw, plus any for which
+     * [extraAvailable] returns true (e.g. emoji the current field renders via EmojiCompat).
+     */
     fun search(
         index: EmojiSearchIndex,
         query: String,
-        limit: Int = 200
+        limit: Int = 200,
+        extraAvailable: ((String) -> Boolean)? = null
     ): List<EmojiSearchResult> {
         val trimmed = query.trim()
         if (trimmed.isEmpty()) return emptyList()
@@ -101,13 +106,17 @@ object EmojiSearchRepository {
         val normalizedQuery = normalizeSearchText(trimmed)
         if (normalizedQuery.isEmpty()) return emptyList()
         val allowContains = normalizedQuery.length >= 2
+        val isAllowed: (String) -> Boolean = { emoji ->
+            EmojiRepository.isSystemAvailable(emoji) || extraAvailable?.invoke(emoji) == true
+        }
 
         return index.items.mapNotNull { item ->
             val score = scoreItem(item, trimmed, normalizedQuery, allowContains)
             if (score <= 0) return@mapNotNull null
+            val entry = EmojiRepository.filterEntry(item.entry, isAllowed) ?: return@mapNotNull null
             RankedResult(
                 result = EmojiSearchResult(
-                    entry = item.entry,
+                    entry = entry,
                     categoryId = item.categoryId,
                     score = score
                 ),
@@ -126,6 +135,48 @@ object EmojiSearchRepository {
     fun clearCache() {
         indexCache.clear()
     }
+
+    /** Index already built for the current locales, without waiting; null until it is. */
+    fun cachedSearchIndex(context: Context): EmojiSearchIndex? {
+        val cacheKey = getPreferredLocaleChain(context).joinToString("|")
+        return indexCache[cacheKey]
+    }
+
+    /** Words that name too many emoji, or none in particular, to suggest one for. */
+    private val GENERIC_WORDS = setOf(
+        "button", "symbol", "sign", "mark", "face", "hand", "up", "down", "left", "right", "arrow",
+        "time", "done", "double", "fast", "person", "man", "woman", "people", "light", "flag",
+        "small", "large", "big", "black", "white", "open", "closed", "square", "circle", "other",
+        "the", "and", "with", "for", "you", "not", "new", "top", "end", "back", "on", "off", "free", "ok"
+    )
+
+    /**
+     * One emoji for a word you typed, for the suggestion bar: an emoji whose name is the word
+     * ("pizza", "rocket"), otherwise the first (in picker order) of the emoji that have it as a
+     * keyword ("happy", "love"), unless the word is generic or names too many emoji.
+     */
+    fun suggestionFor(
+        index: EmojiSearchIndex,
+        word: String,
+        extraAvailable: ((String) -> Boolean)? = null
+    ): String? {
+        if (word.length < 3) return null
+        val query = normalizeSearchText(word)
+        if (query.isEmpty() || query in GENERIC_WORDS) return null
+        val available: (String) -> Boolean = { emoji ->
+            EmojiRepository.isSystemAvailable(emoji) || extraAvailable?.invoke(emoji) == true
+        }
+        index.items.firstOrNull { item ->
+            item.terms.any { it.kind == TermKind.NAME && it.normalizedText == query } && available(item.entry.base)
+        }?.let { return it.entry.base }
+        val byKeyword = index.items.filter { item ->
+            item.terms.any { it.kind == TermKind.KEYWORD && it.normalizedText == query } && available(item.entry.base)
+        }
+        if (byKeyword.isEmpty() || byKeyword.size > MAX_KEYWORD_EMOJI) return null
+        return byKeyword.minByOrNull { it.categoryOrder }?.entry?.base
+    }
+
+    private const val MAX_KEYWORD_EMOJI = 30
 
     private fun scoreItem(
         item: IndexedEmoji,
@@ -169,7 +220,8 @@ object EmojiSearchRepository {
     }
 
     private suspend fun buildIndex(context: Context, localeChain: List<String>): EmojiSearchIndex {
-        val categories = EmojiRepository.getEmojiCategories(context)
+        // Index every emoji; search() filters per call to what the current field can show.
+        val categories = EmojiRepository.getAllEmojiCategories(context)
         val metadataByEmoji = loadMetadataMap(context, localeChain)
 
         val items = ArrayList<IndexedEmoji>()
@@ -188,6 +240,14 @@ object EmojiSearchRepository {
                         metadataByEmoji = metadataByEmoji,
                         emoji = variant
                     )
+                }
+
+                // The search files cover about two thirds of the emoji. Name the rest from
+                // system locale data (flags) or their parts' names (symbols, ZWJ sequences).
+                if (terms.isEmpty()) {
+                    fallbackTerms(entry.base, metadataByEmoji, localeChain).forEach { term ->
+                        terms.putIfAbsent(term.normalizedText, term)
+                    }
                 }
 
                 // If no metadata is available, still index the literal emoji string as a fallback.
@@ -217,7 +277,7 @@ object EmojiSearchRepository {
         metadataByEmoji: Map<String, List<Pair<MetadataRecord, Boolean>>>,
         emoji: String
     ) {
-        val records = metadataByEmoji[emoji].orEmpty()
+        val records = metadataByEmoji[metadataKey(emoji)].orEmpty()
         records.forEach { (record, preferredLocale) ->
             record.name?.let { name ->
                 val normalized = normalizeSearchText(name)
@@ -233,6 +293,99 @@ object EmojiSearchRepository {
             }
         }
     }
+
+    /** Metadata keys ignore U+FE0F, which the emoji data and search files use inconsistently. */
+    internal fun metadataKey(emoji: String): String = emoji.replace("\uFE0F", "")
+
+    /**
+     * Search terms for an emoji the search files don't cover: localized country names for
+     * flags, otherwise the metadata (or Unicode character names) of the sequence's parts.
+     */
+    @VisibleForTesting
+    internal fun fallbackTerms(
+        emoji: String,
+        metadataByEmoji: Map<String, List<Pair<MetadataRecord, Boolean>>>,
+        localeChain: List<String>
+    ): List<SearchTerm> {
+        val out = LinkedHashMap<String, SearchTerm>()
+        fun add(text: String?, kind: TermKind, preferred: Boolean = false) {
+            val normalized = normalizeSearchText(text ?: return)
+            if (normalized.isNotEmpty() && normalized !in out) {
+                out[normalized] = SearchTerm(normalized, kind, preferred)
+            }
+        }
+
+        val flag = flagCodes(emoji)
+        if (flag != null) {
+            val (region, subdivision) = flag
+            subdivision?.let { add(SUBDIVISION_NAMES[it], TermKind.NAME) }
+            val country = Locale("", region)
+            localeChain.forEachIndexed { index, tag ->
+                add(country.getDisplayCountry(Locale.forLanguageTag(tag)), TermKind.NAME, index == 0)
+            }
+            add(country.getDisplayCountry(Locale.ENGLISH), TermKind.NAME)
+            add(region, TermKind.KEYWORD)
+            add("flag", TermKind.KEYWORD)
+            return out.values.toList()
+        }
+
+        // ZWJ sequences, keycaps and text-style symbols: describe each part
+        val partNames = ArrayList<String>()
+        emoji.split('\u200D').forEach { part ->
+            val core = coreOf(part)
+            if (core.isEmpty()) return@forEach
+            val records = metadataByEmoji[metadataKey(core)]
+            if (!records.isNullOrEmpty()) {
+                records.forEach { (record, preferred) ->
+                    add(record.name, TermKind.NAME, preferred)
+                    record.keywords.forEach { add(it, TermKind.KEYWORD, preferred) }
+                }
+                records.first().first.name?.let(partNames::add)
+            } else {
+                val names = ArrayList<String>()
+                core.codePoints().forEach { cp ->
+                    Character.getName(cp)?.lowercase(Locale.ROOT)?.let(names::add)
+                }
+                names.forEach { add(it, TermKind.NAME) }
+                if (names.isNotEmpty()) partNames.add(names.joinToString(" "))
+            }
+        }
+        if (partNames.size > 1) add(partNames.joinToString(" "), TermKind.NAME)
+        if (emoji.contains('\u20E3')) add("keycap", TermKind.KEYWORD)
+        return out.values.toList()
+    }
+
+    /** Region code (and subdivision tag, e.g. "gbeng") for flag emoji, else null. */
+    private fun flagCodes(emoji: String): Pair<String, String?>? {
+        val cps = emoji.codePoints().toArray()
+        if (cps.size == 2 && cps.all { it in 0x1F1E6..0x1F1FF }) {
+            val region = String(charArrayOf('A' + (cps[0] - 0x1F1E6), 'A' + (cps[1] - 0x1F1E6)))
+            return region to null
+        }
+        // Subdivision flags: black flag, tag letters, cancel tag
+        if (cps.size > 3 && cps.first() == 0x1F3F4 && cps.last() == 0xE007F &&
+            cps.drop(1).dropLast(1).all { it in 0xE0061..0xE007A }
+        ) {
+            val tag = String(cps.drop(1).dropLast(1).map { 'a' + (it - 0xE0061) }.toCharArray())
+            return tag.take(2).uppercase(Locale.ROOT) to tag
+        }
+        return null
+    }
+
+    /** [part] without presentation selectors, keycap marks and skin-tone modifiers. */
+    private fun coreOf(part: String): String {
+        val sb = StringBuilder()
+        part.codePoints().forEach { cp ->
+            if (cp != 0xFE0F && cp != 0x20E3 && cp !in 0x1F3FB..0x1F3FF) sb.appendCodePoint(cp)
+        }
+        return sb.toString()
+    }
+
+    private val SUBDIVISION_NAMES = mapOf(
+        "gbeng" to "England",
+        "gbsct" to "Scotland",
+        "gbwls" to "Wales"
+    )
 
     private fun loadMetadataMap(
         context: Context,
@@ -271,7 +424,7 @@ object EmojiSearchRepository {
                                 ?.map { it.trim() }
                                 ?.filter { it.isNotEmpty() }
                                 .orEmpty()
-                            emoji to MetadataRecord(name = name, keywords = keywords)
+                            metadataKey(emoji) to MetadataRecord(name = name, keywords = keywords)
                         }
                         .toMap()
                 }
