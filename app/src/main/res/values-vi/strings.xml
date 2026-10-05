@@ -83,7 +83,7 @@
     <string name="select_emoji">Chọn emoji</string>
     <string name="close">Đóng</string>
     <string name="auto_correct_title">Thay thế văn bản</string>
-    <string name="auto_correct_title_description">Áp dụng quy tắc đã lưu như “ca → ça” khi nhấn Space hoặc Enter.</string>
+    <string name="auto_correct_title_description">Áp dụng quy tắc đã lưu như “ko → không”, “dc → được” khi nhấn Space hoặc Enter.</string>
     <string name="auto_correct_languages_title">Quản lý thay thế văn bản</string>
     <string name="auto_correct_languages_description">Quy tắc đã lưu chạy trước sửa tự động.</string>
     <string name="auto_correct_settings_title">Thay thế văn bản</string>
@@ -239,7 +239,7 @@
     <string name="nav_mode_key_mappings">Ánh xạ phím</string>
     <string name="nav_mode_revert_to_default">Khôi phục mặc định</string>
     <string name="nav_mode_note">Lưu ý: Thay đổi phím Nav Mode cũng ảnh hưởng đến tổ hợp Ctrl+phím trong ô văn bản.</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="nav_mode_configure_key">Cấu hình %1$s</string>
     <string name="nav_mode_type">Loại</string>
     <string name="nav_mode_keycode">Keycode</string>
@@ -387,7 +387,7 @@
     <string name="tutorial_previous">Trước</string>
     <string name="tutorial_next">Tiếp</string>
     <string name="tutorial_finish">Hoàn tất</string>
-    <string name="tutorial_page_welcome_title">Pastiera tiếp tục với tên Plektra</string>
+    <string name="tutorial_page_welcome_title">Chào mừng đến với Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 là bản phát hành cuối cùng được lên kế hoạch có tính năng mới. Bạn có thể tiếp tục dùng Pastiera; các vấn đề liên quan đến bảo mật sẽ tiếp tục nhận được bản cập nhật. Plektra tiếp tục dự án theo cùng các nguyên tắc và vẫn là phần mềm tự do, mã nguồn mở theo giấy phép copyleft GPLv3. Khi Plektra sẵn sàng, Pastiera sẽ thông báo và hướng dẫn bạn chuyển cài đặt một lần.</string>
     <string name="tutorial_page_enable_title">Bật Pastiera</string>
     <string name="tutorial_page_enable_description">Để bắt đầu, bạn cần bật Pastiera làm phương thức nhập trong Cài đặt Android. Nhấn nút bên dưới để mở cài đặt.</string>

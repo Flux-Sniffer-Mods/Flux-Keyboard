@@ -62,7 +62,7 @@
     <string name="select_emoji">Wybierz Emoji</string>
     <string name="close">Zamknij</string>
     <string name="auto_correct_title">Zamiany tekstu</string>
-    <string name="auto_correct_title_description">Stosuje zapisane reguły, np. „ca → ça”, po naciśnięciu spacji lub Enter.</string>
+    <string name="auto_correct_title_description">Stosuje zapisane reguły, np. „sie → się”, „ze → że”, po naciśnięciu spacji lub Enter.</string>
     <string name="auto_correct_languages_title">Zarządzaj zamianami</string>
     <string name="auto_correct_languages_description">Zapisane reguły są stosowane przed automatyczną korektą.</string>
     <string name="auto_correct_settings_title">Zamiany tekstu</string>
@@ -305,7 +305,7 @@
     <string name="tutorial_previous">Poprzedni</string>
     <string name="tutorial_next">Następny</string>
     <string name="tutorial_finish">Zakończ</string>
-    <string name="tutorial_page_welcome_title">Pastiera jest kontynuowana jako Plektra</string>
+    <string name="tutorial_page_welcome_title">Witamy w Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 to ostatnie planowane wydanie z nowymi funkcjami. Możesz nadal używać Pastiera; problemy istotne dla bezpieczeństwa będą nadal otrzymywać aktualizacje. Plektra kontynuuje projekt na tych samych zasadach i pozostaje wolnym oprogramowaniem open source na licencji copyleft GPLv3. Gdy Plektra będzie gotowa, Pastiera powiadomi Cię i przeprowadzi przez jednorazowe przeniesienie ustawień.</string>
     <string name="tutorial_page_enable_title">Włącz Pastiera</string>
     <string name="tutorial_page_enable_description">Aby rozpocząć, musisz włączyć Pastiera jako metodę wprowadzania w Ustawieniach Androida. Naciśnij przycisk poniżej, aby otworzyć ustawienia.</string>
@@ -557,7 +557,7 @@
     <string name="speech_recognition_error_network">Błąd sieci.</string>
     <string name="speech_recognition_error_generic">Błąd rozpoznawania mowy.</string>
     <string name="speech_recognition_error_not_available">Rozpoznawanie mowy jest niedostępne.</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="emoji_category_emoticons">Emotikony</string>
     <string name="emoji_picker_search_label">Search</string>
     <string name="emoji_picker_search_placeholder">Search emoji...</string>

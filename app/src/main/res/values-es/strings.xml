@@ -62,7 +62,7 @@
     <string name="select_emoji">Seleccionar Emoji</string>
     <string name="close">Cerrar</string>
     <string name="auto_correct_title">Reemplazos de texto</string>
-    <string name="auto_correct_title_description">Aplica reglas guardadas como “ca → ça” al pulsar Espacio o Enter.</string>
+    <string name="auto_correct_title_description">Aplica reglas guardadas como “q → que”, “tambien → también” al pulsar Espacio o Enter.</string>
     <string name="auto_correct_languages_title">Gestionar reemplazos</string>
     <string name="auto_correct_languages_description">Las reglas guardadas se aplican antes de la corrección automática.</string>
     <string name="auto_correct_settings_title">Reemplazos de texto</string>
@@ -305,7 +305,7 @@
     <string name="tutorial_previous">Anterior</string>
     <string name="tutorial_next">Siguiente</string>
     <string name="tutorial_finish">Finalizar</string>
-    <string name="tutorial_page_welcome_title">Pastiera continúa como Plektra</string>
+    <string name="tutorial_page_welcome_title">Bienvenido a Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 es la última versión planificada con funciones nuevas. Puedes seguir usando Pastiera; los problemas relevantes para la seguridad seguirán recibiendo actualizaciones. Plektra continúa el proyecto con los mismos principios y seguirá siendo software libre y de código abierto bajo la licencia copyleft GPLv3. Cuando Plektra esté listo, Pastiera te avisará y te guiará por la transferencia única de tus ajustes.</string>
     <string name="tutorial_page_enable_title">Activar Pastiera</string>
     <string name="tutorial_page_enable_description">Para comenzar, debes activar Pastiera como método de entrada en la Configuración de Android. Toca el botón a continuación para abrir la configuración.</string>
@@ -557,7 +557,7 @@
     <string name="speech_recognition_error_network">Error de red.</string>
     <string name="speech_recognition_error_generic">Error de reconocimiento de voz.</string>
     <string name="speech_recognition_error_not_available">Reconocimiento de voz no disponible.</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="emoji_category_emoticons">Emoticonos</string>
     <string name="emoji_picker_search_label">Search</string>
     <string name="emoji_picker_search_placeholder">Search emoji...</string>

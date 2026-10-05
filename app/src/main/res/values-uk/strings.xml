@@ -72,7 +72,7 @@
     <string name="select_emoji">Обрати емодзі</string>
     <string name="close">Закрити</string>
     <string name="auto_correct_title">Текстові заміни</string>
-    <string name="auto_correct_title_description">Застосовує збережені правила, наприклад “ca → ça”, після пробілу або Enter.</string>
+    <string name="auto_correct_title_description">Застосовує збережені правила, наприклад “шо → що”, “щас → зараз”, після пробілу або Enter.</string>
     <string name="auto_correct_languages_title">Керувати замінами</string>
     <string name="auto_correct_languages_description">Збережені правила виконуються перед автоматичною корекцією.</string>
     <string name="auto_correct_settings_title">Текстові заміни</string>
@@ -223,7 +223,7 @@
     <string name="nav_mode_key_mappings">Карта клавіш</string>
     <string name="nav_mode_revert_to_default">Скинути до стандартних</string>
     <string name="nav_mode_note">Увага: Зміна клавіш режиму навігації також змінює Ctrl+клавішу в текстових полях.</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="nav_mode_configure_key">Налаштувати %1$s</string>
     <string name="nav_mode_type">Тип</string>
     <string name="nav_mode_keycode">Код клавіші</string>
@@ -347,7 +347,7 @@
     <string name="tutorial_previous">Назад</string>
     <string name="tutorial_next">Далі</string>
     <string name="tutorial_finish">Завершити</string>
-    <string name="tutorial_page_welcome_title">Pastiera продовжується як Plektra</string>
+    <string name="tutorial_page_welcome_title">Ласкаво просимо до Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 — останній запланований випуск із новими функціями. Ви можете й надалі користуватися Pastiera; проблеми, пов’язані з безпекою, продовжать отримувати оновлення. Plektra продовжує проєкт на тих самих засадах і залишається вільним програмним забезпеченням із відкритим кодом за copyleft-ліцензією GPLv3. Коли Plektra буде готова, Pastiera повідомить вас і допоможе одноразово перенести налаштування.</string>
     <string name="tutorial_page_enable_title">Увімкнути Pastiera</string>
     <string name="tutorial_page_enable_description">Для початку потрібно увімкнути Pastiera як метод введення в налаштуваннях Android. Натисніть кнопку нижче щоб відкрити налаштування.</string>

@@ -200,7 +200,7 @@
 
     <!-- Auto-Correction Section -->
     <string name="auto_correct_title">Αντικαταστάσεις κειμένου</string>
-    <string name="auto_correct_title_description">Εφαρμόζει αποθηκευμένους κανόνες όπως “ca → ça” όταν πατάτε Space ή Enter.</string>
+    <string name="auto_correct_title_description">Εφαρμόζει αποθηκευμένους κανόνες όπως “οτι → ότι”, “ειναι → είναι” όταν πατάτε Space ή Enter.</string>
     <string name="auto_correct_languages_title">Διαχείριση αντικαταστάσεων κειμένου</string>
     <string name="auto_correct_languages_description">Οι αποθηκευμένοι κανόνες αντικατάστασης εκτελούνται πριν από την αυτόματη διόρθωση.</string>
     <string name="auto_correct_settings_title">Αντικαταστάσεις κειμένου</string>
@@ -527,8 +527,8 @@
     <string name="clicks_button_binding_success">Η αντιστοίχιση κουμπιού εφαρμόστηκε.</string>
     <string name="clicks_button_binding_failure">Δεν ήταν δυνατή η εφαρμογή της αντιστοίχισης κουμπιού.</string>
     <string name="clicks_button_binding_pending">Θα εφαρμοστεί όταν είναι έτοιμη μια υποστηριζόμενη σύνδεση πληκτρολογίου.</string>
-    <string name="clicks_launcher_interception_service_label">Παρεμπόδιση κουμπιών Clicks από Pastiera</string>
-    <string name="clicks_launcher_interception_service_description">Παρεμποδίζει μόνο ρητά ρυθμισμένα κουμπιά ενός υποστηριζόμενου Clicks Power Keyboard.</string>
+    <string name="clicks_launcher_interception_service_label">Πλήκτρα Pastiera και μέγεθος οθόνης</string>
+    <string name="clicks_launcher_interception_service_description">Επιτρέπει στο Pastiera να κάνει ό,τι δεν μπορεί μόνο ένα πληκτρολόγιο, για τις επιλογές που ενεργοποιείτε: να χειρίζεται πλήκτρα που αλλιώς θα διάβαζε πρώτα μια εφαρμογή (κουμπιά με ενέργειες Pastiera και, σε εφαρμογές όπου το Pastiera είναι κρυμμένο, τα πλήκτρα για λυχνίες, emoji και Sym) και να βλέπει ποια εφαρμογή είναι μπροστά, ώστε να ακολουθεί το μέγεθος οθόνης ανά εφαρμογή. Δεν μπορεί να διαβάσει τι υπάρχει στην οθόνη.</string>
     <string name="clicks_launcher_interception_title">Παρεμπόδιση κουμπιών Clicks Android</string>
     <string name="clicks_launcher_interception_enabled">Ενεργό · Φιλτράρονται μόνο ρητά ρυθμισμένα κουμπιά ενός υποστηριζόμενου Clicks Power Keyboard.</string>
     <string name="clicks_launcher_interception_disabled">Απαιτείται για κουμπιά Clicks που αντιστοιχίζονται από το λογισμικό. Πατήστε για ενεργοποίηση στις ρυθμίσεις Προσβασιμότητας Android.</string>
@@ -921,7 +921,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="nav_mode_key_mappings">Αντιστοιχίσεις πλήκτρων</string>
     <string name="nav_mode_revert_to_default">Επαναφορά προεπιλογής</string>
     <string name="nav_mode_note">Σημείωση: Η τροποποίηση πλήκτρων nav mode επηρεάζει επίσης τους συνδυασμούς Ctrl+πλήκτρο σε πεδία κειμένου.</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="nav_mode_configure_key">Ρύθμιση %1$s</string>
     <string name="nav_mode_type">Τύπος</string>
     <string name="nav_mode_keycode">Keycode</string>
@@ -1227,7 +1227,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="tutorial_whats_new_bug_fixes_title">Διορθώσεις σφαλμάτων</string>
     <string name="tutorial_whats_new_docs_button">Άνοιγμα τεκμηρίωσης Pastiera</string>
     <string name="tutorial_whats_new_continue_hint">Συνεχίστε το tutorial για να δείτε τις πιο χρήσιμες ρυθμίσεις αυτής της έκδοσης.</string>
-    <string name="tutorial_page_welcome_title">Το Pastiera συνεχίζεται ως Plektra</string>
+    <string name="tutorial_page_welcome_title">Καλώς ήρθατε στο Pastiera</string>
     <string name="tutorial_page_welcome_description">Το Pastiera 0.86 είναι η τελευταία προγραμματισμένη έκδοση με νέες λειτουργίες. Μπορείτε να συνεχίσετε να χρησιμοποιείτε το Pastiera· τα ζητήματα ασφαλείας θα συνεχίσουν να λαμβάνουν ενημερώσεις. Το Plektra συνεχίζει το έργο με τις ίδιες αρχές και παραμένει ελεύθερο λογισμικό ανοικτού κώδικα με την άδεια copyleft GPLv3. Όταν το Plektra είναι έτοιμο, το Pastiera θα σας ενημερώσει και θα σας καθοδηγήσει στην εφάπαξ μεταφορά των ρυθμίσεών σας.</string>
     <string name="tutorial_devs_choice_button">Επιλογή προγραμματιστή</string>
     <string name="tutorial_devs_choice_applied">Οι ρυθμίσεις Επιλογής προγραμματιστή εφαρμόστηκαν.</string>
@@ -1673,7 +1673,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="kw_main_custom_input_styles">διάταξη πληκτρολογίου, διατάξεις, στυλ εισαγωγής, γλώσσες, ανά γλώσσα, keyboard layout, layouts, input styles, languages</string>
     <string name="kw_main_text_input">πληκτρολόγηση, κείμενο, στίξη, εισαγωγικά, διαστήματα, κεφαλαία, typing, text, punctuation, quotes, spacing, capitalization</string>
     <string name="kw_main_auto_correction">διόρθωση, αυτόματη διόρθωση, ορθογραφία, προτάσεις, αντικαταστάσεις, λεξικά, correction, autocorrect, spelling, suggestions, replacements, dictionaries</string>
-    <string name="kw_main_keyboard_theme">θέμα, θέματα, χρώματα, σκοτεινό, φωτεινό, προρυθμίσεις, hardware πληκτρολόγιο, πληκτρολόγιο οθόνης, theme, colors, dark, light, presets, Pastiera Dark, Pastiera Light, Cloud Tap, Moon Tap, Classic Cloud, Classic Midnight</string>
+    <string name="kw_main_keyboard_theme">θέμα, θέματα, χρώματα, σκοτεινό, φωτεινό, προρυθμίσεις, hardware πληκτρολόγιο, πληκτρολόγιο οθόνης, theme, colors, dark, light, presets, Flux Dark, Flux Light, Cloud Tap, Moon Tap, Classic Cloud, Classic Midnight</string>
     <string name="kw_main_app_language">γλώσσα, γλώσσα εφαρμογής, locale, μετάφραση, language, app language, translation</string>
     <string name="kw_main_customization">προσαρμογή, εμφάνιση, customize, customization, appearance</string>
     <string name="kw_main_advanced">για προχωρημένους, αντίγραφο ασφαλείας, επαναφορά, debug, ειδικός, advanced, backup, restore, expert</string>

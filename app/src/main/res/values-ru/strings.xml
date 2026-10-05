@@ -72,7 +72,7 @@
     <string name="select_emoji">Выбрать Эмодзи</string>
     <string name="close">Закрыть</string>
     <string name="auto_correct_title">Текстовые замены</string>
-    <string name="auto_correct_title_description">Применяет сохранённые правила, например “ca → ça”, при пробеле или Enter.</string>
+    <string name="auto_correct_title_description">Применяет сохранённые правила, например “щас → сейчас”, “тож → тоже”, при пробеле или Enter.</string>
     <string name="auto_correct_languages_title">Управлять заменами</string>
     <string name="auto_correct_languages_description">Сохранённые правила выполняются перед автоматическим исправлением.</string>
     <string name="auto_correct_settings_title">Текстовые замены</string>
@@ -225,7 +225,7 @@
     <string name="nav_mode_key_mappings">Клавиатурная карта</string>
     <string name="nav_mode_revert_to_default">Сбросить по умолчанию</string>
     <string name="nav_mode_note">Внимание: Изменение клавиш в режиме навигации так же меняет CTRL+клавишу в текстовых полях.</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="nav_mode_configure_key">Настроить %1$s</string>
     <string name="nav_mode_type">Тип</string>
     <string name="nav_mode_keycode">Код</string>
@@ -358,7 +358,7 @@
     <string name="tutorial_previous">Предыдущий</string>
     <string name="tutorial_next">Далее</string>
     <string name="tutorial_finish">Закончить</string>
-    <string name="tutorial_page_welcome_title">Pastiera продолжает развиваться как Plektra</string>
+    <string name="tutorial_page_welcome_title">Добро пожаловать в Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 — последний запланированный выпуск с новыми функциями. Вы можете продолжать пользоваться Pastiera; проблемы, связанные с безопасностью, будут и дальше получать обновления. Plektra продолжает проект на тех же принципах и остаётся свободным программным обеспечением с открытым исходным кодом под copyleft-лицензией GPLv3. Когда Plektra будет готова, Pastiera уведомит вас и поможет один раз перенести настройки.</string>
     <string name="tutorial_page_enable_title">Включить Pastiera</string>
     <string name="tutorial_page_enable_description">Для начала вам нужно включить Pastiera как метод ввода в настройках Android. Нажмите кнопку ниже, чтобы открыть настройки.</string>

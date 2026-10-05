@@ -55,7 +55,7 @@
     <string name="select_emoji">Ընտրել էմոջի</string>
     <string name="close">Փակել</string>
     <string name="auto_correct_title">Տեքստի փոխարինումներ</string>
-    <string name="auto_correct_title_description">Կիրառում է պահված կանոններ, օրինակ՝ “ca → ça”, բացատ կամ Enter սեղմելիս։</string>
+    <string name="auto_correct_title_description">Կիրառում է պահված կանոններ, օրինակ՝ “եվ → և”, բացատ կամ Enter սեղմելիս։</string>
     <string name="auto_correct_languages_title">Կառավարել փոխարինումները</string>
     <string name="auto_correct_languages_description">Պահված կանոնները կիրառվում են ավտոմատ ուղղումից առաջ։</string>
     <string name="auto_correct_settings_title">Տեքստի փոխարինումներ</string>
@@ -478,7 +478,7 @@
     <string name="speech_recognition_error_network">Ցանցի սխալ։</string>
     <string name="speech_recognition_error_generic">Խոսքի ճանաչման սխալ։</string>
     <string name="speech_recognition_error_not_available">Խոսքի ճանաչումը հասանելի չէ։</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="emoji_category_emoticons">Էմոտիկոններ</string>
     <string name="emoji_picker_search_label">Search</string>
     <string name="emoji_picker_search_placeholder">Search emoji...</string>
@@ -510,7 +510,7 @@
     <string name="tutorial_previous">Previous</string>
     <string name="tutorial_next">Next</string>
     <string name="tutorial_finish">Finish</string>
-    <string name="tutorial_page_welcome_title">Pastiera continues as Plektra</string>
+    <string name="tutorial_page_welcome_title">Welcome to Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 is the final planned Pastiera release with new features. You can keep using Pastiera; security-relevant issues will continue to receive updates. Plektra continues the project with the same principles and remains free, open-source software under the GPLv3 copyleft licence. When Plektra is ready, Pastiera will notify you and guide you through the one-time transfer of your settings.</string>
     <string name="tutorial_page_enable_title">Enable Pastiera</string>
     <string name="tutorial_page_enable_description">To get started, you need to enable Pastiera as an input method in Android Settings. Tap the button below to open settings.</string>

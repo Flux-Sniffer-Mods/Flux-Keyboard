@@ -60,7 +60,7 @@
     <string name="select_emoji">Choisir un emoji</string>
     <string name="close">Fermer</string>
     <string name="auto_correct_title">Remplacements de texte</string>
-    <string name="auto_correct_title_description">Applique des règles comme « ca → ça » avec Espace ou Entrée.</string>
+    <string name="auto_correct_title_description">Applique des règles comme « ca → ça », « cest → c’est » avec Espace ou Entrée.</string>
     <string name="auto_correct_languages_title">Gérer les remplacements</string>
     <string name="auto_correct_languages_description">Les règles enregistrées passent avant la correction automatique.</string>
     <string name="auto_correct_settings_title">Remplacements de texte</string>
@@ -301,7 +301,7 @@
     <string name="tutorial_previous">Précédent</string>
     <string name="tutorial_next">Suivant</string>
     <string name="tutorial_finish">Terminer</string>
-    <string name="tutorial_page_welcome_title">Pastiera continue sous le nom de Plektra</string>
+    <string name="tutorial_page_welcome_title">Bienvenue dans Pastiera</string>
     <string name="tutorial_page_welcome_description">Pastiera 0.86 est la dernière version prévue avec de nouvelles fonctions. Vous pouvez continuer à utiliser Pastiera ; les problèmes liés à la sécurité continueront à recevoir des mises à jour. Plektra poursuit le projet selon les mêmes principes et reste un logiciel libre et open source sous licence copyleft GPLv3. Lorsque Plektra sera prêt, Pastiera vous préviendra et vous guidera dans le transfert unique de vos réglages.</string>
     <string name="tutorial_page_enable_title">Activer Pastiera</string>
     <string name="tutorial_page_enable_description">Pour commencer, vous devez activer Pastiera comme méthode de saisie dans les Paramètres Android. Appuyez sur le bouton ci-dessous pour ouvrir les paramètres.</string>
@@ -508,7 +508,7 @@
     <string name="input_method_name_pt">Português</string>
     <string name="input_method_name_ru">Русский</string>
     <string name="input_method_name_uk">Українська</string>
-    <string name="nav_mode_warning_icon">⚠</string>
+    <string name="nav_mode_warning_icon">⚠\uFE0E</string>
     <string name="sym_reset_confirm_title">Réinitialiser</string>
     <string name="sym_reset_confirm_message">Réinitialiser tous les mappings SYM ? Action irréversible.</string>
     <string name="sym_reset_confirm_button">Réinitialiser</string>
