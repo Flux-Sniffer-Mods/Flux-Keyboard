@@ -1,5 +1,15 @@
 package it.palsoftware.pastiera.inputmethod
 
+import it.palsoftware.pastiera.clipboard.PasteSuggestion
+import it.palsoftware.pastiera.shortcuts.AppShortcutRemapper
+import it.palsoftware.pastiera.shortcuts.AppShortcutSettings
+import it.palsoftware.pastiera.shortcuts.KeyCombo
+import it.palsoftware.pastiera.shortcuts.ShortcutAction
+import it.palsoftware.pastiera.shortcuts.toIntent
+import it.palsoftware.pastiera.inputmethod.suggestions.EmojiSuggestion
+import it.palsoftware.pastiera.data.emoji.EmojiSearchRepository
+import it.palsoftware.pastiera.shortcuts.AppActionDiscovery
+import it.palsoftware.pastiera.shortcuts.DiscoveredAppActions
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,6 +19,8 @@ import android.content.res.Configuration
 import it.palsoftware.pastiera.AppBroadcastActions
 import it.palsoftware.pastiera.ClicksPowerKeyboardController
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.data.desktop.DesktopKeyboardLayout
+import it.palsoftware.pastiera.data.gif.GifCollections
 import it.palsoftware.pastiera.SoftwareKeyboardModeActions
 import android.inputmethodservice.InputMethodService
 import android.hardware.input.InputManager
@@ -18,6 +30,7 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.ContextCompat
 import android.view.InputDevice
+import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
@@ -27,6 +40,14 @@ import android.view.inputmethod.CursorAnchorInfo
 import it.palsoftware.pastiera.clipboard.ClipboardDao
 import it.palsoftware.pastiera.inputmethod.KeyboardEventTracker
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import android.content.ClipDescription
+import androidx.core.content.FileProvider
+import androidx.core.view.inputmethod.EditorInfoCompat
+import androidx.core.view.inputmethod.InputConnectionCompat
+import androidx.core.view.inputmethod.InputContentInfoCompat
+import it.palsoftware.pastiera.data.gif.GifResult
+import it.palsoftware.pastiera.data.gif.KlipyGifs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -35,10 +56,12 @@ import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import it.palsoftware.pastiera.BuildConfig
+import it.palsoftware.pastiera.AppEnterStandards
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
 import it.palsoftware.pastiera.core.AutoCorrectionManager
 import it.palsoftware.pastiera.core.DeferredPunctuationSpaceTracker
+import it.palsoftware.pastiera.core.ContactDetails
 import it.palsoftware.pastiera.core.InputContextState
 import it.palsoftware.pastiera.core.ModifierStateController
 import it.palsoftware.pastiera.core.NavModeController
@@ -48,6 +71,7 @@ import it.palsoftware.pastiera.core.suggestions.SuggestionController
 import it.palsoftware.pastiera.core.suggestions.SuggestionKind
 import it.palsoftware.pastiera.core.suggestions.SuggestionResult
 import it.palsoftware.pastiera.core.suggestions.SuggestionSettings
+import it.palsoftware.pastiera.data.emoji.EmojiCompatSupport
 import it.palsoftware.pastiera.data.layout.LayoutMappingRepository
 import it.palsoftware.pastiera.data.layout.LayoutFileStore
 import it.palsoftware.pastiera.data.layout.LayoutMapping
@@ -86,6 +110,8 @@ import rikka.shizuku.Shizuku
 class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibilityKeyBridge.Target {
 
     companion object {
+        /** Root page: read the keyboard's touch pad as root (and pause the scroll module while typing) */
+        private const val PASTE_SUGGESTION_WINDOW_MS = 60_000L
         private const val TAG = "PastieraInputMethod"
         private const val TRACKPAD_DEBUG_TAG = "TrackpadDebug"
         private const val NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS = 2f
@@ -162,6 +188,27 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var suppressNextLayoutReload: Boolean = false
     private var activeKeyboardLayoutName: String = "qwerty"
     private var consumeAltEnterUntilKeyUp: Boolean = false
+    // The key of a suggestion shortcut, whose key-up is ours too
+    private var suggestionKeyUpPending: Int = KeyEvent.KEYCODE_UNKNOWN
+    // The focused app is on the "hide keyboard in these apps" list: no UI, keys go to the app
+    private var keyboardHiddenForApp: Boolean = false
+    // ...but with "Show status LEDs only": the LED strip stays, following observed modifiers
+    private var hiddenAppShowsLeds: Boolean = false
+    // ...and this hidden app lets the emoji key and Sym open Pastiera (per-app option)
+    private var hiddenAppAllowsPanels: Boolean = false
+    private val observedModifierLeds = ObservedModifierLeds()
+    // Hidden app with the panels option: Pastiera's surface is up for an emoji/symbols panel
+    private var hiddenAppPanelShown: Boolean = false
+    // Keys whose press went to the hidden app / to Pastiera (their release goes the same way)
+    private val hiddenAppPassedThroughKeys = mutableSetOf<Int>()
+    private val hiddenAppPastieraKeys = mutableSetOf<Int>()
+    // Keys the accessibility service handed to Pastiera (their release follows)
+    private val hiddenAppInterceptedKeys = mutableSetOf<Int>()
+    // Key-up of the dedicated emoji picker key still to be swallowed (KEYCODE_UNKNOWN = none)
+    private var emojiPickerKeyUpPending: Int = KeyEvent.KEYCODE_UNKNOWN
+    // An emoji key that is also a modifier (Right Shift) opens the picker on release, unless it
+    // was held for a chord such as Ctrl+Shift+Q
+    private var emojiPickerKeyChorded: Boolean = false
     private var dispatchingSoftwareKeyboardKey: Boolean = false
     
     // Aggiungi per Power Shortcuts
@@ -241,9 +288,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     private val shouldDisableAutoCapitalize: Boolean
         get() {
-            if (!inputContextState.shouldDisableAutoCapitalize) return false
-            val includeRestrictedFields = SettingsManager.getAutoCapitalizeRestrictedFields(this)
-            return !includeRestrictedFields || inputContextState.isPasswordField
+            if (inputContextState.isPasswordField || inputContextState.exactTyping) return true
+            // Automatic Shift by kind of field (Settings > Text input)
+            val type = ShiftFieldTypes.of(currentInputEditorInfo) ?: return inputContextState.shouldDisableAutoCapitalize
+            return type !in ShiftFieldTypes.enabled(this)
         }
     
     // Current package name
@@ -251,6 +299,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     
     // Constants
     private val DOUBLE_TAP_THRESHOLD = 500L
+    // Shift, Ctrl or Alt held this long with no other key: a hold, which leaves them as they were.
+    // Shorter is a tap: a deliberate press of a physical key can take 300 ms or more.
+    private val MODIFIER_HOLD_MS = 500L
+    // How much of a field is read to learn or match an email or phone number
+    private val CONTACT_TEXT_LIMIT = 320
     private val CURSOR_UPDATE_DELAY = 50L
     private val MULTI_TAP_TIMEOUT_MS = 400L
 
@@ -287,16 +340,23 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     // Trackpad gesture detection
     private val trackpadScope = CoroutineScope(Dispatchers.IO)
+    // Sends GIFs picked in the emoji picker (download, then rich content or a link)
+    private val gifScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private lateinit var trackpadGestureDetector: TrackpadGestureDetector
     private var modifierStateBeforeHold: it.palsoftware.pastiera.core.ModifierStateController.LogicalState? = null
     private var variationInteractedDuringHold: Boolean = false
     private var modifierDownTimes = mutableMapOf<Int, Long>()
     private var otherKeyInteractedDuringHold: Boolean = false
+    // Ctrl was held while a shortcut opened another field (the find bar Ctrl+F opens)
+    private var ctrlHeldIntoNewField = false
     private var shiftLayerLatched: Boolean = false
     private var altModifierLayerLatched: Boolean = false
     private var lastShiftTapUpTime: Long = 0L
     private var lastAltTapUpTime: Long = 0L
     private var symTogglePendingOnKeyUp: Boolean = false
+    // Flux Keyboard: SYM or the emoji key tapped, so the next key types its symbol or emoji
+    private var symSticky: Boolean = false
+    private var emojiSticky: Boolean = false
     private var symChordUsedSinceKeyDown: Boolean = false
     private var symPhysicallyPressed: Boolean = false
     private var nativeTrackpadGestureStart: NativeTrackpadGestureStart? = null
@@ -403,8 +463,18 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private val symPage: Int
         get() = if (::symLayoutController.isInitialized) symLayoutController.currentSymPage() else 0
 
+    // The input type an app gave its field, before onStartInput adds NO_SUGGESTIONS for the
+    // keyboard's own reasons: exact typing must follow what the app asked for, not that flag
+    private var appInputType: Pair<EditorInfo, Int>? = null
+
     private fun updateInputContextState(info: EditorInfo?) {
-        inputContextState = InputContextState.fromEditorInfo(info)
+        val state = InputContextState.fromEditorInfo(info)
+        val requestedType = appInputType?.takeIf { it.first === info }?.second ?: info?.inputType ?: 0
+        inputContextState = if (info != null && SettingsManager.isExactTypingField(this, info.packageName, requestedType)) {
+            state.copy(exactTyping = true)
+        } else {
+            state
+        }
     }
 
     private fun markSelectionUpdateSkipAfterCommit() {
@@ -631,6 +701,15 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         pendingSelectionAutoCapCheck = null
     }
 
+    /**
+     * The bar's chips (autofill, one-time codes, paste, emails and numbers) aren't part of the
+     * status the bar is redrawn for, so showing or clearing one forces the redraw.
+     */
+    private fun refreshBarChips() {
+        invalidateRenderedStatusSnapshot()
+        updateStatusBarText()
+    }
+
     private fun invalidateRenderedStatusSnapshot() {
         lastRenderedStatusSnapshot = null
         lastRenderedEmojiMapText = null
@@ -688,6 +767,116 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         uiHandler.postDelayed(runnable, CURSOR_UPDATE_DELAY * 2)
     }
 
+    private val startAutoCapRechecks = mutableListOf<Runnable>()
+
+    // Fields that don't say what they are ("Other" in Automatic Shift)
+    private var otherFieldShift = false
+    private var otherFieldCapitalNext = false
+    private var otherFieldLastChar: Char? = null
+
+    /**
+     * A field that doesn't say what it is can't be read, so the keyboard follows what's typed in
+     * it: the first letter, and the first after Enter or after . ! ? and a space, get a capital.
+     * Returns true when it typed the capital itself.
+     */
+    private fun otherFieldCapital(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event == null || event.repeatCount != 0 || keyboardHiddenForApp || terminalModeActive) return false
+        if (!::modifierStateController.isInitialized || KeyEvent.isModifierKey(keyCode)) return false
+        val otherModifier = event.isCtrlPressed || event.isAltPressed || event.isMetaPressed ||
+            ctrlPressed || ctrlOneShot || ctrlLatchActive || altPressed || altOneShot || altLatchActive ||
+            symLayoutController.isSymActive()
+        if (otherModifier) return false
+        when (keyCode) {
+            in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z -> {
+                val shifted = event.isShiftPressed || modifierStateController.shiftOneShot ||
+                    modifierStateController.capsLockEnabled || modifierStateController.shiftPressed
+                if (otherFieldCapitalNext && !shifted) {
+                    val capital = it.palsoftware.pastiera.data.layout.LayoutMappingRepository.getCharacter(keyCode, isShift = true)
+                        ?: event.getUnicodeChar(KeyEvent.META_SHIFT_ON).takeIf { it > 0 }?.toChar()
+                    if (capital != null && currentInputConnection?.commitText(capital.toString(), 1) == true) {
+                        otherFieldCapitalNext = false
+                        otherFieldLastChar = capital
+                        return true
+                    }
+                }
+                otherFieldCapitalNext = false
+                otherFieldLastChar = 'a'
+            }
+            KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                otherFieldCapitalNext = true
+                otherFieldLastChar = '\n'
+            }
+            KeyEvent.KEYCODE_SPACE -> {
+                if (otherFieldLastChar in setOf('.', '!', '?')) otherFieldCapitalNext = true
+                otherFieldLastChar = ' '
+            }
+            KeyEvent.KEYCODE_DEL -> Unit
+            else -> event.unicodeChar.takeIf { it > 0 }?.let { otherFieldLastChar = it.toChar() }
+        }
+        return false
+    }
+
+    private val EDIT_STEP_CHECK_MS = 150L
+    private val EDIT_STEP_IDLE_MS = 900L
+    private var editHistoryRecord: Runnable? = null
+
+    /**
+     * Ctrl+Z's history: a step at the end of each word (a space, a newline or punctuation was just
+     * typed), or after a pause in typing.
+     */
+    private fun scheduleEditHistoryRecord(delay: Long) {
+        editHistoryRecord?.let { uiHandler.removeCallbacks(it) }
+        val runnable = Runnable {
+            editHistoryRecord = null
+            val ic = currentInputConnection ?: return@Runnable
+            if (delay == EDIT_STEP_CHECK_MS) {
+                val last = runCatching { ic.getTextBeforeCursor(1, 0) }.getOrNull()?.lastOrNull()
+                if (last == null || !(last.isWhitespace() || last in ".,!?;:")) {
+                    scheduleEditHistoryRecord(EDIT_STEP_IDLE_MS)
+                    return@Runnable
+                }
+            }
+            it.palsoftware.pastiera.core.EditHistory.record(ic)
+        }
+        editHistoryRecord = runnable
+        uiHandler.postDelayed(runnable, delay)
+    }
+
+    /** Ctrl+Z (or Ctrl+Shift+Z, Ctrl+Y to redo) from the keyboard's own history; false: the app's. */
+    internal fun undoFromHistory(redo: Boolean): Boolean {
+        val ic = currentInputConnection ?: return false
+        editHistoryRecord?.let { uiHandler.removeCallbacks(it) }
+        editHistoryRecord = null
+        return if (redo) it.palsoftware.pastiera.core.EditHistory.redo(ic) else it.palsoftware.pastiera.core.EditHistory.undo(ic)
+    }
+
+    /**
+     * A field that has just opened (a new note in Keep, WhatsApp's box after sending) often
+     * can't be read yet, and an empty field sends no cursor update to check again on. Checks
+     * again shortly after, while nothing has been typed, so it starts with a capital.
+     */
+    private fun scheduleStartAutoCapRechecks() {
+        startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
+        startAutoCapRechecks.clear()
+        // Some apps (Instagram, Keep) fill their field in a little after it opens
+        listOf(120L, 450L, 1000L).forEach { delay ->
+            val runnable = Runnable {
+                if (!inputContextState.isEditable) return@Runnable
+                AutoCapitalizeHelper.checkAutoCapitalizeOnRestart(
+                    this,
+                    currentInputConnection,
+                    shouldDisableAutoCapitalize,
+                    enableShift = { requestAutoCapShiftOneShot() },
+                    disableShift = { modifierStateController.consumeShiftOneShot() },
+                    onUpdateStatusBar = { updateStatusBarText() },
+                    inputContextState = inputContextState
+                )
+            }
+            startAutoCapRechecks += runnable
+            uiHandler.postDelayed(runnable, delay)
+        }
+    }
+
     private fun isPureModifierKey(keyCode: Int): Boolean {
         return keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
             keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT ||
@@ -702,7 +891,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         return DeviceSpecific.isMinimalPhoneDevice(physicalKeyboardProfileOverride)
     }
 
-    private fun openQuickLauncher(): Boolean = QuickLauncherOpener.open(this)
+    private fun openQuickLauncher(): Boolean = QuickLauncherOpener.open(this, currentInputEditorInfo?.packageName)
     
     /**
      * Starts voice input using SpeechRecognizer via SpeechRecognitionManager.
@@ -779,18 +968,20 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     private fun getSuggestionSettings(): SuggestionSettings {
         val suggestionsEnabled = SettingsManager.getSuggestionsEnabled(this)
+        // Exact typing: suggestions stay, but nothing rewrites or spaces what you typed
+        val exact = inputContextState.exactTyping
         return SuggestionSettings(
-            textReplacementsEnabled = SettingsManager.getAutoCorrectEnabled(this),
+            textReplacementsEnabled = SettingsManager.getAutoCorrectEnabled(this) && !exact,
             suggestionsEnabled = suggestionsEnabled,
             accentMatching = SettingsManager.getAccentMatchingEnabled(this),
-            autoReplaceOnSpaceEnter = SettingsManager.getAutoReplaceOnSpaceEnter(this),
+            autoReplaceOnSpaceEnter = SettingsManager.getAutoReplaceOnSpaceEnter(this) && !exact,
             maxAutoReplaceDistance = SettingsManager.getMaxAutoReplaceDistance(this),
             maxSuggestions = 3,
             useKeyboardProximity = SettingsManager.getUseKeyboardProximity(this),
             useEditTypeRanking = SettingsManager.getUseEditTypeRanking(this),
             frenchPunctuationSpacing = SettingsManager.shouldApplyFrenchPunctuationSpacing(this),
-            commaSpace = SettingsManager.getCommaSpace(this),
-            autoSpacePunctuation = SettingsManager.getAutoSpacePunctuation(this)
+            commaSpace = SettingsManager.getCommaSpace(this) && !exact,
+            autoSpacePunctuation = if (exact) "" else SettingsManager.getAutoSpacePunctuation(this)
         )
     }
 
@@ -850,6 +1041,22 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
+    /** Whether the field can hold more than one line (a message, note or post, not a search box). */
+    private fun acceptsNewLines(info: EditorInfo?): Boolean {
+        val type = info?.inputType ?: return false
+        if (type and android.text.InputType.TYPE_MASK_CLASS != android.text.InputType.TYPE_CLASS_TEXT) return false
+        return type and (android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE or
+            android.text.InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE) != 0
+    }
+
+    /**
+     * Whether the field says it sends (a message or comment box). Most chat apps declare Send and
+     * also ask for Enter to stay a new line (IME_FLAG_NO_ENTER_ACTION), so the flag is ignored here.
+     */
+    private fun declaresSendAction(info: EditorInfo): Boolean =
+        info.actionId == EditorInfo.IME_ACTION_SEND ||
+            info.imeOptions and EditorInfo.IME_MASK_ACTION == EditorInfo.IME_ACTION_SEND
+
     private fun resolveAppEnterBehavior(info: EditorInfo?): String? {
         val packageName = info?.packageName ?: return null
         if (!SettingsManager.getAppEnterBehaviorEnabled(this)) return null
@@ -860,7 +1067,16 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (override != null && override != SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT) {
             return override
         }
-        if (packageName !in MESSENGER_ENTER_BEHAVIOR_PACKAGES) return null
+        if (packageName !in MESSENGER_ENTER_BEHAVIOR_PACKAGES) {
+            // An app you set to "App default" keeps its own Enter
+            if (override != null) return null
+            // Every other app follows its category's standard (AppEnterStandards)
+            return AppEnterStandards.behaviorFor(
+                packageName,
+                SettingsManager.getAppEnterBehaviorPreset(this),
+                fieldSends = declaresSendAction(info)
+            )
+        }
 
         return when (SettingsManager.getAppEnterBehaviorPreset(this)) {
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE ->
@@ -873,6 +1089,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
                 SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE
+            SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+                SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
             else -> null
         }
     }
@@ -904,7 +1122,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             packageName in ENTER_BEHAVIOR_SEND_ACTION_PACKAGES ->
                 SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
             override != null -> SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
-            else -> null
+            else -> AppEnterStandards.sendStrategyFor(packageName)
         }
     }
 
@@ -1155,7 +1373,22 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             )
         }
 
-        when (resolveAppEnterBehavior(info)) {
+        val appEnterBehavior = resolveAppEnterBehavior(info)
+        // Search boxes and address bars always, and one-line fields where the app's Enter would
+        // type a new line: Enter does the field's own action (search, go, next). A message box
+        // that sends with Enter keeps Shift + Enter for a new line (WhatsApp's isn't marked
+        // multi-line, but takes new lines)
+        val enterMakesNewLine = appEnterBehavior == SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE ||
+            appEnterBehavior == SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND ||
+            appEnterBehavior == SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
+        if (actionId != null && !navModeController.isNavModeActive() &&
+            (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO ||
+                (enterMakesNewLine && !acceptsNewLines(info)))
+        ) {
+            return performEnterEditorAction(keyCode, actionId, ic, event, consumeCtrlState = ctrlActiveForEnter)
+        }
+
+        when (appEnterBehavior) {
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE -> {
                 if (navModeController.isNavModeActive() && ctrlActiveForEnter) {
                     return performConfiguredAppEnterSend(
@@ -1167,6 +1400,18 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     )
                 }
                 return commitEnterNewline(keyCode, ic, event, "app_enter_newline")
+            }
+            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND -> {
+                if (!isShiftModifierActive(event) && !ctrlActiveForEnter) {
+                    return commitEnterNewline(keyCode, ic, event, "app_enter_newline")
+                }
+                return performConfiguredAppEnterSend(
+                    keyCode = keyCode,
+                    info = info,
+                    inputConnection = ic,
+                    event = event,
+                    consumeCtrlState = ctrlActiveForEnter
+                )
             }
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND -> {
                 if (!ctrlActiveForEnter) {
@@ -1268,7 +1513,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         val locale = getLocaleFromSubtype()
 
-        return latestSuggestionResults.map { suggestion ->
+        val words = latestSuggestionResults.map { suggestion ->
             when (suggestion.kind) {
                 SuggestionKind.NEXT_WORD,
                 SuggestionKind.STARTER_WORD -> recaseWordStartSuggestion(
@@ -1278,6 +1523,37 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 )
                 SuggestionKind.CURRENT_WORD -> suggestion.candidate
             }
+        }
+        return withEmojiSuggestion(words)
+    }
+
+    /**
+     * The emoji for the word being typed, in the third slot (the bar's left one): after the word
+     * suggestions, or instead of the third.
+     */
+    private fun withEmojiSuggestion(words: List<String>): List<String> {
+        if (!SettingsManager.getEmojiSuggestionsEnabled(this)) return words
+        if (latestSuggestionResults.none { it.kind == SuggestionKind.CURRENT_WORD }) return words
+        val word = suggestionController.currentWord()
+        if (word.isBlank()) return words
+        val index = EmojiSearchRepository.cachedSearchIndex(this) ?: run {
+            requestEmojiSuggestionIndex()
+            return words
+        }
+        val emoji = EmojiSearchRepository.suggestionFor(index, word) ?: return words
+        // Keycaps (1️⃣) have a digit, so they would be taken for a word
+        if (!EmojiSuggestion.isEmoji(emoji) || emoji in words) return words
+        return words.take(2) + emoji
+    }
+
+    private var emojiSuggestionIndexRequested = false
+
+    private fun requestEmojiSuggestionIndex() {
+        if (emojiSuggestionIndexRequested) return
+        emojiSuggestionIndexRequested = true
+        expansionAssetScope.launch {
+            runCatching { EmojiSearchRepository.getSearchIndex(this@PhysicalKeyboardInputMethodService) }
+            emojiSuggestionIndexRequested = false
         }
     }
 
@@ -1656,11 +1932,20 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         modifierStateController.shiftTapLatches = SettingsManager.getShiftTapLatches(this)
         modifierStateController.altTapLatches = SettingsManager.getAltTapLatches(this)
         modifierStateController.ctrlTapLatches = SettingsManager.getCtrlTapLatches(this)
+        modifierStateController.shiftDoubleTapLocks = SettingsManager.getShiftDoubleTapLocks(this)
+        modifierStateController.altDoubleTapLocks = SettingsManager.getAltDoubleTapLocks(this)
+        modifierStateController.ctrlDoubleTapLocks = SettingsManager.getCtrlDoubleTapLocks(this)
     }
 
     override fun onCreate() {
         super.onCreate()
         ClicksAccessibilityKeyBridge.register(this)
+        // Root: the keyboard backlight follows the screen, when set (the Root page)
+        it.palsoftware.pastiera.adb.KeyboardBacklight.start(this)
+        // A code arriving while typing is offered straight away
+        // A newer code replaces the chip too when the bar shows one already
+        it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = { if (isInputViewShown || isInputViewActive || pasteSuggestionShown) offerOneTimeCode() }
+        EmojiCompatSupport.ensureLoaded(this)
         lastSystemLocalesSignature = resources.configuration.locales.toLanguageTags()
         prefs = getSharedPreferences("pastiera_prefs", Context.MODE_PRIVATE)
         clearAltOnSpaceEnabled = SettingsManager.getClearAltOnSpace(this)
@@ -1702,6 +1987,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             activeSuggestionLocalesProvider = { getAdditionalSuggestionLocalesForActiveInputStyle() }
         )
         inputEventRouter.suggestionController = suggestionController
+        // The phone's own spell checker (Gboard's, say) as a second opinion on misspelt words
+        val phoneSpellChecker = it.palsoftware.pastiera.spellcheck.PhoneSpellChecker(this)
+        suggestionController.externalSuggestions = { word, locale, onResult -> phoneSpellChecker.suggest(word, locale, onResult) }
+        suggestionController.textAfterCursorProvider = { currentInputConnection?.getTextAfterCursor(32, 0) }
+        // The spell checker reads the loaded dictionary instead of loading its own
+        it.palsoftware.pastiera.spellcheck.PastieraSpellCheckerService.keyboardController =
+            java.lang.ref.WeakReference(suggestionController)
         
         // Preload dictionary in background so it's ready when user focuses a field
         suggestionController.preloadDictionary()
@@ -1755,7 +2047,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 candidatesBarController.showExpansionSuggestions(labels, onSelected)
             },
             clearSuggestionBar = { candidatesBarController.clearExpansionSuggestions() },
-            requestSurfaceUpdate = { updateStatusBarText() },
+            requestSurfaceUpdate = { refreshBarChips() },
             onCommitted = {
                 markSelectionUpdateSkipAfterCommit()
                 suggestionController.onContextReset()
@@ -1919,6 +2211,50 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 updateStatusBarText()
             }
         }
+        candidatesBarController.onEmojiLayerSearchRequested = {
+            // Emoji layer's search button: the picker, with its search ready for typing
+            candidatesBarController.requestEmojiPickerSearch()
+            symLayoutController.openEmojiPickerPage()
+            updateStatusBarText()
+        }
+        candidatesBarController.onEmojiLayerGifRequested = {
+            // Emoji layer's GIF key: the picker, in GIF search
+            candidatesBarController.requestEmojiPickerGifs()
+            symLayoutController.openEmojiPickerPage()
+            updateStatusBarText()
+        }
+        candidatesBarController.onGifChosen = { gif -> sendGif(gif) }
+        candidatesBarController.onSymbolSearchRequested = {
+            // A symbols page's search: the picker, in symbol search
+            candidatesBarController.requestSymbolSearch()
+            symLayoutController.openEmojiPickerPage()
+            updateStatusBarText()
+        }
+        candidatesBarController.onKaomojiBackTapped = {
+            if (symLayoutController.previousPage()) updateStatusBarText()
+        }
+        candidatesBarController.onLayerNextTapped = {
+            if (symLayoutController.nextPage()) updateStatusBarText()
+        }
+        candidatesBarController.onKaomojiKeyTapped = {
+            if (symLayoutController.kaomojiKeyPressed()) updateStatusBarText()
+        }
+        candidatesBarController.onEmojiVariantsRequested = { emoji ->
+            if (symLayoutController.showEmojiVariants(emoji)) updateStatusBarText()
+        }
+        candidatesBarController.onEmojiLayerTyped = {
+            if (symLayoutController.closeEmojiVariants()) updateStatusBarText()
+        }
+        candidatesBarController.onKaomojiSearchRequested = {
+            candidatesBarController.requestKaomojiSearch()
+            symLayoutController.openEmojiPickerPage()
+            updateStatusBarText()
+        }
+        candidatesBarController.onEmojiLayerRecentsToggled = {
+            if (symLayoutController.toggleEmojiLayerRecents()) {
+                updateStatusBarText()
+            }
+        }
         candidatesBarController.onEmojiPickerSearchPanelToggled = {
             // The picker's search panel state is not part of the rendered snapshot; force a
             // re-render so the picker moves to its popup surface while searching.
@@ -1927,11 +2263,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         candidatesBarController.onUndoRequested = {
             variationInteractedDuringHold = true
-            sendCtrlShortcut(KeyEvent.KEYCODE_Z)
+            if (!undoFromHistory(redo = false)) sendCtrlShortcut(KeyEvent.KEYCODE_Z)
         }
         candidatesBarController.onRedoRequested = {
             variationInteractedDuringHold = true
-            sendCtrlShortcut(KeyEvent.KEYCODE_Y)
+            if (!undoFromHistory(redo = true)) sendCtrlShortcut(KeyEvent.KEYCODE_Y)
         }
         candidatesBarController.onSoftwareKeyboardKeyPressed = { keyCode ->
             typingSoundPlayer.play(keyCode)
@@ -2053,6 +2389,44 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         symLayoutController = SymLayoutController(this, prefs, alternateCharacterManager)
+        // Emoji layer's GIF key (physical): the same as its on-screen GIF key
+        symLayoutController.onEmojiLayerGifKey = {
+            uiHandler.post { candidatesBarController.onEmojiLayerGifRequested?.invoke() }
+        }
+        // Type to search: the emoji layer's or a symbols page's search, already holding the letter
+        symLayoutController.onSearchKey = { target ->
+            uiHandler.post {
+                when (target) {
+                    SymLayoutController.SearchTarget.EMOJI_LAYER -> {
+                        candidatesBarController.requestEmojiPickerSearch()
+                        symLayoutController.openEmojiPickerPage()
+                    }
+                    SymLayoutController.SearchTarget.SYMBOLS -> {
+                        candidatesBarController.requestSymbolSearch()
+                        symLayoutController.openEmojiPickerPage()
+                    }
+                    SymLayoutController.SearchTarget.KAOMOJI -> {
+                        candidatesBarController.requestKaomojiSearch()
+                        symLayoutController.openEmojiPickerPage()
+                    }
+                    SymLayoutController.SearchTarget.PICKER ->
+                        candidatesBarController.focusEmojiPickerSearch()
+                }
+                updateStatusBarText()
+            }
+        }
+        symLayoutController.onTypeToSearch = { emoji, text ->
+            uiHandler.post {
+                // Lower case, as the rest of the search is typed
+                if (emoji) {
+                    candidatesBarController.requestEmojiPickerSearch(text.lowercase())
+                } else {
+                    candidatesBarController.requestSymbolSearch(text.lowercase())
+                }
+                symLayoutController.openEmojiPickerPage()
+                updateStatusBarText()
+            }
+        }
         keyboardVisibilityController = KeyboardVisibilityController(
             context = this,
             candidatesBarController = candidatesBarController,
@@ -2087,7 +2461,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             refreshStatusBar = {
                 invalidateRenderedStatusSnapshot()
                 refreshStatusBar()
-            }
+            },
+            isHiddenForApp = { hiddenAppSurfaceBlocked() }
         )
         inputManager = getSystemService(InputManager::class.java)
         InputDevice.getDeviceIds().forEach { deviceId ->
@@ -2129,7 +2504,25 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Register listener for SharedPreferences changes
         prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
             Log.d(TRACKPAD_DEBUG_TAG, "SharedPrefs changed: key=$key")
-            if (key == "sym_mappings_custom") {
+            if (key == it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.PREF_SWITCH_BY_APP) {
+                alternateCharacterManager.setEmojiLayerOverride(
+                    if (it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.switchByApp(this)) {
+                        it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.forApp(currentInputEditorInfo?.packageName)?.let { profile -> it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.layerMappings(this, profile) }
+                    } else null
+                )
+                Handler(Looper.getMainLooper()).post { updateStatusBarText() }
+            } else if (key != null && key.startsWith("led_")) {
+                // LED colours: repaint the LEDs even though no modifier changed
+                Handler(Looper.getMainLooper()).post {
+                    invalidateRenderedStatusSnapshot()
+                    updateStatusBarText()
+                }
+            } else if (key == it.palsoftware.pastiera.data.mappings.CustomDeviceSymProfiles.PREF_KEY ||
+                key == it.palsoftware.pastiera.data.mappings.CustomDeviceSymProfiles.PREF_CHOICE
+            ) {
+                alternateCharacterManager.reloadModifierAndDeviceSymMappings()
+                Handler(Looper.getMainLooper()).post { updateStatusBarText() }
+            } else if (key == "sym_mappings_custom") {
                 Log.d(TAG, "SYM mappings page 1 changed, reloading...")
                 // Reload SYM mappings for page 1
                 alternateCharacterManager.reloadSymMappings()
@@ -2165,7 +2558,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 clearAltOnSpaceEnabled = SettingsManager.getClearAltOnSpace(this)
             } else if (key == "emoji_shortcodes_enabled" || key == "symbol_shortcodes_enabled") {
                 prepareEnabledExpansionAssets()
-            } else if (key == "shift_tap_latches" || key == "alt_tap_latches" || key == "ctrl_tap_latches") {
+            } else if (key == "shift_tap_latches" || key == "alt_tap_latches" || key == "ctrl_tap_latches" ||
+                key?.endsWith("_double_tap_locks") == true) {
                 updateModifierTapLatchSettings()
                 Handler(Looper.getMainLooper()).post {
                     updateStatusBarText()
@@ -2180,6 +2574,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else if (key == "physical_keyboard_currency_symbol") {
                 Log.d(TAG, "Physical keyboard currency symbol changed, reloading Device SYM and Alt modifier mappings...")
                 alternateCharacterManager.reloadModifierAndDeviceSymMappings()
+                // The symbols page's defaults carry it too
+                alternateCharacterManager.reloadSymMappings2()
             } else if (key != null && (key.startsWith("auto_correct_custom_") || key == "auto_correct_enabled_languages")) {
                 Log.d(TAG, "Auto-correction rules changed, reloading...")
                 // Reload auto-corrections (including new custom languages)
@@ -2280,7 +2676,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else if (key == "pastierina_mode_override") {
                 keyboardVisibilityController.syncStatusBarPresentationModeFromSettings()
             } else if (key == SettingsManager.KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS ||
-                key == SettingsManager.KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS ||
+                key == SettingsManager.KEY_TITAN2_ELITE_FILL_CORNERS ||
+                key == SettingsManager.KEY_TITAN2_ELITE_CONTOUR_LEDS ||
                 key == it.palsoftware.pastiera.T2eCornerCalibration.KEY ||
                 key == SettingsManager.KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER ||
                 key == SettingsManager.KEY_TITAN2_ELITE_MAX_ICON_SHRINK) {
@@ -2372,12 +2769,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         val filter = IntentFilter(SpeechRecognitionActivity.ACTION_SPEECH_RESULT)
         
-        // On Android 13+ (API 33+) we must specify whether the receiver is exported
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(speechResultReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(speechResultReceiver, filter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, speechResultReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for: ${SpeechRecognitionActivity.ACTION_SPEECH_RESULT}")
         
@@ -2406,11 +2799,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             addAction(PermissionRequestActivity.ACTION_PERMISSION_DENIED)
         }
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(permissionResultReceiver, permissionFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(permissionResultReceiver, permissionFilter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, permissionResultReceiver, permissionFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for permission request results")
         
@@ -2427,11 +2817,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         
         val userDictFilter = IntentFilter(AppBroadcastActions.USER_DICTIONARY_UPDATED)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(userDictionaryReceiver, userDictFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(userDictionaryReceiver, userDictFilter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, userDictionaryReceiver, userDictFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for user dictionary updates")
         
@@ -2446,11 +2833,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         
         val subtypesFilter = IntentFilter("it.palsoftware.pastiera.ACTION_ADDITIONAL_SUBTYPES_UPDATED")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(additionalSubtypesReceiver, subtypesFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(additionalSubtypesReceiver, subtypesFilter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, additionalSubtypesReceiver, subtypesFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for additional subtypes updates")
 
@@ -2602,6 +2986,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 if (shortcutUsedDuringHold && ctrlOneShot && !ctrlLatchActive) {
                     modifierStateController.ctrlOneShot = false
                 }
+                if ((shortcutUsedDuringHold || ctrlHeldIntoNewField) && !ctrlLatchFromNavMode) {
+                    modifierStateController.clearCtrlState(resetPressedState = true)
+                }
+                ctrlHeldIntoNewField = false
                 if (result.shouldUpdateStatusBar || wasTap || shortcutUsedDuringHold) {
                     updateStatusBarText()
                 }
@@ -2731,7 +3119,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         )
         return TrackpadGestureDetector(
             isEnabled = { shouldStartShizukuTrackpadDetector() },
-            onSwipeUp = { third -> acceptSuggestionAtIndex(third) },
+            onSwipeUp = { third ->
+                if (it.palsoftware.pastiera.core.SuggestionSwipeLearning.swipesPick(this)) {
+                    it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
+                    acceptSuggestionAtIndex(third)
+                }
+            },
             scope = trackpadScope,
             swipeUpThreshold = swipeThreshold,
             eventDeviceSelection = eventDeviceSelection,
@@ -2747,6 +3140,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
     
     override fun onDestroy() {
+        it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = null
+        it.palsoftware.pastiera.spellcheck.PastieraSpellCheckerService.keyboardController = null
+        gifScope.cancel()
+        HiddenAppKeyObserver.sink = null
+        HiddenAppKeyObserver.interceptor = null
+        HiddenAppKeyObserver.hiddenAppInFront = false
         ClicksAccessibilityKeyBridge.unregister(this)
         clicksPowerShiftTapFilter.reset()
         accidentalKeyPressFilter.reset()
@@ -2861,6 +3260,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
      * Only the experimental hardware backend uses Android's separate candidates lifecycle.
      */
     override fun onEvaluateInputViewShown(): Boolean {
+        if (hiddenAppSurfaceBlocked()) {
+            requestedInputViewShown = false
+            return false
+        }
         val systemShouldShowInputView = super.onEvaluateInputViewShown()
         val resolvedShowInputView =
             keyboardVisibilityController.onEvaluateInputViewShown(systemShouldShowInputView)
@@ -2870,6 +3273,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     override fun onShowInputRequested(flags: Int, configChange: Boolean): Boolean {
         val accepted = super.onShowInputRequested(flags, configChange)
+        if (hiddenAppSurfaceBlocked()) return false
         if (::keyboardVisibilityController.isInitialized) {
             keyboardVisibilityController.onExplicitShowRequested()
         }
@@ -2881,6 +3285,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         super.onComputeInsets(outInsets)
         val decor = window?.window?.decorView ?: return
         outInsets ?: return
+        if (keyboardHiddenForApp && !hiddenAppPanelOpen()) {
+            // Nothing (or only the LEDs) is shown: the app keeps the whole screen and every touch
+            ImeInsetsPolicy.applyRenderedContentInsets(outInsets, null, decor.height)
+            return
+        }
         if (!isFullscreenMode && ::candidatesBarController.isInitialized) {
             // Content and touch geometry come from the same attached, visible child. Neither
             // a requested surface nor Android's cached candidates-started flag is sufficient.
@@ -2912,6 +3321,263 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun requestKeyboardInputView() = requestShowSelf(0)
 
     /**
+     * A GIF picked in the emoji picker. Fields that take GIF content get the file itself
+     * (through the FileProvider); anywhere else, or if the download fails, its link is typed.
+     */
+    private fun sendGif(gif: GifResult) {
+        val editorInfo = currentInputEditorInfo ?: return
+        // Recent GIFs (GIF search's Recent section, and recently used first)
+        GifCollections.addRecent(this, gif)
+        val acceptsGif = KlipyGifs.editorAcceptsGif(EditorInfoCompat.getContentMimeTypes(editorInfo))
+        // A GIF is a one-off: close the picker straight away
+        if (symLayoutController.closeSymPage()) updateStatusBarText()
+        if (!acceptsGif) {
+            currentInputConnection?.commitText(gif.gifUrl, 1)
+            Toast.makeText(this, R.string.gif_sent_as_link, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val pickedInPackage = editorInfo.packageName
+        val pickedInField = editorInfo.fieldId
+        gifScope.launch {
+            val file = try {
+                KlipyGifs.downloadToCache(this@PhysicalKeyboardInputMethodService, gif)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                null
+            }
+            // The field was re-bound during the download: use the current connection, but never
+            // send to another app or field (a different chat) than the GIF was picked in
+            val connection = currentInputConnection ?: return@launch
+            val info = currentInputEditorInfo ?: return@launch
+            if (info.packageName != pickedInPackage || info.fieldId != pickedInField) return@launch
+            if (file == null) {
+                connection.commitText(gif.gifUrl, 1)
+                return@launch
+            }
+            val uri = FileProvider.getUriForFile(
+                this@PhysicalKeyboardInputMethodService, "$packageName.fileprovider", file
+            )
+            val content = InputContentInfoCompat(
+                uri,
+                ClipDescription(gif.description.ifBlank { "GIF" }, arrayOf("image/gif")),
+                null
+            )
+            val sent = InputConnectionCompat.commitContent(
+                connection, info, content, InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION, null
+            )
+            if (!sent) connection.commitText(gif.gifUrl, 1)
+        }
+    }
+
+    /** Hidden app with the panels option and an emoji or symbols panel open. */
+    private fun hiddenAppPanelOpen(): Boolean =
+        keyboardHiddenForApp && symPage > 0 && hiddenAppAllowsPanels
+
+    /** Hidden apps keep Pastiera's surface closed, except for the status LEDs or an open panel. */
+    private fun hiddenAppSurfaceBlocked(): Boolean =
+        (keyboardHiddenForApp && !hiddenAppShowsLeds && !hiddenAppPanelOpen()) || terminalSurfaceHidden()
+
+    /**
+     * Terminal mode, like the Linux desktop: Pastiera out of sight while its keys keep working
+     * (Alt layer, SYM layers typed blind, real Ctrl). The clipboard (3) and emoji picker (4) need
+     * to be seen, so they show while open.
+     */
+    private fun terminalSurfaceHidden(): Boolean =
+        terminalModeActive && !keyboardHiddenForApp && terminalHidesKeyboard && !terminalShowsLeds &&
+            symPage != 3 && symPage != 4
+
+    /** Terminal mode keeps the keyboard out of sight but its status LEDs show (an option). */
+    private fun terminalLedsOnly(): Boolean =
+        terminalModeActive && !keyboardHiddenForApp && terminalHidesKeyboard && terminalShowsLeds &&
+            symPage != 3 && symPage != 4
+
+    private var terminalHidesKeyboard = false
+    private var terminalShowsLeds = false
+    private var terminalSurfaceShown = false
+
+    /** In a hidden app with the panels option: its panel keys, and every key while a panel is open. */
+    private fun hiddenAppKeyGoesToPastiera(keyCode: Int): Boolean {
+        if (!hiddenAppAllowsPanels) return false
+        if (symPage > 0) return true
+        // Keys pressed with SYM held are its chords (SYM + Space: the quick launcher): with only
+        // SYM reaching the keyboard, SYM would count as a tap and open its panel
+        if (symKeyHeld) return true
+        val emojiKey = SettingsManager.getEmojiPickerKey(this)
+        return keyCode == KEYCODE_SYM || (emojiKey != KeyEvent.KEYCODE_UNKNOWN && keyCode == emojiKey)
+    }
+
+    /**
+     * In a hidden app, a held character key repeats into the app, and an ordinary text field
+     * (not a terminal or X11 view, which read raw keys) answers a held letter with Android's
+     * accent picker. Pastiera is hidden there, so the repeats are dropped instead.
+     */
+    private fun hiddenAppHoldOpensAccentPicker(keyCode: Int): Boolean {
+        if (hiddenAppKeyGoesToPastiera(keyCode)) return false
+        if (!it.palsoftware.pastiera.shortcuts.KeyCombo.isCharacterKey(keyCode) || keyCode == KeyEvent.KEYCODE_SPACE) return false
+        val inputType = currentInputEditorInfo?.inputType ?: EditorInfo.TYPE_NULL
+        return inputType and android.text.InputType.TYPE_MASK_CLASS != EditorInfo.TYPE_NULL
+    }
+
+    /** Show Pastiera while a panel is open in a hidden app; hide it (or back to LEDs) afterwards. */
+    private fun syncHiddenAppPanel() {
+        if (terminalModeActive && terminalHidesKeyboard && !keyboardHiddenForApp) {
+            if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(terminalLedsOnly())
+            val show = !terminalSurfaceHidden()
+            if (show == terminalSurfaceShown) return
+            terminalSurfaceShown = show
+            invalidateRenderedStatusSnapshot()
+            if (show) ensureImeSurfaceVisible() else hideSurfaceIfHiddenForApp()
+            return
+        }
+        if (!keyboardHiddenForApp) return
+        val panelOpen = hiddenAppPanelOpen()
+        if (::candidatesBarController.isInitialized) {
+            candidatesBarController.setLedsOnlyMode(hiddenAppShowsLeds && !panelOpen)
+        }
+        if (panelOpen == hiddenAppPanelShown) return
+        hiddenAppPanelShown = panelOpen
+        invalidateRenderedStatusSnapshot()
+        if (panelOpen) {
+            ensureImeSurfaceVisible()
+        } else {
+            hideSurfaceIfHiddenForApp()
+        }
+        // Re-render in the new mode once the current pass is over
+        uiHandler.post { updateStatusBarText() }
+    }
+
+    /**
+     * Accessibility path for hidden apps that read keys before any input method (Termux:X11):
+     * hands the panel keys, and every key while a panel is open, to Pastiera; sends the Titan's
+     * Ctrl and Sym on as standard keys ([translateHiddenAppKey]).
+     */
+    private fun interceptHiddenAppKey(event: KeyEvent): Boolean {
+        if (!keyboardHiddenForApp || currentInputConnection == null) return false
+        val keyCode = event.keyCode
+        if (keyCode in HIDDEN_APP_SYSTEM_KEYS) return false
+        val forPastiera = when (event.action) {
+            KeyEvent.ACTION_DOWN -> hiddenAppKeyGoesToPastiera(keyCode)
+            KeyEvent.ACTION_UP -> keyCode in hiddenAppInterceptedKeys
+            else -> false
+        }
+        if (!forPastiera && translateHiddenAppKey(event)) return true
+        val take = when (event.action) {
+            KeyEvent.ACTION_DOWN -> hiddenAppKeyGoesToPastiera(keyCode).also { taken ->
+                if (taken && event.repeatCount == 0) hiddenAppInterceptedKeys += keyCode
+            }
+            // Only releases of presses Pastiera took; others belong to the app
+            KeyEvent.ACTION_UP -> hiddenAppInterceptedKeys.remove(keyCode)
+            else -> false
+        }
+        if (!take) return false
+        when (event.action) {
+            KeyEvent.ACTION_DOWN -> onKeyDown(keyCode, event)
+            KeyEvent.ACTION_UP -> onKeyUp(keyCode, event)
+        }
+        return true
+    }
+
+    // The Titan's Ctrl and Sym in hidden apps (Termux:X11). Android names them FUNC3 and
+    // AGUI_SYM (Unihertz key codes), or keeps the press and only marks the next key with a Ctrl
+    // or Sym meta state; apps such as Termux:X11 can turn neither into keys. Pastiera sends
+    // standard Left Ctrl and Right Alt (the desktop layout's Sym) through the input connection.
+    private val hiddenAppTranslatedKeys = mutableMapOf<Int, Int>()          // original -> sent modifier
+    private val hiddenAppWrappedKeys = mutableMapOf<Int, List<Int>>()       // original -> modifiers around it
+    private var hiddenAppStandardCtrlHeld = false
+
+    /** Returns true when [event] was replaced by standard keys sent to the app (and must be consumed). */
+    private fun translateHiddenAppKey(event: KeyEvent?): Boolean {
+        if (event == null || !keyboardHiddenForApp) return false
+        if (!SettingsManager.getHiddenAppStandardModifiers(this)) return false
+        val ic = currentInputConnection ?: return false
+        val code = event.keyCode
+        val down = event.action == KeyEvent.ACTION_DOWN
+        if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
+        val titanModifier = TITAN_MODIFIER_SCAN_CODES[event.scanCode]
+        if (titanModifier == null && (code == KeyEvent.KEYCODE_CTRL_LEFT || code == KeyEvent.KEYCODE_CTRL_RIGHT)) {
+            // A standard Ctrl (another keyboard): the app gets it itself; never add a second one
+            hiddenAppStandardCtrlHeld = down
+            return false
+        }
+        if (titanModifier != null) {
+            if (down) {
+                if (event.repeatCount == 0) {
+                    sendHiddenAppKey(ic, event, KeyEvent.ACTION_DOWN, titanModifier)
+                    hiddenAppTranslatedKeys[code] = titanModifier
+                    HiddenAppKeyObserver.logKey(event, "sent as ${KeyEvent.keyCodeToString(titanModifier)}")
+                }
+            } else {
+                hiddenAppTranslatedKeys.remove(code)?.let { sendHiddenAppKey(ic, event, KeyEvent.ACTION_UP, it) }
+            }
+            return true
+        }
+        if (down) {
+            if (KeyEvent.isModifierKey(code)) return false
+            val held = hiddenAppTranslatedKeys.values
+            val wrap = buildList {
+                if (event.isCtrlPressed && !hiddenAppStandardCtrlHeld && KeyEvent.KEYCODE_CTRL_LEFT !in held) {
+                    add(KeyEvent.KEYCODE_CTRL_LEFT)
+                }
+                if (event.metaState and KeyEvent.META_SYM_ON != 0 && KeyEvent.KEYCODE_ALT_RIGHT !in held) {
+                    add(KeyEvent.KEYCODE_ALT_RIGHT)
+                }
+            }
+            if (wrap.isEmpty() && code !in hiddenAppWrappedKeys) return false
+            if (event.repeatCount == 0) {
+                wrap.forEach { sendHiddenAppKey(ic, event, KeyEvent.ACTION_DOWN, it) }
+                hiddenAppWrappedKeys[code] = wrap
+                // Which modifiers, never which key (no text is logged)
+                android.util.Log.i("FluxKeys", "a key marked ${wrap.joinToString { KeyEvent.keyCodeToString(it) }} sent with them")
+            }
+            val sentWith = hiddenAppWrappedKeys[code].orEmpty()
+            val meta = (if (KeyEvent.KEYCODE_CTRL_LEFT in sentWith) KeyEvent.META_CTRL_ON or KeyEvent.META_CTRL_LEFT_ON else 0) or
+                (if (KeyEvent.KEYCODE_ALT_RIGHT in sentWith) KeyEvent.META_ALT_ON or KeyEvent.META_ALT_RIGHT_ON else 0)
+            sendHiddenAppKey(ic, event, KeyEvent.ACTION_DOWN, code, event.repeatCount, meta)
+            return true
+        }
+        val wrap = hiddenAppWrappedKeys.remove(code) ?: return false
+        sendHiddenAppKey(ic, event, KeyEvent.ACTION_UP, code)
+        wrap.asReversed().forEach { sendHiddenAppKey(ic, event, KeyEvent.ACTION_UP, it) }
+        return true
+    }
+
+    private fun sendHiddenAppKey(
+        ic: InputConnection,
+        source: KeyEvent,
+        action: Int,
+        keyCode: Int,
+        repeat: Int = 0,
+        metaState: Int = 0
+    ) {
+        val sent = KeyEvent(
+            source.downTime, source.eventTime, action, keyCode, repeat, metaState,
+            KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+            KeyEvent.FLAG_SOFT_KEYBOARD or KeyEvent.FLAG_KEEP_TOUCH_MODE
+        )
+        ic.sendKeyEvent(sent)
+        // The status LEDs follow what the app receives
+        if (KeyEvent.isModifierKey(keyCode)) observeHiddenAppKey(sent)
+    }
+
+    /** Hidden app with status LEDs: mirror modifier keys the app receives, never consume them. */
+    private fun observeHiddenAppKey(event: KeyEvent?) {
+        if (!hiddenAppShowsLeds || event == null) return
+        val changed = observedModifierLeds.onKey(
+            event.keyCode, event.action, event.repeatCount, event.downTime, event.eventTime
+        )
+        if (changed) updateStatusBarText()
+    }
+
+    /** Close any Pastiera surface once the framework's start/show pass is over. */
+    private fun hideSurfaceIfHiddenForApp() {
+        if (!hiddenAppSurfaceBlocked() || !::keyboardVisibilityController.isInitialized) return
+        uiHandler.post {
+            if (hiddenAppSurfaceBlocked()) keyboardVisibilityController.hideForApp()
+        }
+    }
+
+    /**
      * Evaluates whether the IME should run in fullscreen mode.
      */
     override fun onEvaluateFullscreenMode(): Boolean {
@@ -2923,6 +3589,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     @Suppress("DEPRECATION")
     override fun onViewClicked(focusChanged: Boolean) {
         super.onViewClicked(focusChanged)
+        // Tapping a search bar that waited for typing brings the keyboard bar up
+        if (::keyboardVisibilityController.isInitialized && keyboardVisibilityController.shouldRecoverSurfaceOnHardwareKey() &&
+            !keyboardHiddenForApp && !terminalHidesKeyboard
+        ) keyboardVisibilityController.onHardwareInputRequested()
         if (symPage == 4 && ::candidatesBarController.isInitialized) {
             disableEmojiSearchInputCapture()
         }
@@ -2941,6 +3611,20 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             ignoreNextEmojiSearchCursorAnchorUpdate = false
             return
         }
+        // Only a moved selection means the user went back to the app's text. The cursor also
+        // moves on screen whenever the keyboard changes height (opening emoji, GIF or symbol
+        // search), and that must not take typing away from the search that just opened.
+        val start = cursorAnchorInfo?.selectionStart ?: -1
+        val end = cursorAnchorInfo?.selectionEnd ?: -1
+        if (start < 0 || end < 0) return // the app doesn't report its selection here
+        val knownStart = emojiSearchExternalSelectionStart
+        val knownEnd = emojiSearchExternalSelectionEnd
+        if (knownStart == null || knownEnd == null) {
+            emojiSearchExternalSelectionStart = start
+            emojiSearchExternalSelectionEnd = end
+            return
+        }
+        if (start == knownStart && end == knownEnd) return
         disableEmojiSearchInputCapture()
     }
 
@@ -3024,6 +3708,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
      * Aggiorna la status bar delegando al controller dedicato.
      */
     private fun updateStatusBarText() {
+        syncHiddenAppPanel()
         val totalStart = ImePerfLogger.mark()
         var variationMs = 0L
         var suggestionsMs = 0L
@@ -3046,7 +3731,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         val modifierSnapshot = modifierStateController.snapshot()
         val state = inputContextState
+        // The suggestions' "add to dictionary" chip, unless it's switched off
         val addWordCandidate = suggestionController.pendingAddWord()
+            ?.takeIf { SettingsManager.getShowAddWordSuggestion(this) }
         val suggestionsEnabled = SettingsManager.isExperimentalSuggestionsEnabled(this) && SettingsManager.getSuggestionsEnabled(this)
         val suggestionsStart = ImePerfLogger.mark()
         val baseSuggestions = if (suggestionsEnabled) visibleSuggestionStrings() else emptyList()
@@ -3064,6 +3751,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             altPhysicallyPressed = modifierSnapshot.altPhysicallyPressed,
             altOneShot = modifierSnapshot.altOneShot,
             symPage = symPage,
+            symHeld = symTogglePendingOnKeyUp,
+            symSticky = symSticky,
+            emojiHeld = emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN,
+            emojiSticky = emojiSticky,
             symPhysicallyPressed = symPhysicallyPressed,
             clipboardCount = clipboardCount,
             variations = variationSnapshot.variations,
@@ -3080,6 +3771,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             shiftLayerLatched = shiftLayerLatched,
             altModifierLayerLatched = altModifierLayerLatched,
             activeKeyboardLayoutName = activeKeyboardLayoutName,
+            emojiScreenFromEmojiKey = symLayoutController.openedByEmojiKey,
             softwareSymPreviewLabels = softwareSymPreviewProjection.contentByKeyCode,
             softwareSymPreviewTextLabels = softwareSymPreviewProjection.contentByBaseText,
             softwareCtrlPreviewLabels = buildSoftwareCtrlPreviewLabels(modifierSnapshot),
@@ -3089,7 +3781,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             softwareAltPreviewActive = shouldShowSoftwareAltPreview(modifierSnapshot),
             // Legacy flag for backward compatibility
             shouldDisableSmartFeatures = shouldDisableSmartFeatures
-        )
+        ).let { if (hiddenAppShowsLeds && !hiddenAppPanelOpen()) observedModifierLeds.applyTo(it) else it }
         updateSystemStatusModifierIcon(snapshot, effectiveSoftwareKeyboardMode)
         val modifierIndicators = SettingsManager.getModifierIndicators(this)
         // Passa anche la mappa emoji quando SYM è attivo (solo pagina 1)
@@ -3353,9 +4045,103 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
+        AutoCapitalizeHelper.debugPackage = info?.packageName
+        info?.let {
+            DebugCaptureStore.recordField(
+                DebugCaptureStore.FieldInfo(
+                    timestampMs = System.currentTimeMillis(),
+                    packageName = it.packageName,
+                    inputType = it.inputType,
+                    imeOptions = it.imeOptions,
+                    fieldId = it.fieldId,
+                    hasHint = !it.hintText.isNullOrEmpty(),
+                    initialSelStart = it.initialSelStart,
+                    initialSelEnd = it.initialSelEnd,
+                    shiftFieldType = ShiftFieldTypes.of(it)?.id,
+                    restarting = restarting
+                )
+            )
+        }
+        // Fields that don't say what they are ("Other" in Automatic Shift): typing is followed by key
+        otherFieldShift = info != null && info.packageName != packageName &&
+            ShiftFieldTypes.of(info) == ShiftFieldTypes.Type.OTHER &&
+            ShiftFieldTypes.Type.OTHER in ShiftFieldTypes.enabled(this)
+        otherFieldCapitalNext = otherFieldShift
+        otherFieldLastChar = null
+        // Undo history for this field (none for passwords)
+        val historyKey = info?.let { "${it.packageName}:${it.fieldId}:${it.inputType}" }
+        val password = info != null && ShiftFieldTypes.of(info) == null &&
+            info.inputType and android.text.InputType.TYPE_MASK_CLASS == android.text.InputType.TYPE_CLASS_TEXT
+        it.palsoftware.pastiera.core.EditHistory.onFieldStarted(historyKey, !password && info?.inputType != EditorInfo.TYPE_NULL)
+        scheduleEditHistoryRecord(300L)
+        AutoCapitalizeHelper.cursorAtStart = info != null && info.initialSelStart == 0 && info.initialSelEnd == 0
+        // Back out of Niagara's search (opened by the quick launcher): back to the app
+        if (!restarting) {
+            val editable = info != null && info.inputType != EditorInfo.TYPE_NULL
+            info?.packageName?.let { QuickLauncherOpener.foregroundPackage = it }
+            // Screen size per app (Shizuku extras)
+            it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, info?.packageName)
+            QuickLauncherOpener.NiagaraReturn.onInputStarted(info?.packageName, editable)?.let(::returnToApp)
+        }
+        // Emoji layer profiles: the layer follows the app when switching by app
+        if (::alternateCharacterManager.isInitialized) alternateCharacterManager.setEmojiLayerOverride(
+            if (it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.switchByApp(this)) {
+                it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.forApp(info?.packageName)?.let { profile -> it.palsoftware.pastiera.data.mappings.EmojiLayerProfiles.layerMappings(this, profile) }
+            } else null
+        )
+        terminalModeActive = SettingsManager.isTerminalModeApp(this, info?.packageName) && TerminalMode.apply(info)
+        // A new field (a search a Ctrl shortcut opened, say): a latched Ctrl doesn't come along,
+        // so typing there isn't taken for more shortcuts
+        if (!restarting && !terminalModeActive && ::modifierStateController.isInitialized &&
+            SettingsManager.getSmartCtrlOffAfterShortcut(this)
+        ) {
+            // Still held: it lets go when released
+            if (ctrlPhysicallyPressed) ctrlHeldIntoNewField = true else releaseCtrlAfterShortcut()
+        }
+        // Flux Keyboard: no microphone button in terminal apps
+        it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry.setTerminalApp(
+            SettingsManager.isTerminalModeApp(this, info?.packageName)
+        )
+        terminalHidesKeyboard = terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)
+        terminalShowsLeds = terminalHidesKeyboard && SettingsManager.getTerminalModeShowLeds(this)
+        terminalSurfaceShown = false
+        terminalCtrlKeysDown.clear()
+        terminalCtrlSent.clear()
+        terminalRawKeysDown.clear()
+        terminalEmojiKeysDown.clear()
         pendingKeyboardSurfaceTransition?.let(uiHandler::removeCallbacks)
         pendingKeyboardSurfaceTransition = null
         super.onStartInput(info, restarting)
+        EmojiCompatSupport.onStartInput(info)
+        keyboardHiddenForApp = SettingsManager.isKeyboardHiddenForApp(this, info?.packageName)
+        HiddenAppKeyObserver.hiddenAppInFront = keyboardHiddenForApp
+        val showLeds = keyboardHiddenForApp && SettingsManager.hiddenAppShowsLeds(this, info?.packageName)
+        hiddenAppAllowsPanels = keyboardHiddenForApp && SettingsManager.hiddenAppAllowsPanels(this, info?.packageName)
+        if (showLeds != hiddenAppShowsLeds || !restarting) observedModifierLeds.reset()
+        hiddenAppShowsLeds = showLeds
+        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(showLeds || terminalLedsOnly())
+        HiddenAppKeyObserver.sink = if (showLeds) ::observeHiddenAppKey else null
+        hiddenAppPanelShown = false
+        hiddenAppPassedThroughKeys.clear()
+        hiddenAppPastieraKeys.clear()
+        hiddenAppInterceptedKeys.clear()
+        if (keyboardHiddenForApp && ::symLayoutController.isInitialized && symLayoutController.isSymActive()) {
+            symLayoutController.closeSymPage()
+        }
+        // Every hidden app: panel keys (with the panels option) and the Titan's Ctrl and Sym
+        HiddenAppKeyObserver.interceptor = if (keyboardHiddenForApp) ::interceptHiddenAppKey else null
+        if (keyboardHiddenForApp) {
+            // Keep the Linux desktop's keyboard layout in step with Pastiera's Alt map and SYM
+            // page (written only when it changed; the chroot picks it up at the next start)
+            val appContext = applicationContext
+            Thread({
+                runCatching { DesktopKeyboardLayout.export(appContext) }
+            }, "desktop-layout").start()
+        }
+        hiddenAppTranslatedKeys.clear()
+        hiddenAppWrappedKeys.clear()
+        hiddenAppStandardCtrlHeld = false
+        hideSurfaceIfHiddenForApp()
         if (::textExpansionController.isInitialized) textExpansionController.clear()
         if (
             !restarting ||
@@ -3365,7 +4151,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             // Text context alone cannot identify a field: every empty editor looks like "|".
             clearAutoCapSuppression()
         }
-        DeferredPunctuationSpaceTracker.clear()
+        DeferredPunctuationSpaceTracker.startField(info)
         bounceKeyFilter.reset()
         clicksPowerShiftTapFilter.reset()
         accidentalKeyPressFilter.reset()
@@ -3379,6 +4165,16 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Reset clipboard overlay when starting new input
 
         updateInputContextState(info)
+        it.palsoftware.pastiera.core.EmoticonSentences.enabled = SettingsManager.getAutoCapAfterEmoticon(this)
+        // Private mode (a shortcut) makes every field incognito
+        val incognitoField = SettingsManager.isIncognitoField(this, info?.imeOptions ?: 0) ||
+            it.palsoftware.pastiera.core.PrivateMode.isOn(this)
+        it.palsoftware.pastiera.core.IncognitoTyping.active = incognitoField
+        if (::suggestionController.isInitialized) {
+            // Words are never learned from passwords, email addresses or web addresses either
+            suggestionController.incognito = incognitoField ||
+                inputContextState.isPasswordField || inputContextState.restrictedReason != null
+        }
         val state = inputContextState
         val isEditable = state.isEditable
         val isReallyEditable = state.isReallyEditable
@@ -3391,6 +4187,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         
         if (info != null && isEditable) {
+            // The field as the app asked for it, before the flag the keyboard adds for itself
+            appInputType = info to info.inputType
             info.inputType = info.inputType or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
         }
         
@@ -3446,20 +4244,32 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 onUpdateStatusBar = { updateStatusBarText() },
                 inputContextState = state
             )
+            scheduleStartAutoCapRechecks()
         }
 
         startClipboardCleanupTimer()
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        if (terminalModeActive) TerminalMode.apply(info)
         super.onStartInputView(info, restarting)
+        hideSurfaceIfHiddenForApp()
         if (::textExpansionController.isInitialized) textExpansionController.clear()
         updateDebugImeContextSnapshot(info)
         attachTrackpadDecorViewMotionHook("onStartInputView")
 
         updateInputContextState(info)
         isInputViewActive = inputContextState.isEditable
+        updateTrackpadCapture()
         traceImeVisibility("onStartInputView restarting=$restarting")
+        if (!restarting) holdBarInAutoFocusedSearch(info)
+        if (!restarting) restoreAppLanguage(info)
+        if (!restarting) offerPasteSuggestion()
+        if (!restarting) offerOneTimeCode()
+        if (!restarting) {
+            contactChips = emptyList()
+            refreshContactSuggestions()
+        }
         initializeInputContext(restarting)
         suggestionController.onContextReset()
         
@@ -3521,7 +4331,34 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
+    /** A key held longer than a tap (Android's long-press time), judged at its release. */
+    private fun isLongHold(event: KeyEvent): Boolean =
+        event.eventTime - event.downTime >= android.view.ViewConfiguration.getLongPressTimeout()
+
+    /** Back to [packageName]'s task, as it was. */
+    private fun returnToApp(packageName: String) {
+        packageManager.getLaunchIntentForPackage(packageName)?.let { intent ->
+            runCatching { startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+        }
+    }
+
     override fun onFinishInput() {
+        ClicksAccessibilityKeyBridge.trackpadCaptured = false
+        // Leaving the field: an email or number typed there is complete
+        learnContactDetails(endOfEntry = true)
+        contactKeysTyped = 0
+        contactDetailsSaved = null
+        startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
+        startAutoCapRechecks.clear()
+        // Niagara's search closed: back to the app unless one opens from it meanwhile
+        if (QuickLauncherOpener.NiagaraReturn.onInputFinished(currentInputEditorInfo?.packageName)) {
+            uiHandler.postDelayed({
+                QuickLauncherOpener.NiagaraReturn.decide()?.let(::returnToApp)
+            }, QuickLauncherOpener.NiagaraReturn.DECIDE_AFTER_MS)
+        }
+        clearInlineAutofill()
+        symSticky = false
+        emojiSticky = false
         pendingKeyboardSurfaceTransition?.let(uiHandler::removeCallbacks)
         pendingKeyboardSurfaceTransition = null
         super.onFinishInput()
@@ -3551,6 +4388,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (::textExpansionController.isInitialized) textExpansionController.clear()
         // Finishing a view does not finish the editor session (Back and backend transitions).
         isInputViewActive = !finishingInput && inputContextState.isEditable
+        updateTrackpadCapture()
         traceImeVisibility("onFinishInputView finishing=$finishingInput")
         if (::candidatesBarController.isInitialized) {
             candidatesBarController.resetSuggestionActionMode()
@@ -4020,6 +4858,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
      */
     override fun onCurrentInputMethodSubtypeChanged(newSubtype: android.view.inputmethod.InputMethodSubtype) {
         super.onCurrentInputMethodSubtypeChanged(newSubtype)
+        rememberAppLanguage(newSubtype)
         
         if (::suggestionController.isInitialized) {
             val newLocale = getLocaleFromSubtype(newSubtype)
@@ -4098,6 +4937,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     ) {
         val perfStart = ImePerfLogger.mark()
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        if (contactChips.isNotEmpty() || contactFieldKind() != null) refreshContactSuggestions()
         
         val state = inputContextState
         val cursorPositionChanged = (oldSelStart != newSelStart) || (oldSelEnd != newSelEnd)
@@ -4154,6 +4994,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             )
         }
         
+        AutoCapitalizeHelper.cursorAtStart = newSelStart == 0 && newSelEnd == 0
+        // A Shift turned off by hand holds only until the text changes (a message sent and the
+        // box emptied gets its capital again)
+        if (suppressedAutoCapContextKey != null && autoCapContextKey() != suppressedAutoCapContextKey) {
+            clearAutoCapSuppression()
+        }
+        if (cursorPositionChanged || oldSelEnd != newSelEnd) scheduleEditHistoryRecord(EDIT_STEP_CHECK_MS)
         // Auto-cap reads editor context through InputConnection. For simple typing feedback,
         // debounce it so remote editors like Telegram don't pay that cost for every character.
         if (cursorPositionChanged && collapsedSelection && forwardByOne) {
@@ -4162,6 +5009,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             pendingSelectionAutoCapCheck?.let { uiHandler.removeCallbacks(it) }
             pendingSelectionAutoCapCheck = null
             checkAutoCapitalizeOnSelectionChange(oldSelStart, oldSelEnd, newSelStart, newSelEnd)
+            // Back to the start of the field (a chat app clearing its box after sending): the
+            // text may still be there for a moment, so look again once it's gone
+            if (newSelStart == 0 && newSelEnd == 0 && oldSelStart > 0) scheduleStartAutoCapRechecks()
         }
         ImePerfLogger.logDuration(
             label = "onUpdateSelection",
@@ -4218,6 +5068,17 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         return true
     }
 
+    override fun dispatchCapturedTrackpadMotion(event: MotionEvent): Boolean =
+        handleNativeImeTrackpadMotion(event, origin = "accessibility")
+
+    /** Keyboard swipes stay with the keyboard while a field is typed in (an option). */
+    private fun updateTrackpadCapture() {
+        ClicksAccessibilityKeyBridge.trackpadCaptured =
+            isInputViewActive && inputContextState.isEditable && !terminalModeActive &&
+                !keyboardHiddenForApp && SettingsManager.getTrackpadCaptureWhileTyping(this) &&
+                isNativeImeTrackpadProviderActive()
+    }
+
     override fun dispatchClicksDirectAction(action: ClicksButtonDirectAction): Boolean {
         if (action != ClicksButtonDirectAction.TOGGLE_EMOJI_PICKER ||
             currentInputConnection == null || !inputContextState.isEditable
@@ -4232,6 +5093,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun toggleEmojiPicker() {
         ensureImeSurfaceVisible()
         symLayoutController.openEmojiPickerPage()
+        updateStatusBarText()
+    }
+
+    /** The dedicated emoji key: the emoji picker, or the emoji layer (SYM settings). */
+    private fun toggleEmojiKeyScreen() {
+        ensureImeSurfaceVisible()
+        symLayoutController.toggleEmojiKeyPage(layer = SettingsManager.getEmojiKeyOpensLayer(this))
         updateStatusBarText()
     }
 
@@ -4314,7 +5182,524 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
+    /** A layout-switch chord doesn't count with the emoji key, or from an open emoji/symbol screen. */
+    private fun layoutSwitchChordBlocked(keyCode: Int, symPageWasOpen: Boolean): Boolean {
+        if (symPageWasOpen || symPage > 0) return true
+        val emojiKey = SettingsManager.getEmojiPickerKey(this)
+        return emojiKey != KeyEvent.KEYCODE_UNKNOWN && keyCode == emojiKey
+    }
+
+    // The app whose text field was last started: a search bar focused in a newly opened app counts
+    // as focused by the app, not by a tap
+    private var lastInputPackage: String? = null
+
+    /**
+     * "Search bars wait for typing": a search bar that an app focuses as it opens doesn't bring up
+     * the keyboard bar; the first key (or tapping the bar) does.
+     */
+    private fun holdBarInAutoFocusedSearch(info: EditorInfo?) {
+        val pkg = info?.packageName
+        val openedApp = pkg != null && pkg != lastInputPackage
+        lastInputPackage = pkg
+        if (!openedApp || pkg == packageName || !SettingsManager.getSearchBarWaitsForTyping(this)) return
+        if (ShiftFieldTypes.of(info) != ShiftFieldTypes.Type.SEARCH || !::keyboardVisibilityController.isInitialized) return
+        uiHandler.post { keyboardVisibilityController.hideForApp() }
+    }
+
+    // Language per app: the app whose language was last restored, so it's done once per visit
+    private var languageRestoredForPackage: String? = null
+
+    /** On entering another app, switch to the language last used there (if any). */
+    private fun restoreAppLanguage(info: EditorInfo?) {
+        val pkg = info?.packageName ?: return
+        if (pkg == packageName || pkg == languageRestoredForPackage) return
+        languageRestoredForPackage = pkg
+        if (!SettingsManager.getLanguagePerAppEnabled(this)) return
+        val key = SettingsManager.getAppLanguage(this, pkg) ?: return
+        SubtypeCycler.switchToSubtypeKey(this, PhysicalKeyboardInputMethodService::class.java, assets, key)
+    }
+
+    /** A language chosen while typing in an app becomes that app's language. */
+    private fun rememberAppLanguage(subtype: android.view.inputmethod.InputMethodSubtype) {
+        val pkg = currentInputEditorInfo?.packageName ?: return
+        if (pkg == packageName || !SettingsManager.getLanguagePerAppEnabled(this)) return
+        SettingsManager.setAppLanguage(this, pkg, SubtypeCycler.subtypeKey(subtype))
+    }
+
+    // Paste suggestion: the chip offering what was just copied, while it is shown
+    private var pasteSuggestionShown = false
+
+    // Remember emails and phone numbers (ContactDetails): keys typed in this field, so only what
+    // was typed by hand is kept, and the saved ones for this field's chips
+    private var contactKeysTyped = 0
+    private var contactDetailsSaved: List<String>? = null
+    private var contactChips: List<String> = emptyList()
+
+    private fun contactFieldKind(): ContactDetails.Kind? = when {
+        inputContextState.isEmailField -> ContactDetails.Kind.EMAIL
+        inputContextState.isPhoneField -> ContactDetails.Kind.PHONE
+        else -> null
+    }
+
+    /** Whether this field may learn and offer emails and numbers: never private or password fields. */
+    private fun contactDetailsAllowed(): Boolean {
+        if (!SettingsManager.getLearnContactDetails(this)) return false
+        val info = currentInputEditorInfo ?: return false
+        val state = inputContextState
+        return state.isReallyEditable && !state.isPasswordField && !terminalModeActive && !keyboardHiddenForApp &&
+            info.packageName != null
+    }
+
+    private fun countContactKey(keyCode: Int, event: KeyEvent?) {
+        if ((event?.repeatCount ?: 0) != 0 || KeyEvent.isModifierKey(keyCode)) return
+        when (keyCode) {
+            KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_FORWARD_DEL, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_TAB,
+            KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT,
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KEYCODE_SYM -> return
+        }
+        contactKeysTyped++
+    }
+
+    private fun savedContactDetails(): List<String> = contactDetailsSaved ?: run {
+        val store = it.palsoftware.pastiera.core.suggestions.UserDictionaryStore()
+        store.loadUserEntries(this)
+        store.getSnapshot().map { it.word }.filter { ContactDetails.kindOf(it) != null }
+    }.also { contactDetailsSaved = it }
+
+    /**
+     * Keeps an email or phone number just typed by hand. [endOfEntry]: Enter, Tab or leaving the
+     * field, the only time a number with spaces is known to be complete.
+     */
+    private fun learnContactDetails(endOfEntry: Boolean) {
+        // Incognito: saved ones are still offered, nothing new is kept
+        if (!contactDetailsAllowed() || it.palsoftware.pastiera.core.IncognitoTyping.active) return
+        val kind = contactFieldKind()
+        if (kind == ContactDetails.Kind.PHONE && !endOfEntry) return
+        val connection = currentInputConnection ?: return
+        val before = runCatching { connection.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0) }
+            .getOrNull()?.toString() ?: return
+        // In an email or phone field, only a whole entry: the cursor in the middle means part of it
+        if (kind != null && runCatching { connection.getTextAfterCursor(1, 0) }.getOrNull()?.isNotEmpty() == true) return
+        val detail = ContactDetails.toLearn(before, kind, contactKeysTyped) ?: return
+        val store = it.palsoftware.pastiera.core.suggestions.UserDictionaryStore()
+        store.loadUserEntries(this)
+        val saved = store.getSnapshot().map { it.word }
+        if (ContactDetails.alreadySaved(saved, detail)) return
+        store.addWord(this, detail)
+        contactDetailsSaved = null
+        if (::suggestionController.isInitialized) suggestionController.refreshUserDictionary()
+    }
+
+    /** In an email or phone field: the saved ones that go on from what's typed, as chips. */
+    private fun refreshContactSuggestions() {
+        if (!::candidatesBarController.isInitialized) return
+        val kind = contactFieldKind()
+        val matches = if (kind == null || pasteSuggestionShown || !contactDetailsAllowed()) {
+            emptyList()
+        } else {
+            val typed = runCatching { currentInputConnection?.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0) }
+                .getOrNull()?.toString().orEmpty()
+            ContactDetails.matching(savedContactDetails(), typed, kind)
+        }
+        if (matches == contactChips) return
+        contactChips = matches
+        if (matches.isEmpty()) {
+            candidatesBarController.clearExpansionSuggestions()
+        } else {
+            candidatesBarController.showExpansionSuggestions(matches) { chosen ->
+                val connection = currentInputConnection ?: return@showExpansionSuggestions
+                val typedLength = connection.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0)?.length ?: 0
+                connection.beginBatchEdit()
+                connection.deleteSurroundingText(typedLength, 0)
+                connection.commitText(chosen, 1)
+                connection.endBatchEdit()
+                it.palsoftware.pastiera.core.suggestions.UserDictionaryStore().apply {
+                    loadUserEntries(this@PhysicalKeyboardInputMethodService)
+                    markUsed(this@PhysicalKeyboardInputMethodService, chosen)
+                }
+                contactDetailsSaved = null
+                contactChips = emptyList()
+                candidatesBarController.clearExpansionSuggestions()
+                refreshBarChips()
+            }
+        }
+        refreshBarChips()
+    }
+
+    /** In a new text field, offer text copied within the last minute as a chip to paste it. */
+    private fun offerPasteSuggestion() {
+        if (!::clipboardHistoryManager.isInitialized || !::candidatesBarController.isInitialized) return
+        if (!SettingsManager.getPasteSuggestionEnabled(this)) return
+        val state = inputContextState
+        if (!state.isReallyEditable || terminalModeActive || keyboardHiddenForApp) return
+        val passwordField = state.isPasswordField
+        if (passwordField && !SettingsManager.getPasteSuggestionInPasswordFields(this)) return
+        val copy = clipboardHistoryManager.recentCopy ?: return
+        if (System.currentTimeMillis() - copy.timestamp > PASTE_SUGGESTION_WINDOW_MS) return
+        // A password manager's copy only goes into password fields
+        if (copy.sensitive && !passwordField) return
+        // In a password field the chip never shows the text, and it's pasted exactly as copied
+        val label = if (passwordField) PasteSuggestion.MASKED_LABEL else PasteSuggestion.label(copy.text)
+        pasteSuggestionShown = true
+        candidatesBarController.showExpansionSuggestions(listOf(label)) { _ ->
+            clearPasteSuggestion()
+            val pasted = if (passwordField) copy.text else SettingsManager.textToPaste(this, copy.text)
+            // A copied code into a number field: typed one character at a time, so apps with a
+            // box per digit move along as it goes
+            if (inputContextState.isNumericField && looksLikeOneTimeCode(pasted)) typeOneTimeCode(pasted)
+            else currentInputConnection?.commitText(pasted, 1)
+            clipboardHistoryManager.consumeRecentCopy()
+            refreshBarChips()
+        }
+        refreshBarChips()
+    }
+
+    /** A one-time code from a notification, offered as a chip; one tap types it. */
+    private fun looksLikeOneTimeCode(text: CharSequence): Boolean =
+        text.length in 4..10 && text.all { it.isLetterOrDigit() }
+
+    /**
+     * A one-time code typed a character at a time, a moment apart, each into the field in focus
+     * then: one field takes the whole code; codes split over a box per digit (which move to the
+     * next box as each fills) fill every box. Digits go as key presses, which those boxes listen
+     * for; letters as text.
+     */
+    private fun typeOneTimeCode(code: CharSequence) {
+        code.forEachIndexed { index, char ->
+            uiHandler.postDelayed({
+                val ic = currentInputConnection ?: return@postDelayed
+                if (char in '0'..'9') {
+                    val keyCode = KeyEvent.KEYCODE_0 + (char - '0')
+                    val now = SystemClock.uptimeMillis()
+                    ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0))
+                    ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0))
+                } else {
+                    ic.commitText(char.toString(), 1)
+                }
+            }, index * 70L)
+        }
+    }
+
+    private fun offerOneTimeCode() {
+        if (!::candidatesBarController.isInitialized || !SettingsManager.getOneTimeCodesEnabled(this)) return
+        val state = inputContextState
+        if (!state.isReallyEditable || terminalModeActive || keyboardHiddenForApp) return
+        val code = it.palsoftware.pastiera.otp.OneTimeCodes.current() ?: return
+        pasteSuggestionShown = true
+        candidatesBarController.showExpansionSuggestions(listOf(getString(R.string.one_time_code_chip, code))) { _ ->
+            clearPasteSuggestion()
+            // The newest code by then, if another arrived since the chip was shown
+            typeOneTimeCode(it.palsoftware.pastiera.otp.OneTimeCodes.current() ?: code)
+            it.palsoftware.pastiera.otp.OneTimeCodes.consume()
+            refreshBarChips()
+        }
+        refreshBarChips()
+    }
+
+    // Inline autofill (Android 11+): the password manager's chips in the suggestion bar
+    private var inlineAutofillGeneration = 0
+
+    @androidx.annotation.RequiresApi(android.os.Build.VERSION_CODES.R)
+    override fun onCreateInlineSuggestionsRequest(uiExtras: android.os.Bundle): android.view.inputmethod.InlineSuggestionsRequest? {
+        if (!SettingsManager.getInlineAutofillEnabled(this) || terminalModeActive || keyboardHiddenForApp) {
+            DebugCaptureStore.recordAutofill(
+                "request declined: setting=${SettingsManager.getInlineAutofillEnabled(this)} terminal=$terminalModeActive hidden=$keyboardHiddenForApp"
+            )
+            return null
+        }
+        DebugCaptureStore.recordAutofill("request made for ${currentInputEditorInfo?.packageName}")
+        val colours = if (::candidatesBarController.isInitialized) {
+            runCatching { candidatesBarController.suggestionChipColours() }.getOrNull()
+        } else null
+        return InlineAutofill.request(this, colours?.first, colours?.second)
+    }
+
+    @androidx.annotation.RequiresApi(android.os.Build.VERSION_CODES.R)
+    override fun onInlineSuggestionsResponse(response: android.view.inputmethod.InlineSuggestionsResponse): Boolean {
+        val suggestions = response.inlineSuggestions
+        DebugCaptureStore.recordAutofill(
+            "response: ${suggestions.size} chips" + suggestions.joinToString(prefix = " [", postfix = "]") { s ->
+                "${s.info.source}${if (s.info.isPinned) " pinned" else ""}"
+            } + " inputView=$isInputViewShown"
+        )
+        val generation = ++inlineAutofillGeneration
+        if (suggestions.isEmpty() || !::candidatesBarController.isInitialized) {
+            clearInlineAutofill()
+            return false
+        }
+        InlineAutofill.inflate(this, suggestions, candidatesBarController.suggestionChipHeight()) { views ->
+            // A newer response (another field) replaced this one while it was inflating
+            if (generation != inlineAutofillGeneration) {
+                DebugCaptureStore.recordAutofill("chips dropped: another field took over")
+                return@inflate
+            }
+            DebugCaptureStore.recordAutofill("inflated ${views.size} chips")
+            if (views.isEmpty()) {
+                clearInlineAutofill()
+            } else {
+                candidatesBarController.showInlineAutofill(views)
+            }
+            refreshBarChips()
+        }
+        return true
+    }
+
+    private fun clearInlineAutofill() {
+        inlineAutofillGeneration++
+        if (::candidatesBarController.isInitialized) {
+            candidatesBarController.clearInlineAutofill()
+            refreshBarChips()
+        }
+    }
+
+    private fun clearPasteSuggestion() {
+        if (!pasteSuggestionShown) return
+        pasteSuggestionShown = false
+        candidatesBarController.clearExpansionSuggestions()
+        invalidateRenderedStatusSnapshot()
+    }
+
+    // Terminal mode (Termux): see TerminalMode
+    private var terminalModeActive = false
+    // Keys sent to the terminal with Ctrl: their release goes the same way
+    private val terminalCtrlKeysDown = mutableSetOf<Int>()
+    // Terminal keys (Enter, Backspace, arrows...) passed to the terminal as pressed
+    private val terminalRawKeysDown = mutableSetOf<Int>()
+    // Pressed key -> (key sent, meta state sent)
+    private val terminalCtrlSent = mutableMapOf<Int, Pair<Int, Int>>()
+
+    /**
+     * In a terminal, any Ctrl (held, tapped or latched; not Nav Mode's) sends the key as a real
+     * Ctrl combo, with Alt and Shift if they are held too, so Ctrl+C, Ctrl+D and the rest reach
+     * the shell instead of Pastiera's cursor and copy keys.
+     */
+    private fun sendTerminalCtrlCombo(pressedKeyCode: Int, event: KeyEvent?): Boolean {
+        if (event == null || event.action != KeyEvent.ACTION_DOWN) return false
+        val keyCode = event.keyCode
+        if (KeyEvent.isModifierKey(keyCode) || keyCode == KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_BACK) return false
+        if (event.repeatCount > 0 && pressedKeyCode !in terminalCtrlKeysDown) return false
+        if (event.repeatCount == 0) {
+            val ctrl = event.isCtrlPressed || ctrlPressed || ctrlPhysicallyPressed || ctrlOneShot ||
+                (ctrlLatchActive && !ctrlLatchFromNavMode)
+            if (!ctrl) return false
+            var meta = KeyEvent.META_CTRL_ON or KeyEvent.META_CTRL_LEFT_ON
+            if (event.isAltPressed || altPhysicallyPressed) meta = meta or KeyEvent.META_ALT_ON or KeyEvent.META_ALT_LEFT_ON
+            if (event.isShiftPressed || modifierStateController.shiftPhysicallyPressed) {
+                meta = meta or KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+            }
+            terminalCtrlSent[pressedKeyCode] = keyCode to meta
+            terminalCtrlKeysDown += pressedKeyCode
+            if (ctrlOneShot) {
+                ctrlOneShot = false
+                updateStatusBarText()
+            }
+        }
+        sendTerminalCtrlKey(event, KeyEvent.ACTION_DOWN, pressedKeyCode)
+        return true
+    }
+
+    // The emoji key held as Alt in a terminal (it was pressed as Alt; its Shift meta is dropped)
+    private var terminalEmojiAltHeld = false
+
+    /** In a terminal with the emoji key set to Alt, the emoji key's events as Alt's. */
+    private fun terminalEmojiKeyAsAlt(keyCode: Int, event: KeyEvent?): KeyEvent? {
+        if (event == null || keyCode == KeyEvent.KEYCODE_ALT_LEFT) return null
+        val emojiKey = SettingsManager.getEmojiPickerKey(this)
+        if (emojiKey == KeyEvent.KEYCODE_UNKNOWN || keyCode != emojiKey) return null
+        val asAlt = terminalModeActive &&
+            TerminalMode.EmojiKeyAction.byId(SettingsManager.getTerminalModeEmojiKeyAction(this)) == TerminalMode.EmojiKeyAction.Alt
+        // A release after leaving the terminal still ends the Alt it began
+        if (!asAlt && !(terminalEmojiAltHeld && event.action == KeyEvent.ACTION_UP)) return null
+        terminalEmojiAltHeld = event.action == KeyEvent.ACTION_DOWN
+        return KeyEvent(
+            event.downTime, event.eventTime, event.action, KeyEvent.KEYCODE_ALT_LEFT, event.repeatCount,
+            dropEmojiKeyShift(event.metaState) or KeyEvent.META_ALT_ON or KeyEvent.META_ALT_LEFT_ON,
+            event.deviceId, event.scanCode, event.flags, event.source
+        )
+    }
+
+    /** While the emoji key (Right Shift) is held as Alt, other keys don't count it as Shift. */
+    private fun withoutEmojiAltShift(event: KeyEvent?): KeyEvent? {
+        if (!terminalEmojiAltHeld || event == null) return null
+        val meta = dropEmojiKeyShift(event.metaState)
+        if (meta == event.metaState) return null
+        return KeyEvent(
+            event.downTime, event.eventTime, event.action, event.keyCode, event.repeatCount,
+            meta or KeyEvent.META_ALT_ON or KeyEvent.META_ALT_LEFT_ON,
+            event.deviceId, event.scanCode, event.flags, event.source
+        )
+    }
+
+    private fun dropEmojiKeyShift(meta: Int): Int {
+        if (SettingsManager.getEmojiPickerKey(this) != KeyEvent.KEYCODE_SHIFT_RIGHT) return meta
+        val withoutRight = meta and KeyEvent.META_SHIFT_RIGHT_ON.inv()
+        return if (withoutRight and KeyEvent.META_SHIFT_LEFT_ON == 0) withoutRight and KeyEvent.META_SHIFT_ON.inv() else withoutRight
+    }
+
+    // Emoji keys pressed in a terminal and sent as its terminal key (pressed key -> action)
+    private val terminalEmojiKeysDown = mutableMapOf<Int, TerminalMode.EmojiKeyAction>()
+
+    /** The emoji key in a terminal, when it's set to a terminal key instead of the emoji picker. */
+    private fun sendTerminalEmojiKeyAction(pressedKeyCode: Int, keyCode: Int, event: KeyEvent?): Boolean {
+        if (event == null || event.action != KeyEvent.ACTION_DOWN) return false
+        val emojiKey = SettingsManager.getEmojiPickerKey(this)
+        if (emojiKey == KeyEvent.KEYCODE_UNKNOWN || keyCode != emojiKey) return false
+        val action = TerminalMode.EmojiKeyAction.byId(SettingsManager.getTerminalModeEmojiKeyAction(this))
+        if (action == TerminalMode.EmojiKeyAction.EmojiPicker) return false
+        if (event.repeatCount > 0) {
+            if (action.repeats) sendTerminalActionKey(action, KeyEvent.ACTION_DOWN, event.repeatCount)
+            return true
+        }
+        terminalEmojiKeysDown[pressedKeyCode] = action
+        sendTerminalActionKey(action, KeyEvent.ACTION_DOWN, 0)
+        return true
+    }
+
+    private fun sendTerminalActionKey(action: TerminalMode.EmojiKeyAction, keyAction: Int, repeat: Int) {
+        val ic = currentInputConnection ?: return
+        val now = SystemClock.uptimeMillis()
+        ic.sendKeyEvent(
+            KeyEvent(now, now, keyAction, action.keyCode, repeat, action.metaState,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_SOFT_KEYBOARD or KeyEvent.FLAG_KEEP_TOUCH_MODE)
+        )
+    }
+
+    private fun sendTerminalCtrlKey(source: KeyEvent, action: Int, pressedKeyCode: Int) {
+        val (keyCode, meta) = (if (action == KeyEvent.ACTION_UP) terminalCtrlSent.remove(pressedKeyCode)
+            else terminalCtrlSent[pressedKeyCode]) ?: return
+        val ic = currentInputConnection ?: return
+        ic.sendKeyEvent(
+            KeyEvent(
+                source.downTime, source.eventTime, action, keyCode,
+                if (action == KeyEvent.ACTION_DOWN) source.repeatCount else 0, meta,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD or KeyEvent.FLAG_KEEP_TOUCH_MODE
+            )
+        )
+    }
+
+    // Keys (as pressed) whose press was sent to the app as its own shortcut; their release is dropped
+    private val appShortcutKeysDown = mutableSetOf<Int>()
+
+    /**
+     * Universal app shortcuts: a standard combo (Ctrl+F, Alt+Down, ...) pressed in an app with
+     * a preset is sent as that app's own shortcut. Returns true when the key was handled.
+     */
+    /** Each app's own shortcuts, read once per installed version of the app. */
+    private val discoveredAppActionsCache = HashMap<String, Pair<Long, DiscoveredAppActions>>()
+
+    private fun discoveredAppActions(packageName: String): DiscoveredAppActions {
+        val updated = runCatching { packageManager.getPackageInfo(packageName, 0).lastUpdateTime }.getOrDefault(0L)
+        discoveredAppActionsCache[packageName]?.let { (time, actions) -> if (time == updated) return actions }
+        return AppActionDiscovery.discover(this, packageName).also {
+            discoveredAppActionsCache[packageName] = updated to it
+        }
+    }
+
+    /**
+     * With Ctrl and Alt held, a key whose Alt character is a digit counts as that digit, so
+     * Ctrl+Alt+1 works on keyboards without a number row.
+     */
+    private fun appShortcutKeyCode(event: KeyEvent, ctrl: Boolean, alt: Boolean): Pair<Int, Boolean> {
+        val keyCode = event.keyCode
+        if (!ctrl || !alt || it.palsoftware.pastiera.shortcuts.ShortcutKeys.charOf(keyCode) != null) return keyCode to alt
+        // The keyboard's own Alt character, then Pastiera's Alt layer: a digit keeps Alt
+        // (Ctrl+Alt+1), "/" or "," drops it (Ctrl+/), for keyboards without those keys
+        val hardwareChar = runCatching { event.keyCharacterMap.get(keyCode, KeyEvent.META_ALT_ON).toChar() }
+            .getOrNull()?.takeIf { it.code != 0 }
+        val layerChar = { runCatching { AltModifierMappingResolver.resolve(assets, this)[keyCode] }.getOrNull()?.singleOrNull() }
+        return it.palsoftware.pastiera.shortcuts.ShortcutKeys.translate(hardwareChar)
+            ?: it.palsoftware.pastiera.shortcuts.ShortcutKeys.translate(layerChar())
+            ?: (keyCode to alt)
+    }
+
+    private fun remapAppShortcut(pressedKeyCode: Int, event: KeyEvent?, hasEditableField: Boolean): Boolean {
+        if (event == null || event.action != KeyEvent.ACTION_DOWN) return false
+        if (event.repeatCount > 0) return pressedKeyCode in appShortcutKeysDown
+        val keyCode = event.keyCode
+        if (KeyEvent.isModifierKey(keyCode) || keyCode == KEYCODE_SYM) return false
+        if (::candidatesBarController.isInitialized && candidatesBarController.isEmojiPickerSearchInputActive()) return false
+        val heldCtrl = event.isCtrlPressed || ctrlPressed || ctrlPhysicallyPressed
+        // In a text field a latched Ctrl (and a held one with "held Ctrl uses Nav Mode") is
+        // Pastiera's cursor and selection grid; only a held Ctrl the app would get counts there
+        val ctrl = if (hasEditableField) {
+            heldCtrl && !SettingsManager.getNavModeCtrlHoldEnabled(this)
+        } else {
+            heldCtrl || ctrlOneShot || (ctrlLatchActive && !ctrlLatchFromNavMode)
+        }
+        val alt = event.isAltPressed || altPhysicallyPressed
+        // Every standard combo holds Ctrl or Alt; plain typing never gets this far
+        if (!ctrl && !alt) return false
+        val shift = event.isShiftPressed || shiftPressed || modifierStateController.shiftPhysicallyPressed
+        val packageName = currentInputEditorInfo?.packageName ?: currentPackageName ?: return false
+        val action = AppShortcutRemapper.resolve(
+            AppShortcutSettings.config(this),
+            packageName,
+            appShortcutKeyCode(event, ctrl, alt).let { (code, withAlt) ->
+                KeyCombo(code, ctrl = ctrl, alt = withAlt, shift = shift, meta = event.isMetaPressed)
+            },
+            inTextField = hasEditableField,
+            discovered = { discoveredAppActions(packageName) }
+        ) ?: return false
+        when (action) {
+            is ShortcutAction.SendKeys -> {
+                val target = action.combo
+                val ic = currentInputConnection ?: return false
+                val now = SystemClock.uptimeMillis()
+                val flags = KeyEvent.FLAG_SOFT_KEYBOARD or KeyEvent.FLAG_KEEP_TOUCH_MODE
+                ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, target.keyCode, 0, target.metaState,
+                    KeyCharacterMap.VIRTUAL_KEYBOARD, 0, flags))
+                ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, target.keyCode, 0, target.metaState,
+                    KeyCharacterMap.VIRTUAL_KEYBOARD, 0, flags))
+                // Which combo became which, never any text
+                Log.i("PastieraAppShortcuts", "$packageName: $keyCode sent as ${target.serialize()}")
+            }
+            is ShortcutAction.OpenInApp -> {
+                // A suggestion the app on this phone doesn't accept lets the key through
+                val intent = action.intents.firstNotNullOfOrNull { appIntent ->
+                    appIntent.toIntent(packageName).takeIf { it.resolveActivity(packageManager) != null }
+                } ?: return false
+                try {
+                    startActivity(intent)
+                } catch (error: Exception) {
+                    Log.w("PastieraAppShortcuts", "$packageName: suggestion not opened", error)
+                    return false
+                }
+                Log.i("PastieraAppShortcuts", "$packageName: $keyCode opened ${intent.action}")
+            }
+            is ShortcutAction.OpenDiscovered -> {
+                val intent = AppActionDiscovery.intentFor(this, packageName, action.action) ?: return false
+                try {
+                    startActivity(intent)
+                } catch (error: Exception) {
+                    Log.w("PastieraAppShortcuts", "$packageName: app shortcut not opened", error)
+                    return false
+                }
+                Log.i("PastieraAppShortcuts", "$packageName: $keyCode opened the app's ${action.action.id}")
+            }
+        }
+        appShortcutKeysDown += pressedKeyCode
+        // The shortcut has run: Ctrl lets go, a one-shot, locked or Nav Mode one alike, so the
+        // next key (typing in the search the shortcut opened) isn't another shortcut
+        releaseCtrlAfterShortcut()
+        return true
+    }
+
+    /** Ctrl off after an app's shortcut ran: one-shot, locked or Nav Mode (a held Ctrl stays held). */
+    private fun releaseCtrlAfterShortcut() {
+        if (!ctrlOneShot && !ctrlLatchActive && !ctrlLatchFromNavMode && !navModeController.isNavModeActive()) return
+        val wasNavModeLatched = ctrlLatchFromNavMode || navModeController.isNavModeActive()
+        ctrlOneShot = false
+        modifierStateController.clearCtrlState(resetPressedState = false)
+        if (wasNavModeLatched) {
+            navModeController.cancelNotification()
+            navModeController.refreshNavModeState()
+        }
+        updateStatusBarText()
+    }
+
     override fun onKeyLongPress(keyCode_: Int, event_: KeyEvent?): Boolean {
+        if (keyboardHiddenForApp && !hiddenAppKeyGoesToPastiera(keyCode_)) return super.onKeyLongPress(keyCode_, event_)
         if (!replayingProtectedNumberKey) {
             val accidentalInput = accidentalKeyInput(keyCode_, event_)
             accidentalKeyPressFilter.shouldConsumeKeyDown(
@@ -4351,7 +5736,99 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         return super.onKeyLongPress(keyCode, event)
     }
 
+    // SYM physically held, wherever its keys go; and whether a chord used it in a hidden app
+    private var symKeyHeld = false
+    private var hiddenAppSymChordUsed = false
+
+    // Back taken from Niagara's search to return to the app: its release is ours too
+    private var niagaraBackReturnTo: String? = null
+
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
+        // Keycode 0 types nothing: the keyboard light's wake-up key, passed straight on
+        if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyDown(keyCode_, event_)
+        // The quick launcher in front: its keys go to it, not to the app's field beneath
+        if (QuickLauncherActivity.ownsKey(event_)) return false
+        // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
+        if ((event_?.repeatCount ?: 0) == 0 && !KeyEvent.isModifierKey(keyCode_)) {
+            if (keyCode_ == KeyEvent.KEYCODE_DEL) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
+            else it.palsoftware.pastiera.core.SuggestionSwipeLearning.onTyped()
+        }
+        // A letter at the very start of a field: its capital decided now, whatever the app sent
+        // before (Instagram's DMs open and clear their box without telling the keyboard in time)
+        if ((event_?.repeatCount ?: 0) == 0 && keyCode_ in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z &&
+            AutoCapitalizeHelper.cursorAtStart && inputContextState.isEditable && !keyboardHiddenForApp &&
+            ::modifierStateController.isInitialized && !symLayoutController.isSymActive() &&
+            !modifierStateController.shiftOneShot && !modifierStateController.capsLockEnabled &&
+            !modifierStateController.shiftPressed && !ctrlPressed && !ctrlOneShot && !ctrlLatchActive &&
+            !altPressed && !altOneShot && !altLatchActive && event_?.isShiftPressed != true
+        ) {
+            AutoCapitalizeHelper.checkAutoCapitalizeOnRestart(
+                this,
+                currentInputConnection,
+                shouldDisableAutoCapitalize,
+                enableShift = { requestAutoCapShiftOneShot() },
+                disableShift = { false },
+                onUpdateStatusBar = { updateStatusBarText() },
+                inputContextState = inputContextState
+            )
+        }
+        if (otherFieldShift && otherFieldCapital(keyCode_, event_)) return true
+        if (keyCode_ == KEYCODE_SYM && (event_?.repeatCount ?: 0) == 0) {
+            symKeyHeld = true
+            hiddenAppSymChordUsed = false
+        }
+        if (keyCode_ == KeyEvent.KEYCODE_BACK && (event_?.repeatCount ?: 0) == 0) {
+            // Returning happens on the release: done on the press, the release would reach the
+            // app and press Back there too
+            QuickLauncherOpener.NiagaraReturn.onBackPressed(currentInputEditorInfo?.packageName)?.let { pkg ->
+                niagaraBackReturnTo = pkg
+                return true
+            }
+        }
+        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return onKeyDown(KeyEvent.KEYCODE_ALT_LEFT, it) }
+        withoutEmojiAltShift(event_)?.let { return onKeyDown(keyCode_, it) }
+        if (emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN && keyCode_ != emojiPickerKeyUpPending) {
+            emojiPickerKeyChorded = true
+        }
+        if (keyboardHiddenForApp) {
+            val firstPress = (event_?.repeatCount ?: 0) == 0
+            if (!firstPress && hiddenAppHoldOpensAccentPicker(keyCode_)) {
+                // Holding a letter in a hidden app's text field would open Android's own accent
+                // picker there (the key repeats reach its TextView): the first press is enough
+                return true
+            }
+            if (!hiddenAppKeyGoesToPastiera(keyCode_)) {
+                if (translateHiddenAppKey(event_)) return true
+                if (firstPress) hiddenAppPassedThroughKeys += keyCode_
+                HiddenAppKeyObserver.logKey(event_, "input method, to the app")
+                observeHiddenAppKey(event_)
+                return super.onKeyDown(keyCode_, event_)
+            }
+            HiddenAppKeyObserver.logKey(event_, "input method, to the keyboard")
+            if (firstPress) hiddenAppPastieraKeys += keyCode_
+            // SYM + Space in a hidden app (the Niagara home screen): the quick launcher, and SYM
+            // doesn't then open its panel
+            if (firstPress && symKeyHeld && keyCode_ == KeyEvent.KEYCODE_SPACE) {
+                symChordUsedSinceKeyDown = true
+                symTogglePendingOnKeyUp = false
+                hiddenAppSymChordUsed = true
+                openQuickLauncher()
+                return true
+            }
+        }
+        if ((event_?.repeatCount ?: 0) == 0) {
+            when (keyCode_) {
+                KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_TAB -> learnContactDetails(endOfEntry = true)
+                KeyEvent.KEYCODE_SPACE -> learnContactDetails(endOfEntry = false)
+            }
+        }
+        countContactKey(keyCode_, event_)
+        val handled = handleKeyDown(keyCode_, event_)
+        if (keyboardHiddenForApp || terminalHidesKeyboard) syncHiddenAppPanel()
+        return handled
+    }
+
+    private fun handleKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         val perfStart = ImePerfLogger.mark()
         try {
         if (!replayingProtectedNumberKey) {
@@ -4407,6 +5884,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             return true
         }
 
+        if (terminalModeActive && sendTerminalEmojiKeyAction(keyCode_, keyCode, event)) {
+            return true
+        }
+
+        // Whether an emoji/symbol screen was open when this key came (keys can close it)
+        val symPageOpenBeforeKey = symPage > 0
+
         // Check if we have an editable field at the very start
         val info = currentInputEditorInfo
         val initialInputConnection = currentInputConnection
@@ -4415,12 +5899,44 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (hasEditableField && !isInputViewActive) {
             isInputViewActive = true
         }
+        if (pasteSuggestionShown && event?.repeatCount == 0 && !KeyEvent.isModifierKey(keyCode)) {
+            // Typing: the paste suggestion goes away (it is offered once per copy)
+            clearPasteSuggestion()
+            if (::clipboardHistoryManager.isInitialized) clipboardHistoryManager.consumeRecentCopy()
+        }
+        if (remapAppShortcut(keyCode_, event, hasEditableField)) {
+            return true
+        }
+        if (terminalModeActive && sendTerminalCtrlCombo(keyCode_, event)) {
+            return true
+        }
+        if (terminalModeActive && TerminalMode.isTerminalKey(keyCode) && symPage == 0 &&
+            event?.isAltPressed != true && !altLatchActive && !altOneShot
+        ) {
+            terminalRawKeysDown += keyCode_
+            return super.onKeyDown(keyCode, event)
+        }
         if (hasEditableField && ::candidatesBarController.isInitialized) {
             candidatesBarController.resetSuggestionActionMode()
         }
 
         if (shouldPlayTypingSound(hasEditableField, keyCode, event)) {
             typingSoundPlayer.play(keyCode)
+        }
+
+        // Shift + Backspace (Text input > Shift + Backspace) deletes the character after the
+        // cursor. Only a held Shift, which the key event itself may not report on the Titan: an
+        // automatic capital or a tapped Shift leaves Backspace as it is. A selection is deleted as usual.
+        if (keyCode == KeyEvent.KEYCODE_DEL && hasEditableField && symPage == 0 && !terminalModeActive &&
+            SettingsManager.getShiftBackspaceDelete(this) &&
+            (shiftPhysicallyPressed || event?.isShiftPressed == true) &&
+            event?.isCtrlPressed != true && event?.isAltPressed != true
+        ) {
+            val ic = initialInputConnection
+            if (ic != null && ic.getSelectedText(0).isNullOrEmpty()) {
+                ic.deleteSurroundingTextInCodePoints(0, 1)
+                return true
+            }
         }
 
         val emojiSearchCtrlActive = event?.isCtrlPressed == true ||
@@ -4451,12 +5967,26 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             candidatesBarController.handleEmojiPickerSearchKeyDown(
                 event,
                 emojiSearchCtrlActive,
+                // Search is lower case: no automatic capital or Shift from the app's field. Alt
+                // (held, tapped or locked) types the key's Alt character, "1" for 100 emoji, then
+                // lets go
                 resolveTypedText = { typedEvent ->
-                    getCharacterFromLayout(
-                        typedEvent.keyCode,
-                        typedEvent,
-                        isShiftModifierActive(typedEvent)
-                    )?.toString()
+                    val altOn = typedEvent.isAltPressed || altPhysicallyPressed || altOneShot || altLatchActive
+                    val altChar = if (altOn) alternateCharacterManager.getAltModifierMappings()[typedEvent.keyCode] else null
+                    if (altChar != null) {
+                        if (!altPhysicallyPressed && !typedEvent.isAltPressed) {
+                            altOneShot = false
+                            if (altLatchActive) modifierStateController.clearAltState()
+                            updateStatusBarText()
+                        }
+                        altChar
+                    } else {
+                        getCharacterFromLayout(
+                            typedEvent.keyCode,
+                            typedEvent,
+                            false
+                        )?.toString()?.lowercase()
+                    }
                 }
             )
         ) {
@@ -4507,7 +6037,41 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             symTogglePendingOnKeyUp = true
             symChordUsedSinceKeyDown = false
             symPhysicallyPressed = true
-            updateStatusBarText()
+            updateStatusBarText() // SYM's LED shows it held
+        }
+
+        // The emoji key held, or SYM or the emoji key tapped: the next key types its emoji or symbol
+        if (
+            hasEditableField &&
+            event?.repeatCount == 0 &&
+            keyCode != KEYCODE_SYM &&
+            keyCode != emojiPickerKeyUpPending &&
+            keyCode != SettingsManager.getEmojiPickerKey(this) &&
+            !isPureModifierKey(keyCode) &&
+            keyCode != KeyEvent.KEYCODE_BACK
+        ) {
+            val shift = event.isShiftPressed || shiftOneShot || capsLockEnabled
+            val ctrlOrAlt = event.isCtrlPressed || event.isAltPressed || ctrlPhysicallyPressed || altPhysicallyPressed
+            val emojiHeld = emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN &&
+                KeyEvent.isModifierKey(emojiPickerKeyUpPending) && !ctrlOrAlt
+            val text = when {
+                emojiHeld || emojiSticky -> symLayoutController.resolveEmojiLayerSymbol(keyCode, shift)
+                symSticky -> symLayoutController.resolveChordSymbol(keyCode, shift)
+                else -> null
+            }
+            val wasSticky = symSticky || emojiSticky
+            if (emojiHeld || wasSticky) {
+                symSticky = false
+                emojiSticky = false
+                if (!text.isNullOrEmpty()) {
+                    val inputConnection = currentInputConnection
+                    if (!handleBoundaryTextBeforeCommit(text, inputConnection)) inputConnection?.commitText(text, 1)
+                    rememberLayerText(text)
+                    updateStatusBarText()
+                    return true
+                }
+                if (wasSticky) updateStatusBarText()
+            }
         }
 
         // Minimal Phone dedicated keys (skip while Alt is active so its configured mapping can run)
@@ -4538,6 +6102,28 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             !altActiveForDedicatedKeys
         ) {
             startSpeechRecognition()
+            return true
+        }
+
+        // User-selected dedicated emoji picker key (SYM settings > Emoji picker key).
+        // Consumed entirely so it never reaches the modifier state machine; outside text
+        // fields the key keeps its normal role.
+        val emojiPickerKey = SettingsManager.getEmojiPickerKey(this)
+        if (
+            hasEditableField &&
+            emojiPickerKey != KeyEvent.KEYCODE_UNKNOWN &&
+            keyCode == emojiPickerKey
+        ) {
+            if ((event?.repeatCount ?: 0) == 0) {
+                if (KeyEvent.isModifierKey(keyCode)) {
+                    emojiPickerKeyChorded = event?.isCtrlPressed == true || event?.isAltPressed == true ||
+                        ctrlPhysicallyPressed || altPhysicallyPressed
+                } else {
+                    toggleEmojiKeyScreen()
+                }
+            }
+            emojiPickerKeyUpPending = keyCode
+            updateStatusBarText() // the emoji key's LED shows it held
             return true
         }
 
@@ -4587,6 +6173,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 if (!handleBoundaryTextBeforeCommit(symChar, inputConnection)) {
                     inputConnection?.commitText(symChar, 1)
                 }
+                rememberLayerText(symChar)
                 updateStatusBarText()
                 return true
             }
@@ -4602,6 +6189,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     updateStatusBarText()
                     return true
                 }
+            }
+            // A tapped SYM or emoji key waiting for its one key: Back cancels it, as it closes a page
+            if (symSticky || emojiSticky) {
+                symSticky = false
+                emojiSticky = false
+                updateStatusBarText()
+                return true
             }
             // A user dismissal wins over an in-flight backend switch or queued recovery.
             pendingKeyboardSurfaceTransition?.let(uiHandler::removeCallbacks)
@@ -4730,8 +6324,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             InputEventRouter.EditableFieldRoutingResult.Continue -> {}
         }
         
+        // Layout-switch chords never fire from an emoji/symbol screen or with the emoji key: Shift
+        // then an action key there (the emoji key on Alt or Shift, Alt closing a layer) is not
+        // a request to change layout
+        val layoutSwitchChordsAllowed = !layoutSwitchChordBlocked(keyCode, symPageOpenBeforeKey)
+
         // Handle Alt+Shift for subtype cycling
         if (
+            layoutSwitchChordsAllowed &&
             hasEditableField &&
             event != null &&
             event.repeatCount == 0 &&
@@ -4768,6 +6368,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
         // Handle Alt+Enter for subtype cycling
         if (
+            layoutSwitchChordsAllowed &&
             hasEditableField &&
             event != null &&
             event.repeatCount == 0 &&
@@ -4790,8 +6391,42 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             return true
         }
 
+        // A suggestion picked from the keyboard (Ctrl+Shift+Q/W/E by default): only while the bar
+        // shows suggestions, otherwise the keys do what they always did
+        if (hasEditableField && event != null && event.repeatCount == 0 && symPage == 0) {
+            val slot = SuggestionKeys.slotFor(
+                SettingsManager.getSuggestionKeys(this),
+                keyCode,
+                ctrl = event.isCtrlPressed || ctrlPhysicallyPressed,
+                shift = event.isShiftPressed || shiftPhysicallyPressed,
+                alt = event.isAltPressed || altPhysicallyPressed
+            )
+            if (slot != null && visibleSuggestionStrings().isNotEmpty()) {
+                suggestionKeyUpPending = keyCode
+                acceptSuggestionAtIndex(slot)
+                return true
+            }
+        }
+
+        // Ctrl + Shift + D: add the last word typed to the dictionary
+        if (
+            hasEditableField &&
+            keyCode == KeyEvent.KEYCODE_D &&
+            event?.repeatCount == 0 &&
+            (event.isCtrlPressed || ctrlPressed || ctrlLatchActive || ctrlOneShot) &&
+            (event.isShiftPressed || shiftPhysicallyPressed) &&
+            SettingsManager.getAddLastWordShortcut(this)
+        ) {
+            modifierStateController.clearCtrlState(resetPressedState = true)
+            modifierStateController.clearShiftState(resetPressedState = true)
+            addLastWordToDictionary()
+            updateStatusBarText()
+            return true
+        }
+
         // Handle Ctrl+Space for subtype cycling
         if (
+            layoutSwitchChordsAllowed &&
             hasEditableField &&
             keyCode == KeyEvent.KEYCODE_SPACE &&
             SettingsManager.isCtrlSpaceLayoutSwitchEnabled(this) &&
@@ -4833,9 +6468,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 shouldUpdateStatusBar = true
             }
 
-            // Cycle to next subtype
+            // Cycle to the next subtype; with Shift too (Ctrl+Shift+Space), to the previous one
+            // (palsoftware/pastiera#267)
+            val backwards = event?.isShiftPressed == true || shiftPhysicallyPressed
+            if (backwards) modifierStateController.clearShiftState(resetPressedState = true)
             val showToast = SettingsManager.isToastOnLayoutSwitchEnabled(this)
-            if (SubtypeCycler.cycleToNextSubtype(this, PhysicalKeyboardInputMethodService::class.java, assets, showToast = showToast)) {
+            if (SubtypeCycler.cycleToNextSubtype(this, PhysicalKeyboardInputMethodService::class.java, assets, showToast = showToast, backwards = backwards)) {
                 shouldUpdateStatusBar = true
             }
 
@@ -5049,7 +6687,69 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         return keyCode != KeyEvent.KEYCODE_BACK
     }
 
+    /** An emoji or symbol typed through a layer chord (or a tapped SYM or emoji key) joins its recents. */
+    private fun rememberLayerText(text: String) {
+        val first = text.codePointAt(0)
+        if (first >= 0x1F000 || '\uFE0F' in text) {
+            it.palsoftware.pastiera.data.emoji.RecentEmojiManager.addRecentEmoji(this, text)
+        } else {
+            it.palsoftware.pastiera.data.symbols.SymbolSearch.addRecent(this, text)
+        }
+    }
+
     override fun onKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
+        if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyUp(keyCode_, event_)
+        if (QuickLauncherActivity.ownsKey(event_)) return false
+        if (keyCode_ == KEYCODE_SYM) {
+            symKeyHeld = false
+            // Released after a chord in a hidden app: no panel
+            if (hiddenAppSymChordUsed) {
+                hiddenAppSymChordUsed = false
+                hiddenAppPastieraKeys.remove(keyCode_)
+                symTogglePendingOnKeyUp = false
+                return true
+            }
+        }
+        if (keyCode_ == KeyEvent.KEYCODE_BACK && niagaraBackReturnTo != null) {
+            val pkg = niagaraBackReturnTo!!
+            niagaraBackReturnTo = null
+            requestHideSelf(0)
+            returnToApp(pkg)
+            return true
+        }
+        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return onKeyUp(KeyEvent.KEYCODE_ALT_LEFT, it) }
+        withoutEmojiAltShift(event_)?.let { return onKeyUp(keyCode_, it) }
+        if (keyboardHiddenForApp) {
+            // A release follows its press, so neither side is left with a stuck key
+            val toPastiera = when {
+                hiddenAppPastieraKeys.remove(keyCode_) -> true
+                hiddenAppPassedThroughKeys.remove(keyCode_) -> false
+                else -> hiddenAppKeyGoesToPastiera(keyCode_)
+            }
+            if (!toPastiera && translateHiddenAppKey(event_)) return true
+            HiddenAppKeyObserver.logKey(event_, if (toPastiera) "input method, to the keyboard" else "input method, to the app")
+            if (!toPastiera) {
+                observeHiddenAppKey(event_)
+                return super.onKeyUp(keyCode_, event_)
+            }
+        }
+        val handled = handleKeyUp(keyCode_, event_)
+        if (keyboardHiddenForApp || terminalHidesKeyboard) syncHiddenAppPanel()
+        return handled
+    }
+
+    private fun handleKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
+        // The release of a key sent to the app as its own shortcut, or to a terminal with Ctrl
+        if (appShortcutKeysDown.remove(keyCode_)) return true
+        if (terminalRawKeysDown.remove(keyCode_)) return super.onKeyUp(keyCode_, event_)
+        terminalEmojiKeysDown.remove(keyCode_)?.let { action ->
+            sendTerminalActionKey(action, KeyEvent.ACTION_UP, 0)
+            return true
+        }
+        if (terminalCtrlKeysDown.remove(keyCode_)) {
+            event_?.let { sendTerminalCtrlKey(it, KeyEvent.ACTION_UP, keyCode_) }
+            return true
+        }
         if (!replayingProtectedNumberKey) {
             when (val result = accidentalKeyPressFilter.onKeyUp(keyCode_, event_)) {
                 is AccidentalKeyPressFilter.KeyUpResult.Suppressed -> {
@@ -5073,8 +6773,35 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (remapped.consume) return true
         val keyCode = remapped.keyCode
         val event = remapped.event
+        // The emoji layer's pages: a pressed emoji with skin tones is typed when it comes up
+        if (symLayoutController.handlePagedKeyUp(keyCode, currentInputConnection) { updateStatusBarText() }) {
+            updateStatusBarText()
+            return true
+        }
         if (keyCode == KeyEvent.KEYCODE_ENTER && consumeAltEnterUntilKeyUp) {
             consumeAltEnterUntilKeyUp = false
+            return true
+        }
+        if (suggestionKeyUpPending != KeyEvent.KEYCODE_UNKNOWN && keyCode == suggestionKeyUpPending) {
+            suggestionKeyUpPending = KeyEvent.KEYCODE_UNKNOWN
+            return true
+        }
+        if (emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN && keyCode == emojiPickerKeyUpPending) {
+            emojiPickerKeyUpPending = KeyEvent.KEYCODE_UNKNOWN
+            // Held past a tap without choosing anything: the emoji key just lets go
+            val heldWithoutChoice = event != null && isLongHold(event)
+            if (KeyEvent.isModifierKey(keyCode) && !emojiPickerKeyChorded && !heldWithoutChoice) {
+                if (!emojiSticky && symPage == 0 && SettingsManager.getEmojiStickyTap(this)) {
+                    // A tap: the next key types its emoji; a second tap opens the emoji screen
+                    emojiSticky = true
+                    symSticky = false
+                } else {
+                    emojiSticky = false
+                    toggleEmojiKeyScreen()
+                }
+            }
+            emojiPickerKeyChorded = false
+            updateStatusBarText()
             return true
         }
         clicksPowerShiftTapFilter.shouldConsumeKeyUp(keyCode, event)?.let { suppressed ->
@@ -5164,7 +6891,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (shiftPressed) {
                 val downTime = modifierDownTimes[keyCode] ?: 0L
                 val holdDuration = if (downTime > 0) event?.eventTime?.minus(downTime) ?: 0L else 0L
-                val isLongHold = holdDuration > 300L
+                val isLongHold = holdDuration > MODIFIER_HOLD_MS
                 val stickyEnabled = SettingsManager.isStaticVariationBarLayerStickyEnabled(this)
                 val isIntentionalHold = variationInteractedDuringHold || (isLongHold && !otherKeyInteractedDuringHold)
 
@@ -5184,10 +6911,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     if (result.shouldUpdateStatusBar) {
                         updateStatusBarText()
                     }
-                    val isQuickTap = holdDuration < 300L && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
+                    val isQuickTap = holdDuration < MODIFIER_HOLD_MS && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
                     if (stickyEnabled && isQuickTap) {
                         val now = event?.eventTime ?: System.currentTimeMillis()
-                        if (lastShiftTapUpTime > 0L && now - lastShiftTapUpTime <= DOUBLE_TAP_THRESHOLD) {
+                        if (modifierStateController.shiftDoubleTapLocks && lastShiftTapUpTime > 0L && now - lastShiftTapUpTime <= DOUBLE_TAP_THRESHOLD) {
                             shiftLayerLatched = true
                             lastShiftTapUpTime = 0L
                             updateStatusBarText()
@@ -5207,10 +6934,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         // Handle Ctrl release for double-tap
         if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) {
+            // Held for a shortcut (Ctrl+F, Ctrl+C…), even one that opened another field: Ctrl lets go
+            val usedForShortcut = otherKeyInteractedDuringHold || ctrlHeldIntoNewField
+            ctrlHeldIntoNewField = false
             if (ctrlPressed) {
                 val downTime = modifierDownTimes[keyCode] ?: 0L
                 val holdDuration = if (downTime > 0) event?.eventTime?.minus(downTime) ?: 0L else 0L
-                val isLongHold = holdDuration > 300L
+                val isLongHold = holdDuration > MODIFIER_HOLD_MS
                 val shortcutUsedDuringHold = otherKeyInteractedDuringHold
                 val isIntentionalHold = variationInteractedDuringHold || (isLongHold && !otherKeyInteractedDuringHold)
 
@@ -5236,6 +6966,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 }
                 modifierDownTimes.remove(keyCode)
             }
+            if (usedForShortcut && !ctrlLatchFromNavMode && (ctrlOneShot || ctrlLatchActive || ctrlPressed)) {
+                modifierStateController.clearCtrlState(resetPressedState = true)
+                otherKeyInteractedDuringHold = false
+                modifierStateBeforeHold = null
+                updateStatusBarText()
+            }
             return super.onKeyUp(keyCode, event)
         }
         
@@ -5244,7 +6980,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (altPressed) {
                 val downTime = modifierDownTimes[keyCode] ?: 0L
                 val holdDuration = if (downTime > 0) event?.eventTime?.minus(downTime) ?: 0L else 0L
-                val isLongHold = holdDuration > 300L
+                val isLongHold = holdDuration > MODIFIER_HOLD_MS
                 val stickyEnabled = SettingsManager.isStaticVariationBarLayerStickyEnabled(this)
                 val isIntentionalHold = variationInteractedDuringHold || (isLongHold && !otherKeyInteractedDuringHold)
 
@@ -5264,10 +7000,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     if (result.shouldUpdateStatusBar) {
                         updateStatusBarText()
                     }
-                    val isQuickTap = holdDuration < 300L && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
+                    val isQuickTap = holdDuration < MODIFIER_HOLD_MS && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
                     if (stickyEnabled && isQuickTap) {
                         val now = event?.eventTime ?: System.currentTimeMillis()
-                        if (lastAltTapUpTime > 0L && now - lastAltTapUpTime <= DOUBLE_TAP_THRESHOLD) {
+                        if (modifierStateController.altDoubleTapLocks && lastAltTapUpTime > 0L && now - lastAltTapUpTime <= DOUBLE_TAP_THRESHOLD) {
                             altModifierLayerLatched = true
                             lastAltTapUpTime = 0L
                             updateStatusBarText()
@@ -5288,11 +7024,20 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Toggle SYM layout on key release only when SYM was tapped alone.
         if (keyCode == KEYCODE_SYM) {
             symPhysicallyPressed = false
-            if (symTogglePendingOnKeyUp && !symChordUsedSinceKeyDown) {
-                symLayoutController.toggleSymPage()
-            }
+            // Held past a tap without choosing a symbol: SYM just lets go
+            val tapped = symTogglePendingOnKeyUp && !symChordUsedSinceKeyDown && !(event != null && isLongHold(event))
             symTogglePendingOnKeyUp = false
             symChordUsedSinceKeyDown = false
+            if (tapped) {
+                if (!symSticky && symPage == 0 && SettingsManager.getSymStickyTap(this)) {
+                    // A tap: the next key types its symbol; a second tap opens the symbols
+                    symSticky = true
+                    emojiSticky = false
+                } else {
+                    symSticky = false
+                    symLayoutController.toggleSymPage()
+                }
+            }
             updateStatusBarText()
             return true
         }
@@ -5306,6 +7051,25 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             textExpansionController.scheduleRefresh()
         }
         return handled
+    }
+
+    /**
+     * Adds the word before the cursor (or the unknown word the suggestions offered) to the
+     * dictionary, and says what happened.
+     */
+    private fun addLastWordToDictionary() {
+        val before = currentInputConnection?.getTextBeforeCursor(64, 0)?.toString().orEmpty()
+        val word = lastWordIn(before) ?: suggestionController.pendingAddWord()
+        val message = when {
+            word.isNullOrBlank() -> getString(R.string.add_last_word_none)
+            suggestionController.isKnownWordInActiveDictionaries(word) -> getString(R.string.add_last_word_known, word)
+            else -> {
+                suggestionController.addUserWord(word)
+                suggestionController.clearPendingAddWord()
+                getString(R.string.add_last_word_added, word)
+            }
+        }
+        android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -5547,14 +7311,49 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             "Native candidate[$phase]: startX=${start.x}, startY=${start.y}, x=$x, y=$y, dx=$deltaX, dy=$deltaY, up=$upwardDistance, left=$leftwardDistance, suggestionThreshold=$suggestionThreshold, deleteThreshold=$deleteThreshold, duration=${durationMs}ms, upVelocity=$upVelocity, leftVelocity=$leftVelocity, verticalEnough=$verticalEnough, mostlyVertical=$mostlyVertical, verticalFastEnough=$verticalFastEnough, leftEnough=$leftEnough, mostlyHorizontal=$mostlyHorizontal, horizontalFastEnough=$horizontalFastEnough"
         )
         val candidateThreshold = if (leftwardDistance > upwardDistance) deleteThreshold else suggestionThreshold
+        // Flux Keyboard: left, up and right can pick the left, middle and right suggestion,
+        // and a swipe down can delete the previous word
+        val directional = SettingsManager.getTrackpadSuggestionSwipeDirections(this)
+        val rightwardDistance = deltaX
+        val downwardDistance = deltaY
+        // Direction picks: the dominant direction counts (a 45° wedge each way) and a shorter
+        // swipe does, so a swipe works from anywhere on the keys, edges included
+        // One key's width (the Titan 2 Elite's keys are about square): sliding from one key onto
+        // the next picks, from anywhere on the keys, however slowly within half a second
+        val pickDistance = TrackpadCoordinateMapper.pickDistance(
+            suggestionThreshold * 0.6f, start.xRange)
+        val sideDistance = TrackpadCoordinateMapper.pickDistance(
+            SettingsManager.getTrackpadSideSwipeThreshold(this) * it.palsoftware.pastiera.core.SuggestionSwipeLearning.scale(this), start.xRange)
+        // After a pause in typing a swipe is a scroll: it picks nothing
+        val picksAllowed = it.palsoftware.pastiera.core.SuggestionSwipeLearning.swipesPick(this)
+        val horizontalDominant = kotlin.math.abs(deltaX) > kotlin.math.abs(deltaY)
+        val pickFastEnough = TrackpadCoordinateMapper.pickQuickEnough(
+            maxOf(kotlin.math.abs(deltaX), kotlin.math.abs(deltaY)),
+            if (horizontalDominant) sideDistance else pickDistance,
+            durationMs, NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS)
+        val rightEnough = horizontalDominant && rightwardDistance >= sideDistance && pickFastEnough
+        val leftPicks = horizontalDominant && leftwardDistance >= sideDistance && pickFastEnough
+        val upPicks = !horizontalDominant && upwardDistance >= pickDistance && pickFastEnough
+        val downEnough = !horizontalDominant && downwardDistance >= deleteThreshold * 0.6f &&
+            downwardDistance / durationMs >= NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS
         val direction = when {
-            verticalEnough && mostlyVertical && verticalFastEnough -> NativeTrackpadSwipeDirection.UP
-            leftEnough &&
+            picksAllowed && verticalEnough && mostlyVertical && verticalFastEnough -> NativeTrackpadSwipeDirection.UP
+            picksAllowed && directional && upPicks -> NativeTrackpadSwipeDirection.UP
+            picksAllowed && directional && rightEnough -> NativeTrackpadSwipeDirection.RIGHT
+            picksAllowed && directional && leftPicks -> NativeTrackpadSwipeDirection.LEFT
+            !directional &&
+                leftEnough &&
                 mostlyHorizontal &&
                 horizontalFastEnough &&
                 SettingsManager.getSwipeToDelete(this) &&
                 SettingsManager.getSwipeToDeleteProvider(this) == SettingsManager.SWIPE_TO_DELETE_PROVIDER_NATIVE_IME -> NativeTrackpadSwipeDirection.LEFT
+            downEnough && SettingsManager.getTrackpadSwipeDownDeletesWord(this) -> NativeTrackpadSwipeDirection.DOWN
             else -> {
+                // A swipe that nearly picked: if a pick follows soon, swipes need a little less
+                if (picksAllowed) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onMissed(
+                    reached = maxOf(upwardDistance, kotlin.math.abs(deltaX)),
+                    needed = if (horizontalDominant) sideDistance else pickDistance
+                )
                 DebugCaptureStore.recordRawTrackpadEvent(
                     provider = SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME,
                     origin = start.origin,
@@ -5591,8 +7390,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 deltaX = deltaX,
                 deltaY = deltaY,
                 threshold = when (direction) {
-                    NativeTrackpadSwipeDirection.UP -> suggestionThreshold
-                    NativeTrackpadSwipeDirection.LEFT -> deleteThreshold
+                    NativeTrackpadSwipeDirection.UP, NativeTrackpadSwipeDirection.RIGHT -> suggestionThreshold
+                    NativeTrackpadSwipeDirection.LEFT -> if (directional) suggestionThreshold else deleteThreshold
+                    NativeTrackpadSwipeDirection.DOWN -> deleteThreshold
                 },
                 deviceId = start.deviceId,
                 source = start.source,
@@ -5604,7 +7404,24 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         nativeTrackpadGestureAtMs = now
         nativeTrackpadGestureHandled = true
 
+        if (directional && direction != NativeTrackpadSwipeDirection.DOWN) {
+            val index = when (direction) {
+                NativeTrackpadSwipeDirection.LEFT -> 0
+                NativeTrackpadSwipeDirection.RIGHT -> 2
+                else -> 1
+            }
+            Log.d(TRACKPAD_DEBUG_TAG, "Native swipe accepted[$phase]: direction=$direction picks suggestion $index")
+            it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
+            acceptSuggestionAtIndex(index)
+            return true
+        }
+
         when (direction) {
+            NativeTrackpadSwipeDirection.RIGHT -> acceptSuggestionAtIndex(2)
+            NativeTrackpadSwipeDirection.DOWN -> {
+                Log.d(TRACKPAD_DEBUG_TAG, "Native swipe accepted[$phase]: direction=DOWN deletes a word")
+                deleteWordFromNativeTrackpadSwipe()
+            }
             NativeTrackpadSwipeDirection.UP -> {
                 val third = TrackpadCoordinateMapper.third(start.x, start.xRange)
                 Log.d(
@@ -5629,6 +7446,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     source = start.source,
                     eventTimeUptimeMs = eventTimeUptimeMs
                 )
+                it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
                 acceptSuggestionAtIndex(third)
             }
             NativeTrackpadSwipeDirection.LEFT -> {
@@ -5661,7 +7479,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     private fun nativeImeTrackpadSuggestionSwipeThreshold(): Float {
-        return SettingsManager.getTrackpadSuggestionSwipeThreshold(this)
+        // Your setting, scaled by what suggestion swipes learned from your picks and undos
+        return SettingsManager.getTrackpadSuggestionSwipeThreshold(this) * it.palsoftware.pastiera.core.SuggestionSwipeLearning.scale(this)
     }
 
     private fun nativeImeTrackpadDeleteSwipeThreshold(): Float {
@@ -5699,6 +7518,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     private fun deleteWordFromNativeTrackpadSwipe() {
+        it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
         val ic = currentInputConnection
         if (ic == null) {
             Log.w(TRACKPAD_DEBUG_TAG, "Native swipe-to-delete ignored: no InputConnection")
@@ -5793,6 +7613,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             // Provide visual feedback on the suggestions bar, matching variation press color
             candidatesBarController.flashSuggestionSlot(suggestionIndex)
 
+            if (EmojiSuggestion.isEmoji(suggestion)) {
+                EmojiSuggestion.commitAfterWord(ic, suggestion)
+                suggestionController.onContextReset()
+                NotificationHelper.triggerHapticFeedback(this)
+                return@post
+            }
+
             val forceLeadingCapital = AutoCapitalizeHelper.shouldAutoCapitalizeAtCursor(
                 context = this,
                 inputConnection = ic,
@@ -5835,7 +7662,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
 
             val wordBeforeCursor = before.substring(start)
-            val wordAfterCursor = after.substring(0, end)
+            // Typing in front of a word: a new word keeps the word after the cursor
+            val keepAfter = it.palsoftware.pastiera.core.suggestions.WordInFront.keepsWordAfter(suggestion, wordBeforeCursor, after.substring(0, end))
+            val wordAfterCursor = if (keepAfter) "" else after.substring(0, end)
             val currentWord = wordBeforeCursor + wordAfterCursor
 
             val deleteBefore = wordBeforeCursor.length
@@ -5883,6 +7712,35 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     private enum class NativeTrackpadSwipeDirection {
         UP,
-        LEFT
+        LEFT,
+        RIGHT,
+        DOWN
     }
+}
+
+/** Keys that always belong to Android, even while a hidden app's Pastiera panel is open. */
+/** The Titan 2 Elite's Ctrl (scancode 251) and Sym (253), as the standard keys apps understand. */
+private val TITAN_MODIFIER_SCAN_CODES = mapOf(
+    251 to KeyEvent.KEYCODE_CTRL_LEFT,
+    253 to KeyEvent.KEYCODE_ALT_RIGHT
+)
+
+private val HIDDEN_APP_SYSTEM_KEYS = setOf(
+    KeyEvent.KEYCODE_BACK,
+    KeyEvent.KEYCODE_HOME,
+    KeyEvent.KEYCODE_APP_SWITCH,
+    KeyEvent.KEYCODE_POWER,
+    KeyEvent.KEYCODE_VOLUME_UP,
+    KeyEvent.KEYCODE_VOLUME_DOWN,
+    KeyEvent.KEYCODE_VOLUME_MUTE
+)
+
+/** The last word in [text], skipping the spaces and punctuation after it; null when there's none. */
+internal fun lastWordIn(text: String): String? {
+    fun wordChar(c: Char) = c.isLetterOrDigit() || c == '\'' || c == '’' || c == '-'
+    var end = text.length
+    while (end > 0 && !text[end - 1].isLetterOrDigit()) end--
+    var start = end
+    while (start > 0 && wordChar(text[start - 1])) start--
+    return text.substring(start, end).trim('\'', '’', '-').takeIf { word -> word.any { it.isLetter() } }
 }

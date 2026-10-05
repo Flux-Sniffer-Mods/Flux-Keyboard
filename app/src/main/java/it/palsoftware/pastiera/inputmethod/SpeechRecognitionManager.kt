@@ -137,6 +137,18 @@ class SpeechRecognitionManager(
         return formatted
     }
 
+    // Keep listening through pauses (palsoftware/pastiera#108): a session lasts until you stop
+    // it or stay silent, with the recognizer restarted after each sentence
+    private var sessionActive = false
+    private var sessionHadResult = false
+
+    private fun keepListening(): Boolean =
+        sessionActive && it.palsoftware.pastiera.SettingsManager.getSpeechKeepListening(context)
+
+    private fun listenAgain() {
+        Handler(Looper.getMainLooper()).postDelayed({ if (keepListening()) listen() }, 150)
+    }
+
     /**
      * Ensures SpeechRecognizer is initialized with a RecognitionListener.
      */
@@ -179,8 +191,17 @@ class SpeechRecognitionManager(
                     }
 
                     override fun onError(error: Int) {
+                        // A pause after something was said ends a kept-listening session quietly
+                        val silence = error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT
+                        val quietEnd = silence && sessionHadResult
+                        sessionActive = false
+                        sessionHadResult = false
                         // Notify that recognition is finished (due to error)
                         onRecognitionStateChanged?.invoke(false)
+                        if (quietEnd) {
+                            if (isComposingPartialText) clearPartialText()
+                            return
+                        }
                         
                         // Clear partial text on error
                         if (isComposingPartialText) {
@@ -216,8 +237,9 @@ class SpeechRecognitionManager(
                     }
 
                     override fun onResults(results: Bundle) {
-                        // Notify that recognition is finished
-                        onRecognitionStateChanged?.invoke(false)
+                        val continuing = keepListening()
+                        // Notify that recognition is finished, unless it carries on after this sentence
+                        if (!continuing) onRecognitionStateChanged?.invoke(false)
                         
                         val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                         val confidenceScores = results.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES)
@@ -236,6 +258,7 @@ class SpeechRecognitionManager(
                             Log.d(TAG, "Using recognized text: '$formattedText' (original: '$text', normalized: '$normalizedText')")
                             // Replace partial text with final formatted text
                             replacePartialWithFinalText(formattedText)
+                            sessionHadResult = true
                         } else {
                             // Clear partial text if no final result
                             if (isComposingPartialText) {
@@ -243,6 +266,7 @@ class SpeechRecognitionManager(
                             }
                             Log.w(TAG, "No text recognized")
                         }
+                        if (continuing) listenAgain() else sessionActive = false
                     }
 
                     override fun onPartialResults(partialResults: Bundle?) {
@@ -375,6 +399,12 @@ class SpeechRecognitionManager(
      * Starts voice input using SpeechRecognizer.
      */
     fun startRecognition() {
+        sessionActive = true
+        sessionHadResult = false
+        listen()
+    }
+
+    private fun listen() {
         // Check if RECORD_AUDIO permission is granted
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) 
             != android.content.pm.PackageManager.PERMISSION_GRANTED) {
@@ -414,6 +444,14 @@ class SpeechRecognitionManager(
                 putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
                 putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.speech_recognition_prompt))
+                if (it.palsoftware.pastiera.SettingsManager.getSpeechKeepListening(context)) {
+                    // Wait longer before deciding a pause is the end (recognizers that honour it)
+                    // The pause timeout (Settings): how long a silence ends it
+                    val pauseMs = it.palsoftware.pastiera.SettingsManager.getSpeechPauseTimeoutSeconds(context) * 1000L
+                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, pauseMs)
+                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, (pauseMs - 500L).coerceAtLeast(500L))
+                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 2000L)
+                }
             }
             
             Log.d(TAG, "Starting speech recognition with language: $languageTag")
@@ -432,6 +470,7 @@ class SpeechRecognitionManager(
      * Stops voice input if active.
      */
     fun stopRecognition() {
+        sessionActive = false
         speechRecognizer?.stopListening()
         Log.d(TAG, "Speech recognition stopped")
     }

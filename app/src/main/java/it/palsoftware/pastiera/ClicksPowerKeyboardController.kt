@@ -164,6 +164,7 @@ object ClicksPowerKeyboardController {
             .mapNotNull(InputDevice::getDevice)
             .firstOrNull(DeviceSpecific::isClicksPowerKeyboard)
             ?.name
+        if (deviceName != null) SettingsManager.markClicksKeyboardSeen(context)
         if (!forceReconnect && deviceName == connectedDeviceName) return
         val previousClient = client
         client = null

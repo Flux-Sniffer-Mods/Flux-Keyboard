@@ -25,20 +25,30 @@ object ClicksFirmwareVersionReader {
         deviceName: String,
         onResult: (String?) -> Unit
     ): Closeable {
+        // Without the Nearby devices permission (revocable on Android 12+) these calls throw
         val adapter = context.getSystemService(BluetoothManager::class.java)?.adapter
-        val device = adapter?.bondedDevices?.firstOrNull { it.name == deviceName }
+        val device = try {
+            adapter?.bondedDevices?.firstOrNull { it.name == deviceName }
+        } catch (_: SecurityException) {
+            null
+        }
         if (device == null) {
             onResult(null)
             return Closeable { }
         }
 
         val session = FirmwareReadSession(onResult)
-        session.gatt = device.connectGatt(
-            context.applicationContext,
-            false,
-            session.callback,
-            android.bluetooth.BluetoothDevice.TRANSPORT_LE
-        )
+        try {
+            session.gatt = device.connectGatt(
+                context.applicationContext,
+                false,
+                session.callback,
+                android.bluetooth.BluetoothDevice.TRANSPORT_LE
+            )
+        } catch (_: SecurityException) {
+            onResult(null)
+            return Closeable { }
+        }
         session.startTimeout()
         return session
     }
@@ -119,7 +129,7 @@ object ClicksFirmwareVersionReader {
             if (completed) return
             completed = true
             handler.removeCallbacksAndMessages(null)
-            gatt?.close()
+            runCatching { gatt?.close() }
             gatt = null
             handler.post { onResult(version) }
         }
@@ -128,7 +138,7 @@ object ClicksFirmwareVersionReader {
             if (completed) return
             completed = true
             handler.removeCallbacksAndMessages(null)
-            gatt?.close()
+            runCatching { gatt?.close() }
             gatt = null
         }
     }

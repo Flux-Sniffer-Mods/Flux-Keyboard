@@ -15,6 +15,7 @@ import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import android.os.Handler
 import android.os.Looper
 import it.palsoftware.pastiera.core.SymLayoutController
+import it.palsoftware.pastiera.core.SmartModifierToggle
 import it.palsoftware.pastiera.core.SymLayoutController.SymKeyResult
 import it.palsoftware.pastiera.core.TextInputController
 import it.palsoftware.pastiera.core.AutoCorrectionManager
@@ -498,6 +499,18 @@ class InputEventRouter(
                     callSuperWithKey = callbacks.callSuperWithKey
                 )
             ) {
+                // Smart toggle: Alt lock + an opening quote or bracket means words come next
+                if (altLatchActive && SettingsManager.getSmartAltOffAfterOpening(context)) {
+                    val typed = (params.altMappingsOverride
+                        ?: controllers.alternateCharacterManager.getAltModifierMappings())[keyCode]
+                    val before = ic?.getTextBeforeCursor(2, 0)?.let { text ->
+                        if (typed != null && text.endsWith(typed)) text.dropLast(typed.length) else text
+                    }
+                    if (typed != null && SmartModifierToggle.opensQuoteOrBracket(typed, before)) {
+                        controllers.modifierStateController.clearAltState()
+                        callbacks.updateStatusBar()
+                    }
+                }
                 return EditableFieldRoutingResult.Consume
             }
         }
@@ -522,6 +535,17 @@ class InputEventRouter(
                     toggleMinimalUi = callbacks.toggleMinimalUi
                 )
             ) {
+                // Smart toggle: a tapped Ctrl latch is done after one shortcut (cursor moves keep it)
+                val ctrlMapping = params.ctrlKeyMap[keyCode]
+                if (
+                    params.ctrlLatchActive && !params.ctrlLatchFromNavMode &&
+                    event?.isCtrlPressed != true && !params.ctrlPressed && !params.ctrlPhysicallyPressed &&
+                    !SmartModifierToggle.isNavigation(ctrlMapping?.type, ctrlMapping?.value) &&
+                    SettingsManager.getSmartCtrlOffAfterShortcut(context)
+                ) {
+                    controllers.modifierStateController.clearCtrlState()
+                    callbacks.updateStatusBar()
+                }
                 return EditableFieldRoutingResult.Consume
             }
         }
@@ -874,10 +898,8 @@ class InputEventRouter(
             AutoSpaceTracker.clear()
         }
 
-        // Try new dictionary-based auto-replace undo first (if experimental suggestions enabled)
-        if (keyCode == KeyEvent.KEYCODE_DEL && 
-            SettingsManager.isExperimentalSuggestionsEnabled(context) &&
-            SettingsManager.getAutoReplaceOnSpaceEnter(context)) {
+        // Undo the last auto-replace or text replacement first (it only acts right after one)
+        if (keyCode == KeyEvent.KEYCODE_DEL) {
             
             val sc = suggestionController
             if (sc != null) {
@@ -1324,6 +1346,30 @@ class InputEventRouter(
                 ic.sendKeyEvent(down)
             }
             return true
+        }
+
+        // Ctrl+V: a link on the clipboard is cleaned first, whoever pastes it
+        if (shortcutKeyCode == KeyEvent.KEYCODE_V && event?.repeatCount == 0 && SettingsManager.getCleanPastedLinks(context)) {
+            (context.getSystemService(Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager)?.let { clipboard ->
+                runCatching { it.palsoftware.pastiera.clipboard.LinkCleaner.cleanClipboard(context, clipboard) }
+            }
+        }
+
+        // Ctrl+Z, Ctrl+Shift+Z and Ctrl+Y: the keyboard's own typing history, in any app (the
+        // app's own undo when the keyboard has nothing to undo)
+        if (!ctrlLatchFromNavMode && event?.repeatCount == 0 && inputConnection != null) {
+            val shift = event?.isShiftPressed == true
+            val undoKey = shortcutKeyCode == KeyEvent.KEYCODE_Z
+            val redoKey = shortcutKeyCode == KeyEvent.KEYCODE_Y && isPhysicalCtrlCombo
+            if ((undoKey || redoKey) &&
+                (context as? PhysicalKeyboardInputMethodService)?.undoFromHistory(redo = redoKey || shift) == true
+            ) {
+                if (ctrlOneShot) {
+                    clearCtrlOneShot()
+                    updateStatusBar()
+                }
+                return true
+            }
         }
 
         // When Ctrl is physically held, prefer native app shortcuts (rich-text editors, IDEs, etc.).
