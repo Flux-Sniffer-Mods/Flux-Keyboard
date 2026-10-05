@@ -51,6 +51,9 @@ class InputEventRouterModifierE2ETest {
     fun setUp() {
         context = RuntimeEnvironment.getApplication()
         SettingsManager.setSymPagesConfig(context, SymPagesConfig())
+        // The layers' own mappings: one page each, as before pages
+        SettingsManager.setEmojiLayerPages(context, false)
+        SettingsManager.setSymbolsPages(context, false)
         SettingsManager.resetSymMappings(context)
         SettingsManager.resetSymMappingsPage2(context)
         SettingsManager.resetVariationsToDefault(context)
@@ -210,6 +213,48 @@ class InputEventRouterModifierE2ETest {
         assertTrue(result is InputEventRouter.EditableFieldRoutingResult.CallSuper)
         assertTrue(modifierStateController.altLatchActive)
         assertTrue(inputConnectionRecorder.committedTexts.isEmpty())
+    }
+
+    @Test
+    fun smartToggle_altLockTurnsOffAfterAnOpeningBracket() {
+        SettingsManager.setSmartAltOffAfterOpening(context, true)
+        val bracketKey = alternateCharacterManager.getAltModifierMappings().entries.first { it.value == "(" }.key
+        modifierStateController.altLatchActive = true
+
+        val result = routeKeyDown(bracketKey, keyDown(bracketKey), TestCallbacks(modifierStateController))
+
+        assertTrue(result is InputEventRouter.EditableFieldRoutingResult.Consume)
+        assertEquals("(", inputConnectionRecorder.committedTexts.last())
+        assertFalse(modifierStateController.altLatchActive)
+    }
+
+    @Test
+    fun smartToggle_altLockStaysForOtherSymbolsAndWhenOff() {
+        val mappings = alternateCharacterManager.getAltModifierMappings()
+        val digitKey = mappings.entries.first { it.value == "1" }.key
+        SettingsManager.setSmartAltOffAfterOpening(context, true)
+        modifierStateController.altLatchActive = true
+        routeKeyDown(digitKey, keyDown(digitKey), TestCallbacks(modifierStateController))
+        assertTrue(modifierStateController.altLatchActive)
+
+        SettingsManager.setSmartAltOffAfterOpening(context, false)
+        val bracketKey = mappings.entries.first { it.value == "(" }.key
+        routeKeyDown(bracketKey, keyDown(bracketKey), TestCallbacks(modifierStateController))
+        assertTrue(modifierStateController.altLatchActive)
+    }
+
+    @Test
+    fun smartToggle_ctrlLatchTurnsOffAfterAShortcutButNotAfterCursorMoves() {
+        SettingsManager.setSmartCtrlOffAfterShortcut(context, true)
+        val moveKey = ctrlKeyMap.entries.first { it.value.type == "keycode" && it.value.value == "DPAD_UP" }.key
+        val copyKey = ctrlKeyMap.entries.first { it.value.type == "action" && it.value.value == "copy" }.key
+        modifierStateController.ctrlLatchActive = true
+
+        routeKeyDown(moveKey, keyDown(moveKey), TestCallbacks(modifierStateController))
+        assertTrue(modifierStateController.ctrlLatchActive)
+
+        routeKeyDown(copyKey, keyDown(copyKey), TestCallbacks(modifierStateController))
+        assertFalse(modifierStateController.ctrlLatchActive)
     }
 
     @Test
@@ -410,6 +455,8 @@ class InputEventRouterModifierE2ETest {
 
     @Test
     fun symDevicePage_newDefault_mapsA_andConsumes() {
+        // These check A's mapping, clear of the search key (Q by default, off here anyway)
+        SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
         symLayoutController.toggleSymPage() // opens Device SYM in the new default config
         assertTrue(symLayoutController.isSymActive())
@@ -429,18 +476,17 @@ class InputEventRouterModifierE2ETest {
     }
 
     @Test
-    fun symSymbolsPage_defaultLayout_mapsA_andConsumes() {
+    fun symSymbolsPage_defaultLayout_mapsS_andConsumes() {
+        // S's mapping (Q is the search key and A the Recents key)
+        SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
-        if (!alternateCharacterManager.getSymMappings2().containsKey(KeyEvent.KEYCODE_A)) {
-            SettingsManager.saveSymMappingsPage2(context, mapOf(KeyEvent.KEYCODE_A to "="))
-            alternateCharacterManager.reloadSymMappings2()
-        }
+        val expected = alternateCharacterManager.getSymMappings2()[KeyEvent.KEYCODE_S] ?: "="
         symLayoutController.openSymbolsPage()
         assertTrue(symLayoutController.isSymActive())
 
         val result = routeKeyDown(
-            keyCode = KeyEvent.KEYCODE_A,
-            event = keyDown(KeyEvent.KEYCODE_A),
+            keyCode = KeyEvent.KEYCODE_S,
+            event = keyDown(KeyEvent.KEYCODE_S),
             callbacks = callbacks
         )
 
@@ -448,12 +494,31 @@ class InputEventRouterModifierE2ETest {
         assertTrue(inputConnectionRecorder.committedTexts.isNotEmpty())
         assertTrue(
             "commits=${inputConnectionRecorder.committedTexts}",
-            inputConnectionRecorder.committedTexts.contains("=")
+            inputConnectionRecorder.committedTexts.contains(expected)
         )
     }
 
     @Test
+    fun symSymbolsPage_searchKeyQOpensSearchInsteadOfTyping() {
+        val callbacks = TestCallbacks(modifierStateController)
+        symLayoutController.openSymbolsPage()
+
+        val result = routeKeyDown(
+            keyCode = KeyEvent.KEYCODE_Q,
+            event = keyDown(KeyEvent.KEYCODE_Q),
+            callbacks = callbacks
+        )
+
+        assertTrue(result is InputEventRouter.EditableFieldRoutingResult.Consume)
+        assertTrue(inputConnectionRecorder.committedTexts.isEmpty())
+    }
+
+    @Test
     fun symEmojiPage_customMapping_isUsed() {
+        // These check A's mapping, clear of the search key (Q by default, off here anyway)
+        SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
+        // A is also the emoji layer's Recents key by default: off here too
+        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
         SettingsManager.saveSymMappings(context, mapOf(KeyEvent.KEYCODE_A to "🧪"))
         alternateCharacterManager.reloadSymMappings()
@@ -471,14 +536,16 @@ class InputEventRouterModifierE2ETest {
 
     @Test
     fun symSymbolsPage_customMapping_isUsed() {
+        // W's mapping (Q is the search key and A the Recents key)
+        SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
-        SettingsManager.saveSymMappingsPage2(context, mapOf(KeyEvent.KEYCODE_A to "#"))
+        SettingsManager.saveSymMappingsPage2(context, mapOf(KeyEvent.KEYCODE_W to "#"))
         alternateCharacterManager.reloadSymMappings2()
         symLayoutController.openSymbolsPage()
 
         val result = routeKeyDown(
-            keyCode = KeyEvent.KEYCODE_A,
-            event = keyDown(KeyEvent.KEYCODE_A),
+            keyCode = KeyEvent.KEYCODE_W,
+            event = keyDown(KeyEvent.KEYCODE_W),
             callbacks = callbacks
         )
 

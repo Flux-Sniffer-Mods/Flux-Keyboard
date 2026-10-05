@@ -7,8 +7,10 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import it.palsoftware.pastiera.inputmethod.ui.LedStatusView
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -59,7 +61,12 @@ class NestedStatusBarGeometryTest {
         assertEquals(row.height, button.height)
         assertTrue(row.bottom > surface.top)
         assertEquals("No unused band may remain below the indicators", chrome.height, surface.bottom)
-        assertEquals((6.5f * context.resources.displayMetrics.density).toInt(), surface.bottom - row.bottom)
+        // The LED band under the row, plus the straight-buttons lift above it
+        assertEquals(
+            (LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * context.resources.displayMetrics.density).toInt() +
+                it.palsoftware.pastiera.SettingsManager.getTitan2EliteStatusBarLiftPx(context),
+            surface.bottom - row.bottom
+        )
         val nestedHeight = chrome.measuredHeight
         measure()
         assertEquals(nestedHeight, chrome.measuredHeight)
@@ -105,14 +112,25 @@ class NestedStatusBarGeometryTest {
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
         chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
-        assertTrue(content.clipToOutline)
-        assertEquals((6.5f * context.resources.displayMetrics.density).toInt(), surface.height - content.height)
+        // Straight corner buttons (the default) reach into the corners: the content isn't clipped
+        assertFalse(content.clipToOutline)
+        assertEquals((LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * context.resources.displayMetrics.density).toInt(), surface.height - content.height)
         assertTrue(lights.top < content.bottom)
         assertEquals(surface.height, lights.bottom)
+        // With contoured LEDs it follows the display curve
+        it.palsoftware.pastiera.SettingsManager.setTitan2EliteContourLeds(context, true)
+        chrome.requestLayout()
+        chrome.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
+        assertTrue(content.clipToOutline)
+        it.palsoftware.pastiera.SettingsManager.setTitan2EliteContourLeds(context, false)
     }
 
     @Test
-    fun contourIntegratedIndicatorsLetTheRegularRowUseTheFullCenterHeight() {
+    fun contourIntegratedIndicatorsKeepTheRowJustAboveTheLeds() {
         val context = RuntimeEnvironment.getApplication()
         val chrome = StatusBarController.ImeChromeLayout(context).apply {
             orientation = LinearLayout.VERTICAL
@@ -134,7 +152,9 @@ class NestedStatusBarGeometryTest {
         )
         chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
 
-        assertEquals(indicators.bottom, row.bottom)
+        // The row stops just above the contoured LEDs: the rail's band stays clear below it
+        assertTrue(row.bottom < indicators.bottom)
+        assertTrue(indicators.bottom - row.bottom <= 12)
     }
 
     @Test
@@ -166,7 +186,8 @@ class NestedStatusBarGeometryTest {
         chrome.draw(Canvas(bitmap))
 
         assertEquals(Color.WHITE, bitmap.getPixel(1, row.height / 2))
-        assertEquals(0, Color.alpha(bitmap.getPixel(1, chrome.height - 1)))
+        // The square corner outside the display curve is filled with the keyboard colour
+        assertEquals(Color.WHITE, bitmap.getPixel(1, chrome.height - 1))
         assertEquals(Color.WHITE, bitmap.getPixel(chrome.width / 2, chrome.height - 1))
     }
 }

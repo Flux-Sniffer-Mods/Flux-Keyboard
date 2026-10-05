@@ -47,6 +47,7 @@ class ClicksAccessibilityKeyBridgeTest {
     private fun target(accept: Boolean) = object : ClicksAccessibilityKeyBridge.Target {
         override fun dispatchClicksAccessibilityKeyEvent(event: KeyEvent): Boolean = accept
         override fun dispatchClicksDirectAction(action: ClicksButtonDirectAction): Boolean = accept
+        override fun dispatchCapturedTrackpadMotion(event: android.view.MotionEvent): Boolean = accept
     }
 
     private fun keyDown() = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_U)

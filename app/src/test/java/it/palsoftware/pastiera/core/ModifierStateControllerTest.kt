@@ -67,6 +67,33 @@ class ModifierStateControllerTest {
     }
 
     @Test
+    fun testTapAfterTurningShiftOffGivesShiftNotCapsLock() {
+        val controller = ModifierStateController(60_000L)
+
+        controller.handleShiftKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
+        controller.handleShiftKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
+        controller.registerNonModifierKey()
+        controller.handleShiftKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT) // off again
+        controller.handleShiftKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
+        assertEquals(ShiftState.OFF, controller.shiftState)
+
+        controller.handleShiftKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT) // quickly on again
+        assertEquals(ShiftState.ONE_SHOT, controller.shiftState)
+    }
+
+    @Test
+    fun testDoubleTapOnAnAutomaticCapitalGivesCapsLock() {
+        val controller = ModifierStateController(60_000L)
+        controller.requestShiftOneShotFromAutoCap()
+
+        controller.handleShiftKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT) // the automatic capital off
+        controller.handleShiftKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
+        assertEquals(ShiftState.OFF, controller.shiftState)
+        controller.handleShiftKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT) // quickly again
+        assertEquals(ShiftState.CAPS, controller.shiftState)
+    }
+
+    @Test
     fun testNonModifierBetweenShiftTapsPreventsCapsLock() {
         val controller = ModifierStateController(doubleTapThreshold)
 

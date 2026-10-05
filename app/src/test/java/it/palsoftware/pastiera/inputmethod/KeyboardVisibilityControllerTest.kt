@@ -381,6 +381,49 @@ class KeyboardVisibilityControllerTest {
         assertTrue(h.actions.isEmpty())
     }
 
+    @Test
+    fun hiddenAppNeverShowsTheSurface() {
+        val h = Harness()
+        h.hiddenForApp = true
+
+        h.controller.ensureImeSurfaceVisible()
+        h.controller.onExplicitShowRequested()
+        h.controller.onHardwareInputRequested()
+
+        assertTrue(h.actions.isEmpty())
+        assertEquals(0, h.inputAttachments + h.candidatesAttachments + h.showRequests)
+    }
+
+    @Test
+    fun hideForAppClosesTheSurfaceAndDropsPendingShows() {
+        val h = Harness()
+        h.controller.ensureImeSurfaceVisible() // a show is pending
+        h.hiddenForApp = true
+
+        h.controller.hideForApp()
+        h.drain()
+
+        assertEquals(1, h.hideRequests)
+        assertEquals(1, h.windowHides)
+        assertEquals(listOf(false), h.candidatesShown)
+        assertEquals(0, h.inputAttachments + h.showRequests)
+    }
+
+    @Test
+    fun leavingTheHiddenAppShowsTheSurfaceAgain() {
+        val h = Harness()
+        h.hiddenForApp = true
+        h.controller.hideForApp()
+        h.hiddenForApp = false
+
+        h.controller.onInputStarted(restarting = false)
+        h.controller.ensureImeSurfaceVisible()
+        h.runNext()
+
+        assertEquals(1, h.inputAttachments)
+        assertEquals(1, h.showRequests)
+    }
+
     private inner class Harness {
         var active = true
         var connection: InputConnection? = mock(InputConnection::class.java)
@@ -393,6 +436,7 @@ class KeyboardVisibilityControllerTest {
         var rejectHideRequest = false
         var windowHides = 0
         var refreshes = 0
+        var hiddenForApp = false
         var containerSynchronizations = 0
         val requestedInputShown = mutableListOf<Boolean>()
         val candidatesShown = mutableListOf<Boolean>()
@@ -425,7 +469,8 @@ class KeyboardVisibilityControllerTest {
                 if (rejectHideRequest) throw IllegalStateException("Window detached")
             },
             requestShowInputView = { showRequests++ },
-            refreshStatusBar = { refreshes++ }
+            refreshStatusBar = { refreshes++ },
+            isHiddenForApp = { hiddenForApp }
         )
         fun runNext() = actions.removeAt(0).second.invoke()
         fun hasImmediateActions() = actions.any { it.first == 0L }

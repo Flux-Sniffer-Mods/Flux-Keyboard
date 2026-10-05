@@ -20,23 +20,30 @@ class CornerButtonThemeTest {
     fun roundedDisplayPreservesButtonThemeAndRefreshesBadgeColors() {
         val context = RuntimeEnvironment.getApplication()
         SettingsManager.setTitan2EliteRoundedCornerInsetsEnabled(context, true)
+        // Rounded corner buttons are the contoured-LEDs corner style
+        SettingsManager.setTitan2EliteContourLeds(context, true)
         val host = StatusBarButtonHost(context, StatusBarButtonRegistry())
         host.themeOverride = StatusBarButtonStyles.ThemeOverride(Color.YELLOW, Color.MAGENTA, Color.BLACK)
         val hosted = requireNotNull(host.getOrCreateButton(StatusBarButtonId.Clipboard, 40, StatusBarCallbacks(), 80, 40))
         val badge = hosted.button.getTag(R.id.tag_badge_view) as TextView
-        assertEquals(Color.BLACK, badge.currentTextColor)
+        // The count is a pill in the accent colour, with text that reads on it
+        assertEquals(Color.MAGENTA, (badge.background as GradientDrawable).color!!.defaultColor)
+        assertEquals(Color.WHITE, badge.currentTextColor)
         val background = hosted.button.background.current as GradientDrawable
         assertEquals(Color.YELLOW, background.color!!.defaultColor)
         assertEquals(StatusBarButtonStyles.cornerRadiusForSize(40), background.cornerRadius)
 
         host.themeOverride = StatusBarButtonStyles.ThemeOverride(Color.BLUE, Color.CYAN, Color.WHITE)
-        assertEquals(Color.WHITE, badge.currentTextColor)
+        assertEquals(Color.CYAN, (badge.background as GradientDrawable).color!!.defaultColor)
+        assertEquals(Color.BLACK, badge.currentTextColor)
         assertEquals(Color.BLUE, (hosted.button.background.current as GradientDrawable).color!!.defaultColor)
     }
     @Test
     fun outerIconMovesWithoutLedSurfaceAndRemainsStableAcrossRedrawAndDisable() {
         val activity = org.robolectric.Robolectric.buildActivity(android.app.Activity::class.java).setup().get()
         SettingsManager.setTitan2EliteRoundedCornerInsetsEnabled(activity, true)
+        // Rounded corner buttons are the contoured-LEDs corner style
+        SettingsManager.setTitan2EliteContourLeds(activity, true)
         val chrome = StatusBarController.ImeChromeLayout(activity).apply {
             orientation = android.widget.LinearLayout.HORIZONTAL
             bottomCornerRadiiPx = 100 to 100
@@ -73,6 +80,8 @@ class CornerButtonThemeTest {
     fun microphoneRetainsThemedContourAcrossRecordingAndThemeChanges() {
         val context = RuntimeEnvironment.getApplication()
         SettingsManager.setTitan2EliteRoundedCornerInsetsEnabled(context, true)
+        // Rounded corner buttons are the contoured-LEDs corner style
+        SettingsManager.setTitan2EliteContourLeds(context, true)
         val host = StatusBarButtonHost(context, StatusBarButtonRegistry())
         host.themeOverride = StatusBarButtonStyles.ThemeOverride(Color.GRAY, Color.BLUE, Color.WHITE)
         val hosted = requireNotNull(host.getOrCreateButton(StatusBarButtonId.Microphone, 80, StatusBarCallbacks(), 120, 100))
@@ -102,6 +111,8 @@ class CornerButtonThemeTest {
     fun lowRowFindsRoomAndContourIgnoresBottomPaddingAndUpdatesUpperCorners() {
         val activity = org.robolectric.Robolectric.buildActivity(android.app.Activity::class.java).setup().get()
         SettingsManager.setTitan2EliteRoundedCornerInsetsEnabled(activity, true)
+        // Rounded corner buttons are the contoured-LEDs corner style
+        SettingsManager.setTitan2EliteContourLeds(activity, true)
         SettingsManager.setTitan2EliteTopCornerMultiplier(activity, 2)
         val chrome = StatusBarController.ImeChromeLayout(activity).apply { bottomCornerRadiiPx = 100 to 100 }
         activity.setContentView(chrome)
@@ -158,6 +169,8 @@ class CornerButtonThemeTest {
     fun languagePaddingAndSizeStayStableAndRestoreWhenMovedInward() {
         val activity = org.robolectric.Robolectric.buildActivity(android.app.Activity::class.java).setup().get()
         SettingsManager.setTitan2EliteRoundedCornerInsetsEnabled(activity, true)
+        // Rounded corner buttons are the contoured-LEDs corner style
+        SettingsManager.setTitan2EliteContourLeds(activity, true)
         val chrome = StatusBarController.ImeChromeLayout(activity).apply {
             orientation = android.widget.LinearLayout.HORIZONTAL
             bottomCornerRadiiPx = 100 to 100

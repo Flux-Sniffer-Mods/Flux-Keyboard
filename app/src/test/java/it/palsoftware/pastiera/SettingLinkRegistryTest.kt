@@ -46,16 +46,10 @@ class SettingLinkRegistryTest {
     @Test
     fun buildLinkAndParseLinkRoundTrip() {
         SettingLinkRegistry.entries.forEach { entry ->
-            assertEquals("https://pastiera.eu/settings/${entry.id}", SettingLinkRegistry.buildLink(entry.id))
-            for (host in listOf("pkb.rocks", "pastiera.eu")) {
-                assertEquals(
-                    entry.id,
-                    SettingLinkRegistry.parseSettingLink("https", host, "/settings/${entry.id}")
-                )
-            }
+            assertEquals("fluxkeyboard://setting/${entry.id}", SettingLinkRegistry.buildLink(entry.id))
             assertEquals(
                 entry.id,
-                SettingLinkRegistry.parseSettingLink("pastiera", "setting", "/${entry.id}")
+                SettingLinkRegistry.parseSettingLink("fluxkeyboard", "setting", "/${entry.id}")
             )
         }
     }
@@ -63,31 +57,25 @@ class SettingLinkRegistryTest {
     @Test
     fun parseLinkRejectsForeignSchemeHostAndEmptyPath() {
         assertNull(SettingLinkRegistry.parseSettingLink("https", "setting", "/text_input.auto_capitalize"))
-        assertNull(SettingLinkRegistry.parseSettingLink("pastiera", "settings", "/text_input.auto_capitalize"))
-        assertNull(SettingLinkRegistry.parseSettingLink("pastiera", "setting", "/"))
-        assertNull(SettingLinkRegistry.parseSettingLink("pastiera", "setting", null))
+        assertNull(SettingLinkRegistry.parseSettingLink("fluxkeyboard", "settings", "/text_input.auto_capitalize"))
+        assertNull(SettingLinkRegistry.parseSettingLink("fluxkeyboard", "setting", "/"))
+        assertNull(SettingLinkRegistry.parseSettingLink("fluxkeyboard", "setting", null))
     }
 
     @Test
     fun parseLinkAcceptsPathWithoutLeadingSlashAndTrimsWhitespace() {
         assertEquals(
             "text_input.auto_capitalize",
-            SettingLinkRegistry.parseSettingLink("pastiera", "setting", " /text_input.auto_capitalize ")
+            SettingLinkRegistry.parseSettingLink("fluxkeyboard", "setting", " /text_input.auto_capitalize ")
         )
     }
 
     @Test
-    fun webLinksRejectOtherOriginsAndMalformedPaths() {
+    fun linksToPastieraOrItsWebsitesAreNotOurs() {
         val id = "text_input.auto_capitalize"
-        for (host in listOf("www.pkb.rocks", "pkb.rocks.example.org", "example.org")) {
-            assertNull(SettingLinkRegistry.parseSettingLink("https", host, "/settings/$id"))
-        }
+        assertNull(SettingLinkRegistry.parseSettingLink("pastiera", "setting", "/$id"))
         for (host in listOf("pkb.rocks", "pastiera.eu")) {
-            assertNull(SettingLinkRegistry.parseSettingLink("http", host, "/settings/$id"))
-            for (path in listOf("/", "/settings/", "/setting/$id", "/settings/$id/extra",
-                "/settings/$id/", "/settings/../$id", "/settings/ $id", "/settingsx/$id")) {
-                assertNull(SettingLinkRegistry.parseSettingLink("https", host, path))
-            }
+            assertNull(SettingLinkRegistry.parseSettingLink("https", host, "/settings/$id"))
         }
     }
 
@@ -98,7 +86,7 @@ class SettingLinkRegistryTest {
 
     @Test
     fun buildSettingMarkdownUsesLabelWithDescriptionAndLinkWithout() {
-        val link = "pastiera://setting/text_input.auto_capitalize"
+        val link = "fluxkeyboard://setting/text_input.auto_capitalize"
         assertEquals(
             "[Auto capitalize]($link)",
             SettingLinkRegistry.buildSettingMarkdown("Auto capitalize", link, withDescription = true)
@@ -111,7 +99,7 @@ class SettingLinkRegistryTest {
 
     @Test
     fun buildSettingMarkdownEscapesBracketsInLabel() {
-        val link = "pastiera://setting/main.about"
+        val link = "fluxkeyboard://setting/main.about"
         assertEquals(
             "[\\[Advanced\\] stuff]($link)",
             SettingLinkRegistry.buildSettingMarkdown("[Advanced] stuff", link, withDescription = true)
@@ -186,20 +174,19 @@ class SettingLinkRegistryTest {
     }
 
     @Test
-    fun trackpadDetailLinksRouteThroughAdvancedSettings() {
+    fun trackpadDetailLinksRouteToTrackpadAndGestures() {
         val trackpadIds = setOf(
             SettingLinkIds.TRACKPAD_GESTURES_ENABLED,
             SettingLinkIds.TRACKPAD_PROVIDER,
             SettingLinkIds.TRACKPAD_SHIZUKU_DEVICE,
             SettingLinkIds.TRACKPAD_SENSITIVITY,
             SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
-            SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
-            SettingLinkIds.TRACKPAD_DEBUG
+            SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD
         )
 
         trackpadIds.forEach { id ->
             assertEquals(
-                SettingsDestination.Advanced,
+                SettingsDestination.TrackpadGestures,
                 requireNotNull(SettingLinkRegistry.byId(id)).route.destination
             )
         }
@@ -225,11 +212,11 @@ class SettingLinkRegistryTest {
     }
 
     @Test
-    fun ledColorsRouteToColorsTab() {
+    fun ledColorsRouteToStatusLedColours() {
         val route = requireNotNull(
             SettingLinkRegistry.byId(SettingLinkIds.KEYBOARD_THEME_LED_COLORS)
         ).route
 
-        assertEquals(KeyboardThemeEditorTab.Colors, route.keyboardThemeTab)
+        assertEquals(SettingsDestination.LedColors, route.destination)
     }
 }

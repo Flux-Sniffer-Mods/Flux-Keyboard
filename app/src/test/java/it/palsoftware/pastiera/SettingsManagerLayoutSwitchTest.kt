@@ -79,14 +79,14 @@ class SettingsManagerLayoutSwitchTest {
     }
 
     @Test
-    fun symAutoCloseOnTouch_defaultsEnabled_andPersistsDisabledState() {
+    fun symAutoCloseOnTouch_defaultsDisabled_andPersistsEnabledState() {
         val context = RuntimeEnvironment.getApplication()
 
-        assertTrue(SettingsManager.getSymAutoCloseOnTouch(context))
-
-        SettingsManager.setSymAutoCloseOnTouch(context, false)
-
         assertFalse(SettingsManager.getSymAutoCloseOnTouch(context))
+
+        SettingsManager.setSymAutoCloseOnTouch(context, true)
+
+        assertTrue(SettingsManager.getSymAutoCloseOnTouch(context))
     }
 
     @Test
@@ -232,10 +232,10 @@ class SettingsManagerLayoutSwitchTest {
         assertEquals(240f, SettingsManager.getTrackpadSuggestionSwipeThreshold(context), 0.01f)
         assertEquals(720f, SettingsManager.getTrackpadDeleteSwipeThreshold(context), 0.01f)
 
-        SettingsManager.setTrackpadSuggestionSwipeThreshold(context, 40f)
+        SettingsManager.setTrackpadSuggestionSwipeThreshold(context, 10f)
         SettingsManager.setTrackpadDeleteSwipeThreshold(context, 2000f)
 
-        assertEquals(120f, SettingsManager.getTrackpadSuggestionSwipeThreshold(context), 0.01f)
+        assertEquals(40f, SettingsManager.getTrackpadSuggestionSwipeThreshold(context), 0.01f)
         assertEquals(750f, SettingsManager.getTrackpadDeleteSwipeThreshold(context), 0.01f)
     }
 
@@ -491,7 +491,8 @@ class SettingsManagerLayoutSwitchTest {
             registry.getCommands(CommandSurface.NavMode)
                 .any { it.id == "device.home" && it.source == CommandSourceId.DeviceControl }
         )
-        assertFalse(
+        // Device control shows in the quick launcher by default
+        assertTrue(
             registry.getCommands(CommandSurface.QuickLauncher)
                 .any { it.id == "device.home" }
         )
@@ -720,6 +721,13 @@ class SettingsManagerLayoutSwitchTest {
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.Apps.storageValue, CommandSurface.NavMode))
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.Pastiera.storageValue, CommandSurface.QuickLauncher))
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.AssignedKey))
+        assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.QuickLauncher))
+        assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.NavMode))
+        // Turned off, a source only leaves the quick launcher's search
+        SettingsManager.setCommandSourceVisibility(
+            context,
+            listOf(SettingsManager.CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = false))
+        )
         assertFalse(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.QuickLauncher))
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.NavMode))
     }

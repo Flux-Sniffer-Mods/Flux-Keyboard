@@ -96,6 +96,28 @@ class ClipboardHistoryPrivacyTest {
     }
 
     @Test
+    fun aPasswordManagersCopyStaysOutOfTheHistoryAndIsMarkedSensitive() {
+        val clip = ClipData.newPlainText("password", "hunter2").apply {
+            description.extras = android.os.PersistableBundle().apply {
+                putBoolean("android.content.extra.IS_SENSITIVE", true)
+            }
+        }
+        clipboardManager.setPrimaryClip(clip)
+        historyManager.onPrimaryClipChanged()
+
+        assertEquals(0, historyManager.getHistorySize())
+        val recent = historyManager.recentCopy
+        assertTrue(recent?.sensitive == true)
+        // Never spelt out if the copy is logged
+        assertFalse(recent.toString().contains("hunter2"))
+
+        copyToSystemClipboard("plain text")
+        historyManager.onPrimaryClipChanged()
+        assertEquals(1, historyManager.getHistorySize())
+        assertFalse(historyManager.recentCopy!!.sensitive)
+    }
+
+    @Test
     fun allHistoryActionsAreBlockedWhileLocked() {
         copyToSystemClipboard("protected-secret")
         historyManager.onPrimaryClipChanged()

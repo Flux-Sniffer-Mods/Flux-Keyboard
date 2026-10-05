@@ -52,7 +52,7 @@ class InputDeviceSettingLinkTest {
         assertTrue(emoji.contains("text_expansion.emoji_symbols.tab"))
         assertFalse(emoji.contains("text_expansion.snippets.tab"))
         listOf("text_expansion.snippets.tab", "text_expansion.emoji_symbols.tab").forEach { id ->
-            assertEquals(SettingsDestination.TextInput, requireNotNull(SettingLinkRegistry.byId(id)).route.destination)
+            assertEquals(SettingsDestination.TextExpansion, requireNotNull(SettingLinkRegistry.byId(id)).route.destination)
         }
     }
 
@@ -72,12 +72,19 @@ class InputDeviceSettingLinkTest {
                     assertTrue("Empty label for ${entry.id} ($language)", label.isNotBlank())
                     assertFalse("Unformatted label for ${entry.id}: $label", unexpandedFormat.containsMatchIn(label))
                 }
-                if (entry.id.startsWith("sym.")) {
+                if (entry.id in SYM_ACTIVITY_ENTRIES) {
                     assertTrue("SYM entry needs its activity: ${entry.id}", entry.route.symCustomization)
+                } else if (entry.id.startsWith("sym.")) {
+                    // Auto-close and the picker height live on the Emoji, symbols & GIFs screen
+                    assertEquals(entry.id, SettingsDestination.FluxEmojiGifs, entry.route.destination)
                 }
             }
         }
         assertEquals(KeyboardsDevicesDestination.BuiltIn, requireNotNull(SettingLinkRegistry.byId("hardware.profile")).route.keyboardsDevicesDestination)
         assertEquals(KeyboardsDevicesDestination.PowerKeyboard, requireNotNull(SettingLinkRegistry.byId("clicks.buttons.red_button")).route.keyboardsDevicesDestination)
+    }
+
+    private companion object {
+        val SYM_ACTIVITY_ENTRIES = setOf("sym.pages")
     }
 }

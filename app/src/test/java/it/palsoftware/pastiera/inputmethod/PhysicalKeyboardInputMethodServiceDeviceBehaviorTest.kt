@@ -10,6 +10,7 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.SymPagesConfig
 import it.palsoftware.pastiera.core.InputContextState
 import it.palsoftware.pastiera.core.ModifierStateController
+import it.palsoftware.pastiera.core.SymLayoutController
 import it.palsoftware.pastiera.data.layout.LayoutMappingRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -29,6 +30,10 @@ import java.lang.reflect.Proxy
 @Config(sdk = [33])
 class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
 
+    private companion object {
+        const val EMOJI_PICKER_PAGE = 4
+    }
+
     private lateinit var service: PhysicalKeyboardInputMethodService
     private lateinit var recorder: RecordingInputConnection
     private lateinit var inputConnection: InputConnection
@@ -39,6 +44,9 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         val context = RuntimeEnvironment.getApplication()
         DeviceSpecific.clearTestOverrides()
         SettingsManager.setSymPagesConfig(context, SymPagesConfig())
+        // The layers' own mappings: one page each, as before pages
+        SettingsManager.setEmojiLayerPages(context, false)
+        SettingsManager.setSymbolsPages(context, false)
         SettingsManager.resetSymMappings(context)
         SettingsManager.resetSymMappingsPage2(context)
         SettingsManager.setStaticVariationBarLayerStickyEnabled(context, true)
@@ -301,6 +309,46 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
+    fun appEnter_searchBoxSearches_evenWhenTheAppsEnterIsANewLine() {
+        SettingsManager.setAppEnterBehaviorPreset(RuntimeEnvironment.getApplication(), SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY)
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_CLASS_TEXT,
+            packageName = "com.android.vending",
+            imeOptions = EditorInfo.IME_ACTION_SEARCH
+        )
+        recorder.performEditorActionResult = true
+
+        val handled = service.onKeyDown(
+            KeyEvent.KEYCODE_ENTER,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 2_752L, 2_752L)
+        )
+
+        assertTrue(handled)
+        assertEquals(listOf(EditorInfo.IME_ACTION_SEARCH), recorder.editorActions)
+        assertFalse(recorder.committedTexts.contains("\n"))
+    }
+
+    @Test
+    fun appEnter_shiftEnterIsANewLine_inAChatBoxNotMarkedMultiLine() {
+        // WhatsApp's message box: Send action, not marked multi-line, Enter sends
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+            packageName = "com.whatsapp",
+            imeOptions = EditorInfo.IME_ACTION_SEND
+        )
+        recorder.performEditorActionResult = true
+
+        service.onKeyDown(
+            KeyEvent.KEYCODE_ENTER,
+            KeyEvent(2_753L, 2_753L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON)
+        )
+
+        assertTrue(recorder.editorActions.isEmpty())
+    }
+
+    @Test
     fun appEnter_facebookMessengerManualEditorStrategy_usesEditorAction() {
         configureAppEnterOverride(
             packageName = "com.facebook.orca",
@@ -439,6 +487,70 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
+    fun terminalMode_keepsTheKeyboardOutOfSightInTermux() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setTerminalModeEnabled(context, true)
+        val termux = EditorInfo().apply {
+            packageName = "com.termux"
+            // A terminal view: no text field, as Termux reports it
+            inputType = android.text.InputType.TYPE_NULL
+        }
+
+        SettingsManager.setTerminalModeHideKeyboard(context, true)
+        SettingsManager.setTerminalModeShowLeds(context, false)
+        service.onStartInput(termux, false)
+        assertFalse(service.onEvaluateInputViewShown())
+
+        // The option off: terminal mode no longer forces the keyboard away
+        SettingsManager.setTerminalModeHideKeyboard(context, false)
+        service.onStartInput(termux, false)
+        val shownWithoutHiding = service.onEvaluateInputViewShown()
+        service.onStartInput(editorInfo, false)
+        assertEquals(service.onEvaluateInputViewShown(), shownWithoutHiding)
+    }
+
+    @Test
+    fun terminalMode_emojiKeySendsTheChosenTerminalKey() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setTerminalModeEnabled(context, true)
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_GRAVE)
+        SettingsManager.setTerminalModeEmojiKeyAction(context, TerminalMode.EmojiKeyAction.Interrupt.id)
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_NULL,
+            packageName = "com.termux"
+        )
+
+        assertTrue(service.onKeyDown(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_000L)))
+        // Holding it doesn't send more interrupts
+        service.onKeyDown(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_500L, repeatCount = 1))
+        assertTrue(service.onKeyUp(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_600L)))
+
+        assertEquals(listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP), recorder.sentKeyEvents.map { it.action })
+        assertTrue(recorder.sentKeyEvents.all { it.keyCode == KeyEvent.KEYCODE_C && it.isCtrlPressed })
+        assertTrue(recorder.committedTexts.isEmpty())
+    }
+
+    @Test
+    fun terminalMode_emojiKeyAsAltActsAsAlt() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setTerminalModeEnabled(context, true)
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_GRAVE)
+        SettingsManager.setTerminalModeEmojiKeyAction(context, TerminalMode.EmojiKeyAction.Alt.id)
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_NULL,
+            packageName = "com.termux"
+        )
+
+        service.onKeyDown(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_000L))
+        assertTrue("Held, the emoji key is Alt", modifierController().altPhysicallyPressed)
+        service.onKeyUp(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_200L))
+        assertFalse(modifierController().altPhysicallyPressed)
+        assertTrue("Nothing of its own is sent", recorder.sentKeyEvents.none { it.keyCode == KeyEvent.KEYCODE_GRAVE })
+    }
+
+    @Test
     fun autoCap_manualShiftOff_survivesRestartOfCurrentField() {
         val context = RuntimeEnvironment.getApplication()
         SettingsManager.setAutoCapitalizeFirstLetter(context, true)
@@ -474,10 +586,49 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
-    fun autoCap_restrictedFieldsSetting_startsUriFieldWithShift() {
+    fun autoCap_recommendedSettings_startEveryTextBoxWithShift() {
+        val context = RuntimeEnvironment.getApplication()
+        assertTrue(it.palsoftware.pastiera.RecommendedSettings.apply(context))
+        val kinds = mapOf(
+            "plain" to InputType.TYPE_CLASS_TEXT,
+            "sentences" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES),
+            "multiline" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES),
+            "message" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+        )
+        var time = 20_000L
+        val failed = kinds.filter { (_, type) ->
+            focusNewField(newRecorder = RecordingInputConnection(), inputType = type, packageName = "com.example.notes")
+            service.onStartInputView(editorInfo, false)
+            time += 1_000L
+            pressKey(KeyEvent.KEYCODE_H, time)
+            !recorder.committedTexts.joinToString("").startsWith("H")
+        }.keys.associateWith { recorder.committedTexts }
+        assertEquals(emptyMap<String, Any>(), failed)
+    }
+
+    @Test
+    fun exactTyping_onlyForFieldsTheAppAsksForNoSuggestions() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setExactTypingForNoSuggestionFields(context, true)
+        SettingsManager.setAutoCapitalizeFirstLetter(context, true)
+        // The keyboard's own no-suggestions flag doesn't make a plain field exact
+        focusNewField(newRecorder = RecordingInputConnection(), inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+        service.onStartInputView(editorInfo, false)
+        assertTrue(modifierController().shiftOneShot)
+        // A field the app marks no-suggestions is
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        )
+        service.onStartInputView(editorInfo, false)
+        assertFalse(modifierController().shiftOneShot)
+    }
+
+    @Test
+    fun autoCap_linksChosen_startsUriFieldWithShift() {
         val context = RuntimeEnvironment.getApplication()
         SettingsManager.setAutoCapitalizeFirstLetter(context, true)
-        SettingsManager.setAutoCapitalizeRestrictedFields(context, true)
+        ShiftFieldTypes.setEnabled(context, setOf(ShiftFieldTypes.Type.TEXT, ShiftFieldTypes.Type.LINKS))
 
         focusNewField(
             newRecorder = RecordingInputConnection(),
@@ -775,6 +926,10 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
 
     @Test
     fun deviceSanity_symACyclesDeviceThenEmojiThenSymbols_exactMappings() {
+        // This checks A's mapping on each page: the search key (A by default) is off here, and
+        // each page closes after a key so SYM opens it again
+        SettingsManager.setSearchKey(RuntimeEnvironment.getApplication(), KeyEvent.KEYCODE_UNKNOWN)
+        SettingsManager.setSymAutoClose(RuntimeEnvironment.getApplication(), true)
         val t0 = 4_000L
 
         tapSym(t0)
@@ -784,11 +939,12 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         )
         assertTrue("commits=${recorder.committedTexts}", recorder.committedTexts.contains("@"))
 
+        // The emoji and symbols defaults sit around the button keys: A's emoji is on F, its symbol on S
         tapSym(t0 + 200L) // re-open SYM (Device SYM)
         tapSym(t0 + 260L) // next page -> emoji
         service.onKeyDown(
-            KeyEvent.KEYCODE_A,
-            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A, t0 + 300L, t0 + 300L)
+            KeyEvent.KEYCODE_F,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_F, t0 + 300L, t0 + 300L)
         )
         assertTrue("commits=${recorder.committedTexts}", recorder.committedTexts.contains("😢"))
 
@@ -796,8 +952,8 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         tapSym(t0 + 460L) // next page -> emoji
         tapSym(t0 + 520L) // next page -> symbols
         service.onKeyDown(
-            KeyEvent.KEYCODE_A,
-            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A, t0 + 560L, t0 + 560L)
+            KeyEvent.KEYCODE_S,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_S, t0 + 560L, t0 + 560L)
         )
         assertTrue("commits=${recorder.committedTexts}", recorder.committedTexts.contains("="))
     }
@@ -917,6 +1073,290 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         assertFalse("Telex rewrite should not commit transformed text", recorder.committedTexts.contains("câ"))
     }
 
+    @Test
+    fun emojiPickerKey_rightShiftTogglesPickerWithoutTouchingShiftState() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+        val shiftOneShotBefore = modifierController().shiftOneShot
+
+        assertTrue(pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 7_000L).first)
+        assertEquals(EMOJI_PICKER_PAGE, symLayout().currentSymPage())
+        assertEquals(shiftOneShotBefore, modifierController().shiftOneShot)
+        assertFalse(modifierController().shiftPressed)
+
+        val (downHandled, upHandled) = pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 7_500L)
+        assertTrue(downHandled)
+        assertTrue(upHandled)
+        assertEquals(0, symLayout().currentSymPage())
+        assertEquals(shiftOneShotBefore, modifierController().shiftOneShot)
+    }
+
+    @Test
+    fun emojiPickerKey_rightShiftHeldForAChordDoesNotOpenThePicker() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+
+        service.onKeyDown(
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_RIGHT, 7_800L, 7_800L)
+        )
+        assertEquals("Opens on release, so it can be held for a chord", 0, symLayout().currentSymPage())
+        pressKey(KeyEvent.KEYCODE_W, 7_850L)
+        val upHandled = service.onKeyUp(
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_RIGHT, 7_800L, 7_900L)
+        )
+
+        assertTrue(upHandled)
+        assertEquals(0, symLayout().currentSymPage())
+
+        // The next plain tap opens it again
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 7_950L)
+        assertEquals(EMOJI_PICKER_PAGE, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun emojiPickerKey_heldWithoutChoosingLetsGo() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+
+        service.onKeyDown(
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_RIGHT, 8_000L, 8_000L)
+        )
+        val repeatHandled = service.onKeyDown(
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_RIGHT, 8_000L, 8_500L, repeatCount = 1)
+        )
+        service.onKeyUp(
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_RIGHT, 8_000L, 8_600L)
+        )
+
+        // Held past a tap and let go without choosing anything: nothing opens
+        assertTrue(repeatHandled)
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun emojiPickerKey_anyAssignedKeyWorks_notJustListedOnes() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_FUNCTION)
+
+        assertTrue(pressKey(KeyEvent.KEYCODE_FUNCTION, 8_800L).first)
+        assertEquals(EMOJI_PICKER_PAGE, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun hiddenApp_keysGoStraightToTheAppAndNothingOpens() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+        setField(service, "keyboardHiddenForApp", true)
+
+        val (emojiKeyDown, emojiKeyUp) = pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 11_000L)
+        val (letterDown, _) = pressKey(KeyEvent.KEYCODE_A, 11_500L)
+
+        assertFalse(emojiKeyDown)
+        assertFalse(emojiKeyUp)
+        assertFalse(letterDown)
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun layoutSwitchChords_notFromEmojiScreensOrWithTheEmojiKey() {
+        val context = RuntimeEnvironment.getApplication()
+        val blocked = PhysicalKeyboardInputMethodService::class.java
+            .getDeclaredMethod("layoutSwitchChordBlocked", Int::class.java, Boolean::class.java)
+            .apply { isAccessible = true }
+        fun isBlocked(keyCode: Int, symOpen: Boolean) = blocked.invoke(service, keyCode, symOpen) as Boolean
+
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_ALT_RIGHT)
+        assertFalse(isBlocked(KeyEvent.KEYCODE_ALT_LEFT, false))
+        assertTrue(isBlocked(KeyEvent.KEYCODE_ALT_RIGHT, false))
+        assertTrue(isBlocked(KeyEvent.KEYCODE_ALT_LEFT, true))
+    }
+
+    @Test
+    fun hiddenApp_holdingALetterInATextFieldDoesNotRepeatIntoTheApp() {
+        setField(service, "keyboardHiddenForApp", true)
+
+        // The first press goes to the app; its repeats would open Android's accent picker there
+        val first = service.onKeyDown(KeyEvent.KEYCODE_C, KeyEvent(14_000L, 14_000L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_C, 0))
+        val repeat = service.onKeyDown(KeyEvent.KEYCODE_C, KeyEvent(14_000L, 14_500L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_C, 1))
+        assertFalse(first)
+        assertTrue(repeat)
+
+        // Views that read raw keys (terminals, X11) still get every repeat
+        val rawView = EditorInfo().apply { inputType = InputType.TYPE_NULL }
+        setField(service, "mInputEditorInfo", rawView)
+        val rawRepeat = service.onKeyDown(KeyEvent.KEYCODE_C, KeyEvent(15_000L, 15_500L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_C, 1))
+        assertFalse(rawRepeat)
+    }
+
+    @Test
+    fun hiddenApp_withPanels_emojiKeyOpensPickerAndClosesItAgain() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+        setField(service, "keyboardHiddenForApp", true)
+        setField(service, "hiddenAppAllowsPanels", true)
+
+        val (openDown, openUp) = pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 12_000L)
+        assertTrue(openDown)
+        assertTrue(openUp)
+        assertEquals(4, symLayout().currentSymPage())
+
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 12_500L)
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun hiddenApp_withPanels_symSpaceIsAChordNotASymTap() {
+        setField(service, "keyboardHiddenForApp", true)
+        setField(service, "hiddenAppAllowsPanels", true)
+
+        service.onKeyDown(KeyEvent.KEYCODE_SYM, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SYM, 13_000L, 13_000L))
+        assertTrue(service.onKeyDown(KeyEvent.KEYCODE_SPACE, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SPACE, 13_050L, 13_050L)))
+        service.onKeyUp(KeyEvent.KEYCODE_SPACE, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SPACE, 13_050L, 13_100L))
+        service.onKeyUp(KeyEvent.KEYCODE_SYM, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SYM, 13_000L, 13_150L))
+
+        // No symbols panel over the app
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun hiddenApp_withPanels_keyPressedBeforeThePanelReleasesToTheApp() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+        setField(service, "keyboardHiddenForApp", true)
+        setField(service, "hiddenAppAllowsPanels", true)
+
+        val shiftDown = service.onKeyDown(
+            KeyEvent.KEYCODE_SHIFT_LEFT,
+            KeyEvent(13_000L, 13_000L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        )
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 13_100L)
+        assertEquals(4, symLayout().currentSymPage())
+        val shiftUp = service.onKeyUp(
+            KeyEvent.KEYCODE_SHIFT_LEFT,
+            KeyEvent(13_000L, 13_300L, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        )
+
+        assertFalse(shiftDown)
+        assertFalse(shiftUp)
+    }
+
+    @Test
+    fun emojiPickerKey_off_rightShiftDoesNotOpenPicker() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_UNKNOWN)
+
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 9_000L)
+
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun emojiPickerKey_leftShiftUnaffectedWhenRightShiftIsDedicated() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+
+        tapShift(9_500L)
+
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun emojiPickerKey_passesThroughOutsideTextFields() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+        val nonEditable = EditorInfo().apply { inputType = InputType.TYPE_NULL }
+        setField(service, "mInputEditorInfo", nonEditable)
+        setField(service, "inputContextState", InputContextState.fromEditorInfo(nonEditable))
+
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 10_000L)
+
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun tappedSymOrEmojiKey_backCancelsItsOneKey() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setSymStickyTap(context, true)
+        SettingsManager.setEmojiStickyTap(context, true)
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+
+        tapSym(30_000L)
+        assertTrue(getField<Boolean>(service, "symSticky"))
+        assertTrue(pressKey(KeyEvent.KEYCODE_BACK, 30_100L).first)
+        assertFalse(getField<Boolean>(service, "symSticky"))
+        pressKey(KeyEvent.KEYCODE_A, 30_200L)
+        assertEquals(listOf("a"), recorder.committedTexts)
+
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 31_000L)
+        assertTrue(getField<Boolean>(service, "emojiSticky"))
+        pressKey(KeyEvent.KEYCODE_BACK, 31_100L)
+        assertFalse(getField<Boolean>(service, "emojiSticky"))
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun tappedSymKey_typesOneSymbolThenLetters() {
+        SettingsManager.setSymStickyTap(RuntimeEnvironment.getApplication(), true)
+
+        tapSym(32_000L)
+        pressKey(KeyEvent.KEYCODE_A, 32_100L)
+        pressKey(KeyEvent.KEYCODE_A, 32_200L)
+
+        assertEquals(2, recorder.committedTexts.size)
+        assertTrue(recorder.committedTexts[0] != "a")
+        assertEquals("a", recorder.committedTexts[1])
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun shiftHeldWithBackspace_deletesTheCharacterAfterTheCursor() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), true)
+        recorder.textBeforeCursor = "abc"
+        val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+        service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_000L, shiftMeta))
+        val handled = service.onKeyDown(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 40_050L, 40_050L, shiftMeta))
+        service.onKeyUp(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL, 40_050L, 40_080L, shiftMeta))
+        service.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_100L))
+
+        assertTrue(handled)
+        assertEquals(listOf(1), recorder.forwardDeletes)
+        assertEquals("abc", recorder.textBeforeCursor)
+    }
+
+    @Test
+    fun shiftHeldWithBackspace_deletesBackwardsWhenTheSettingIsOff() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), false)
+        recorder.textBeforeCursor = "abc"
+        val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+        service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 42_000L, 42_000L, shiftMeta))
+        service.onKeyDown(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 42_050L, 42_050L, shiftMeta))
+
+        assertTrue(recorder.forwardDeletes.isEmpty())
+    }
+
+    @Test
+    fun backspaceAfterATappedShift_stillDeletesBackwards() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), true)
+        recorder.textBeforeCursor = "abc"
+        tapShift(41_000L)
+        pressKey(KeyEvent.KEYCODE_DEL, 41_100L)
+
+        assertTrue(recorder.forwardDeletes.isEmpty())
+    }
+
+    private fun pressKey(keyCode: Int, start: Long): Pair<Boolean, Boolean> {
+        val down = service.onKeyDown(keyCode, keyEvent(KeyEvent.ACTION_DOWN, keyCode, start, start))
+        val up = service.onKeyUp(keyCode, keyEvent(KeyEvent.ACTION_UP, keyCode, start, start + 30L))
+        return down to up
+    }
+
+    private fun symLayout(): SymLayoutController = getField(service, "symLayoutController")
+
     private fun tapAlt(start: Long) {
         service.onKeyDown(
             KeyEvent.KEYCODE_ALT_LEFT,
@@ -1007,13 +1447,15 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     private fun focusNewField(
         newRecorder: RecordingInputConnection,
         inputType: Int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
-        packageName: String = "it.palsoftware.pastiera.test"
+        packageName: String = "it.palsoftware.pastiera.test",
+        imeOptions: Int = 0
     ) {
         recorder = newRecorder
         inputConnection = recorder.asProxy()
         editorInfo = EditorInfo().apply {
             this.inputType = inputType
             this.packageName = packageName
+            this.imeOptions = imeOptions
         }
         setField(service, "mInputConnection", inputConnection)
         setField(service, "mStartedInputConnection", inputConnection)
@@ -1095,6 +1537,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         val editorActions = mutableListOf<Int>()
         val contextMenuActions = mutableListOf<Int>()
         val deleteSurroundingTextCalls = mutableListOf<Pair<Int, Int>>()
+        val forwardDeletes = mutableListOf<Int>()
 
         fun asProxy(): InputConnection {
             return Proxy.newProxyInstance(
@@ -1108,6 +1551,10 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
                             committedTexts += text
                             textBeforeCursor += text
                         }
+                        true
+                    }
+                    "deleteSurroundingTextInCodePoints" -> {
+                        forwardDeletes += ((args?.getOrNull(1) as? Int) ?: 0)
                         true
                     }
                     "deleteSurroundingText" -> {

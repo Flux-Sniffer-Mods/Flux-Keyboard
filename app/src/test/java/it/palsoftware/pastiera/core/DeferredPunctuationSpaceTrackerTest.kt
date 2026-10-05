@@ -30,7 +30,83 @@ class DeferredPunctuationSpaceTrackerTest {
             .commit()
         SettingsManager.setSpaceAfterPunctuation(context, "?!")
         DeferredPunctuationSpaceTracker.clear()
+        DeferredPunctuationSpaceTracker.startField(null)
         inputConnection = FakeInputConnection(context)
+    }
+
+    @Test
+    fun noSpacesInEmailAndSignInFields() {
+        fun field(type: Int, hint: String? = null) = android.view.inputmethod.EditorInfo().apply {
+            inputType = type
+            hintText = hint
+        }
+        val text = android.text.InputType.TYPE_CLASS_TEXT
+        assertTrue(DeferredPunctuationSpaceTracker.appliesTo(field(text)))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(
+            field(text or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(
+            field(text or android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS)))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(field(text, "Email or phone")))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(field(android.text.InputType.TYPE_CLASS_NUMBER)))
+
+        DeferredPunctuationSpaceTracker.startField(field(text or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS))
+        commit("?")
+        commit("a")
+        assertEquals("?a", inputConnection.text)
+    }
+
+    @Test
+    fun emoticonsKeepTheirShape() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        listOf(":-)", ";(", ":D", ":'(", ":P ").forEach { face ->
+            inputConnection.text = ""
+            DeferredPunctuationSpaceTracker.clear()
+            face.forEach { commit(it.toString()) }
+            assertEquals(face, inputConnection.text)
+        }
+    }
+
+    @Test
+    fun emoticonLetterThatStartsAWordGetsItsSpaceBack() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        "Note:Do".forEach { commit(it.toString()) }
+        assertEquals("Note: Do", inputConnection.text)
+    }
+
+    @Test
+    fun fullStopsAndOtherWordsKeepTheirSpace() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        "a.(b,\"c:wo".forEach { commit(it.toString()) }
+        assertEquals("a. (b, \"c: wo", inputConnection.text)
+    }
+
+    @Test
+    fun aLetterAfterAColonWaitsForTheNextKey() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        ":v".forEach { commit(it.toString()) }
+        assertEquals(":v", inputConnection.text)
+        commit("e")
+        assertEquals(": ve", inputConnection.text)
+    }
+
+    @Test
+    fun numbersTimesAndDecimalsStayTogether() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        "1,000 at 12:30 is 3.14, ok:3".forEach { commit(it.toString()) }
+        assertEquals("1,000 at 12:30 is 3.14, ok:3", inputConnection.text)
+        inputConnection.text = ""
+        DeferredPunctuationSpaceTracker.clear()
+        SettingsManager.setEmoticonPunctuation(context, false)
+        "12:30 a,1".forEach { commit(it.toString()) }
+        assertEquals("12:30 a, 1", inputConnection.text)
+    }
+
+    @Test
+    fun emoticonOptionOffSpacesAsBefore() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        SettingsManager.setEmoticonPunctuation(context, false)
+        ":-)".forEach { commit(it.toString()) }
+        assertEquals(": -)", inputConnection.text)
     }
 
     @Test
@@ -82,11 +158,23 @@ class DeferredPunctuationSpaceTrackerTest {
     private class FakeInputConnection(context: Context) : BaseInputConnection(View(context), true) {
         private val buffer = StringBuilder()
 
-        val text: String
+        var text: String
             get() = buffer.toString()
+            set(value) {
+                buffer.setLength(0)
+                buffer.append(value)
+            }
 
         override fun commitText(text: CharSequence?, newCursorPosition: Int): Boolean {
             buffer.append(text ?: "")
+            return true
+        }
+
+        override fun getTextBeforeCursor(n: Int, flags: Int): CharSequence =
+            buffer.substring(maxOf(0, buffer.length - n))
+
+        override fun deleteSurroundingText(beforeLength: Int, afterLength: Int): Boolean {
+            buffer.setLength(maxOf(0, buffer.length - beforeLength))
             return true
         }
     }

@@ -1,7 +1,10 @@
 package it.palsoftware.pastiera.inputmethod.ui
 
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.os.Bundle
 import android.view.KeyEvent
+import it.palsoftware.pastiera.SettingsManager
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.CompletionInfo
@@ -74,6 +77,9 @@ class EmojiPickerOnScreenSearchTest {
 
     @Test
     fun emojiCommitRunsSynchronouslyBeforeAutoClose() {
+        // Auto-close on, whether the picker follows SYM auto-close (no emoji key) or the emoji
+        // key's own setting (an emoji key is set; the fork defaults to Right Shift)
+        SettingsManager.setEmojiKeyAutoClose(RuntimeEnvironment.getApplication(), true)
         val events = mutableListOf<String>()
         var viewRef: EmojiPickerView? = null
         val view = EmojiPickerView(RuntimeEnvironment.getApplication()) {
@@ -90,6 +96,55 @@ class EmojiPickerOnScreenSearchTest {
 
         assertEquals(listOf("commit", "close"), events)
         assertEquals(listOf("\uD83D\uDE00"), ic.committedTexts)
+    }
+
+    @Test
+    fun withAnEmojiKeyThePickerStaysOpenUnlessItsOwnAutoCloseIsOn() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+        SettingsManager.setEmojiKeyAutoClose(context, false)
+        val events = mutableListOf<String>()
+        val view = EmojiPickerView(context) { events.add("close") }
+        val ic = RecordingInputConnection { events.add("commit") }
+        view.setInputConnection(ic)
+
+        invokeOnEmojiSelected(view, "\uD83D\uDE00", "smileys")
+
+        // Typed, and the picker stays open for the next emoji (SYM auto-close doesn't apply)
+        assertEquals(listOf("commit"), events)
+    }
+
+    @Test
+    fun symbolSearchShowsItsResultsInTheEmojiGridItself() {
+        val view = EmojiPickerView(RuntimeEnvironment.getApplication())
+        val grid = view.privateField("recyclerView").get(view) as RecyclerView
+
+        view.openSymbols()
+
+        // No separate grid that might stay hidden: the visible grid switches content
+        assertEquals("SymbolAdapter", grid.adapter!!::class.java.simpleName)
+        assertEquals(8, (grid.layoutManager as GridLayoutManager).spanCount)
+        assertEquals(View.VISIBLE, grid.visibility)
+
+        view.refresh()
+
+        assertTrue(grid.adapter!!::class.java.simpleName in setOf("SectionAdapter", "SearchAdapter"))
+    }
+
+    @Test
+    fun dataRefreshKeepsSymbolSearchButAFreshOpeningLeavesIt() {
+        val view = EmojiPickerView(RuntimeEnvironment.getApplication())
+        fun symbolMode() = view.privateField("symbolMode")?.get(view) as Boolean
+
+        view.openSymbols()
+        assertTrue(symbolMode())
+
+        // e.g. the downloadable emoji font finished loading while symbol search was open
+        view.refresh(resetModes = false)
+        assertTrue(symbolMode())
+
+        view.refresh()
+        assertFalse(symbolMode())
     }
 
     @Test
@@ -197,6 +252,67 @@ class EmojiPickerOnScreenSearchTest {
         assertTrue(handled)
         assertEquals(listOf("\uD83D\uDE80"), ic.committedTexts)
         assertEquals(listOf("close"), events)
+    }
+
+    @Test
+    fun enterAfterAPickOnlyCloses() {
+        val events = mutableListOf<String>()
+        val view = EmojiPickerView(RuntimeEnvironment.getApplication()) { events.add("close") }
+        view.setPrivateField("isSearchPanelVisible", true)
+        view.setPrivateField("searchInputCaptureEnabled", true)
+        view.setPrivateField(
+            "lastSearchResults",
+            listOf(
+                EmojiSearchRepository.EmojiSearchResult(
+                    EmojiRepository.EmojiEntry("\uD83D\uDE80", emptyList()),
+                    "travel",
+                    1
+                )
+            )
+        )
+        view.setPrivateField("pickedSinceSearchChange", true)
+        val ic = RecordingInputConnection()
+        view.setInputConnection(ic)
+
+        view.handleSearchKeyDown(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
+
+        // "Done": no second copy of the first result
+        assertTrue(ic.committedTexts.isEmpty())
+        assertEquals(listOf("close"), events)
+    }
+
+    @Test
+    fun symbolSearchEnterWithNothingFoundCloses() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setSymbolSearchEnterPicks(context, true)
+        val events = mutableListOf<String>()
+        val view = EmojiPickerView(context) { events.add("close") }
+        val ic = RecordingInputConnection()
+        view.setInputConnection(ic)
+        view.openSymbols()
+
+        view.handleSearchKeyDown(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
+
+        assertTrue(ic.committedTexts.isEmpty())
+        assertEquals(listOf("close"), events)
+    }
+
+    @Test
+    fun enterLeavesSymbolSearchOpenWhenItsSettingIsOff() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setSymbolSearchEnterPicks(context, false)
+        try {
+            val events = mutableListOf<String>()
+            val view = EmojiPickerView(context) { events.add("close") }
+            view.setInputConnection(RecordingInputConnection())
+            view.openSymbols()
+
+            view.handleSearchKeyDown(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
+
+            assertTrue(events.isEmpty())
+        } finally {
+            SettingsManager.setSymbolSearchEnterPicks(context, true)
+        }
     }
 
     @Test

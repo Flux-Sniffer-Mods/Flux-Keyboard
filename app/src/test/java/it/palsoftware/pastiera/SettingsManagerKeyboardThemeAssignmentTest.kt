@@ -23,6 +23,47 @@ class SettingsManagerKeyboardThemeAssignmentTest {
             .edit()
             .clear()
             .commit()
+        // These check assignment itself: start from a fixed theme, not the default follow-system
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.KeyboardThemeTarget.values().forEach { target ->
+            SettingsManager.setKeyboardThemeAssignmentMode(context, target, SettingsManager.KEYBOARD_THEME_ASSIGNMENT_MODE_FIXED)
+        }
+    }
+
+    @Test
+    fun byDefaultTheKeyboardFollowsTheSystemWithTheClassicThemes() {
+        val context = RuntimeEnvironment.getApplication()
+        context.getSharedPreferences("pastiera_prefs", android.content.Context.MODE_PRIVATE).edit().clear().commit()
+        val target = SettingsManager.KeyboardThemeTarget.HARDWARE
+        assertEquals(
+            SettingsManager.KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM,
+            SettingsManager.getKeyboardThemeAssignmentMode(context, target)
+        )
+        // Light mode here: Classic Cloud
+        assertEquals(0xFFCCD2DC.toInt(), SettingsManager.getEffectiveKeyboardTheme(context, target).background)
+        assertEquals(0xFF1C1C1E.toInt(), SettingsManager.getKeyboardThemeSystemSlot(context, target, dark = true).background)
+    }
+
+    @Test
+    fun aKeyboardStillColouredLikeARemovedThemeMovesToTheClassicOnes() {
+        val context = RuntimeEnvironment.getApplication()
+        val prefs = context.getSharedPreferences("pastiera_prefs", android.content.Context.MODE_PRIVATE)
+        prefs.edit().clear().commit()
+        val target = SettingsManager.KeyboardThemeTarget.HARDWARE
+        val nord = removedBuiltInThemes().first { it.name == "Nord" }
+        SettingsManager.setKeyboardThemeAssignmentMode(context, target, SettingsManager.KEYBOARD_THEME_ASSIGNMENT_MODE_FIXED)
+        prefs.edit().putString(
+            SettingsManager.keyboardThemeKeyForTarget(target),
+            org.json.JSONObject()
+                .put("background", nord.background).put("normal_key", nord.normalKey)
+                .put("text_and_icons", nord.textAndIcons).put("accent", nord.accent).toString()
+        ).commit()
+
+        assertEquals(0xFFCCD2DC.toInt(), SettingsManager.getEffectiveKeyboardTheme(context, target).background)
+        assertEquals(
+            SettingsManager.KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM,
+            SettingsManager.getKeyboardThemeAssignmentMode(context, target)
+        )
     }
 
     @Test

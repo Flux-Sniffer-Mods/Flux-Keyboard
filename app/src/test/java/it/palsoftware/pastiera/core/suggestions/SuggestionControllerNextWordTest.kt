@@ -81,6 +81,27 @@ class SuggestionControllerNextWordTest {
     }
 
     @Test
+    fun incognitoLearnsNothing() {
+        val controller = newController()
+        controller.incognito = true
+
+        typeWord(controller, "teste")
+        pressSpace(controller)
+        typeWord(controller, "das")
+        pressSpace(controller)
+        controller.flushNextWordLearningForTests()
+
+        assertTrue(store.predict("de-DE", "teste", limit = 3).isEmpty())
+
+        // Leaving incognito learns again
+        controller.incognito = false
+        typeWord(controller, "das")
+        pressSpace(controller)
+        controller.flushNextWordLearningForTests()
+        assertTrue(store.predict("de-DE", "teste", limit = 3).isEmpty())
+    }
+
+    @Test
     fun periodLearnsCurrentPairThenResetsContext() {
         val controller = newController()
 

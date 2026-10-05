@@ -9,14 +9,15 @@ class CustomizationSettingLinkTest {
     private val entries = customizationSettingEntries().associateBy { it.id }
 
     @Test
-    fun ledLinksPreserveTheEditedKeyboardTarget() {
+    fun ledColourLinksLandOnStatusLedColours() {
+        // The theme no longer edits LED colours; Look & sound > Status LED colours does
         for (target in SettingsManager.KeyboardThemeTarget.values()) {
-            val entry = entries.getValue("keyboard_theme.${target.name.lowercase()}.led_colors")
-            assertEquals(target, entry.route.keyboardThemeTarget)
-            assertEquals(KeyboardThemeEditorTab.Colors, entry.route.keyboardThemeTab)
-            assertEquals("keyboard_theme", entry.route.customizationDestination)
+            assertTrue(!entries.containsKey("keyboard_theme.${target.name.lowercase()}.led_colors"))
         }
-        assertNotNull(SettingLinkRegistry.byId(SettingLinkIds.KEYBOARD_THEME_LED_COLORS))
+        assertEquals(
+            SettingsDestination.LedColors,
+            SettingLinkRegistry.byId(SettingLinkIds.KEYBOARD_THEME_LED_COLORS)?.route?.destination
+        )
     }
 
     @Test

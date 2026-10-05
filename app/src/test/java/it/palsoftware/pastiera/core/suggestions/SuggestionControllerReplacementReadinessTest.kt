@@ -220,7 +220,25 @@ class SuggestionControllerReplacementReadinessTest {
         assertTrue(controller.onBoundaryKey(KeyEvent.KEYCODE_SPACE, null, input).replaced)
         assertTrue(controller.handleBackspaceUndo(KeyEvent.KEYCODE_DEL, input))
 
-        assertEquals("im", input.text)
+        // The space after the word stays (palsoftware/pastiera#316)
+        assertEquals("im ", input.text)
+    }
+
+    @Test
+    fun textReplacementCanBeUndoneWithAutoReplaceOff() {
+        val controller = newController(
+            ControlledDictionaryRepository(ready = false, loadFails = false),
+            experimentalSuggestionsEnabled = false,
+            suggestionsEnabled = false
+        )
+        val input = FakeInputConnection(context, "im")
+
+        assertTrue(controller.onBoundaryKey(KeyEvent.KEYCODE_SPACE, null, input).replaced)
+        assertEquals("I'm ", input.text)
+        assertTrue(controller.handleBackspaceUndo(KeyEvent.KEYCODE_DEL, input))
+        assertEquals("im ", input.text)
+        // A second backspace is an ordinary delete
+        assertFalse(controller.handleBackspaceUndo(KeyEvent.KEYCODE_DEL, input))
     }
 
     @Test

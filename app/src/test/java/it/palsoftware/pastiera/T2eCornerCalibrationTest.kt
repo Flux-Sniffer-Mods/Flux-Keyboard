@@ -43,4 +43,13 @@ class T2eCornerCalibrationTest {
         val inverse = T2eCornerGeometry.atY(100f, 1200f, p.y, config)
         assertEquals(p.x.toDouble(), inverse.x.toDouble(), 0.001)
     }
+
+    @Test fun defaultIsTheCornerCalibratedOnThePhone() {
+        val config = T2eCornerCalibration()
+        assertEquals(1.05f, config.size)
+        assertEquals(0.75f, config.offsetPx)
+        assertEquals(0.75f, config.squircle)
+        assertEquals(0f, config.shiftXPx)
+        assertEquals(0f, config.shiftYPx)
+    }
 }
