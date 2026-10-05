@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,9 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +36,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EmojiEmotions
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -59,16 +65,6 @@ fun SymCustomizationScreen(
     val coroutineScope = rememberCoroutineScope()
     val screenScrollState = rememberScrollState()
 
-    // Load saved auto-close SYM value
-    var symAutoClose by remember {
-        mutableStateOf(SettingsManager.getSymAutoClose(context))
-    }
-    var symAutoCloseOnTouch by remember {
-        mutableStateOf(SettingsManager.getSymAutoCloseOnTouch(context))
-    }
-    var emojiPickerExpandedHeight by remember {
-        mutableStateOf(SettingsManager.getEmojiPickerExpandedHeight(context))
-    }
 
     val titan2LayoutEnabled = remember {
         SettingsManager.isTitan2LayoutEnabled(context)
@@ -188,7 +184,7 @@ fun SymCustomizationScreen(
 
     // Load default mappings for page 2 (characters)
     val defaultMappingsPage2 = remember {
-        loadMappingsFromJson("common/sym/sym_key_mappings_page2.json")
+        SettingsManager.personaliseSymbolsDefaults(context, loadMappingsFromJson("common/sym/sym_key_mappings_page2.json"))
     }
 
     // Load custom mappings or fallback to defaults for page 1
@@ -341,14 +337,12 @@ fun SymCustomizationScreen(
                         Text(
                             text = stringResource(R.string.sym_swap_pages_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.sym_swap_pages_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -418,9 +412,6 @@ fun SymCustomizationScreen(
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
-                            }
-                            if (pageId == SymPagesConfig.PAGE_DEVICE) {
-                                FeatureStatusIcon(FeatureStatus.Construction)
                             }
                             if (pageId == SymPagesConfig.PAGE_DEVICE ||
                                 pageId == SymPagesConfig.PAGE_EMOJI ||
@@ -512,94 +503,6 @@ fun SymCustomizationScreen(
             }
         }
 
-        SettingsSectionDivider(stringResource(R.string.sym_behavior_section_title))
-
-
-        // Auto-Close SYM Layout option (in alto)
-        Surface(
-            modifier = Modifier.settingRow("sym.auto_close")
-                .fillMaxWidth()
-                .height(64.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Keyboard,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.sym_auto_close_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = stringResource(R.string.sym_auto_close_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2
-                    )
-                }
-                Switch(
-                    checked = symAutoClose,
-                    onCheckedChange = { enabled ->
-                        symAutoClose = enabled
-                        SettingsManager.setSymAutoClose(context, enabled)
-                    }
-                )
-            }
-        }
-
-        Surface(
-            modifier = Modifier.settingRow("sym.auto_close_touch")
-                .fillMaxWidth()
-                .height(64.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 52.dp, end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.sym_auto_close_touch_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium,
-                        color = if (symAutoClose) {
-                            MaterialTheme.colorScheme.onSurface
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                        maxLines = 1
-                    )
-                    Text(
-                        text = stringResource(R.string.sym_auto_close_touch_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2
-                    )
-                }
-                Switch(
-                    checked = symAutoCloseOnTouch,
-                    enabled = symAutoClose,
-                    onCheckedChange = { enabled ->
-                        symAutoCloseOnTouch = enabled
-                        SettingsManager.setSymAutoCloseOnTouch(context, enabled)
-                    }
-                )
-            }
-        }
-
         HorizontalDivider()
 
         }
@@ -670,53 +573,6 @@ fun SymCustomizationScreen(
 
         }
 
-        if (editingLayerPage == null) {
-
-        Surface(
-            modifier = Modifier.settingRow("sym.emoji_height")
-                .fillMaxWidth()
-                .height(64.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Keyboard,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.emoji_picker_expanded_height_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = stringResource(R.string.emoji_picker_expanded_height_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2
-                    )
-                }
-                Switch(
-                    checked = emojiPickerExpandedHeight,
-                    onCheckedChange = { enabled ->
-                        emojiPickerExpandedHeight = enabled
-                        SettingsManager.setEmojiPickerExpandedHeight(context, enabled)
-                    }
-                )
-            }
-        }
-
-        HorizontalDivider()
-
-        }
 
         // Emoji picker dialog
         if (showEmojiPicker && selectedKeyCode != null) {

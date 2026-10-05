@@ -80,7 +80,7 @@ class AlternateCharacterManager(
             deviceSymMappings.putAll(DeviceSymMappingRepository.load(assets, it))
         }
         symKeyMap.putAll(KeyMappingLoader.loadSymKeyMappings(assets))
-        symKeyMap2.putAll(KeyMappingLoader.loadSymKeyMappingsPage2(assets))
+        symKeyMap2.putAll(symbolsDefaults())
         symKeyMapUppercase.putAll(KeyMappingLoader.loadSymKeyMappingsUppercase(assets))
         symKeyMap2Uppercase.putAll(KeyMappingLoader.loadSymKeyMappingsPage2Uppercase(assets))
         reloadLongPressThreshold()
@@ -112,7 +112,22 @@ class AlternateCharacterManager(
     /**
      * Ricarica le mappature SYM, controllando prima le personalizzazioni.
      */
+    // The emoji layer for the app in use (emoji layer profiles, "switch by app"); null: your own
+    private var emojiLayerOverride: Map<Int, String>? = null
+
+    fun setEmojiLayerOverride(mappings: Map<Int, String>?) {
+        if (mappings == emojiLayerOverride) return
+        emojiLayerOverride = mappings
+        reloadSymMappings()
+    }
+
     fun reloadSymMappings() {
+        emojiLayerOverride?.let { override ->
+            symKeyMap.clear()
+            symKeyMap.putAll(override)
+            symKeyMapUppercase.clear()
+            return
+        }
         if (context != null) {
             val customMappings = it.palsoftware.pastiera.SettingsManager.getSymMappings(context)
             if (customMappings.isNotEmpty()) {
@@ -134,9 +149,30 @@ class AlternateCharacterManager(
     /**
      * Reloads SYM mappings for page 2, checking for custom mappings first.
      */
+    /**
+     * The symbols page's Recents key (A) holds no symbol: one mapped there before moves to K when
+     * K still has its old default („), so it stays on the page. Saved, so it happens once.
+     */
+    private fun movedOffRecentsKey(custom: Map<Int, String>): Map<Int, String> {
+        val ctx = context ?: return custom
+        val recentsKey = it.palsoftware.pastiera.SettingsManager.getEmojiLayerRecentsKey(ctx)
+        val onRecents = custom[recentsKey] ?: return custom
+        val moved = custom.toMutableMap()
+        moved.remove(recentsKey)
+        if (moved[KeyEvent.KEYCODE_K] == "\u201E") moved[KeyEvent.KEYCODE_K] = onRecents
+        it.palsoftware.pastiera.SettingsManager.saveSymMappingsPage2(ctx, moved)
+        return moved
+    }
+
+    /** The symbols page's own defaults, with your currency on them. */
+    private fun symbolsDefaults(): Map<Int, String> {
+        val defaults = KeyMappingLoader.loadSymKeyMappingsPage2(assets)
+        return context?.let { ctx -> it.palsoftware.pastiera.SettingsManager.personaliseSymbolsDefaults(ctx, defaults) } ?: defaults
+    }
+
     fun reloadSymMappings2() {
         if (context != null) {
-            val customMappings = it.palsoftware.pastiera.SettingsManager.getSymMappingsPage2(context)
+            val customMappings = movedOffRecentsKey(it.palsoftware.pastiera.SettingsManager.getSymMappingsPage2(context))
             if (customMappings.isNotEmpty()) {
                 symKeyMap2.clear()
                 symKeyMap2.putAll(customMappings)
@@ -145,7 +181,7 @@ class AlternateCharacterManager(
             } else {
                 // Use default mappings from JSON
                 symKeyMap2.clear()
-                symKeyMap2.putAll(KeyMappingLoader.loadSymKeyMappingsPage2(assets))
+                symKeyMap2.putAll(symbolsDefaults())
                 symKeyMap2Uppercase.clear()
                 symKeyMap2Uppercase.putAll(KeyMappingLoader.loadSymKeyMappingsPage2Uppercase(assets))
                 Log.d(TAG, "Loaded default SYM page 2 mappings")

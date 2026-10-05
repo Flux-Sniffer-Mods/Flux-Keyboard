@@ -14,7 +14,7 @@ import java.io.InputStream
 object KeyMappingLoader {
     private const val TAG = "KeyMappingLoader"
 
-    private val keyCodeMap = mapOf(
+    internal val keyCodeMap = mapOf(
         "KEYCODE_Q" to KeyEvent.KEYCODE_Q,
         "KEYCODE_W" to KeyEvent.KEYCODE_W,
         "KEYCODE_E" to KeyEvent.KEYCODE_E,

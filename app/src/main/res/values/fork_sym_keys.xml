@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flux Keyboard: sticky SYM and emoji keys, and the emoji key's LED -->
+<resources>
+    <string name="sym_sticky_title">Tap SYM for one symbol</string>
+    <string name="sym_sticky_description">A tap on SYM makes the next key type its symbol, without opening the symbols. Tap SYM twice to open them. Holding SYM works either way.</string>
+    <string name="emoji_sticky_title">Tap the emoji key for one emoji</string>
+    <string name="emoji_sticky_description">A tap on the emoji key makes the next key type its emoji from the emoji layer. Tap it twice to open the emoji screen. Holding the emoji key and pressing a key types that key\'s emoji either way.</string>
+    <string name="emoji_led_title">Emoji key LED</string>
+    <string name="emoji_led_description">A fifth status LED for the emoji key, lit while it\'s held and locked while it\'s tapped or an emoji screen is open. The other LEDs shrink to make room.</string>
+</resources>

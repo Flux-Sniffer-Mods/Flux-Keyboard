@@ -236,14 +236,12 @@ fun VariationCustomizationScreen(
                         Text(
                             text = stringResource(R.string.static_variation_preset_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.static_variation_bar_mode_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
                         ExposedDropdownMenuBox(
@@ -317,7 +315,7 @@ fun VariationCustomizationScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth().settingRow("variations.sticky_layer")
-                    .height(64.dp)
+                    .heightIn(min = 64.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -336,14 +334,12 @@ fun VariationCustomizationScreen(
                         Text(
                             text = stringResource(R.string.static_variation_layer_sticky_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = stringResource(R.string.static_variation_layer_sticky_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Switch(
