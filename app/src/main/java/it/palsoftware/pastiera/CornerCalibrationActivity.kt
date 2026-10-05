@@ -29,7 +29,7 @@ class CornerCalibrationActivity : LocalizedComponentActivity() {
         draft = if (savedInstanceState != null) T2eCornerCalibration(
             savedInstanceState.getFloat("size", 1f), savedInstanceState.getFloat("offset"),
             savedInstanceState.getFloat("squircle"), savedInstanceState.getFloat("shift_x"),
-            savedInstanceState.getFloat("shift_y")) else T2eCornerCalibration.readSaved(this)
+            savedInstanceState.getFloat("shift_y"), savedInstanceState.getFloat("led_offset", 4f)) else T2eCornerCalibration.readSaved(this)
         keyboardVisible = savedInstanceState?.getBoolean("keyboard_visible") ?: false
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -48,15 +48,15 @@ class CornerCalibrationActivity : LocalizedComponentActivity() {
         fun text(value: String, size: Float = 16f) = TextView(this).apply {
             text = value; textSize = size; setTextColor(Color.BLACK)
         }
-        controls.addView(text("Displaykurve kalibrieren", 22f))
-        controls.addView(text("Kontur direkt am Displayrand vergleichen. Änderungen bleiben bis „Übernehmen“ eine Vorschau."))
+        controls.addView(text("Display contour calibration", 22f))
+        controls.addView(text("Match the outline to the edge of the display. Changes are a preview until you tap Apply. With the real keyboard shown, contoured LEDs and the corner buttons follow along."))
         val toggle = Switch(this).apply {
-            text = "Echte Tastatur statt grauer Fläche"
+            text = "Show the real keyboard instead of a grey area"
             setTextColor(Color.BLACK)
             isChecked = keyboardVisible
         }
         keyboardField = EditText(this).apply {
-            hint = "Testfeld für die Tastatur"
+            hint = "Type here to open the keyboard"
             setTextColor(Color.BLACK)
             setHintTextColor(Color.DKGRAY)
             setBackgroundColor(Color.WHITE)
@@ -110,32 +110,34 @@ class CornerCalibrationActivity : LocalizedComponentActivity() {
             controls.addView(row)
             refresh()
         }
-        fun decimal(v: Float) = String.format(Locale.GERMAN, "%.2f", v)
-        slider("Eckgröße", 140, { (draft.size * 100).roundToInt() - 40 },
+        fun decimal(v: Float) = String.format(Locale.ROOT, "%.2f", v)
+        slider("Corner size", 140, { (draft.size * 100).roundToInt() - 40 },
             { draft = draft.copy(size = (it + 40) / 100f) }, { "${(draft.size * 100).roundToInt()} %" })
-        slider("Versatz (− außen / + innen)", 128, { ((draft.offsetPx + 16) * 4).toInt() },
+        slider("Edge offset (− outwards / + inwards)", 128, { ((draft.offsetPx + 16) * 4).toInt() },
             { draft = draft.copy(offsetPx = it / 4f - 16) }, { "${decimal(draft.offsetPx)} px" })
-        slider("Squircle (0 = Kreis)", 80, { (draft.squircle * 20).roundToInt() },
+        slider("Squircle (0 = circle)", 80, { (draft.squircle * 20).roundToInt() },
             { draft = draft.copy(squircle = it / 20f) }, { decimal(draft.squircle) })
-        slider("X-Versatz (− links / + rechts)", 128, { ((draft.shiftXPx + 16) * 4).toInt() },
+        slider("Horizontal shift (− left / + right)", 128, { ((draft.shiftXPx + 16) * 4).toInt() },
             { draft = draft.copy(shiftXPx = it / 4f - 16) }, { "${decimal(draft.shiftXPx)} px" })
-        slider("Y-Versatz (− oben / + unten)", 128, { ((draft.shiftYPx + 16) * 4).toInt() },
+        slider("Vertical shift (− up / + down)", 128, { ((draft.shiftYPx + 16) * 4).toInt() },
             { draft = draft.copy(shiftYPx = it / 4f - 16) }, { "${decimal(draft.shiftYPx)} px" })
+        slider("Contoured LED offset (inwards from the edge)", 128, { (draft.ledOffsetPx * 4).toInt() },
+            { draft = draft.copy(ledOffsetPx = it / 4f) }, { "${decimal(draft.ledOffsetPx)} px" })
         val actions = LinearLayout(this)
         fun button(label: String, action: () -> Unit) = Button(this).apply {
             text = label; isAllCaps = false; setOnClickListener { action() }
         }
-        actions.addView(button("Zurücksetzen") {
+        actions.addView(button("Reset") {
             draft = T2eCornerCalibration()
             refreshSliders.forEach { it() }
             refreshPreview()
         }, LinearLayout.LayoutParams(0, dp(52), 1f))
-        actions.addView(button("Übernehmen") {
+        actions.addView(button("Apply") {
             draft.save(this)
-            Toast.makeText(this, "Für den T2E-Modus gespeichert", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved for the Titan 2 Elite", Toast.LENGTH_SHORT).show()
         }, LinearLayout.LayoutParams(0, dp(52), 1f))
         controls.addView(actions)
-        controls.addView(button("Schließen") { finish() })
+        controls.addView(button("Close") { finish() })
         val scroll = ScrollView(this).apply { addView(controls) }
         root.addView(scroll, FrameLayout.LayoutParams(-1, -2).apply {
             bottomMargin = dp(120)
@@ -151,6 +153,7 @@ class CornerCalibrationActivity : LocalizedComponentActivity() {
         outState.putFloat("squircle", draft.squircle)
         outState.putFloat("shift_x", draft.shiftXPx)
         outState.putFloat("shift_y", draft.shiftYPx)
+        outState.putFloat("led_offset", draft.ledOffsetPx)
         super.onSaveInstanceState(outState)
     }
 

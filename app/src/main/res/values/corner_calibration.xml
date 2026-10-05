@@ -1,4 +1,4 @@
 <resources>
-    <string name="corner_calibration_title">Display corner calibration</string>
-    <string name="corner_calibration_description">Advanced calibration of the Titan 2 Elite display contour.</string>
+    <string name="corner_calibration_title">Display contour calibration</string>
+    <string name="corner_calibration_description">Fit the rounded corners, corner buttons and contoured LEDs to the Titan 2 Elite’s display edge, and set how far inside it the LED rail runs.</string>
 </resources>

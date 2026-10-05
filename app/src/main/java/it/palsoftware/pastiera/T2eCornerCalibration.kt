@@ -5,11 +5,17 @@ import android.graphics.Path
 import kotlin.math.*
 
 internal data class T2eCornerCalibration(
-    val size: Float = 1.17f,
-    val offsetPx: Float = 2.25f,
-    val squircle: Float = 0.85f,
-    val shiftXPx: Float = -0.50f,
-    val shiftYPx: Float = -1.25f
+    // Set on a Titan 2 Elite with the calibration screen, against the glass itself: a slightly
+    // squarer corner than a circle, 105 % of the radius Android reports (80 px), 0.75 px inside
+    // the screen's edge. (Unihertz's render suggested a 91 px circle; the phone disagrees.)
+    val size: Float = 1.05f,
+    /** How far the contour sits inside the screen's edge, all the way round */
+    val offsetPx: Float = 0.75f,
+    val squircle: Float = 0.75f,
+    val shiftXPx: Float = 0f,
+    val shiftYPx: Float = 0f,
+    /** Contoured LEDs: how far the LED rail sits inside the calibrated display edge (0: on the edge) */
+    val ledOffsetPx: Float = 0f
 ) {
     companion object {
         const val KEY = "titan2_elite_corner_calibration"
@@ -37,15 +43,18 @@ internal data class T2eCornerCalibration(
                 json.optDouble(key, fallback.toDouble()).toFloat().let {
                     if (it.isFinite()) it.coerceIn(range) else fallback
                 }
-            T2eCornerCalibration(number("size", defaults.size, 0.4f..1.8f),
-                number("offset_px", defaults.offsetPx, -16f..16f), number("squircle", defaults.squircle, 0f..4f),
-                number("shift_x_px", defaults.shiftXPx, -16f..16f), number("shift_y_px", defaults.shiftYPx, -16f..16f))
+            // Stored under new names since the corner was traced from the render: values saved
+            // for earlier guesses start again from the traced corner
+            T2eCornerCalibration(number("traced_size", defaults.size, 0.4f..1.8f),
+                number("traced_offset_px", defaults.offsetPx, -16f..16f), number("traced_squircle", defaults.squircle, 0f..4f),
+                number("traced_shift_x_px", defaults.shiftXPx, -16f..16f), number("traced_shift_y_px", defaults.shiftYPx, -16f..16f),
+                number("led_edge_offset_px", defaults.ledOffsetPx, 0f..32f))
         }.getOrDefault(T2eCornerCalibration())
     }
 
     fun save(context: Context) {
-        val json = org.json.JSONObject().put("size", size).put("offset_px", offsetPx).put("squircle", squircle)
-            .put("shift_x_px", shiftXPx).put("shift_y_px", shiftYPx)
+        val json = org.json.JSONObject().put("traced_size", size).put("traced_offset_px", offsetPx).put("traced_squircle", squircle)
+            .put("traced_shift_x_px", shiftXPx).put("traced_shift_y_px", shiftYPx).put("led_edge_offset_px", ledOffsetPx)
         SettingsManager.getPreferences(context).edit().putString(KEY, json.toString()).apply()
     }
 }
@@ -65,6 +74,7 @@ internal object T2eCornerGeometry {
         val nx = c.pow(2.0 - 2.0 / n)
         val ny = s.pow(2.0 - 2.0 / n)
         val length = hypot(nx, ny)
+        // Along the inward normal: for the traced circle, a smaller circle with the same centre
         val inset = calibration.offsetPx + extraInset
         return Point((r - r * c.pow(2.0 / n) + inset * nx / length).toFloat(),
             (bottom - r + r * s.pow(2.0 / n) - inset * ny / length).toFloat())
