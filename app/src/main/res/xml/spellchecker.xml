@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Languages with a bundled dictionary (SpellCheckRules.LANGUAGES) -->
+<spell-checker xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/spell_checker_name">
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="da" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="de" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="en" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="es" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="fr" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="it" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="nl" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="no" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="pl" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="pt" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="ru" />
+    <subtype
+        android:label="@string/spell_checker_subtype"
+        android:subtypeLocale="uk" />
+</spell-checker>
