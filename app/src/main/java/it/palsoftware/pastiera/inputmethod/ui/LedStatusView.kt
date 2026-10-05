@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PathMeasure
 import android.graphics.PointF
 import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
@@ -39,31 +41,51 @@ class LedStatusView(
     )
 
     companion object {
-        internal const val LED_ZONE_HEIGHT_DP = 6.5f
-        private const val CONTOUR_LED_STROKE_DP = 1.4f
-        private const val CONTOUR_LED_GAP_DP = 2.2f
-        private const val CONTOUR_EDGE_PADDING_DP = 1f
-        // Keep the two clear gaps equal: outer rail -> inner rail -> button border.
-        internal const val CONTOUR_BUTTON_INSET_DP =
-            CONTOUR_EDGE_PADDING_DP + 2f * CONTOUR_LED_STROKE_DP + 2f * CONTOUR_LED_GAP_DP
-        private const val LED_CONTENT_HEIGHT_DP = 5.5f
-        private const val LED_TOP_PADDING_DP = LED_ZONE_HEIGHT_DP - LED_CONTENT_HEIGHT_DP
         private val LED_COLOR_GRAY_OFF = Color.argb(100, 17, 17, 17)
         private val LED_COLOR_RED_LOCKED = Color.rgb(247, 99, 0)
         private val LED_COLOR_BLUE_ACTIVE = Color.rgb(100, 150, 255)
+        private const val CONTOUR_STEPS = 64
+        /** Pastiera's contour LEDs: a band this tall under the bar; the lifted fork layouts use [MERGED_LED_ZONE_HEIGHT_DP]. */
+        internal const val LED_ZONE_HEIGHT_DP = 6.5f
+        /** One LED contour per side (Flux Keyboard's Titan 2 Elite layouts) */
+        internal const val MERGED_LED_ZONE_HEIGHT_DP = 3.1f
+        /** Contoured LEDs: the rail's thickness, and the clear gap between it and the buttons */
+        private const val CONTOUR_LED_STROKE_DP = 1.6f
+        private const val CONTOUR_LED_GAP_DP = 2f
+        /** Space between neighbouring LEDs on the rail, in rail thicknesses */
+        private const val CONTOUR_LED_SPACING = 2.5f
+
+        /**
+         * Contoured LEDs: how far inside the calibrated display edge the buttons stop, corner
+         * and bottom buttons alike: the LED offset, the rail and a 2 dp gap, so every button
+         * sits the same distance above the LEDs and the corner ones follow their curve.
+         */
+        /**
+         * How far the rail climbs the display's sides from its bottom edge, the same on every page:
+         * 103 px on the Titan 2 Elite's 1080 px wide screen, as it looks best there
+         */
+        internal const val CONTOUR_RAIL_RISE_PX = 103f
+        internal const val CONTOUR_RAIL_RISE_REFERENCE_WIDTH = 1080f
+
+        internal fun contourButtonInsetPx(context: Context): Float =
+            T2eCornerCalibration.read(context).ledOffsetPx +
+                (2f * CONTOUR_LED_STROKE_DP + 2f * CONTOUR_LED_GAP_DP) * context.resources.displayMetrics.density
+
+        /** How far across the display each corner's rails run, without the corner buttons' own edge. */
+        private const val CONTOUR_CORNER_SHARE = 0.164f
     }
 
     private val ledHeight: Int by lazy {
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            LED_CONTENT_HEIGHT_DP,
+            5.5f,
             context.resources.displayMetrics
         ).toInt()
     }
     private val topPadding: Int by lazy {
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            LED_TOP_PADDING_DP,
+            1f,
             context.resources.displayMetrics
         ).toInt()
     }
@@ -78,6 +100,7 @@ class LedStatusView(
     private var container: ModifierLedCanvas? = null
     private val ledsByState = mutableMapOf<ModifierLedState, MutableList<View>>()
     private val segmentsByView = mutableMapOf<View, ModifierLedSegment>()
+    private val statePriority = mutableMapOf<ModifierLedState, Int>()
 
     var bottomCornerRadiiPx: Pair<Int, Int>? = null
         set(value) {
@@ -96,22 +119,224 @@ class LedStatusView(
             rebuildSegments()
         }
 
+    /**
+     * False when Right Shift is dedicated to another job (the emoji picker key). The merged
+     * Titan 2 Elite layout then shows only Sym on its right-hand LED, so Left Shift can't light it.
+     */
+    var rightShiftIsShift: Boolean = true
+        set(value) {
+            if (field == value) return
+            field = value
+            ledsByState[ModifierLedState.SHIFT].orEmpty().forEach { it.invalidate() }
+        }
+
     var contourIntegrated: Boolean = false
         set(value) {
             if (field == value) return
             field = value
             rebuildSegments()
             container?.invalidate()
+            railChrome()?.invalidate()
         }
 
     internal var contourGeometry: ContourGeometry? = null
         set(value) {
             if (field == value) return
             field = value
+            railChrome()?.invalidate()
             container?.let { canvas ->
                 for (index in 0 until canvas.childCount) canvas.getChildAt(index).invalidate()
             }
         }
+
+    // Locked LEDs' moving gradient (Status LED colours > Animate locked LEDs): 0..1, one sweep
+    private var lockPhase = 0f
+    private var lockAnimator: ValueAnimator? = null
+
+    private fun lockAnimationOn(): Boolean = LedColors.lockedAnimationEnabled(context)
+
+    /** Runs the sweep while an LED is locked and the option is on; stops it otherwise. */
+    private fun syncLockAnimation() {
+        val wanted = lockAnimationOn() && statePriority.values.any { it == 2 } && container?.isAttachedToWindow == true
+        if (wanted == (lockAnimator != null)) return
+        if (!wanted) {
+            lockAnimator?.cancel()
+            lockAnimator = null
+            invalidateAllLeds()
+            return
+        }
+        lockAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1800
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = android.view.animation.LinearInterpolator()
+            addUpdateListener {
+                lockPhase = it.animatedValue as Float
+                invalidateAllLeds()
+            }
+            start()
+        }
+    }
+
+    private fun invalidateAllLeds() {
+        container?.let { canvas -> for (index in 0 until canvas.childCount) canvas.getChildAt(index).invalidate() }
+        railChrome()?.invalidate()
+    }
+
+    /** How high the contoured LEDs rise up the corner buttons on the plain bar. */
+
+    /** Each LED's current colour on the contoured rail. */
+    private val railColors = mutableMapOf<ModifierLedSegment, Int>()
+    private val railPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private fun railChrome(): StatusBarController.ImeChromeLayout? {
+        var ancestor = container?.parent
+        while (ancestor != null && ancestor !is StatusBarController.ImeChromeLayout) ancestor = ancestor.parent
+        return ancestor as? StatusBarController.ImeChromeLayout
+    }
+
+    /**
+     * Contoured LEDs, drawn by the keyboard frame after everything in it, in its coordinates:
+     * nothing (buttons, the close button, fills) can cover them.
+     */
+    fun drawRailOverlay(canvas: Canvas) {
+        if (!contourIntegrated || !ModifierLedLayouts.isSplit(layout)) return
+        // Drawn by the frame whenever it shows, lit or not, on every page: whether the LED strip's
+        // own view is shown there (menu bar, symbol and emoji pages) doesn't matter
+        val chrome = railChrome() ?: return
+        if (!chrome.isShown) return
+        val radii = bottomCornerRadiiPx ?: return
+        val density = context.resources.displayMetrics.density
+        val stroke = CONTOUR_LED_STROKE_DP * density
+        val gap = CONTOUR_LED_GAP_DP * density
+        val outerRail = railPoints(0f) ?: return
+        val innerRail = railPoints(stroke + gap) ?: return
+        val width = chrome.width.toFloat()
+        // Pastiera's contour LEDs: two rails round each corner button, as on the keyboard: Left
+        // Shift outside and Alt inside on the left; on the right Right Shift (or the emoji key's
+        // LED) outside, and Sym and Ctrl sharing the inside
+        // The same length on every panel: up to the panels' shared side-button width
+        val side = chrome.ledSideWidthPx.takeIf { it > 0 }?.toFloat() ?: (width * CONTOUR_CORNER_SHARE)
+        val leftEnd = side
+        val rightStart = width - side
+        val emojiLed = layout.segments.any { it.state == ModifierLedState.EMOJI }
+        val rightOuter = if (emojiLed) ModifierLedState.EMOJI else ModifierLedState.SHIFT
+
+        val calibration = T2eCornerCalibration.read(context)
+        val outward = maxOf(radii.first, radii.second) * calibration.size + calibration.offsetPx + stroke
+        // The outer rails also fill outward, down to the bottom edge and sideways into the square
+        // corners, over whatever is there; everything inside them stays as it is
+        val outerInside = T2eCornerGeometry.path(
+            width, chrome.height.toFloat(), radii.first.toFloat(), radii.second.toFloat(),
+            calibration, calibration.ledOffsetPx + stroke
+        )
+        val save = canvas.save()
+        canvas.clipOutPath(outerInside)
+        drawRail(canvas, chrome, sidePart(outerRail, leftEnd, left = true), ModifierLedState.SHIFT, 2f * outward)
+        if (rightOuter != ModifierLedState.SHIFT || rightShiftIsShift) {
+            drawRail(canvas, chrome, sidePart(outerRail, rightStart, left = false), rightOuter, 2f * outward)
+        } else {
+            drawRail(canvas, chrome, sidePart(outerRail, rightStart, left = false), null, 2f * outward)
+        }
+        canvas.restoreToCount(save)
+        drawRail(canvas, chrome, sidePart(innerRail, leftEnd, left = true), ModifierLedState.ALT, 0f)
+        // Right inside: Sym from the top, Ctrl towards the middle, a little apart
+        val right = sidePart(innerRail, rightStart, left = false)
+        if (right.size >= 2) {
+            val path = polyline(right)
+            val measure = PathMeasure(path, false)
+            val apart = stroke * CONTOUR_LED_SPACING / 2f
+            val half = measure.length * 0.5f
+            drawRail(canvas, chrome, null, ModifierLedState.SYM, 0f, measure, 0f, half - apart)
+            drawRail(canvas, chrome, null, ModifierLedState.CTRL, 0f, measure, half + apart, measure.length)
+        }
+    }
+
+    /** An LED's colour now, as its drawable last set it. */
+    private fun railColor(state: ModifierLedState?): Int {
+        if (state == null) return ledColor(ModifierLedState.SHIFT, 0)
+        val segment = layout.segments.firstOrNull { it.state == state }
+        return segment?.let { railColors[it] } ?: ledColor(state, statePriority[state] ?: 0)
+    }
+
+    /** One LED on a rail: [points] (or a [measure]d part of a rail), widened outward by [extraWidth]. */
+    private fun drawRail(
+        canvas: Canvas,
+        chrome: StatusBarController.ImeChromeLayout,
+        points: List<PointF>?,
+        state: ModifierLedState?,
+        extraWidth: Float,
+        measure: PathMeasure? = null,
+        from: Float = 0f,
+        to: Float = 0f
+    ) {
+        val raw = railColor(state)
+        // Only lit LEDs (apps with the keyboard hidden): nothing where one is off
+        if (hideOffLeds && Color.alpha(raw) == 0) return
+        // Unlit LEDs too, opaque: their see-through grey is mixed with the keyboard's colour so the
+        // whole rail, lit or not, covers what is under it the same way
+        val color = if (Color.alpha(raw) == 255) raw
+            else androidx.core.graphics.ColorUtils.compositeColors(raw, chrome.bottomFillColors.first or 0xFF000000.toInt())
+        railPaint.shader = null
+        railPaint.color = color
+        if (state != null && lockAnimator != null && statePriority[state] == 2) {
+            railPaint.shader = lockShader(color, chrome.width.toFloat())
+        }
+        val piece = if (measure != null) {
+            if (to <= from) return
+            Path().also { measure.getSegment(from, to, it, true) }
+        } else {
+            if (points == null || points.size < 2) return
+            polyline(points)
+        }
+        val stroke = CONTOUR_LED_STROKE_DP * context.resources.displayMetrics.density
+        railPaint.style = Paint.Style.STROKE
+        railPaint.strokeWidth = stroke + extraWidth
+        // Widened outward: square ends, which fan apart round the convex corners and never overlap
+        railPaint.strokeCap = if (extraWidth > 0f) Paint.Cap.BUTT else Paint.Cap.ROUND
+        railPaint.strokeJoin = Paint.Join.ROUND
+        canvas.drawPath(piece, railPaint)
+    }
+
+    private fun polyline(points: List<PointF>): Path = Path().apply {
+        moveTo(points.first().x, points.first().y)
+        points.drop(1).forEach { lineTo(it.x, it.y) }
+    }
+
+    /**
+     * A corner's part of a rail: from the top of the display's side round the corner to [limitX]
+     * (the corner button's inner edge), always starting at the top.
+     */
+    private fun sidePart(rail: List<PointF>, limitX: Float, left: Boolean): List<PointF> {
+        val ordered = if (left) rail else rail.asReversed()
+        val part = ArrayList<PointF>()
+        for (point in ordered) {
+            val inside = if (left) point.x <= limitX else point.x >= limitX
+            if (inside) {
+                part += point
+                continue
+            }
+            val previous = part.lastOrNull()
+            if (previous != null && point.x != previous.x) {
+                val ratio = ((limitX - previous.x) / (point.x - previous.x)).coerceIn(0f, 1f)
+                part += PointF(limitX, previous.y + (point.y - previous.y) * ratio)
+            }
+            break
+        }
+        return part
+    }
+
+    /** The gradient a locked LED sweeps: its colour, a more intense version, and back. */
+    private fun lockShader(color: Int, width: Float): android.graphics.Shader {
+        val intense = LedColors.intensify(color)
+        val deep = LedColors.deepen(color)
+        val span = width.coerceAtLeast(1f)
+        val offset = lockPhase * span * 2f
+        return android.graphics.LinearGradient(
+            offset - span, 0f, offset + span, 0f,
+            intArrayOf(deep, intense, deep), floatArrayOf(0f, 0.5f, 1f),
+            android.graphics.Shader.TileMode.MIRROR
+        )
+    }
 
     var onLongPressListener: (() -> Unit)? = null
     var themeOverride: KeyboardThemeColors? = null
@@ -152,7 +377,8 @@ class LedStatusView(
         val altActive = (snapshot.altPhysicallyPressed || snapshot.altOneShot) && !altLocked
         updateLeds(ModifierLedState.ALT, altLocked, altActive)
 
-        updateSymLeds(snapshot.symPage, snapshot.symPhysicallyPressed)
+        updateSymLeds(snapshot)
+        syncLockAnimation()
     }
 
     private fun rebuildSegments() {
@@ -160,7 +386,7 @@ class LedStatusView(
         ledsByState.clear()
         segmentsByView.clear()
         canvas.replaceSegments(layout.segments) { segment ->
-            createLedView(themeOverride?.ledInactive ?: LED_COLOR_GRAY_OFF, segment).also { led ->
+            createLedView(ledColor(segment.state, 0), segment).also { led ->
                 ledsByState.getOrPut(segment.state) { mutableListOf() }.add(led)
             }
         }
@@ -175,6 +401,8 @@ class LedStatusView(
     }
 
     private fun createDrawable(color: Int, segment: ModifierLedSegment): GradientDrawable {
+        railColors[segment] = color
+        railChrome()?.invalidate()
         return object : GradientDrawable() {
             private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 this.color = color
@@ -182,37 +410,91 @@ class LedStatusView(
                 strokeCap = Paint.Cap.ROUND
             }
 
+            private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
             override fun draw(canvas: Canvas) {
                 val radii = bottomCornerRadiiPx
                 if (radii == null) {
+                    if (lockAnimator != null && statePriority[segment.state] == 2) {
+                        // Locked: the LED's colour sweeps to a more intense version and back
+                        fillPaint.shader = lockShader(color, bounds.width().toFloat())
+                        val box = android.graphics.RectF(bounds)
+                        canvas.drawRoundRect(box, this@LedStatusView.cornerRadius, this@LedStatusView.cornerRadius, fillPaint)
+                        return
+                    }
                     super.draw(canvas)
                     return
                 }
-                if (contourIntegrated && layout == ModifierLedLayouts.TITAN_2_ELITE) {
-                    drawContourIndicator(canvas, segment, paint, radii)
-                    return
+                paint.shader = null
+                // Pastiera's contour LEDs: rails along the outer buttons (bar not lifted)
+                // (drawn by the keyboard frame over everything else: see drawRailOverlay)
+                if (contourIntegrated && ModifierLedLayouts.isSplit(layout)) return
+                // One physical contour per side in rounded mode. Alt/Sym and
+                // Shift share it; a locked modifier wins over an active one.
+                if (layout == ModifierLedLayouts.TITAN_2_ELITE && segment.y == 0f) return
+                if (layout == ModifierLedLayouts.TITAN_2_ELITE && segment.state == ModifierLedState.SHIFT) {
+                    val rightSide = segment.x >= 0.5f
+                    val otherState = if (rightSide) ModifierLedState.SYM else ModifierLedState.ALT
+                    val shiftPriority = if (rightSide && !rightShiftIsShift) 0
+                        else statePriority[ModifierLedState.SHIFT] ?: 0
+                    val priority = maxOf(shiftPriority, statePriority[otherState] ?: 0)
+                    // The colour of whichever modifier lights the shared LED
+                    val shown = if (shiftPriority >= (statePriority[otherState] ?: 0)) ModifierLedState.SHIFT else otherState
+                    paint.color = ledColor(shown, priority)
+                    if (lockAnimator != null && priority == 2) paint.shader = lockShader(paint.color, bounds.width().toFloat())
                 }
                 val width = bounds.width().toFloat()
                 val height = bounds.height().toFloat()
+                // Each row follows a concentric contour, so the indicator retains
+                // its thickness through the bend instead of being cut off by it.
                 val inset = (1f - segment.y - segment.height / 2f) * ledHeight + topPadding
+                val leftRadius = radii.first.toFloat().coerceIn(inset, maxOf(inset, width / 2f))
+                val rightRadius = radii.second.toFloat().coerceIn(inset, maxOf(inset, width / 2f))
+                val leftArc = leftRadius - inset
+                val rightArc = rightRadius - inset
+                // One LED per modifier: spread along the corners and bottom edge only; the vertical
+                // side runs sit behind the bar and would swallow the outer LEDs.
+                val cornersAndBottomOnly = ModifierLedLayouts.isSplit(layout)
+                val contour = straightContour() ?: liftedContour(radii) ?: Path().apply {
+                    if (cornersAndBottomOnly) {
+                        moveTo(inset, height - leftRadius)
+                    } else {
+                        moveTo(inset, 0f)
+                        lineTo(inset, height - leftRadius)
+                    }
+                    if (leftArc > 0f) {
+                        arcTo(inset, height - leftRadius - leftArc,
+                            leftRadius + leftArc, height - inset, 180f, -90f, false)
+                    }
+                    lineTo(width - rightRadius, height - inset)
+                    if (rightArc > 0f) {
+                        arcTo(width - rightRadius - rightArc, height - rightRadius - rightArc,
+                            width - inset, height - inset, 90f, -90f, false)
+                    }
+                    if (!cornersAndBottomOnly) lineTo(width - inset, 0f)
+                }
+                if (lockAnimator != null && statePriority[segment.state] == 2 && paint.shader == null &&
+                    !(layout == ModifierLedLayouts.TITAN_2_ELITE && segment.state == ModifierLedState.SHIFT)
+                ) {
+                    paint.shader = lockShader(paint.color, width)
+                }
+                val measure = PathMeasure(contour, false)
                 paint.strokeWidth = segment.height * ledHeight
-                paint.strokeCap = Paint.Cap.ROUND
-                val calibration = T2eCornerCalibration.read(context)
-                val centerY = height - calibration.offsetPx - inset + calibration.shiftYPx
-                val boundaryY = centerY - calibration.shiftYPx
-                val contourInset = paint.strokeWidth / 2f
-                val left = T2eCornerGeometry.atY(
-                    radii.first.toFloat(), height, boundaryY, calibration, contourInset
-                ).x + calibration.shiftXPx
-                val right = width - T2eCornerGeometry.atY(
-                    radii.second.toFloat(), height, boundaryY, calibration, contourInset
-                ).x + calibration.shiftXPx
-                val availableWidth = (right - left).coerceAtLeast(0f)
-                val cap = paint.strokeWidth / 2f
-                val start = left + availableWidth * segment.x + cap
-                val end = left + availableWidth * (segment.x + segment.width) - cap
+                val joinRightIndicators = layout == ModifierLedLayouts.TITAN_2_ELITE &&
+                    (segment.state == ModifierLedState.CTRL ||
+                        (segment.state == ModifierLedState.SHIFT && segment.x > 0.5f))
+                paint.strokeCap = if (joinRightIndicators) Paint.Cap.BUTT else Paint.Cap.ROUND
+                // Leave room for the round caps at both ends of each segment.
+                val cap = if (joinRightIndicators) 0f else paint.strokeWidth / 2f
+                val start = measure.length * segment.x + cap
+                val endFraction = if (joinRightIndicators && segment.state == ModifierLedState.CTRL) {
+                    layout.segments.first { it.state == ModifierLedState.SHIFT && it.x > segment.x }.x
+                } else segment.x + segment.width
+                val end = measure.length * endFraction - cap
                 if (end > start) {
-                    canvas.drawLine(start, centerY, end, centerY, paint)
+                    val stroke = Path()
+                    measure.getSegment(start, end, stroke, true)
+                    canvas.drawPath(stroke, paint)
                 }
             }
         }.apply {
@@ -222,151 +504,163 @@ class LedStatusView(
         }
     }
 
-    private fun drawContourIndicator(
-        canvas: Canvas,
-        segment: ModifierLedSegment,
-        paint: Paint,
-        @Suppress("UNUSED_PARAMETER") radii: Pair<Int, Int>
-    ) {
-        val stroke = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            CONTOUR_LED_STROKE_DP,
-            context.resources.displayMetrics
-        )
-        val railGap = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            CONTOUR_LED_GAP_DP,
-            context.resources.displayMetrics
-        )
-        val geometry = contourGeometry ?: return
-        val leftSide = segment.x < 0.5f
-        val outerRail = segment.state == ModifierLedState.SHIFT
-        val buttonContour = (
-            if (leftSide) geometry.leftButtonContour else geometry.rightButtonContour
-        ) ?: return
-        if (buttonContour.points.size < 2) return
-        val distanceFromButtonCenterline = buttonContour.borderHalfWidthPx + railGap + stroke / 2f +
-            if (outerRail) stroke + railGap else 0f
-        val offsetPoints = buttonContour.points.mapIndexed { index, point ->
-            val previous = buttonContour.points[(index - 1).coerceAtLeast(0)]
-            val next = buttonContour.points[(index + 1).coerceAtMost(buttonContour.points.lastIndex)]
-            val dx = next.x - previous.x
-            val dy = next.y - previous.y
-            val length = hypot(dx, dy).coerceAtLeast(0.001f)
-            val normalX = if (leftSide) -dy / length else dy / length
-            val normalY = if (leftSide) dx / length else -dx / length
-            PointF(
-                point.x + normalX * distanceFromButtonCenterline,
-                point.y + normalY * distanceFromButtonCenterline
-            )
+    /**
+     * Titan 2 Elite with the status bar lifted: the LEDs run in the band under the bar, on the
+     * calibrated display curve (the one the outer buttons use) raised by half the lift, so they
+     * stay clear of the physical corners. Null when the bar isn't lifted.
+     */
+    /**
+     * Straight outer buttons: the corner buttons fill the corners, so the LEDs run in a straight
+     * line through the band under the other buttons or keys, between the two corner buttons.
+     */
+    private fun straightContour(): Path? {
+        val canvasView = container ?: return null
+        var ancestor = canvasView.parent
+        while (ancestor != null && ancestor !is StatusBarController.ImeChromeLayout) ancestor = ancestor.parent
+        val chrome = ancestor as? StatusBarController.ImeChromeLayout ?: return null
+        val span = chrome.straightLedSpanPx ?: return null
+        // Top of the band under the buttons: the bar's row, or an emoji/SYM screen's bottom keys
+        val rowBottom = chrome.straightLedBandTopPx
+        if (rowBottom < 0 || rowBottom >= chrome.height) return null
+        val location = IntArray(2)
+        val chromeLocation = IntArray(2)
+        canvasView.getLocationInWindow(location)
+        chrome.getLocationInWindow(chromeLocation)
+        val lineY = (rowBottom + chrome.height) / 2f
+        return Path().apply {
+            moveTo(span.first.toFloat(), lineY)
+            lineTo(span.second.toFloat(), lineY)
+            // Chrome coordinates to this view's
+            offset((chromeLocation[0] - location[0]).toFloat(), (chromeLocation[1] - location[1]).toFloat())
         }
-        val topCenterY = geometry.buttonTopPx + stroke / 2f
-        val topTrimmed = ArrayList<PointF>(offsetPoints.size)
-        for (index in 1 until offsetPoints.size) {
-            val previous = offsetPoints[index - 1]
-            val point = offsetPoints[index]
-            if (topTrimmed.isEmpty()) {
-                if (point.y < topCenterY) continue
-                val denominator = point.y - previous.y
-                val ratio = if (kotlin.math.abs(denominator) < 0.001f) 1f
-                    else ((topCenterY - previous.y) / denominator).coerceIn(0f, 1f)
-                topTrimmed += PointF(
-                    previous.x + (point.x - previous.x) * ratio,
-                    topCenterY
-                )
-            }
-            topTrimmed += point
-        }
-        if (topTrimmed.size < 2) return
+    }
 
-        val targetX = if (leftSide) geometry.leftButtonEndPx - stroke / 2f
-            else geometry.rightButtonStartPx + stroke / 2f
-        val trimmed = ArrayList<PointF>(topTrimmed.size)
-        for (point in topTrimmed) {
-            val reached = if (leftSide) point.x >= targetX else point.x <= targetX
-            if (!reached) {
-                trimmed += point
-                continue
-            }
-            val previous = trimmed.lastOrNull()
-            if (previous != null) {
-                val denominator = point.x - previous.x
-                val ratio = if (kotlin.math.abs(denominator) < 0.001f) 1f
-                    else ((targetX - previous.x) / denominator).coerceIn(0f, 1f)
-                trimmed += PointF(targetX, previous.y + (point.y - previous.y) * ratio)
-            }
-            break
+    private fun liftedContour(radii: Pair<Int, Int>): Path? {
+        val canvasView = container ?: return null
+        var ancestor = canvasView.parent
+        while (ancestor != null && ancestor !is StatusBarController.ImeChromeLayout) ancestor = ancestor.parent
+        val chrome = ancestor as? StatusBarController.ImeChromeLayout ?: return null
+        val lift = chrome.nestedRowLiftPx
+        if (lift <= 0 || chrome.width <= 0 || chrome.height <= 0) return null
+        val location = IntArray(2)
+        val chromeLocation = IntArray(2)
+        canvasView.getLocationInWindow(location)
+        chrome.getLocationInWindow(chromeLocation)
+        val x = (location[0] - chromeLocation[0]).toFloat()
+        val y = (location[1] - chromeLocation[1]).toFloat()
+        val calibration = T2eCornerCalibration.read(context)
+        val width = chrome.width.toFloat()
+        val bottom = chrome.height - lift / 2f
+        val left = radii.first.toFloat().coerceIn(0f, width / 2f)
+        val right = radii.second.toFloat().coerceIn(0f, width / 2f)
+        fun point(radius: Float, step: Int): T2eCornerGeometry.Point =
+            T2eCornerGeometry.point(radius, bottom, Math.PI / 2 * step / CONTOUR_STEPS, calibration)
+        // Left arc, bottom, right arc; LED segments are spread over what shows below the bar
+        val points = (0..CONTOUR_STEPS).map { point(left, it) } +
+            (CONTOUR_STEPS downTo 0).map { point(right, it).let { p -> T2eCornerGeometry.Point(width - p.x, p.y) } }
+        val rowBottom = chrome.nestedRowBottomPx
+        val visibleTop = if (rowBottom >= 0) rowBottom + ledHeight / 2f - calibration.shiftYPx else Float.NEGATIVE_INFINITY
+        val visible = points.filter { it.y >= visibleTop }.takeIf { it.size >= 2 } ?: points
+        return Path().apply {
+            moveTo(visible.first().x, visible.first().y)
+            visible.drop(1).forEach { lineTo(it.x, it.y) }
+            // Chrome coordinates to this view's, plus the calibrated shift the buttons use
+            offset(calibration.shiftXPx - x, calibration.shiftYPx - y)
         }
-        if (trimmed.size < 2) return
+    }
 
-        val cumulative = FloatArray(trimmed.size)
-        for (index in 1 until trimmed.size) {
-            cumulative[index] = cumulative[index - 1] + hypot(
-                trimmed[index].x - trimmed[index - 1].x,
-                trimmed[index].y - trimmed[index - 1].y
-            )
-        }
-        val totalLength = cumulative.last().coerceAtLeast(0.001f)
-        val range = when (segment.state) {
-            ModifierLedState.SYM -> 0f to 0.46f
-            ModifierLedState.CTRL -> 0.54f to 1f
-            else -> 0f to 1f
-        }
-        fun pointAt(distance: Float): PointF {
-            val target = distance.coerceIn(0f, totalLength)
-            var index = 1
-            while (index < cumulative.size && cumulative[index] < target) index++
-            if (index >= cumulative.size) return trimmed.last()
-            val segmentLength = (cumulative[index] - cumulative[index - 1]).coerceAtLeast(0.001f)
-            val ratio = (target - cumulative[index - 1]) / segmentLength
-            val from = trimmed[index - 1]
-            val to = trimmed[index]
-            return PointF(from.x + (to.x - from.x) * ratio, from.y + (to.y - from.y) * ratio)
-        }
-        val path = android.graphics.Path()
-        val rangeStart = range.first * totalLength
-        val rangeEnd = range.second * totalLength
-        val first = pointAt(rangeStart)
-        path.moveTo(first.x, first.y)
-        for (index in 1 until trimmed.size) {
-            if (cumulative[index] <= rangeStart) continue
-            if (cumulative[index] >= rangeEnd) break
-            path.lineTo(trimmed[index].x, trimmed[index].y)
-        }
-        val last = pointAt(rangeEnd)
-        path.lineTo(last.x, last.y)
+    /**
+     * An LED's colour at [level] (0 off, 1 active, 2 locked): its own colour when each LED is
+     * coloured individually, otherwise the theme's shared LED colours.
+     */
+    /** Only lit LEDs show (apps with the keyboard hidden): an LED that's off isn't drawn. */
+    var hideOffLeds: Boolean = false
 
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = stroke
-        paint.strokeCap = Paint.Cap.ROUND
-        paint.strokeJoin = Paint.Join.ROUND
-        canvas.drawPath(path, paint)
+    private fun ledColor(state: ModifierLedState, level: Int): Int {
+        if (level == 0 && hideOffLeds) return Color.TRANSPARENT
+        if (LedColors.enabled(context)) {
+            val base = LedColors.baseColor(context, LedColors.ledFor(state))
+            return LedColors.shade(base, when (level) {
+                2 -> LedColors.Level.LOCKED
+                1 -> LedColors.Level.ACTIVE
+                else -> LedColors.Level.OFF
+            })
+        }
+        val theme = themeOverride
+        return when (level) {
+            2 -> theme?.ledLocked ?: LED_COLOR_RED_LOCKED
+            1 -> theme?.ledActive ?: LED_COLOR_BLUE_ACTIVE
+            else -> theme?.ledInactive ?: LED_COLOR_GRAY_OFF
+        }
+    }
+
+    /**
+     * A rail in the keyboard frame's coordinates (with the calibrated shift the buttons use),
+     * [extraInset] further inside than the outer one: up the display's left side past the curve,
+     * round the bottom, and up the right side, the same height on every page.
+     */
+    private fun railPoints(extraInset: Float): List<PointF>? {
+        val radii = bottomCornerRadiiPx ?: return null
+        val chrome = railChrome() ?: return null
+        if (chrome.width <= 0 || chrome.height <= 0) return null
+        val calibration = T2eCornerCalibration.read(context)
+        val stroke = CONTOUR_LED_STROKE_DP * context.resources.displayMetrics.density
+        val inset = calibration.ledOffsetPx + stroke / 2f + extraInset
+        val width = chrome.width.toFloat()
+        val bottom = chrome.height.toFloat()
+        val left = radii.first.toFloat().coerceIn(0f, width / 2f)
+        val right = radii.second.toFloat().coerceIn(0f, width / 2f)
+        fun point(radius: Float, step: Int) =
+            T2eCornerGeometry.point(radius, bottom, Math.PI / 2 * step / CONTOUR_STEPS, calibration, inset)
+        val leftArc = (0..CONTOUR_STEPS).map { point(left, it) }
+        val rightArc = (CONTOUR_STEPS downTo 0).map { point(right, it).let { p -> T2eCornerGeometry.Point(width - p.x, p.y) } }
+        val top = bottom - CONTOUR_RAIL_RISE_PX * width / CONTOUR_RAIL_RISE_REFERENCE_WIDTH
+        val points = buildList {
+            if (top < leftArc.first().y) add(T2eCornerGeometry.Point(leftArc.first().x, top))
+            addAll(leftArc)
+            addAll(rightArc)
+            if (top < rightArc.last().y) add(T2eCornerGeometry.Point(rightArc.last().x, top))
+        }
+        return points.map { PointF(it.x + calibration.shiftXPx, it.y + calibration.shiftYPx) }
     }
 
     private fun updateLeds(state: ModifierLedState, isLocked: Boolean, isActive: Boolean = false) {
-        val theme = themeOverride
-        val targetColor = when {
-            isLocked -> theme?.ledLocked ?: LED_COLOR_RED_LOCKED
-            isActive -> theme?.ledActive ?: LED_COLOR_BLUE_ACTIVE
-            else -> theme?.ledInactive ?: LED_COLOR_GRAY_OFF
-        }
+        val level = if (isLocked) 2 else if (isActive) 1 else 0
+        statePriority[state] = level
+        val targetColor = ledColor(state, level)
         ledsByState[state].orEmpty().forEach { led -> animateLedColor(led, targetColor) }
     }
 
-    private fun updateSymLeds(symPage: Int, physicallyPressed: Boolean) {
-        val theme = themeOverride
-        val targetColor = when (symPage) {
-            1 -> theme?.ledActive ?: LED_COLOR_BLUE_ACTIVE
-            2 -> theme?.ledLocked ?: LED_COLOR_RED_LOCKED
-            3 -> theme?.ledActive ?: LED_COLOR_BLUE_ACTIVE
-            4 -> theme?.ledActive ?: LED_COLOR_BLUE_ACTIVE
-            else -> if (physicallyPressed) {
-                theme?.ledActive ?: LED_COLOR_BLUE_ACTIVE
-            } else {
-                theme?.ledInactive ?: LED_COLOR_GRAY_OFF
-            }
+    /**
+     * SYM: active while held, locked while it's sticky or a symbols page is open. The emoji key's
+     * LED, when shown, works the same way for the emoji layer and picker; without it, those
+     * pages show on the SYM LED as active.
+     */
+    private fun updateSymLeds(snapshot: StatusBarController.StatusSnapshot) {
+        val symPage = snapshot.symPage
+        val emojiPage = symPage == 1 || symPage == 4
+        val emojiLed = ledsByState.containsKey(ModifierLedState.EMOJI)
+        val symLevel = when {
+            snapshot.symSticky || symPage == 2 || symPage == 5 -> 2
+            snapshot.symHeld || snapshot.symPhysicallyPressed -> 1
+            emojiPage && !emojiLed -> 1
+            else -> 0
         }
+        statePriority[ModifierLedState.SYM] = symLevel
+        val targetColor = ledColor(ModifierLedState.SYM, symLevel)
         ledsByState[ModifierLedState.SYM].orEmpty().forEach { led -> animateLedColor(led, targetColor) }
+        if (emojiLed) {
+            val emojiLevel = when {
+                snapshot.emojiSticky || emojiPage -> 2
+                snapshot.emojiHeld -> 1
+                else -> 0
+            }
+            statePriority[ModifierLedState.EMOJI] = emojiLevel
+            val emojiColor = ledColor(ModifierLedState.EMOJI, emojiLevel)
+            ledsByState[ModifierLedState.EMOJI].orEmpty().forEach { led -> animateLedColor(led, emojiColor) }
+        }
+        // The visible idle contour depends on both the upper and lower states.
+        ledsByState[ModifierLedState.SHIFT].orEmpty().forEach { it.invalidate() }
     }
 
     private fun animateLedColor(led: View?, targetColor: Int) {
@@ -398,7 +692,7 @@ class LedStatusView(
             // Rounded indicators overlap the controls. Their transparent center
             // must not become a full-row long-press target above those controls.
             if (cornerRadiiPx != null && event.actionMasked == MotionEvent.ACTION_DOWN) {
-                val edge = LED_ZONE_HEIGHT_DP * resources.displayMetrics.density
+                val edge = MERGED_LED_ZONE_HEIGHT_DP * resources.displayMetrics.density
                 if (event.x > edge && event.x < width - edge && event.y < height - edge) {
                     return false
                 }
