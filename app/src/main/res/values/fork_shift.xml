@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shift_field_text">Messages, notes and other text</string>
+    <string name="shift_field_names">Names</string>
+    <string name="shift_field_addresses">Postal addresses</string>
+    <string name="shift_field_search">Search bars</string>
+    <string name="shift_field_links">Links and web addresses</string>
+    <string name="shift_field_email">Email addresses</string>
+    <string name="shift_field_other">Other fields (ones that don\'t say what they are)</string>
+    <string name="shift_field_none">No fields</string>
+    <string name="search_bar_waits_title">Search bars wait for typing</string>
+    <string name="search_bar_waits_description">When an app opens with its search bar already focused, the keyboard bar appears only once you type or tap the bar.</string>
+</resources>

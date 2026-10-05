@@ -44,7 +44,28 @@ object AutoCapitalizeHelper {
      * Reads the cursor context, ignoring any selected text (treated as removed/replaced).
      * Prefers ExtractedText; falls back to surrounding text APIs.
      */
-    private fun readContext(inputConnection: InputConnection): CursorContext? {
+    /**
+     * Invisible characters some apps keep in an empty field (Instagram's and Keep's zero-width
+     * spaces, an embedded object's placeholder): they aren't text, so the field still counts as
+     * empty and gets its capital.
+     */
+    private val INVISIBLE = Regex("[\\u200B\\u200C\\u200D\\u2060\\uFEFF\\uFFFC]")
+
+    internal fun visible(text: CharSequence): CharSequence =
+        if (INVISIBLE.containsMatchIn(text)) INVISIBLE.replace(text, "") else text
+
+    /**
+     * The cursor sits at the very start of the field, as the app last reported it. Some apps
+     * (Instagram) don't let the keyboard read their field; at its start, it still gets its capital.
+     */
+    @Volatile var cursorAtStart = false
+
+    private fun readContext(inputConnection: InputConnection): CursorContext? =
+        (runCatching { readRawContext(inputConnection) }.getOrNull()
+            ?: if (cursorAtStart) CursorContext("", "") else null)
+            ?.let { CursorContext(visible(it.before), visible(it.after)) }
+
+    private fun readRawContext(inputConnection: InputConnection): CursorContext? {
         val extracted = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
         if (extracted != null && extracted.text != null) {
             val text = extracted.text
@@ -95,6 +116,11 @@ object AutoCapitalizeHelper {
         val lastNonWhitespaceIndex = textBeforeCursor.indexOfLast { !it.isWhitespace() }
         if (lastNonWhitespaceIndex < 0) return false
         
+        // A text emoticon (:) ;D <3) ends a sentence too ("Capital after an emoticon")
+        if (it.palsoftware.pastiera.core.EmoticonSentences.endsWithEmoticon(textBeforeCursor.subSequence(0, lastNonWhitespaceIndex + 1))) {
+            return !requireWhitespaceAfter || lastNonWhitespaceIndex < textBeforeCursor.length - 1
+        }
+
         val lastNonWhitespaceChar = textBeforeCursor[lastNonWhitespaceIndex]
         val isSentencePunctuation = when (lastNonWhitespaceChar) {
             '.' -> {
@@ -168,6 +194,15 @@ object AutoCapitalizeHelper {
      * User settings take precedence over CAP_WORDS and CAP_SENTENCES.
      * CAP_CHARACTERS remains an explicit caps-lock field requirement.
      */
+    /** The app in front, for the debug export's Automatic Shift log. */
+    @Volatile var debugPackage: String? = null
+
+    private fun trace(result: String, reason: String, context: CursorContext? = null) {
+        runCatching {
+            DebugCaptureStore.recordAutoCap(debugPackage, result, reason, context?.before, context?.after)
+        }
+    }
+
     fun maybeEnableSmartShift(
         context: android.content.Context,
         inputConnection: InputConnection?,
@@ -177,8 +212,32 @@ object AutoCapitalizeHelper {
         onUpdateStatusBar: () -> Unit,
         inputContextState: InputContextState? = null
     ) {
-        val ic = inputConnection ?: run {
+        fun on(reason: String, cursor: CursorContext? = null) {
+            val took = enableShift()
+            if (took) {
+                smartShiftRequested = true
+                onUpdateStatusBar()
+            }
+            trace(if (took) "shift" else "shift (already on, or turned off by hand here)", reason, cursor)
+        }
+        fun off(reason: String, cursor: CursorContext? = null) {
             clearSmartShift(disableShift, onUpdateStatusBar)
+            trace("no shift", reason, cursor)
+        }
+        val ic = inputConnection ?: run {
+            off("no input connection")
+            return
+        }
+        // Scripts without capitals (Thai, Arabic, CJK…) use Shift for other letters: never auto-Shift
+        if (isCaselessLanguage(currentLanguageCode(context))) {
+            off("caseless language")
+            return
+        }
+
+        // A kind of field without automatic Shift (Settings > Capitals) gets none, even when the
+        // app asks for capitals
+        if (shouldDisableAutoCapitalize && inputContextState?.requiresCapCharacters != true) {
+            off(if (inputContextState?.exactTyping == true) "exact typing field" else "field type not chosen for Automatic Shift, or a password")
             return
         }
 
@@ -186,7 +245,7 @@ object AutoCapitalizeHelper {
         if (inputContextState != null) {
             // CAP_CHARACTERS is handled separately (caps lock)
             if (inputContextState.requiresCapCharacters) {
-                clearSmartShift(disableShift, onUpdateStatusBar)
+                off("field asks for all capitals")
                 return
             }
             
@@ -195,16 +254,8 @@ object AutoCapitalizeHelper {
                 inputContextState.requiresCapWords &&
                 SettingsManager.getAutoCapitalizeFirstLetter(context)
             ) {
-                if (isAtStartOfWord(ic)) {
-                    if (enableShift()) {
-                        smartShiftRequested = true
-                        onUpdateStatusBar()
-                    }
-                    return
-                } else {
-                    clearSmartShift(disableShift, onUpdateStatusBar)
-                    return
-                }
+                if (isAtStartOfWord(ic)) on("cap words: start of word") else off("cap words: inside a word")
+                return
             }
             
             // CAP_SENTENCES: capitalize at start of sentence, but respect user settings
@@ -234,18 +285,11 @@ object AutoCapitalizeHelper {
                             else -> false
                         }
                         
-                        if (shouldCapitalize) {
-                            if (enableShift()) {
-                                smartShiftRequested = true
-                                onUpdateStatusBar()
-                            }
-                            return
-                        } else {
-                            clearSmartShift(disableShift, onUpdateStatusBar)
-                            return
-                        }
+                        if (shouldCapitalize) on("cap sentences: start of sentence", cursorContext)
+                        else off("cap sentences: mid-sentence", cursorContext)
+                        return
                     } else {
-                        clearSmartShift(disableShift, onUpdateStatusBar)
+                        off("cap sentences: field can't be read")
                         return
                     }
                 }
@@ -254,32 +298,47 @@ object AutoCapitalizeHelper {
 
         // Only check shouldDisableAutoCapitalize for user settings-based auto-cap
         if (shouldDisableAutoCapitalize) {
-            clearSmartShift(disableShift, onUpdateStatusBar)
+            off("field type not chosen for Automatic Shift")
             return
         }
 
         // Fall back to user settings-based auto-capitalization
         val settings = resolveAutoCapSettings(context, ic)
         if (!settings.autoCapFirstLetter && !settings.autoCapAfterPeriod) {
-            clearSmartShift(disableShift, onUpdateStatusBar)
+            off("capitals turned off in settings")
             return
         }
 
         val cursorContext = readContext(ic) ?: run {
-            clearSmartShift(disableShift, onUpdateStatusBar)
+            off("field can't be read")
             return
         }
 
         val shouldCapitalize = shouldAutoCap(settings, cursorContext.before, cursorContext.after)
-        if (shouldCapitalize) {
-            if (enableShift()) {
-                smartShiftRequested = true
-                onUpdateStatusBar()
-            }
-        } else {
-            clearSmartShift(disableShift, onUpdateStatusBar)
-        }
+        if (shouldCapitalize) on("start of sentence", cursorContext)
+        else off("mid-sentence", cursorContext)
     }
+
+    /**
+     * Languages written in scripts without capital letters. On their layouts Shift picks other
+     * letters (Thai: d is ก, D is ฏ), so auto-capitals would type the wrong ones
+     * (palsoftware/pastiera#302).
+     */
+    private val CASELESS_LANGUAGES = setOf(
+        "th", "lo", "km", "my", "zh", "ja", "ko", "ar", "fa", "ur", "ps", "he", "yi",
+        "hi", "mr", "ne", "sa", "bn", "as", "pa", "gu", "or", "ta", "te", "kn", "ml", "si",
+        "am", "ti", "ka", "bo", "dz", "dv"
+    )
+
+    fun isCaselessLanguage(languageCode: String?): Boolean =
+        languageCode != null && languageCode.lowercase().substringBefore('_').substringBefore('-') in CASELESS_LANGUAGES
+
+    private fun currentLanguageCode(context: android.content.Context): String? = runCatching {
+        val imm = context.getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
+            as? android.view.inputmethod.InputMethodManager
+        imm?.currentInputMethodSubtype?.languageTag?.takeIf { it.isNotBlank() }
+            ?: imm?.currentInputMethodSubtype?.locale
+    }.getOrNull()
 
     fun shouldAutoCapitalizeAtCursor(
         context: android.content.Context,
@@ -287,6 +346,7 @@ object AutoCapitalizeHelper {
         shouldDisableAutoCapitalize: Boolean
     ): Boolean {
         if (inputConnection == null || shouldDisableAutoCapitalize) return false
+        if (isCaselessLanguage(currentLanguageCode(context))) return false
         val settings = resolveAutoCapSettings(context, inputConnection)
         if (!settings.autoCapFirstLetter && !settings.autoCapAfterPeriod) {
             return false

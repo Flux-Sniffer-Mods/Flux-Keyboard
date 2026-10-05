@@ -557,8 +557,6 @@ private fun KeyButton(
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,
                 color = keyTextColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
             )
             if (layoutHint != null) {
@@ -567,8 +565,6 @@ private fun KeyButton(
                     style = MaterialTheme.typography.labelSmall,
                     fontSize = 8.sp,
                     color = MaterialTheme.colorScheme.tertiary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center
                 )
             }
@@ -585,8 +581,6 @@ private fun KeyButton(
                     style = MaterialTheme.typography.labelSmall,
                     fontSize = 11.sp,
                     color = mappingTextColor,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center
                 )
             } else if (hasDefault) {
@@ -595,8 +589,6 @@ private fun KeyButton(
                     style = MaterialTheme.typography.labelSmall,
                     fontSize = 9.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center
                 )
             }
@@ -717,8 +709,6 @@ private fun KeyMappingDialog(
                                     text = stringResource(R.string.nav_mode_use_default, defaultLabel),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
                                     textDecoration = TextDecoration.Underline
                                 )
                             }
