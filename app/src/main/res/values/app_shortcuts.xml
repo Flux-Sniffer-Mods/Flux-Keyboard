@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Universal app shortcuts (Settings > Apps > App shortcuts) -->
+<resources>
+    <string name="app_shortcuts_title">App shortcuts</string>
+    <string name="app_shortcuts_description">The same key combos in every app</string>
+    <string name="app_shortcuts_intro">Press the same combo in every app: Ctrl+F searches, Ctrl+N makes something new, Alt+↓ goes to the next item. Pastiera sends each app its own shortcut for it, or where the app has none, opens the app’s own share or search screen.</string>
+    <string name="app_shortcuts_enabled_title">Universal app shortcuts</string>
+    <string name="app_shortcuts_enabled_description">Send each app its own shortcut for the standard combos</string>
+    <string name="app_shortcuts_section_standard">Standard combos</string>
+    <string name="app_shortcuts_section_apps">Apps</string>
+    <string name="app_shortcuts_section_mapping">What each combo sends</string>
+    <string name="app_shortcuts_scope_outside_text_fields">Not while typing in a text field</string>
+    <string name="app_shortcuts_not_installed">not installed</string>
+    <plurals name="app_shortcuts_remapped_count">
+        <item quantity="one">%d combo sent as the app’s own shortcut</item>
+        <item quantity="other">%d combos sent as the app’s own shortcuts</item>
+    </plurals>
+    <string name="app_shortcuts_add_app">Add an app</string>
+    <string name="app_shortcuts_research_note">Key shortcuts come only from what each app documents for Android (or ships in its source code); most apps document none, so their presets are suggestions. The apps are Google Play’s top 100 in Social and top 10 in every other main category.</string>
+
+    <string name="app_shortcuts_app_source">Preset from the app’s keyboard shortcut documentation: %1$s</string>
+    <string name="app_shortcuts_app_custom">Added by you: set what each combo sends by pressing the app’s shortcut.</string>
+    <string name="app_shortcuts_app_enabled_title">Shortcuts in this app</string>
+    <string name="app_shortcuts_app_enabled_description">Send %1$s its own shortcuts for the standard combos</string>
+    <string name="app_shortcuts_not_remapped">Not remapped: the app gets the combo as pressed</string>
+    <string name="app_shortcuts_same_in_app">Already the app’s own shortcut</string>
+    <string name="app_shortcuts_sent_as">Sent as %1$s</string>
+    <string name="app_shortcuts_changed_by_you">changed by you</string>
+    <string name="app_shortcuts_reset_app">Back to the preset</string>
+    <string name="app_shortcuts_reset_app_description">Forget the shortcuts you changed in this app</string>
+    <string name="app_shortcuts_remove_app">Remove this app</string>
+    <string name="app_shortcuts_remove_app_description">Stop sending it shortcuts and forget them</string>
+
+    <string name="app_shortcuts_capture_instruction">Press the app’s own shortcut for this. Pastiera sends it when you press %1$s in the app.</string>
+    <string name="app_shortcuts_capture_waiting">Press a key combo…</string>
+    <string name="app_shortcuts_capture_preset">Preset: %1$s</string>
+    <string name="app_shortcuts_dont_remap">Don’t remap</string>
+    <string name="app_shortcuts_use_preset">Use preset</string>
+    <string name="app_shortcuts_save">Save</string>
+
+    <string name="app_shortcut_new">New (message, note, event, tab)</string>
+    <string name="app_shortcut_search">Search or find</string>
+    <string name="app_shortcut_open">Open or go to</string>
+    <string name="app_shortcut_refresh">Refresh</string>
+    <string name="app_shortcut_send">Send</string>
+    <string name="app_shortcut_close">Close or finish</string>
+    <string name="app_shortcut_reply">Reply</string>
+    <string name="app_shortcut_reply_all">Reply all</string>
+    <string name="app_shortcut_forward">Forward</string>
+    <string name="app_shortcut_archive">Archive</string>
+    <string name="app_shortcut_delete">Delete</string>
+    <string name="app_shortcut_mark_unread">Mark unread</string>
+    <string name="app_shortcut_star">Star, flag, pin or bookmark</string>
+    <string name="app_shortcut_undo">Undo the last action</string>
+    <string name="app_shortcut_next">Next item (message, tab, sheet, session)</string>
+    <string name="app_shortcut_previous">Previous item</string>
+    <string name="app_shortcut_menu">Menu or side panel</string>
+    <string name="app_shortcut_help">Keyboard shortcut help</string>
+
+    <string name="app_shortcuts_suggestions_title">Suggested shortcuts</string>
+    <string name="app_shortcuts_suggestions_description">Where an app documents no key shortcut, open its own screen instead: its share screen for New, its search for Search. Only when the app on this phone accepts it.</string>
+    <plurals name="app_shortcuts_suggested_count">
+        <item quantity="one">%d suggested shortcut</item>
+        <item quantity="other">%d suggested shortcuts</item>
+    </plurals>
+    <plurals name="app_shortcuts_not_installed_count">
+        <item quantity="one">%d more app with a preset</item>
+        <item quantity="other">%d more apps with presets</item>
+    </plurals>
+    <string name="app_shortcuts_show_not_installed">Show apps that aren’t installed</string>
+    <string name="app_shortcuts_app_suggested_only">This app documents no keyboard shortcuts. Its suggested shortcuts open its own screens; each is used only if the app accepts it.</string>
+    <string name="app_shortcuts_suggested_share">Suggested: opens its share screen (new post or message)</string>
+    <string name="app_shortcuts_suggested_search">Suggested: opens its search</string>
+    <string name="app_shortcuts_suggested_link">Suggested: opens %1$s in the app</string>
+    <string name="app_shortcuts_category_social">Social</string>
+    <string name="app_shortcuts_category_communication">Communication</string>
+    <string name="app_shortcuts_category_browsers">Browsers</string>
+    <string name="app_shortcuts_category_productivity">Productivity</string>
+    <string name="app_shortcuts_category_entertainment">Entertainment</string>
+    <string name="app_shortcuts_category_video_players">Video players</string>
+    <string name="app_shortcuts_category_music">Music &amp; audio</string>
+    <string name="app_shortcuts_category_shopping">Shopping</string>
+    <string name="app_shortcuts_category_maps">Maps &amp; navigation</string>
+    <string name="app_shortcuts_category_travel">Travel &amp; local</string>
+    <string name="app_shortcuts_category_news">News &amp; magazines</string>
+    <string name="app_shortcuts_category_books">Books &amp; reference</string>
+    <string name="app_shortcuts_category_photography">Photography</string>
+    <string name="app_shortcuts_category_finance">Finance</string>
+    <string name="app_shortcuts_category_education">Education</string>
+    <string name="app_shortcuts_category_health">Health &amp; fitness</string>
+    <string name="app_shortcuts_category_food">Food &amp; drink</string>
+    <string name="app_shortcuts_category_lifestyle">Lifestyle</string>
+    <string name="app_shortcuts_category_business">Business</string>
+    <string name="app_shortcuts_category_tools">Tools</string>
+    <string name="app_shortcuts_category_dating">Dating</string>
+    <string name="app_shortcuts_category_sports">Sports</string>
+    <string name="app_shortcuts_category_weather">Weather</string>
+    <string name="app_shortcuts_category_terminal">Terminal</string>
+    <string name="app_shortcuts_category_other">Added by you</string>
+    <string name="enter_standards_title">Following their category</string>
+    <string name="enter_standards_description">Every app follows the preset unless you set it above: by default Enter sends and Shift+Enter is a new line. Email and note-taking apps keep Enter for a new line: Ctrl+Enter sends an email. Tap an app to set it yourself.</string>
+    <string name="enter_standards_empty">No other chat or email apps installed from the list.</string>
+    <string name="enter_standard_chat">Chat · %1$s</string>
+    <string name="enter_standard_email">Email · Enter newline, Ctrl+Enter sends</string>
+    <string name="app_shortcut_settings">App settings</string>
+    <string name="app_shortcut_app_action_1">App\'s shortcut 1</string>
+    <string name="app_shortcut_app_action_2">App\'s shortcut 2</string>
+    <string name="app_shortcut_app_action_3">App\'s shortcut 3</string>
+    <string name="app_shortcut_app_action_4">App\'s shortcut 4</string>
+    <string name="app_shortcuts_opens_discovered">Opens %1$s (from the app)</string>
+    <string name="app_shortcuts_opens_settings">Opens the app\'s settings</string>
+    <string name="app_shortcuts_section_discovered">What the app offers</string>
+    <string name="app_shortcuts_discovered_note">Shortcuts this app shows when you long-press its icon, and its settings screen, read from the app on this phone. Ctrl+Alt+1 to 4 open the first four (on a keyboard without a number row, hold Ctrl+Alt and press the keys that type 1 to 4), Ctrl+, opens its settings, and one named like New or Search fills Ctrl+N or Ctrl+F when nothing else does.</string>
+    <string name="app_shortcuts_discovered_none">This app offers no shortcuts or settings screen to other apps.</string>
+    <string name="app_shortcuts_keys_note">Shown as you press them on your keyboard. Where it has no number or \"/\" key, hold Ctrl and Alt with the letter that types it (shown in brackets). Shortcuts your keyboard can\'t make, like arrows without arrow keys, aren\'t listed.</string>
+    <string name="app_enter_behaviour_preset_newline_shift_send">Enter new line, Shift+Enter sends</string>
+    <string name="app_enter_behaviour_option_newline_shift_send">Enter new line, Shift+Enter sends</string>
+    <string name="enter_standard_notes">Notes · Enter new line, Ctrl+Enter for the app\'s own action</string>
+</resources>

@@ -1,0 +1,2172 @@
+[
+ {
+  "package": "com.google.android.apps.maps",
+  "title": "Google Maps",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "10B+",
+  "reviews": 19600000
+ },
+ {
+  "package": "com.google.android.apps.mapslite",
+  "title": "Google Maps Go",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "1B+",
+  "reviews": 358000
+ },
+ {
+  "package": "com.booking",
+  "title": "Booking.com: Hotels & Travel",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "500M+",
+  "reviews": 6400000
+ },
+ {
+  "package": "com.google.earth",
+  "title": "Google Earth",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "500M+",
+  "reviews": 2960000
+ },
+ {
+  "package": "com.grabtaxi.passenger",
+  "title": "Grab - Taxi & Food Delivery",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "100M+",
+  "reviews": 16700000
+ },
+ {
+  "package": "com.gojek.app",
+  "title": "Gojek - Food & Transportation",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "100M+",
+  "reviews": 6710000
+ },
+ {
+  "package": "in.redbus.android",
+  "title": "redBus Book Bus, Train Tickets",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "100M+",
+  "reviews": 4650000
+ },
+ {
+  "package": "ru.yandex.yandexnavi",
+  "title": "Yandex Navigator",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "100M+",
+  "reviews": 2730000
+ },
+ {
+  "package": "com.comuto",
+  "title": "BlaBlaCar: Carpooling and Bus",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "100M+",
+  "reviews": 2610000
+ },
+ {
+  "package": "com.makemytrip",
+  "title": "MakeMyTrip - Flights & Hotels",
+  "category": "TRAVEL_AND_LOCAL",
+  "downloads": "100M+",
+  "reviews": 2230000
+ },
+ {
+  "package": "com.sec.android.app.shealth",
+  "title": "Samsung Health",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "1B+",
+  "reviews": 1580000
+ },
+ {
+  "package": "org.iggymedia.periodtracker",
+  "title": "Flo Ovulation & Period Tracker",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 5110000
+ },
+ {
+  "package": "com.popularapp.periodcalendar",
+  "title": "Period Calendar Period Tracker",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 4890000
+ },
+ {
+  "package": "homeworkout.homeworkouts.noequipment",
+  "title": "Home Workout - No Equipment",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 4030000
+ },
+ {
+  "package": "in.sweatco.app",
+  "title": "Sweatcoin・Walking Step Counter",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 3120000
+ },
+ {
+  "package": "com.myfitnesspal.android",
+  "title": "MyFitnessPal: Calorie Counter",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 2920000
+ },
+ {
+  "package": "sixpack.sixpackabs.absworkout",
+  "title": "Six Pack in 30 Days",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 2850000
+ },
+ {
+  "package": "menloseweight.loseweightappformen.weightlossformen",
+  "title": "Lose Weight App for Men",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 2750000
+ },
+ {
+  "package": "pedometer.steptracker.calorieburner.stepcounter",
+  "title": "Step Counter - Pedometer",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 1710000
+ },
+ {
+  "package": "loseweight.weightloss.workout.fitness",
+  "title": "Lose Weight - Weight Loss App",
+  "category": "HEALTH_AND_FITNESS",
+  "downloads": "100M+",
+  "reviews": 1250000
+ },
+ {
+  "package": "us.zoom.videomeetings",
+  "title": "Zoom Workplace",
+  "category": "BUSINESS",
+  "downloads": "1B+",
+  "reviews": 4590000
+ },
+ {
+  "package": "com.linkedin.android",
+  "title": "LinkedIn: Community & Network",
+  "category": "BUSINESS",
+  "downloads": "1B+",
+  "reviews": 3510000
+ },
+ {
+  "package": "com.microsoft.teams",
+  "title": "Microsoft Teams",
+  "category": "BUSINESS",
+  "downloads": "500M+",
+  "reviews": 8780000
+ },
+ {
+  "package": "com.indeed.android.jobsearch",
+  "title": "Indeed Job Search",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 13900000
+ },
+ {
+  "package": "com.ubercab.driver",
+  "title": "Uber - Driver: Drive & Deliver",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 6290000
+ },
+ {
+  "package": "com.facebook.pages.app",
+  "title": "Meta Business Suite",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 5310000
+ },
+ {
+  "package": "com.adobe.scan.android",
+  "title": "Adobe Scan AI PDF Scanner, OCR",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 3040000
+ },
+ {
+  "package": "pdf.tap.scanner",
+  "title": "PDF Scanner app - TapScanner",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 2940000
+ },
+ {
+  "package": "com.azure.authenticator",
+  "title": "Microsoft Authenticator",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 2800000
+ },
+ {
+  "package": "com.teamviewer.teamviewer.market.mobile",
+  "title": "TeamViewer Remote Control",
+  "category": "BUSINESS",
+  "downloads": "100M+",
+  "reviews": 1060000
+ },
+ {
+  "package": "com.google.android.apps.books",
+  "title": "Google Play Books & Audiobooks",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "1B+",
+  "reviews": 3230000
+ },
+ {
+  "package": "wp.wattpad",
+  "title": "Wattpad - Read & Write Stories",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "100M+",
+  "reviews": 5020000
+ },
+ {
+  "package": "com.amazon.kindle",
+  "title": "Amazon Kindle: Reading App",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "100M+",
+  "reviews": 4820000
+ },
+ {
+  "package": "com.audible.application",
+  "title": "Audible: Audiobooks & Podcasts",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "100M+",
+  "reviews": 1760000
+ },
+ {
+  "package": "com.nhn.android.search",
+  "title": "네이버 - NAVER",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "100M+",
+  "reviews": 542000
+ },
+ {
+  "package": "org.readera",
+  "title": "ReadEra – book reader pdf epub",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "50M+",
+  "reviews": 1590000
+ },
+ {
+  "package": "com.pratilipi.mobile.android",
+  "title": "Pratilipi Novel",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "50M+",
+  "reviews": 926000
+ },
+ {
+  "package": "org.wikipedia",
+  "title": "Wikipedia",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "50M+",
+  "reviews": 694000
+ },
+ {
+  "package": "com.mobisystems.msdict.embedded.wireless.oxford.dictionaryofenglish",
+  "title": "Oxford Dictionary & Thesaurus",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "50M+",
+  "reviews": 543000
+ },
+ {
+  "package": "com.merriamwebster",
+  "title": "Dictionary - Merriam-Webster",
+  "category": "BOOKS_AND_REFERENCE",
+  "downloads": "50M+",
+  "reviews": 519000
+ },
+ {
+  "package": "com.cricbuzz.android",
+  "title": "Cricbuzz - Live Cricket Scores",
+  "category": "SPORTS",
+  "downloads": "100M+",
+  "reviews": 3150000
+ },
+ {
+  "package": "com.espn.score_center",
+  "title": "ESPN",
+  "category": "SPORTS",
+  "downloads": "100M+",
+  "reviews": 1210000
+ },
+ {
+  "package": "com.sofascore.results",
+  "title": "Sofascore: Live Sports Scores",
+  "category": "SPORTS",
+  "downloads": "100M+",
+  "reviews": 1150000
+ },
+ {
+  "package": "com.gotv.nflgamecenter.us.lite",
+  "title": "NFL",
+  "category": "SPORTS",
+  "downloads": "100M+",
+  "reviews": 644000
+ },
+ {
+  "package": "com.resultadosfutbol.mobile",
+  "title": "BeSoccer: Soccer Live Score",
+  "category": "SPORTS",
+  "downloads": "100M+",
+  "reviews": 628000
+ },
+ {
+  "package": "com.crrepa.band.dafit",
+  "title": "Da Fit",
+  "category": "SPORTS",
+  "downloads": "100M+",
+  "reviews": 407000
+ },
+ {
+  "package": "com.scores365",
+  "title": "365Scores: Live Sports Scores",
+  "category": "SPORTS",
+  "downloads": "50M+",
+  "reviews": 2200000
+ },
+ {
+  "package": "de.motain.iliga",
+  "title": "OneFootball Live Soccer scores",
+  "category": "SPORTS",
+  "downloads": "50M+",
+  "reviews": 1630000
+ },
+ {
+  "package": "com.mobilefootie.wc2010",
+  "title": "FotMob - Soccer Live Scores",
+  "category": "SPORTS",
+  "downloads": "50M+",
+  "reviews": 750000
+ },
+ {
+  "package": "com.dazn",
+  "title": "DAZN - Watch Live Sports",
+  "category": "SPORTS",
+  "downloads": "50M+",
+  "reviews": 650000
+ },
+ {
+  "package": "com.grofers.customerapp",
+  "title": "Blinkit: Groceries & more",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "100M+",
+  "reviews": 9560000
+ },
+ {
+  "package": "com.ubercab.eats",
+  "title": "Uber Eats: Food and Grocery",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "100M+",
+  "reviews": 7860000
+ },
+ {
+  "package": "com.zeptoconsumerapp",
+  "title": "Zepto: Groceries in minutes",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "100M+",
+  "reviews": 4910000
+ },
+ {
+  "package": "com.global.foodpanda.android",
+  "title": "foodpanda: food & groceries",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "100M+",
+  "reviews": 3580000
+ },
+ {
+  "package": "com.grability.rappi",
+  "title": "Rappi: Food Delivery, Grocery",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "100M+",
+  "reviews": 2370000
+ },
+ {
+  "package": "com.mcdonalds.mobileapp",
+  "title": "McDonald's",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "100M+",
+  "reviews": 807000
+ },
+ {
+  "package": "com.dd.doordash",
+  "title": "DoorDash: Food, Grocery, More",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "50M+",
+  "reviews": 6210000
+ },
+ {
+  "package": "com.pedidosya",
+  "title": "PedidosYa - Delivery Online",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "50M+",
+  "reviews": 2240000
+ },
+ {
+  "package": "com.mcdonalds.app",
+  "title": "McDonald's",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "50M+",
+  "reviews": 2170000
+ },
+ {
+  "package": "com.app.tgtg",
+  "title": "Too Good To Go: End Food Waste",
+  "category": "FOOD_AND_DRINK",
+  "downloads": "50M+",
+  "reviews": 2000000
+ },
+ {
+  "package": "com.google.android.youtube",
+  "title": "YouTube",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "10B+",
+  "reviews": 172000000
+ },
+ {
+  "package": "com.mxtech.videoplayer.ad",
+  "title": "MX Player",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "1B+",
+  "reviews": 14300000
+ },
+ {
+  "package": "com.lemon.lvoverseas",
+  "title": "CapCut - Video Editor",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "1B+",
+  "reviews": 13000000
+ },
+ {
+  "package": "com.transsion.magicshow",
+  "title": "Visha-Video Player All Formats",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "1B+",
+  "reviews": 1700000
+ },
+ {
+  "package": "com.quvideo.xiaoying",
+  "title": "VivaVideo - Video Cut & Editor",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "500M+",
+  "reviews": 12300000
+ },
+ {
+  "package": "com.kwai.video",
+  "title": "Kwai - Video & Drama",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "500M+",
+  "reviews": 11100000
+ },
+ {
+  "package": "com.nexstreaming.app.kinemasterfree",
+  "title": "KineMaster - AI Video Editor",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "500M+",
+  "reviews": 6110000
+ },
+ {
+  "package": "org.videolan.vlc",
+  "title": "VLC for Android",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "500M+",
+  "reviews": 2009999
+ },
+ {
+  "package": "com.camerasideas.trimmer",
+  "title": "YouCut - Video Editor & Maker",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "100M+",
+  "reviews": 8600000
+ },
+ {
+  "package": "videoeditor.videorecorder.screenrecorder",
+  "title": "Screen Recorder - XRecorder",
+  "category": "VIDEO_PLAYERS",
+  "downloads": "100M+",
+  "reviews": 7660000
+ },
+ {
+  "package": "com.phonepe.app",
+  "title": "PhonePe UPI Payments, Loan App",
+  "category": "FINANCE",
+  "downloads": "1B+",
+  "reviews": 14300000
+ },
+ {
+  "package": "com.google.android.apps.walletnfcrel",
+  "title": "Google Wallet",
+  "category": "FINANCE",
+  "downloads": "1B+",
+  "reviews": 2240000
+ },
+ {
+  "package": "id.dana",
+  "title": "DANA Indonesia Digital Wallet",
+  "category": "FINANCE",
+  "downloads": "100M+",
+  "reviews": 10700000
+ },
+ {
+  "package": "com.squareup.cash",
+  "title": "Cash App",
+  "category": "FINANCE",
+  "downloads": "100M+",
+  "reviews": 4460000
+ },
+ {
+  "package": "pk.com.telenor.phoenix",
+  "title": "easypaisa – a digital bank",
+  "category": "FINANCE",
+  "downloads": "100M+",
+  "reviews": 4420000
+ },
+ {
+  "package": "com.paypal.android.p2pmobile",
+  "title": "PayPal - Pay, Send, Save",
+  "category": "FINANCE",
+  "downloads": "100M+",
+  "reviews": 3730000
+ },
+ {
+  "package": "com.gojek.gopay",
+  "title": "GoPay: Transfer, Payment, QRIS",
+  "category": "FINANCE",
+  "downloads": "100M+",
+  "reviews": 1990000
+ },
+ {
+  "package": "in.org.npci.upiapp",
+  "title": "BHIM Bharat's Own Payments App",
+  "category": "FINANCE",
+  "downloads": "100M+",
+  "reviews": 1920000
+ },
+ {
+  "package": "com.bancomer.mbanking",
+  "title": "BBVA México",
+  "category": "FINANCE",
+  "downloads": "50M+",
+  "reviews": 6130000
+ },
+ {
+  "package": "com.bpjstku",
+  "title": "JMO (Jamsostek Mobile)",
+  "category": "FINANCE",
+  "downloads": "50M+",
+  "reviews": 4520000
+ },
+ {
+  "package": "com.google.android.apps.youtube.music",
+  "title": "YouTube Music",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "5B+",
+  "reviews": 7830000
+ },
+ {
+  "package": "com.spotify.music",
+  "title": "Spotify: Music and Podcasts",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "1B+",
+  "reviews": 36400000
+ },
+ {
+  "package": "com.sec.android.app.music",
+  "title": "Samsung Music",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "1B+",
+  "reviews": 820000
+ },
+ {
+  "package": "com.shazam.android",
+  "title": "Shazam: Find Music & Concerts",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "500M+",
+  "reviews": 12200000
+ },
+ {
+  "package": "com.jio.media.jiobeats",
+  "title": "JioSaavn - Music & Podcasts",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "500M+",
+  "reviews": 9040000
+ },
+ {
+  "package": "com.dywx.larkplayer",
+  "title": "Lark Player:Music Player & MP3",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "500M+",
+  "reviews": 5390000
+ },
+ {
+  "package": "com.starmakerinteractive.starmaker",
+  "title": "StarMaker: Sing Karaoke Songs",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "500M+",
+  "reviews": 3940000
+ },
+ {
+  "package": "com.audiomack",
+  "title": "Audiomack: Music Downloader",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "100M+",
+  "reviews": 8990000
+ },
+ {
+  "package": "com.soundcloud.android",
+  "title": "SoundCloud: The Music You Love",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "100M+",
+  "reviews": 7640000
+ },
+ {
+  "package": "com.gaana",
+  "title": "Gaana: Music App, MP3 Songs",
+  "category": "MUSIC_AND_AUDIO",
+  "downloads": "100M+",
+  "reviews": 5140000
+ },
+ {
+  "package": "com.pinterest",
+  "title": "Pinterest",
+  "category": "LIFESTYLE",
+  "downloads": "1B+",
+  "reviews": 11600000
+ },
+ {
+  "package": "com.samsung.android.oneconnect",
+  "title": "SmartThings",
+  "category": "LIFESTYLE",
+  "downloads": "1B+",
+  "reviews": 5460000
+ },
+ {
+  "package": "com.google.android.apps.chromecast.app",
+  "title": "Google Home",
+  "category": "LIFESTYLE",
+  "downloads": "1B+",
+  "reviews": 3660000
+ },
+ {
+  "package": "com.amazon.dee.app",
+  "title": "Amazon Alexa",
+  "category": "LIFESTYLE",
+  "downloads": "100M+",
+  "reviews": 5700000
+ },
+ {
+  "package": "com.life360.android.safetymapd",
+  "title": "Life360: Family Safety & GPS",
+  "category": "LIFESTYLE",
+  "downloads": "100M+",
+  "reviews": 2410000
+ },
+ {
+  "package": "com.glovo",
+  "title": "Glovo: Food & Grocery Delivery",
+  "category": "LIFESTYLE",
+  "downloads": "100M+",
+  "reviews": 2160000
+ },
+ {
+  "package": "com.astrotalk",
+  "title": "Astrotalk - Talk to Astrologer",
+  "category": "LIFESTYLE",
+  "downloads": "100M+",
+  "reviews": 1700000
+ },
+ {
+  "package": "com.lgeha.nuts",
+  "title": "LG ThinQ",
+  "category": "LIFESTYLE",
+  "downloads": "100M+",
+  "reviews": 1470000
+ },
+ {
+  "package": "com.dramaton.slime",
+  "title": "Super Slime Simulator: DIY Art",
+  "category": "LIFESTYLE",
+  "downloads": "100M+",
+  "reviews": 914000
+ },
+ {
+  "package": "com.xiaomi.smarthome",
+  "title": "Xiaomi Home",
+  "category": "LIFESTYLE",
+  "downloads": "50M+",
+  "reviews": 1600000
+ },
+ {
+  "package": "com.google.android.googlequicksearchbox",
+  "title": "Google",
+  "category": "TOOLS",
+  "downloads": "10B+",
+  "reviews": 29500000
+ },
+ {
+  "package": "com.google.android.dialer",
+  "title": "Phone by Google",
+  "category": "TOOLS",
+  "downloads": "5B+",
+  "reviews": 51400000
+ },
+ {
+  "package": "com.sec.android.app.myfiles",
+  "title": "Samsung My Files",
+  "category": "TOOLS",
+  "downloads": "5B+",
+  "reviews": 550000
+ },
+ {
+  "package": "com.lenovo.anyshare.gps",
+  "title": "SHAREit: Transfer, Share Files",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 18300000
+ },
+ {
+  "package": "com.google.android.apps.translate",
+  "title": "Google Translate",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 9030000
+ },
+ {
+  "package": "com.mi.android.globalFileexplorer",
+  "title": "File Manager",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 4380000
+ },
+ {
+  "package": "com.google.ar.lens",
+  "title": "Google Lens",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 2860000
+ },
+ {
+  "package": "com.google.android.apps.searchlite",
+  "title": "Google Go",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 2140000
+ },
+ {
+  "package": "com.samsung.android.voc",
+  "title": "Samsung Members",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 1860000
+ },
+ {
+  "package": "com.mi.globalbrowser",
+  "title": "Mi Browser",
+  "category": "TOOLS",
+  "downloads": "1B+",
+  "reviews": 1320000
+ },
+ {
+  "package": "com.google.android.apps.photos",
+  "title": "Google Photos",
+  "category": "PHOTOGRAPHY",
+  "downloads": "10B+",
+  "reviews": 54100000
+ },
+ {
+  "package": "com.picsart.studio",
+  "title": "Picsart AI Photo Editor, Video",
+  "category": "PHOTOGRAPHY",
+  "downloads": "1B+",
+  "reviews": 12100000
+ },
+ {
+  "package": "com.google.android.apps.photosgo",
+  "title": "Gallery",
+  "category": "PHOTOGRAPHY",
+  "downloads": "1B+",
+  "reviews": 640000
+ },
+ {
+  "package": "com.camerasideas.instashot",
+  "title": "Video Editor & Maker - InShot",
+  "category": "PHOTOGRAPHY",
+  "downloads": "500M+",
+  "reviews": 24600000
+ },
+ {
+  "package": "com.linecorp.b612.android",
+  "title": "B612 AI Photo&Video Editor",
+  "category": "PHOTOGRAPHY",
+  "downloads": "500M+",
+  "reviews": 7190000
+ },
+ {
+  "package": "com.bigwinepot.nwdn.international",
+  "title": "Remini - AI Photo Enhancer",
+  "category": "PHOTOGRAPHY",
+  "downloads": "500M+",
+  "reviews": 5880000
+ },
+ {
+  "package": "io.faceapp",
+  "title": "FaceApp: Perfect Face Editor",
+  "category": "PHOTOGRAPHY",
+  "downloads": "500M+",
+  "reviews": 5360000
+ },
+ {
+  "package": "com.commsource.beautyplus",
+  "title": "BeautyPlus-Selfie Photo Editor",
+  "category": "PHOTOGRAPHY",
+  "downloads": "500M+",
+  "reviews": 5010000
+ },
+ {
+  "package": "vStudio.Android.Camera360",
+  "title": "Camera360 :Photo Editor&Selfie",
+  "category": "PHOTOGRAPHY",
+  "downloads": "100M+",
+  "reviews": 4750000
+ },
+ {
+  "package": "photo.editor.photoeditor.photoeditorpro",
+  "title": "Photo Editor - Polish",
+  "category": "PHOTOGRAPHY",
+  "downloads": "100M+",
+  "reviews": 4700000
+ },
+ {
+  "package": "com.duolingo",
+  "title": "Duolingo: Language Lessons",
+  "category": "EDUCATION",
+  "downloads": "500M+",
+  "reviews": 49100000
+ },
+ {
+  "package": "co.brainly",
+  "title": "Brainly: AI Homework Helper",
+  "category": "EDUCATION",
+  "downloads": "100M+",
+  "reviews": 4470000
+ },
+ {
+  "package": "com.google.android.apps.classroom",
+  "title": "Google Classroom",
+  "category": "EDUCATION",
+  "downloads": "100M+",
+  "reviews": 2089999
+ },
+ {
+  "package": "com.education.android.h.intelligence",
+  "title": "Gauth: AI Study Companion",
+  "category": "EDUCATION",
+  "downloads": "100M+",
+  "reviews": 2040000
+ },
+ {
+  "package": "me.mycake",
+  "title": "Cake - Learn English & Korean",
+  "category": "EDUCATION",
+  "downloads": "100M+",
+  "reviews": 1230000
+ },
+ {
+  "package": "no.mobitroll.kahoot.android",
+  "title": "Kahoot! Play & Create Quizzes",
+  "category": "EDUCATION",
+  "downloads": "100M+",
+  "reviews": 857000
+ },
+ {
+  "package": "com.memrise.android.memrisecompanion",
+  "title": "Memrise: Fun language lessons",
+  "category": "EDUCATION",
+  "downloads": "50M+",
+  "reviews": 1570000
+ },
+ {
+  "package": "com.classdojo.android",
+  "title": "ClassDojo",
+  "category": "EDUCATION",
+  "downloads": "50M+",
+  "reviews": 1340000
+ },
+ {
+  "package": "com.busuu.android.enc",
+  "title": "Busuu: Learn & Speak Languages",
+  "category": "EDUCATION",
+  "downloads": "50M+",
+  "reviews": 1230000
+ },
+ {
+  "package": "com.babbel.mobile.android.en",
+  "title": "Babbel - Learn Languages",
+  "category": "EDUCATION",
+  "downloads": "50M+",
+  "reviews": 1130000
+ },
+ {
+  "package": "com.facebook.katana",
+  "title": "Facebook",
+  "category": "SOCIAL",
+  "downloads": "10B+",
+  "reviews": 186000000
+ },
+ {
+  "package": "com.instagram.android",
+  "title": "Instagram",
+  "category": "SOCIAL",
+  "downloads": "5B+",
+  "reviews": 169000000
+ },
+ {
+  "package": "com.zhiliaoapp.musically",
+  "title": "TikTok - Videos, Shop & LIVE",
+  "category": "SOCIAL",
+  "downloads": "1B+",
+  "reviews": 70000000
+ },
+ {
+  "package": "com.facebook.lite",
+  "title": "Facebook Lite",
+  "category": "SOCIAL",
+  "downloads": "1B+",
+  "reviews": 38900000
+ },
+ {
+  "package": "video.like",
+  "title": "Likee-Live, Chat & Party Games",
+  "category": "SOCIAL",
+  "downloads": "1B+",
+  "reviews": 11400000
+ },
+ {
+  "package": "com.instagram.lite",
+  "title": "Instagram Lite",
+  "category": "SOCIAL",
+  "downloads": "1B+",
+  "reviews": 2700000
+ },
+ {
+  "package": "sg.bigo.live",
+  "title": "Bigo Live - Live Streaming App",
+  "category": "SOCIAL",
+  "downloads": "500M+",
+  "reviews": 6490000
+ },
+ {
+  "package": "in.mohalla.sharechat",
+  "title": "ShareChat Status, Video & Live",
+  "category": "SOCIAL",
+  "downloads": "500M+",
+  "reviews": 3970000
+ },
+ {
+  "package": "com.instagram.barcelona",
+  "title": "Threads",
+  "category": "SOCIAL",
+  "downloads": "500M+",
+  "reviews": 2620000
+ },
+ {
+  "package": "com.trassion.infinix.xclub",
+  "title": "XClub",
+  "category": "SOCIAL",
+  "downloads": "500M+",
+  "reviews": 145000
+ },
+ {
+  "package": "com.vkontakte.android",
+  "title": "VK: music, video, messenger",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 9240000
+ },
+ {
+  "package": "com.sgiggle.production",
+  "title": "Tango: Live Stream, Video Chat",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 4990000
+ },
+ {
+  "package": "com.reddit.frontpage",
+  "title": "Reddit",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 4840000
+ },
+ {
+  "package": "com.tumblr",
+  "title": "Tumblr: Social Media & Art",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 3740000
+ },
+ {
+  "package": "ru.ok.android",
+  "title": "OK: Social Network",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 2830000
+ },
+ {
+  "package": "com.nglreactnative",
+  "title": "NGL: ask me anything",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 2049999
+ },
+ {
+  "package": "in.mohalla.video",
+  "title": "Moj: Free Short Drama & Reels",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 2040000
+ },
+ {
+  "package": "com.myyearbook.m",
+  "title": "MeetMe: Go Live & Stream Now",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 1640000
+ },
+ {
+  "package": "com.litatom.app",
+  "title": "Litmatch—Make new friends",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 1260000
+ },
+ {
+  "package": "com.next.innovation.takatak",
+  "title": "Moj Lite",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 1090000
+ },
+ {
+  "package": "com.eterno.shortvideos",
+  "title": "Josh - Live Calls & Chat",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 983000
+ },
+ {
+  "package": "com.blockchainvault",
+  "title": "Pi Network",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 950000
+ },
+ {
+  "package": "org.thunderdog.challegram",
+  "title": "Telegram X",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 858000
+ },
+ {
+  "package": "video.like.lite",
+  "title": "Saya Lite - Games&Party&Chat",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 759000
+ },
+ {
+  "package": "omegle.tv",
+  "title": "OmeTV – Video Chat Alternative",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 699000
+ },
+ {
+  "package": "io.chingari.app",
+  "title": "Chingari - Live & Audio Room",
+  "category": "SOCIAL",
+  "downloads": "100M+",
+  "reviews": 666000
+ },
+ {
+  "package": "net.lovoo.android",
+  "title": "LOVOO - Dating App & Chat App",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 1200000
+ },
+ {
+  "package": "com.taggedapp",
+  "title": "Tagged - Meet, Chat & Dating",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 1060000
+ },
+ {
+  "package": "com.waplog.social",
+  "title": "Waplog: Dating & Video Chat",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 827000
+ },
+ {
+  "package": "com.nhn.android.band",
+  "title": "BAND - App for all groups",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 793000
+ },
+ {
+  "package": "com.mico",
+  "title": "MICO: Go Live Streaming & Chat",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 755000
+ },
+ {
+  "package": "com.unearby.sayhi",
+  "title": "SayHi Chat Meet Dating People",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 755000
+ },
+ {
+  "package": "com.imvu.mobilecordova",
+  "title": "IMVU: Social Chat & Avatar app",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 702000
+ },
+ {
+  "package": "com.widgetable.theme.android",
+  "title": "Widgetable: Besties & Couples",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 563000
+ },
+ {
+  "package": "com.textmeinc.textme",
+  "title": "Text Me: Second Phone Number",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 550000
+ },
+ {
+  "package": "com.gogii.textplus",
+  "title": "textPlus: Text Message + Call",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 541000
+ },
+ {
+  "package": "com.hkfuliao.chamet",
+  "title": "Chamet - Live Chat & Party",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 522000
+ },
+ {
+  "package": "com.kakao.story",
+  "title": "KakaoStory",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 518000
+ },
+ {
+  "package": "com.scorp.who",
+  "title": "Who - Live Video Chat",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 287000
+ },
+ {
+  "package": "com.thankyo.hwgame",
+  "title": "StreamKar - Live Stream & Chat",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 206000
+ },
+ {
+  "package": "com.live.soulchill",
+  "title": "SoulChill - Voice Chat & Party",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 200000
+ },
+ {
+  "package": "com.voicemaker.android",
+  "title": "SUGO：Voice Chat Party",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 160000
+ },
+ {
+  "package": "ly.omegle.android",
+  "title": "Omega - Live video chat",
+  "category": "SOCIAL",
+  "downloads": "50M+",
+  "reviews": 112000
+ },
+ {
+  "package": "co.benx.weverse",
+  "title": "Weverse: Connect with Artists",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 1130000
+ },
+ {
+  "package": "com.clubhouse.app",
+  "title": "Clubhouse",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 592000
+ },
+ {
+  "package": "com.kismia.app",
+  "title": "Kismia: Dating App & Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 569000
+ },
+ {
+  "package": "com.pita.oyem",
+  "title": "MeYo : be friends",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 541000
+ },
+ {
+  "package": "kr.co.vcnc.android.couple",
+  "title": "Between - Private Couples App",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 537000
+ },
+ {
+  "package": "com.exutech.chacha",
+  "title": "HOLLA - Video Call",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 457000
+ },
+ {
+  "package": "com.jeevansathi.android",
+  "title": "Jeevansathi.com® Matrimony App",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 451000
+ },
+ {
+  "package": "com.blued.international",
+  "title": "HeeSay: LGBTQ+ Community",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 436000
+ },
+ {
+  "package": "com.dazz.hoop",
+  "title": "Hoop - Make new friends",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 427000
+ },
+ {
+  "package": "co.yellw.yellowapp",
+  "title": "Yubo: Make friends & chat now",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 415000
+ },
+ {
+  "package": "com.locket.Locket",
+  "title": "Locket Widget",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 391000
+ },
+ {
+  "package": "com.bereal.ft",
+  "title": "BeReal. Your friends for real.",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 370000
+ },
+ {
+  "package": "de.tellonym.app",
+  "title": "Tellonym: anonymous questions",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 357000
+ },
+ {
+  "package": "younow.live",
+  "title": "YouNow: Live Stream App",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 357000
+ },
+ {
+  "package": "com.waplogmatch.social",
+  "title": "W-Match: Video Dating & Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 351000
+ },
+ {
+  "package": "com.muzmatch.muzmatchapp",
+  "title": "Muzz: Where Muslims Marry",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 344000
+ },
+ {
+  "package": "com.sina.weibo",
+  "title": "微博",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 332000
+ },
+ {
+  "package": "world.voya.android",
+  "title": "Voya - Chat, Call & Group",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 257000
+ },
+ {
+  "package": "com.baitu.qingshu",
+  "title": "Poppo Live - Live Stream",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 252000
+ },
+ {
+  "package": "com.hornet.android",
+  "title": "Hornet - Gay Dating & Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 251000
+ },
+ {
+  "package": "com.superlive.liveapp",
+  "title": "SuperLive- Live Stream & Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 247000
+ },
+ {
+  "package": "com.meetup",
+  "title": "Meetup: Social Events & Groups",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 235000
+ },
+ {
+  "package": "com.camshare.camfrog.android",
+  "title": "Camfrog: Video Chat Strangers",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 232000
+ },
+ {
+  "package": "cn.gem.android",
+  "title": "PopUp - Chat, Friend, Fun",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 224000
+ },
+ {
+  "package": "com.xingin.xhs",
+  "title": "rednote",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 209000
+ },
+ {
+  "package": "com.chatous.chatous",
+  "title": "Chatous",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 200000
+ },
+ {
+  "package": "com.connected2.ozzy.c2m",
+  "title": "Connected2.me",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 198000
+ },
+ {
+  "package": "com.towneers.www",
+  "title": "Karrot: Buy & sell locally",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 191000
+ },
+ {
+  "package": "com.mewe",
+  "title": "mewe: The Safe Network",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 187000
+ },
+ {
+  "package": "com.Chatspin",
+  "title": "Chatspin Random Video Chat Duo",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 175000
+ },
+ {
+  "package": "vixr.bermuda",
+  "title": "Bermuda Video Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 175000
+ },
+ {
+  "package": "com.mihoyo.hoyolab",
+  "title": "HoYoLAB",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 171000
+ },
+ {
+  "package": "co.spoonme",
+  "title": "Spoon: Live & PodNovel",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 171000
+ },
+ {
+  "package": "com.metaztech.chatta",
+  "title": "Chatta - Live Meet Friends",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 163000
+ },
+ {
+  "package": "com.google.android.apps.blogger",
+  "title": "Blogger",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 162000
+ },
+ {
+  "package": "com.noyesrun.meeff.kr",
+  "title": "MEEFF - Make Global Friends",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 153000
+ },
+ {
+  "package": "com.parau.pro.videochat",
+  "title": "Lumi - online video chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 153000
+ },
+ {
+  "package": "com.interfun.buz",
+  "title": "buz - voice connects",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 142000
+ },
+ {
+  "package": "com.guochao.faceshow",
+  "title": "BuzzCast: Live Stream & Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 141000
+ },
+ {
+  "package": "com.hkjustar.gemgala",
+  "title": "Gemgala - Party & Chat & Games",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 139000
+ },
+ {
+  "package": "com.machipopo.media17",
+  "title": "17LIVE - Live streaming",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 139000
+ },
+ {
+  "package": "com.aigc.ushow.ichat",
+  "title": "Linky AI: Chat, Play, Connect",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 137000
+ },
+ {
+  "package": "im.kumu.ph",
+  "title": "Kumu Livestream Community",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 136000
+ },
+ {
+  "package": "com.newsclapper.video",
+  "title": "Clapper: Video, Live, Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 135000
+ },
+ {
+  "package": "com.textmeinc.freetone",
+  "title": "FreeTone Calls & Texting",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 132000
+ },
+ {
+  "package": "com.mi.global.bbs",
+  "title": "Xiaomi Community",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 129000
+ },
+ {
+  "package": "com.pinger.textfree.call",
+  "title": "Text Free: Calling & Texting",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 128000
+ },
+ {
+  "package": "net.wrightflyer.le.reality",
+  "title": "REALITY-Become an Anime Avatar",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 106000
+ },
+ {
+  "package": "com.gettr.gettr",
+  "title": "GETTR",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 99000
+ },
+ {
+  "package": "com.voicechat.live.group",
+  "title": "YoHo: Group Voice Chat Room",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 96700
+ },
+ {
+  "package": "com.ahchat.app",
+  "title": "Achat- Global Voice Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 95200
+ },
+ {
+  "package": "com.wegochat.happy",
+  "title": "Veego - live chat online",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 93400
+ },
+ {
+  "package": "video.chat.joi",
+  "title": "Joi - Live Video Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 92400
+ },
+ {
+  "package": "com.client.goparty",
+  "title": "Vava.chat-Video Call&Translate",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 85000
+ },
+ {
+  "package": "com.nhn.android.blog",
+  "title": "네이버 블로그 - Naver Blog",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 81200
+ },
+ {
+  "package": "com.matchtech.solive",
+  "title": "SoLive - Live Video Chat",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 79400
+ },
+ {
+  "package": "camsurf.com",
+  "title": "Camsurf: Chat Random & Flirt",
+  "category": "SOCIAL",
+  "downloads": "10M+",
+  "reviews": 77100
+ },
+ {
+  "package": "com.einnovation.temu",
+  "title": "Temu: Shop Like a Billionaire",
+  "category": "SHOPPING",
+  "downloads": "1B+",
+  "reviews": 12800000
+ },
+ {
+  "package": "com.zzkko",
+  "title": "SHEIN-Shopping Online",
+  "category": "SHOPPING",
+  "downloads": "1B+",
+  "reviews": 12000000
+ },
+ {
+  "package": "com.amazon.mShop.android.shopping",
+  "title": "Amazon Shopping",
+  "category": "SHOPPING",
+  "downloads": "1B+",
+  "reviews": 4700000
+ },
+ {
+  "package": "com.alibaba.aliexpresshd",
+  "title": "AliExpress - Shopping App",
+  "category": "SHOPPING",
+  "downloads": "500M+",
+  "reviews": 16300000
+ },
+ {
+  "package": "com.alibaba.intl.android.apps.poseidon",
+  "title": "Alibaba.com - B2B marketplace",
+  "category": "SHOPPING",
+  "downloads": "500M+",
+  "reviews": 3060000
+ },
+ {
+  "package": "com.wildberries.ru",
+  "title": "Wildberries",
+  "category": "SHOPPING",
+  "downloads": "100M+",
+  "reviews": 9570000
+ },
+ {
+  "package": "com.walmart.android",
+  "title": "Walmart: Shopping & Savings",
+  "category": "SHOPPING",
+  "downloads": "100M+",
+  "reviews": 7460000
+ },
+ {
+  "package": "com.myntra.android",
+  "title": "Myntra - Fashion Shopping App",
+  "category": "SHOPPING",
+  "downloads": "100M+",
+  "reviews": 5820000
+ },
+ {
+  "package": "com.ebay.mobile",
+  "title": "eBay online shopping & selling",
+  "category": "SHOPPING",
+  "downloads": "100M+",
+  "reviews": 5020000
+ },
+ {
+  "package": "com.daraz.android",
+  "title": "Daraz Online Shopping App",
+  "category": "SHOPPING",
+  "downloads": "100M+",
+  "reviews": 4120000
+ },
+ {
+  "package": "com.tinder",
+  "title": "Tinder Dating App: Chat & Date",
+  "category": "DATING",
+  "downloads": "500M+",
+  "reviews": 9200000
+ },
+ {
+  "package": "com.badoo.mobile",
+  "title": "Badoo Dating App: Meet & Date",
+  "category": "DATING",
+  "downloads": "100M+",
+  "reviews": 6650000
+ },
+ {
+  "package": "com.ftw_and_co.happn",
+  "title": "happn: dating app",
+  "category": "DATING",
+  "downloads": "100M+",
+  "reviews": 2080000
+ },
+ {
+  "package": "com.bumble.app",
+  "title": "Bumble Dating App: Meet & Date",
+  "category": "DATING",
+  "downloads": "100M+",
+  "reviews": 1620000
+ },
+ {
+  "package": "com.pof.android",
+  "title": "Plenty of Fish : Dating App",
+  "category": "DATING",
+  "downloads": "50M+",
+  "reviews": 1680000
+ },
+ {
+  "package": "com.skout.android",
+  "title": "Skout - Meet, Chat, Go Live",
+  "category": "DATING",
+  "downloads": "50M+",
+  "reviews": 1220000
+ },
+ {
+  "package": "ru.mamba.client",
+  "title": "Mamba Dating App: Make friends",
+  "category": "DATING",
+  "downloads": "50M+",
+  "reviews": 940000
+ },
+ {
+  "package": "enterprises.dating.boo",
+  "title": "Boo Dating App: Date & Friends",
+  "category": "DATING",
+  "downloads": "10M+",
+  "reviews": 3480000
+ },
+ {
+  "package": "co.hinge.app",
+  "title": "Hinge Dating App: Match & Date",
+  "category": "DATING",
+  "downloads": "10M+",
+  "reviews": 484000
+ },
+ {
+  "package": "app.bumpy.android",
+  "title": "Bumpy – International Dating",
+  "category": "DATING",
+  "downloads": "10M+",
+  "reviews": 476000
+ },
+ {
+  "package": "com.ubercab",
+  "title": "Uber: Rides, eats, hotels",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "1B+",
+  "reviews": 19900000
+ },
+ {
+  "package": "com.waze",
+  "title": "Waze Navigation & Live Traffic",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "500M+",
+  "reviews": 8920000
+ },
+ {
+  "package": "sinet.startup.inDriver",
+  "title": "inDrive. Rides with fair fares",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 16100000
+ },
+ {
+  "package": "ru.yandex.taxi",
+  "title": "Yandex Go: Taxi Food Delivery",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 14500000
+ },
+ {
+  "package": "ee.mtakso.client",
+  "title": "Bolt: Request a Ride",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 10800000
+ },
+ {
+  "package": "com.rapido.passenger",
+  "title": "Rapido: Bike-Taxi, Auto & Cabs",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 4850000
+ },
+ {
+  "package": "com.taxis99",
+  "title": "99: Rides, Food, Pay",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 3090000
+ },
+ {
+  "package": "ru.yandex.yandexmaps",
+  "title": "Yandex Maps and Navigator",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 1800000
+ },
+ {
+  "package": "com.didiglobal.passenger",
+  "title": "DiDi Rider: Affordable rides",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "100M+",
+  "reviews": 1650000
+ },
+ {
+  "package": "com.yandex.yango",
+  "title": "Yango: taxi, food, delivery",
+  "category": "MAPS_AND_NAVIGATION",
+  "downloads": "50M+",
+  "reviews": 3570000
+ },
+ {
+  "package": "com.whatsapp",
+  "title": "WhatsApp Messenger",
+  "category": "COMMUNICATION",
+  "downloads": "10B+",
+  "reviews": 244000000
+ },
+ {
+  "package": "com.android.chrome",
+  "title": "Google Chrome",
+  "category": "COMMUNICATION",
+  "downloads": "10B+",
+  "reviews": 49300000
+ },
+ {
+  "package": "com.google.android.apps.messaging",
+  "title": "Google Messages",
+  "category": "COMMUNICATION",
+  "downloads": "10B+",
+  "reviews": 49100000
+ },
+ {
+  "package": "com.google.android.gm",
+  "title": "Gmail",
+  "category": "COMMUNICATION",
+  "downloads": "10B+",
+  "reviews": 14500000
+ },
+ {
+  "package": "com.google.android.apps.tachyon",
+  "title": "Google Meet",
+  "category": "COMMUNICATION",
+  "downloads": "10B+",
+  "reviews": 12000000
+ },
+ {
+  "package": "com.facebook.orca",
+  "title": "Messenger",
+  "category": "COMMUNICATION",
+  "downloads": "5B+",
+  "reviews": 114000000
+ },
+ {
+  "package": "com.google.android.contacts",
+  "title": "Contacts",
+  "category": "COMMUNICATION",
+  "downloads": "5B+",
+  "reviews": 1950000
+ },
+ {
+  "package": "com.snapchat.android",
+  "title": "Snapchat",
+  "category": "COMMUNICATION",
+  "downloads": "1B+",
+  "reviews": 39800000
+ },
+ {
+  "package": "com.truecaller",
+  "title": "Truecaller: Spam Call Blocker",
+  "category": "COMMUNICATION",
+  "downloads": "1B+",
+  "reviews": 29500000
+ },
+ {
+  "package": "com.whatsapp.w4b",
+  "title": "WhatsApp Business",
+  "category": "COMMUNICATION",
+  "downloads": "1B+",
+  "reviews": 24900000
+ },
+ {
+  "package": "com.google.android.apps.docs",
+  "title": "Google Drive",
+  "category": "PRODUCTIVITY",
+  "downloads": "10B+",
+  "reviews": 10800000
+ },
+ {
+  "package": "com.google.android.calendar",
+  "title": "Google Calendar",
+  "category": "PRODUCTIVITY",
+  "downloads": "10B+",
+  "reviews": 4820000
+ },
+ {
+  "package": "com.microsoft.skydrive",
+  "title": "Microsoft OneDrive",
+  "category": "PRODUCTIVITY",
+  "downloads": "5B+",
+  "reviews": 7330000
+ },
+ {
+  "package": "com.openai.chatgpt",
+  "title": "ChatGPT",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 61800000
+ },
+ {
+  "package": "com.google.android.apps.bard",
+  "title": "Google Gemini",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 46900000
+ },
+ {
+  "package": "com.microsoft.office.word",
+  "title": "Microsoft Word: Edit Documents",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 17400000
+ },
+ {
+  "package": "com.samsung.android.app.notes",
+  "title": "Samsung Notes",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 15100000
+ },
+ {
+  "package": "com.microsoft.office.outlook",
+  "title": "Microsoft Outlook",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 10700000
+ },
+ {
+  "package": "com.microsoft.office.excel",
+  "title": "Microsoft Excel: Spreadsheets",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 9640000
+ },
+ {
+  "package": "com.microsoft.office.officehubrow",
+  "title": "Microsoft Copilot",
+  "category": "PRODUCTIVITY",
+  "downloads": "1B+",
+  "reviews": 9230000
+ },
+ {
+  "package": "com.netflix.mediaclient",
+  "title": "Netflix",
+  "category": "ENTERTAINMENT",
+  "downloads": "1B+",
+  "reviews": 16200000
+ },
+ {
+  "package": "com.amazon.avod.thirdpartyclient",
+  "title": "Prime Video",
+  "category": "ENTERTAINMENT",
+  "downloads": "500M+",
+  "reviews": 5670000
+ },
+ {
+  "package": "com.disney.disneyplus",
+  "title": "Disney+",
+  "category": "ENTERTAINMENT",
+  "downloads": "500M+",
+  "reviews": 5140000
+ },
+ {
+  "package": "com.google.android.apps.youtube.kids",
+  "title": "YouTube Kids",
+  "category": "ENTERTAINMENT",
+  "downloads": "500M+",
+  "reviews": 3410000
+ },
+ {
+  "package": "com.wbd.stream",
+  "title": "HBO Max: Stream TV & Movies",
+  "category": "ENTERTAINMENT",
+  "downloads": "100M+",
+  "reviews": 5820000
+ },
+ {
+  "package": "tv.twitch.android.app",
+  "title": "Twitch: Live Streaming",
+  "category": "ENTERTAINMENT",
+  "downloads": "100M+",
+  "reviews": 5760000
+ },
+ {
+  "package": "com.storymatrix.drama",
+  "title": "DramaBox - Stream Drama Shorts",
+  "category": "ENTERTAINMENT",
+  "downloads": "100M+",
+  "reviews": 5460000
+ },
+ {
+  "package": "com.crunchyroll.crunchyroid",
+  "title": "Crunchyroll: Anime Streaming",
+  "category": "ENTERTAINMENT",
+  "downloads": "100M+",
+  "reviews": 4380000
+ },
+ {
+  "package": "com.bt.bms",
+  "title": "BookMyShow | Movies & Events",
+  "category": "ENTERTAINMENT",
+  "downloads": "100M+",
+  "reviews": 4270000
+ },
+ {
+  "package": "com.graymatrix.did",
+  "title": "ZEE5: Movies, TV Shows, Series",
+  "category": "ENTERTAINMENT",
+  "downloads": "100M+",
+  "reviews": 3100000
+ },
+ {
+  "package": "com.miui.weather2",
+  "title": "Weather - By Xiaomi",
+  "category": "WEATHER",
+  "downloads": "1B+",
+  "reviews": 1290000
+ },
+ {
+  "package": "com.weather.Weather",
+  "title": "The Weather Channel - Radar",
+  "category": "WEATHER",
+  "downloads": "100M+",
+  "reviews": 3590000
+ },
+ {
+  "package": "de.wetteronline.wetterapp",
+  "title": "Weather & Radar Forecast",
+  "category": "WEATHER",
+  "downloads": "100M+",
+  "reviews": 2970000
+ },
+ {
+  "package": "com.accuweather.android",
+  "title": "AccuWeather: Weather Radar",
+  "category": "WEATHER",
+  "downloads": "100M+",
+  "reviews": 2570000
+ },
+ {
+  "package": "com.handmark.expressweather",
+  "title": "1Weather Forecasts & Radar",
+  "category": "WEATHER",
+  "downloads": "100M+",
+  "reviews": 1110000
+ },
+ {
+  "package": "com.inmobi.weather",
+  "title": "Weather",
+  "category": "WEATHER",
+  "downloads": "100M+",
+  "reviews": 251000
+ },
+ {
+  "package": "aplicacion.tiempo",
+  "title": "Weather Radar - Meteored News",
+  "category": "WEATHER",
+  "downloads": "50M+",
+  "reviews": 3010000
+ },
+ {
+  "package": "com.droid27.transparentclockweather",
+  "title": "Transparent clock and weather",
+  "category": "WEATHER",
+  "downloads": "50M+",
+  "reviews": 981000
+ },
+ {
+  "package": "ru.yandex.weatherplugin",
+  "title": "Yandex Weather & Rain Radar",
+  "category": "WEATHER",
+  "downloads": "50M+",
+  "reviews": 844000
+ },
+ {
+  "package": "com.windyty.android",
+  "title": "Windy.com - Weather Forecast",
+  "category": "WEATHER",
+  "downloads": "50M+",
+  "reviews": 822000
+ },
+ {
+  "package": "com.twitter.android",
+  "title": "X",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "1B+",
+  "reviews": 24300000
+ },
+ {
+  "package": "com.google.android.apps.magazines",
+  "title": "Google News - Daily Headlines",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "1B+",
+  "reviews": 1960000
+ },
+ {
+  "package": "flipboard.boxer.app",
+  "title": "Briefing",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "1B+",
+  "reviews": 753000
+ },
+ {
+  "package": "flipboard.app",
+  "title": "Flipboard:Your Social Magazine",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "500M+",
+  "reviews": 1410000
+ },
+ {
+  "package": "com.opera.app.news",
+  "title": "Opera News: breaking & local",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "100M+",
+  "reviews": 707000
+ },
+ {
+  "package": "com.quora.android",
+  "title": "Quora: the knowledge platform",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "50M+",
+  "reviews": 1000000
+ },
+ {
+  "package": "jp.gocro.smartnews.android",
+  "title": "SmartNews: Live News & Rewards",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "50M+",
+  "reviews": 701000
+ },
+ {
+  "package": "com.particlenews.newsbreak",
+  "title": "NewsBreak: Local News & Alerts",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "50M+",
+  "reviews": 638000
+ },
+ {
+  "package": "com.cnn.mobile.android.phone",
+  "title": "CNN: Live & Breaking News",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "50M+",
+  "reviews": 587000
+ },
+ {
+  "package": "ma.safe.bn",
+  "title": "Breaking News: Local & Alerts",
+  "category": "NEWS_AND_MAGAZINES",
+  "downloads": "10M+",
+  "reviews": 568000
+ }
+]
