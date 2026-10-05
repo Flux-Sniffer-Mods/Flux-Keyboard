@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flux Keyboard's quick launcher extras -->
+<resources>
+    <string name="quick_launcher_app_shortcuts_title">App shortcuts in results</string>
+    <string name="quick_launcher_app_shortcuts_description">Apps\' own shortcuts, the ones their icon shows on a long press (\"New message\", \"Scan QR code\"), are results you can open straight away.</string>
+    <string name="quick_launcher_niagara_back_title">Back returns to the app</string>
+    <string name="quick_launcher_niagara_back_description">Pressing Back in Niagara\'s search before opening anything takes you back to the app you opened it from, instead of Niagara\'s home screen.</string>
+    <string name="quick_launcher_niagara_note">Niagara\'s search ranks and opens results itself, so the settings below that change results apply to the built-in quick launcher. Your keyboard layout, and Back returning to your app, apply to Niagara too.</string>
+</resources>

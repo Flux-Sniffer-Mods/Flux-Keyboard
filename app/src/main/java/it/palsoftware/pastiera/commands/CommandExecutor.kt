@@ -52,6 +52,52 @@ class CommandExecutor(
     }
 
     private fun startIntent(spec: CommandLaunchSpec.IntentUri): CommandExecutionResult {
+        if (spec.action == it.palsoftware.pastiera.shortcuts.UserShortcuts.LAUNCH_ACTION) {
+            // A shortcut added by hand: started as the app that made it built it
+            return try {
+                val intent = Intent.parseUri(spec.intentUri ?: return fail("Command not available"), Intent.URI_INTENT_SCHEME)
+                intent.selector = null
+                // Stored intents can come back from a backup: never pass on access to our own files
+                intent.removeFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                )
+                intent.clipData = null
+                // A Termux task runs through Termux's command service
+                if (intent.component?.className == it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_RUN_COMMAND_SERVICE) {
+                    context.startForegroundService(intent)
+                    return CommandExecutionResult.Success
+                }
+                // A contact's direct dial needs the phone permission home screens hold: without
+                // it, open the dialer with the number ready
+                if (intent.action == Intent.ACTION_CALL &&
+                    context.checkSelfPermission(android.Manifest.permission.CALL_PHONE) !=
+                    android.content.pm.PackageManager.PERMISSION_GRANTED
+                ) {
+                    intent.action = Intent.ACTION_DIAL
+                    intent.component = null
+                }
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                CommandExecutionResult.Success
+            } catch (error: Exception) {
+                Log.e(TAG, "Failed to start a hand-added shortcut", error)
+                fail("Command failed")
+            }
+        }
+        spec.intentUri?.let { uri ->
+            // An app's own shortcut: only if the app still lets other apps open it
+            val packageName = spec.packageName ?: return fail("Command not available")
+            val action = it.palsoftware.pastiera.shortcuts.DiscoveredAction("", "", uri)
+            val intent = it.palsoftware.pastiera.shortcuts.AppActionDiscovery.intentFor(context, packageName, action)
+                ?: return fail("Command not available")
+            return try {
+                context.startActivity(intent)
+                CommandExecutionResult.Success
+            } catch (error: Exception) {
+                Log.e(TAG, "Failed to start app shortcut", error)
+                fail("Command failed")
+            }
+        }
         return try {
             val intent = Intent(spec.action, spec.data?.let(Uri::parse)).apply {
                 spec.packageName?.let(::setPackage)
@@ -80,6 +126,10 @@ class CommandExecutor(
     }
 
     private fun executeInternalAction(actionId: String): CommandExecutionResult {
+        // ADB shortcuts through Shizuku (root_… ids kept for keys assigned before)
+        if (actionId.startsWith("root_")) {
+            return if (AdbCommandSource.execute(context, actionId)) CommandExecutionResult.Success else fail("Unknown action")
+        }
         return when (actionId) {
             PastieraCommandSource.ACTION_OPEN_QUICK_LAUNCHER -> {
                 try {
@@ -100,11 +150,23 @@ class CommandExecutor(
                     CommandExecutionResult.Success
                 } catch (error: Exception) {
                     Log.e(TAG, "Failed to open Pastiera", error)
-                    fail("Could not open Pastiera")
+                    fail("Could not open ${it.palsoftware.pastiera.BuildConfig.APP_NAME}")
                 }
             }
             PastieraCommandSource.ACTION_TOGGLE_SOFTWARE_KEYBOARD_MODE -> toggleSoftwareKeyboardMode()
+            PastieraCommandSource.ACTION_SELECT_FROM_CURSOR -> {
+                val controller = navModeController ?: return fail("Nav mode unavailable")
+                controller.startSelectingFromCursor()
+                CommandExecutionResult.Success
+            }
+            PastieraCommandSource.ACTION_TOGGLE_PRIVATE_MODE -> {
+                it.palsoftware.pastiera.core.PrivateMode.toggle(context)
+                CommandExecutionResult.Success
+            }
             DeviceControlCommandSource.ACTION_HOME_SCREEN -> goHome()
+            DeviceControlCommandSource.ACTION_PHONE_TRACKPAD_SETTINGS ->
+                if (it.palsoftware.pastiera.PhoneTrackpadSettings.open(context)) CommandExecutionResult.Success
+                else fail("Could not open the trackpad settings")
             DeviceControlCommandSource.ACTION_MEDIA_PLAY_PAUSE -> dispatchMediaKey(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
             DeviceControlCommandSource.ACTION_MEDIA_PREVIOUS -> dispatchMediaKey(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
             DeviceControlCommandSource.ACTION_MEDIA_NEXT -> dispatchMediaKey(KeyEvent.KEYCODE_MEDIA_NEXT)

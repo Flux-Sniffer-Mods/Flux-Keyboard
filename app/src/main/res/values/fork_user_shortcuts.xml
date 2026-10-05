@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_shortcuts_title">Add a shortcut</string>
+    <string name="user_shortcuts_description">Put a shortcut from an app, such as a contact\'s direct dial, a bookmark or a settings page, in the quick launcher\'s results.</string>
+    <string name="user_shortcuts_intro">Only the home screen app can read the shortcuts already on your home screen, so add the ones you want here once. Pick an app below and choose the shortcut in its own screen.</string>
+    <string name="user_shortcuts_yours">Your shortcuts</string>
+    <string name="user_shortcuts_add_from">Add from</string>
+    <string name="user_shortcuts_none">No app on this phone offers shortcuts to add.</string>
+    <string name="user_shortcuts_added">%1$s is in the quick launcher</string>
+    <string name="user_shortcuts_unsupported">This app\'s shortcut can only be opened from the home screen.</string>
+    <string name="user_shortcuts_remove">Remove %1$s</string>
+    <string name="quick_launcher_open_failed">Couldn\'t open %1$s</string>
+    <string name="user_shortcuts_builtin">Made by Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Call a contact</string>
+    <string name="user_shortcuts_message_title">Message a contact</string>
+    <string name="user_shortcuts_website_title">Website</string>
+    <string name="user_shortcuts_termux_title">Termux task</string>
+    <string name="user_shortcuts_termux_description">A script in ~/.shortcuts, run as Termux:Widget runs it: those in tasks in the background, the others in a terminal.</string>
+    <string name="user_shortcuts_termux_setup">Termux needs allow-external-apps = true in ~/.termux/termux.properties (then restart Termux), and Flux Keyboard needs permission to run commands in Termux.</string>
+    <string name="user_shortcuts_termux_none">No scripts found in ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Call %1$s</string>
+    <string name="user_shortcuts_message_label">Message %1$s</string>
+    <string name="user_shortcuts_website_address">Address</string>
+    <string name="user_shortcuts_name">Name</string>
+    <string name="user_shortcuts_add">Add</string>
+    <string name="quick_launcher_action_new_message">New message</string>
+    <string name="quick_launcher_action_new_post">New post</string>
+    <string name="quick_launcher_action_new_note">New note</string>
+    <string name="quick_launcher_action_compose">Compose email</string>
+    <string name="quick_launcher_action_search">Search</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Shortcuts for compatible apps</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard adds New message, New note, Compose email and Search to the quick launcher for the apps it knows, where the app accepts them.</string>
+    <string name="quick_launcher_listed_app_toggle">Flux Keyboard\'s shortcuts for this app</string>
+    <string name="termux_runs_background">Termux · background</string>
+    <string name="termux_runs_terminal">Termux · terminal</string>
+    <string name="quick_launcher_termux_scripts_title">Termux scripts</string>
+    <string name="quick_launcher_termux_scripts_description">Your Termux:Widget scripts and tasks (~/.shortcuts) in the quick launcher, kept up to date. Needs allow-external-apps = true in ~/.termux/termux.properties and permission to run commands in Termux.</string>
+</resources>

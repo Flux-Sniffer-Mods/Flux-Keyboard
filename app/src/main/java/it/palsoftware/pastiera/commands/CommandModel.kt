@@ -17,7 +17,7 @@ data class CommandTarget(
 
 enum class CommandSourceId(val storageValue: String, val displayLabel: String) {
     Apps("apps", "Apps"),
-    Pastiera("pastiera", "Pastiera"),
+    Pastiera("pastiera", it.palsoftware.pastiera.BuildConfig.APP_NAME),
     AppActions("app_actions", "App actions"),
     DeviceControl("device_control", "Device control"),
     NavActions("nav_actions", "Navigation");
@@ -73,7 +73,9 @@ sealed class CommandLaunchSpec {
         val packageName: String? = null,
         val componentName: String? = null,
         val categories: List<String> = emptyList(),
-        val flags: List<String> = emptyList()
+        val flags: List<String> = emptyList(),
+        // Flux Keyboard: a complete intent (an app's own shortcut), started as it is
+        val intentUri: String? = null
     ) : CommandLaunchSpec()
 
     data class InternalAction(val actionId: String) : CommandLaunchSpec()

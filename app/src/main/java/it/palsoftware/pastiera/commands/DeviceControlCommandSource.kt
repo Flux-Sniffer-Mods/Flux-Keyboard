@@ -20,6 +20,10 @@ class DeviceControlCommandSource : CommandSource {
             add(deviceAction("device.volume.mute", "Mute volume", "Audio", ACTION_VOLUME_MUTE))
             add(deviceAction("device.brightness.up", "Brightness up", "Display", ACTION_BRIGHTNESS_UP))
             add(deviceAction("device.brightness.down", "Brightness down", "Display", ACTION_BRIGHTNESS_DOWN))
+            if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
+                // The phone's own trackpad settings: touch scrolling and cursor movement on the keys
+                add(deviceAction("settings.android.trackpad", "Trackpad scroll & cursor", "Phone settings", ACTION_PHONE_TRACKPAD_SETTINGS))
+            }
             add(settingsCommand("settings.android.main", "Settings", Settings.ACTION_SETTINGS))
             add(settingsCommand("settings.android.apps", "Apps", Settings.ACTION_APPLICATION_SETTINGS))
             add(settingsCommand("settings.android.default_apps", "Default apps", Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS))
@@ -40,7 +44,7 @@ class DeviceControlCommandSource : CommandSource {
                 add(
                     settingsCommand(
                         id = "settings.android.pastiera_notifications",
-                        label = "Pastiera notifications",
+                        label = "${it.palsoftware.pastiera.BuildConfig.APP_NAME} notifications",
                         action = Settings.ACTION_APP_NOTIFICATION_SETTINGS,
                         data = null,
                         extras = mapOf(Settings.EXTRA_APP_PACKAGE to context.packageName)
@@ -124,6 +128,7 @@ class DeviceControlCommandSource : CommandSource {
         const val ACTION_VOLUME_MUTE = "device.volume.mute"
         const val ACTION_BRIGHTNESS_UP = "device.brightness.up"
         const val ACTION_BRIGHTNESS_DOWN = "device.brightness.down"
+        const val ACTION_PHONE_TRACKPAD_SETTINGS = "device.trackpad_settings"
         private const val ACTION_NOTIFICATION_SETTINGS = "android.settings.NOTIFICATION_SETTINGS"
     }
 }

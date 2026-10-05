@@ -19,6 +19,7 @@ object CommandJson {
                     launch.componentName?.let { put("componentName", it) }
                     put("categories", JSONArray(launch.categories))
                     put("flags", JSONArray(launch.flags))
+                    launch.intentUri?.let { put("intentUri", it) }
                 }
                 is CommandLaunchSpec.InternalAction -> {
                     put("type", "internal_action")
@@ -45,7 +46,8 @@ object CommandJson {
                 packageName = json.optString("packageName").takeIf { it.isNotBlank() },
                 componentName = json.optString("componentName").takeIf { it.isNotBlank() },
                 categories = json.optJSONArray("categories").toStringList(),
-                flags = json.optJSONArray("flags").toStringList()
+                flags = json.optJSONArray("flags").toStringList(),
+                intentUri = json.optString("intentUri").takeIf { it.isNotBlank() }
             )
             "internal_action" -> json.optString("actionId")
                 .takeIf { it.isNotBlank() }

@@ -487,8 +487,7 @@ fun LauncherShortcutsScreen(
                                                         text = commandShortcutLabel(shortcut, keyName),
                                                         style = MaterialTheme.typography.labelSmall,
                                                         fontWeight = FontWeight.Bold,
-                                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                                        maxLines = 1
+                                                        color = MaterialTheme.colorScheme.onPrimaryContainer
                                                     )
                                                 }
                                             } else {

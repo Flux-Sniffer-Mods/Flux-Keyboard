@@ -47,6 +47,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
@@ -129,6 +131,11 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Android 16 delivers Back (the gesture, and the key once apps target it) as a back
+        // callback rather than a key press: close the same way the Back key does
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() = requestAnimatedDismiss()
+        })
         disableActivityAnimations()
         window.requestFeature(android.view.Window.FEATURE_NO_TITLE)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
@@ -161,6 +168,8 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
         setContent {
             PastieraTheme {
+              // Flux Keyboard: the keyboard's own theme colours, so the two look like one app
+              MaterialTheme(colorScheme = quickLauncherColors(this), typography = MaterialTheme.typography, shapes = MaterialTheme.shapes) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -192,9 +201,12 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
                         onDismissAnimationFinished = { finish() }
                     )
                 }
+              }
             }
         }
 
+        // Termux:Widget's scripts: asked for again, for the next time the launcher opens
+        it.palsoftware.pastiera.shortcuts.TermuxScripts.refresh(this)
         reloadCommandsFromRegistry()
     }
 
@@ -204,6 +216,16 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
         if (intent.getBooleanExtra(EXTRA_TOGGLE_REQUEST, false)) {
             requestAnimatedDismiss()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        frontSince = android.os.SystemClock.uptimeMillis()
+    }
+
+    override fun onPause() {
+        frontSince = 0L
+        super.onPause()
     }
 
     override fun onDestroy() {
@@ -249,8 +271,11 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
         when (keyCode) {
             KeyEvent.KEYCODE_ENTER -> {
-                enterHandledOnKeyDown = true
-                launchTopMatch()
+                // Holding Enter repeats it: launch once
+                if (event == null || event.repeatCount == 0) {
+                    enterHandledOnKeyDown = true
+                    launchTopMatch()
+                }
                 return true
             }
             KeyEvent.KEYCODE_BACK,
@@ -335,6 +360,11 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
             finish()
         } else {
             Log.w(TAG, "Command failed: ${command.id}")
+            android.widget.Toast.makeText(
+                this,
+                getString(it.palsoftware.pastiera.R.string.quick_launcher_open_failed, command.label),
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -387,6 +417,12 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
     private fun registerQuickLauncherPreferencesListener() {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            // Flux Keyboard's own shortcuts turned on or off, or Termux's scripts listed again
+            if (key == "quick_launcher_listed_apps_off" || key == "quick_launcher_listed_app_shortcuts" ||
+                key == "quick_launcher_termux_scripts_found"
+            ) {
+                reloadCommandsFromRegistry()
+            }
             if (key == PREF_COMMAND_SURFACE_SOURCES) {
                 launchedAutomatically = false
                 commands = quickLauncherCommandsFromCachedApps()
@@ -483,6 +519,19 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
     }
 
     companion object {
+        /**
+         * When the quick launcher came to the front (uptime), 0 when it isn't. Keys pressed since
+         * are its own: the keyboard, still attached to the app beneath, lets them through, or
+         * typing into the search would sometimes go nowhere.
+         */
+        @Volatile
+        var frontSince: Long = 0L
+
+        fun ownsKey(event: KeyEvent?): Boolean {
+            val since = frontSince
+            return since != 0L && event != null && event.downTime >= since
+        }
+
         const val EXTRA_TOGGLE_REQUEST = "it.palsoftware.pastiera.inputmethod.extra.TOGGLE_QUICK_LAUNCHER"
         private const val TAG = "QuickLauncher"
         private const val PREF_COMMAND_SURFACE_SOURCES = "command_surface_sources"
@@ -508,6 +557,29 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
             }
         }
     }
+}
+
+/** The quick launcher in the keyboard's theme: its background, keys, text and accent. */
+private fun quickLauncherColors(context: Context): androidx.compose.material3.ColorScheme {
+    val theme = SettingsManager.getEffectiveKeyboardTheme(context, SettingsManager.KeyboardThemeTarget.HARDWARE)
+    val background = Color(theme.background).copy(alpha = 1f)
+    val text = Color(theme.textAndIcons)
+    val accent = Color(theme.accent)
+    val dark = androidx.core.graphics.ColorUtils.calculateLuminance(theme.background) < 0.5
+    val base = if (dark) androidx.compose.material3.darkColorScheme() else androidx.compose.material3.lightColorScheme()
+    return base.copy(
+        primary = accent,
+        onPrimary = background,
+        primaryContainer = accent.copy(alpha = 0.35f),
+        onPrimaryContainer = text,
+        surface = background,
+        onSurface = text,
+        surfaceVariant = Color(theme.normalKey),
+        onSurfaceVariant = text.copy(alpha = 0.78f),
+        background = background,
+        onBackground = text,
+        outline = Color(theme.divider)
+    )
 }
 
 @Composable
@@ -998,6 +1070,87 @@ private fun QuickLauncherEntryContextMenu(
                     )
                 },
                 onClick = { onMoveFavorite(1) }
+            )
+        }
+        // Add a shortcut: the home screen shortcuts this app offers (a contact's direct dial…)
+        val menuContext = LocalContext.current
+        val appPackage = (command.launch as? it.palsoftware.pastiera.commands.CommandLaunchSpec.AppPackage)?.packageName
+        // Flux Keyboard's own for this app first (call or message a contact, a website, a Termux
+        // task); the app's home screen variants only where Flux Keyboard has none
+        val builtInKinds = remember(appPackage, expanded) {
+            if (appPackage == null || !expanded) emptyList()
+            else it.palsoftware.pastiera.builtInKindsFor(menuContext, appPackage)
+        }
+        builtInKinds.forEach { kind ->
+            DropdownMenuItem(
+                text = {
+                    Column {
+                        Text(stringResource(R.string.user_shortcuts_title))
+                        Text(
+                            stringResource(it.palsoftware.pastiera.builtInTitle(kind)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                },
+                leadingIcon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                onClick = {
+                    onDismiss()
+                    runCatching {
+                        menuContext.startActivity(
+                            android.content.Intent(menuContext, it.palsoftware.pastiera.UserShortcutsActivity::class.java)
+                                .putExtra(it.palsoftware.pastiera.UserShortcutsActivity.EXTRA_BUILT_IN, kind)
+                                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                    (menuContext as? android.app.Activity)?.finish()
+                }
+            )
+        }
+        val shortcutProviders = remember(appPackage, expanded, builtInKinds) {
+            if (appPackage == null || !expanded || builtInKinds.isNotEmpty()) emptyList()
+            else it.palsoftware.pastiera.UserShortcutsActivity.providersOf(menuContext, appPackage)
+        }
+        // Flux Keyboard's New and Search for this app: on or off, app by app
+        val offersListed = remember(appPackage, expanded) {
+            appPackage != null && expanded &&
+                it.palsoftware.pastiera.commands.ListedAppCommandSource().offersShortcuts(menuContext, appPackage)
+        }
+        if (offersListed && appPackage != null) {
+            var listedOff by remember(appPackage) {
+                mutableStateOf(appPackage in SettingsManager.getQuickLauncherListedAppsOff(menuContext))
+            }
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.quick_launcher_listed_app_toggle)) },
+                trailingIcon = {
+                    androidx.compose.material3.Switch(checked = !listedOff, onCheckedChange = null)
+                },
+                onClick = {
+                    listedOff = !listedOff
+                    SettingsManager.setQuickLauncherListedAppOff(menuContext, appPackage, listedOff)
+                }
+            )
+        }
+        shortcutProviders.forEach { (component, label) ->
+            DropdownMenuItem(
+                text = {
+                    Column {
+                        Text(stringResource(R.string.user_shortcuts_title))
+                        Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                },
+                leadingIcon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                onClick = {
+                    onDismiss()
+                    runCatching {
+                        menuContext.startActivity(
+                            android.content.Intent(menuContext, it.palsoftware.pastiera.UserShortcutsActivity::class.java)
+                                .putExtra(it.palsoftware.pastiera.UserShortcutsActivity.EXTRA_PROVIDER, component.flattenToString())
+                                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                    (menuContext as? android.app.Activity)?.finish()
+                }
             )
         }
         DropdownMenuItem(

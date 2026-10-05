@@ -56,7 +56,12 @@ class CommandRegistry(
                 AppCommandSource(),
                 PastieraCommandSource(),
                 AppActionCommandSource(),
+                AppShortcutCommandSource(),
+                ListedAppCommandSource(),
+                TermuxScriptCommandSource(),
+                UserShortcutCommandSource(),
                 DeviceControlCommandSource(),
+                AdbCommandSource(),
                 NavCommandSource()
             )
         }
