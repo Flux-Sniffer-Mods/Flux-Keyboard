@@ -368,6 +368,14 @@
     {
       "text": "Dev's choice static variations by default.",
       "after": "202610050759"
+    },
+    {
+      "text": "Keyboard swipes per app can include Flux Keyboard itself, so swiping on the keyboard doesn't scroll its own settings; the swipes still reach the keyboard while you type there. The quick launcher keeps the choice of the app it opens over.",
+      "after": "202610050800"
+    },
+    {
+      "text": "About ends with the flux sniffer mods mark, light or dark to match the app's theme (tap it for their GitHub), and has a Support me on Ko-fi link.",
+      "after": "202610050800"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -450,6 +458,7 @@
   "docsLabel": "Full Flux Keyboard changelog",
   "introSince": "What's new in Flux Keyboard since the version you had.",
   "releases": {
-    "1.0.0": "202610050800"
+    "1.0.0": "202610050800",
+    "1.1.0": "202610051915"
   }
 }

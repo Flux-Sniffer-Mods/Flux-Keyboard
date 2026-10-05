@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/screenshots/hero.png" alt="Flux Keyboard on the Titan 2 Elite, with its emoji pages open in a chat" width="840"></p>
+
 # Flux Keyboard
 
 **The companion app for the Unihertz Titan 2 Elite.** A keyboard first, built around its physical
@@ -5,7 +7,7 @@ keys and trackpad, and an app that makes the rest of the phone better too: the
 keyboard light, screen size per app and shortcuts for things the phone hides away, all without
 root. It works on any Android phone with a hardware keyboard, and is at its best on the Titan 2 Elite.
 
-<p align="center"><img src="docs/screenshots/hero.png" alt="Flux Keyboard's emoji pages in a chat on the Titan 2 Elite" width="420"></p>
+<p align="center"><a href="https://ko-fi.com/fluxsniffermods"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi"></a></p>
 
 > **Flux Keyboard** is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera),
 > created by Andrea Palumbo (PalSoftware) and developed by Andrea Palumbo, Patrick Zauner and the
@@ -25,108 +27,100 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 - **Keyboard light, no root (Shizuku)**: on with the screen and off with it, following the screen's brightness as it changes (adaptive brightness and fades included), or flashing for notifications.
 
 <p align="center">
-  <img src="docs/screenshots/shizuku-light.png" alt="Keyboard light settings in Shizuku extras" width="300">
+  <img src="docs/cards/keyboard-light.webp" alt="The keyboard light, no root. On and off with the screen, following its brightness as it changes, or flashing for notifications, through Shizuku." width="840">
 </p>
 
 - **Screen size presets** for the whole phone, each applied with one tap: Default (300 dpi), Tablet and Desktop (about 200 dpi on the Titan 2 Elite).
 
 <p align="center">
-  <img src="docs/screenshots/screen-size.png" alt="Screen size presets, each with its own Apply button" width="300">
+  <img src="docs/cards/screen-size.webp" alt="Screen size presets. Default, Tablet and Desktop for the whole phone, each applied with one tap." width="840">
 </p>
 
 - **Screen size per app**: each app at its own size, kept through the recent apps screen and back to yours when you leave. Plus shortcuts to force-stop the app in front, toggle Battery Saver or cut an app off the network.
 
 <p align="center">
-  <img src="docs/screenshots/screen-size-per-app.png" alt="Screen size per app: Discord at Desktop, Instagram at Tablet, WhatsApp at Default" width="300">
+  <img src="docs/cards/screen-size-per-app.webp" alt="Screen size per app. Each app at its own size, kept through the recent apps screen and back to yours when you leave." width="840">
 </p>
 
 - **The same app at two sizes**: Instagram at the phone's own size, then at Desktop, with more on the screen.
 
 <p align="center">
-  <img src="docs/screenshots/instagram-default.png" alt="Instagram at the phone's own size" width="270">
-  <img src="docs/screenshots/instagram-desktop.png" alt="Instagram at the Desktop size" width="270">
+  <img src="docs/cards/two-sizes.webp" alt="The same app at two sizes. Instagram at the phone's own size, then at Desktop, with more on the screen." width="840">
 </p>
 
 - **Recommended settings**: the setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates as a "from → to" list.
 
 <p align="center">
-  <img src="docs/screenshots/recommended.png" alt="Recommended settings offered as from and to" width="280">
+  <img src="docs/cards/recommended.webp" alt="Recommended settings. The setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates." width="840">
 </p>
 
 - **Modifier LEDs** under the suggestions, with a colour each: Shift, Alt, SYM, Ctrl, and a fifth for the emoji key.
 
 <p align="center">
-  <img src="docs/screenshots/led-strip.png" alt="The status LEDs under the suggestion bar" width="520">
+  <img src="docs/cards/led-strip.webp" alt="Modifier LEDs. Shift, Alt, SYM, Ctrl and the emoji key, each with its own colour, under the suggestions." width="840">
 </p>
 
 ### A keyboard built around physical keys
 - **Emoji, symbols and kaomoji as pages**: Q and P turn through every emoji by category, symbols (arrows, maths, currency, punctuation, shapes) and over 300 kaomoji, each going round on its own, opening on what you use most.
 
 <p align="center">
-  <img src="docs/screenshots/symbols.png" alt="Symbols as pages" width="420">
-  <img src="docs/screenshots/kaomoji.png" alt="Kaomoji as pages" width="420">
+  <img src="docs/cards/pages.webp" alt="Emoji, symbols and kaomoji as pages. Q and P turn through every emoji by category, the symbols and over 300 kaomoji, right on the keys." width="840">
 </p>
 
 - **Skin tones**: hold an emoji for its skin tones, one per key on the pages or in a row in the picker, and pick a default one.
 
 <p align="center">
-  <img src="docs/screenshots/skin-tones.png" alt="An emoji held for its skin tones" width="420">
-  <img src="docs/screenshots/picker-skin-tones.png" alt="An emoji held in the picker for its skin tones" width="420">
+  <img src="docs/cards/skin-tones.webp" alt="Skin tones. Hold an emoji for its skin tones, one per key on the pages or in a row in the picker." width="840">
 </p>
 
 - **Search everything**: emoji by name, every Unicode symbol, and kaomoji (here "double" among the emoji). Each search has its own tabs in the bottom bar: emoji categories, the symbols' groups (# → ∑ € § ★ ♪) and the kaomoji's moods (Joy, Love, Sad, Mad and more), each jumping straight to its place.
 
 <p align="center">
-  <img src="docs/screenshots/emoji-search.png" alt="Emoji search: double, with the emoji categories in the bar" width="280">
-  <img src="docs/screenshots/symbol-search.png" alt="Symbol search, with the symbols' groups in the bar" width="280">
-  <img src="docs/screenshots/kaomoji-search.png" alt="Kaomoji search, with their moods in the bar" width="280">
+  <img src="docs/cards/search.webp" alt="Search everything. Emoji by name, every Unicode symbol and kaomoji, each search with tabs that jump straight to a group." width="840">
 </p>
 
 - **Kaomoji by mood, action or name**: happy, sad, lenny face and hundreds more.
 
 <p align="center">
-  <img src="docs/screenshots/kaomoji-happy.png" alt="Kaomoji search: happy" width="280">
-  <img src="docs/screenshots/kaomoji-sad.png" alt="Kaomoji search: sad" width="280">
-  <img src="docs/screenshots/kaomoji-lenny.png" alt="Kaomoji search: lenny" width="280">
+  <img src="docs/cards/kaomoji-moods.webp" alt="Kaomoji by mood, action or name. Happy, sad, lenny face and hundreds more." width="840">
 </p>
 
 - **GIFs**: search them from the emoji pages or the picker, with quick searches (LOL, Love, Sad, Wow, Yes, No, Bye) in the bar, and star one to keep it in your **favourites** (★), with the ones you sent last under them.
 
 <p align="center">
-  <img src="docs/screenshots/gif-search.png" alt="GIF search: cat" width="420">
-  <img src="docs/screenshots/gif-favourites.png" alt="GIF favourites and recents" width="420">
+  <img src="docs/cards/gifs.webp" alt="GIFs, with favourites. Search from the emoji pages or the picker, with quick searches in the bar, and star the ones you want to keep." width="840">
 </p>
 
 - **Tap SYM or the emoji key** for one symbol or emoji, with no screen in the way; a dedicated **emoji key** (Right Shift by default) for the picker.
 - **Shortcuts everywhere**: Ctrl+Z undo in any app, the same app shortcuts in every app, Ctrl+Shift+Q/W/E to pick a suggestion, Enter that sends or adds a line the way each app expects, and Nav Mode for arrows on the letters.
 
 <p align="center">
-  <img src="docs/screenshots/app-shortcuts.png" alt="App shortcuts: the same standard combos in every app" width="300">
+  <img src="docs/cards/app-shortcuts.webp" alt="Shortcuts everywhere. Ctrl+Z in any app, and the same standard shortcuts in every app." width="840">
 </p>
 
 - **Shift, Alt and Ctrl your way**, side by side: what a tap does, whether two taps lock it, what Space does, whether it lets go after use, and Backspace deleting forwards.
 
 <p align="center">
-  <img src="docs/screenshots/modifiers.png" alt="Shift, Alt and Ctrl side by side" width="320">
+  <img src="docs/cards/modifiers.webp" alt="Shift, Alt and Ctrl your way. What a tap does, whether two taps lock it, and whether it lets go after use, side by side." width="840">
 </p>
 
 - **A quick launcher that does more**: apps, their own shortcuts (Discord's "New message"), contacts to call or message, websites, Termux scripts and tasks, and Niagara search if you prefer it.
 
 <p align="center">
-  <img src="docs/screenshots/quick-launcher.png" alt="The quick launcher: Discord and its own New message shortcut" width="320">
+  <img src="docs/cards/quick-launcher.webp" alt="A quick launcher that does more. Apps and their own shortcuts, contacts to call or message, websites and Termux scripts, by typing their name." width="840">
 </p>
 
 ### Typing that keeps up
 - **Suggestions as you type**, in the bar above the keys.
 
 <p align="center">
-  <img src="docs/screenshots/suggestions.png" alt="Suggestions in the bar while typing" width="520">
+  <img src="docs/cards/suggestions.webp" alt="Suggestions as you type. In the bar above the keys, picked with a swipe on the trackpad." width="840">
 </p>
 
 - **Spell checking in every app**, working with Gboard's corrections, plus password managers' autofill chips, **one-time codes** from your notifications and copied passwords offered without ever being shown.
 
 <p align="center">
-  <img src="docs/screenshots/autofill.png" alt="Bitwarden's autofill chips in the suggestion bar" width="520">
+  <img src="docs/cards/autofill.webp" alt="Autofill and one-time codes. Password managers' chips in the suggestion bar, and codes from your notifications." width="840">
 </p>
 
 - **Learns as you go** (words you use, the emails and numbers you type) and **forgets when asked**: Incognito typing and **Offline mode**, together as a private mode on one key.
@@ -137,27 +131,26 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 - **A background picture** you place behind the keys.
 
 <p align="center">
-  <img src="docs/screenshots/background-picture.png" alt="A picture behind the keys" width="480">
+  <img src="docs/cards/background-picture.webp" alt="A picture behind the keys. Place a photo of your own behind the keyboard." width="840">
 </p>
 
 - **Themes**: one for light mode and one for dark, colours from your wallpaper, and every colour editable.
 
 <p align="center">
-  <img src="docs/screenshots/theme-picker.png" alt="Choosing themes: following the system, wallpaper colours and a background picture" width="300">
-  <img src="docs/screenshots/theme-colours.png" alt="Editing a theme's colours" width="300">
+  <img src="docs/cards/themes.webp" alt="Themes. One for light mode and one for dark, colours from your wallpaper, and every colour editable." width="840">
 </p>
 
 - **Edit layouts in the app**, and keyboard-free apps like Termux:X11 and Niagara that still get the keys (and the LEDs).
 - **Terminal mode** for Termux: the keyboard stays out of sight with just its LEDs showing, Alt and SYM type their symbols, Ctrl stays Ctrl, and Termux is set up for the keyboard with one pasted command.
 
 <p align="center">
-  <img src="docs/screenshots/terminal-mode.png" alt="Terminal mode settings: the LEDs, the emoji key and Termux set up for the keyboard" width="300">
+  <img src="docs/cards/terminal-mode.webp" alt="Terminal mode. The keyboard out of sight in Termux with just its LEDs, Alt and SYM for symbols, and Ctrl staying Ctrl." width="840">
 </p>
 
 - **A tutorial** that sets up the extras for you, and **updates from the app**, full releases or dev builds.
 
 <p align="center">
-  <img src="docs/screenshots/tutorial.png" alt="The tutorial's welcome page" width="280">
+  <img src="docs/cards/tutorial.webp" alt="A tutorial that sets things up. The extras set up for you, and updates from the app, full releases or dev builds." width="840">
 </p>
 
 Everything else, including per-app exact typing and languages, automatic Shift by field type,
@@ -258,6 +251,20 @@ never-off value and the broadcast that turns the light off) follows what
 [PhysiBoard](https://github.com/brobata/physiboard) by brobata found and documented on the
 phone. Thank you to brobata.
 
-If you enjoy Flux Keyboard, consider supporting the people it's built on:
+If you enjoy Flux Keyboard, you can [support me on Ko-fi](https://ko-fi.com/fluxsniffermods),
+and the people it's built on:
 [Pastiera on Open Collective](https://pastiera.eu/donate) and
 [Andrea Palumbo on Ko-fi](https://ko-fi.com/palsoftware).
+
+<p align="center"><a href="https://ko-fi.com/fluxsniffermods"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi"></a></p>
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/Flux-Sniffer-Mods">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/branding/flux-sniffer-mods-dark.png">
+      <img src="docs/branding/flux-sniffer-mods-light.png" alt="flux sniffer mods" width="240">
+    </picture>
+  </a>
+</p>
