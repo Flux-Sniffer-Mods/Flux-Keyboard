@@ -23,6 +23,35 @@ internal fun successorReleasesApiUrl(): String =
 internal fun successorReleasesPage(): String =
     "https://github.com/${BuildConfig.SUCCESSOR_GITHUB_REPOSITORY}/releases"
 
+/** Flux Keyboard stable builds update from the fork's own releases rather than upstream's. */
+internal fun forkUpdatesEnabled(): Boolean =
+    BuildConfig.RELEASE_CHANNEL == "stable" && BuildConfig.FORK_GITHUB_REPOSITORY.isNotBlank()
+
+private const val FORK_UPDATE_PREFS = "fork_update"
+private const val KEY_ANNOUNCED_FORK_RELEASE = "announced_release"
+
+/** Remembers the release a notification announced, so it can be cleared once installed. */
+internal fun rememberAnnouncedForkRelease(context: Context, tag: String) {
+    context.getSharedPreferences(FORK_UPDATE_PREFS, Context.MODE_PRIVATE).edit()
+        .putString(KEY_ANNOUNCED_FORK_RELEASE, tag).apply()
+}
+
+/**
+ * After an update, a notification announcing this build (or an older one) is stale: it's
+ * cleared, so the new version never prompts for itself.
+ */
+fun clearStaleForkUpdateNotice(context: Context) {
+    ForkUpdateInstaller.clearDownloads(context)
+    val prefs = context.getSharedPreferences(FORK_UPDATE_PREFS, Context.MODE_PRIVATE)
+    val tag = prefs.getString(KEY_ANNOUNCED_FORK_RELEASE, null) ?: return
+    if (forkReleaseIsNewer(tag, BuildConfig.VERSION_NAME)) return
+    it.palsoftware.pastiera.inputmethod.NotificationHelper.cancelUpdateNotification(context)
+    prefs.edit().remove(KEY_ANNOUNCED_FORK_RELEASE).apply()
+}
+
+internal fun forkReleasesPage(): String =
+    "https://github.com/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases"
+
 private val client = OkHttpClient()
 private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
@@ -34,6 +63,7 @@ internal data class UpdateCheckResult(
     val releasePageUrl: String? = null,
     val downloadUrl: String? = null,
     val isNightlyUpdate: Boolean = false,
+    val isForkUpdate: Boolean = false,
     val isPastieraStableUpdate: Boolean = false,
     val followUpAnnouncement: UpdateCheckResult? = null
 )
@@ -61,7 +91,9 @@ internal fun combineNightlyUpdateResults(
 private enum class ReleaseFeed {
     SUCCESSOR,
     PASTIERA_STABLE,
-    PASTIERA_NIGHTLY
+    PASTIERA_NIGHTLY,
+    /** Flux Keyboard's own releases, in place of Pastiera's and its successor's */
+    FORK
 }
 
 internal fun checkForUpdate(
@@ -69,7 +101,11 @@ internal fun checkForUpdate(
     releaseChannel: String,
     ignoreDismissedReleases: Boolean = true,
     callback: (UpdateCheckResult) -> Unit
-) = checkRelease(context, releaseChannel, ignoreDismissedReleases, ReleaseFeed.SUCCESSOR, callback)
+) = checkRelease(
+    context, releaseChannel, ignoreDismissedReleases,
+    if (forkUpdatesEnabled()) ReleaseFeed.FORK else ReleaseFeed.SUCCESSOR,
+    callback
+)
 
 private fun checkForPastieraStableUpdate(
     context: Context,
@@ -102,7 +138,11 @@ internal fun checkForUpdateNotices(
     ignoreDismissedReleases: Boolean = true,
     callback: (UpdateCheckResult) -> Unit
 ) {
-    if (BuildConfig.RELEASE_CHANNEL == "nightly") {
+    // Flux Keyboard includes Pastiera's releases: it offers only its own, never Pastiera's or
+    // its successor's
+    if (forkUpdatesEnabled()) {
+        checkForUpdate(context, releaseChannel, ignoreDismissedReleases, callback)
+    } else if (BuildConfig.RELEASE_CHANNEL == "nightly") {
         checkForNightlyUpdate(context, ignoreDismissedReleases) { nightly ->
             checkForUpdate(context, "nightly", ignoreDismissedReleases) { successor ->
                 callback(combineNightlyUpdateResults(nightly, successor))
@@ -129,11 +169,14 @@ private fun checkRelease(
         return
     }
 
+    val fork = feed == ReleaseFeed.FORK
+    val includeDev = fork && SettingsManager.getForkUpdateChannel(context) == SettingsManager.FORK_UPDATE_CHANNEL_DEV
     val request = Request.Builder()
-        .url(
-            if (feed == ReleaseFeed.SUCCESSOR) successorReleasesApiUrl()
-            else "https://api.github.com/repos/palsoftware/pastiera/releases?per_page=20"
-        )
+        .url(when (feed) {
+            ReleaseFeed.FORK -> forkReleasesApiUrl()
+            ReleaseFeed.SUCCESSOR -> successorReleasesApiUrl()
+            else -> "https://api.github.com/repos/palsoftware/pastiera/releases?per_page=20"
+        })
         .header("Accept", "application/vnd.github+json")
         .build()
 
@@ -156,10 +199,15 @@ private fun checkRelease(
                 }
 
                 val latestRelease = try {
-                    val releases = parseGitHubReleases(JSONArray(body))
+                    val releases = if (feed == ReleaseFeed.FORK) {
+                        // The fork's release tags (see forkReleasesApiUrl)
+                        val refs = JSONArray(body)
+                        forkReleasesFromTags((0 until refs.length()).mapNotNull { refs.optJSONObject(it)?.optString("ref") })
+                    } else parseGitHubReleases(JSONArray(body))
                     when (feed) {
                         ReleaseFeed.PASTIERA_NIGHTLY -> findNewerNightlyRelease(releases, BuildConfig.VERSION_NAME)
                         ReleaseFeed.PASTIERA_STABLE -> findNewerStableRelease(releases, BuildConfig.VERSION_NAME)
+                        ReleaseFeed.FORK -> findNewerForkRelease(releases, BuildConfig.VERSION_NAME, includeDev)
                         ReleaseFeed.SUCCESSOR -> findLatestRelease(releases, releaseChannel)
                     }
                 } catch (_: Exception) {
@@ -173,12 +221,7 @@ private fun checkRelease(
 
                 val releaseTag = latestRelease.tagName
                 if (ignoreDismissedReleases) {
-                    val dismissalKey = when (feed) {
-                        ReleaseFeed.PASTIERA_NIGHTLY -> "pastiera-nightly:$releaseTag"
-                        ReleaseFeed.PASTIERA_STABLE -> "pastiera-stable:$releaseTag"
-                        ReleaseFeed.SUCCESSOR -> releaseTag
-                    }
-                    val isDismissed = SettingsManager.isReleaseDismissed(context, dismissalKey)
+                    val isDismissed = SettingsManager.isReleaseDismissed(context, dismissKey(releaseTag, feed))
                     if (isDismissed) {
                         // Release was dismissed, don't show update
                         postResult(callback, UpdateCheckResult(successful = true))
@@ -196,12 +239,20 @@ private fun checkRelease(
                         releasePageUrl = latestRelease.releasePageUrl,
                         downloadUrl = latestRelease.downloadUrl,
                         isNightlyUpdate = feed == ReleaseFeed.PASTIERA_NIGHTLY,
-                        isPastieraStableUpdate = feed == ReleaseFeed.PASTIERA_STABLE
+                        isPastieraStableUpdate = feed == ReleaseFeed.PASTIERA_STABLE,
+                        isForkUpdate = feed == ReleaseFeed.FORK
                     )
                 )
             }
         }
     })
+}
+
+private fun dismissKey(tag: String, feed: ReleaseFeed): String = when (feed) {
+    ReleaseFeed.PASTIERA_NIGHTLY -> "pastiera-nightly:$tag"
+    ReleaseFeed.PASTIERA_STABLE -> "pastiera-stable:$tag"
+    ReleaseFeed.FORK -> "pastiera-flux:$tag"
+    ReleaseFeed.SUCCESSOR -> tag
 }
 
 private fun postResult(
@@ -268,6 +319,12 @@ private fun openUrl(context: Context, url: String) {
 internal fun showReleaseNotice(context: Context, result: UpdateCheckResult) {
     val tag = result.releaseTag ?: return
     val name = result.displayName ?: return
+    if (result.isForkUpdate) {
+        // Checked again here: a result from before an update may name the installed build
+        if (!forkReleaseIsNewer(tag, BuildConfig.VERSION_NAME)) return
+        showForkUpdateDialog(context, tag, name, result.releasePageUrl, result.downloadUrl)
+        return
+    }
     val showFollowUp = {
         result.followUpAnnouncement?.let { showReleaseNotice(context, it) }
         Unit
@@ -300,4 +357,28 @@ internal fun showReleaseNotice(context: Context, result: UpdateCheckResult) {
     val dialog = builder.create()
     dialog.setOnCancelListener { showFollowUp() }
     dialog.show()
+}
+
+private fun showForkUpdateDialog(
+    context: Context,
+    tag: String,
+    name: String,
+    releasePageUrl: String?,
+    downloadUrl: String?
+) {
+    val builder = AlertDialog.Builder(context)
+        .setTitle(R.string.fork_update_title)
+        .setMessage(context.getString(R.string.fork_update_message, name))
+        .setPositiveButton(R.string.nightly_update_open) { _, _ ->
+            openUrl(context, releasePageUrl ?: forkReleasesPage())
+        }
+        .setNeutralButton(R.string.successor_dialog_later) { _, _ ->
+            SettingsManager.addDismissedRelease(context, "pastiera-flux:$tag")
+        }
+    downloadUrl?.let { url ->
+        builder.setNegativeButton(R.string.fork_update_install) { _, _ ->
+            ForkUpdateInstaller.downloadAndInstall(context, url, releasePageUrl)
+        }
+    }
+    builder.show()
 }

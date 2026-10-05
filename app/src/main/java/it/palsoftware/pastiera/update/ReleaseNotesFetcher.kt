@@ -1,19 +1,10 @@
 package it.palsoftware.pastiera.update
 
-import android.os.Handler
-import android.os.Looper
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import org.json.JSONObject
-import java.io.IOException
 
-private const val RELEASE_NOTES_BASE_URL = "https://pastiera.eu/releases"
+/** Flux Keyboard's changelog: where release notes send you for more, never Pastiera's website */
+const val FORK_CHANGELOG_URL = "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md"
 
-private val releaseNotesClient = OkHttpClient()
-private val releaseNotesHandler = Handler(Looper.getMainLooper())
 
 data class ReleaseNotesSummary(
     val version: String,
@@ -21,7 +12,14 @@ data class ReleaseNotesSummary(
     val highlights: List<String>,
     val improvements: List<String> = emptyList(),
     val bugFixes: List<String> = emptyList(),
-    val docsUrl: String = "https://pastiera.eu/"
+    val docsUrl: String = FORK_CHANGELOG_URL,
+    // Flux Keyboard: what the notes cover, a heading for the fork's own changes, and the
+    // Pastiera team's changes since their last official release in a section of their own
+    val intro: String? = null,
+    val sectionTitle: String? = null,
+    val upstreamTitle: String? = null,
+    val upstreamChanges: List<String> = emptyList(),
+    val docsLabel: String? = null
 ) {
     companion object {
         fun fallback(version: String, languageTag: String = "en"): ReleaseNotesSummary {
@@ -29,9 +27,7 @@ data class ReleaseNotesSummary(
             return ReleaseNotesSummary(
                 version = version,
                 title = when (language) {
-                    "de" -> "Pastiera $version"
-                    "it" -> "Pastiera $version"
-                    else -> "Pastiera $version"
+                    else -> "${it.palsoftware.pastiera.BuildConfig.APP_NAME} $version"
                 },
                 highlights = when (language) {
                     "de" -> listOf(
@@ -72,100 +68,110 @@ data class ReleaseNotesSummary(
                     "it" -> listOf("Le superfici dei candidati e delle emoji sono più affidabili; importazioni, archivi di backup e suoni personalizzati vengono convalidati con maggiore rigore.")
                     else -> listOf("Candidate and emoji surfaces are more reliable; imports, backup archives, and custom typing sounds receive stricter validation.")
                 },
-                docsUrl = when (language) {
-                    "de" -> "https://pastiera.eu/de/"
-                    "it" -> "https://pastiera.eu/it/"
-                    else -> "https://pastiera.eu/"
-                }
+                docsUrl = FORK_CHANGELOG_URL
             )
         }
     }
 }
 
-fun fetchReleaseNotesForVersion(
-    version: String,
-    languageTag: String,
-    callback: (ReleaseNotesSummary?) -> Unit
-) {
-    val normalizedVersion = normalizeReleaseNotesVersion(version)
-    if (normalizedVersion.isBlank()) {
-        postReleaseNotes(callback, null)
-        return
-    }
+private val FORK_VERSION = Regex("""^(\d+(?:\.\d+)*)-flux\.(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})$""")
 
-    val preferredLanguage = normalizeReleaseNotesLanguage(languageTag)
-    fetchReleaseNotesFromDocs(
-        normalizedVersion = normalizedVersion,
-        language = preferredLanguage,
-        allowEnglishFallback = preferredLanguage != "en",
-        callback = callback
+/** "0.86-flux.202609260416" → "0.86"; other versions as they are. */
+fun shortVersion(version: String): String = FORK_VERSION.find(version.trim())?.groupValues?.get(1) ?: version.trim()
+
+/**
+ * A version as people read it: "0.86-flux.202609260416" → "0.86 · 26 Sep 2026, 04:16" (the build
+ * time, UTC). Other versions come back as they are.
+ */
+fun friendlyVersion(version: String, locale: java.util.Locale = java.util.Locale.getDefault()): String {
+    val m = FORK_VERSION.find(version.trim()) ?: return version.trim()
+    val (base, y, mo, d, h, mi) = m.destructured
+    val month = runCatching {
+        java.time.Month.of(mo.toInt()).getDisplayName(java.time.format.TextStyle.SHORT, locale)
+    }.getOrDefault(mo)
+    return "$base · ${d.toInt()} $month $y, $h:$mi"
+}
+
+/** A fork version's build time as a number ("0.90-flux.202609261444" → 202609261444), or null for other versions. */
+internal fun forkBuildStamp(version: String?): Long? {
+    val m = FORK_VERSION.find(version?.trim() ?: return null) ?: return null
+    return m.groupValues.drop(2).joinToString("").toLongOrNull()
+}
+
+/**
+ * Release notes shipped inside the app (assets/fork/whats_new.json), used instead of the online
+ * notes when present: a fork build describes its own changes, offline.
+ *
+ * An entry is either text, or {"text": …, "after": "yyyyMMddHHmm"}: new since the build made at
+ * that time. With [sinceVersion] (the version the notes were last seen on) only entries newer
+ * than it are listed; without it, or when nothing is newer, all of them are.
+ */
+fun bundledReleaseNotes(
+    context: android.content.Context,
+    version: String,
+    sinceVersion: String? = null
+): ReleaseNotesSummary? = runCatching {
+    val body = context.assets.open("fork/whats_new.json").bufferedReader().use { it.readText() }
+    parseBundledReleaseNotes(body, version, sinceStamp(body, sinceVersion))
+        ?: if (sinceVersion != null) parseBundledReleaseNotes(body, version, null) else null
+}.getOrNull()
+
+/**
+ * Whether the notes bundled with this build list anything new since [sinceVersion]; null when
+ * the build has no notes of its own or that version's build time isn't known.
+ */
+fun bundledNotesHaveNewSince(context: android.content.Context, sinceVersion: String): Boolean? = runCatching {
+    val body = context.assets.open("fork/whats_new.json").bufferedReader().use { it.readText() }
+    bundledNotesHaveNewSince(body, sinceVersion)
+}.getOrNull()
+
+internal fun bundledNotesHaveNewSince(body: String, sinceVersion: String): Boolean? {
+    val stamp = sinceStamp(body, sinceVersion) ?: return null
+    return parseBundledReleaseNotes(body, sinceVersion, stamp) != null
+}
+
+/** A version's build time: in a dev build's name, or for releases (0.91) from the notes' list. */
+private fun sinceStamp(body: String, sinceVersion: String?): Long? {
+    if (sinceVersion == null) return null
+    return forkBuildStamp(sinceVersion)
+        ?: runCatching { JSONObject(body).optJSONObject("releases")?.optString(sinceVersion) }.getOrNull()?.toLongOrNull()
+}
+
+internal fun parseBundledReleaseNotes(body: String, version: String, sinceStamp: Long?): ReleaseNotesSummary? {
+    val json = JSONObject(body)
+    val highlights = parseEntries(json, "highlights", sinceStamp)
+    val improvements = parseEntries(json, "improvements", sinceStamp)
+    val bugFixes = parseEntries(json, "bugFixes", sinceStamp)
+    val upstream = parseEntries(json, "upstream", sinceStamp)
+    if (highlights.isEmpty() && improvements.isEmpty() && bugFixes.isEmpty()) return null
+    return ReleaseNotesSummary(
+        version = version,
+        title = json.optString("title").takeIf(String::isNotBlank)?.let { "$it ${shortVersion(version)}" }
+            ?: "${it.palsoftware.pastiera.BuildConfig.APP_NAME} ${shortVersion(version)}",
+        highlights = highlights.ifEmpty { improvements },
+        improvements = if (highlights.isEmpty()) emptyList() else improvements,
+        bugFixes = bugFixes,
+        docsUrl = json.optString("docsUrl").takeIf { it.startsWith("https://") } ?: FORK_CHANGELOG_URL,
+        intro = (if (sinceStamp != null) json.optString("introSince") else "").takeIf(String::isNotBlank)
+            ?: json.optString("intro").takeIf(String::isNotBlank),
+        sectionTitle = json.optString("sectionTitle").takeIf(String::isNotBlank),
+        upstreamTitle = json.optString("upstreamTitle").takeIf(String::isNotBlank),
+        upstreamChanges = upstream,
+        docsLabel = json.optString("docsLabel").takeIf(String::isNotBlank)
     )
 }
 
-private fun fetchReleaseNotesFromDocs(
-    normalizedVersion: String,
-    language: String,
-    allowEnglishFallback: Boolean,
-    callback: (ReleaseNotesSummary?) -> Unit
-) {
-    val request = Request.Builder()
-        .url("$RELEASE_NOTES_BASE_URL/$normalizedVersion/$language.json")
-        .header("Accept", "application/json")
-        .build()
-
-    releaseNotesClient.newCall(request).enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            if (allowEnglishFallback) {
-                fetchReleaseNotesFromDocs(normalizedVersion, "en", false, callback)
-            } else {
-                postReleaseNotes(callback, null)
-            }
+/** Entries newer than [sinceStamp] (all of them without it); plain text entries are the oldest. */
+private fun parseEntries(json: JSONObject, key: String, sinceStamp: Long?): List<String> {
+    val array = json.optJSONArray(key) ?: return emptyList()
+    return buildList {
+        for (index in 0 until array.length()) {
+            val entry = array.opt(index)
+            val text = ((entry as? JSONObject)?.optString("text") ?: entry as? String)?.trim().orEmpty()
+            val after = (entry as? JSONObject)?.optString("after")?.toLongOrNull() ?: 0L
+            if (text.isNotBlank() && (sinceStamp == null || after >= sinceStamp)) add(text)
         }
-
-        override fun onResponse(call: Call, response: Response) {
-            response.use { res ->
-                if (!res.isSuccessful) {
-                    if (allowEnglishFallback) {
-                        fetchReleaseNotesFromDocs(normalizedVersion, "en", false, callback)
-                    } else {
-                        postReleaseNotes(callback, null)
-                    }
-                    return
-                }
-
-                val body = res.body?.string().orEmpty()
-                if (body.isBlank()) {
-                    postReleaseNotes(callback, null)
-                    return
-                }
-
-                val notes = parseReleaseNotesJson(body, normalizedVersion)
-                postReleaseNotes(callback, notes)
-            }
-        }
-    })
-}
-
-private fun parseReleaseNotesJson(body: String, expectedVersion: String): ReleaseNotesSummary? {
-    return runCatching {
-        val json = JSONObject(body)
-        val version = json.optString("version", expectedVersion).takeIf(String::isNotBlank) ?: expectedVersion
-        if (normalizeReleaseVersion(version) != expectedVersion) return@runCatching null
-
-        val highlights = parseStringArray(json, "highlights", 8)
-        if (highlights.isEmpty()) return@runCatching null
-
-        ReleaseNotesSummary(
-            version = version,
-            title = json.optString("title").takeIf(String::isNotBlank) ?: "Pastiera $version",
-            highlights = highlights,
-            improvements = parseStringArray(json, "improvements", 8),
-            bugFixes = parseStringArray(json, "bugFixes", 12),
-            docsUrl = json.optString("docsUrl")
-                .takeIf { it.startsWith("https://pastiera.eu/") }
-                ?: "https://pastiera.eu/"
-        )
-    }.getOrNull()
+    }
 }
 
 private fun parseStringArray(json: JSONObject, key: String, limit: Int): List<String> {
@@ -188,11 +194,3 @@ private fun normalizeReleaseNotesLanguage(languageTag: String): String {
     return language.ifBlank { "en" }
 }
 
-private fun postReleaseNotes(
-    callback: (ReleaseNotesSummary?) -> Unit,
-    summary: ReleaseNotesSummary?
-) {
-    releaseNotesHandler.post {
-        callback(summary)
-    }
-}

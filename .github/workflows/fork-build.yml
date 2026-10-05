@@ -1,0 +1,283 @@
+name: Flux Keyboard build
+# Each run is named by its version (or its kind, when the version is worked out), not a running number
+run-name: Flux Keyboard ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
+
+# Pick the branch to pick the kind of build:
+#   flux-release -> a full release (0.92): the newest version in whats_new.json's "releases"
+#   flux-dev     -> a dev build (0.93-flux.<yyyyMMddHHmm>) numbered after that release
+# The version is worked out from the branch unless one is given.
+#
+# Two jobs side by side: the APK is ready (and installable) as soon as it's built,
+# while the tests carry on; the build script reports them and won't release a build
+# whose tests failed.
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: "Version name (leave empty to work it out from the branch)"
+        required: false
+        default: ""
+        type: string
+      version_code:
+        description: "Version code (leave empty to work it out from the version)"
+        required: false
+        default: ""
+        type: string
+      notes_since:
+        description: "Release notes since this build (a version like 0.93-flux.202609271457; leave empty for the build before)"
+        required: false
+        default: ""
+        type: string
+      tests:
+        description: "Tests: quick (emoji, keys, settings), full, or none"
+        required: true
+        default: quick
+        type: choice
+        options: [quick, full, none]
+
+# One build at a time: each works out its version and "the build before" once the previous one
+# has published (two dev builds started in the same minute would otherwise share a version)
+concurrency:
+  group: flux-keyboard-build
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: version
+    runs-on: ubuntu-latest
+    outputs:
+      kind: ${{ steps.version.outputs.kind }}
+      name: ${{ steps.version.outputs.name }}
+      code: ${{ steps.version.outputs.code }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Work out the version
+        id: version
+        env:
+          GIVEN: ${{ inputs.version_name }}
+          GIVEN_CODE: ${{ inputs.version_code }}
+        run: |
+          python3 .github/scripts/flux_release.py version "$GITHUB_REF_NAME" "$GIVEN" > version.txt
+          if [ -n "$GIVEN_CODE" ]; then
+            [[ "$GIVEN_CODE" =~ ^[0-9]+$ ]] || { echo "Version code must be a number"; exit 1; }
+            sed -i "s/^code=.*/code=$GIVEN_CODE/" version.txt
+          fi
+          cat version.txt | tee -a "$GITHUB_OUTPUT"
+
+  apk:
+    name: apk
+    needs: version
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    env:
+      # --build-cache: reuse task outputs from earlier runs (kept by setup-gradle)
+      GRADLE_ARGS: --build-cache -PPASTIERA_VERSION_CODE=${{ needs.version.outputs.code }} -PPASTIERA_VERSION_NAME=${{ needs.version.outputs.name }}
+      # Built-in KLIPY key for GIF search (empty when the secret isn't set)
+      KLIPY_API_KEY: ${{ secrets.KLIPY_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle (caches dependencies and build outputs between runs)
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Skip lint on the release build (personal builds)
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cat > ~/.gradle/init.d/skip-lint-vital.gradle <<'EOF'
+          gradle.allprojects { project ->
+              project.tasks.matching { it.name.startsWith("lintVital") }.configureEach { enabled = false }
+          }
+          EOF
+
+      - name: Signing config
+        env:
+          PASTIERA_KEYSTORE_B64: ${{ secrets.PASTIERA_KEYSTORE_B64 }}
+          PASTIERA_KEYSTORE_PASSWORD: ${{ secrets.PASTIERA_KEYSTORE_PASSWORD }}
+          PASTIERA_KEY_ALIAS: ${{ secrets.PASTIERA_KEY_ALIAS }}
+          PASTIERA_KEY_PASSWORD: ${{ secrets.PASTIERA_KEY_PASSWORD }}
+        run: |
+          mkdir -p release
+          echo "$PASTIERA_KEYSTORE_B64" | base64 -d > release/pastiera-release.jks
+          cat > release/keystore.properties <<EOF
+          storeFile=pastiera-release.jks
+          storePassword=$PASTIERA_KEYSTORE_PASSWORD
+          keyAlias=$PASTIERA_KEY_ALIAS
+          keyPassword=$PASTIERA_KEY_PASSWORD
+          EOF
+
+      - name: Build signed APK
+        run: ./gradlew :app:assembleStableRelease $GRADLE_ARGS
+
+      - name: Collect APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.version.outputs.name }}
+          NOTES_SINCE: ${{ inputs.notes_since }}
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/stable/release/app-stable-release.apk "out/flux-keyboard-${{ needs.version.outputs.name }}.apk"
+          # Release notes list what changed since the build before: for a full release the
+          # previous full release, for a dev build the previous build of either kind (by when it
+          # was published: a release's createdAt is its commit's date, which a fold can keep old)
+          previous=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,publishedAt,isDraft \
+            --jq "[.[] | select(.isDraft | not) | select(.tagName | startswith(\"flux/v\")) | select(.tagName != \"flux/v$VERSION\")] | sort_by(.publishedAt) | last | .tagName // \"\"")
+          # Or since a chosen build
+          if [ -n "$NOTES_SINCE" ]; then previous="flux/v${NOTES_SINCE#flux/v}"; fi
+          python3 .github/scripts/flux_release.py notes "$VERSION" "$previous" "$GITHUB_SHA" > out/RELEASE_NOTES.md
+          # Hand-written notes for a release, when there are some, in place of the generated list
+          if [ -f ".github/release-notes/$VERSION.md" ]; then cp ".github/release-notes/$VERSION.md" out/RELEASE_NOTES.md; fi
+          cat out/RELEASE_NOTES.md
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: |
+            out/*.apk
+            out/RELEASE_NOTES.md
+
+      # The app checks this repository's "flux/" releases for updates. With a
+      # RELEASE_TOKEN secret (a token of the repository owner's) the release is published
+      # as the owner; without it, as github-actions[bot].
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
+          VERSION: ${{ needs.version.outputs.name }}
+        run: |
+          # Dev builds (0.93-flux.<yyyyMMddHHmm>) carry their build time; releases (0.91) don't.
+          # Dev builds are pre-releases, so GitHub's "Latest" is always the latest full release;
+          # the app finds both kinds by their tags, not by "Latest".
+          case "$VERSION" in
+            *-flux.*)
+              stamp="${VERSION##*.}"
+              when=$(date -u -d "${stamp:0:8} ${stamp:8:2}:${stamp:10:2}" "+%-d %b %Y, %H:%M" 2>/dev/null || echo "$stamp")
+              title="Flux Keyboard ${VERSION%%-*} dev · $when"
+              kind="--prerelease" ;;
+            *) title="Flux Keyboard $VERSION"
+              kind="--latest"
+              # A full release replaces the dev builds before it: their releases and tags go
+              gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName --jq '.[].tagName' |
+                grep -- '-flux\.' | while read -r tag; do
+                  gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
+                done ;;
+          esac
+          # A version built again replaces its release (a full release rebuilt with fixes);
+          # a release deleted to be built again leaves its tag behind: move it to this build
+          if gh release view "flux/v$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release delete "flux/v$VERSION" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes
+          else
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/tags/flux/v$VERSION" >/dev/null 2>&1 || true
+          fi
+          gh release create "flux/v$VERSION" out/*.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$title" \
+            --notes-file out/RELEASE_NOTES.md \
+            $kind
+
+  tests:
+    name: tests
+    needs: version
+    if: ${{ inputs.tests != 'none' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # --build-cache: reuse task outputs from earlier runs (kept by setup-gradle)
+      GRADLE_ARGS: --build-cache -PPASTIERA_VERSION_CODE=${{ needs.version.outputs.code }} -PPASTIERA_VERSION_NAME=${{ needs.version.outputs.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle (caches dependencies and build outputs between runs)
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+
+      - name: Cache Robolectric's Android jars
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ hashFiles('gradle/libs.versions.toml', 'app/build.gradle*') }}
+          restore-keys: robolectric-
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Quick tests (emoji, keys, settings)
+        if: ${{ inputs.tests == 'quick' }}
+        run: >
+          ./gradlew :app:testStableDebugUnitTest $GRADLE_ARGS
+          --tests 'it.palsoftware.pastiera.data.emoji.*'
+          --tests 'it.palsoftware.pastiera.data.gif.*'
+          --tests 'it.palsoftware.pastiera.data.symbols.*'
+          --tests 'it.palsoftware.pastiera.data.desktop.*'
+          --tests 'it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest'
+          --tests 'it.palsoftware.pastiera.SettingLinkCoverageTest'
+          --tests 'it.palsoftware.pastiera.SettingLinkRegistryTest'
+          --tests 'it.palsoftware.pastiera.InputDeviceSettingLinkTest'
+          --tests 'it.palsoftware.pastiera.CustomizationSettingLinkTest'
+          --tests 'it.palsoftware.pastiera.OfflineModeTest'
+          --tests 'it.palsoftware.pastiera.EmojiPickerKeySettingsTest'
+          --tests 'it.palsoftware.pastiera.Titan2EliteChromeSettingsTest'
+          --tests 'it.palsoftware.pastiera.HiddenKeyboardAppsTest'
+          --tests 'it.palsoftware.pastiera.inputmethod.KeyboardVisibilityControllerTest'
+          --tests 'it.palsoftware.pastiera.inputmethod.ObservedModifierLedsTest'
+          --tests 'it.palsoftware.pastiera.core.EmojiKeyScreensTest'
+          --tests 'it.palsoftware.pastiera.inputmethod.ui.*'
+          --tests 'it.palsoftware.pastiera.backup.*'
+
+      - name: Full unit test suite
+        if: ${{ inputs.tests == 'full' }}
+        run: ./gradlew :app:testStableDebugUnitTest $GRADLE_ARGS
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            app/build/test-results/
+            app/build/reports/tests/
+          if-no-files-found: ignore
+
+  # A successful build replaces the runs before it: earlier runs (and their artifacts) are
+  # deleted, so only the latest build's run is kept. Releases keep their APKs.
+  cleanup:
+    name: cleanup
+    needs: [apk, tests]
+    if: ${{ !cancelled() && needs.apk.result == 'success' && needs.tests.result != 'failure' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete earlier runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/actions/workflows/fork-build.yml/runs?per_page=100" \
+            --jq ".workflow_runs[] | select(.id != $GITHUB_RUN_ID and .status == \"completed\") | .id" |
+            while read -r id; do
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/runs/$id" >/dev/null 2>&1 || true
+            done

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flux Keyboard: which releases updates offer -->
+<resources>
+    <string name="fork_update_channel_title">Dev builds</string>
+    <string name="fork_update_channel_stable">Off: updates offer full releases only. Dev builds start with this on, full releases with it off.</string>
+    <string name="fork_update_channel_dev">On: updates also offer each dev build as it\'s made, with the newest changes and fewer checks.</string>
+</resources>

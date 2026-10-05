@@ -25,5 +25,6 @@ internal fun isInstalledFromFdroid(context: Context): Boolean {
 }
 
 fun shouldUseGithubUpdateChecks(context: Context): Boolean {
-    return BuildConfig.ENABLE_GITHUB_UPDATE_CHECKS && !isInstalledFromFdroid(context)
+    return BuildConfig.ENABLE_GITHUB_UPDATE_CHECKS && !isInstalledFromFdroid(context) &&
+        !it.palsoftware.pastiera.OfflineMode.enabled
 }

@@ -59,12 +59,14 @@ class UpdateCheckWorker(
         var announcement: UpdateCheckResult? = result
         while (announcement != null) {
             if (announcement.hasAnnouncement && announcement.displayName != null) {
+                if (announcement.isForkUpdate) announcement.releaseTag?.let { rememberAnnouncedForkRelease(context, it) }
                 NotificationHelper.showUpdateAvailableNotification(
                     context = context,
                     displayName = announcement.displayName,
                     releasePageUrl = announcement.releasePageUrl,
                     isNightlyUpdate = announcement.isNightlyUpdate,
-                    isPastieraStableUpdate = announcement.isPastieraStableUpdate
+                    isPastieraStableUpdate = announcement.isPastieraStableUpdate,
+                    isForkUpdate = announcement.isForkUpdate
                 )
             }
             announcement = announcement.followUpAnnouncement

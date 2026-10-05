@@ -1,0 +1,12 @@
+<resources>
+    <string name="fork_update_title">Flux Keyboard update available</string>
+    <string name="fork_update_message">%1$s is ready to install.</string>
+    <string name="fork_update_settings_title">Flux Keyboard updates</string>
+    <string name="fork_update_settings_description">Check for a newer Flux Keyboard build on GitHub.</string>
+    <string name="fork_update_checking">Checking for Flux Keyboard updates…</string>
+    <string name="fork_update_install">Install update</string>
+    <string name="fork_update_downloading">Downloading the update…</string>
+    <string name="fork_update_allow_installs">Allow Flux Keyboard to install apps, then go back: the update installs from there.</string>
+    <string name="fork_update_download_failed">Couldn\'t download the update, so here\'s the release page instead.</string>
+    <string name="fork_update_current">Flux Keyboard is up to date.</string>
+</resources>
