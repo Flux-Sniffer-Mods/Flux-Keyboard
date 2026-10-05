@@ -43,8 +43,8 @@ fun MultiAppPickerDialog(
 ) {
     val context = LocalContext.current
     val apps = remember {
+        // Flux Keyboard itself included: its own settings can keep keyboard swipes out too
         AppListHelper.getInstalledApps(context)
-            .filter { it.packageName != context.packageName }
             .sortedWith(compareBy<InstalledApp> { it.packageName !in initial }.thenBy { it.appName.lowercase() })
     }
     var chosen by remember { mutableStateOf(initial) }

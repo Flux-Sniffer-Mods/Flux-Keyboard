@@ -53,8 +53,9 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
             // The quick launcher opens over the app you're in: that app keeps its screen size
             val overlay = pkg == packageName && event.className?.toString()?.contains("QuickLauncher") == true
             if (!overlay) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
-            // Keyboard swipes per app follow the app's own screens
-            if (confirmed && pkg != frontPackage) {
+            // Keyboard swipes per app follow the app's own screens (the quick launcher, over
+            // another app, keeps that app's choice)
+            if (confirmed && !overlay && pkg != frontPackage) {
                 frontPackage = pkg
                 claimTrackpad(ClicksAccessibilityKeyBridge.trackpadCaptured)
             }
