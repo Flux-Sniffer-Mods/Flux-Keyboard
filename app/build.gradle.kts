@@ -72,6 +72,47 @@ fun shouldValidateStableSigning(taskNames: List<String>): Boolean {
     }
 }
 
+// Flux Keyboard: the fork's builds don't use the Pastiera name (at the Pastiera team's request).
+// Every string resource that names Pastiera is regenerated for the stable flavor with the fork's
+// name, so Pastiera's own string files stay untouched; credits in assets still name Pastiera.
+val forkAppName = "Flux Keyboard"
+val forkCompactModeName = "Solderina" // Pastiera's compact mode, Pastierina
+val forkNamesDir = layout.buildDirectory.dir("generated/forkNames/res")
+val generateForkNames = tasks.register("generateForkNames") {
+    val resDir = file("src/main/res")
+    val outDir = forkNamesDir
+    val appName = forkAppName
+    val compactName = forkCompactModeName
+    inputs.dir(resDir).withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.property("appName", appName)
+    inputs.property("compactName", compactName)
+    outputs.dir(outDir)
+    doLast {
+        val out = outDir.get().asFile
+        out.deleteRecursively()
+        val element = Regex("(?s)<(string|plurals|string-array)\\b[^>]*>.*?</\\1>")
+        val word = Regex("\\bPastiera\\b|Pastierina")
+        resDir.listFiles { f -> f.isDirectory && f.name.startsWith("values") }.orEmpty().forEach { dir ->
+            val renamed = dir.listFiles { f -> f.extension == "xml" }.orEmpty().sortedBy { it.name }
+                .flatMap { xml -> element.findAll(xml.readText()).map { it.value }.toList() }
+                // Credits to PalSoftware keep Pastiera's name
+                .filter { word.containsMatchIn(it) && !it.contains("PalSoftware") }
+                .map {
+                    word.replace(it.replace("Pastiera Flux", appName).replace("Pastierina", compactName), appName)
+                }
+            if (renamed.isNotEmpty()) {
+                File(out, dir.name).mkdirs()
+                File(out, "${dir.name}/fork_names.xml").writeText(
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                        "<resources xmlns:tools=\"http://schemas.android.com/tools\">\n    " +
+                        renamed.joinToString("\n    ") + "\n</resources>\n"
+                )
+            }
+        }
+    }
+}
+tasks.named("preBuild") { dependsOn(generateForkNames) }
+
 android {
     namespace = "it.palsoftware.pastiera"
     compileSdk = 36
@@ -84,11 +125,28 @@ android {
     val nightlyVersionNameSuffix = providers.gradleProperty("PASTIERA_NIGHTLY_VERSION_SUFFIX").orNull ?: "-nightly"
     val isFdroidBuild = gradleBooleanProperty("PASTIERA_FDROID_BUILD")
     val isUnsignedReleaseBuild = gradleBooleanProperty("PASTIERA_UNSIGNED_RELEASE_BUILD")
+    // Built-in KLIPY key for GIF search: from the build environment (a CI secret), never the source
+    val klipyApiKey = (providers.environmentVariable("KLIPY_API_KEY").orNull
+        ?: providers.gradleProperty("KLIPY_API_KEY").orNull ?: "").trim().let { key ->
+        if (key.isEmpty() || key.matches(Regex("[A-Za-z0-9_-]+"))) key else {
+            logger.warn("KLIPY_API_KEY has unexpected characters; building without a built-in GIF key")
+            ""
+        }
+    }
     val successorGithubRepository = providers.gradleProperty("PASTIERA_SUCCESSOR_GITHUB_REPOSITORY")
         .orNull ?: "pkb-rocks/plektra"
     if (!successorGithubRepository.matches(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+"))) {
         throw GradleException(
             "PASTIERA_SUCCESSOR_GITHUB_REPOSITORY must have the form owner/repository"
+        )
+    }
+
+    // Flux Keyboard: stable builds update from this repository's "flux/" GitHub releases
+    val forkGithubRepository = providers.gradleProperty("PASTIERA_FORK_GITHUB_REPOSITORY")
+        .orNull ?: "Flux-Sniffer-Mods/Flux-Keyboard"
+    if (forkGithubRepository.isNotEmpty() && !forkGithubRepository.matches(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+"))) {
+        throw GradleException(
+            "PASTIERA_FORK_GITHUB_REPOSITORY must be empty or have the form owner/repository"
         )
     }
 
@@ -100,7 +158,11 @@ android {
         versionName = ciVersionName ?: defaultVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "APP_NAME", "\"Pastiera\"")
+        buildConfigField("String", "COMPACT_MODE_NAME", "\"Pastierina\"")
         buildConfigField("String", "SUCCESSOR_GITHUB_REPOSITORY", "\"$successorGithubRepository\"")
+        buildConfigField("String", "FORK_GITHUB_REPOSITORY", "\"$forkGithubRepository\"")
+        buildConfigField("String", "KLIPY_API_KEY", "\"$klipyApiKey\"")
     }
 
     signingConfigs {
@@ -136,12 +198,18 @@ android {
     }
 
     flavorDimensions += "channel"
+    sourceSets.maybeCreate("stable").res.srcDir(forkNamesDir)
 
     productFlavors {
         create("stable") {
             dimension = "channel"
-            manifestPlaceholders["appLabel"] = "Pastiera"
-            manifestPlaceholders["imeLabel"] = "Pastiera"
+            // Flux Keyboard (Flux-Sniffer-Mods fork): its own name and app ID, so it installs next
+            // to official Pastiera and never presents itself as Pastiera
+            applicationId = "io.github.fluxsniffermods.fluxkeyboard"
+            manifestPlaceholders["appLabel"] = forkAppName
+            manifestPlaceholders["imeLabel"] = forkAppName
+            buildConfigField("String", "APP_NAME", "\"$forkAppName\"")
+            buildConfigField("String", "COMPACT_MODE_NAME", "\"$forkCompactModeName\"")
             buildConfigField("String", "RELEASE_CHANNEL", "\"stable\"")
             buildConfigField("boolean", "IS_FDROID_BUILD", if (isFdroidBuild) "true" else "false")
             buildConfigField("boolean", "ENABLE_GITHUB_UPDATE_CHECKS", if (isFdroidBuild) "false" else "true")
@@ -265,6 +333,11 @@ android {
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
+        // File names with non-ASCII characters (layout names) need a UTF-8 locale on every host
+        unitTests.all { test ->
+            test.environment("LC_ALL", "C.UTF-8")
+            test.environment("LANG", "C.UTF-8")
+        }
     }
 }
 
@@ -277,10 +350,11 @@ val generateStableReleaseSbom = tasks.register("generateStableReleaseSbom") {
     inputs.files(stableRuntimeClasspath)
     inputs.property("versionName", android.defaultConfig.versionName ?: "")
     inputs.property("versionCode", android.defaultConfig.versionCode ?: 0)
+    inputs.property("appName", forkAppName)
     outputs.dir(stableSbomAssets)
     doLast {
         val versionName = android.defaultConfig.versionName ?: "unknown"
-        val appRef = "pkg:generic/pastiera@$versionName"
+        val appRef = "pkg:generic/${forkAppName.lowercase().replace(' ', '-')}@$versionName"
         val libraries = stableRuntimeClasspath.get().resolvedConfiguration.resolvedArtifacts
             .map { artifact ->
                 val id = artifact.moduleVersion.id
@@ -319,7 +393,7 @@ val generateStableReleaseSbom = tasks.register("generateStableReleaseSbom") {
             "version" to 1,
             "metadata" to mapOf("component" to mapOf(
                 "type" to "application",
-                "name" to "Pastiera",
+                "name" to forkAppName,
                 "version" to versionName,
                 "bom-ref" to appRef,
                 "purl" to appRef,
@@ -347,6 +421,8 @@ tasks.matching { it.name == "mergeStableReleaseAssets" }.configureEach {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    // Inline autofill chips (passwords, one-time codes) in the suggestion bar
+    implementation(libs.androidx.autofill)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)

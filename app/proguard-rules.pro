@@ -26,3 +26,10 @@
 
 # Keep BuildConfig for runtime checks if needed
 -keep class it.palsoftware.pastiera.BuildConfig { *; }
+# Shizuku's shell processes are started by reflection (Shizuku.newProcess is private): without
+# this, a minified build strips it and nothing through Shizuku runs (keyboard light, screen size,
+# ADB shortcuts, trackpad discovery)
+-keepclassmembers class rikka.shizuku.Shizuku {
+    private static rikka.shizuku.ShizukuRemoteProcess newProcess(java.lang.String[], java.lang.String[], java.lang.String);
+}
+-keep class rikka.shizuku.ShizukuRemoteProcess { *; }

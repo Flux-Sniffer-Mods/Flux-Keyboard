@@ -3,6 +3,14 @@
     <cache-path
         name="debug_reports"
         path="debug-reports/" />
+    <!-- GIFs sent to apps (KlipyGifs.CACHE_FOLDER) -->
+    <cache-path
+        name="gifs"
+        path="gifs/" />
+    <!-- Flux Keyboard updates handed to the package installer (ForkUpdateInstaller) -->
+    <cache-path
+        name="updates"
+        path="updates/" />
     <cache-path
         name="sbom"
         path="sbom/" />

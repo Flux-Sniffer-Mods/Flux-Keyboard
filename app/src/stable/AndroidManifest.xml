@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Flux Keyboard installs its own updates (update/ForkUpdateInstaller.kt) -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <application>
+        <!-- One-time codes from notifications (otp/OneTimeCodeListener.kt); reads nothing
+             until the user grants notification access and turns the option on -->
+        <service
+            android:name="it.palsoftware.pastiera.otp.OneTimeCodeListener"
+            android:exported="true"
+            android:label="@string/one_time_codes_title"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

@@ -26,6 +26,8 @@
 
     <!-- Query per vedere tutte le app installate che possono essere avviate -->
     <queries>
+        <!-- Termux tasks in the quick launcher (Add a shortcut) -->
+        <package android:name="com.termux" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -37,12 +39,27 @@
             <category android:name="android.intent.category.HOME" />
         </intent>
 
+        <!-- Apps offering shortcuts for the home screen: Add a shortcut -->
+        <intent>
+            <action android:name="android.intent.action.CREATE_SHORTCUT" />
+        </intent>
+
         <!-- Optional QuickLauncher backend: Niagara Launcher search deep link -->
         <package android:name="bitpit.launcher" />
         <package android:name="net.dinglisch.android.taskerm" />
         <package android:name="io.homeassistant.companion.android" />
         <package android:name="com.clicks.companionapp" />
+        <!-- Unihertz's settings app: the Titan 2 Elite's Keyboard gesture page -->
+        <package android:name="com.agui.settings" />
+        <!-- Shizuku: granting it what it needs to start at boot, then opening it -->
+        <package android:name="moe.shizuku.privileged.api" />
     </queries>
+
+    <!-- Termux tasks in the quick launcher: run a script in ~/.shortcuts through Termux -->
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
+    <!-- Call a contact in the quick launcher: calls straight away when allowed, else opens the dialer -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <application
         android:name=".PastieraApplication"
@@ -96,6 +113,7 @@
             android:theme="@style/Theme.Pastiera" />
         
         <activity android:name=".KeyboardLayoutActivity" android:exported="false" android:theme="@style/Theme.Pastiera" />
+        <activity android:name=".UserShortcutsActivity" android:exported="false" android:theme="@style/Theme.Pastiera" />
 
         <activity android:name=".CornerCalibrationActivity" android:exported="false"
             android:label="Displaykurve kalibrieren" android:theme="@style/Theme.Pastiera" />
@@ -107,11 +125,8 @@
             android:exported="true"
             android:label="@string/settings_title"
             android:theme="@style/Theme.Pastiera">
-            <!-- Settings links only navigate and highlight; they never change values.
-                 Keep the pastiera scheme and pastiera.eu alias after the Plektra rename.
-                 Future: if multiple Stable/Nightly or Pastiera/Plektra apps are installed,
-                 consider an in-app choice with explicit forwarding to the selected package.
-                 Verified overlapping App Links do not guarantee an Android chooser. -->
+            <!-- Settings links (fluxkeyboard://setting/<id>) open that setting here; they only
+                 navigate and highlight, never change values -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -119,26 +134,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="pastiera"
+                    android:scheme="fluxkeyboard"
                     android:host="setting" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="pkb.rocks"
-                    android:pathPrefix="/settings/" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="pastiera.eu"
-                    android:pathPrefix="/settings/" />
             </intent-filter>
         </activity>
         
@@ -182,6 +179,19 @@
             <meta-data
                 android:name="android.view.im"
                 android:resource="@xml/method" />
+        </service>
+
+        <service
+            android:name=".spellcheck.PastieraSpellCheckerService"
+            android:label="@string/spell_checker_name"
+            android:permission="android.permission.BIND_TEXT_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.textservice.SpellCheckerService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.view.textservice.scs"
+                android:resource="@xml/spellchecker" />
         </service>
 
         <service
@@ -237,6 +247,16 @@
             android:finishOnTaskLaunch="true" />
 
         <activity
+            android:name=".update.UpdateInstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false"
+            android:excludeFromRecents="true" />
+        <!-- Termux's answer when the quick launcher asks for Termux:Widget's scripts -->
+        <receiver
+            android:name=".shortcuts.TermuxScripts$Receiver"
+            android:exported="false" />
+
+        <activity
             android:name=".inputmethod.QuickLauncherActivity"
             android:theme="@style/Theme.Pastiera.QuickLauncherOverlay"
             android:exported="false"
@@ -245,6 +265,19 @@
             android:taskAffinity=""
             android:noHistory="true"
             android:finishOnTaskLaunch="true" />
+
+        <!-- Opens the QuickLauncher from other apps: key mappers, side buttons, Tasker, the app
+             icon's long-press shortcut (palsoftware/pastiera#292) -->
+        <activity-alias
+            android:name=".QuickLauncherEntry"
+            android:targetActivity=".inputmethod.QuickLauncherActivity"
+            android:exported="true"
+            android:label="@string/quick_launcher_title">
+            <intent-filter>
+                <action android:name="it.palsoftware.pastiera.action.QUICK_LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- Shizuku provider -->
         <provider
