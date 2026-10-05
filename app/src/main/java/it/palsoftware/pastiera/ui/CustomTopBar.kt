@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -49,11 +50,11 @@ import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.R
 import kotlin.math.hypot
 
-// Pastiera colors inspired by the dessert
-private val PastieraBeige = Color(0xFF6B5435)
-private val PastieraBeigeDark = Color(0xFF8B6F47)
-private val PastieraOrangeLight = Color(0xFFFFB84D)
-private val PastieraYellow = Color(0xFFF2B24C)
+// Flux Keyboard: the dessert's lattice, in purples
+private val PastieraBeige = Color(0xFF3F2F66)
+private val PastieraBeigeDark = Color(0xFF54408A)
+private val PastieraOrangeLight = Color(0xFFC9A2FF)
+private val PastieraYellow = Color(0xFFB98AF0)
 
 /**
  * Custom top bar with Pastiera lattice pattern.
@@ -65,6 +66,8 @@ fun CustomTopBar(
     modifier: Modifier = Modifier
 ) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val compactHeader = DeviceSpecific.isTitan2EliteDevice()
+    val headerContentOffset = if (compactHeader) 0.dp else statusBarInset / 2
     val context = LocalContext.current
     val view = LocalView.current
     val density = LocalDensity.current
@@ -125,27 +128,61 @@ fun CustomTopBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 32.dp)
+                    // On the Titan 2 Elite's short screen the text sits just below the status bar
+                    // with even space around it; elsewhere a little more lattice below the
+                    // "Based on Pastiera" credit
+                    .padding(
+                        start = 16.dp, end = 16.dp,
+                        top = if (compactHeader) statusBarInset + 2.dp else 32.dp,
+                        bottom = when {
+                            compactHeader -> 20.dp
+                            it.palsoftware.pastiera.BuildConfig.APP_NAME != "Pastiera" -> 46.dp
+                            else -> 32.dp
+                        }
+                    )
             ) {
                 // Centered title and subtitle
                 Column(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(y = statusBarInset / 2),
+                        .offset(y = headerContentOffset),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Pastiera",
-                        style = MaterialTheme.typography.headlineLarge,
+                        text = it.palsoftware.pastiera.BuildConfig.APP_NAME,
+                        style = if (compactHeader) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                     Text(
-                        text = "La Tastiera per la tua Tastiera",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = "Go with the flux",
+                        style = if (compactHeader) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
                         color = Color.White.copy(alpha = 0.9f),
                         fontWeight = FontWeight.Medium
                     )
+                    // A fork under its own name says what it's built on, and links to it
+                    if (it.palsoftware.pastiera.BuildConfig.APP_NAME != "Pastiera") {
+                        Text(
+                            text = "Based on Pastiera by PalSoftware ↗",
+                            style = if (compactHeader) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium,
+                            color = Color.White.copy(alpha = 0.85f),
+                            textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline,
+                            modifier = Modifier
+                                .padding(top = if (compactHeader) 2.dp else 6.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    runCatching {
+                                        context.startActivity(
+                                            android.content.Intent(
+                                                android.content.Intent.ACTION_VIEW,
+                                                android.net.Uri.parse("https://github.com/palsoftware/pastiera")
+                                            ).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        )
+                                    }
+                                }
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                    }
                 }
 
                 // Settings icon on the right
@@ -153,8 +190,8 @@ fun CustomTopBar(
                     onClick = onSettingsClick,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .offset(y = statusBarInset / 2)
-                        .size(64.dp)
+                        .offset(y = headerContentOffset)
+                        .size(if (compactHeader) 48.dp else 64.dp)
                         .clip(RoundedCornerShape(24.dp))
                         .background(
                             color = PastieraBeige.copy(alpha = 0.9f)
@@ -164,7 +201,7 @@ fun CustomTopBar(
                         imageVector = Icons.Filled.Settings,
                         contentDescription = stringResource(R.string.settings_content_description),
                         tint = Color.White,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(if (compactHeader) 28.dp else 36.dp)
                     )
                 }
             }

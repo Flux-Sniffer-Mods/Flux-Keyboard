@@ -25,6 +25,7 @@ class SettingsActivity : LocalizedComponentActivity() {
         const val EXTRA_CUSTOMIZATION_DESTINATION = "it.palsoftware.pastiera.CUSTOMIZATION_DESTINATION"
         const val CUSTOMIZATION_DESTINATION_VARIATIONS = "variations"
         const val CUSTOMIZATION_DESTINATION_LAUNCHER_SHORTCUTS = "launcher_shortcuts"
+        const val CUSTOMIZATION_DESTINATION_KEY_SHORTCUTS = "key_shortcuts"
         const val CUSTOMIZATION_DESTINATION_APP_ENTER_BEHAVIOR = "app_enter_behavior"
         const val CUSTOMIZATION_DESTINATION_STATUS_BAR_BUTTONS = "status_bar_buttons"
         const val CUSTOMIZATION_DESTINATION_KEYBOARD_THEME = "keyboard_theme"

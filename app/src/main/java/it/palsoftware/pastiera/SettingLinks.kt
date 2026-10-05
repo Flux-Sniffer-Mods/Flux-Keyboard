@@ -6,7 +6,7 @@ import java.text.Normalizer
 
 /**
  * Stable identifiers for addressable settings entries. They are the path segment
- * of deep links (`pastiera://setting/<id>`) and must never change once shipped.
+ * of deep links (`fluxkeyboard://setting/<id>`) and must never change once shipped.
  */
 object SettingLinkIds {
     // Main screen navigation rows
@@ -25,6 +25,33 @@ object SettingLinkIds {
     const val MAIN_ADVANCED = "main.advanced"
     const val MAIN_ACCESSIBILITY = "main.accessibility"
     const val MAIN_ABOUT = "main.about"
+    const val MAIN_FLUX_EMOJI_GIFS = "main.flux_emoji_gifs"
+    const val MAIN_FLUX_TITAN_SCREEN = "main.flux_titan_screen"
+    const val MAIN_FLUX_HIDDEN_APPS = "main.flux_hidden_apps"
+    const val MAIN_FLUX_LINUX_DESKTOP = "main.flux_linux_desktop"
+    const val MAIN_FLUX_OFFLINE = "main.flux_offline"
+    const val MAIN_KEYBOARDS_LAYOUTS = "main.keyboards_layouts"
+    const val MAIN_TYPING = "main.typing"
+    const val MAIN_EDITING_KEYS = "main.editing_keys"
+    const val MAIN_LOOK_SOUND = "main.look_sound"
+    const val MAIN_APPS = "main.apps"
+    const val MAIN_APP_SHORTCUTS = "main.app_shortcuts"
+    const val MAIN_DEVELOPER = "main.developer"
+    const val MAIN_TERMINAL_MODE = "main.terminal_mode"
+    const val MAIN_EXACT_TYPING = "main.exact_typing"
+    const val EXACT_TYPING_NO_SUGGESTION_FIELDS = "exact_typing.no_suggestion_fields"
+    const val PRIVACY_INCOGNITO_ALWAYS = "privacy.incognito_always"
+    const val PRIVACY_PASTE_SUGGESTION = "privacy.paste_suggestion"
+    const val PRIVACY_ONE_TIME_CODES = "privacy.one_time_codes"
+    const val PRIVACY_PASTE_IN_PASSWORD_FIELDS = "privacy.paste_in_password_fields"
+    const val PRIVACY_CLEAN_LINKS = "privacy.clean_links"
+    const val PRIVACY_INCOGNITO_FOLLOW_APPS = "privacy.incognito_follow_apps"
+    const val TERMINAL_MODE_ENABLED = "terminal_mode.enabled"
+    const val DEVELOPER_OPTIONS_ENABLED = "system.developer_options"
+
+    // App shortcuts screen
+    const val APP_SHORTCUTS_ENABLED = "app_shortcuts.enabled"
+    const val APP_SHORTCUTS_SUGGESTIONS = "app_shortcuts.suggestions"
 
     // Text input screen
     const val TEXT_INPUT_TEXT_EXPANSION = "text_input.text_expansion"
@@ -36,6 +63,8 @@ object SettingLinkIds {
     const val TEXT_INPUT_AUTO_CAPITALIZE_AFTER_PERIOD = "text_input.auto_capitalize_after_period"
     const val TEXT_INPUT_DOUBLE_SPACE_TO_PERIOD = "text_input.double_space_to_period"
     const val TEXT_INPUT_AUTO_SPACE_PUNCTUATION = "text_input.auto_space_punctuation"
+    const val TEXT_INPUT_EMOTICON_PUNCTUATION = "text_input.emoticon_punctuation"
+    const val TEXT_INPUT_AUTO_CAP_AFTER_EMOTICON = "text_input.auto_cap_after_emoticon"
     const val TEXT_INPUT_COMMA_SPACE = "text_input.comma_space"
     const val TEXT_INPUT_FRENCH_PUNCTUATION_SPACING = "text_input.french_punctuation_spacing"
     const val TEXT_INPUT_FRENCH_PUNCTUATION_ONLY_FRENCH = "text_input.french_punctuation_only_french"
@@ -44,7 +73,10 @@ object SettingLinkIds {
     const val TEXT_INPUT_SMART_QUOTES = "text_input.smart_quotes"
     const val TEXT_INPUT_CLEAR_ALT_ON_SPACE = "text_input.clear_alt_on_space"
     const val TEXT_INPUT_AUTO_SHOW_KEYBOARD = "text_input.auto_show_keyboard"
+    const val TEXT_INPUT_SEARCH_BAR_WAITS = "text_input.search_bar_waits_for_typing"
     const val TEXT_INPUT_ALT_CTRL_SPEECH_SHORTCUT = "text_input.alt_ctrl_speech_shortcut"
+    const val TEXT_INPUT_SPEECH_KEEP_LISTENING = "text_input.speech_keep_listening"
+    const val TEXT_INPUT_SPEECH_PAUSE_TIMEOUT = "text_input.speech_pause_timeout"
     const val TEXT_INPUT_SHIFT_BACKSPACE_DELETE = "text_input.shift_backspace_delete"
     const val TEXT_INPUT_ALT_BACKSPACE_DELETE = "text_input.alt_backspace_delete"
     const val TEXT_INPUT_BACKSPACE_AT_START_DELETE = "text_input.backspace_at_start_delete"
@@ -68,6 +100,20 @@ object SettingLinkIds {
     const val AUTO_CORRECTION_EXPERIMENTAL_SUGGESTIONS = "auto_correction.experimental_suggestions"
     const val AUTO_CORRECTION_SUGGESTIONS = "auto_correction.suggestions"
     const val AUTO_CORRECTION_ACCENT_MATCHING = "auto_correction.accent_matching"
+    const val AUTO_CORRECTION_EMOJI_SUGGESTIONS = "auto_correction.emoji_suggestions"
+    const val AUTO_CORRECTION_SUGGESTIONS_BOLD = "auto_correction.suggestions_bold"
+    const val AUTO_CORRECTION_SUGGESTION_KEYS = "auto_correction.suggestion_keys"
+    const val AUTO_CORRECTION_SPELL_CHECKER = "auto_correction.spell_checker"
+    const val AUTO_CORRECTION_INLINE_AUTOFILL = "auto_correction.inline_autofill"
+    const val MAIN_LED_COLORS = "main.led_colors"
+    const val MAIN_EMOJI_PROFILES = "main.emoji_profiles"
+    const val RECOMMENDED_SETTINGS = "system.recommended_settings"
+    const val TERMINAL_MODE_HIDE_KEYBOARD = "terminal_mode.hide_keyboard"
+    const val TERMINAL_MODE_EMOJI_KEY = "terminal_mode.emoji_key"
+    const val EMOJI_PROFILES_SWITCH_BY_APP = "emoji_profiles.switch_by_app"
+    const val EMOJI_PROFILES_SAVE_CURRENT = "emoji_profiles.save_current"
+    const val LED_INDIVIDUAL_COLORS = "led_colors.individual"
+    const val LED_LOCKED_ANIMATION = "led_colors.locked_animation"
     const val AUTO_CORRECTION_KEYBOARD_PROXIMITY = "auto_correction.keyboard_proximity"
     const val AUTO_CORRECTION_EDIT_TYPE_RANKING = "auto_correction.edit_type_ranking"
 
@@ -92,6 +138,7 @@ object SettingLinkIds {
     const val ADVANCED_EXPERIMENTAL_CANDIDATES_VIEW = "advanced.experimental_candidates_view"
     const val ADVANCED_SHOW_TUTORIAL = "advanced.show_tutorial"
     const val ADVANCED_SHOW_RELEASE_NOTES_TUTORIAL = "advanced.show_release_notes_tutorial"
+    const val FORK_UPDATE_CHANNEL = "advanced.update_channel"
 
     // Trackpad gesture screen
     const val TRACKPAD_GESTURES_ENABLED = "trackpad.gestures_enabled"
@@ -100,6 +147,7 @@ object SettingLinkIds {
     const val TRACKPAD_SENSITIVITY = "trackpad.sensitivity"
     const val TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad.suggestion_swipe_threshold"
     const val TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad.delete_swipe_threshold"
+    const val TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad.side_swipe_threshold"
     const val TRACKPAD_DEBUG = "trackpad.debug"
 
     // Modifiers screen
@@ -116,6 +164,9 @@ object SettingLinkIds {
     const val MODIFIERS_ALT_LATCH_STAYS_ON_SPACE = "modifiers.alt_latch_stays_on_space"
     const val MODIFIERS_CTRL_TAP_LATCHES = "modifiers.ctrl_tap_latches"
     const val MODIFIERS_CTRL_LATCH_STAYS_ON_SPACE = "modifiers.ctrl_latch_stays_on_space"
+    const val MODIFIERS_SMART_ALT_OFF = "modifiers.smart_alt_off"
+    const val MODIFIERS_SMART_CTRL_OFF = "modifiers.smart_ctrl_off"
+    const val MODIFIERS_DOUBLE_TAP_LOCKS = "modifiers.double_tap_locks"
 
     // Custom input styles screen
     const val CUSTOM_INPUT_STYLES_LAYOUT_MODE = "custom_input_styles.layout_mode"
@@ -126,11 +177,10 @@ object SettingLinkIds {
     const val CUSTOM_INPUT_STYLES_CTRL_SPACE_LAYOUT_SWITCH =
         "custom_input_styles.ctrl_space_layout_switch"
     const val CUSTOM_INPUT_STYLES_LAYOUT_SWITCH_TOAST = "custom_input_styles.layout_switch_toast"
+    const val CUSTOM_INPUT_STYLES_LANGUAGE_PER_APP = "custom_input_styles.language_per_app"
 
     // About screen
     const val ABOUT_SUPPORT_KO_FI = "about.support_ko_fi"
-    const val ABOUT_SUPPORT_OPEN_COLLECTIVE = "about.support_open_collective"
-    const val ABOUT_PLEKTRA_GITHUB = "about.plektra_github"
 
     // Keyboard theme editor (customization sub-screen): behaviour toggles and
     // the aggregated LED colors. Individual color picker fields stay
@@ -143,6 +193,10 @@ object SettingLinkIds {
     const val KEYBOARD_THEME_TOGGLE_PREVIEW_ON_HOLD = "keyboard_theme.toggle_preview_on_hold"
     const val KEYBOARD_THEME_TOGGLE_CHARACTER_PICKER = "keyboard_theme.toggle_character_picker"
     const val KEYBOARD_THEME_LED_COLORS = "keyboard_theme.led_colors"
+    const val KEYBOARD_THEME_WALLPAPER_COLOURS = "keyboard_theme.wallpaper_colours"
+    const val KEYBOARD_BACKGROUND_IMAGE = "keyboard_theme.background_image"
+    const val KEYBOARD_BACKGROUND_AUTO_COLOURS = "keyboard_theme.background_auto_colours"
+    const val KEYBOARD_BACKGROUND_KEY_OPACITY = "keyboard_theme.background_key_opacity"
 
     // Modifier indicator chips (rendered on the modifiers screen)
     const val MODIFIERS_INDICATOR_BOTTOM_STRIP = "modifiers.indicator_bottom_strip"
@@ -174,7 +228,10 @@ enum class SettingAvailability {
     TextReplacementsEnabled,
     AutoReplaceEnabled,
     CtrlTapLatchesEnabled,
-    TrackpadShizukuProvider
+    TrackpadShizukuProvider,
+    DeveloperOptionsEnabled,
+    /** The row no longer exists; old links resolve to [SettingEntry.unavailableFallbackId]. */
+    Retired
 }
 
 data class SettingEntry(
@@ -200,6 +257,8 @@ data class SettingEntry(
             SettingsManager.getCtrlTapLatches(context)
         SettingAvailability.TrackpadShizukuProvider ->
             SettingsManager.getTrackpadProvider(context) == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU
+        SettingAvailability.DeveloperOptionsEnabled -> SettingsManager.getDeveloperOptionsEnabled(context)
+        SettingAvailability.Retired -> false
     }
 }
 
@@ -209,11 +268,9 @@ data class SettingEntry(
  */
 object SettingLinkRegistry {
 
-    const val LINK_SCHEME = "pastiera"
+    // Flux Keyboard's own scheme: a link opens the setting in this app, never a website or Pastiera
+    const val LINK_SCHEME = "fluxkeyboard"
     const val LINK_HOST = "setting"
-    const val WEB_LINK_HOST = "pastiera.eu"
-    const val ALTERNATE_WEB_LINK_HOST = "pkb.rocks"
-    const val WEB_LINK_PATH_PREFIX = "/settings/"
     private val settingIdPattern = Regex("^[a-z0-9_]+(\\.[a-z0-9_]+)+$")
 
     private fun entry(
@@ -225,7 +282,8 @@ object SettingLinkRegistry {
         keyboardThemeTarget: SettingsManager.KeyboardThemeTarget? = null,
         keyboardThemeTab: KeyboardThemeEditorTab? = null,
         availability: SettingAvailability = SettingAvailability.Always,
-        unavailableFallbackId: String? = null
+        unavailableFallbackId: String? = null,
+        availabilityCheck: ((android.content.Context) -> Boolean)? = null
     ) = SettingEntry(
         id = id,
         titleRes = titleRes,
@@ -237,7 +295,8 @@ object SettingLinkRegistry {
             keyboardThemeTab = keyboardThemeTab
         ),
         availability = availability,
-        unavailableFallbackId = unavailableFallbackId
+        unavailableFallbackId = unavailableFallbackId,
+        availabilityCheck = availabilityCheck
     )
 
     val entries: List<SettingEntry> = listOf(
@@ -288,7 +347,9 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.MAIN_CUSTOMIZATION,
             R.string.settings_category_customization,
-            destination = SettingsDestination.Customization
+            destination = SettingsDestination.LookSound,
+            availability = SettingAvailability.Retired,
+            unavailableFallbackId = SettingLinkIds.MAIN_LOOK_SOUND
         ),
         entry(
             SettingLinkIds.MAIN_LAUNCHER_SHORTCUTS,
@@ -330,7 +391,7 @@ object SettingLinkRegistry {
             SettingLinkIds.TEXT_INPUT_TEXT_EXPANSION,
             R.string.text_expansion_title,
             R.string.text_expansion_description,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.TextExpansion
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_AUTO_CAPITALIZE,
@@ -361,6 +422,12 @@ object SettingLinkRegistry {
             destination = SettingsDestination.TextInput
         ),
         entry(
+            SettingLinkIds.TEXT_INPUT_AUTO_CAP_AFTER_EMOTICON,
+            R.string.auto_cap_after_emoticon_title,
+            R.string.auto_cap_after_emoticon_description,
+            destination = SettingsDestination.TextInput
+        ),
+        entry(
             SettingLinkIds.TEXT_INPUT_DOUBLE_SPACE_TO_PERIOD,
             R.string.double_space_to_period_title,
             R.string.double_space_to_period_description,
@@ -372,9 +439,9 @@ object SettingLinkRegistry {
             destination = SettingsDestination.TextInput
         ),
         entry(
-            SettingLinkIds.TEXT_INPUT_COMMA_SPACE,
-            R.string.comma_space_title,
-            R.string.comma_space_description,
+            SettingLinkIds.TEXT_INPUT_EMOTICON_PUNCTUATION,
+            R.string.emoticon_punctuation_title,
+            R.string.emoticon_punctuation_description,
             destination = SettingsDestination.TextInput
         ),
         entry(
@@ -411,40 +478,57 @@ object SettingLinkRegistry {
             SettingLinkIds.TEXT_INPUT_CLEAR_ALT_ON_SPACE,
             R.string.clear_alt_on_space_title,
             R.string.clear_alt_on_space_description,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.Modifiers
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_AUTO_SHOW_KEYBOARD,
             R.string.auto_show_keyboard_title,
             R.string.auto_show_keyboard_description,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.KeyboardsLayouts
+        ),
+        entry(
+            SettingLinkIds.TEXT_INPUT_SEARCH_BAR_WAITS,
+            R.string.search_bar_waits_title,
+            R.string.search_bar_waits_description,
+            destination = SettingsDestination.KeyboardsLayouts
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_ALT_CTRL_SPEECH_SHORTCUT,
             R.string.alt_ctrl_speech_shortcut_title,
             R.string.alt_ctrl_speech_shortcut_description,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.Modifiers
+        ),
+        entry(
+            SettingLinkIds.TEXT_INPUT_SPEECH_KEEP_LISTENING,
+            R.string.speech_keep_listening_title,
+            R.string.speech_keep_listening_description,
+            destination = SettingsDestination.Modifiers
+        ),
+        entry(
+            SettingLinkIds.TEXT_INPUT_SPEECH_PAUSE_TIMEOUT,
+            R.string.speech_pause_timeout_title,
+            destination = SettingsDestination.Modifiers
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_SHIFT_BACKSPACE_DELETE,
             R.string.shift_backspace_delete_title,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.Modifiers
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_ALT_BACKSPACE_DELETE,
             R.string.alt_backspace_delete_title,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.Modifiers
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_BACKSPACE_AT_START_DELETE,
             R.string.backspace_at_start_delete_title,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.EditingKeys
         ),
         entry(
             SettingLinkIds.TEXT_INPUT_DELETE_NAV_MODE,
             R.string.delete_alternatives_nav_mode_title,
             R.string.settings_nav_mode_configure,
-            destination = SettingsDestination.TextInput
+            destination = SettingsDestination.EditingKeys
         ),
 
         entry(
@@ -478,7 +562,9 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.KEYBOARDS_DEVICES_KEYBOARD_ACCESSORIES,
             R.string.keyboard_accessories_title,
-            destination = SettingsDestination.KeyboardsDevices
+            destination = SettingsDestination.KeyboardsDevices,
+            availabilityCheck = { SettingsManager.hasClicksKeyboard(it) },
+            unavailableFallbackId = SettingLinkIds.KEYBOARDS_DEVICES_BUILT_IN_KEYBOARDS
         ),
 
         entry(
@@ -529,6 +615,7 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.AUTO_CORRECTION_ACCENT_MATCHING,
             R.string.auto_correct_accent_matching_title,
+            R.string.auto_correct_accent_matching_description,
             destination = SettingsDestination.AutoCorrection
         ),
         entry(
@@ -608,7 +695,7 @@ object SettingLinkRegistry {
             SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
             R.string.trackpad_gestures_title,
             R.string.trackpad_gestures_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.ADVANCED_BACKUP,
@@ -625,7 +712,7 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.ADVANCED_SWIPE_INCREMENTAL_THRESHOLD,
             R.string.swipe_incremental_threshold_title,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.ADVANCED_CLIPBOARD_RETENTION_TIME,
@@ -646,27 +733,37 @@ object SettingLinkRegistry {
             destination = SettingsDestination.Advanced
         ),
         entry(
+            SettingLinkIds.FORK_UPDATE_CHANNEL,
+            R.string.fork_update_channel_title,
+            R.string.fork_update_channel_stable,
+            destination = SettingsDestination.Developer,
+            availability = SettingAvailability.DeveloperOptionsEnabled,
+            unavailableFallbackId = SettingLinkIds.DEVELOPER_OPTIONS_ENABLED
+        ),
+        entry(
             SettingLinkIds.ADVANCED_SHOW_RELEASE_NOTES_TUTORIAL,
             R.string.tutorial_show_release_notes,
             R.string.tutorial_show_release_notes_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.Developer,
+            availability = SettingAvailability.DeveloperOptionsEnabled,
+            unavailableFallbackId = SettingLinkIds.DEVELOPER_OPTIONS_ENABLED
         ),
 
         entry(
             SettingLinkIds.TRACKPAD_GESTURES_ENABLED,
             R.string.trackpad_gestures_enabled_title,
             R.string.trackpad_gestures_enabled_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.TRACKPAD_PROVIDER,
             R.string.trackpad_provider_title,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.TRACKPAD_SHIZUKU_DEVICE,
             R.string.trackpad_shizuku_device_title,
-            destination = SettingsDestination.Advanced,
+            destination = SettingsDestination.TrackpadGestures,
             availability = SettingAvailability.TrackpadShizukuProvider,
             unavailableFallbackId = SettingLinkIds.TRACKPAD_PROVIDER
         ),
@@ -674,25 +771,33 @@ object SettingLinkRegistry {
             SettingLinkIds.TRACKPAD_SENSITIVITY,
             R.string.trackpad_sensitivity_title,
             R.string.trackpad_sensitivity_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
             R.string.trackpad_suggestion_swipe_threshold_title,
             R.string.trackpad_suggestion_swipe_threshold_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
             R.string.trackpad_delete_swipe_threshold_title,
             R.string.trackpad_delete_swipe_threshold_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.TrackpadGestures
+        ),
+        entry(
+            SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            R.string.trackpad_side_swipe_threshold_title,
+            R.string.trackpad_side_swipe_threshold_description,
+            destination = SettingsDestination.TrackpadGestures
         ),
         entry(
             SettingLinkIds.TRACKPAD_DEBUG,
             R.string.trackpad_debug_title,
             R.string.trackpad_debug_description,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.Developer,
+            availability = SettingAvailability.DeveloperOptionsEnabled,
+            unavailableFallbackId = SettingLinkIds.DEVELOPER_OPTIONS_ENABLED
         ),
 
         entry(
@@ -719,8 +824,8 @@ object SettingLinkRegistry {
         ),
         entry(
             SettingLinkIds.MODIFIERS_SYM_SHORTCUTS,
-            R.string.power_shortcuts_title,
-            R.string.power_shortcuts_description,
+            R.string.key_shortcuts_title,
+            R.string.key_shortcuts_description,
             destination = SettingsDestination.Modifiers
         ),
         entry(
@@ -733,7 +838,9 @@ object SettingLinkRegistry {
             SettingLinkIds.MODIFIERS_ALT_KEY_SHORTCUTS,
             R.string.alt_key_shortcuts_title,
             R.string.alt_key_shortcuts_modifier_link_description,
-            destination = SettingsDestination.Modifiers
+            destination = SettingsDestination.Modifiers,
+            availability = SettingAvailability.Retired,
+            unavailableFallbackId = SettingLinkIds.MODIFIERS_SYM_SHORTCUTS
         ),
         entry(
             SettingLinkIds.MODIFIERS_CONTROL_NAV_MODE,
@@ -803,21 +910,16 @@ object SettingLinkRegistry {
             R.string.toast_on_layout_switch_description,
             destination = SettingsDestination.CustomInputStyles
         ),
+        entry(
+            SettingLinkIds.CUSTOM_INPUT_STYLES_LANGUAGE_PER_APP,
+            R.string.language_per_app_title,
+            R.string.language_per_app_description,
+            destination = SettingsDestination.CustomInputStyles
+        ),
 
         entry(
             SettingLinkIds.ABOUT_SUPPORT_KO_FI,
             R.string.settings_support_creator_ko_fi,
-            destination = SettingsDestination.About
-        ),
-        entry(
-            SettingLinkIds.ABOUT_SUPPORT_OPEN_COLLECTIVE,
-            R.string.settings_support_open_collective,
-            destination = SettingsDestination.About
-        ),
-        entry(
-            SettingLinkIds.ABOUT_PLEKTRA_GITHUB,
-            R.string.about_plektra_github_title,
-            R.string.about_plektra_github_description,
             destination = SettingsDestination.About
         ),
 
@@ -882,9 +984,8 @@ object SettingLinkRegistry {
             SettingLinkIds.KEYBOARD_THEME_LED_COLORS,
             R.string.keyboard_theme_wizard_leds,
             R.string.keyboard_theme_wizard_leds_description,
-            destination = SettingsDestination.Customization,
-            customizationDestination = SettingsActivity.CUSTOMIZATION_DESTINATION_KEYBOARD_THEME,
-            keyboardThemeTab = KeyboardThemeEditorTab.Colors
+            // LED colours moved to Look & sound > Status LED colours
+            destination = SettingsDestination.LedColors
         ),
 
         // Modifier indicator chips (rendered on the modifiers screen)
@@ -906,7 +1007,8 @@ object SettingLinkRegistry {
             R.string.modifier_indicators_status_bar_description,
             destination = SettingsDestination.Modifiers
         )
-    ) + customizationSettingEntries() + inputDeviceSettingEntries() + systemSettingEntries()
+    ) + customizationSettingEntries() + inputDeviceSettingEntries() + systemSettingEntries() + fluxSettingEntries() +
+        layoutSettingEntries()
 
     private val entriesById: Map<String, SettingEntry> =
         entries.associateBy { it.id }
@@ -949,8 +1051,6 @@ object SettingLinkRegistry {
         SettingLinkIds.MODIFIERS_INDICATORS to R.string.kw_modifier_indicators,
         SettingLinkIds.CUSTOM_INPUT_STYLES_LAYOUT_MODE to R.string.kw_custom_input_styles_layout_mode,
         SettingLinkIds.ABOUT_SUPPORT_KO_FI to R.string.kw_about_support_ko_fi,
-        SettingLinkIds.ABOUT_SUPPORT_OPEN_COLLECTIVE to R.string.kw_about_support_open_collective,
-        SettingLinkIds.ABOUT_PLEKTRA_GITHUB to R.string.kw_about_plektra_github,
         SettingLinkIds.KEYBOARD_THEME_TOGGLE_SHOW_LEDS to R.string.kw_theme_toggle_show_leds,
         SettingLinkIds.KEYBOARD_THEME_TOGGLE_DISTRIBUTE_SPACING to R.string.kw_theme_toggle_distribute_spacing,
         SettingLinkIds.KEYBOARD_THEME_TOGGLE_ORTHOLINEAR to R.string.kw_theme_toggle_ortholinear,
@@ -979,7 +1079,7 @@ object SettingLinkRegistry {
         return candidate
     }
 
-    fun buildLink(id: String): String = "https://$WEB_LINK_HOST$WEB_LINK_PATH_PREFIX$id"
+    fun buildLink(id: String): String = "$LINK_SCHEME://$LINK_HOST/$id"
 
     /**
      * Markdown link used for sharing. With [withDescription] the localized
@@ -1000,9 +1100,6 @@ object SettingLinkRegistry {
         val id = when {
             scheme == LINK_SCHEME && host == LINK_HOST ->
                 path?.trim()?.removePrefix("/")
-            scheme == "https" && (host == WEB_LINK_HOST || host == ALTERNATE_WEB_LINK_HOST) ->
-                path?.takeIf { it.startsWith(WEB_LINK_PATH_PREFIX) }
-                    ?.removePrefix(WEB_LINK_PATH_PREFIX)
             else -> null
         }
         return id?.takeIf(settingIdPattern::matches)
@@ -1014,16 +1111,36 @@ object SettingLinkRegistry {
     val destinationTitles: Map<SettingsDestination, Int> = mapOf(
         SettingsDestination.Main to R.string.settings_title,
         SettingsDestination.KeyboardsDevices to R.string.keyboards_devices_title,
-        SettingsDestination.TextInput to R.string.settings_category_text_input,
+        SettingsDestination.TextInput to R.string.settings_capitalisation_punctuation_title,
         SettingsDestination.Accessibility to R.string.settings_category_accessibility,
         SettingsDestination.AutoCorrection to R.string.settings_category_auto_correction,
         SettingsDestination.Customization to R.string.settings_category_customization,
         SettingsDestination.NavMode to R.string.nav_mode_title,
-        SettingsDestination.Advanced to R.string.settings_category_advanced,
+        SettingsDestination.Advanced to R.string.settings_privacy_system_title,
         SettingsDestination.About to R.string.about_title,
         SettingsDestination.CustomInputStyles to R.string.custom_input_styles_title,
         SettingsDestination.AppLanguage to R.string.app_language_title,
-        SettingsDestination.Modifiers to R.string.modifiers_title
+        SettingsDestination.Modifiers to R.string.settings_modifiers_sym_title,
+        SettingsDestination.FluxEmojiGifs to R.string.flux_emoji_gifs_title,
+        SettingsDestination.FluxTitanScreen to R.string.flux_titan_screen_title,
+        SettingsDestination.FluxHiddenApps to R.string.flux_hidden_apps_title,
+        SettingsDestination.FluxLinuxDesktop to R.string.flux_linux_desktop_title,
+        SettingsDestination.FluxOffline to R.string.flux_offline_title,
+        SettingsDestination.Root to R.string.root_title,
+        SettingsDestination.KeyboardsLayouts to R.string.settings_keyboards_layouts_title,
+        SettingsDestination.Typing to R.string.settings_typing_title,
+        SettingsDestination.EditingKeys to R.string.settings_editing_keys_title,
+        SettingsDestination.TextExpansion to R.string.text_expansion_title,
+        SettingsDestination.LookSound to R.string.settings_look_sound_title,
+        SettingsDestination.TrackpadGestures to R.string.settings_trackpad_gestures_title,
+        SettingsDestination.Apps to R.string.settings_apps_title,
+        SettingsDestination.AppShortcuts to R.string.app_shortcuts_title,
+        SettingsDestination.Developer to R.string.developer_options_title,
+        SettingsDestination.DeviceSymLayerEditor to R.string.alt_key_editor_title,
+        SettingsDestination.LedColors to R.string.led_colors_title,
+        SettingsDestination.EmojiProfiles to R.string.emoji_profiles_title,
+        SettingsDestination.TerminalMode to R.string.terminal_mode_title,
+        SettingsDestination.ExactTyping to R.string.exact_typing_title
     )
 
     val keyboardsDevicesSubtitles: Map<KeyboardsDevicesDestination, Int> = mapOf(
@@ -1037,11 +1154,45 @@ object SettingLinkRegistry {
             R.string.status_bar_buttons_title,
         SettingsActivity.CUSTOMIZATION_DESTINATION_LAUNCHER_SHORTCUTS to
             R.string.starter_launcher_shortcuts_title,
+        SettingsActivity.CUSTOMIZATION_DESTINATION_KEY_SHORTCUTS to
+            R.string.key_shortcuts_title,
         SettingsActivity.CUSTOMIZATION_DESTINATION_APP_ENTER_BEHAVIOR to
             R.string.app_enter_behaviour_title,
         SettingsActivity.CUSTOMIZATION_DESTINATION_KEYBOARD_THEME to
             R.string.keyboard_theme_title
     ) + customizationSettingSubtitles()
+
+    /** The main settings categories, in the order the settings screen lists them. */
+    val categories: List<SettingsDestination> = listOf(
+        SettingsDestination.Typing, SettingsDestination.KeyboardsLayouts, SettingsDestination.Modifiers,
+        SettingsDestination.FluxEmojiGifs, SettingsDestination.Apps, SettingsDestination.LookSound,
+        SettingsDestination.Advanced
+    )
+
+    /** Which main category a settings page belongs to. */
+    fun categoryOf(destination: SettingsDestination): SettingsDestination = when (destination) {
+        SettingsDestination.Typing, SettingsDestination.AutoCorrection, SettingsDestination.TextInput,
+        SettingsDestination.TextExpansion, SettingsDestination.EditingKeys, SettingsDestination.NavMode,
+        SettingsDestination.TrackpadGestures, SettingsDestination.Accessibility -> SettingsDestination.Typing
+        SettingsDestination.KeyboardsLayouts, SettingsDestination.CustomInputStyles,
+        SettingsDestination.KeyboardsDevices, SettingsDestination.FluxTitanScreen -> SettingsDestination.KeyboardsLayouts
+        SettingsDestination.Modifiers, SettingsDestination.DeviceSymLayerEditor -> SettingsDestination.Modifiers
+        SettingsDestination.FluxEmojiGifs, SettingsDestination.EmojiProfiles -> SettingsDestination.FluxEmojiGifs
+        SettingsDestination.Apps, SettingsDestination.AppShortcuts, SettingsDestination.ExactTyping,
+        SettingsDestination.TerminalMode, SettingsDestination.FluxHiddenApps, SettingsDestination.FluxLinuxDesktop,
+        SettingsDestination.Customization -> SettingsDestination.Apps
+        SettingsDestination.LookSound, SettingsDestination.LedColors -> SettingsDestination.LookSound
+        else -> SettingsDestination.Advanced
+    }
+
+    /**
+     * [search], grouped by main category: the category with the best match first, and the
+     * best matches first within each, so the headings show where each setting lives.
+     */
+    fun searchGrouped(context: Context, query: String): List<Pair<SettingsDestination, List<SettingEntry>>> =
+        search(context, query)
+            .groupBy { categoryOf(it.route.destination) }
+            .toList()
 
     /**
      * Search across all registered entries. The query is split into tokens;

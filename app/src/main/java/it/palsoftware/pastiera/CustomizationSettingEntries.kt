@@ -49,7 +49,7 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         summaryRes = R.string.power_shortcuts_description,
         route = SettingRoute(
             destination = SettingsDestination.Customization,
-            customizationDestination = "launcher_shortcuts"
+            customizationDestination = "key_shortcuts"
         )
     ),
     SettingEntry(
@@ -58,7 +58,7 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         summaryRes = R.string.alt_key_shortcuts_description,
         route = SettingRoute(
             destination = SettingsDestination.Customization,
-            customizationDestination = "launcher_shortcuts"
+            customizationDestination = "key_shortcuts"
         )
     ),
     SettingEntry(
@@ -67,7 +67,7 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         summaryRes = R.string.sym_shortcuts_in_text_fields_description,
         route = SettingRoute(
             destination = SettingsDestination.Customization,
-            customizationDestination = "launcher_shortcuts"
+            customizationDestination = "key_shortcuts"
         ),
         availabilityCheck = { SettingsManager.getPowerShortcutsEnabled(it) },
         unavailableFallbackId = "quick_launcher.sym_shortcuts"
@@ -78,7 +78,7 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         summaryRes = R.string.alt_shortcuts_in_text_fields_description,
         route = SettingRoute(
             destination = SettingsDestination.Customization,
-            customizationDestination = "launcher_shortcuts"
+            customizationDestination = "key_shortcuts"
         ),
         availabilityCheck = { SettingsManager.getQuickLauncherAltShortcutsOutsideTextFields(it) },
         unavailableFallbackId = "quick_launcher.alt_shortcuts"
@@ -135,6 +135,53 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
             destination = SettingsDestination.Customization,
             customizationDestination = "launcher_shortcut_behavior"
         )
+    ),
+    SettingEntry(
+        id = "quick_launcher.app_shortcuts",
+        titleRes = R.string.quick_launcher_app_shortcuts_title,
+        summaryRes = R.string.quick_launcher_app_shortcuts_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "launcher_shortcut_behavior"
+        )
+    ),
+    SettingEntry(
+        id = "quick_launcher.listed_app_shortcuts",
+        titleRes = R.string.quick_launcher_listed_app_shortcuts_title,
+        summaryRes = R.string.quick_launcher_listed_app_shortcuts_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "launcher_shortcut_behavior"
+        )
+    ),
+    SettingEntry(
+        id = "quick_launcher.add_shortcut",
+        titleRes = R.string.user_shortcuts_title,
+        summaryRes = R.string.user_shortcuts_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "launcher_shortcut_behavior"
+        )
+    ),
+    SettingEntry(
+        id = "quick_launcher.termux_scripts",
+        titleRes = R.string.quick_launcher_termux_scripts_title,
+        summaryRes = R.string.quick_launcher_termux_scripts_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "launcher_shortcut_behavior"
+        )
+    ),
+    SettingEntry(
+        id = "quick_launcher.niagara_back_returns",
+        titleRes = R.string.quick_launcher_niagara_back_title,
+        summaryRes = R.string.quick_launcher_niagara_back_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "launcher_shortcut_behavior"
+        ),
+        availabilityCheck = { context -> SettingsManager.getQuickLauncherBehavior(context) == SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA },
+        unavailableFallbackId = "quick_launcher.behavior"
     ),
     SettingEntry(
         id = "quick_launcher.typo_tolerant_ranking",
@@ -302,6 +349,15 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         )
     ),
     SettingEntry(
+        id = "app_enter_behavior.standards",
+        titleRes = R.string.enter_standards_title,
+        summaryRes = R.string.enter_standards_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "app_enter_behavior"
+        )
+    ),
+    SettingEntry(
         id = "sounds.typing_mode",
         titleRes = R.string.typing_sound_title,
         route = SettingRoute(
@@ -382,20 +438,9 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         titleRes = R.string.titan2_elite_rounded_corners_title,
         summaryRes = R.string.titan2_elite_rounded_corners_description,
         route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
+            // On the Titan 2 Elite screen with the other Titan 2 Elite settings
+            destination = SettingsDestination.FluxTitanScreen
         )
-    ),
-    SettingEntry(
-        id = "status_bar.fill_bottom_corners",
-        titleRes = R.string.titan2_elite_fill_bottom_corners_title,
-        summaryRes = R.string.titan2_elite_fill_bottom_corners_description,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
-        ),
-        availabilityCheck = { SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(it) },
-        unavailableFallbackId = "status_bar.rounded_corners"
     ),
     SettingEntry(
         id = "status_bar.variations_visible",
@@ -434,8 +479,8 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         titleRes = R.string.titan2_elite_top_corner_title,
         summaryRes = R.string.titan2_elite_top_corner_description,
         route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
+            // On the Titan 2 Elite screen with the other Titan 2 Elite settings
+            destination = SettingsDestination.FluxTitanScreen
         ),
         availabilityCheck = { SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(it) },
         unavailableFallbackId = "status_bar.rounded_corners"
@@ -444,11 +489,19 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         id = "status_bar.max_icon_shrink",
         titleRes = R.string.setting_link_max_icon_shrink,
         route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
+            // On the Titan 2 Elite screen with the other Titan 2 Elite settings
+            destination = SettingsDestination.FluxTitanScreen
         ),
         availabilityCheck = { SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(it) },
         unavailableFallbackId = "status_bar.rounded_corners"
+    ),
+    SettingEntry(
+        id = "status_bar.menu_bar",
+        titleRes = R.string.menu_bar_section,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "status_bar_buttons"
+        )
     ),
     SettingEntry(
         id = "status_bar.extended_left",
@@ -610,18 +663,50 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         )
     ),
     SettingEntry(
-        id = "keyboard_theme.hardware.led_colors",
-        titleRes = R.string.setting_link_theme_hardware_led_colors,
+        id = "keyboard_theme.hardware.assignment",
+        titleRes = R.string.setting_link_theme_hardware_assignment,
         route = SettingRoute(
             destination = SettingsDestination.Customization,
-            customizationDestination = "keyboard_theme",
-            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE,
-            keyboardThemeTab = KeyboardThemeEditorTab.Colors
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
         )
     ),
     SettingEntry(
-        id = "keyboard_theme.hardware.assignment",
-        titleRes = R.string.setting_link_theme_hardware_assignment,
+        id = SettingLinkIds.KEYBOARD_THEME_WALLPAPER_COLOURS,
+        titleRes = R.string.keyboard_theme_wallpaper_colours_title,
+        summaryRes = R.string.keyboard_theme_wallpaper_colours_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
+        ),
+        availabilityCheck = { android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S },
+        unavailableFallbackId = "keyboard_theme.hardware.assignment"
+    ),
+    SettingEntry(
+        id = SettingLinkIds.KEYBOARD_BACKGROUND_IMAGE,
+        titleRes = R.string.keyboard_background_image_title,
+        summaryRes = R.string.keyboard_background_image_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
+        )
+    ),
+    SettingEntry(
+        id = SettingLinkIds.KEYBOARD_BACKGROUND_AUTO_COLOURS,
+        titleRes = R.string.keyboard_background_auto_colours_title,
+        summaryRes = R.string.keyboard_background_auto_colours_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
+        )
+    ),
+    SettingEntry(
+        id = SettingLinkIds.KEYBOARD_BACKGROUND_KEY_OPACITY,
+        titleRes = R.string.keyboard_background_key_opacity_search,
+        summaryRes = R.string.keyboard_background_auto_colours_description,
         route = SettingRoute(
             destination = SettingsDestination.Customization,
             customizationDestination = "keyboard_theme_assignment",
@@ -657,16 +742,6 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
             destination = SettingsDestination.Customization,
             customizationDestination = "keyboard_theme_assignment",
             keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
-        )
-    ),
-    SettingEntry(
-        id = "keyboard_theme.software.led_colors",
-        titleRes = R.string.setting_link_theme_software_led_colors,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "keyboard_theme",
-            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.SOFTWARE,
-            keyboardThemeTab = KeyboardThemeEditorTab.Colors
         )
     ),
     SettingEntry(

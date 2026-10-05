@@ -33,13 +33,14 @@ import android.graphics.drawable.ColorDrawable
 @Composable
 fun AppPickerDialog(
     onAppSelected: (InstalledApp) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    excludePackages: Set<String> = emptySet()
 ) {
     val context = LocalContext.current
     
     // Carica le app installate
     val installedApps by remember {
-        mutableStateOf(AppListHelper.getInstalledApps(context))
+        mutableStateOf(AppListHelper.getInstalledApps(context).filter { it.packageName !in excludePackages })
     }
     
     var searchQuery by remember { mutableStateOf("") }
@@ -109,7 +110,7 @@ fun AppPickerDialog(
                         .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    items(filteredApps) { app ->
+                    items(filteredApps, key = { it.packageName }) { app ->
                         AppListItem(
                             app = app,
                             onClick = {
@@ -158,9 +159,10 @@ private fun AppListItem(
                                 ViewGroup.LayoutParams.MATCH_PARENT
                             )
                             scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
-                            setImageDrawable(app.icon)
                         }
                     },
+                    // A reused row (scrolling, searching) shows its new app's icon, not the old one
+                    update = { view -> view.setImageDrawable(app.icon) },
                     modifier = Modifier.size(48.dp)
                 )
             }

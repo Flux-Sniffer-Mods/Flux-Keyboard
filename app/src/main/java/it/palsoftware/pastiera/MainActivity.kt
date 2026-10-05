@@ -196,6 +196,13 @@ class MainActivity : LocalizedComponentActivity() {
             return
         }
 
+        // An update with nothing new in What's new since the version last seen shows nothing
+        if (SettingsManager.shouldShowWhatsNew(this, BuildConfig.VERSION_NAME)) {
+            val lastSeen = SettingsManager.getLastSeenWhatsNewVersion(this)
+            if (lastSeen != null && it.palsoftware.pastiera.update.bundledNotesHaveNewSince(this, lastSeen) == false) {
+                SettingsManager.markWhatsNewSeen(this, BuildConfig.VERSION_NAME)
+            }
+        }
         if (SettingsManager.shouldShowWhatsNew(this, BuildConfig.VERSION_NAME)) {
             val intent = Intent(this, TutorialActivity::class.java).apply {
                 putExtra(TutorialActivity.EXTRA_UPDATE_TUTORIAL, true)
@@ -243,6 +250,9 @@ class MainActivity : LocalizedComponentActivity() {
                             .height(statusBarHeight)
                             .background(overlayColor)
                     )
+
+                    // After an update: recommended settings that differ, from X to Y
+                    RecommendedSettingsUpdatePrompt(BuildConfig.VERSION_NAME)
                 }
             }
         }
@@ -506,7 +516,7 @@ fun KeyboardSetupScreen(
         } else {
             Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
-                putExtra(Intent.EXTRA_SUBJECT, "Pastiera Keyboard Debug Export")
+                putExtra(Intent.EXTRA_SUBJECT, "${BuildConfig.APP_NAME} Debug Export")
                 putExtra(Intent.EXTRA_TEXT, report)
             }
         }
@@ -515,12 +525,16 @@ fun KeyboardSetupScreen(
         )
     }
 
+    // The Titan 2 Elite's short screen fits the whole start page without scrolling (settings
+    // search lives in Settings, so the room goes to readable text and even gaps)
+    val compact = remember { DeviceSpecific.isTitan2EliteDevice() }
+    val rowInset = if (compact) 4.dp else 10.dp
     Column(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(if (compact) 10.dp else 4.dp)
     ) {
         // Custom top bar with personalized graphics
         CustomTopBar(
@@ -551,7 +565,7 @@ fun KeyboardSetupScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                        .padding(horizontal = rowInset, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -590,7 +604,7 @@ fun KeyboardSetupScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                        .padding(horizontal = rowInset, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -626,6 +640,15 @@ fun KeyboardSetupScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             placeholder = { Text(stringResource(R.string.test_field_placeholder)) },
+            // The same pill as the settings search above it
+            shape = MaterialTheme.shapes.extraLarge,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Keyboard,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
             minLines = 1,
             maxLines = 2,
             keyboardOptions = KeyboardOptions(
@@ -652,11 +675,16 @@ fun KeyboardSetupScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            .then(if (compact) Modifier else Modifier.horizontalScroll(rememberScrollState())),
+                        horizontalArrangement = Arrangement.spacedBy(if (compact) 6.dp else 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        // On the Elite the four buttons share the width evenly
+                        val recorderButton = if (compact) Modifier.weight(1f).height(40.dp) else Modifier
+                        val recorderPadding = if (compact) PaddingValues(horizontal = 4.dp) else ButtonDefaults.ContentPadding
                         OutlinedButton(
+                            modifier = recorderButton,
+                            contentPadding = recorderPadding,
                             onClick = {
                                 if (isRecording) {
                                     isRecording = false
@@ -678,6 +706,8 @@ fun KeyboardSetupScreen(
                             )
                         }
                         OutlinedButton(
+                            modifier = recorderButton,
+                            contentPadding = recorderPadding,
                             onClick = {
                                 recordedEvents.clear()
                                 DebugCaptureStore.clearAll()
@@ -692,6 +722,8 @@ fun KeyboardSetupScreen(
                             Text(stringResource(R.string.debug_recorder_clear))
                         }
                         OutlinedButton(
+                            modifier = recorderButton,
+                            contentPadding = recorderPadding,
                             onClick = {
                                 latestDebugReport = buildCurrentReport()
                                 showDebugReportViewer = true
@@ -700,6 +732,8 @@ fun KeyboardSetupScreen(
                             Text(stringResource(R.string.debug_recorder_view))
                         }
                         OutlinedButton(
+                            modifier = recorderButton,
+                            contentPadding = recorderPadding,
                             onClick = {
                                 val report = buildCurrentReport()
                                 shareReport(report)
@@ -708,70 +742,73 @@ fun KeyboardSetupScreen(
                             Text(stringResource(R.string.debug_recorder_share))
                         }
                     }
+                    val recorderStatus = context.getString(
+                        R.string.debug_recorder_status,
+                        if (isRecording) context.getString(R.string.debug_recorder_status_recording)
+                        else context.getString(R.string.debug_recorder_status_stopped),
+                        recordedEvents.size
+                    )
+                    val recorderStarted = "${stringResource(R.string.debug_recorder_started_at)}${
+                        recordStartedAtMs?.let { formatDebugTimestamp(it) } ?: "n/a"
+                    }"
                     Column(
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        Text(
-                            text = context.getString(
-                                R.string.debug_recorder_status,
-                                if (isRecording) context.getString(R.string.debug_recorder_status_recording)
-                                else context.getString(R.string.debug_recorder_status_stopped),
-                                recordedEvents.size
-                            ),
-                            style = MaterialTheme.typography.bodySmall,
-                            fontFamily = FontFamily.Monospace,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "${stringResource(R.string.debug_recorder_started_at)}${
-                                recordStartedAtMs?.let { formatDebugTimestamp(it) } ?: "n/a"
-                            }",
-                            style = MaterialTheme.typography.bodySmall,
-                            fontFamily = FontFamily.Monospace,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        // One line on the Elite
+                        (if (compact) listOf("$recorderStatus · $recorderStarted") else listOf(recorderStatus, recorderStarted)).forEach { line ->
+                            Text(
+                                text = line,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontFamily = FontFamily.Monospace,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 }
-                Column(
-                    modifier = Modifier.width(140.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    FilterChip(
-                        selected = includeSuggestionsInExport,
-                        onClick = {
-                            includeSuggestionsInExport = !includeSuggestionsInExport
-                        },
-                        label = {
-                            Text(
-                                text = stringResource(R.string.debug_recorder_include_suggestions),
-                                style = MaterialTheme.typography.labelSmall,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    FilterChip(
-                        selected = includeRawTrackpadInExport,
-                        onClick = {
-                            includeRawTrackpadInExport = !includeRawTrackpadInExport
-                        },
-                        label = {
-                            Text(
-                                text = stringResource(R.string.debug_recorder_include_raw_trackpad),
-                                style = MaterialTheme.typography.labelSmall,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+            }
+            // Export options side by side on one line each, below the recorder status
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilterChip(
+                    selected = includeSuggestionsInExport,
+                    onClick = {
+                        includeSuggestionsInExport = !includeSuggestionsInExport
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(R.string.debug_recorder_include_suggestions),
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+                FilterChip(
+                    selected = includeRawTrackpadInExport,
+                    onClick = {
+                        includeRawTrackpadInExport = !includeRawTrackpadInExport
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(R.string.debug_recorder_include_raw_trackpad),
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 
         // Last keyboard event (always visible)
         val event = displayedLastKeyEvent
+        val eventTextStyle = if (compact) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -780,7 +817,7 @@ fun KeyboardSetupScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(if (compact) PaddingValues(horizontal = 4.dp, vertical = 8.dp) else PaddingValues(12.dp)),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Row(
@@ -793,27 +830,27 @@ fun KeyboardSetupScreen(
                     ) {
                         Text(
                             text = event?.keyCodeName ?: "n/a",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
                             text = "${stringResource(R.string.event_action_label)}${event?.action ?: "n/a"}",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
                             text = "${stringResource(R.string.event_keycode_label)}${event?.keyCode?.toString() ?: "n/a"}",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
                             text = "Origin: ${event?.origin ?: "n/a"}",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
                             text = "Layout: ${event?.resolvedLayout ?: "n/a"}",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                     }
@@ -824,7 +861,7 @@ fun KeyboardSetupScreen(
                     ) {
                         Text(
                             text = "${stringResource(R.string.event_scancode_label)}${event?.scanCode?.toString() ?: "n/a"}",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
@@ -833,7 +870,7 @@ fun KeyboardSetupScreen(
                                     "raw=${formatUnicodeForDebug(it.rawUnicodeChar)} effective=${formatUnicodeForDebug(it.effectiveUnicodeChar)}"
                                 } ?: "n/a"
                             }",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
@@ -842,7 +879,7 @@ fun KeyboardSetupScreen(
                                     "$it${event.outputKeyCode?.let { code -> " ($code)" } ?: ""}"
                                 } ?: "n/a"
                             }",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = eventTextStyle,
                             fontFamily = FontFamily.Monospace,
                             color = if (event?.outputKeyCodeName != null) MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.onSurface
@@ -953,9 +990,9 @@ private fun createDebugReportFileShareIntent(context: Context, report: String): 
     )
     return Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, "Pastiera Keyboard Debug Export")
+        putExtra(Intent.EXTRA_SUBJECT, "${BuildConfig.APP_NAME} Debug Export")
         putExtra(Intent.EXTRA_STREAM, uri)
-        clipData = ClipData.newUri(context.contentResolver, "Pastiera Keyboard Debug Export", uri)
+        clipData = ClipData.newUri(context.contentResolver, "${BuildConfig.APP_NAME} Debug Export", uri)
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 }
@@ -1082,7 +1119,7 @@ private fun buildKeyboardDebugReport(
         .joinToString("\n") { (key, value) -> "$key=${flattenPreferenceValue(value)}" }
 
     val header = buildString {
-        appendLine("=== Pastiera Keyboard Debug Export ===")
+        appendLine("=== ${BuildConfig.APP_NAME} Debug Export ===")
         appendLine("exported_at=${formatDebugTimestamp(nowMs)}")
         appendLine("timezone_id=${tz.id}")
         appendLine("timezone_offset=${tz.getOffset(nowMs) / 1000}s")
@@ -1165,6 +1202,34 @@ private fun buildKeyboardDebugReport(
         appendLine("resolved_layout=${imeContext?.resolvedLayout ?: "n/a"}")
         appendLine("profile_override_snapshot=${imeContext?.physicalProfileOverride ?: "n/a"}")
         appendLine("resolved_physical_profile_snapshot=$resolvedPhysicalProfile")
+        appendLine()
+        appendLine("[recent_fields]")
+        val recentFields = DebugCaptureStore.fieldsSnapshot()
+        if (recentFields.isEmpty()) appendLine("(none)")
+        recentFields.forEach { field ->
+            appendLine(
+                "${formatDebugTimestamp(field.timestampMs)} pkg=${field.packageName} " +
+                    "inputType=0x${Integer.toHexString(field.inputType)} imeOptions=0x${Integer.toHexString(field.imeOptions)} " +
+                    "fieldId=${field.fieldId} hint=${field.hasHint} sel=${field.initialSelStart},${field.initialSelEnd} " +
+                    "shiftType=${field.shiftFieldType ?: "none"} restarting=${field.restarting}"
+            )
+        }
+        appendLine()
+        appendLine("[inline_autofill]")
+        val autofill = DebugCaptureStore.autofillSnapshot()
+        if (autofill.isEmpty()) appendLine("(none)")
+        autofill.forEach { (time, message) -> appendLine("${formatDebugTimestamp(time)} $message") }
+        appendLine("candidates_view_backend=${SettingsManager.getExperimentalCandidatesViewEnabled(context)}")
+        appendLine()
+        appendLine("[automatic_shift]")
+        val autoCap = DebugCaptureStore.autoCapSnapshot()
+        if (autoCap.isEmpty()) appendLine("(none)")
+        autoCap.forEach { trace ->
+            appendLine(
+                "${formatDebugTimestamp(trace.timestampMs)} pkg=${trace.packageName} ${trace.result} · ${trace.reason}" +
+                    (trace.before?.let { " before=$it" } ?: "") + (trace.after?.let { " after=$it" } ?: "")
+            )
+        }
         appendLine()
         appendLine("[settings_snapshot]")
         appendLine(settingsDump.ifBlank { "(empty)" })
@@ -1337,3 +1402,4 @@ private fun checkImeStatus(
         callback(false, false)
     }
 }
+

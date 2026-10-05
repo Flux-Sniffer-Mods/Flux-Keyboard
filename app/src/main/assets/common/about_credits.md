@@ -1,4 +1,10 @@
 
+# Flux Keyboard
+An unofficial fork of Pastiera, tuned for the Unihertz Titan 2 Elite. Pastiera and everything credited below is the work of the original Pastiera team; the fork is not affiliated with or endorsed by them. Please report problems with Flux Keyboard to the fork, not to Pastiera's issue tracker.
+#### [Flux Keyboard repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard)
+#### [Changelog: Flux Keyboard over Pastiera 0.86](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md)
+---
+
 # Pastiera - La Tastiera per la tua Tastiera
 ---
 #### Creator
@@ -53,3 +59,6 @@ Bundled base dictionaries are frequency-list derivatives built mainly from [Leip
 
 #### eellak GSOC 2019 Greek Morphological Dictionary
 The downloadable Greek base dictionary is derived from the top frequency-ranked entries in the [eellak GSOC 2019 Greek spelling dictionary](https://github.com/eellak/gsoc2019-greek-morpho), with Pastiera-specific filtering and normalization. The project source code is GPLv3; the produced morphological database is documented as CC BY-SA 3.0.
+
+#### PhysiBoard
+Flux Keyboard's keyboard light on the Titan 2 Elite through Shizuku (the vendor service's backlight timeout, its never-off value and the broadcast that turns the light off) follows the findings documented by [PhysiBoard](https://github.com/brobata/physiboard) by brobata, GPLv3.

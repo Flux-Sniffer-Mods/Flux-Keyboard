@@ -106,7 +106,7 @@ fun LanguagesScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .heightIn(min = 56.dp)
             ) {
                 Box(
                     modifier = Modifier
@@ -127,7 +127,7 @@ fun LanguagesScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp)
+                        .heightIn(min = 64.dp)
                 ) {
                     Box(
                         modifier = Modifier
@@ -175,7 +175,7 @@ private fun LanguageSubtypeItem(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .heightIn(min = 64.dp)
     ) {
         Row(
             modifier = Modifier
@@ -196,14 +196,12 @@ private fun LanguageSubtypeItem(
                 Text(
                     text = languageName,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = languageCode.uppercase(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Switch(

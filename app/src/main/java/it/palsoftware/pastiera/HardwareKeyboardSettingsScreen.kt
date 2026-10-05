@@ -77,7 +77,7 @@ fun HardwareKeyboardSettingsScreen(
             onBack = onBack,
             onDeviceSymLayerEditor = { destination = HardwareKeyboardDestination.DeviceSymLayerEditor }
         )
-        HardwareKeyboardDestination.DeviceSymLayerEditor -> DeviceSymLayerEditorStubScreen(
+        HardwareKeyboardDestination.DeviceSymLayerEditor -> DeviceSymLayerEditorScreen(
             modifier = modifier,
             onBack = { destination = HardwareKeyboardDestination.Main }
         )
@@ -231,7 +231,13 @@ private fun HardwareKeyboardListScreen(
 
             HardwareKeyboardSectionDivider(stringResource(R.string.hardware_keyboard_custom_profiles_title))
             Text(
-                text = stringResource(R.string.hardware_keyboard_custom_profiles_empty),
+                text = remember { it.palsoftware.pastiera.data.mappings.CustomDeviceSymProfiles.all(context).size }.let { count ->
+                    if (count == 0) {
+                        stringResource(R.string.hardware_keyboard_custom_profiles_empty)
+                    } else {
+                        context.resources.getQuantityString(R.plurals.alt_key_editor_profile_count, count, count)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
@@ -239,15 +245,15 @@ private fun HardwareKeyboardListScreen(
             HardwareKeyboardNavigationRow(
                 title = stringResource(R.string.alt_key_editor_title),
                 linkId = "hardware.alt_editor",
-                description = stringResource(R.string.alt_key_editor_summary),
+                description = stringResource(R.string.alt_key_editor_summary_ready),
                 icon = Icons.Filled.Edit,
-                status = FeatureStatus.Construction,
                 onClick = onDeviceSymLayerEditor
             )
 
             HardwareKeyboardSectionDivider(stringResource(R.string.hardware_keyboard_behavior_title))
 
-            HardwareKeyboardSwitchRow(
+            // Only on a Titan 2 (or while it's on, so it can be turned off)
+            if (SettingsManager.titan2LayoutApplies(context)) HardwareKeyboardSwitchRow(
                 title = stringResource(R.string.titan2_layout_title),
                 linkId = "hardware.titan2_layout",
                 description = stringResource(R.string.titan2_layout_description),

@@ -310,12 +310,7 @@ fun ClicksPowerKeyboardSettingsScreen(
             inProgress = buttonBindingsInProgress,
             resultMessage = buttonBindingResult,
             onBack = { mappingPage = null },
-            onOpenLauncherInterceptionSettings = {
-                context.startActivity(
-                    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
-            },
+            onOpenLauncherInterceptionSettings = { RestrictedSettings.openAccessibility(context) },
             onRedSelected = { choiceId, mode, firmwareOutput, pastieraFunction ->
                 clicksButtonMode = mode
                 SettingsManager.setClicksButtonMode(context, mode)
@@ -615,10 +610,12 @@ fun ClicksPowerKeyboardSettingsScreen(
                 null
             }
         )
-        PlannedSettingsRow(
+        ClicksDeviceInfoRow(
             icon = Icons.Filled.Edit,
             title = stringResource(R.string.clicks_all_key_mappings_title),
-            description = stringResource(R.string.clicks_all_key_mappings_description)
+            linkId = "clicks.all_key_mappings",
+            description = stringResource(R.string.clicks_all_key_mappings_ready_description),
+            onClick = { openSettingsPage(context, SettingsPage(SettingsDestination.DeviceSymLayerEditor)) }
         )
 
         StubSection(stringResource(R.string.clicks_section_backlight_power))
@@ -1548,7 +1545,7 @@ private fun ClicksRemapDropdownRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         OutlinedTextField(
             value = selected.label,
@@ -1587,7 +1584,7 @@ private fun ClicksIntDropdownRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { if (enabled) expanded = it },
-        modifier = Modifier.settingRow(linkId).fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier = Modifier.settingRow(linkId).fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         OutlinedTextField(
             value = selected?.let { label(it) } ?: "–",
@@ -1629,7 +1626,7 @@ private fun ClicksButtonBindingRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { if (enabled) expanded = it },
-        modifier = Modifier.settingRow(linkId).fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier = Modifier.settingRow(linkId).fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         OutlinedTextField(
             value = if (applying) {
@@ -1778,7 +1775,7 @@ private fun ClicksNumberRowInputModeRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = Modifier.settingRow("clicks.number_row_input_mode").fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier = Modifier.settingRow("clicks.number_row_input_mode").fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         OutlinedTextField(
             value = clicksNumberRowInputModeLabel(selected),
@@ -1813,7 +1810,7 @@ private fun ClicksOverlappingKeysModeRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = Modifier.settingRow("clicks.release_order").fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier = Modifier.settingRow("clicks.release_order").fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         OutlinedTextField(
             value = clicksOverlappingKeysModeLabel(selected),
@@ -2133,48 +2130,6 @@ private fun ClicksChoiceButtonGrid(
 }
 
 @Composable
-fun DeviceSymLayerEditorStubScreen(
-    modifier: Modifier = Modifier,
-    onBack: () -> Unit
-) {
-    HardwareProfileScaffold(
-        modifier = modifier,
-        title = stringResource(R.string.alt_key_editor_title),
-        description = stringResource(R.string.alt_key_editor_stub_description),
-        onBack = onBack
-    ) {
-        StubSection(stringResource(R.string.alt_key_editor_create_section))
-        PlannedSettingsRow(
-            icon = Icons.Filled.Edit,
-            title = stringResource(R.string.alt_key_editor_blank_profile_title),
-            description = stringResource(R.string.alt_key_editor_blank_profile_description)
-        )
-        PlannedSettingsRow(
-            icon = Icons.Filled.Keyboard,
-            title = stringResource(R.string.alt_key_editor_clone_profile_title),
-            description = stringResource(R.string.alt_key_editor_clone_profile_description)
-        )
-
-        StubSection(stringResource(R.string.alt_key_editor_scope_section))
-        PlannedSettingsRow(
-            icon = Icons.Filled.Settings,
-            title = stringResource(R.string.alt_key_editor_matching_title),
-            description = stringResource(R.string.alt_key_editor_matching_description)
-        )
-        PlannedSettingsRow(
-            icon = Icons.Filled.Edit,
-            title = stringResource(R.string.alt_key_editor_mappings_title),
-            description = stringResource(R.string.alt_key_editor_mappings_description)
-        )
-        PlannedSettingsRow(
-            icon = Icons.Filled.Settings,
-            title = stringResource(R.string.alt_key_editor_transfer_title),
-            description = stringResource(R.string.alt_key_editor_transfer_description)
-        )
-    }
-}
-
-@Composable
 private fun HardwareProfileScaffold(
     modifier: Modifier,
     title: String,
@@ -2260,39 +2215,3 @@ private fun StubSection(title: String) {
     }
 }
 
-@Composable
-private fun PlannedSettingsRow(
-    icon: ImageVector,
-    title: String,
-    description: String
-) {
-    Surface(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
-            )
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            FeatureStatusIcon(FeatureStatus.Construction)
-        }
-    }
-}

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -79,7 +80,7 @@ fun TypingSoundSettingsRow() {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .heightIn(min = 64.dp)
             .settingRow("sounds.typing_mode") { showTypingSoundMenu = true }
     ) {
         Row(
@@ -99,14 +100,12 @@ fun TypingSoundSettingsRow() {
                 Text(
                     text = stringResource(R.string.typing_sound_title),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = typingSoundModeLabel(typingSoundMode, customTypingSoundName),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Icon(
@@ -167,7 +166,7 @@ fun TypingSoundSettingsRow() {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(88.dp)
+            .heightIn(min = 88.dp)
             .settingRow("sounds.output") { showOutputMenu = true }
     ) {
         Row(
@@ -187,20 +186,17 @@ fun TypingSoundSettingsRow() {
                 Text(
                     text = stringResource(R.string.typing_sound_output_title),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = typingSoundOutputModeLabel(typingSoundOutputMode),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = stringResource(R.string.typing_sound_output_dnd_hint),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Icon(
@@ -247,7 +243,7 @@ fun TypingSoundSettingsRow() {
     Surface(
         modifier = Modifier
             .fillMaxWidth().settingRow("sounds.system_haptics")
-            .height(72.dp)
+            .heightIn(min = 72.dp)
     ) {
         Row(
             modifier = Modifier
@@ -266,14 +262,12 @@ fun TypingSoundSettingsRow() {
                 Text(
                     text = stringResource(R.string.tap_haptic_system_title),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = stringResource(R.string.tap_haptic_system_description),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Switch(
@@ -290,7 +284,7 @@ fun TypingSoundSettingsRow() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth().settingRow("sounds.haptic_duration")
-                .height(104.dp)
+                .heightIn(min = 104.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -301,14 +295,12 @@ fun TypingSoundSettingsRow() {
                 Text(
                     text = stringResource(R.string.tap_haptic_duration_title, tapHapticDurationMs.toInt()),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = stringResource(R.string.tap_haptic_duration_description),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Slider(
                     value = tapHapticDurationMs,
@@ -332,7 +324,7 @@ fun TypingSoundSettingsRow() {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .heightIn(min = 64.dp)
             .clickable {
                 val intent = Intent(
                     Intent.ACTION_VIEW,
@@ -358,14 +350,12 @@ fun TypingSoundSettingsRow() {
                 Text(
                     text = stringResource(R.string.typing_sound_docs_title),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = stringResource(R.string.typing_sound_docs_description),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Icon(

@@ -224,18 +224,21 @@ private fun KeyboardsDevicesMainScreen(
                 linkId = SettingLinkIds.KEYBOARDS_DEVICES_BUILT_IN_KEYBOARDS,
                 onClick = onBuiltIn
             )
-            NavigationRow(
-                icon = Icons.Filled.Bluetooth,
-                title = stringResource(R.string.keyboard_accessories_title),
-                description = if (clicksDevice != null) {
-                    val slot = clicksDevice.name.substringAfterLast('-', missingDelimiterValue = "?")
-                    stringResource(R.string.keyboard_accessory_clicks_connected, slot)
-                } else {
-                    stringResource(R.string.keyboard_accessory_clicks_disconnected)
-                },
-                linkId = SettingLinkIds.KEYBOARDS_DEVICES_KEYBOARD_ACCESSORIES,
-                onClick = onPowerKeyboard
-            )
+            // Only phones that have had a Clicks Power Keyboard see its settings
+            if (clicksDevice != null || SettingsManager.hasClicksKeyboard(context)) {
+                NavigationRow(
+                    icon = Icons.Filled.Bluetooth,
+                    title = stringResource(R.string.keyboard_accessories_title),
+                    description = if (clicksDevice != null) {
+                        val slot = clicksDevice.name.substringAfterLast('-', missingDelimiterValue = "?")
+                        stringResource(R.string.keyboard_accessory_clicks_connected, slot)
+                    } else {
+                        stringResource(R.string.keyboard_accessory_clicks_disconnected)
+                    },
+                    linkId = SettingLinkIds.KEYBOARDS_DEVICES_KEYBOARD_ACCESSORIES,
+                    onClick = onPowerKeyboard
+                )
+            }
 
             SectionDivider(stringResource(R.string.hardware_keyboard_custom_profiles_title))
             Text(
