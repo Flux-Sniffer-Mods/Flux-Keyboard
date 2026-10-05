@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="learn_contact_details_title">Remember emails and phone numbers</string>
+    <string name="learn_contact_details_description">Emails and phone numbers you type yourself are kept in your dictionary and offered again in email and phone fields. Never anything pasted, from password fields, or while typing incognito.</string>
+    <string name="learn_frequent_words_title">Learn words you use often</string>
+    <string name="learn_frequent_words_description">A word that isn\'t in the dictionary goes into it once you\'ve typed it three times, so it\'s suggested and never auto-corrected. Not while typing incognito.</string>
+    <string name="recommended_label_learn_contact_details" translatable="false">@string/learn_contact_details_title</string>
+    <string name="recommended_label_learn_frequent_words" translatable="false">@string/learn_frequent_words_title</string>
+</resources>

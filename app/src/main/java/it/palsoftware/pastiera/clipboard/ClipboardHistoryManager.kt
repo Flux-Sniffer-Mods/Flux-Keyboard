@@ -59,9 +59,53 @@ class ClipboardHistoryManager internal constructor(
         accessStateListeners.clear()
     }
 
+    /**
+     * The last text copied while Pastiera was listening, for the paste suggestion. [sensitive]:
+     * marked so by the app it came from (a password manager); kept in memory only and offered
+     * only in password fields, masked.
+     */
+    data class RecentCopy(val timestamp: Long, val text: String, val sensitive: Boolean = false) {
+        override fun toString() = "RecentCopy(timestamp=$timestamp, sensitive=$sensitive)"
+    }
+
+    @Volatile
+    var recentCopy: RecentCopy? = null
+        private set
+
+    /** Forget the recent copy once it has been offered or used. */
+    fun consumeRecentCopy() {
+        recentCopy = null
+    }
+
     override fun onPrimaryClipChanged() {
+        // The clean link comes back here as a change of its own
+        if (cleanCopiedLink()) return
+        recordRecentCopy()
         if (!isEnabled || !isHistoryAccessible()) return
         fetchPrimaryClip()
+    }
+
+    /**
+     * A link just copied loses its tracking on the clipboard itself (Clean links), so it's clean
+     * wherever it's pasted: an app's own Paste and Ctrl+V too, not only Pastiera's. Only a plain
+     * text copy is replaced, never a password manager's, formatted text or a file. Returns
+     * whether the clip was replaced.
+     */
+    private fun cleanCopiedLink(): Boolean {
+        if (!SettingsManager.getCleanPastedLinks(context)) return false
+        val clip = runCatching { clipboardManager.primaryClip }.getOrNull() ?: return false
+        if (isSensitive(clip)) return false
+        return LinkCleaner.cleanClipboard(context, clipboardManager, MAX_CLEANED_COPY)
+    }
+
+    private fun recordRecentCopy() {
+        recentCopy = null
+        val clipData = runCatching { clipboardManager.primaryClip }.getOrNull() ?: return
+        if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) return
+        val text = clipData.getItemAt(0)?.coerceToText(context)?.toString()
+        if (text.isNullOrBlank()) return
+        // Passwords and codes copied from password managers: only for password fields, masked
+        recentCopy = RecentCopy(System.currentTimeMillis(), text, sensitive = isSensitive(clipData))
     }
 
     private fun fetchPrimaryClip() {
@@ -70,6 +114,9 @@ class ClipboardHistoryManager internal constructor(
         if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) {
             return
         }
+
+        // Passwords and codes copied from password managers never go into the history
+        if (isSensitive(clipData)) return
 
         clipData.getItemAt(0)?.let { clipItem ->
             val timeStamp = System.currentTimeMillis() // TODO: Get actual clip timestamp if available
@@ -81,6 +128,9 @@ class ClipboardHistoryManager internal constructor(
             clipboardDao?.addClip(timeStamp, false, content.toString(), retentionMinutes)
         }
     }
+
+    private fun isSensitive(clipData: android.content.ClipData): Boolean =
+        clipData.description?.extras?.getBoolean(SENSITIVE_EXTRA) == true
 
     fun toggleClipPinned(id: Long) {
         if (!isHistoryAccessible()) return
@@ -165,7 +215,7 @@ class ClipboardHistoryManager internal constructor(
      */
     fun pasteText(text: String, inputConnection: android.view.inputmethod.InputConnection?) {
         if (!isHistoryAccessible()) return
-        inputConnection?.commitText(text, 1)
+        inputConnection?.commitText(it.palsoftware.pastiera.SettingsManager.textToPaste(context, text), 1)
     }
 
     /**
@@ -231,5 +281,9 @@ class ClipboardHistoryManager internal constructor(
 
     companion object {
         private const val TAG = "ClipboardHistoryManager"
+        // ClipDescription.EXTRA_IS_SENSITIVE (Android 13), set by password managers and read on every version
+        private const val SENSITIVE_EXTRA = "android.content.extra.IS_SENSITIVE"
+        // Longer copies are left alone (a document, not a link someone shared)
+        private const val MAX_CLEANED_COPY = 4000
     }
 }
