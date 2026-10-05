@@ -31,7 +31,9 @@ class KeyboardVisibilityController(
     private val requestHideInputView: () -> Unit,
     private val requestShowInputView: () -> Unit,
     private val refreshStatusBar: () -> Unit,
-    private val trace: (String) -> Unit = {}
+    private val trace: (String) -> Unit = {},
+    // Apps where Pastiera stays hidden (Settings > Advanced > Hide keyboard in these apps)
+    private val isHiddenForApp: () -> Boolean = { false }
 ) {
     enum class RenderedSurface { HIDDEN, FULL_INPUT_VIEW, CANDIDATES_VIEW }
 
@@ -75,7 +77,8 @@ class KeyboardVisibilityController(
         return !usesCandidatesView()
     }
 
-    private fun canShow() = isInputViewActive() && currentInputConnection() != null && !isNavModeLatched()
+    private fun canShow() = isInputViewActive() && currentInputConnection() != null && !isNavModeLatched() &&
+        !isHiddenForApp()
 
     fun ensureImeSurfaceVisible() {
         if (!canShow() || waitingForBackendHide) return
@@ -199,6 +202,24 @@ class KeyboardVisibilityController(
     fun onInputStarted(restarting: Boolean) {
         cancelPendingSurfaceTransition()
         if (!restarting) dismissed = false
+    }
+
+    /** For apps where Pastiera stays hidden: drop any pending show and close the surface. */
+    fun hideForApp() {
+        cancelPendingSurfaceTransition()
+        changingSurface = true
+        try {
+            setCandidatesSurfaceActive(false)
+            setCandidatesViewShown(false)
+            setRequestedInputViewShown(false)
+            hideInputWindow()
+            requestHideInputView()
+        } catch (error: RuntimeException) {
+            trace("hide_for_app_rejected error=${error.javaClass.simpleName}")
+        } finally {
+            changingSurface = false
+        }
+        trace("hidden_for_app")
     }
 
     fun onExplicitShowRequested() = ensureImeSurfaceVisible()

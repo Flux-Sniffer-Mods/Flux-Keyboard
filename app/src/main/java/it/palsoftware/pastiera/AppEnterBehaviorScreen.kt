@@ -291,6 +291,57 @@ fun AppEnterBehaviorScreen(
             )
         }
 
+        // Every installed chat and email app gets its own entry, set to its category's standard,
+        // so each one is there to change
+        LaunchedEffect(Unit) {
+            val known = overrides.map { it.packageName }.toSet() + favoriteEnterBehaviorApps
+            val additions = AppListHelper.getInstalledApps(context)
+                .filter { it.packageName !in known }
+                .mapNotNull { app ->
+                    val standard = AppEnterStandards.standardFor(app.packageName)
+                    if (standard == EnterStandard.AppDefault) return@mapNotNull null
+                    SettingsManager.AppEnterBehaviorOverride(
+                        packageName = app.packageName,
+                        behavior = if (standard == EnterStandard.Email || standard == EnterStandard.Notes) {
+                            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
+                        } else {
+                            enterBehaviorForPreset(preset) ?: SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT
+                        },
+                        sendStrategy = AppEnterStandards.sendStrategyFor(app.packageName)
+                            ?: SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION,
+                        additionalSendShortcut = additionalSendShortcutForNewApp(selectedAdditionalSendShortcut)
+                    )
+                }
+            if (additions.isNotEmpty()) {
+                val updated = sortEnterBehaviorOverrides(context, overrides + additions)
+                overrides = updated
+                SettingsManager.setAppEnterBehaviorOverrides(context, updated)
+            }
+        }
+
+        EnterStandardsSection(
+            preset = preset,
+            excludedPackages = overrides.map { it.packageName }.toSet() + favoriteEnterBehaviorApps,
+            onAdopt = { packageName, standard ->
+                // Adopting the standard makes it an override you can then change
+                val behavior = when (standard) {
+                    EnterStandard.Email, EnterStandard.Notes -> SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
+                    else -> enterBehaviorForPreset(preset) ?: SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT
+                }
+                val addition = SettingsManager.AppEnterBehaviorOverride(
+                    packageName = packageName,
+                    behavior = behavior,
+                    sendStrategy = AppEnterStandards.sendStrategyFor(packageName)
+                        ?: SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION,
+                    additionalSendShortcut = additionalSendShortcutForNewApp(selectedAdditionalSendShortcut)
+                )
+                val updated = sortEnterBehaviorOverrides(context, overrides + addition)
+                overrides = updated
+                SettingsManager.setAppEnterBehaviorOverrides(context, updated)
+                bringIntoViewPackage = packageName
+            }
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
     }
 
@@ -322,6 +373,77 @@ fun AppEnterBehaviorScreen(
                 bringIntoViewPackage = apps.firstOrNull()?.packageName
             }
         )
+    }
+}
+
+/**
+ * The installed apps from the app shortcut list whose Enter follows their category's standard
+ * (AppEnterStandards). Tapping one turns it into an override you can change.
+ */
+@Composable
+private fun EnterStandardsSection(
+    preset: String,
+    excludedPackages: Set<String>,
+    onAdopt: (packageName: String, standard: EnterStandard) -> Unit
+) {
+    val context = LocalContext.current
+    // Every installed chat or email app, by its category: the app list's or Android's own
+    val rows = remember(excludedPackages) {
+        AppListHelper.getInstalledApps(context)
+            .filter { it.packageName !in excludedPackages }
+            .mapNotNull { app ->
+                AppEnterStandards.standardFor(app.packageName)
+                    .takeIf { it != EnterStandard.AppDefault }
+                    ?.let { app to it }
+            }
+            .sortedBy { it.first.appName.lowercase() }
+    }
+    // Normally empty: every chat and email app already has its own entry above
+    if (rows.isEmpty()) return
+    Box(modifier = Modifier.padding(top = 8.dp).settingRow("app_enter_behavior.standards")) {
+        SettingsSectionDivider(stringResource(R.string.enter_standards_title))
+    }
+    Text(
+        text = stringResource(R.string.enter_standards_description),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+    )
+    val chatSummary = stringResource(R.string.enter_standard_chat, getEnterPresetLabel(preset))
+    val emailSummary = stringResource(R.string.enter_standard_email)
+    val notesSummary = stringResource(R.string.enter_standard_notes)
+    rows.forEach { (app, standard) ->
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onAdopt(app.packageName, standard) }
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                app.icon?.let { icon ->
+                    AndroidView(
+                        factory = { ImageView(it).apply { scaleType = ImageView.ScaleType.FIT_CENTER } },
+                        update = { view -> view.setImageDrawable(icon.constantState?.newDrawable() ?: icon) },
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+                Column {
+                    Text(text = app.appName, style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        text = when (standard) {
+                            EnterStandard.Email -> emailSummary
+                            EnterStandard.Notes -> notesSummary
+                            else -> chatSummary
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -477,16 +599,12 @@ private fun EnterBehaviorOverrideRow(
                     Text(
                         text = app.label,
                         style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        fontWeight = FontWeight.Medium
                     )
                     Text(
                         text = app.packageName,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 TextButton(
@@ -742,9 +860,7 @@ private fun AddEnterBehaviorAppDialog(
                                     Text(
                                         text = app.packageName,
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 Checkbox(
@@ -790,6 +906,8 @@ private fun getEnterPresetLabel(preset: String): String {
             stringResource(R.string.app_enter_behaviour_preset_newline_ctrl_send)
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
             stringResource(R.string.app_enter_behaviour_preset_newline_only)
+        SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+            stringResource(R.string.app_enter_behaviour_preset_newline_shift_send)
         SettingsManager.ENTER_BEHAVIOR_PRESET_CUSTOM ->
             stringResource(R.string.app_enter_behaviour_preset_custom)
         else -> stringResource(R.string.app_enter_behaviour_preset_app_default)
@@ -805,6 +923,8 @@ private fun getEnterBehaviorLabel(behavior: String): String {
             stringResource(R.string.app_enter_behaviour_option_send_shift_newline)
         SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND ->
             stringResource(R.string.app_enter_behaviour_option_newline_ctrl_send)
+        SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND ->
+            stringResource(R.string.app_enter_behaviour_option_newline_shift_send)
         else -> stringResource(R.string.app_enter_behaviour_option_app_default)
     }
 }
@@ -813,6 +933,7 @@ private fun enterPresetOptions(): List<String> {
     return listOf(
         SettingsManager.ENTER_BEHAVIOR_PRESET_APP_DEFAULT,
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE,
+        SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND,
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND
     )
 }
@@ -821,6 +942,7 @@ private fun enterBehaviorOptions(): List<String> {
     return listOf(
         SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT,
         SettingsManager.ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
+        SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND,
         SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
     )
 }
@@ -1053,6 +1175,8 @@ private fun enterBehaviorForPreset(preset: String): String? {
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE
+        SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
         SettingsManager.ENTER_BEHAVIOR_PRESET_APP_DEFAULT ->
             SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT
         else -> null
@@ -1076,6 +1200,8 @@ internal fun inferKnownAppEnterBehaviorPreset(
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE
         SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND ->
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND
+        SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND ->
+            SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND
         else -> SettingsManager.ENTER_BEHAVIOR_PRESET_CUSTOM
     }
 }

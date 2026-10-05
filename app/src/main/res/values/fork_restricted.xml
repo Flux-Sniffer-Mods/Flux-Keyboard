@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flux Keyboard: Android's restricted settings for apps installed from a file -->
+<resources>
+    <string name="restricted_settings_toast">Tap ⋮ at the top right, then Allow restricted settings. If it isn\'t there, try turning the service on once first.</string>
+    <string name="restricted_settings_accessibility">Off, and Android blocks it until you allow restricted settings. Tap to open App info, then ⋮ › Allow restricted settings, then come back and turn it on.</string>
+    <string name="restricted_settings_notifications">Android blocks notification access until you allow restricted settings. Tap to open App info, then ⋮ › Allow restricted settings, then come back.</string>
+    <string name="notification_access_title">Notification access</string>
+    <string name="notification_access_off">Off: one-time codes need it. Tap to turn it on.</string>
+    <string name="restricted_settings_help_title">Allow restricted settings</string>
+    <string name="restricted_settings_help_steps">Android blocks accessibility and notification access for apps installed from a file, like Flux Keyboard, until you allow it once:\n\n1. Tap Open App info.\n2. Tap ⋮ at the top right, then Allow restricted settings, and confirm with your PIN or fingerprint.\n3. No Allow restricted settings under ⋮? Go back, try to switch the feature on once (Android says it\'s a restricted setting), then return to App info: it shows up after that.\n4. Come back to Flux Keyboard and switch the feature on.</string>
+    <string name="restricted_settings_help_open">Open App info</string>
+</resources>
