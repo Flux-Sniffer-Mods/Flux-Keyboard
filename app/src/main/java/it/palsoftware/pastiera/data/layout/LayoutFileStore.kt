@@ -81,6 +81,9 @@ object LayoutFileStore {
         code to name
     }
 
+    /** The keys a layout can map, in keyboard order: letters, then the number row, then punctuation. */
+    val editableKeyCodes: List<Int> get() = keyboardLayoutNameToKeyCode.values.toList()
+
     enum class LayoutImportError {
         MALFORMED_JSON,
         MISSING_MAPPINGS,

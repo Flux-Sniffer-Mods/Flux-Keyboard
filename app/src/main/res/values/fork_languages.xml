@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="language_per_app_title">Remember language per app</string>
+    <string name="language_per_app_description">Each app gets back the language you last used in it.</string>
+</resources>

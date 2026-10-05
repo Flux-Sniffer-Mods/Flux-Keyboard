@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flux Keyboard's in-app layout editor -->
+<resources>
+    <string name="layout_editor_intro">Tap a key to change what it types, with and without Shift. Keys without a character type what the keyboard prints on them.</string>
+    <string name="layout_editor_intro_changed">You\'ve changed this layout. Restore it from the menu to get the original back.</string>
+    <string name="layout_editor_unmapped">As printed on the key</string>
+    <string name="layout_editor_key_title">Key %1$s</string>
+    <string name="layout_editor_key_lower">Types</string>
+    <string name="layout_editor_key_upper">With Shift</string>
+    <string name="layout_editor_key_note">Leave \"Types\" empty to let the key type what\'s printed on it.</string>
+    <string name="layout_editor_key_multitap_note">This key\'s multi-tap characters stay as they are.</string>
+    <string name="layout_editor_key_clear">Clear</string>
+    <string name="layout_editor_done">Done</string>
+    <string name="layout_editor_save">Save</string>
+    <string name="layout_editor_discard">Discard</string>
+    <string name="layout_editor_saved">Layout saved</string>
+    <string name="layout_editor_save_failed">Couldn\'t save the layout</string>
+    <string name="layout_editor_unsaved_title">Save your changes?</string>
+    <string name="layout_editor_unsaved_message">You\'ve changed keys in this layout.</string>
+    <string name="layout_editor_restore">Restore original</string>
+    <string name="layout_editor_copy">Save as a new layout</string>
+    <string name="layout_editor_copy_suffix">(copy)</string>
+    <string name="layout_editor_copy_name">Name</string>
+    <string name="layout_editor_copied">Saved as %1$s</string>
+    <string name="layout_editor_copy_exists">A layout with this name already exists</string>
+    <string name="layout_editor_copy_invalid">Choose another name</string>
+    <string name="layout_editor_export">Export</string>
+    <string name="layout_editor_exported">Layout exported</string>
+    <string name="layout_editor_export_failed">Couldn\'t export the layout</string>
+    <string name="layout_editor_link">Edit a layout: tap its pencil</string>
+</resources>

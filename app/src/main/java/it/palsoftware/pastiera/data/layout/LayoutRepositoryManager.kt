@@ -50,6 +50,9 @@ sealed class LayoutDownloadResult {
 
 object LayoutRepositoryManager {
     suspend fun fetchManifest(): Result<LayoutManifest> = withContext(Dispatchers.IO) {
+        if (it.palsoftware.pastiera.OfflineMode.enabled) {
+            return@withContext Result.failure(java.io.IOException("Offline mode is on"))
+        }
         try {
             val request = Request.Builder()
                 .url(MANIFEST_URL)
@@ -86,6 +89,7 @@ object LayoutRepositoryManager {
         item: LayoutItem,
         onProgress: ((Long, Long) -> Unit)? = null
     ): LayoutDownloadResult = withContext(Dispatchers.IO) {
+        if (it.palsoftware.pastiera.OfflineMode.enabled) return@withContext LayoutDownloadResult.NetworkError
         try {
             val request = Request.Builder()
                 .url(item.url)

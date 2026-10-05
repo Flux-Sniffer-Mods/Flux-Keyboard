@@ -277,32 +277,24 @@ fun KeyboardLayoutSettingsScreen(
                     .verticalScroll(rememberScrollState())
             ) {
 
-                // Online Layout Editor link
+                // Layouts are edited in the app: each row's pencil opens its editor
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            try {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pastierakeyedit.vercel.app/"))
-                                context.startActivity(intent)
-                            } catch (e: Exception) {
-                                // Handle error silently or show snackbar
-                            }
-                        }
                         .padding(horizontal = 16.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Link,
+                        imageVector = Icons.Filled.Edit,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
-                        text = stringResource(R.string.keyboard_layout_editor_title),
+                        text = stringResource(R.string.layout_editor_link),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -312,7 +304,7 @@ fun KeyboardLayoutSettingsScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(72.dp)
+                        .heightIn(min = 72.dp)
                         .clickable {
                             selectedLayout = "qwerty"
                         }
@@ -334,14 +326,12 @@ fun KeyboardLayoutSettingsScreen(
                             Text(
                                 text = stringResource(R.string.keyboard_layout_no_conversion),
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Medium,
-                                maxLines = 1
+                                fontWeight = FontWeight.Medium
                             )
                             Text(
                                 text = stringResource(R.string.keyboard_layout_no_conversion_description),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 2
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                         Row(
@@ -352,7 +342,7 @@ fun KeyboardLayoutSettingsScreen(
                                 onClick = { openSettingsChild(context, "layout_preview", "qwerty") }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.Visibility,
+                                    imageVector = Icons.Filled.Edit,
                                     contentDescription = stringResource(R.string.keyboard_layout_viewer_open),
                                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -409,8 +399,7 @@ fun KeyboardLayoutSettingsScreen(
                                         Text(
                                             text = metadata?.name ?: layout.replaceFirstChar { it.uppercase() },
                                             style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.Medium,
-                                            maxLines = 1
+                                            fontWeight = FontWeight.Medium
                                         )
                                         if (hasMultiTap) {
                                             Surface(
@@ -430,8 +419,7 @@ fun KeyboardLayoutSettingsScreen(
                                     Text(
                                         text = metadata?.description ?: getLayoutDescription(context, layout),
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 2
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 if (canDelete) {
@@ -449,7 +437,7 @@ fun KeyboardLayoutSettingsScreen(
                                     onClick = { openSettingsChild(context, "layout_preview", layout) }
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Filled.Visibility,
+                                        imageVector = Icons.Filled.Edit,
                                         contentDescription = stringResource(R.string.keyboard_layout_viewer_open),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
