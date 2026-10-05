@@ -95,6 +95,12 @@ class TextInputController(
             lastSpacePressTime = currentTime
             return false
         }
+        // Not after other punctuation: "Hello, " never becomes "Hello,. "
+        val beforeSpaces = textBeforeCursor.trimEnd(' ').lastOrNull()
+        if (beforeSpaces != null && beforeSpaces in ",;:-–—([{/\\") {
+            lastSpacePressTime = currentTime
+            return false
+        }
 
         val spacesToReplace = if (endsWithDoubleSpaceAfterAutoSpace) 2 else 1
         inputConnection.deleteSurroundingText(spacesToReplace, 0)

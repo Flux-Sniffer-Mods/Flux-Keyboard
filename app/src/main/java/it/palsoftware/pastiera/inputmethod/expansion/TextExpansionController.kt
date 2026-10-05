@@ -167,14 +167,25 @@ class TextExpansionController(
             clear()
             return
         }
+        // Your snippets can hold {date}, {time}, {clipboard} and the like, filled in now
+        val replacement = if (match.provider == ExpansionProvider.SNIPPET) {
+            SnippetPlaceholders.fill(match.replacement, clipboard = ::clipboardText)
+        } else {
+            match.replacement
+        }
         inputConnection.beginBatchEdit()
         inputConnection.finishComposingText()
         inputConnection.deleteSurroundingText(query.token.length, 0)
-        inputConnection.commitText(match.replacement + suffix, 1)
+        inputConnection.commitText(replacement + suffix, 1)
         inputConnection.endBatchEdit()
         clear()
-        onCommitted(match.replacement + suffix)
+        onCommitted(replacement + suffix)
     }
+
+    private fun clipboardText(): String? = runCatching {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
+        clipboard?.primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString()
+    }.getOrNull()
 
     private fun render(presentation: ExpansionPresentation) {
         when (presentation) {

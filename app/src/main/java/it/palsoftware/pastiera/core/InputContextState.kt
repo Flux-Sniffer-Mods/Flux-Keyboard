@@ -14,7 +14,13 @@ data class InputContextState(
     val inputClass: Int,
     val inputVariation: Int,
     val inputType: Int,
-    val restrictedReason: RestrictedReason?
+    val restrictedReason: RestrictedReason?,
+    /**
+     * Exact typing (Settings > Apps > Exact typing): the app is on your list, or it asks for no
+     * suggestions and you chose to honour that. Every character stays as typed: no auto-correct,
+     * text replacements, auto-capitals or double-space full stop. Suggestions still show.
+     */
+    val exactTyping: Boolean = false
 ) {
 
     val isPhoneField: Boolean
@@ -38,21 +44,21 @@ data class InputContextState(
      * Disabled for: PASSWORD, URI, EMAIL, FILTER
      */
     val shouldDisableAutoCorrect: Boolean
-        get() = restrictedReason != null
+        get() = restrictedReason != null || exactTyping
     
     /**
      * Disable auto-capitalization (automatic capitalization after period/enter).
      * Disabled for: PASSWORD, URI, EMAIL, FILTER
      */
     val shouldDisableAutoCapitalize: Boolean
-        get() = restrictedReason != null
+        get() = restrictedReason != null || exactTyping
     
     /**
      * Disable double-space-to-period conversion.
      * Disabled for: PASSWORD, URI, EMAIL, FILTER
      */
     val shouldDisableDoubleSpaceToPeriod: Boolean
-        get() = restrictedReason != null
+        get() = restrictedReason != null || exactTyping
     
     /**
      * Disable character variations (accented characters, special variants).
@@ -74,14 +80,14 @@ data class InputContextState(
      * When this is true, the first letter after space/punctuation should be capitalized.
      */
     val requiresCapWords: Boolean
-        get() = (inputType and InputType.TYPE_TEXT_FLAG_CAP_WORDS) != 0
+        get() = (inputType and InputType.TYPE_TEXT_FLAG_CAP_WORDS) != 0 && !exactTyping
     
     /**
      * Field requires first letter of each sentence to be capitalized (textCapSentences flag).
      * When this is true, the first letter after sentence-ending punctuation should be capitalized.
      */
     val requiresCapSentences: Boolean
-        get() = (inputType and InputType.TYPE_TEXT_FLAG_CAP_SENTENCES) != 0
+        get() = (inputType and InputType.TYPE_TEXT_FLAG_CAP_SENTENCES) != 0 && !exactTyping
     
     // Legacy flag for backward compatibility (maps to shouldDisableSuggestions)
     // TODO: Gradually replace all usages with specific flags

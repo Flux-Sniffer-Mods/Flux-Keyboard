@@ -354,7 +354,6 @@ private fun SnippetsScreen(onBack: () -> Unit) {
                         Text(entry.key, fontWeight = FontWeight.Medium)
                         Text(
                             entry.value.replace("\n", " ↵ "),
-                            maxLines = 2,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

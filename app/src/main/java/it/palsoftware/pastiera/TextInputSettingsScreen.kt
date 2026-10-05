@@ -3,6 +3,7 @@ package it.palsoftware.pastiera
 import androidx.compose.foundation.clickable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,14 +27,22 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.core.Punctuation
 
+/** The two Typing screens built from these rows. */
+enum class TextInputPage {
+    CapitalisationPunctuation,
+    EditingKeys
+}
+
 /**
- * Text Input settings screen.
+ * Typing settings: capitalisation and punctuation, or the editing keys
+ * (Backspace combinations and Enter per app).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputSettingsScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
+    page: TextInputPage = TextInputPage.CapitalisationPunctuation,
     onNavModeSettingsClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -87,12 +96,14 @@ fun TextInputSettingsScreen(
         mutableStateOf(SettingsManager.getFrenchPunctuationOnlyFrenchLayouts(context))
     }
 
-    var commaSpace by remember {
-        mutableStateOf(SettingsManager.getCommaSpace(context))
-    }
+    // Before the rows below read it: an old Space after comma setting moves into punctuation spacing
+    remember { SettingsManager.foldCommaSpaceIntoPunctuationSpacing(context); true }
 
     var autoSpacePunctuation by remember {
         mutableStateOf(SettingsManager.getAutoSpacePunctuation(context))
+    }
+    var emoticonPunctuation by remember {
+        mutableStateOf(SettingsManager.getEmoticonPunctuation(context))
     }
     var spaceAfterPunctuation by remember {
         mutableStateOf(SettingsManager.getSpaceAfterPunctuation(context))
@@ -110,26 +121,6 @@ fun TextInputSettingsScreen(
     }
 
     var smartQuotesExpanded by remember { mutableStateOf(false) }
-
-    var clearAltOnSpace by remember {
-        mutableStateOf(SettingsManager.getClearAltOnSpace(context))
-    }
-
-    var autoShowKeyboard by remember {
-        mutableStateOf(SettingsManager.getAutoShowKeyboard(context))
-    }
-
-    var altCtrlSpeechShortcut by remember {
-        mutableStateOf(SettingsManager.getAltCtrlSpeechShortcutEnabled(context))
-    }
-
-    var shiftBackspaceDelete by remember {
-        mutableStateOf(SettingsManager.getShiftBackspaceDelete(context))
-    }
-
-    var altBackspaceDelete by remember {
-        mutableStateOf(SettingsManager.getAltBackspaceDelete(context))
-    }
 
     var backspaceAtStartDelete by remember {
         mutableStateOf(SettingsManager.getBackspaceAtStartDelete(context))
@@ -189,12 +180,14 @@ fun TextInputSettingsScreen(
                         Text(
                             text = stringResource(R.string.auto_space_punctuation_before_column),
                             style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.width(72.dp)
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            modifier = Modifier.width(80.dp)
                         )
                         Text(
                             text = stringResource(R.string.auto_space_punctuation_after_column),
                             style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.width(72.dp)
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            modifier = Modifier.width(80.dp)
                         )
                     }
                     Column {
@@ -202,15 +195,27 @@ fun TextInputSettingsScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(48.dp)
+                                    .heightIn(min = 48.dp)
                                     .padding(horizontal = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(
-                                    text = autoSpacePunctuationLabel(punctuation),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.weight(1f)
-                                )
+                                Row(
+                                    modifier = Modifier.weight(1f),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = autoSpacePunctuationLabel(punctuation),
+                                        style = MaterialTheme.typography.titleLarge,
+                                        modifier = Modifier.width(28.dp)
+                                    )
+                                    autoSpacePunctuationName(punctuation)?.let { name ->
+                                        Text(
+                                            text = stringResource(name),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
                                 Checkbox(
                                     checked = punctuation in autoSpacePunctuation,
                                     onCheckedChange = { checked ->
@@ -221,7 +226,7 @@ fun TextInputSettingsScreen(
                                         }
                                         SettingsManager.setAutoSpacePunctuation(context, autoSpacePunctuation)
                                     },
-                                    modifier = Modifier.width(72.dp)
+                                    modifier = Modifier.width(80.dp)
                                 )
                                 Checkbox(
                                     checked = punctuation in spaceAfterPunctuation,
@@ -233,7 +238,7 @@ fun TextInputSettingsScreen(
                                         }
                                         SettingsManager.setSpaceAfterPunctuation(context, spaceAfterPunctuation)
                                     },
-                                    modifier = Modifier.width(72.dp)
+                                    modifier = Modifier.width(80.dp)
                                 )
                             }
                         }
@@ -293,7 +298,12 @@ fun TextInputSettingsScreen(
                         )
                     }
                     Text(
-                        text = stringResource(R.string.settings_category_text_input),
+                        text = stringResource(
+                            when (page) {
+                                TextInputPage.CapitalisationPunctuation -> R.string.settings_capitalisation_punctuation_title
+                                TextInputPage.EditingKeys -> R.string.settings_editing_keys_title
+                            }
+                        ),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(start = 8.dp)
@@ -308,14 +318,7 @@ fun TextInputSettingsScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            SettingsSectionHeader(text = stringResource(R.string.text_expansion_title))
-            SettingsNavigationRow(
-                title = stringResource(R.string.text_expansion_title),
-                description = stringResource(R.string.text_expansion_description),
-                linkId = SettingLinkIds.TEXT_INPUT_TEXT_EXPANSION,
-                onClick = { openSettingsChild(context, "text", "expansion") }
-            )
-
+            if (page == TextInputPage.CapitalisationPunctuation) {
             SettingsSectionHeader(text = stringResource(R.string.text_input_section_capitalization))
             SettingsSwitchRow(
                 title = stringResource(R.string.auto_capitalize_title),
@@ -340,28 +343,21 @@ fun TextInputSettingsScreen(
                             SettingsManager.setAutoCapitalizeRespectManualShiftOff(context, enabled)
                         }
                     )
-                    SettingsSwitchRow(
-                        title = stringResource(R.string.auto_capitalize_restricted_fields_title),
-                        description = stringResource(R.string.auto_capitalize_restricted_fields_description),
-                        checked = autoCapitalizeRestrictedFields,
-                        inset = 52.dp,
-                        linkId = SettingLinkIds.TEXT_INPUT_AUTO_CAPITALIZE_RESTRICTED_FIELDS,
-                        onCheckedChange = { enabled ->
-                            autoCapitalizeRestrictedFields = enabled
-                            SettingsManager.setAutoCapitalizeRestrictedFields(context, enabled)
-                        }
-                    )
+                    AutoShiftFieldTypesRow()
                 }
             }
-            SettingsSwitchRow(
-                title = stringResource(R.string.auto_capitalize_after_period_title),
-                description = stringResource(R.string.auto_capitalize_after_period_description),
-                checked = autoCapitalizeAfterPeriod,
+            // Where a new sentence starts: after a full stop, after an emoticon
+            FluxCheckTable(
                 linkId = SettingLinkIds.TEXT_INPUT_AUTO_CAPITALIZE_AFTER_PERIOD,
-                onCheckedChange = { enabled ->
-                    autoCapitalizeAfterPeriod = enabled
-                    SettingsManager.setAutoCapitalizeAfterPeriod(context, enabled)
-                }
+                title = stringResource(R.string.capital_after_title),
+                description = stringResource(R.string.capital_after_description),
+                columns = listOf(stringResource(R.string.capital_after_full_stop), stringResource(R.string.capital_after_emoticon)),
+                rows = listOf(
+                    "" to listOf(
+                        CheckCell({ SettingsManager.getAutoCapitalizeAfterPeriod(context) }) { SettingsManager.setAutoCapitalizeAfterPeriod(context, it) },
+                        CheckCell({ SettingsManager.getAutoCapAfterEmoticon(context) }, SettingLinkIds.TEXT_INPUT_AUTO_CAP_AFTER_EMOTICON) { SettingsManager.setAutoCapAfterEmoticon(context, it) }
+                    )
+                )
             )
 
             SettingsSectionHeader(text = stringResource(R.string.text_input_section_spacing_punctuation))
@@ -387,16 +383,18 @@ fun TextInputSettingsScreen(
                 linkId = SettingLinkIds.TEXT_INPUT_AUTO_SPACE_PUNCTUATION,
                 onClick = { autoSpacePunctuationDialogVisible = true }
             )
-            SettingsSwitchRow(
-                title = stringResource(R.string.comma_space_title),
-                description = stringResource(R.string.comma_space_description),
-                checked = commaSpace,
-                linkId = SettingLinkIds.TEXT_INPUT_COMMA_SPACE,
-                onCheckedChange = { enabled ->
-                    commaSpace = enabled
-                    SettingsManager.setCommaSpace(context, enabled)
-                }
-            )
+            AnimatedVisibility(visible = spaceAfterPunctuation.any { it != '.' }) {
+                SettingsSwitchRow(
+                    title = stringResource(R.string.emoticon_punctuation_title),
+                    description = stringResource(R.string.emoticon_punctuation_description),
+                    checked = emoticonPunctuation,
+                    linkId = SettingLinkIds.TEXT_INPUT_EMOTICON_PUNCTUATION,
+                    onCheckedChange = { enabled ->
+                        emoticonPunctuation = enabled
+                        SettingsManager.setEmoticonPunctuation(context, enabled)
+                    }
+                )
+            }
             SettingsSwitchRow(
                 title = stringResource(R.string.french_punctuation_spacing_title),
                 description = stringResource(R.string.french_punctuation_spacing_description),
@@ -477,38 +475,9 @@ fun TextInputSettingsScreen(
                 }
             )
 
-            SettingsSectionHeader(text = stringResource(R.string.text_input_section_keyboard_behavior))
-            SettingsSwitchRow(
-                title = stringResource(R.string.clear_alt_on_space_title),
-                description = stringResource(R.string.clear_alt_on_space_description),
-                checked = clearAltOnSpace,
-                linkId = SettingLinkIds.TEXT_INPUT_CLEAR_ALT_ON_SPACE,
-                onCheckedChange = { enabled ->
-                    clearAltOnSpace = enabled
-                    SettingsManager.setClearAltOnSpace(context, enabled)
-                }
-            )
-            SettingsSwitchRow(
-                title = stringResource(R.string.auto_show_keyboard_title),
-                description = stringResource(R.string.auto_show_keyboard_description),
-                checked = autoShowKeyboard,
-                linkId = SettingLinkIds.TEXT_INPUT_AUTO_SHOW_KEYBOARD,
-                onCheckedChange = { enabled ->
-                    autoShowKeyboard = enabled
-                    SettingsManager.setAutoShowKeyboard(context, enabled)
-                }
-            )
-            SettingsSwitchRow(
-                title = stringResource(R.string.alt_ctrl_speech_shortcut_title),
-                description = stringResource(R.string.alt_ctrl_speech_shortcut_description),
-                checked = altCtrlSpeechShortcut,
-                linkId = SettingLinkIds.TEXT_INPUT_ALT_CTRL_SPEECH_SHORTCUT,
-                onCheckedChange = { enabled ->
-                    altCtrlSpeechShortcut = enabled
-                    SettingsManager.setAltCtrlSpeechShortcutEnabled(context, enabled)
-                }
-            )
+            }
 
+            if (page == TextInputPage.EditingKeys) {
             SettingsSectionHeader(text = stringResource(R.string.text_input_section_delete))
             Surface(
                 modifier = Modifier
@@ -524,52 +493,6 @@ fun TextInputSettingsScreen(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .settingRow(SettingLinkIds.TEXT_INPUT_SHIFT_BACKSPACE_DELETE),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = stringResource(R.string.shift_backspace_delete_title),
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Switch(
-                            checked = shiftBackspaceDelete,
-                            onCheckedChange = { enabled ->
-                                shiftBackspaceDelete = enabled
-                                SettingsManager.setShiftBackspaceDelete(context, enabled)
-                            }
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .settingRow(SettingLinkIds.TEXT_INPUT_ALT_BACKSPACE_DELETE),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = stringResource(R.string.alt_backspace_delete_title),
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Switch(
-                            checked = altBackspaceDelete,
-                            onCheckedChange = { enabled ->
-                                altBackspaceDelete = enabled
-                                SettingsManager.setAltBackspaceDelete(context, enabled)
-                            }
-                        )
-                    }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
@@ -618,6 +541,8 @@ fun TextInputSettingsScreen(
                         fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
                     )
                 }
+            }
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -698,15 +623,13 @@ private fun SettingsSwitchRow(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2
+                fontWeight = FontWeight.Medium
             )
             if (description != null) {
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -740,14 +663,12 @@ private fun SettingsNavigationRow(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         Icon(
@@ -787,8 +708,7 @@ private fun SettingsDropdownSwitchRow(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2
+                fontWeight = FontWeight.Medium
             )
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -882,6 +802,9 @@ private fun autoSpacePunctuationSummary(
     afterLabel: String,
     offLabel: String
 ): String {
+    if (beforePunctuation.isNotEmpty() && beforePunctuation == afterPunctuation) {
+        return "$beforeLabel, $afterLabel: ${beforePunctuation.map(::autoSpacePunctuationLabel).joinToString(" ")}"
+    }
     val parts = buildList {
         beforePunctuation.takeIf { it.isNotEmpty() }?.let {
             add("$beforeLabel: ${it.map(::autoSpacePunctuationLabel).joinToString(" ")}")
@@ -891,6 +814,16 @@ private fun autoSpacePunctuationSummary(
         }
     }
     return parts.joinToString(" · ").ifEmpty { offLabel }
+}
+
+private fun autoSpacePunctuationName(punctuation: Char): Int? = when (punctuation) {
+    '.' -> R.string.punctuation_name_full_stop
+    ',' -> R.string.punctuation_name_comma
+    ';' -> R.string.punctuation_name_semicolon
+    ':' -> R.string.punctuation_name_colon
+    '!' -> R.string.punctuation_name_exclamation
+    '?' -> R.string.punctuation_name_question
+    else -> null
 }
 
 internal fun autoSpacePunctuationLabel(punctuation: Char): String {
@@ -911,5 +844,68 @@ internal fun toggleAutoSpacePunctuation(current: String, punctuation: Char): Str
         current.filterNot { it == punctuation }
     } else {
         addAutoSpacePunctuation(current, punctuation)
+    }
+}
+
+/** Automatic Shift by kind of text field: a summary row opening a checklist. */
+@Composable
+private fun AutoShiftFieldTypesRow() {
+    val context = LocalContext.current
+    var types by remember { mutableStateOf(it.palsoftware.pastiera.inputmethod.ShiftFieldTypes.enabled(context)) }
+    var picking by remember { mutableStateOf(false) }
+    val all = it.palsoftware.pastiera.inputmethod.ShiftFieldTypes.Type.entries
+    val summary = all.filter { type -> type in types }
+        .map { type -> stringResource(type.labelRes) }
+        .ifEmpty { listOf(stringResource(R.string.shift_field_none)) }
+        .joinToString(", ")
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .settingRow(SettingLinkIds.TEXT_INPUT_AUTO_CAPITALIZE_RESTRICTED_FIELDS) { picking = true }
+    ) {
+        Column(modifier = Modifier.padding(start = 52.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)) {
+            Text(
+                stringResource(R.string.auto_capitalize_restricted_fields_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium
+            )
+            Text(summary, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+    if (picking) {
+        AlertDialog(
+            onDismissRequest = { picking = false },
+            title = { Text(stringResource(R.string.auto_capitalize_restricted_fields_title)) },
+            text = {
+                // Scrolls when the list is taller than the dialog (long labels, large text)
+                Column(modifier = Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                    Text(
+                        stringResource(R.string.auto_capitalize_restricted_fields_description),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+                    all.forEach { type ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .clip(MaterialTheme.shapes.small)
+                                .clickable {
+                                    types = if (type in types) types - type else types + type
+                                    it.palsoftware.pastiera.inputmethod.ShiftFieldTypes.setEnabled(context, types)
+                                }
+                                .padding(horizontal = 4.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Checkbox(checked = type in types, onCheckedChange = null)
+                            Text(stringResource(type.labelRes), style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { picking = false }) { Text(stringResource(R.string.whats_new_done)) } }
+        )
     }
 }
