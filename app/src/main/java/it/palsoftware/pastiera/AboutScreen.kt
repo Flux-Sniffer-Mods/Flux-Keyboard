@@ -1,6 +1,8 @@
 package it.palsoftware.pastiera
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicText
@@ -174,6 +176,25 @@ fun AboutScreen(
                     color = MaterialTheme.colorScheme.error
                 )
             }
+
+            // Who makes Flux Keyboard: the flux sniffer mods wordmark, light or dark to suit the
+            // app's own theme (not the phone's), opening their GitHub
+            val darkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
+            Spacer(modifier = Modifier.height(24.dp))
+            Image(
+                painter = painterResource(
+                    if (darkTheme) R.drawable.flux_sniffer_mods_logo_on_dark
+                    else R.drawable.flux_sniffer_mods_logo_on_light
+                ),
+                contentDescription = stringResource(R.string.about_flux_sniffer_mods),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width(180.dp)
+                    .clickable { openUrl(context, "https://github.com/Flux-Sniffer-Mods") }
+                    .padding(vertical = 8.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
