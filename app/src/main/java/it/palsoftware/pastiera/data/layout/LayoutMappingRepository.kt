@@ -87,8 +87,6 @@ object LayoutMappingRepository {
         return resolveText(mapping, isShift, tapIndex)?.firstOrNull()
     }
 
-    fun getLowercase(keyCode: Int): String? = currentLayout[keyCode]?.lowercase
-
     fun getUppercase(keyCode: Int): String? = currentLayout[keyCode]?.uppercase
 
     fun getCharacterWithModifiers(

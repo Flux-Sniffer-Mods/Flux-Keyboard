@@ -232,35 +232,7 @@ class StatusBarButtonRegistry {
             else -> null
         }
     }
-    
-    /**
-     * Gets the default button configuration.
-     * 
-     * Default layout: [Clipboard] [---variations---] [Emoji] [Language]
-     */
-    fun getDefaultConfiguration(): List<StatusBarButtonConfig> {
-        return listOf(
-            StatusBarButtonConfig(
-                id = StatusBarButtonId.Clipboard,
-                position = StatusBarButtonPosition.LEFT,
-                enabled = true,
-                order = 0
-            ),
-            StatusBarButtonConfig(
-                id = StatusBarButtonId.Emoji,
-                position = StatusBarButtonPosition.RIGHT,
-                enabled = true,
-                order = 0
-            ),
-            StatusBarButtonConfig(
-                id = StatusBarButtonId.Language,
-                position = StatusBarButtonPosition.RIGHT,
-                enabled = true,
-                order = 1
-            )
-        )
-    }
-    
+
     /**
      * Direct access to the microphone factory for audio level updates.
      * This is needed because audio level updates happen frequently and
@@ -272,14 +244,5 @@ class StatusBarButtonRegistry {
      * Direct access to the language factory for text updates.
      */
     fun getLanguageFactory(): LanguageButtonFactory = languageFactory
-    
-    /**
-     * Direct access to the clipboard factory for badge updates.
-     */
-    fun getClipboardFactory(): ClipboardButtonFactory = clipboardFactory
-    
-    /**
-     * Direct access to the emoji factory.
-     */
-    fun getEmojiFactory(): EmojiButtonFactory = emojiFactory
+
 }

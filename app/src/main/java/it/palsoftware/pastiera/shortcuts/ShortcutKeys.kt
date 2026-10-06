@@ -25,7 +25,6 @@ object ShortcutKeys {
     private val KEY_CHARS = CHAR_KEYS.entries.associate { (c, k) -> k to c }
 
     fun charOf(keyCode: Int): Char? = KEY_CHARS[keyCode]
-    fun keyCodeOf(c: Char): Int? = CHAR_KEYS[c]
 
     /** Hardware keyboards connected now (not the on-screen one). */
     private fun physicalKeyboards(): List<InputDevice> = runCatching {

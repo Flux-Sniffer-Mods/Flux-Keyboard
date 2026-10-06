@@ -1807,11 +1807,6 @@ object SettingsManager {
      * Returns the maximum allowed value for the long-press threshold.
      */
     fun getMaxLongPressThreshold(): Long = MAX_LONG_PRESS_THRESHOLD
-    
-    /**
-     * Returns the default value for the long-press threshold.
-     */
-    fun getDefaultLongPressThreshold(): Long = DEFAULT_LONG_PRESS_THRESHOLD
 
     fun getTypingSoundMode(context: Context): String {
         val mode = getPreferences(context).getString(KEY_TYPING_SOUND_MODE, DEFAULT_TYPING_SOUND_MODE)
@@ -2059,12 +2054,7 @@ object SettingsManager {
      * Returns the maximum allowed value for the swipe incremental threshold.
      */
     fun getMaxSwipeIncrementalThreshold(): Float = MAX_SWIPE_INCREMENTAL_THRESHOLD
-    
-    /**
-     * Returns the default value for the swipe incremental threshold.
-     */
-    fun getDefaultSwipeIncrementalThreshold(): Float = DEFAULT_SWIPE_INCREMENTAL_THRESHOLD
-    
+
     /**
      * Returns the state of auto-capitalization for the first letter.
      */
@@ -2891,19 +2881,6 @@ object SettingsManager {
         return getStaticVariationBarPreset(context) != STATIC_VARIATION_PRESET_OFF
     }
 
-    /**
-     * Sets whether the static variation bar mode is enabled.
-     */
-    fun setStaticVariationBarModeEnabled(context: Context, enabled: Boolean) {
-        getPreferences(context).edit()
-            .putBoolean(KEY_STATIC_VARIATION_BAR_MODE, enabled)
-            .putString(
-                KEY_STATIC_VARIATION_BAR_PRESET,
-                if (enabled) STATIC_VARIATION_PRESET_SYMBOLS else STATIC_VARIATION_PRESET_OFF
-            )
-            .apply()
-    }
-
     fun getStaticVariationBarPreset(context: Context): String {
         val prefs = getPreferences(context)
         val stored = prefs.getString(KEY_STATIC_VARIATION_BAR_PRESET, null)
@@ -2955,26 +2932,6 @@ object SettingsManager {
                 staticVariationsAlt = getStaticVariationAltPreset(normalized)
             )
         }
-    }
-
-    /**
-     * Returns whether the base (top) static variation row is enabled.
-     * Shift/Alt static layers remain available independently.
-     */
-    fun isStaticVariationBarBaseLayerEnabled(context: Context): Boolean {
-        return getPreferences(context).getBoolean(
-            KEY_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED,
-            DEFAULT_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED
-        )
-    }
-
-    /**
-     * Sets whether the base (top) static variation row is enabled.
-     */
-    fun setStaticVariationBarBaseLayerEnabled(context: Context, enabled: Boolean) {
-        getPreferences(context).edit()
-            .putBoolean(KEY_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED, enabled)
-            .apply()
     }
 
     /**
@@ -3409,15 +3366,7 @@ object SettingsManager {
             .remove(KEY_SYM_MAPPINGS_CUSTOM)
             .apply()
     }
-    
-    /**
-     * Returns true if custom SYM mappings exist.
-     */
-    fun hasCustomSymMappings(context: Context): Boolean {
-        val prefs = getPreferences(context)
-        return prefs.contains(KEY_SYM_MAPPINGS_CUSTOM)
-    }
-    
+
     /**
      * Returns custom SYM mappings for page 2.
      * Returns an empty map if there are no custom mappings.
@@ -3510,15 +3459,7 @@ object SettingsManager {
             .remove(KEY_SYM_MAPPINGS_PAGE2_CUSTOM)
             .apply()
     }
-    
-    /**
-     * Returns true if custom SYM page 2 mappings exist.
-     */
-    fun hasCustomSymMappingsPage2(context: Context): Boolean {
-        val prefs = getPreferences(context)
-        return prefs.contains(KEY_SYM_MAPPINGS_PAGE2_CUSTOM)
-    }
-    
+
     /**
      * Returns whether auto-correction is enabled.
      */
@@ -3599,23 +3540,11 @@ object SettingsManager {
         return getPreferences(context).getBoolean(KEY_SUGGESTION_DEBUG_LOGGING, DEFAULT_SUGGESTION_DEBUG_LOGGING)
     }
 
-    fun setSuggestionDebugLoggingEnabled(context: Context, enabled: Boolean) {
-        getPreferences(context).edit()
-            .putBoolean(KEY_SUGGESTION_DEBUG_LOGGING, enabled)
-            .apply()
-    }
-
     /**
      * Optional debug logging for IME overlay / inset calculations.
      */
     fun isImeOverlayDebugLoggingEnabled(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_IME_OVERLAY_DEBUG_LOGGING, DEFAULT_IME_OVERLAY_DEBUG_LOGGING)
-    }
-
-    fun setImeOverlayDebugLoggingEnabled(context: Context, enabled: Boolean) {
-        getPreferences(context).edit()
-            .putBoolean(KEY_IME_OVERLAY_DEBUG_LOGGING, enabled)
-            .apply()
     }
 
     /**
@@ -3723,16 +3652,7 @@ object SettingsManager {
             .putString(KEY_AUTO_CORRECT_ENABLED_LANGUAGES, languagesString)
             .apply()
     }
-    
-    /**
-     * Returns true if a language is enabled for auto-correction.
-     */
-    fun isAutoCorrectLanguageEnabled(context: Context, language: String): Boolean {
-        val enabledLanguages = getAutoCorrectEnabledLanguages(context)
-        // If the list is empty, all languages are enabled (default behavior)
-        return enabledLanguages.isEmpty() || enabledLanguages.contains(language)
-    }
-    
+
     /**
      * Special JSON field for the language name.
      */
@@ -3949,32 +3869,7 @@ object SettingsManager {
             Log.e(TAG, "Error saving custom corrections for $languageCode", e)
         }
     }
-    
-    /**
-     * Updates only the display name of a custom language.
-     */
-    fun updateCustomLanguageName(context: Context, languageCode: String, languageName: String) {
-        try {
-            val prefs = getPreferences(context)
-            val key = "auto_correct_custom_$languageCode"
-            val jsonString = prefs.getString(key, null)
-            
-            val jsonObject = if (jsonString != null) {
-                JSONObject(jsonString)
-            } else {
-                JSONObject()
-            }
-            
-            jsonObject.put(LANGUAGE_NAME_KEY, languageName)
-            
-            prefs.edit()
-                .putString(key, jsonObject.toString())
-                .apply()
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating language name for $languageCode", e)
-        }
-    }
-    
+
     /**
      * Returns the long-press action, including optional fixed SYM key layers.
      */
@@ -4003,28 +3898,6 @@ object SettingsManager {
             .putString(KEY_LONG_PRESS_MODIFIER, validModifier)
             .apply()
     }
-    
-    /**
-     * Returns true if long press uses Shift, false if it uses Alt.
-     * @deprecated Use getLongPressModifier() for more granular control
-     */
-    fun isLongPressShift(context: Context): Boolean {
-        return getLongPressModifier(context) == "shift"
-    }
-
-    /**
-     * Returns true if long press uses Variations mode.
-     */
-    fun isLongPressVariations(context: Context): Boolean {
-        return getLongPressModifier(context) == "variations"
-    }
-
-    /**
-     * Returns true if long press uses Sym mode.
-     */
-    fun isLongPressSym(context: Context): Boolean {
-        return getLongPressModifier(context).startsWith("sym")
-    }
 
     /** Returns 1 for Emoji and 2 for Symbols. */
     fun resolveLongPressSymPage(context: Context): Int = when (getLongPressModifier(context)) {
@@ -4034,15 +3907,15 @@ object SettingsManager {
     }
     
     /**
-     * Data class per rappresentare una scorciatoia del launcher.
-     * Estendibile per supportare diversi tipi di azioni in futuro (app, shortcut, ecc.)
+     * A launcher shortcut.
+     * Its type says what it opens (an app, a shortcut, a command…).
      */
     data class LauncherShortcut(
         val type: String = TYPE_APP, // Tipo di azione: "app", "shortcut", ecc.
-        val packageName: String? = null, // Per tipo "app"
-        val appName: String? = null, // Per tipo "app"
-        val action: String? = null, // Per tipo "shortcut" o altri tipi futuri
-        val data: String? = null, // Dati aggiuntivi per tipi futuri
+        val packageName: String? = null, // For type "app"
+        val appName: String? = null, // For type "app"
+        val action: String? = null, // For type "shortcut" and others
+        val data: String? = null, // Extra data for other types
         val commandId: String? = null,
         val commandSource: String? = null,
         val commandKind: String? = null,
@@ -4109,7 +3982,7 @@ object SettingsManager {
     internal const val KEY_NAV_MODE_MAPPINGS_UPDATED = "nav_mode_mappings_updated"
     
     /**
-     * Imposta una scorciatoia del launcher per un tasto (tipo app).
+     * Sets a key's launcher shortcut (an app).
      */
     fun setLauncherShortcut(context: Context, keyCode: Int, packageName: String, appName: String) {
         setLauncherCommand(
@@ -4168,7 +4041,7 @@ object SettingsManager {
     }
     
     /**
-     * Imposta un'azione del launcher per un tasto (generico, estendibile).
+     * Sets a key's launcher action (any type).
      */
     fun setLauncherAction(context: Context, keyCode: Int, action: LauncherShortcut) {
         val prefs = getPreferences(context)
@@ -4206,12 +4079,12 @@ object SettingsManager {
             })
             prefs.edit().putString(KEY_LAUNCHER_SHORTCUTS, shortcuts.toString()).apply()
         } catch (e: Exception) {
-            Log.e(TAG, "Errore nel salvataggio dell'azione per tasto $keyCode", e)
+            Log.e(TAG, "Error saving the action for key $keyCode", e)
         }
     }
     
     /**
-     * Rimuove una scorciatoia del launcher per un tasto.
+     * Removes a key's launcher shortcut.
      */
     fun removeLauncherShortcut(context: Context, keyCode: Int) {
         val prefs = getPreferences(context)
@@ -4222,13 +4095,13 @@ object SettingsManager {
             shortcuts.remove(keyCode.toString())
             prefs.edit().putString(KEY_LAUNCHER_SHORTCUTS, shortcuts.toString()).apply()
         } catch (e: Exception) {
-            Log.e(TAG, "Errore nella rimozione della scorciatoia per tasto $keyCode", e)
+            Log.e(TAG, "Error removing the shortcut for key $keyCode", e)
         }
     }
     
     /**
-     * Scambia le scorciatoie del launcher tra due tasti (operazione atomica).
-     * Se uno dei tasti non ha uno shortcut, lo shortcut viene spostato.
+     * Swaps two keys' launcher shortcuts (in one write).
+     * If one key has none, the other's shortcut moves.
      */
     fun swapLauncherShortcuts(context: Context, fromKeyCode: Int, toKeyCode: Int) {
         val prefs = getPreferences(context)
@@ -4256,12 +4129,12 @@ object SettingsManager {
             // Save atomically
             prefs.edit().putString(KEY_LAUNCHER_SHORTCUTS, shortcuts.toString()).apply()
         } catch (e: Exception) {
-            Log.e(TAG, "Errore nello scambio delle scorciatoie tra tasti $fromKeyCode e $toKeyCode", e)
+            Log.e(TAG, "Error swapping shortcuts between keys $fromKeyCode and $toKeyCode", e)
         }
     }
     
     /**
-     * Ottiene tutte le scorciatoie del launcher salvate.
+     * All saved launcher shortcuts.
      */
     fun getLauncherShortcuts(context: Context): Map<Int, LauncherShortcut> {
         ensureQuickLauncherDefaultShortcut(context)
@@ -4300,14 +4173,14 @@ object SettingsManager {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Errore nel caricamento delle scorciatoie", e)
+            Log.e(TAG, "Error loading shortcuts", e)
         }
         
         return shortcuts
     }
     
     /**
-     * Ottiene una scorciatoia del launcher per un tasto specifico.
+     * A key's launcher shortcut.
      */
     fun getLauncherShortcut(context: Context, keyCode: Int): LauncherShortcut? {
         return getLauncherShortcuts(context)[keyCode]
@@ -4395,7 +4268,7 @@ object SettingsManager {
                 }
             }
         } catch (error: Exception) {
-            Log.e(TAG, "Errore nel caricamento command source visibility", error)
+            Log.e(TAG, "Error loading command source visibility", error)
             defaults
         }
     }
@@ -4451,7 +4324,7 @@ object SettingsManager {
             }
             result
         } catch (error: Exception) {
-            Log.e(TAG, "Errore nel caricamento quick launcher command customizations", error)
+            Log.e(TAG, "Error loading quick launcher command customisations", error)
             emptyMap()
         }
     }
@@ -4551,14 +4424,14 @@ object SettingsManager {
     }
     
     /**
-     * Restituisce se le scorciatoie del launcher sono abilitate.
+     * Whether launcher shortcuts are on.
      */
     fun getLauncherShortcutsEnabled(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_LAUNCHER_SHORTCUTS_ENABLED, DEFAULT_LAUNCHER_SHORTCUTS_ENABLED)
     }
     
     /**
-     * Imposta se le scorciatoie del launcher sono abilitate.
+     * Turns launcher shortcuts on or off.
      */
     fun setLauncherShortcutsEnabled(context: Context, enabled: Boolean) {
         getPreferences(context).edit()
@@ -4799,14 +4672,14 @@ object SettingsManager {
     private const val DEFAULT_POWER_SHORTCUTS_ENABLED = true
     
     /**
-     * Restituisce se i Power Shortcuts sono abilitati.
+     * Whether Power Shortcuts are on.
      */
     fun getPowerShortcutsEnabled(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_POWER_SHORTCUTS_ENABLED, DEFAULT_POWER_SHORTCUTS_ENABLED)
     }
     
     /**
-     * Imposta se i Power Shortcuts sono abilitati.
+     * Turns Power Shortcuts on or off.
      */
     fun setPowerShortcutsEnabled(context: Context, enabled: Boolean) {
         getPreferences(context).edit()
@@ -4876,7 +4749,6 @@ object SettingsManager {
         }
     }
 
-    
     /**
      * Saves nav mode key mappings to the JSON file in filesDir.
      */
@@ -4975,15 +4847,7 @@ object SettingsManager {
             Log.e(TAG, "Error resetting nav mode key mappings", e)
         }
     }
-    
-    /**
-     * Returns true if custom nav mode mappings exist.
-     */
-    fun hasCustomNavModeMappings(context: Context): Boolean {
-        val mappingsFile = getNavModeMappingsFile(context)
-        return mappingsFile.exists()
-    }
-    
+
     /**
      * Returns the selected keyboard layout name.
      */
@@ -5417,44 +5281,6 @@ object SettingsManager {
 
     fun physicalKeyboardCurrencySymbols(): List<String> = listOf("€", "$", "£", "¥", "₹", "₽", "₿", "¤")
 
-    private fun isLayoutAvailable(context: Context, layoutName: String): Boolean {
-        if (it.palsoftware.pastiera.data.layout.LayoutFileStore.layoutExists(context, layoutName)) {
-            return true
-        }
-        return try {
-            BundledLayoutAssets.openLayout(context.assets, layoutName)?.use { true } ?: false
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    /**
-     * Returns the list of keyboard layouts configured for cycling.
-     * Falls back to a single-entry list using the current layout if no list is stored.
-     */
-    fun getKeyboardLayoutList(context: Context): List<String> {
-        val prefs = getPreferences(context)
-        val jsonString = prefs.getString(KEY_KEYBOARD_LAYOUT_LIST, null) ?: return listOf(getKeyboardLayout(context))
-        return try {
-            val array = org.json.JSONArray(jsonString)
-            val seen = LinkedHashSet<String>()
-            for (i in 0 until array.length()) {
-                val name = array.optString(i, null)?.trim()
-                if (!name.isNullOrEmpty()) {
-                    seen.add(name)
-                }
-            }
-            if (seen.isEmpty()) {
-                listOf(getKeyboardLayout(context))
-            } else {
-                seen.toList()
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error parsing keyboard layout list, falling back to single layout", e)
-            listOf(getKeyboardLayout(context))
-        }
-    }
-
     /**
      * Saves the list of keyboard layouts used for cycling.
      * The caller is responsible for also selecting the active layout via setKeyboardLayout().
@@ -5475,29 +5301,6 @@ object SettingsManager {
             .apply()
     }
 
-    /**
-     * Cycles to the next keyboard layout in the configured list and returns its id.
-     * Always loops: even with a single entry we "cycle" back to it, so long press
-     * consistently triggers a layout reload/toast and never becomes a no-op.
-     */
-    fun cycleKeyboardLayout(context: Context): String? {
-        val current = getKeyboardLayout(context)
-        // Normalize list: keep order, drop blanks/duplicates, ensure at least one entry.
-        val baseLayouts = getKeyboardLayoutList(context).ifEmpty { listOf(current) }
-        val normalized = if (baseLayouts.contains(current)) baseLayouts else listOf(current) + baseLayouts
-        val missing = normalized.filterNot { isLayoutAvailable(context, it) }
-        if (missing.isNotEmpty()) {
-            Log.w(TAG, "Skipping missing layouts: ${missing.joinToString()}")
-        }
-        val layouts = normalized.filter { isLayoutAvailable(context, it) }.ifEmpty { listOf(current) }
-
-        val currentIndex = layouts.indexOf(current).let { if (it >= 0) it else 0 }
-        val nextIndex = (currentIndex + 1) % layouts.size
-        val nextLayout = layouts[nextIndex]
-        setKeyboardLayout(context, nextLayout)
-        return nextLayout
-    }
-    
     /**
      * Sets the SYM page to restore when returning from settings.
      * @param context The context
@@ -6440,37 +6243,8 @@ object SettingsManager {
             .commit()
     }
 
-    /**
-     * Returns the swipe threshold for trackpad gestures.
-     */
-    fun getTrackpadSwipeThreshold(context: Context): Float {
-        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
-            .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
-    }
-
-    /**
-     * Sets the swipe threshold for trackpad gestures.
-     * Value is clamped to allowed range.
-     */
-    fun setTrackpadSwipeThreshold(context: Context, threshold: Float) {
-        val clamped = threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
-        getPreferences(context).edit()
-            .putFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, clamped)
-            .commit()  // Use commit() instead of apply() to ensure synchronous write
-    }
-
     fun getMinTrackpadSwipeThreshold(): Float = MIN_TRACKPAD_SWIPE_THRESHOLD
     fun getMaxTrackpadSwipeThreshold(): Float = MAX_TRACKPAD_SWIPE_THRESHOLD
-    fun getDefaultTrackpadSwipeThreshold(): Float = defaultTrackpadSwipeThreshold()
-
-    /**
-     * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
-     * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
-     * swipes there; 120, less than one key, catches a flick across a single key.
-     */
-    private fun defaultTrackpadSwipeThreshold(): Float =
-        if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
-        else DEFAULT_TRACKPAD_SWIPE_THRESHOLD
 
     fun getTrackpadSuggestionSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
@@ -7400,20 +7174,6 @@ object SettingsManager {
         getPreferences(context).edit()
             .putString(KEY_APP_ENTER_BEHAVIOR_OVERRIDES, array.toString())
             .apply()
-    }
-
-    fun setAppEnterBehaviorOverride(context: Context, packageName: String, behavior: String) {
-        val updated = getAppEnterBehaviorOverrides(context)
-            .filterNot { it.packageName == packageName } +
-            AppEnterBehaviorOverride(packageName, normalizeEnterBehavior(behavior))
-        setAppEnterBehaviorOverrides(context, updated)
-    }
-
-    fun removeAppEnterBehaviorOverride(context: Context, packageName: String) {
-        setAppEnterBehaviorOverrides(
-            context,
-            getAppEnterBehaviorOverrides(context).filterNot { it.packageName == packageName }
-        )
     }
 
     private fun normalizeEnterBehaviorPreset(preset: String): String {

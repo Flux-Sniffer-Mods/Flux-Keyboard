@@ -67,9 +67,6 @@ object EditHistory {
         field.redo.clear()
     }
 
-    @Synchronized
-    fun canUndo(): Boolean = (field()?.undo?.size ?: 0) > 1
-
     /** Undoes the last step; false when there's nothing to undo (the app's own undo can try). */
     @Synchronized
     fun undo(ic: InputConnection): Boolean {

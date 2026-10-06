@@ -1934,59 +1934,10 @@ private fun hostSlotsSummary(state: ClicksPowerKeyboardState): String {
     )
 }
 
-@Composable
-private fun remapLabel(bytes: ByteArray): String = when {
-    bytes.contentEquals(byteArrayOf(0x29, 0x00)) -> stringResource(R.string.clicks_number_preset_escape)
-    bytes.contentEquals(byteArrayOf(0x80.toByte(), 0x00)) -> stringResource(R.string.clicks_number_preset_volume_up)
-    bytes.contentEquals(byteArrayOf(0x81.toByte(), 0x00)) -> stringResource(R.string.clicks_number_preset_volume_down)
-    bytes.contentEquals(byteArrayOf(0x7f, 0x00)) -> stringResource(R.string.clicks_number_preset_volume_mute)
-    bytes.contentEquals(byteArrayOf(0xcd.toByte(), 0xff.toByte())) -> stringResource(R.string.clicks_number_preset_play_pause)
-    bytes.contentEquals(byteArrayOf(0xb5.toByte(), 0xff.toByte())) -> stringResource(R.string.clicks_number_preset_media_next)
-    bytes.contentEquals(byteArrayOf(0xb6.toByte(), 0xff.toByte())) -> stringResource(R.string.clicks_number_preset_media_previous)
-    bytes.contentEquals(byteArrayOf(0x4b, 0x00)) -> stringResource(R.string.clicks_number_preset_page_up)
-    bytes.contentEquals(byteArrayOf(0x4e, 0x00)) -> stringResource(R.string.clicks_number_preset_page_down)
-    bytes.contentEquals(byteArrayOf(0x4a, 0x00)) -> stringResource(R.string.clicks_number_preset_home)
-    bytes.contentEquals(byteArrayOf(0x4d, 0x00)) -> stringResource(R.string.clicks_number_preset_end)
-    bytes.contentEquals(byteArrayOf(0x2f, 0x00)) -> stringResource(R.string.clicks_number_preset_left_bracket)
-    bytes.contentEquals(byteArrayOf(0x30, 0x00)) -> stringResource(R.string.clicks_number_preset_right_bracket)
-    bytes.contentEquals(byteArrayOf(0xe0.toByte(), 0x2c)) -> "Ctrl+Space"
-    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x00)) -> "Alt"
-    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x07)) -> "Alt+D"
-    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x0e)) -> "Alt+K"
-    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x16)) -> "Alt+S"
-    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x37)) -> "Alt+."
-    bytes.contentEquals(byteArrayOf(0x00, 0x2d)) -> "−"
-    else -> stringResource(R.string.clicks_remap_custom_value, bytes.toHexPair())
-}
-
 private fun ByteArray?.toHexPair(): String = this
     ?.takeIf { it.size == 2 }
     ?.joinToString(" ") { "%02X".format(it.toInt() and 0xff) }
     ?: "–"
-
-@Composable
-private fun ClicksSingleChoiceDialog(
-    title: String,
-    choices: List<Int>,
-    label: @Composable (Int) -> String,
-    onChoice: (Int) -> Unit,
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(title) },
-        text = {
-            Column {
-                choices.chunked(3).forEach { row ->
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                        row.forEach { value -> TextButton(onClick = { onChoice(value) }) { Text(label(value)) } }
-                    }
-                }
-            }
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
-    )
-}
 
 private data class ClicksRemapPreset(val label: String, val bytes: ByteArray)
 
@@ -2024,109 +1975,6 @@ private fun ClicksHostNameDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
-}
-
-@Composable
-private fun ClicksNumberRemapDialog(
-    keyIndex: Int,
-    state: ClicksPowerKeyboardState,
-    onApply: (Int, ByteArray) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val labels = listOf(
-        R.string.clicks_number_preset_disabled,
-        R.string.clicks_number_preset_escape,
-        R.string.clicks_number_preset_volume_up,
-        R.string.clicks_number_preset_volume_down,
-        R.string.clicks_number_preset_volume_mute,
-        R.string.clicks_number_preset_play_pause,
-        R.string.clicks_number_preset_media_next,
-        R.string.clicks_number_preset_media_previous,
-        R.string.clicks_number_preset_page_up,
-        R.string.clicks_number_preset_page_down,
-        R.string.clicks_number_preset_home,
-        R.string.clicks_number_preset_end,
-        R.string.clicks_number_preset_left_bracket,
-        R.string.clicks_number_preset_right_bracket
-    ).map { stringResource(it) }
-    val values = listOf(
-        byteArrayOf(0x00, 0x00),
-        byteArrayOf(0x29, 0x00),
-        byteArrayOf(0x80.toByte(), 0x00),
-        byteArrayOf(0x81.toByte(), 0x00),
-        byteArrayOf(0x7f, 0x00),
-        byteArrayOf(0xcd.toByte(), 0xff.toByte()),
-        byteArrayOf(0xb5.toByte(), 0xff.toByte()),
-        byteArrayOf(0xb6.toByte(), 0xff.toByte()),
-        byteArrayOf(0x4b, 0x00),
-        byteArrayOf(0x4e, 0x00),
-        byteArrayOf(0x4a, 0x00),
-        byteArrayOf(0x4d, 0x00),
-        byteArrayOf(0x2f, 0x00),
-        byteArrayOf(0x30, 0x00)
-    )
-    val knownPresets = labels.zip(values).map { (label, bytes) -> ClicksRemapPreset(label, bytes) }
-    val currentBytes = state.numberRemaps[keyIndex]
-    val presets = if (
-        currentBytes != null && knownPresets.none { it.bytes.contentEquals(currentBytes) }
-    ) {
-        listOf(
-            ClicksRemapPreset(
-                stringResource(R.string.clicks_remap_custom_value, currentBytes.toHexPair()),
-                currentBytes.copyOf()
-            )
-        ) + knownPresets
-    } else {
-        knownPresets
-    }
-    var selected by remember(keyIndex, currentBytes?.contentHashCode()) {
-        mutableStateOf(
-            presets.firstOrNull { preset ->
-                currentBytes != null && preset.bytes.contentEquals(currentBytes)
-            } ?: presets.first()
-        )
-    }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.clicks_number_row_title)) },
-        text = {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Text("SYM + ${keyIndex + 1}", style = MaterialTheme.typography.titleMedium)
-                presets.forEach { preset ->
-                    val isSelected = selected.bytes.contentEquals(preset.bytes)
-                    TextButton(onClick = { selected = preset }, modifier = Modifier.fillMaxWidth()) {
-                        Text(if (isSelected) "✓ ${preset.label}" else preset.label)
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                onApply(ClicksPowerKeyboardProtocol.NUMBER_REMAP_COMMANDS[keyIndex], selected.bytes)
-            }) {
-                Text(stringResource(R.string.clicks_apply))
-            }
-        },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
-    )
-}
-
-@Composable
-private fun ClicksChoiceButtonGrid(
-    values: List<Int>,
-    selected: Int,
-    label: (Int) -> String,
-    onChoice: (Int) -> Unit
-) {
-    values.chunked(3).forEach { row ->
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            row.forEach { value ->
-                TextButton(onClick = { onChoice(value) }) {
-                    Text(if (selected == value) "✓ ${label(value)}" else label(value))
-                }
-            }
-        }
-    }
 }
 
 @Composable

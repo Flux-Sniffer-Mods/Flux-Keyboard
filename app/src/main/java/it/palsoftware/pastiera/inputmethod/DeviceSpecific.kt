@@ -127,19 +127,6 @@ object DeviceSpecific {
         return patchKeyCodeIfNeeded(keyCode, event, canonicalKeyCode)
     }
 
-    // Backward-compatible API used by existing callers.
-    fun remapKeyEvent(
-        keyCode: Int,
-        event: KeyEvent?,
-        physicalProfileOverride: String? = null
-    ): Pair<Int, KeyEvent?>? {
-        val remapped = remapHardwareKeyEvent(keyCode, event, physicalProfileOverride)
-        if (remapped.keyCode == keyCode && remapped.event === event) {
-            return null
-        }
-        return remapped.keyCode to remapped.event
-    }
-
     private fun remapQ25KeyEvent(keyCode: Int, event: KeyEvent?): RemappedHardwareEvent {
         if (!shouldRemapQ25Event(keyCode, event)) {
             return RemappedHardwareEvent(keyCode, event)

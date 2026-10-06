@@ -230,10 +230,6 @@ class AndroidDictionaryRepository(
         buildSymSpell()
     }
 
-    fun addUserEntry(word: String) {
-        addUserEntryQuick(word)
-    }
-
     /**
      * Lightweight add: updates persistent store, then merges a single USER entry
      * into the in-memory indices and SymSpell without rebuilding everything.
@@ -325,20 +321,6 @@ class AndroidDictionaryRepository(
             .maxOfOrNull { it.frequency } ?: 0
     }
 
-    fun lookupByPrefix(prefix: String): List<DictionaryEntry> {
-        if (!isReady || prefix.isBlank()) return emptyList()
-        val normalizedPrefix = normalize(prefix)
-        val maxPrefixLength = normalizedPrefix.length.coerceAtMost(cachePrefixLength)
-
-        for (length in maxPrefixLength downTo 1) {
-            val bucket = prefixCache[normalizedPrefix.take(length)]
-            if (!bucket.isNullOrEmpty()) {
-                return bucket
-            }
-        }
-        return emptyList()
-    }
-
     /**
      * Returns a merged list of candidates from the most specific prefix bucket down to the
      * single-letter bucket, stopping when maxSize is reached. This helps capture common
@@ -374,11 +356,6 @@ class AndroidDictionaryRepository(
 
     override fun bestEntryForNormalized(normalized: String): DictionaryEntry? {
         return normalizedIndex[normalized]?.maxByOrNull { effectiveFrequency(it) }
-    }
-
-    fun allCandidates(): List<DictionaryEntry> {
-        if (!isReady) return emptyList()
-        return normalizedIndex.values.flatten()
     }
 
     /**

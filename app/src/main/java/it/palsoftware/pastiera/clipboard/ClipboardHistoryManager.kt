@@ -171,11 +171,6 @@ class ClipboardHistoryManager internal constructor(
         }
     }
 
-    fun sortHistoryEntries() {
-        if (!isHistoryAccessible()) return
-        clipboardDao?.sort()
-    }
-
     fun prepareClipboardHistory() {
         if (!isHistoryAccessible()) return
         // Clear old clips before showing history
@@ -216,42 +211,6 @@ class ClipboardHistoryManager internal constructor(
     fun pasteText(text: String, inputConnection: android.view.inputmethod.InputConnection?) {
         if (!isHistoryAccessible()) return
         inputConnection?.commitText(it.palsoftware.pastiera.SettingsManager.textToPaste(context, text), 1)
-    }
-
-    /**
-     * Shows the clipboard history popup above the keyboard.
-     * Returns the popup view that was created.
-     */
-    fun showClipboardHistoryPopup(
-        inputConnection: android.view.inputmethod.InputConnection?,
-        onDismiss: () -> Unit
-    ): ClipboardHistoryPopupView? {
-        if (!isEnabled) return null
-
-        prepareClipboardHistory()
-
-        return ClipboardHistoryPopupView(context, this).apply {
-            setOnItemClickListener { entry ->
-                pasteText(entry.text, inputConnection)
-                dismiss()
-                onDismiss()
-            }
-            setOnPinClickListener { entry ->
-                toggleClipPinned(entry.id)
-            }
-            setOnDeleteClickListener { entry ->
-                val index = getHistoryEntry(0)?.let {
-                    (0 until getHistorySize()).find { idx ->
-                        getHistoryEntry(idx)?.id == entry.id
-                    }
-                }
-                index?.let { removeEntry(it, force = true) }
-            }
-            setOnClearAllClickListener {
-                clearHistory()
-            }
-            show()
-        }
     }
 
     private fun getClipboardHistoryEnabled(): Boolean {

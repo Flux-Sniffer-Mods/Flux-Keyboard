@@ -441,30 +441,6 @@ object LayoutFileStore {
         return findExistingLayoutFile(context, layoutName) != null
     }
 
-    fun importLayoutFromFile(
-        context: Context,
-        sourceFile: File,
-        targetLayoutName: String
-    ): Boolean {
-        return try {
-            if (!sourceFile.exists() || !sourceFile.canRead()) {
-                Log.e(TAG, "Source file does not exist or cannot be read: ${sourceFile.absolutePath}")
-                return false
-            }
-
-            val result = saveLayoutFromJson(
-                context = context,
-                layoutName = targetLayoutName,
-                jsonString = sourceFile.readText(),
-                conflictPolicy = LayoutConflictPolicy.REPLACE
-            )
-            result is LayoutImportResult.Success
-        } catch (e: Exception) {
-            Log.e(TAG, "Error importing layout from file", e)
-            false
-        }
-    }
-
     data class LayoutMetadata(
         val name: String,
         val description: String

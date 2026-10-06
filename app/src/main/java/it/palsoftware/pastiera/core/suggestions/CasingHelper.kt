@@ -3,8 +3,8 @@ package it.palsoftware.pastiera.core.suggestions
 import java.util.Locale
 
 /**
- * Helper per applicare la capitalizzazione corretta ai suggerimenti
- * in base al pattern della parola digitata dall'utente.
+ * Gives suggestions the right capitalisation
+ * from the pattern of the word being typed.
  */
 object CasingHelper {
 
@@ -17,12 +17,12 @@ object CasingHelper {
     }
 
     /**
-     * Applica la capitalizzazione del suggerimento in base al pattern della parola originale.
+     * Capitalises a suggestion to match the typed word's pattern.
      * 
-     * @param candidate La parola suggerita (es. "Parenzo")
-     * @param original La parola digitata dall'utente (es. "parenz", "Parenz", "PARENZ")
-     * @param forceLeadingCapital Se true, forza la prima lettera maiuscola (per auto-capitalize)
-     * @return La parola con la capitalizzazione corretta
+     * @param candidate The suggested word (e.g. "Parenzo")
+     * @param original The typed word (e.g. "parenz", "Parenz", "PARENZ")
+     * @param forceLeadingCapital Forces a capital first letter (for auto-capitalisation)
+     * @return The word, capitalised
      */
     fun applyCasing(
         candidate: String,
@@ -31,14 +31,14 @@ object CasingHelper {
     ): String {
         if (candidate.isEmpty()) return candidate
         
-        // Se il campo richiede capitalizzazione forzata, applica titlecase
+        // The field forces capitalisation: title case
         if (forceLeadingCapital) {
             return capitalizeFirstLetter(candidate)
         }
         
         if (original.isEmpty()) return candidate
         
-        // Determina il pattern di capitalizzazione considerando solo le lettere (ignora apostrofi/punteggiatura)
+        // The capitalisation pattern, from letters only (apostrophes and punctuation ignored)
         val letters = original.filter { it.isLetter() }
         if (letters.isEmpty()) return candidate
 
@@ -49,15 +49,15 @@ object CasingHelper {
         val firstUpper = firstLetter.isUpperCase()
         val restLower = restLetters.all { it.isLowerCase() }
 
-        // Se il candidato contiene maiuscole e non siamo in caso "allUpper" (>=2 lettere maiuscole),
-        // rispetta il casing del dizionario così com'è.
+        // A candidate with capitals, when the typed word isn't all caps (2+ capitals),
+        // keeps the dictionary's casing.
         val candidateHasUpper = candidate.any { it.isUpperCase() }
         val candidateLettersUpperCount = candidate.count { it.isUpperCase() }
         if (!forceLeadingCapital && candidateHasUpper && candidateLettersUpperCount < 2) {
             return candidate
         }
-        // Se l'originale è tutto minuscolo ma il candidato ha maiuscole (es. "mccartney" -> "McCartney"),
-        // preserva il casing del candidato.
+        // All lowercase typed but the candidate has capitals (e.g. "mccartney" -> "McCartney"):
+        // keep the candidate's casing.
         if (allLower && candidateHasUpper) {
             return candidate
         }
@@ -65,11 +65,11 @@ object CasingHelper {
         return when {
             // Caso: PARENZ -> PARENZO (tutto maiuscolo)
             allUpper -> candidate.uppercase(Locale.getDefault())
-            // Caso: Parenz -> Parenzo (prima maiuscola, resto minuscolo)
+            // Parenz -> Parenzo (capital first, the rest lowercase)
             firstUpper && restLower -> capitalizeFirstLetter(candidate)
             // Caso: parenz -> parenzo (tutto minuscolo)
             allLower -> candidate.lowercase(Locale.getDefault())
-            // Altri casi: usa il suggerimento così com'è
+            // Otherwise use the suggestion as it is
             else -> candidate
         }
     }

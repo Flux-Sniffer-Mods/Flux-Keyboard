@@ -95,11 +95,6 @@ internal object ClicksPowerKeyboardProtocol {
 
     fun readWirelessCharging(): ByteArray = frame(GROUP_READ_WIRELESS, null, byteArrayOf())
 
-    fun readHostName(slotIndex: Int): ByteArray {
-        require(slotIndex in 0..8)
-        return readHostNames(slotIndex * HOST_NAME_BLOCK_SIZE, HOST_NAME_BLOCK_SIZE)
-    }
-
     fun readHostNames(offset: Int, length: Int): ByteArray {
         require(offset in 0 until 9 * HOST_NAME_BLOCK_SIZE)
         require(length in 1..0xff && offset + length <= 9 * HOST_NAME_BLOCK_SIZE)

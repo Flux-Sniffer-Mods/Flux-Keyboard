@@ -91,7 +91,6 @@ fun AutoCorrectionCategoryScreen(
     }
     fun navigateBack() { context.settingsActivity().finish() }
 
-
     val destination = currentDestination
         when (destination) {
             AutoCorrectionDestination.Main -> {
@@ -1048,8 +1047,6 @@ private fun UserDictWordDialog(
     )
 }
 
-
-
 private data class DefaultUserWord(val word: String, val frequency: Int)
 
 /**
@@ -1092,19 +1089,6 @@ private class DefaultUserDefaultsStore(private val context: Context) {
         } catch (_: Exception) {
             emptyList()
         }
-    }
-
-    fun addOrBump(word: String, baseFrequency: Int = 10) {
-        val file = ensureLocalFile()
-        val entries = loadEntries().toMutableList()
-        val existingIndex = entries.indexOfFirst { it.word.equals(word, ignoreCase = true) }
-        if (existingIndex >= 0) {
-            val existing = entries[existingIndex]
-            entries[existingIndex] = existing.copy(frequency = existing.frequency + 1)
-        } else {
-            entries.add(DefaultUserWord(word, baseFrequency))
-        }
-        persist(entries, file)
     }
 
     fun remove(word: String) {

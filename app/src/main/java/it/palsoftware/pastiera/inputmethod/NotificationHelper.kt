@@ -215,46 +215,7 @@ object NotificationHelper {
             notificationManager.createNotificationChannel(channel)
         }
     }
-    
-    /**
-     * Creates a bitmap icon with the letter "N" for the nav mode notification.
-     * @param size Icon size in pixels
-     * @param backgroundColor Background color (default transparent)
-     * @param textColor Text color (default white)
-     */
-    private fun createNavModeIcon(
-        size: Int,
-        backgroundColor: Int = Color.TRANSPARENT,
-        textColor: Int = Color.WHITE
-    ): Bitmap {
-        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        
-        // Draw background
-        if (backgroundColor != Color.TRANSPARENT) {
-            canvas.drawColor(backgroundColor)
-        } else {
-            canvas.drawColor(Color.TRANSPARENT)
-        }
-        
-        // Draw the "N" letter
-        val paint = Paint().apply {
-            color = textColor
-            textSize = size * 0.7f // 70% of size to keep margins
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-            isAntiAlias = true
-            textAlign = Paint.Align.CENTER
-        }
-        
-        // Compute vertical position to center the text
-        val textY = (canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)
-        
-        // Draw "N"
-        canvas.drawText("N", canvas.width / 2f, textY, paint)
-        
-        return bitmap
-    }
-    
+
     /**
      * Shows a notification when a new app update is available.
      * Respects notification permissions on Android 13+.

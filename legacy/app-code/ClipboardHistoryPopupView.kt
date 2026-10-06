@@ -124,22 +124,6 @@ class ClipboardHistoryPopupView(
         refreshEntries()
     }
 
-    fun setOnItemClickListener(listener: (ClipboardHistoryEntry) -> Unit) {
-        onItemClickListener = listener
-    }
-
-    fun setOnPinClickListener(listener: (ClipboardHistoryEntry) -> Unit) {
-        onPinClickListener = listener
-    }
-
-    fun setOnDeleteClickListener(listener: (ClipboardHistoryEntry) -> Unit) {
-        onDeleteClickListener = listener
-    }
-
-    fun setOnClearAllClickListener(listener: () -> Unit) {
-        onClearAllClickListener = listener
-    }
-
     private fun refreshEntries() {
         entriesContainer.removeAllViews()
 

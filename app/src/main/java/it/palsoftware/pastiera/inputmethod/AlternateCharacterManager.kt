@@ -110,7 +110,7 @@ class AlternateCharacterManager(
     fun getSymMappings2Uppercase(): Map<Int, String> = symKeyMap2Uppercase
     
     /**
-     * Ricarica le mappature SYM, controllando prima le personalizzazioni.
+     * Reloads the SYM mappings, customisations first.
      */
     // The emoji layer for the app in use (emoji layer profiles, "switch by app"); null: your own
     private var emojiLayerOverride: Map<Int, String>? = null
@@ -292,7 +292,7 @@ class AlternateCharacterManager(
 
         // For unmapped keys, apply case conversion if needed (fallback only)
         if (normalChar.isNotEmpty() && !LayoutMappingRepository.isMapped(keyCode)) {
-            // Gestisci shiftOneShot: se è attivo e il carattere è una lettera, rendilo maiuscolo
+            // One-shot Shift: uppercase a letter while it's on
             if (shiftOneShot && normalChar.isNotEmpty() && normalChar[0].isLetter()) {
                 normalChar = normalChar.uppercase()
             } else if (capsLockEnabled && event?.isShiftPressed != true) {
@@ -484,7 +484,7 @@ class AlternateCharacterManager(
                                     insertedNormalChars.remove(keyCode)
                                     insertedTextAnchors.remove(keyCode)
                                     keyPressWasShifted.remove(keyCode)
-                                    Log.d(TAG, "Long press Variations per keyCode $keyCode -> $firstVariation")
+                                    Log.d(TAG, "Long press variations for keyCode $keyCode -> $firstVariation")
                                     firstVariation.firstOrNull()?.let { onAltCharInserted?.invoke(it) }
                                 } else {
                                     Log.d(TAG, "Skipped Variations long press for keyCode $keyCode: original text changed")
@@ -555,7 +555,7 @@ class AlternateCharacterManager(
                             insertedNormalChars.remove(keyCode)
                             keyPressWasShifted.remove(keyCode)
                             longPressRunnables.remove(keyCode)
-                            Log.d(TAG, "Long press Sym per keyCode $keyCode -> $symChar")
+                            Log.d(TAG, "Long press SYM for keyCode $keyCode -> $symChar")
                             onAltCharInserted?.invoke(symChar[0])
                         }
                     }
@@ -576,7 +576,7 @@ class AlternateCharacterManager(
                                 insertedNormalChars.remove(keyCode)
                                 keyPressWasShifted.remove(keyCode)
                                 longPressRunnables.remove(keyCode)
-                                Log.d(TAG, "Long press Shift per keyCode $keyCode -> $upperCharString")
+                                Log.d(TAG, "Long press Shift for keyCode $keyCode -> $upperCharString")
                                 upperChar.firstOrNull()?.let { onAltCharInserted?.invoke(it) }
                             }
                         } else if (insertedChar != null && insertedChar.isNotEmpty() && insertedChar[0].isLetter()) {
@@ -590,7 +590,7 @@ class AlternateCharacterManager(
                             insertedNormalChars.remove(keyCode)
                             keyPressWasShifted.remove(keyCode)
                             longPressRunnables.remove(keyCode)
-                            Log.d(TAG, "Long press Shift per keyCode $keyCode -> $upperChar (fallback)")
+                            Log.d(TAG, "Long press Shift for keyCode $keyCode -> $upperChar (fallback)")
                             if (upperChar.isNotEmpty()) {
                                 onAltCharInserted?.invoke(upperChar[0])
                             }
@@ -646,7 +646,7 @@ class AlternateCharacterManager(
                             insertedNormalChars.remove(keyCode)
                             keyPressWasShifted.remove(keyCode)
                             longPressRunnables.remove(keyCode)
-                            Log.d(TAG, "Long press Alt per keyCode $keyCode -> $altChar")
+                            Log.d(TAG, "Long press Alt for keyCode $keyCode -> $altChar")
                             if (altChar.isNotEmpty()) {
                                 onAltCharInserted?.invoke(altChar[0])
                             }

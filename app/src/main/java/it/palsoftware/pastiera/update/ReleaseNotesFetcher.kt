@@ -5,7 +5,6 @@ import org.json.JSONObject
 /** Flux Keyboard's changelog: where release notes send you for more, never Pastiera's website */
 const val FORK_CHANGELOG_URL = "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md"
 
-
 data class ReleaseNotesSummary(
     val version: String,
     val title: String,
@@ -170,17 +169,6 @@ private fun parseEntries(json: JSONObject, key: String, sinceStamp: Long?): List
             val text = ((entry as? JSONObject)?.optString("text") ?: entry as? String)?.trim().orEmpty()
             val after = (entry as? JSONObject)?.optString("after")?.toLongOrNull() ?: 0L
             if (text.isNotBlank() && (sinceStamp == null || after >= sinceStamp)) add(text)
-        }
-    }
-}
-
-private fun parseStringArray(json: JSONObject, key: String, limit: Int): List<String> {
-    val array = json.optJSONArray(key) ?: return emptyList()
-    return buildList {
-        for (index in 0 until array.length()) {
-            val value = array.optString(index).trim()
-            if (value.isNotBlank()) add(value)
-            if (size >= limit) break
         }
     }
 }

@@ -213,7 +213,7 @@ fun AutoCorrectEditScreen(
                                 val assets = context.assets
                                 AutoCorrector.loadCorrections(assets, context)
                             } catch (e: Exception) {
-                                // Fallback: ricarica solo questa lingua
+                                // Fallback: reload just this language
                                 AutoCorrector.loadCustomCorrections(
                                     languageCode,
                                     correctionsToJson(corrections)
@@ -227,7 +227,7 @@ fun AutoCorrectEditScreen(
         }
     }
 
-    // Dialog per aggiungere/modificare una correzione
+    // Dialog for adding or editing a correction
     if (showAddDialog) {
         AddCorrectionDialog(
             originalKey = editingKey,
@@ -265,7 +265,7 @@ fun AutoCorrectEditScreen(
                     val assets = context.assets
                     AutoCorrector.loadCorrections(assets, context)
                 } catch (e: Exception) {
-                    // Fallback: ricarica solo questa lingua
+                    // Fallback: reload just this language
                     AutoCorrector.loadCustomCorrections(
                         languageCode,
                         correctionsToJson(corrections)

@@ -695,15 +695,6 @@ class SymLayoutController(
         }
     }
 
-    fun previewChordMappings(shiftPressed: Boolean): Map<Int, String> {
-        val pageToUse = when (currentPageType()) {
-            SymPage.DEVICE, SymPage.EMOJI, SymPage.SYMBOLS -> currentPageType()
-            else -> preferredChordPage()
-        } ?: return emptyMap()
-
-        return mappingsForPage(pageToUse, shiftPressed)
-    }
-
     fun previewNextSoftwareSymPageMappings(shiftPressed: Boolean): Map<Int, String> {
         val nextTextPage = nextSoftwareTextPageType() ?: return emptyMap()
         return mappingsForPage(nextTextPage, shiftPressed)

@@ -73,14 +73,6 @@ object RecentEmojiManager {
     }
 
     /**
-     * Clears all recent emojis.
-     */
-    fun clearRecentEmojis(context: Context) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().remove(PREF_KEY_RECENT_EMOJIS).apply()
-    }
-
-    /**
      * Creates an EmojiCategory for the recent emojis.
      * Returns null if there are no recent emojis.
      * Looks up variants from the emoji repository cache.

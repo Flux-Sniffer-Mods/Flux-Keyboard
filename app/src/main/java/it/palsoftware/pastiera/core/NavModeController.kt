@@ -41,8 +41,6 @@ class NavModeController(
         return modifierStateController.ctrlLatchActive && modifierStateController.ctrlLatchFromNavMode
     }
 
-    fun hasCtrlLatchFromNavMode(): Boolean = modifierStateController.ctrlLatchFromNavMode
-
     fun setOnNavModeChangedListener(listener: ((Boolean) -> Unit)?) {
         navModeChangedListener = listener
     }
@@ -187,13 +185,13 @@ class NavModeController(
     }
     
     /**
-     * Riattiva nav mode (usato quando power shortcut termina e nav mode era attivo prima).
-     * Riutilizza applyNavModeResult per mantenere la logica consistente.
+     * Turns nav mode back on (after a Power Shortcut, when it was on before).
+     * Goes through applyNavModeResult so the logic stays the same.
      */
     fun enterNavMode() {
         val navModeEnabled = SettingsManager.getNavModeEnabled(context)
         if (navModeEnabled && !isNavModeActive()) {
-            // Riutilizza la logica esistente per attivare nav mode
+            // The usual way of turning nav mode on
             applyNavModeResult(
                 NavModeHandler.NavModeResult(
                     ctrlLatchActive = true
@@ -222,50 +220,22 @@ class NavModeController(
     }
 
     /**
-     * Mostra l'icona del nav mode nella status bar tramite la vecchia API IME (deprecata).
-     * Usa reflection per supportare sia showStatusIcon() che setStatusIcon().
-     */
-    private fun showNavModeStatusIcon() {
-        try {
-            if (context is android.inputmethodservice.InputMethodService) {
-                val imeClass = android.inputmethodservice.InputMethodService::class.java
-                val iconResId = R.drawable.ic_settings_24 // Placeholder: icona impostazioni per nav mode
-
-                // Prova prima showStatusIcon(int), poi setStatusIcon(int)
-                val methodNames = listOf("showStatusIcon", "setStatusIcon")
-                for (name in methodNames) {
-                    try {
-                        val method = imeClass.getMethod(name, Int::class.javaPrimitiveType)
-                        method.invoke(context, iconResId)
-                        Log.d(TAG, "Nav mode status icon shown using $name")
-                        return
-                    } catch (e: NoSuchMethodException) {
-                        // Prova il nome successivo
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Unable to show nav mode status icon", e)
-        }
-    }
-
-    /**
-     * Nasconde l'icona del nav mode dalla status bar tramite la vecchia API IME (deprecata).
-     * Usa reflection per supportare sia hideStatusIcon() che setStatusIcon(0).
+     * Hides the nav mode icon from the status bar through the old (deprecated) IME API.
+     * Uses reflection to support both hideStatusIcon() and setStatusIcon(0).
      */
     private fun hideNavModeStatusIcon() {
         try {
             if (context is android.inputmethodservice.InputMethodService) {
                 val imeClass = android.inputmethodservice.InputMethodService::class.java
 
-                // Prova prima hideStatusIcon(), poi setStatusIcon(0)
+                // Try hideStatusIcon() first, then setStatusIcon(0)
                 try {
                     val hideMethod = imeClass.getMethod("hideStatusIcon")
                     hideMethod.invoke(context)
                     Log.d(TAG, "Nav mode status icon hidden using hideStatusIcon")
                     return
                 } catch (e: NoSuchMethodException) {
-                    // Continua con setStatusIcon(0)
+                    // Carry on with setStatusIcon(0)
                 }
 
                 try {
@@ -273,7 +243,7 @@ class NavModeController(
                     setMethod.invoke(context, 0)
                     Log.d(TAG, "Nav mode status icon hidden using setStatusIcon(0)")
                 } catch (e: NoSuchMethodException) {
-                    // Nessuna API disponibile: non fare nulla
+                    // Neither is available: do nothing
                 }
             }
         } catch (e: Exception) {

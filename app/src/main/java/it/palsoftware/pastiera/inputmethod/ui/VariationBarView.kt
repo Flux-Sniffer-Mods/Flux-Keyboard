@@ -102,7 +102,6 @@ class VariationBarView(
         buttonHost?.updateMicrophoneAudioLevel(rmsdB)
     }
 
-
     private var wrapper: FrameLayout? = null
     private var container: LinearLayout? = null
     private var buttonsContainer: LinearLayout? = null
@@ -312,8 +311,6 @@ class VariationBarView(
         }
     }
 
-    fun getWrapper(): FrameLayout? = wrapper
-
     fun setSymModeActive(active: Boolean) {
         isSymModeActive = active
         if (active) {
@@ -354,39 +351,6 @@ class VariationBarView(
         container?.visibility = View.GONE
         wrapper?.visibility = View.GONE
         overlay?.visibility = View.GONE
-    }
-
-    fun hideForSym(onHidden: () -> Unit) {
-        val containerView = container ?: run {
-            onHidden()
-            return
-        }
-        val row = currentVariationsRow
-        val overlayView = overlay
-
-        buttonHost?.detachAll()
-        hideSwipeIndicator(immediate = true)
-        hideSwipeHintImmediate()
-        shouldShowSwipeHint = false
-
-        if (row != null && row.parent == containerView && row.visibility == View.VISIBLE) {
-            animateVariationsOut(row) {
-                (row.parent as? ViewGroup)?.removeView(row)
-                if (currentVariationsRow == row) {
-                    currentVariationsRow = null
-                }
-                containerView.visibility = View.GONE
-                wrapper?.visibility = View.GONE
-                overlayView?.visibility = View.GONE
-                onHidden()
-            }
-        } else {
-            currentVariationsRow = null
-            containerView.visibility = View.GONE
-            wrapper?.visibility = View.GONE
-            overlayView?.visibility = View.GONE
-            onHidden()
-        }
     }
 
     fun showVariations(snapshot: StatusBarController.StatusSnapshot, inputConnection: android.view.inputmethod.InputConnection?) {
@@ -1258,42 +1222,6 @@ class VariationBarView(
 
     private fun colorWithAlpha(color: Int, alpha: Int): Int =
         Color.argb(alpha.coerceIn(0, 255), Color.red(color), Color.green(color), Color.blue(color))
-
-    private fun animateVariationsIn(view: View) {
-        view.alpha = 0f
-        view.visibility = View.VISIBLE
-        ValueAnimator.ofFloat(0f, 1f).apply {
-            duration = 75
-            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
-            addUpdateListener { animation ->
-                val progress = animation.animatedValue as Float
-                view.alpha = progress
-            }
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    view.alpha = 1f
-                }
-            })
-        }.start()
-    }
-
-    private fun animateVariationsOut(view: View, onAnimationEnd: (() -> Unit)? = null) {
-        ValueAnimator.ofFloat(1f, 0f).apply {
-            duration = 50
-            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
-            addUpdateListener { animation ->
-                val progress = animation.animatedValue as Float
-                view.alpha = progress
-            }
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    view.visibility = View.GONE
-                    view.alpha = 1f
-                    onAnimationEnd?.invoke()
-                }
-            })
-        }.start()
-    }
 
     private fun findClickableViewAt(parent: View, x: Float, y: Float): View? {
         if (parent !is ViewGroup) {

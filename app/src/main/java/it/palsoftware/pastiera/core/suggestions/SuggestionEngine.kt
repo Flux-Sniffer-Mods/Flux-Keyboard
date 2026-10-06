@@ -691,46 +691,6 @@ class SuggestionEngine(
         return top
     }
 
-    private fun boundedLevenshtein(a: String, b: String, maxDistance: Int): Int {
-        // Optimal String Alignment distance (Damerau-Levenshtein with adjacent transpositions cost=1)
-        if (kotlin.math.abs(a.length - b.length) > maxDistance) return -1
-        val prev = IntArray(b.length + 1) { it }
-        val curr = IntArray(b.length + 1)
-
-        for (i in 1..a.length) {
-            curr[0] = i
-            var minRow = curr[0]
-            for (j in 1..b.length) {
-                val cost = if (a[i - 1] == b[j - 1]) 0 else 1
-                var value = minOf(
-                    prev[j] + 1,      // deletion
-                    curr[j - 1] + 1,  // insertion
-                    prev[j - 1] + cost // substitution
-                )
-
-                if (i > 1 && j > 1 &&
-                    a[i - 1] == b[j - 2] &&
-                    a[i - 2] == b[j - 1]
-                ) {
-                    // adjacent transposition
-                    value = min(value, prev[j - 2] + 1)
-                }
-
-                curr[j] = value
-                minRow = min(minRow, value)
-            }
-
-            if (minRow > maxDistance) return -1
-            // swap arrays
-            for (k in 0..b.length) {
-                val tmp = prev[k]
-                prev[k] = curr[k]
-                curr[k] = tmp
-            }
-        }
-        return if (prev[b.length] <= maxDistance) prev[b.length] else -1
-    }
-
     private fun normalize(word: String): String {
         return WordNormalization.normalizeForSuggestion(word, locale)
     }

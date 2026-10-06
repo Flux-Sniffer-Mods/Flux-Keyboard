@@ -137,26 +137,7 @@ object AdditionalSubtypeUtils {
         
         return subtypes.toTypedArray()
     }
-    
-    /**
-     * Creates a preference string from an array of subtypes.
-     * Format: "locale:layout[:extra];locale:layout[:extra];..."
-     */
-    fun createPrefSubtypes(subtypeArray: Array<InputMethodSubtype>): String {
-        return subtypeArray.joinToString(";") { subtype ->
-            val locale = subtype.localeString()
-            val extraValue = subtype.extraValue ?: ""
-            val layoutName = extractLayoutFromExtraValue(extraValue) ?: ""
-            val otherExtras = extractOtherExtras(extraValue)
-            
-            if (otherExtras.isNotEmpty()) {
-                "$locale:$layoutName:$otherExtras"
-            } else {
-                "$locale:$layoutName"
-            }
-        }
-    }
-    
+
     /**
      * Checks if a subtype is an additional (custom) subtype.
      */
@@ -310,21 +291,7 @@ object AdditionalSubtypeUtils {
         }
         return null
     }
-    
-    /**
-     * Extracts other extras (excluding layout, ascii, emoji, isAdditionalSubtype).
-     */
-    private fun extractOtherExtras(extraValue: String): String {
-        val parts = extraValue.split(",")
-        val filtered = parts.filter { part ->
-            !part.startsWith("$EXTRA_KEY_KEYBOARD_LAYOUT_SET=") &&
-            part != EXTRA_KEY_ASCII_CAPABLE &&
-            part != EXTRA_KEY_EMOJI_CAPABLE &&
-            part != EXTRA_KEY_IS_ADDITIONAL_SUBTYPE
-        }
-        return filtered.joinToString(",")
-    }
-    
+
     /**
      * Finds a subtype by locale.
      */

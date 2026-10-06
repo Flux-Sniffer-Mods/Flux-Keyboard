@@ -48,7 +48,7 @@ import it.palsoftware.pastiera.update.shouldUseGithubUpdateChecks
 import kotlinx.coroutines.delay
 
 /**
- * Sealed class per rappresentare lo stato della navigazione nelle settings.
+ * Where the settings navigation is.
  */
 enum class SettingsDestination {
     Main,
@@ -192,7 +192,6 @@ fun SettingsScreen(
             }
         }
     }
-
 
     CompositionLocalProvider(
         LocalSettingHighlightId provides highlightSettingId,
@@ -400,8 +399,6 @@ Intent(context, SymCustomizationActivity::class.java)
         SettingLinkSheet(entry = entry, onDismiss = { linkSheetEntry = null })
     }
 }
-
-
 
 @Composable
 private fun SettingsMainScreen(
@@ -626,28 +623,3 @@ internal fun SettingsCategoryRow(
     }
 }
 
-@Composable
-internal fun SettingsGroupDivider(label: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        HorizontalDivider(
-            modifier = Modifier.weight(1f),
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = FontWeight.Medium
-        )
-        HorizontalDivider(
-            modifier = Modifier.weight(1f),
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    }
-}

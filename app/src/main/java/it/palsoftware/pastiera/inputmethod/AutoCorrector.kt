@@ -228,14 +228,6 @@ object AutoCorrector {
     }
 
     /**
-     * Gets current locale based on device language.
-     */
-    private fun getCurrentLocale(context: Context): String {
-        val locale = context.resources.configuration.locales[0]
-        return locale.language.lowercase()
-    }
-
-    /**
      * Gets the current IME subtype language code (e.g., "it" from "it_IT").
      * Returns null if the IME or subtype is not available.
      */
@@ -249,13 +241,6 @@ object AutoCorrector {
             Log.e(TAG, "Error getting IME language code", e)
             null
         }
-    }
-
-    /**
-     * Gets all supported locales.
-     */
-    fun getSupportedLocales(): Set<String> {
-        return corrections.keys.toSet()
     }
 
     /**
@@ -330,7 +315,7 @@ object AutoCorrector {
         // Try specific locale first
         corrections[targetLocale]?.let { localeCorrections ->
             localeCorrections[wordLower]?.let { correction ->
-                // Applica la capitalizzazione originale alla correzione
+                // Apply the original capitalisation to the correction
                 return applyCapitalization(word, correction)
             }
         }

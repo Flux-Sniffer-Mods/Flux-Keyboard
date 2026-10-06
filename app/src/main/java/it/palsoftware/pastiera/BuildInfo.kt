@@ -3,7 +3,7 @@ package it.palsoftware.pastiera
 import it.palsoftware.pastiera.BuildConfig
 
 /**
- * Fornisce informazioni sulla build dell'app.
+ * Information about the app's build.
  */
 object BuildInfo {
     private val devVersion = Regex("""^(.+)-flux\.(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})$""")

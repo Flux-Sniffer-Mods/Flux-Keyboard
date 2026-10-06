@@ -795,16 +795,6 @@ private fun getModifierIndicatorLabel(indicator: String): String {
 }
 
 @Composable
-private fun getModifierIndicatorDescription(indicator: String): String {
-    return when (indicator) {
-        SettingsManager.MODIFIER_INDICATOR_BOTTOM_STRIP -> stringResource(R.string.modifier_indicators_bottom_strip_description)
-        SettingsManager.MODIFIER_INDICATOR_MENU_BAR -> stringResource(R.string.modifier_indicators_menu_bar_description)
-        SettingsManager.MODIFIER_INDICATOR_STATUS_BAR -> stringResource(R.string.modifier_indicators_status_bar_description)
-        else -> ""
-    }
-}
-
-@Composable
 private fun SlotPreview(
     buttonId: String,
     label: String

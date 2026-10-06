@@ -103,7 +103,7 @@ class InputEventRouter(
         val isLauncherPackage: (String?) -> Boolean,
         val handleLauncherShortcut: (Int) -> Boolean,
         val handlePowerShortcut: (Int) -> Boolean,
-        val togglePowerShortcutMode: (String, Boolean) -> Unit, // Callback per toast e stato nav mode
+        val togglePowerShortcutMode: (String, Boolean) -> Unit, // Toast and nav mode state
         val callSuper: () -> Boolean,
         val currentInputConnection: () -> InputConnection?
     )
@@ -127,12 +127,12 @@ class InputEventRouter(
             return callbacks.callSuper()
         }
 
-        // Gestisci SYM per Power Shortcuts (toggle: attiva/disattiva)
+        // SYM for Power Shortcuts (toggles on and off)
         if (keyCode == KeyEvent.KEYCODE_SYM && powerShortcutsEnabled) {
             val message = context.getString(R.string.power_shortcuts_press_key)
             val isNavModeActive = navModeController.isNavModeActive()
             callbacks.togglePowerShortcutMode(message, isNavModeActive)
-            return true // Consumiamo l'evento
+            return true // Consume the event
         }
 
         if (navModeController.isNavModeKey(keyCode)) {
@@ -169,7 +169,7 @@ class InputEventRouter(
             return true
         }
 
-        // Gestisci Power Shortcuts (SYM premuto + tasto alfabetico)
+        // Power Shortcuts (SYM pressed, then a letter key)
         if (!ctrlLatchActive && powerShortcutsEnabled) {
             if (callbacks.isShortcutKey(keyCode)) {
                 if (callbacks.handlePowerShortcut(keyCode)) {
@@ -178,7 +178,7 @@ class InputEventRouter(
             }
         }
 
-        // Launcher Shortcuts (logica esistente - mantieni per compatibilità)
+        // Launcher shortcuts
         if (!ctrlLatchActive && SettingsManager.getLauncherShortcutsEnabled(context)) {
             val packageName = editorInfo?.packageName ?: currentPackageName
             if (callbacks.isLauncherPackage(packageName) && callbacks.isShortcutKey(keyCode)) {
@@ -1741,22 +1741,6 @@ class InputEventRouter(
         } else {
             keyCode
         }
-    }
-
-    private fun KeyEvent.withKeyCode(newKeyCode: Int): KeyEvent {
-        if (keyCode == newKeyCode) return this
-        return KeyEvent(
-            downTime,
-            eventTime,
-            action,
-            newKeyCode,
-            repeatCount,
-            metaState,
-            deviceId,
-            scanCode,
-            flags,
-            source
-        )
     }
 
     private fun KeyEvent.withKeyCodeAndCtrl(newKeyCode: Int): KeyEvent {

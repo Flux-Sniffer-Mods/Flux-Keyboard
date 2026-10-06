@@ -471,24 +471,7 @@ object AutoCapitalizeHelper {
         val lastChar = before.lastOrNull() ?: return false
         return lastChar.isWhitespace() || lastChar in it.palsoftware.pastiera.core.Punctuation.BOUNDARY
     }
-    
-    /**
-     * Checks if the cursor is at the start of a sentence (after sentence-ending punctuation).
-     * Used for textCapSentences to determine if the next letter should be capitalized.
-     */
-    fun isAtStartOfSentence(inputConnection: InputConnection?): Boolean {
-        if (inputConnection == null) return false
-        
-        val cursorContext = readContext(inputConnection) ?: return false
-        val before = cursorContext.before
-        
-        // At start of field
-        if (before.isEmpty()) return true
-        
-        // Check if text ends with sentence-ending punctuation followed by whitespace
-        return hasSentenceEndingPunctuation(before, requireWhitespaceAfter = true)
-    }
-    
+
     /**
      * Handles input field capitalization flags (CAP_CHARACTERS, CAP_WORDS, CAP_SENTENCES).
      * This is called when entering a new input field to apply field-specific

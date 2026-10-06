@@ -212,7 +212,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var emojiPickerKeyChorded: Boolean = false
     private var dispatchingSoftwareKeyboardKey: Boolean = false
     
-    // Aggiungi per Power Shortcuts
+    // For Power Shortcuts
     private var powerShortcutToast: android.widget.Toast? = null
     
     // Mapping Ctrl+key -> action or keycode (loaded from JSON)
@@ -336,7 +336,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var clearAltOnSpaceEnabled: Boolean = false
     private var physicalKeyboardProfileOverride: String = "auto"
     private var isLanguageSwitchInProgress: Boolean = false
-    // Stato per ricordare se il nav mode era attivo prima di entrare in un campo di testo
+    // Whether nav mode was on before entering a text field
     private var navModeWasActiveBeforeEditableField: Boolean = false
 
     // Trackpad gesture detection
@@ -1621,8 +1621,6 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (isAutoCapSuppressedAtCursor()) return false
         return modifierStateController.requestShiftOneShotFromAutoCap()
     }
-    
-    
 
     /**
      * Initializes the input context for a field.
@@ -1722,15 +1720,6 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         return null
     }
-    
-    /**
-     * Gets the character string from the selected keyboard layout.
-     * Returns the original event character if not mapped in layout.
-     */
-    private fun getCharacterStringFromLayout(keyCode: Int, event: KeyEvent?, isShift: Boolean): String {
-        val char = getCharacterFromLayout(keyCode, event, isShift)
-        return char?.toString() ?: ""
-    }
 
     private fun switchToLayout(layoutName: String, showToast: Boolean) {
         activeKeyboardLayoutName = layoutName
@@ -1742,14 +1731,6 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
         // Update suggestion engine's keyboard layout for proximity-based ranking
         suggestionController?.updateKeyboardLayout(layoutName)
-    }
-
-    private fun cycleLayoutFromShortcut() {
-        suppressNextLayoutReload = true
-        val nextLayout = SettingsManager.cycleKeyboardLayout(this)
-        if (nextLayout != null) {
-            switchToLayout(nextLayout, showToast = false)
-        }
     }
 
     private fun isVietnameseTelexActive(): Boolean {
@@ -1838,7 +1819,6 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
     }
-
 
     private fun handleMultiTapCommit(
         keyCode: Int,
@@ -2474,7 +2454,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         lastObservedAutoSoftwareKeyboardMode = SoftwareKeyboardAutoDetector.resolve(this)
         inputManager?.registerInputDeviceListener(inputDeviceListener, uiHandler)
         launcherShortcutController = LauncherShortcutController(this)
-        // Configura callbacks per gestire nav mode durante power shortcuts
+        // Callbacks that handle nav mode during Power Shortcuts
         launcherShortcutController.setNavModeCallbacks(
             exitNavMode = { navModeController.exitNavMode() },
             enterNavMode = { navModeController.enterNavMode() }
@@ -3706,7 +3686,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         keyboardVisibilityController.ensureImeSurfaceVisible()
     }
     /**
-     * Aggiorna la status bar delegando al controller dedicato.
+     * Updates the status bar through its controller.
      */
     private fun updateStatusBarText() {
         syncHiddenAppPanel()
@@ -3785,11 +3765,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         ).let { if (hiddenAppShowsLeds && !hiddenAppPanelOpen()) observedModifierLeds.applyTo(it) else it }
         updateSystemStatusModifierIcon(snapshot, effectiveSoftwareKeyboardMode)
         val modifierIndicators = SettingsManager.getModifierIndicators(this)
-        // Passa anche la mappa emoji quando SYM è attivo (solo pagina 1)
+        // Also pass the emoji map while SYM is on (page 1 only)
         val emojiMapText = symLayoutController.emojiMapText()
-        // Passa le mappature SYM per la griglia emoji/caratteri
+        // Pass the SYM mappings for the emoji/character grid
         val symMappings = symLayoutController.currentSymMappings()?.toMap()
-        // Passa l'inputConnection per rendere i pulsanti clickabili
+        // Pass the input connection so the buttons can type
         val inputConnection = currentInputConnection
         val unchangedRenderedState =
             snapshot == lastRenderedStatusSnapshot &&
@@ -4022,14 +4002,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
     
     /**
-     * Disattiva le variazioni.
+     * Turns variations off.
      */
     private fun deactivateVariations() {
         if (::variationStateController.isInitialized) {
             variationStateController.clear()
         }
     }
-    
 
     override fun onUnbindInput() {
         pendingKeyboardSurfaceTransition?.let(uiHandler::removeCallbacks)
@@ -4208,7 +4187,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 val hasValidInputConnection = inputConnection != null
 
                 if (isReallyEditable && hasValidInputConnection) {
-                    // Ricorda che nav mode era attivo prima di entrare nel campo di testo
+                    // Remember that nav mode was on before entering the text field
                     navModeWasActiveBeforeEditableField = true
                     navModeController.exitNavMode()
                     resetModifierStates(preserveNavMode = false)
@@ -4374,7 +4353,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         multiTapController.cancelAll()
         disableEmojiSearchInputCapture()
         resetModifierStates(preserveNavMode = true)
-        // Se nav mode era attivo prima di entrare nel campo di testo, riattivalo ora
+        // If nav mode was on before entering the text field, turn it back on
         if (navModeWasActiveBeforeEditableField) {
             navModeController.enterNavMode()
             navModeWasActiveBeforeEditableField = false
@@ -5730,7 +5709,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         // Intercept long presses BEFORE Android handles them
         if (alternateCharacterManager.hasAltMapping(keyCode)) {
-            // Consumiamo l'evento per evitare il popup di Android
+            // Consume the event to avoid Android's popup
             return true
         }
         
@@ -7074,14 +7053,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     /**
-     * Aggiunge una nuova mappatura Alt+tasto -> carattere.
+     * Adds an Alt+key -> character mapping.
      */
     fun addAltKeyMapping(keyCode: Int, character: String) {
         alternateCharacterManager.addAltKeyMapping(keyCode, character)
     }
 
     /**
-     * Rimuove una mappatura Alt+tasto esistente.
+     * Removes an Alt+key mapping.
      */
     fun removeAltKeyMapping(keyCode: Int) {
         alternateCharacterManager.removeAltKeyMapping(keyCode)

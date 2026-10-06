@@ -601,11 +601,6 @@ class SuggestionController(
         pendingAddUserWord = null
     }
 
-    internal fun clearLearnedNextWordsForTests() {
-        nextWordPredictor.clearAll()
-        previousCompletedWord = null
-    }
-
     internal fun flushNextWordLearningForTests() {
         nextWordPredictor.flushLearningForTests()
     }

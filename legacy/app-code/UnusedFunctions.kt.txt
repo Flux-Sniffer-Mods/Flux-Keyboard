@@ -1,0 +1,1306 @@
+// Functions nothing in the app called any more, removed from the sources they are listed
+// under. Kept for reference only; this file is not compiled.
+
+// ===== it/palsoftware/pastiera/AutoCorrectionCategoryScreen.kt : addOrBump
+    fun addOrBump(word: String, baseFrequency: Int = 10) {
+        val file = ensureLocalFile()
+        val entries = loadEntries().toMutableList()
+        val existingIndex = entries.indexOfFirst { it.word.equals(word, ignoreCase = true) }
+        if (existingIndex >= 0) {
+            val existing = entries[existingIndex]
+            entries[existingIndex] = existing.copy(frequency = existing.frequency + 1)
+        } else {
+            entries.add(DefaultUserWord(word, baseFrequency))
+        }
+        persist(entries, file)
+    }
+
+// ===== it/palsoftware/pastiera/ClicksPowerKeyboardProtocol.kt : readHostName
+    fun readHostName(slotIndex: Int): ByteArray {
+        require(slotIndex in 0..8)
+        return readHostNames(slotIndex * HOST_NAME_BLOCK_SIZE, HOST_NAME_BLOCK_SIZE)
+    }
+
+// ===== it/palsoftware/pastiera/HardwareKeyboardProfileStubScreens.kt : remapLabel
+@Composable
+private fun remapLabel(bytes: ByteArray): String = when {
+    bytes.contentEquals(byteArrayOf(0x29, 0x00)) -> stringResource(R.string.clicks_number_preset_escape)
+    bytes.contentEquals(byteArrayOf(0x80.toByte(), 0x00)) -> stringResource(R.string.clicks_number_preset_volume_up)
+    bytes.contentEquals(byteArrayOf(0x81.toByte(), 0x00)) -> stringResource(R.string.clicks_number_preset_volume_down)
+    bytes.contentEquals(byteArrayOf(0x7f, 0x00)) -> stringResource(R.string.clicks_number_preset_volume_mute)
+    bytes.contentEquals(byteArrayOf(0xcd.toByte(), 0xff.toByte())) -> stringResource(R.string.clicks_number_preset_play_pause)
+    bytes.contentEquals(byteArrayOf(0xb5.toByte(), 0xff.toByte())) -> stringResource(R.string.clicks_number_preset_media_next)
+    bytes.contentEquals(byteArrayOf(0xb6.toByte(), 0xff.toByte())) -> stringResource(R.string.clicks_number_preset_media_previous)
+    bytes.contentEquals(byteArrayOf(0x4b, 0x00)) -> stringResource(R.string.clicks_number_preset_page_up)
+    bytes.contentEquals(byteArrayOf(0x4e, 0x00)) -> stringResource(R.string.clicks_number_preset_page_down)
+    bytes.contentEquals(byteArrayOf(0x4a, 0x00)) -> stringResource(R.string.clicks_number_preset_home)
+    bytes.contentEquals(byteArrayOf(0x4d, 0x00)) -> stringResource(R.string.clicks_number_preset_end)
+    bytes.contentEquals(byteArrayOf(0x2f, 0x00)) -> stringResource(R.string.clicks_number_preset_left_bracket)
+    bytes.contentEquals(byteArrayOf(0x30, 0x00)) -> stringResource(R.string.clicks_number_preset_right_bracket)
+    bytes.contentEquals(byteArrayOf(0xe0.toByte(), 0x2c)) -> "Ctrl+Space"
+    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x00)) -> "Alt"
+    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x07)) -> "Alt+D"
+    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x0e)) -> "Alt+K"
+    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x16)) -> "Alt+S"
+    bytes.contentEquals(byteArrayOf(0xe2.toByte(), 0x37)) -> "Alt+."
+    bytes.contentEquals(byteArrayOf(0x00, 0x2d)) -> "−"
+    else -> stringResource(R.string.clicks_remap_custom_value, bytes.toHexPair())
+}
+
+// ===== it/palsoftware/pastiera/HardwareKeyboardProfileStubScreens.kt : ClicksSingleChoiceDialog
+@Composable
+private fun ClicksSingleChoiceDialog(
+    title: String,
+    choices: List<Int>,
+    label: @Composable (Int) -> String,
+    onChoice: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column {
+                choices.chunked(3).forEach { row ->
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                        row.forEach { value -> TextButton(onClick = { onChoice(value) }) { Text(label(value)) } }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
+}
+
+// ===== it/palsoftware/pastiera/HardwareKeyboardProfileStubScreens.kt : ClicksNumberRemapDialog
+@Composable
+private fun ClicksNumberRemapDialog(
+    keyIndex: Int,
+    state: ClicksPowerKeyboardState,
+    onApply: (Int, ByteArray) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val labels = listOf(
+        R.string.clicks_number_preset_disabled,
+        R.string.clicks_number_preset_escape,
+        R.string.clicks_number_preset_volume_up,
+        R.string.clicks_number_preset_volume_down,
+        R.string.clicks_number_preset_volume_mute,
+        R.string.clicks_number_preset_play_pause,
+        R.string.clicks_number_preset_media_next,
+        R.string.clicks_number_preset_media_previous,
+        R.string.clicks_number_preset_page_up,
+        R.string.clicks_number_preset_page_down,
+        R.string.clicks_number_preset_home,
+        R.string.clicks_number_preset_end,
+        R.string.clicks_number_preset_left_bracket,
+        R.string.clicks_number_preset_right_bracket
+    ).map { stringResource(it) }
+    val values = listOf(
+        byteArrayOf(0x00, 0x00),
+        byteArrayOf(0x29, 0x00),
+        byteArrayOf(0x80.toByte(), 0x00),
+        byteArrayOf(0x81.toByte(), 0x00),
+        byteArrayOf(0x7f, 0x00),
+        byteArrayOf(0xcd.toByte(), 0xff.toByte()),
+        byteArrayOf(0xb5.toByte(), 0xff.toByte()),
+        byteArrayOf(0xb6.toByte(), 0xff.toByte()),
+        byteArrayOf(0x4b, 0x00),
+        byteArrayOf(0x4e, 0x00),
+        byteArrayOf(0x4a, 0x00),
+        byteArrayOf(0x4d, 0x00),
+        byteArrayOf(0x2f, 0x00),
+        byteArrayOf(0x30, 0x00)
+    )
+    val knownPresets = labels.zip(values).map { (label, bytes) -> ClicksRemapPreset(label, bytes) }
+    val currentBytes = state.numberRemaps[keyIndex]
+    val presets = if (
+        currentBytes != null && knownPresets.none { it.bytes.contentEquals(currentBytes) }
+    ) {
+        listOf(
+            ClicksRemapPreset(
+                stringResource(R.string.clicks_remap_custom_value, currentBytes.toHexPair()),
+                currentBytes.copyOf()
+            )
+        ) + knownPresets
+    } else {
+        knownPresets
+    }
+    var selected by remember(keyIndex, currentBytes?.contentHashCode()) {
+        mutableStateOf(
+            presets.firstOrNull { preset ->
+                currentBytes != null && preset.bytes.contentEquals(currentBytes)
+            } ?: presets.first()
+        )
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.clicks_number_row_title)) },
+        text = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Text("SYM + ${keyIndex + 1}", style = MaterialTheme.typography.titleMedium)
+                presets.forEach { preset ->
+                    val isSelected = selected.bytes.contentEquals(preset.bytes)
+                    TextButton(onClick = { selected = preset }, modifier = Modifier.fillMaxWidth()) {
+                        Text(if (isSelected) "✓ ${preset.label}" else preset.label)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onApply(ClicksPowerKeyboardProtocol.NUMBER_REMAP_COMMANDS[keyIndex], selected.bytes)
+            }) {
+                Text(stringResource(R.string.clicks_apply))
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
+}
+
+// ===== it/palsoftware/pastiera/HardwareKeyboardProfileStubScreens.kt : ClicksChoiceButtonGrid
+@Composable
+private fun ClicksChoiceButtonGrid(
+    values: List<Int>,
+    selected: Int,
+    label: (Int) -> String,
+    onChoice: (Int) -> Unit
+) {
+    values.chunked(3).forEach { row ->
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            row.forEach { value ->
+                TextButton(onClick = { onChoice(value) }) {
+                    Text(if (selected == value) "✓ ${label(value)}" else label(value))
+                }
+            }
+        }
+    }
+}
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : getDefaultLongPressThreshold
+    /**
+     * Returns the default value for the long-press threshold.
+     */
+    fun getDefaultLongPressThreshold(): Long = DEFAULT_LONG_PRESS_THRESHOLD
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : getDefaultSwipeIncrementalThreshold
+    /**
+     * Returns the default value for the swipe incremental threshold.
+     */
+    fun getDefaultSwipeIncrementalThreshold(): Float = DEFAULT_SWIPE_INCREMENTAL_THRESHOLD
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : setStaticVariationBarModeEnabled
+    /**
+     * Sets whether the static variation bar mode is enabled.
+     */
+    fun setStaticVariationBarModeEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit()
+            .putBoolean(KEY_STATIC_VARIATION_BAR_MODE, enabled)
+            .putString(
+                KEY_STATIC_VARIATION_BAR_PRESET,
+                if (enabled) STATIC_VARIATION_PRESET_SYMBOLS else STATIC_VARIATION_PRESET_OFF
+            )
+            .apply()
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : isStaticVariationBarBaseLayerEnabled
+    /**
+     * Returns whether the base (top) static variation row is enabled.
+     * Shift/Alt static layers remain available independently.
+     */
+    fun isStaticVariationBarBaseLayerEnabled(context: Context): Boolean {
+        return getPreferences(context).getBoolean(
+            KEY_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED,
+            DEFAULT_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED
+        )
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : setStaticVariationBarBaseLayerEnabled
+    /**
+     * Sets whether the base (top) static variation row is enabled.
+     */
+    fun setStaticVariationBarBaseLayerEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit()
+            .putBoolean(KEY_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED, enabled)
+            .apply()
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : hasCustomSymMappings
+    /**
+     * Returns true if custom SYM mappings exist.
+     */
+    fun hasCustomSymMappings(context: Context): Boolean {
+        val prefs = getPreferences(context)
+        return prefs.contains(KEY_SYM_MAPPINGS_CUSTOM)
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : hasCustomSymMappingsPage2
+    /**
+     * Returns true if custom SYM page 2 mappings exist.
+     */
+    fun hasCustomSymMappingsPage2(context: Context): Boolean {
+        val prefs = getPreferences(context)
+        return prefs.contains(KEY_SYM_MAPPINGS_PAGE2_CUSTOM)
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : setSuggestionDebugLoggingEnabled
+    fun setSuggestionDebugLoggingEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit()
+            .putBoolean(KEY_SUGGESTION_DEBUG_LOGGING, enabled)
+            .apply()
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : setImeOverlayDebugLoggingEnabled
+    fun setImeOverlayDebugLoggingEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit()
+            .putBoolean(KEY_IME_OVERLAY_DEBUG_LOGGING, enabled)
+            .apply()
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : isAutoCorrectLanguageEnabled
+    /**
+     * Returns true if a language is enabled for auto-correction.
+     */
+    fun isAutoCorrectLanguageEnabled(context: Context, language: String): Boolean {
+        val enabledLanguages = getAutoCorrectEnabledLanguages(context)
+        // If the list is empty, all languages are enabled (default behavior)
+        return enabledLanguages.isEmpty() || enabledLanguages.contains(language)
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : updateCustomLanguageName
+    /**
+     * Updates only the display name of a custom language.
+     */
+    fun updateCustomLanguageName(context: Context, languageCode: String, languageName: String) {
+        try {
+            val prefs = getPreferences(context)
+            val key = "auto_correct_custom_$languageCode"
+            val jsonString = prefs.getString(key, null)
+            
+            val jsonObject = if (jsonString != null) {
+                JSONObject(jsonString)
+            } else {
+                JSONObject()
+            }
+            
+            jsonObject.put(LANGUAGE_NAME_KEY, languageName)
+            
+            prefs.edit()
+                .putString(key, jsonObject.toString())
+                .apply()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating language name for $languageCode", e)
+        }
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : isLongPressShift
+    /**
+     * Returns true if long press uses Shift, false if it uses Alt.
+     * @deprecated Use getLongPressModifier() for more granular control
+     */
+    fun isLongPressShift(context: Context): Boolean {
+        return getLongPressModifier(context) == "shift"
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : isLongPressVariations
+    /**
+     * Returns true if long press uses Variations mode.
+     */
+    fun isLongPressVariations(context: Context): Boolean {
+        return getLongPressModifier(context) == "variations"
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : isLongPressSym
+    /**
+     * Returns true if long press uses Sym mode.
+     */
+    fun isLongPressSym(context: Context): Boolean {
+        return getLongPressModifier(context).startsWith("sym")
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : hasCustomNavModeMappings
+    /**
+     * Returns true if custom nav mode mappings exist.
+     */
+    fun hasCustomNavModeMappings(context: Context): Boolean {
+        val mappingsFile = getNavModeMappingsFile(context)
+        return mappingsFile.exists()
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : getTrackpadSwipeThreshold
+    /**
+     * Returns the swipe threshold for trackpad gestures.
+     */
+    fun getTrackpadSwipeThreshold(context: Context): Float {
+        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
+            .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : setTrackpadSwipeThreshold
+    /**
+     * Sets the swipe threshold for trackpad gestures.
+     * Value is clamped to allowed range.
+     */
+    fun setTrackpadSwipeThreshold(context: Context, threshold: Float) {
+        val clamped = threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
+        getPreferences(context).edit()
+            .putFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, clamped)
+            .commit()  // Use commit() instead of apply() to ensure synchronous write
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : getDefaultTrackpadSwipeThreshold
+    fun getDefaultTrackpadSwipeThreshold(): Float = defaultTrackpadSwipeThreshold()
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : setAppEnterBehaviorOverride
+    fun setAppEnterBehaviorOverride(context: Context, packageName: String, behavior: String) {
+        val updated = getAppEnterBehaviorOverrides(context)
+            .filterNot { it.packageName == packageName } +
+            AppEnterBehaviorOverride(packageName, normalizeEnterBehavior(behavior))
+        setAppEnterBehaviorOverrides(context, updated)
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : removeAppEnterBehaviorOverride
+    fun removeAppEnterBehaviorOverride(context: Context, packageName: String) {
+        setAppEnterBehaviorOverrides(
+            context,
+            getAppEnterBehaviorOverrides(context).filterNot { it.packageName == packageName }
+        )
+    }
+
+// ===== it/palsoftware/pastiera/SettingsScreen.kt : SettingsGroupDivider
+@Composable
+internal fun SettingsGroupDivider(label: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Medium
+        )
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
+    }
+}
+
+// ===== it/palsoftware/pastiera/StatusBarButtonsScreen.kt : getModifierIndicatorDescription
+@Composable
+private fun getModifierIndicatorDescription(indicator: String): String {
+    return when (indicator) {
+        SettingsManager.MODIFIER_INDICATOR_BOTTOM_STRIP -> stringResource(R.string.modifier_indicators_bottom_strip_description)
+        SettingsManager.MODIFIER_INDICATOR_MENU_BAR -> stringResource(R.string.modifier_indicators_menu_bar_description)
+        SettingsManager.MODIFIER_INDICATOR_STATUS_BAR -> stringResource(R.string.modifier_indicators_status_bar_description)
+        else -> ""
+    }
+}
+
+// ===== it/palsoftware/pastiera/T2eCornerCalibration.kt : bottomContourPath
+    /** Open left-to-right contour of the calibrated lower display edge. */
+    fun bottomContourPath(
+        width: Float,
+        height: Float,
+        leftRadius: Float,
+        rightRadius: Float,
+        calibration: T2eCornerCalibration,
+        extraInset: Float = 0f
+    ): Path = Path().apply {
+        for (i in 0..256) {
+            val p = point(leftRadius, height, PI / 2 * i / 256, calibration, extraInset)
+            if (i == 0) moveTo(p.x, p.y) else lineTo(p.x, p.y)
+        }
+        for (i in 256 downTo 0) {
+            val p = point(rightRadius, height, PI / 2 * i / 256, calibration, extraInset)
+            lineTo(width - p.x, p.y)
+        }
+        offset(calibration.shiftXPx, calibration.shiftYPx)
+    }
+
+// ===== it/palsoftware/pastiera/clipboard/ClipboardHistoryManager.kt : sortHistoryEntries
+    fun sortHistoryEntries() {
+        if (!isHistoryAccessible()) return
+        clipboardDao?.sort()
+    }
+
+// ===== it/palsoftware/pastiera/clipboard/ClipboardHistoryManager.kt : showClipboardHistoryPopup
+    /**
+     * Shows the clipboard history popup above the keyboard.
+     * Returns the popup view that was created.
+     */
+    fun showClipboardHistoryPopup(
+        inputConnection: android.view.inputmethod.InputConnection?,
+        onDismiss: () -> Unit
+    ): ClipboardHistoryPopupView? {
+        if (!isEnabled) return null
+
+        prepareClipboardHistory()
+
+        return ClipboardHistoryPopupView(context, this).apply {
+            setOnItemClickListener { entry ->
+                pasteText(entry.text, inputConnection)
+                dismiss()
+                onDismiss()
+            }
+            setOnPinClickListener { entry ->
+                toggleClipPinned(entry.id)
+            }
+            setOnDeleteClickListener { entry ->
+                val index = getHistoryEntry(0)?.let {
+                    (0 until getHistorySize()).find { idx ->
+                        getHistoryEntry(idx)?.id == entry.id
+                    }
+                }
+                index?.let { removeEntry(it, force = true) }
+            }
+            setOnClearAllClickListener {
+                clearHistory()
+            }
+            show()
+        }
+    }
+
+// ===== it/palsoftware/pastiera/core/EditHistory.kt : canUndo
+    @Synchronized
+    fun canUndo(): Boolean = (field()?.undo?.size ?: 0) > 1
+
+// ===== it/palsoftware/pastiera/core/NavModeController.kt : hasCtrlLatchFromNavMode
+    fun hasCtrlLatchFromNavMode(): Boolean = modifierStateController.ctrlLatchFromNavMode
+
+// ===== it/palsoftware/pastiera/core/NavModeController.kt : showNavModeStatusIcon
+    /**
+     * Mostra l'icona del nav mode nella status bar tramite la vecchia API IME (deprecata).
+     * Usa reflection per supportare sia showStatusIcon() che setStatusIcon().
+     */
+    private fun showNavModeStatusIcon() {
+        try {
+            if (context is android.inputmethodservice.InputMethodService) {
+                val imeClass = android.inputmethodservice.InputMethodService::class.java
+                val iconResId = R.drawable.ic_settings_24 // Placeholder: icona impostazioni per nav mode
+
+                // Prova prima showStatusIcon(int), poi setStatusIcon(int)
+                val methodNames = listOf("showStatusIcon", "setStatusIcon")
+                for (name in methodNames) {
+                    try {
+                        val method = imeClass.getMethod(name, Int::class.javaPrimitiveType)
+                        method.invoke(context, iconResId)
+                        Log.d(TAG, "Nav mode status icon shown using $name")
+                        return
+                    } catch (e: NoSuchMethodException) {
+                        // Prova il nome successivo
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Unable to show nav mode status icon", e)
+        }
+    }
+
+// ===== it/palsoftware/pastiera/core/SymLayoutController.kt : previewChordMappings
+    fun previewChordMappings(shiftPressed: Boolean): Map<Int, String> {
+        val pageToUse = when (currentPageType()) {
+            SymPage.DEVICE, SymPage.EMOJI, SymPage.SYMBOLS -> currentPageType()
+            else -> preferredChordPage()
+        } ?: return emptyMap()
+
+        return mappingsForPage(pageToUse, shiftPressed)
+    }
+
+// ===== it/palsoftware/pastiera/core/suggestions/DictionaryIndex.kt : toSerializable
+/**
+ * Converts DictionaryEntry to SerializableDictionaryEntry.
+ */
+fun DictionaryEntry.toSerializable(): SerializableDictionaryEntry {
+    return SerializableDictionaryEntry(
+        word = this.word,
+        frequency = this.frequency,
+        source = this.source.ordinal
+    )
+}
+
+// ===== it/palsoftware/pastiera/core/suggestions/DictionaryRepository.kt : addUserEntry
+    fun addUserEntry(word: String) {
+        addUserEntryQuick(word)
+    }
+
+// ===== it/palsoftware/pastiera/core/suggestions/DictionaryRepository.kt : lookupByPrefix
+    fun lookupByPrefix(prefix: String): List<DictionaryEntry> {
+        if (!isReady || prefix.isBlank()) return emptyList()
+        val normalizedPrefix = normalize(prefix)
+        val maxPrefixLength = normalizedPrefix.length.coerceAtMost(cachePrefixLength)
+
+        for (length in maxPrefixLength downTo 1) {
+            val bucket = prefixCache[normalizedPrefix.take(length)]
+            if (!bucket.isNullOrEmpty()) {
+                return bucket
+            }
+        }
+        return emptyList()
+    }
+
+// ===== it/palsoftware/pastiera/core/suggestions/DictionaryRepository.kt : allCandidates
+    fun allCandidates(): List<DictionaryEntry> {
+        if (!isReady) return emptyList()
+        return normalizedIndex.values.flatten()
+    }
+
+// ===== it/palsoftware/pastiera/core/suggestions/SuggestionController.kt : clearLearnedNextWordsForTests
+    internal fun clearLearnedNextWordsForTests() {
+        nextWordPredictor.clearAll()
+        previousCompletedWord = null
+    }
+
+// ===== it/palsoftware/pastiera/core/suggestions/SuggestionEngine.kt : boundedLevenshtein
+    private fun boundedLevenshtein(a: String, b: String, maxDistance: Int): Int {
+        // Optimal String Alignment distance (Damerau-Levenshtein with adjacent transpositions cost=1)
+        if (kotlin.math.abs(a.length - b.length) > maxDistance) return -1
+        val prev = IntArray(b.length + 1) { it }
+        val curr = IntArray(b.length + 1)
+
+        for (i in 1..a.length) {
+            curr[0] = i
+            var minRow = curr[0]
+            for (j in 1..b.length) {
+                val cost = if (a[i - 1] == b[j - 1]) 0 else 1
+                var value = minOf(
+                    prev[j] + 1,      // deletion
+                    curr[j - 1] + 1,  // insertion
+                    prev[j - 1] + cost // substitution
+                )
+
+                if (i > 1 && j > 1 &&
+                    a[i - 1] == b[j - 2] &&
+                    a[i - 2] == b[j - 1]
+                ) {
+                    // adjacent transposition
+                    value = min(value, prev[j - 2] + 1)
+                }
+
+                curr[j] = value
+                minRow = min(minRow, value)
+            }
+
+            if (minRow > maxDistance) return -1
+            // swap arrays
+            for (k in 0..b.length) {
+                val tmp = prev[k]
+                prev[k] = curr[k]
+                curr[k] = tmp
+            }
+        }
+        return if (prev[b.length] <= maxDistance) prev[b.length] else -1
+    }
+
+// ===== it/palsoftware/pastiera/data/emoji/EmojiRepository.kt : asPaged
+    /**
+     * Utility for future keyboard pagination/chunking without re-parsing assets.
+     */
+    fun asPaged(
+        categories: List<EmojiCategory>,
+        pageSize: Int = 50
+    ): Map<String, List<List<EmojiEntry>>> {
+        return categories.associate { category ->
+            category.id to category.emojis.chunked(pageSize)
+        }
+    }
+
+// ===== it/palsoftware/pastiera/data/emoji/RecentEmojiManager.kt : clearRecentEmojis
+    /**
+     * Clears all recent emojis.
+     */
+    fun clearRecentEmojis(context: Context) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().remove(PREF_KEY_RECENT_EMOJIS).apply()
+    }
+
+// ===== it/palsoftware/pastiera/data/layout/LayoutFileStore.kt : importLayoutFromFile
+    fun importLayoutFromFile(
+        context: Context,
+        sourceFile: File,
+        targetLayoutName: String
+    ): Boolean {
+        return try {
+            if (!sourceFile.exists() || !sourceFile.canRead()) {
+                Log.e(TAG, "Source file does not exist or cannot be read: ${sourceFile.absolutePath}")
+                return false
+            }
+
+            val result = saveLayoutFromJson(
+                context = context,
+                layoutName = targetLayoutName,
+                jsonString = sourceFile.readText(),
+                conflictPolicy = LayoutConflictPolicy.REPLACE
+            )
+            result is LayoutImportResult.Success
+        } catch (e: Exception) {
+            Log.e(TAG, "Error importing layout from file", e)
+            false
+        }
+    }
+
+// ===== it/palsoftware/pastiera/data/layout/LayoutMappingRepository.kt : getLowercase
+    fun getLowercase(keyCode: Int): String? = currentLayout[keyCode]?.lowercase
+
+// ===== it/palsoftware/pastiera/inputmethod/AutoCapitalizeHelper.kt : isAtStartOfSentence
+    /**
+     * Checks if the cursor is at the start of a sentence (after sentence-ending punctuation).
+     * Used for textCapSentences to determine if the next letter should be capitalized.
+     */
+    fun isAtStartOfSentence(inputConnection: InputConnection?): Boolean {
+        if (inputConnection == null) return false
+        
+        val cursorContext = readContext(inputConnection) ?: return false
+        val before = cursorContext.before
+        
+        // At start of field
+        if (before.isEmpty()) return true
+        
+        // Check if text ends with sentence-ending punctuation followed by whitespace
+        return hasSentenceEndingPunctuation(before, requireWhitespaceAfter = true)
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/AutoCorrector.kt : getCurrentLocale
+    /**
+     * Gets current locale based on device language.
+     */
+    private fun getCurrentLocale(context: Context): String {
+        val locale = context.resources.configuration.locales[0]
+        return locale.language.lowercase()
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/AutoCorrector.kt : getSupportedLocales
+    /**
+     * Gets all supported locales.
+     */
+    fun getSupportedLocales(): Set<String> {
+        return corrections.keys.toSet()
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/DeviceSpecific.kt : remapKeyEvent
+    // Backward-compatible API used by existing callers.
+    fun remapKeyEvent(
+        keyCode: Int,
+        event: KeyEvent?,
+        physicalProfileOverride: String? = null
+    ): Pair<Int, KeyEvent?>? {
+        val remapped = remapHardwareKeyEvent(keyCode, event, physicalProfileOverride)
+        if (remapped.keyCode == keyCode && remapped.event === event) {
+            return null
+        }
+        return remapped.keyCode to remapped.event
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/InputEventRouter.kt : withKeyCode
+    private fun KeyEvent.withKeyCode(newKeyCode: Int): KeyEvent {
+        if (keyCode == newKeyCode) return this
+        return KeyEvent(
+            downTime,
+            eventTime,
+            action,
+            newKeyCode,
+            repeatCount,
+            metaState,
+            deviceId,
+            scanCode,
+            flags,
+            source
+        )
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/KeyboardVisibilityController.kt : isCandidatesOnlySurface
+    fun isCandidatesOnlySurface() = usesCandidatesView()
+
+// ===== it/palsoftware/pastiera/inputmethod/NotificationHelper.kt : createNavModeIcon
+    /**
+     * Creates a bitmap icon with the letter "N" for the nav mode notification.
+     * @param size Icon size in pixels
+     * @param backgroundColor Background color (default transparent)
+     * @param textColor Text color (default white)
+     */
+    private fun createNavModeIcon(
+        size: Int,
+        backgroundColor: Int = Color.TRANSPARENT,
+        textColor: Int = Color.WHITE
+    ): Bitmap {
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        
+        // Draw background
+        if (backgroundColor != Color.TRANSPARENT) {
+            canvas.drawColor(backgroundColor)
+        } else {
+            canvas.drawColor(Color.TRANSPARENT)
+        }
+        
+        // Draw the "N" letter
+        val paint = Paint().apply {
+            color = textColor
+            textSize = size * 0.7f // 70% of size to keep margins
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            isAntiAlias = true
+            textAlign = Paint.Align.CENTER
+        }
+        
+        // Compute vertical position to center the text
+        val textY = (canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)
+        
+        // Draw "N"
+        canvas.drawText("N", canvas.width / 2f, textY, paint)
+        
+        return bitmap
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/PhysicalKeyboardInputMethodService.kt : getCharacterStringFromLayout
+    /**
+     * Gets the character string from the selected keyboard layout.
+     * Returns the original event character if not mapped in layout.
+     */
+    private fun getCharacterStringFromLayout(keyCode: Int, event: KeyEvent?, isShift: Boolean): String {
+        val char = getCharacterFromLayout(keyCode, event, isShift)
+        return char?.toString() ?: ""
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/PhysicalKeyboardInputMethodService.kt : cycleLayoutFromShortcut
+    private fun cycleLayoutFromShortcut() {
+        suppressNextLayoutReload = true
+        val nextLayout = SettingsManager.cycleKeyboardLayout(this)
+        if (nextLayout != null) {
+            switchToLayout(nextLayout, showToast = false)
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/StatusBarController.kt : launchTrackpadDebug
+    private fun launchTrackpadDebug() {
+        if (!trackpadDebugLaunched) {
+            trackpadDebugLaunched = true
+            val intent = Intent(context, it.palsoftware.pastiera.TrackpadDebugActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/StatusBarController.kt : createModifierIndicator
+    /**
+     * Crea un indicatore per un modificatore (deprecato, mantenuto per compatibilità).
+     */
+    private fun createModifierIndicator(text: String, isActive: Boolean): TextView {
+        val dp8 = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 
+            8f, 
+            context.resources.displayMetrics
+        ).toInt()
+        val dp6 = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 
+            6f, 
+            context.resources.displayMetrics
+        ).toInt()
+        
+        return TextView(context).apply {
+            this.text = text
+            textSize = 12f
+            setTextColor(if (isActive) Color.WHITE else Color.argb(180, 255, 255, 255))
+            gravity = Gravity.CENTER
+            setPadding(dp6, dp8, dp6, dp8)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginEnd = dp8 // Margine a destra tra gli indicatori
+            }
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/StatusBarController.kt : createHideKeyboardButton
+    private fun createHideKeyboardButton(height: Int, width: Int): View {
+        val button = FrameLayout(context).apply {
+            layoutParams = LinearLayout.LayoutParams(width, height)
+            isClickable = true
+            isFocusable = true
+            contentDescription = context.getString(R.string.close)
+        }
+        val icon = ImageView(context).apply {
+            setImageResource(R.drawable.ic_close_24)
+            setColorFilter(hardwareTheme().textAndIcons)
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            background = createCloseButtonBackground(hardwareTheme().toKeyboardThemeColors())
+            val padding = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                4f,
+                context.resources.displayMetrics
+            ).toInt()
+            setPadding(padding, padding, padding, padding)
+            layoutParams = FrameLayout.LayoutParams(
+                TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    36f,
+                    context.resources.displayMetrics
+                ).toInt(),
+                TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    32f,
+                    context.resources.displayMetrics
+                ).toInt(),
+                Gravity.BOTTOM or Gravity.END
+            )
+        }
+        button.addView(icon)
+        button.setOnClickListener {
+            if (onSymCloseRequested != null) {
+                onSymCloseRequested?.invoke()
+            } else {
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(button.windowToken, 0)
+            }
+        }
+        return button
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/StatusBarController.kt : updateAccessibilityStateDescription
+    private fun updateAccessibilityStateDescription(view: View) {
+        val newStateDescription = buildLayoutAccessibilityStateDescription()
+        if (ViewCompat.getStateDescription(view)?.toString() == newStateDescription) {
+            return
+        }
+        ViewCompat.setStateDescription(view, newStateDescription)
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/SubtypeCycler.kt : getCurrentSubtypeName
+    /**
+     * Gets the current subtype display name.
+     */
+    fun getCurrentSubtypeName(context: Context): String? {
+        return try {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val currentSubtype = imm?.currentInputMethodSubtype ?: return null
+            
+            val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
+            currentSubtype.getDisplayName(
+                context,
+                context.packageName,
+                appInfo
+            )?.toString()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting current subtype name", e)
+            null
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/SubtypeCycler.kt : getAvailableSubtypes
+    /**
+     * Gets all available subtypes for the IME.
+     */
+    fun getAvailableSubtypes(
+        context: Context,
+        imeServiceClass: Class<*>
+    ): List<InputMethodSubtype> {
+        return try {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                ?: return emptyList()
+            
+            val packageName = context.packageName
+            val serviceName = imeServiceClass.name
+            
+            val inputMethodInfo = imm.getInputMethodList().firstOrNull { info ->
+                info.packageName == packageName && 
+                info.serviceName == serviceName
+            } ?: return emptyList()
+            
+            imm.getEnabledInputMethodSubtypeList(inputMethodInfo, true)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting available subtypes", e)
+            emptyList()
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarAnimator.kt : animateIn
+    /**
+     * Animates a view fading in (alpha 0 -> 1).
+     * 
+     * @param view The view to animate
+     * @param onComplete Optional callback when animation completes
+     */
+    fun animateIn(view: View, onComplete: (() -> Unit)? = null) {
+        // Cancel any running animation
+        currentAnimator?.cancel()
+        
+        view.alpha = 0f
+        view.visibility = View.VISIBLE
+        
+        currentAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = FADE_IN_DURATION_MS
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Float
+                view.alpha = progress
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.alpha = 1f
+                    currentAnimator = null
+                    onComplete?.invoke()
+                }
+            })
+        }
+        currentAnimator?.start()
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarAnimator.kt : animateOut
+    /**
+     * Animates a view fading out (alpha 1 -> 0).
+     * 
+     * @param view The view to animate
+     * @param hideAfter If true, sets visibility to GONE after animation
+     * @param onComplete Optional callback when animation completes
+     */
+    fun animateOut(view: View, hideAfter: Boolean = true, onComplete: (() -> Unit)? = null) {
+        // Cancel any running animation
+        currentAnimator?.cancel()
+        
+        currentAnimator = ValueAnimator.ofFloat(1f, 0f).apply {
+            duration = FADE_OUT_DURATION_MS
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Float
+                view.alpha = progress
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    if (hideAfter) {
+                        view.visibility = View.GONE
+                    }
+                    view.alpha = 1f
+                    currentAnimator = null
+                    onComplete?.invoke()
+                }
+            })
+        }
+        currentAnimator?.start()
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarAnimator.kt : showImmediate
+    /**
+     * Immediately shows a view without animation.
+     * 
+     * @param view The view to show
+     */
+    fun showImmediate(view: View) {
+        currentAnimator?.cancel()
+        currentAnimator = null
+        view.alpha = 1f
+        view.visibility = View.VISIBLE
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarAnimator.kt : isAnimating
+    /**
+     * Checks if an animation is currently running.
+     */
+    fun isAnimating(): Boolean = currentAnimator?.isRunning == true
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarButtonRegistry.kt : getDefaultConfiguration
+    /**
+     * Gets the default button configuration.
+     * 
+     * Default layout: [Clipboard] [---variations---] [Emoji] [Language]
+     */
+    fun getDefaultConfiguration(): List<StatusBarButtonConfig> {
+        return listOf(
+            StatusBarButtonConfig(
+                id = StatusBarButtonId.Clipboard,
+                position = StatusBarButtonPosition.LEFT,
+                enabled = true,
+                order = 0
+            ),
+            StatusBarButtonConfig(
+                id = StatusBarButtonId.Emoji,
+                position = StatusBarButtonPosition.RIGHT,
+                enabled = true,
+                order = 0
+            ),
+            StatusBarButtonConfig(
+                id = StatusBarButtonId.Language,
+                position = StatusBarButtonPosition.RIGHT,
+                enabled = true,
+                order = 1
+            )
+        )
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarButtonRegistry.kt : getClipboardFactory
+    /**
+     * Direct access to the clipboard factory for badge updates.
+     */
+    fun getClipboardFactory(): ClipboardButtonFactory = clipboardFactory
+
+// ===== it/palsoftware/pastiera/inputmethod/statusbar/StatusBarButtonRegistry.kt : getEmojiFactory
+    /**
+     * Direct access to the emoji factory.
+     */
+    fun getEmojiFactory(): EmojiButtonFactory = emojiFactory
+
+// ===== it/palsoftware/pastiera/inputmethod/subtype/AdditionalSubtypeUtils.kt : createPrefSubtypes
+    /**
+     * Creates a preference string from an array of subtypes.
+     * Format: "locale:layout[:extra];locale:layout[:extra];..."
+     */
+    fun createPrefSubtypes(subtypeArray: Array<InputMethodSubtype>): String {
+        return subtypeArray.joinToString(";") { subtype ->
+            val locale = subtype.localeString()
+            val extraValue = subtype.extraValue ?: ""
+            val layoutName = extractLayoutFromExtraValue(extraValue) ?: ""
+            val otherExtras = extractOtherExtras(extraValue)
+            
+            if (otherExtras.isNotEmpty()) {
+                "$locale:$layoutName:$otherExtras"
+            } else {
+                "$locale:$layoutName"
+            }
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/ui/VariationBarView.kt : getWrapper
+    fun getWrapper(): FrameLayout? = wrapper
+
+// ===== it/palsoftware/pastiera/inputmethod/ui/VariationBarView.kt : hideForSym
+    fun hideForSym(onHidden: () -> Unit) {
+        val containerView = container ?: run {
+            onHidden()
+            return
+        }
+        val row = currentVariationsRow
+        val overlayView = overlay
+
+        buttonHost?.detachAll()
+        hideSwipeIndicator(immediate = true)
+        hideSwipeHintImmediate()
+        shouldShowSwipeHint = false
+
+        if (row != null && row.parent == containerView && row.visibility == View.VISIBLE) {
+            animateVariationsOut(row) {
+                (row.parent as? ViewGroup)?.removeView(row)
+                if (currentVariationsRow == row) {
+                    currentVariationsRow = null
+                }
+                containerView.visibility = View.GONE
+                wrapper?.visibility = View.GONE
+                overlayView?.visibility = View.GONE
+                onHidden()
+            }
+        } else {
+            currentVariationsRow = null
+            containerView.visibility = View.GONE
+            wrapper?.visibility = View.GONE
+            overlayView?.visibility = View.GONE
+            onHidden()
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/ui/VariationBarView.kt : animateVariationsIn
+    private fun animateVariationsIn(view: View) {
+        view.alpha = 0f
+        view.visibility = View.VISIBLE
+        ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 75
+            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Float
+                view.alpha = progress
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.alpha = 1f
+                }
+            })
+        }.start()
+    }
+
+// ===== it/palsoftware/pastiera/shortcuts/ShortcutKeys.kt : keyCodeOf
+    fun keyCodeOf(c: Char): Int? = CHAR_KEYS[c]
+
+// ===== it/palsoftware/pastiera/update/ReleaseNotesFetcher.kt : parseStringArray
+private fun parseStringArray(json: JSONObject, key: String, limit: Int): List<String> {
+    val array = json.optJSONArray(key) ?: return emptyList()
+    return buildList {
+        for (index in 0 until array.length()) {
+            val value = array.optString(index).trim()
+            if (value.isNotBlank()) add(value)
+            if (size >= limit) break
+        }
+    }
+}
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : cycleKeyboardLayout
+    /**
+     * Cycles to the next keyboard layout in the configured list and returns its id.
+     * Always loops: even with a single entry we "cycle" back to it, so long press
+     * consistently triggers a layout reload/toast and never becomes a no-op.
+     */
+    fun cycleKeyboardLayout(context: Context): String? {
+        val current = getKeyboardLayout(context)
+        // Normalize list: keep order, drop blanks/duplicates, ensure at least one entry.
+        val baseLayouts = getKeyboardLayoutList(context).ifEmpty { listOf(current) }
+        val normalized = if (baseLayouts.contains(current)) baseLayouts else listOf(current) + baseLayouts
+        val missing = normalized.filterNot { isLayoutAvailable(context, it) }
+        if (missing.isNotEmpty()) {
+            Log.w(TAG, "Skipping missing layouts: ${missing.joinToString()}")
+        }
+        val layouts = normalized.filter { isLayoutAvailable(context, it) }.ifEmpty { listOf(current) }
+
+        val currentIndex = layouts.indexOf(current).let { if (it >= 0) it else 0 }
+        val nextIndex = (currentIndex + 1) % layouts.size
+        val nextLayout = layouts[nextIndex]
+        setKeyboardLayout(context, nextLayout)
+        return nextLayout
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : defaultTrackpadSwipeThreshold
+    /**
+     * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
+     * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
+     * swipes there; 120, less than one key, catches a flick across a single key.
+     */
+    private fun defaultTrackpadSwipeThreshold(): Float =
+        if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
+        else DEFAULT_TRACKPAD_SWIPE_THRESHOLD
+
+// ===== it/palsoftware/pastiera/clipboard/ClipboardHistoryPopupView.kt : setOnItemClickListener
+    fun setOnItemClickListener(listener: (ClipboardHistoryEntry) -> Unit) {
+        onItemClickListener = listener
+    }
+
+// ===== it/palsoftware/pastiera/clipboard/ClipboardHistoryPopupView.kt : setOnPinClickListener
+    fun setOnPinClickListener(listener: (ClipboardHistoryEntry) -> Unit) {
+        onPinClickListener = listener
+    }
+
+// ===== it/palsoftware/pastiera/clipboard/ClipboardHistoryPopupView.kt : setOnDeleteClickListener
+    fun setOnDeleteClickListener(listener: (ClipboardHistoryEntry) -> Unit) {
+        onDeleteClickListener = listener
+    }
+
+// ===== it/palsoftware/pastiera/clipboard/ClipboardHistoryPopupView.kt : setOnClearAllClickListener
+    fun setOnClearAllClickListener(listener: () -> Unit) {
+        onClearAllClickListener = listener
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/StatusBarController.kt : buildLayoutAccessibilityStateDescription
+    private fun buildLayoutAccessibilityStateDescription(): String {
+        return try {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val subtype = imm?.currentInputMethodSubtype
+            val languageLabel = if (subtype != null) {
+                val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
+                subtype.getDisplayName(context, context.packageName, appInfo)?.toString()
+                    ?.takeIf { it.isNotBlank() }
+                    ?: subtype.localeString().ifBlank { "Unknown" }
+            } else {
+                "Unknown"
+            }
+
+            val layoutName = subtype
+                ?.let { AdditionalSubtypeUtils.getKeyboardLayoutFromSubtype(it) }
+                ?.takeIf { it.isNotBlank() }
+                ?: "qwerty"
+            val layoutLabel = LayoutFileStore.getLayoutMetadataFromAssets(context.assets, layoutName)?.name
+                ?.takeIf { it.isNotBlank() }
+                ?: LayoutFileStore.getLayoutMetadata(context, layoutName)?.name
+                ?.takeIf { it.isNotBlank() }
+                ?: layoutName
+
+            context.getString(
+                R.string.status_bar_button_language_state_description,
+                languageLabel,
+                layoutLabel
+            )
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to update accessibility state description", e)
+            context.getString(
+                R.string.status_bar_button_language_state_description,
+                "Unknown",
+                "qwerty"
+            )
+        }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/subtype/AdditionalSubtypeUtils.kt : extractOtherExtras
+    /**
+     * Extracts other extras (excluding layout, ascii, emoji, isAdditionalSubtype).
+     */
+    private fun extractOtherExtras(extraValue: String): String {
+        val parts = extraValue.split(",")
+        val filtered = parts.filter { part ->
+            !part.startsWith("$EXTRA_KEY_KEYBOARD_LAYOUT_SET=") &&
+            part != EXTRA_KEY_ASCII_CAPABLE &&
+            part != EXTRA_KEY_EMOJI_CAPABLE &&
+            part != EXTRA_KEY_IS_ADDITIONAL_SUBTYPE
+        }
+        return filtered.joinToString(",")
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/ui/VariationBarView.kt : animateVariationsOut
+    private fun animateVariationsOut(view: View, onAnimationEnd: (() -> Unit)? = null) {
+        ValueAnimator.ofFloat(1f, 0f).apply {
+            duration = 50
+            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Float
+                view.alpha = progress
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                    view.alpha = 1f
+                    onAnimationEnd?.invoke()
+                }
+            })
+        }.start()
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : isLayoutAvailable
+    private fun isLayoutAvailable(context: Context, layoutName: String): Boolean {
+        if (it.palsoftware.pastiera.data.layout.LayoutFileStore.layoutExists(context, layoutName)) {
+            return true
+        }
+        return try {
+            BundledLayoutAssets.openLayout(context.assets, layoutName)?.use { true } ?: false
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+// ===== it/palsoftware/pastiera/SettingsManager.kt : getKeyboardLayoutList
+    /**
+     * Returns the list of keyboard layouts configured for cycling.
+     * Falls back to a single-entry list using the current layout if no list is stored.
+     */
+    fun getKeyboardLayoutList(context: Context): List<String> {
+        val prefs = getPreferences(context)
+        val jsonString = prefs.getString(KEY_KEYBOARD_LAYOUT_LIST, null) ?: return listOf(getKeyboardLayout(context))
+        return try {
+            val array = org.json.JSONArray(jsonString)
+            val seen = LinkedHashSet<String>()
+            for (i in 0 until array.length()) {
+                val name = array.optString(i, null)?.trim()
+                if (!name.isNullOrEmpty()) {
+                    seen.add(name)
+                }
+            }
+            if (seen.isEmpty()) {
+                listOf(getKeyboardLayout(context))
+            } else {
+                seen.toList()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing keyboard layout list, falling back to single layout", e)
+            listOf(getKeyboardLayout(context))
+        }
+    }
+

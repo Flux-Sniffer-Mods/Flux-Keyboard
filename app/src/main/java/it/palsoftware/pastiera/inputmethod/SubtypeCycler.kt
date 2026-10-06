@@ -276,50 +276,5 @@ object SubtypeCycler {
 
         return SettingsManager.getKeyboardLayout(context)
     }
-    
-    /**
-     * Gets the current subtype display name.
-     */
-    fun getCurrentSubtypeName(context: Context): String? {
-        return try {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            val currentSubtype = imm?.currentInputMethodSubtype ?: return null
-            
-            val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
-            currentSubtype.getDisplayName(
-                context,
-                context.packageName,
-                appInfo
-            )?.toString()
-        } catch (e: Exception) {
-            Log.e(TAG, "Error getting current subtype name", e)
-            null
-        }
-    }
-    
-    /**
-     * Gets all available subtypes for the IME.
-     */
-    fun getAvailableSubtypes(
-        context: Context,
-        imeServiceClass: Class<*>
-    ): List<InputMethodSubtype> {
-        return try {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                ?: return emptyList()
-            
-            val packageName = context.packageName
-            val serviceName = imeServiceClass.name
-            
-            val inputMethodInfo = imm.getInputMethodList().firstOrNull { info ->
-                info.packageName == packageName && 
-                info.serviceName == serviceName
-            } ?: return emptyList()
-            
-            imm.getEnabledInputMethodSubtypeList(inputMethodInfo, true)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error getting available subtypes", e)
-            emptyList()
-        }
-    }
+
 }

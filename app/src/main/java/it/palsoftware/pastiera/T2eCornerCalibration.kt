@@ -113,23 +113,4 @@ internal object T2eCornerGeometry {
         }
     }
 
-    /** Open left-to-right contour of the calibrated lower display edge. */
-    fun bottomContourPath(
-        width: Float,
-        height: Float,
-        leftRadius: Float,
-        rightRadius: Float,
-        calibration: T2eCornerCalibration,
-        extraInset: Float = 0f
-    ): Path = Path().apply {
-        for (i in 0..256) {
-            val p = point(leftRadius, height, PI / 2 * i / 256, calibration, extraInset)
-            if (i == 0) moveTo(p.x, p.y) else lineTo(p.x, p.y)
-        }
-        for (i in 256 downTo 0) {
-            val p = point(rightRadius, height, PI / 2 * i / 256, calibration, extraInset)
-            lineTo(width - p.x, p.y)
-        }
-        offset(calibration.shiftXPx, calibration.shiftYPx)
-    }
 }

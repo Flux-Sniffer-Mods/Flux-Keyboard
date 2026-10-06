@@ -352,14 +352,14 @@ class StatusBarController(
         val altLatchActive: Boolean,
         val altPhysicallyPressed: Boolean,
         val altOneShot: Boolean,
-        val symPage: Int, // 0=disattivato, 1=pagina1 emoji, 2=pagina2 caratteri
+        val symPage: Int, // 0 = off, 1 = emoji page, 2 = characters page
         // Flux Keyboard: SYM and the emoji key held down, or tapped to apply to the next key
         val symHeld: Boolean = false,
         val symSticky: Boolean = false,
         val emojiHeld: Boolean = false,
         val emojiSticky: Boolean = false,
         val symPhysicallyPressed: Boolean = false,
-        val clipboardOverlay: Boolean = false, // mostra la clipboard come view dedicata
+        val clipboardOverlay: Boolean = false, // show the clipboard as its own view
         val clipboardCount: Int = 0, // numero di elementi in clipboard
         val variations: List<String> = emptyList(),
         val suggestions: List<String> = emptyList(),
@@ -830,7 +830,7 @@ class StatusBarController(
             ).toInt()
             val emojiKeyboardBottomPadding = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
-                12f, // Padding in basso per evitare i controlli IME
+                12f, // Bottom padding to clear the IME controls
                 context.resources.displayMetrics
             ).toInt()
             emojiKeyboardHorizontalPaddingPx = emojiKeyboardHorizontalPadding
@@ -1158,15 +1158,6 @@ class StatusBarController(
         }
     }
 
-    private fun launchTrackpadDebug() {
-        if (!trackpadDebugLaunched) {
-            trackpadDebugLaunched = true
-            val intent = Intent(context, it.palsoftware.pastiera.TrackpadDebugActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        }
-    }
-
     /**
      * Ensures the layout is created before updating.
      * This is important for candidates view which may not have been created yet.
@@ -1224,36 +1215,6 @@ class StatusBarController(
         }
         
         return null
-    }
-    
-    /**
-     * Crea un indicatore per un modificatore (deprecato, mantenuto per compatibilità).
-     */
-    private fun createModifierIndicator(text: String, isActive: Boolean): TextView {
-        val dp8 = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, 
-            8f, 
-            context.resources.displayMetrics
-        ).toInt()
-        val dp6 = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, 
-            6f, 
-            context.resources.displayMetrics
-        ).toInt()
-        
-        return TextView(context).apply {
-            this.text = text
-            textSize = 12f
-            setTextColor(if (isActive) Color.WHITE else Color.argb(180, 255, 255, 255))
-            gravity = Gravity.CENTER
-            setPadding(dp6, dp8, dp6, dp8)
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                marginEnd = dp8 // Margine a destra tra gli indicatori
-            }
-        }
     }
 
     private fun updateMenuBarModifierIndicators(
@@ -1739,10 +1700,10 @@ class StatusBarController(
     }
 
     /**
-     * Aggiorna la griglia emoji/caratteri con le mappature SYM.
+     * Updates the emoji/character grid with the SYM mappings.
      * @param symMappings Le mappature da visualizzare
-     * @param page La pagina attiva (1=emoji, 2=caratteri)
-     * @param inputConnection L'input connection per inserire caratteri quando si clicca sui pulsanti
+     * @param page The active page (1 = emoji, 2 = characters)
+     * @param inputConnection The input connection that tapped buttons type into
      */
     private fun updateEmojiKeyboard(symMappings: Map<Int, String>, page: Int, inputConnection: android.view.inputmethod.InputConnection? = null) {
         val container = emojiKeyboardContainer ?: return
@@ -1763,11 +1724,11 @@ class StatusBarController(
         }
         lastEmojiLayerSlot = slot
         
-        // Rimuovi tutti i tasti esistenti
+        // Remove the existing keys
         container.removeAllViews()
         emojiKeyButtons.clear()
         
-        // Definizione delle righe della tastiera
+        // Keyboard rows
         val keyboardRows = listOf(
             listOf(android.view.KeyEvent.KEYCODE_Q, android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_E, 
                    android.view.KeyEvent.KEYCODE_R, android.view.KeyEvent.KEYCODE_T, android.view.KeyEvent.KEYCODE_Y, 
@@ -1799,8 +1760,8 @@ class StatusBarController(
             context.resources.displayMetrics
         ).toInt()
         
-        // Calcola la larghezza fissa dei tasti basata sulla prima riga (10 caselle)
-        val maxKeysInRow = 10 // Prima riga ha 10 caselle
+        // Fixed key width, from the first row (10 keys)
+        val maxKeysInRow = 10 // The first row has 10 keys
         val screenWidth = context.resources.displayMetrics.widthPixels
         val horizontalPadding = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -1813,7 +1774,7 @@ class StatusBarController(
         
         val keyHeight = layerKeyHeightPx(page)
         
-        // Crea ogni riga della tastiera
+        // Build each keyboard row
         for ((rowIndex, row) in keyboardRows.withIndex()) {
             val rowLayout = LinearLayout(context).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -1883,7 +1844,7 @@ class StatusBarController(
             // Default non-Titan 2 layout logic...
             // (The rest of the loop for non-Titan 2 remains the same)
             
-            // Per la terza riga, aggiungi placeholder con emoji picker button a sinistra
+            // Third row: a placeholder with the emoji picker button on the left
             // Without an emoji key, the bottom-left slot switches between emoji and symbols;
             // with one, it holds the pencil
             // A layer shown as pages has nothing to edit, so its corner swaps to the other layer
@@ -1924,16 +1885,16 @@ class StatusBarController(
                 
                 bindLayerKey(keyButton, keyCode, content, page, inputConnection)
                 
-                // Usa larghezza fissa invece di weight
+                // Fixed width instead of weight
                 rowLayout.addView(keyButton, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
-                    // Aggiungi margine solo se non è l'ultimo tasto della riga
+                    // Margin only between keys, not after the last one
                     if (index < row.size - 1) {
                         marginEnd = keySpacing
                     }
                 })
             }
             
-            // Per la terza riga, aggiungi placeholder con icona matita a destra
+            // Third row: a placeholder with the pencil icon on the right
             if (rowIndex == 2) {
                 rowLayout.addView(View(context), LinearLayout.LayoutParams(0, keyHeight, 1f))
                 rowLayout.addView(createGridCloseButton(), LinearLayout.LayoutParams(bottomSideWidth, keyHeight))
@@ -2571,7 +2532,7 @@ class StatusBarController(
     }
 
     /**
-     * Crea un placeholder trasparente per allineare le righe.
+     * A transparent placeholder that keeps the rows aligned.
      */
     private fun createPlaceholderButton(height: Int): View {
         return FrameLayout(context).apply {
@@ -2586,7 +2547,7 @@ class StatusBarController(
     }
     
     /**
-     * Crea un placeholder con icona emoji per aprire l'emoji picker (symPage 4).
+     * A placeholder with an emoji icon that opens the emoji picker (SYM page 4).
      */
     private fun createPlaceholderWithEmojiPickerButton(height: Int, page: Int): View {
         val theme = activeThemeColors()
@@ -2641,7 +2602,7 @@ class StatusBarController(
     }
     
     /**
-     * Crea un placeholder con icona matita per aprire la schermata di personalizzazione SYM.
+     * A placeholder with a pencil icon that opens SYM customisation.
      */
     private fun createPlaceholderWithPencilButton(height: Int, page: Int): View {
         val theme = activeThemeColors()
@@ -2656,10 +2617,10 @@ class StatusBarController(
         // Background trasparente
         placeholder.background = null
         
-        // Dimensione icona più grande
+        // Larger icon
         val iconSize = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            28f, // Aumentata per maggiore visibilità
+            28f, // Larger, to stand out
             context.resources.displayMetrics
         ).toInt()
         
@@ -2786,16 +2747,16 @@ class StatusBarController(
         try {
             context.startActivity(intent)
         } catch (e: Exception) {
-            Log.e(TAG, "Errore nell'apertura della schermata di personalizzazione SYM", e)
+            Log.e(TAG, "Error opening SYM customisation", e)
         }
     }
     
     /**
-     * Crea un tasto della griglia emoji/caratteri.
-     * @param label La lettera del tasto
-     * @param content L'emoji o carattere da mostrare
-     * @param height L'altezza del tasto
-     * @param page La pagina attiva (1=emoji, 2=caratteri)
+     * A key of the emoji/character grid.
+     * @param label The key's letter
+     * @param content The emoji or character to show
+     * @param height The key's height
+     * @param page The active page (1 = emoji, 2 = characters)
      */
     /**
      * Titan 2 Elite (rounded corners): space above the emoji/SYM/picker screens, below the bar, and
@@ -2807,7 +2768,7 @@ class StatusBarController(
     private fun createEmojiKeyButton(label: String, content: String, height: Int, page: Int): View {
         val theme = activeThemeColors()
         val keyLayout = FrameLayout(context).apply {
-            setPadding(0, 0, 0, 0) // Nessun padding per permettere all'emoji di occupare tutto lo spazio
+            setPadding(0, 0, 0, 0) // No padding, so the emoji fills the key
             layoutParams = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 height
@@ -2815,7 +2776,7 @@ class StatusBarController(
             contentDescription = buildSymKeyContentDescription(label, content)
         }
         
-        // Background del tasto con angoli leggermente arrotondati
+        // Key background with slightly rounded corners
         val cornerRadius = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             6f, // Angoli leggermente arrotondati
@@ -2828,15 +2789,15 @@ class StatusBarController(
         }
         keyLayout.background = drawable
         
-        // Emoji/carattere deve occupare tutto il tasto, centrata
+        // The emoji or character fills the key, centred
         // Calcola textSize in base all'altezza disponibile (convertendo da pixel a sp)
         val heightInDp = height / context.resources.displayMetrics.density
         val roundedCorners = SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)
         val contentTextSize = if (page == 2 || roundedCorners) {
-            // Per caratteri unicode, usa una dimensione più piccola
+            // Smaller size for Unicode characters
             (heightInDp * 0.5f)
         } else {
-            // Per emoji, usa la dimensione normale
+            // Normal size for emoji
             (heightInDp * 0.75f)
         }
         
@@ -2871,7 +2832,7 @@ class StatusBarController(
                 setTextColor(theme.textAndIcons)
                 setTypeface(null, android.graphics.Typeface.BOLD)
             }
-            // Larghezza e altezza per occupare tutto lo spazio disponibile
+            // Fill the available width and height
             layoutParams = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -2948,7 +2909,7 @@ class StatusBarController(
             return keyLayout
         }
 
-        // Aggiungi prima il contenuto (dietro) poi il testo (davanti)
+        // Content first (behind), then the text (in front)
         keyLayout.addView(contentText)
         keyLayout.addView(labelText)
         
@@ -2960,50 +2921,6 @@ class StatusBarController(
             return label
         }
         return context.getString(R.string.sym_key_content_description, label, content)
-    }
-
-    private fun createHideKeyboardButton(height: Int, width: Int): View {
-        val button = FrameLayout(context).apply {
-            layoutParams = LinearLayout.LayoutParams(width, height)
-            isClickable = true
-            isFocusable = true
-            contentDescription = context.getString(R.string.close)
-        }
-        val icon = ImageView(context).apply {
-            setImageResource(R.drawable.ic_close_24)
-            setColorFilter(hardwareTheme().textAndIcons)
-            scaleType = ImageView.ScaleType.CENTER_INSIDE
-            background = createCloseButtonBackground(hardwareTheme().toKeyboardThemeColors())
-            val padding = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                4f,
-                context.resources.displayMetrics
-            ).toInt()
-            setPadding(padding, padding, padding, padding)
-            layoutParams = FrameLayout.LayoutParams(
-                TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    36f,
-                    context.resources.displayMetrics
-                ).toInt(),
-                TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    32f,
-                    context.resources.displayMetrics
-                ).toInt(),
-                Gravity.BOTTOM or Gravity.END
-            )
-        }
-        button.addView(icon)
-        button.setOnClickListener {
-            if (onSymCloseRequested != null) {
-                onSymCloseRequested?.invoke()
-            } else {
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(button.windowToken, 0)
-            }
-        }
-        return button
     }
 
     /**
@@ -3415,11 +3332,11 @@ class StatusBarController(
     }
     
     /**
-     * Crea una griglia emoji personalizzabile (per la schermata di personalizzazione).
-     * Restituisce una View che può essere incorporata in Compose tramite AndroidView.
+     * A customisable emoji grid (for the customisation screen).
+     * Returns a View that Compose can host through AndroidView.
      * 
      * @param symMappings Le mappature emoji da visualizzare
-     * @param onKeyClick Callback chiamato quando un tasto viene cliccato (keyCode, emoji)
+     * @param onKeyClick Called when a key is tapped (keyCode, emoji)
      */
     fun createCustomizableEmojiKeyboard(
         symMappings: Map<Int, String>,
@@ -3434,8 +3351,8 @@ class StatusBarController(
                 12f,
                 context.resources.displayMetrics
             ).toInt()
-            setPadding(0, 0, 0, bottomPadding) // Nessun padding orizzontale, solo in basso
-            // Aggiungi sfondo nero per migliorare la visibilità dei caratteri con tema chiaro
+            setPadding(0, 0, 0, bottomPadding) // Bottom padding only
+            // Black background so characters stay readable with a light theme
             setBackgroundColor(Color.BLACK)
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -3443,7 +3360,7 @@ class StatusBarController(
             )
         }
         
-        // Definizione delle righe della tastiera (stessa struttura della tastiera reale)
+        // Keyboard rows (the same as the real keyboard)
         val keyboardRows = listOf(
             listOf(android.view.KeyEvent.KEYCODE_Q, android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_E, 
                    android.view.KeyEvent.KEYCODE_R, android.view.KeyEvent.KEYCODE_T, android.view.KeyEvent.KEYCODE_Y, 
@@ -3475,11 +3392,11 @@ class StatusBarController(
             context.resources.displayMetrics
         ).toInt()
         
-        // Calcola la larghezza fissa dei tasti basata sulla prima riga (10 caselle)
-        // Usa ViewTreeObserver per ottenere la larghezza effettiva del container dopo il layout
-        val maxKeysInRow = 10 // Prima riga ha 10 caselle
+        // Fixed key width, from the first row (10 keys)
+        // A ViewTreeObserver gets the container's real width after layout
+        val maxKeysInRow = 10 // The first row has 10 keys
         
-        // Inizializza con una larghezza temporanea, verrà aggiornata dopo il layout
+        // A temporary width, updated after layout
         var fixedKeyWidth = 0
         
         container.viewTreeObserver.addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
@@ -3489,7 +3406,7 @@ class StatusBarController(
                     val totalSpacing = keySpacing * (maxKeysInRow - 1)
                     fixedKeyWidth = (containerWidth - totalSpacing) / maxKeysInRow
                     
-                    // Aggiorna tutti i tasti con la larghezza corretta
+                    // Give every key the right width
                     for (i in 0 until container.childCount) {
                         val rowLayout = container.getChildAt(i) as? LinearLayout
                         rowLayout?.let { row ->
@@ -3507,13 +3424,13 @@ class StatusBarController(
                         }
                     }
                     
-                    // Rimuovi il listener dopo il primo layout
+                    // Remove the listener after the first layout
                     container.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
             }
         })
         
-        // Valore iniziale basato sulla larghezza dello schermo (verrà aggiornato dal listener)
+        // Initial value from the screen width (the listener updates it)
         val screenWidth = context.resources.displayMetrics.widthPixels
         val totalSpacing = keySpacing * (maxKeysInRow - 1)
         fixedKeyWidth = (screenWidth - totalSpacing) / maxKeysInRow
@@ -3524,7 +3441,7 @@ class StatusBarController(
             context.resources.displayMetrics
         ).toInt()
         
-        // Crea ogni riga della tastiera (stessa struttura della tastiera reale)
+        // Build each keyboard row (the same as the real keyboard)
         for ((rowIndex, row) in keyboardRows.withIndex()) {
             val rowLayout = LinearLayout(context).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -3580,7 +3497,7 @@ class StatusBarController(
                 continue
             }
             
-            // Per la terza riga, aggiungi placeholder trasparente a sinistra
+            // Third row: a transparent placeholder on the left
             if (rowIndex == 2) {
                 val leftPlaceholder = createPlaceholderButton(keyHeight)
                 rowLayout.addView(leftPlaceholder, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
@@ -3593,7 +3510,7 @@ class StatusBarController(
                 val reserved = reservedLayerKeys(page)[keyCode]
                 val emoji = symMappings[keyCode] ?: ""
                 
-                // Usa la stessa funzione createEmojiKeyButton della tastiera reale
+                // The same createEmojiKeyButton as the real keyboard
                 val keyButton = createEmojiKeyButton(label, reserved ?: emoji, keyHeight, page)
                 
                 // The search, GIF and Recents keys aren't mapped: greyed, showing their job
@@ -3601,7 +3518,7 @@ class StatusBarController(
                     onKeyClick(keyCode, emoji)
                 }
                 
-                // Usa larghezza fissa invece di weight (stesso layout della tastiera reale)
+                // Fixed width instead of weight (the same layout as the real keyboard)
                 rowLayout.addView(keyButton, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
                     if (index < row.size - 1) {
                         marginEnd = keySpacing
@@ -3609,8 +3526,8 @@ class StatusBarController(
                 })
             }
             
-            // Per la terza riga nella schermata di personalizzazione, aggiungi placeholder trasparente a destra
-            // per mantenere l'allineamento (senza matita e senza click listener)
+            // Third row on the customisation screen: a transparent placeholder on the right
+            // to keep the alignment (no pencil, no click listener)
             if (rowIndex == 2) {
                 val rightPlaceholder = createPlaceholderButton(keyHeight)
                 rowLayout.addView(rightPlaceholder, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
@@ -3691,7 +3608,7 @@ class StatusBarController(
     }
     
     /**
-     * Anima l'apparizione della griglia emoji solo con slide up (nessun fade).
+     * Slides the emoji grid up into view (no fade).
      * @param backgroundView Il view dello sfondo da impostare a opaco immediatamente
      */
     private fun animateEmojiKeyboardIn(view: View, backgroundView: View? = null) {
@@ -3741,9 +3658,9 @@ class StatusBarController(
     }
     
     /**
-     * Anima la scomparsa della griglia emoji (slide down + fade out).
-     * @param backgroundView Il view dello sfondo (non animato, rimane opaco)
-     * @param onAnimationEnd Callback chiamato quando l'animazione è completata
+     * Slides the emoji grid down and fades it out.
+     * @param backgroundView The background view (not animated, stays opaque)
+     * @param onAnimationEnd Called when the animation ends
      */
     private fun animateEmojiKeyboardOut(view: View, backgroundView: View? = null, onAnimationEnd: (() -> Unit)? = null) {
         if (SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)) {
@@ -3781,9 +3698,6 @@ class StatusBarController(
         }
         animator.start()
     }
-
-    
-    
 
     fun update(snapshot: StatusSnapshot, emojiMapText: String = "", inputConnection: android.view.inputmethod.InputConnection? = null, symMappings: Map<Int, String>? = null) {
         lastSnapshotSymPage = snapshot.symPage
@@ -4170,14 +4084,6 @@ class StatusBarController(
         }
     }
 
-    private fun updateAccessibilityStateDescription(view: View) {
-        val newStateDescription = buildLayoutAccessibilityStateDescription()
-        if (ViewCompat.getStateDescription(view)?.toString() == newStateDescription) {
-            return
-        }
-        ViewCompat.setStateDescription(view, newStateDescription)
-    }
-
     private fun isAccessibilityLiveAnnouncementsEnabled(): Boolean {
         return SettingsManager.getAccessibilityLiveAnnouncementsEnabled(context)
     }
@@ -4208,44 +4114,6 @@ class StatusBarController(
             if (container.importantForAccessibility != importance) {
                 container.importantForAccessibility = importance
             }
-        }
-    }
-
-    private fun buildLayoutAccessibilityStateDescription(): String {
-        return try {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            val subtype = imm?.currentInputMethodSubtype
-            val languageLabel = if (subtype != null) {
-                val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
-                subtype.getDisplayName(context, context.packageName, appInfo)?.toString()
-                    ?.takeIf { it.isNotBlank() }
-                    ?: subtype.localeString().ifBlank { "Unknown" }
-            } else {
-                "Unknown"
-            }
-
-            val layoutName = subtype
-                ?.let { AdditionalSubtypeUtils.getKeyboardLayoutFromSubtype(it) }
-                ?.takeIf { it.isNotBlank() }
-                ?: "qwerty"
-            val layoutLabel = LayoutFileStore.getLayoutMetadataFromAssets(context.assets, layoutName)?.name
-                ?.takeIf { it.isNotBlank() }
-                ?: LayoutFileStore.getLayoutMetadata(context, layoutName)?.name
-                ?.takeIf { it.isNotBlank() }
-                ?: layoutName
-
-            context.getString(
-                R.string.status_bar_button_language_state_description,
-                languageLabel,
-                layoutLabel
-            )
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to update accessibility state description", e)
-            context.getString(
-                R.string.status_bar_button_language_state_description,
-                "Unknown",
-                "qwerty"
-            )
         }
     }
 

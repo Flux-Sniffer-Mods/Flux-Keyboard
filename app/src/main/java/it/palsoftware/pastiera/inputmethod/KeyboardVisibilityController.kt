@@ -262,7 +262,6 @@ class KeyboardVisibilityController(
         waitingForBackendHide = false
     }
 
-    fun isCandidatesOnlySurface() = usesCandidatesView()
     fun isExpectedSurfaceRequestedOrShown(): Boolean = windowShown && renderedSurface() == expectedSurface() &&
         (usesCandidatesView() || isInputViewShown())
     fun shouldRecoverSurfaceOnHardwareKey() = !isExpectedSurfaceRequestedOrShown()

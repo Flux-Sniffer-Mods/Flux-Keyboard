@@ -96,18 +96,6 @@ object EmojiRepository {
         return emptyList()
     }
 
-    /**
-     * Utility for future keyboard pagination/chunking without re-parsing assets.
-     */
-    fun asPaged(
-        categories: List<EmojiCategory>,
-        pageSize: Int = 50
-    ): Map<String, List<List<EmojiEntry>>> {
-        return categories.associate { category ->
-            category.id to category.emojis.chunked(pageSize)
-        }
-    }
-
     private fun filterCategories(
         data: LoadedData,
         extraAvailable: (String) -> Boolean
