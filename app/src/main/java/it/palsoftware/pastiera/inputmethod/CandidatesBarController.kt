@@ -389,7 +389,9 @@ class CandidatesBarController(
     }
 
     /** Hidden app with "Show status LEDs only": both surfaces draw only the LED strip. */
-    fun setLedsOnlyMode(active: Boolean) {
+    fun setLedsOnlyMode(active: Boolean, atScreenEdge: Boolean = false) {
+        inputStatusBar.ledsAtScreenEdge = atScreenEdge
+        candidatesStatusBar.ledsAtScreenEdge = atScreenEdge
         inputStatusBar.ledsOnlyMode = active
         candidatesStatusBar.ledsOnlyMode = active
     }

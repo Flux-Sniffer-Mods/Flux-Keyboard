@@ -283,6 +283,10 @@
     <string name="root_section_shortcuts">Shortcuts</string>
     <string name="root_shortcuts_note">Force-stop the app in front, Battery Saver on or off, and the app in front off the network (Android 14 and later): assign them to keys in Key shortcuts, or find them in the quick launcher.</string>
     <string name="root_shortcuts_open_description">Assign the Shizuku shortcuts to keys.</string>
+    <string name="shizuku_request_not_running">Shizuku isn\'t running yet. Start it in Shizuku (Start via Wireless debugging), then come back and try again.</string>
+    <string name="shizuku_request_refused_before">Shizuku remembers Flux Keyboard being refused, so it won\'t ask again. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
+    <string name="shizuku_request_old">This Shizuku is too old to ask. Update it from Shizuku\'s GitHub page, then try again.</string>
+    <string name="shizuku_request_no_question">Shizuku didn\'t show its question. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
     <string name="adb_not_running">Shizuku isn\'t running. Start it (wireless debugging, or ADB from a computer), then come back.</string>
     <string name="adb_not_allowed">Shizuku is running but hasn\'t allowed Flux Keyboard yet.</string>
     <string name="adb_allow_title">Allow Flux Keyboard in Shizuku</string>

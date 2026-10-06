@@ -18,13 +18,14 @@ class MenuBarButtonsTest {
     fun reset() = SettingsManager.resetMenuBarButtons(context)
 
     @Test
-    fun extraKeysUndoRedoAndClipboardByDefault() {
+    fun extraKeysUndoRedoClipboardAndSettingsByDefault() {
         assertEquals(
             listOf(
                 SettingsManager.STATUS_BAR_BUTTON_EXTRA_KEYS,
                 SettingsManager.STATUS_BAR_BUTTON_UNDO,
                 SettingsManager.STATUS_BAR_BUTTON_REDO,
-                SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD
+                SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD,
+                SettingsManager.STATUS_BAR_BUTTON_SETTINGS
             ),
             SettingsManager.getMenuBarButtons(context)
         )

@@ -55,7 +55,6 @@ import it.palsoftware.pastiera.setMinimalModeShowLeds
 private const val SHIZUKU_RELEASES = "https://github.com/RikkaApps/Shizuku/releases/latest"
 private const val TERMUX_RELEASES = "https://github.com/termux/termux-app/releases/latest"
 private const val TERMUX_BOOT_RELEASES = "https://github.com/termux/termux-boot/releases/latest"
-private const val SHIZUKU_PERMISSION_REQUEST = 4207
 
 /** A number that goes up each time the tutorial comes back to the front, to re-check statuses. */
 @Composable
@@ -339,17 +338,7 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
                     done = if (status == ShizukuStatus.Connected) stringResource(R.string.flux_tutorial_shizuku_allowed) else null,
                     buttons = if (status != ShizukuStatus.NotAuthorized) emptyList() else listOf(
                         stringResource(R.string.flux_tutorial_shizuku_allow_button) to {
-                            val listener = object : rikka.shizuku.Shizuku.OnRequestPermissionResultListener {
-                                override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
-                                    rikka.shizuku.Shizuku.removeRequestPermissionResultListener(this)
-                                    refresh++
-                                }
-                            }
-                            runCatching {
-                                rikka.shizuku.Shizuku.addRequestPermissionResultListener(listener)
-                                rikka.shizuku.Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST)
-                            }
-                            Unit
+                            it.palsoftware.pastiera.adb.ShizukuPermission.request(context) { refresh++ }
                         }
                     )
                 )

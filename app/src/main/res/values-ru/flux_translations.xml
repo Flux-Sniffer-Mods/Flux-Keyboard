@@ -1700,4 +1700,8 @@
     <string name="extra_keys_text_set">Везде ещё</string>
     <string name="extra_keys_pick_hint">Выберите до %1$d клавиш в нужном порядке. Буква рядом — клавиша, которая её нажимает.</string>
     <string name="extra_keys_reset">По умолчанию</string>
+    <string name="shizuku_request_not_running">Shizuku ещё не запущен. Запустите его в Shizuku (запуск через отладку по Wi-Fi), затем вернитесь и попробуйте снова.</string>
+    <string name="shizuku_request_refused_before">Shizuku помнит отказ Flux Keyboard и больше не спросит. В Shizuku откройте Авторизованные приложения и включите Flux Keyboard.</string>
+    <string name="shizuku_request_old">Этот Shizuku слишком старый, чтобы спросить. Обновите его со страницы Shizuku на GitHub и попробуйте снова.</string>
+    <string name="shizuku_request_no_question">Shizuku не показал свой вопрос. В Shizuku откройте Авторизованные приложения и включите Flux Keyboard.</string>
 </resources>

@@ -1062,4 +1062,8 @@
     <string name="extra_keys_text_set">Οπουδήποτε αλλού</string>
     <string name="extra_keys_pick_hint">Διαλέξτε έως %1$d πλήκτρα, με τη σειρά που θέλετε. Το γράμμα δίπλα είναι το πλήκτρο που το πατά.</string>
     <string name="extra_keys_reset">Προεπιλογές</string>
+    <string name="shizuku_request_not_running">Το Shizuku δεν εκτελείται ακόμα. Ξεκινήστε το στο Shizuku (έναρξη μέσω ασύρματου εντοπισμού σφαλμάτων), μετά επιστρέψτε και δοκιμάστε ξανά.</string>
+    <string name="shizuku_request_refused_before">Το Shizuku θυμάται ότι το Flux Keyboard απορρίφθηκε και δεν θα ξαναρωτήσει. Στο Shizuku, ανοίξτε τις Εξουσιοδοτημένες εφαρμογές και ενεργοποιήστε το Flux Keyboard.</string>
+    <string name="shizuku_request_old">Αυτό το Shizuku είναι πολύ παλιό για να ρωτήσει. Ενημερώστε το από τη σελίδα του Shizuku στο GitHub και δοκιμάστε ξανά.</string>
+    <string name="shizuku_request_no_question">Το Shizuku δεν εμφάνισε την ερώτησή του. Στο Shizuku, ανοίξτε τις Εξουσιοδοτημένες εφαρμογές και ενεργοποιήστε το Flux Keyboard.</string>
 </resources>

@@ -28,7 +28,10 @@ import it.palsoftware.pastiera.gifsAvailable
  */
 class HamburgerMenuView(
     private val context: Context,
-    private val buttonRegistry: StatusBarButtonRegistry
+    private val buttonRegistry: StatusBarButtonRegistry,
+    /** The bar's corner-button width: the menu's first and last buttons match it, so they sit
+     * where the bar's do and the LEDs between them stay clear (0: equal widths). */
+    private val outerButtonWidthPx: () -> Int = { 0 }
 ) {
 
     companion object {
@@ -240,7 +243,9 @@ class HamburgerMenuView(
             rowView.addView(hosted.container)
         }
         currentButtons = hostedButtons
-        // The last button sits in the bottom-right display corner, like the bar's outer buttons
+        // The last button sits in the bottom-right display corner, like the bar's outer buttons;
+        // one that was last before (buttons added after it) goes back to a plain button
+        hostedButtons.dropLast(1).forEach { buttonHost.setOuterEdge(it.id, null) }
         hostedButtons.lastOrNull()?.let { buttonHost.setOuterEdge(it.id, StatusBarButtonPosition.RIGHT) }
 
         updateButtonSizes(rowView)
@@ -254,9 +259,10 @@ class HamburgerMenuView(
     }
 
     private fun updateButtonSizes(rowView: LinearLayout) {
-        val expectedButtons = shownButtonIds.size + 1
+        // Close plus the buttons actually made (one the phone can't show, like a GIF button
+        // offline, is left out rather than leaving every width unset)
         val totalButtons = rowView.childCount
-        if (totalButtons != expectedButtons) {
+        if (totalButtons == 0 || totalButtons != currentButtons.size + 1) {
             return
         }
         applyDynamicPadding(rowView)
@@ -265,7 +271,17 @@ class HamburgerMenuView(
         if (availableWidth <= 0) {
             return
         }
-        val buttonWidth = ((availableWidth - spacing * (totalButtons - 1)) / totalButtons).coerceAtLeast(1)
+        val equalWidth = ((availableWidth - spacing * (totalButtons - 1)) / totalButtons).coerceAtLeast(1)
+        val outer = outerButtonWidthPx().takeIf { it > 0 && totalButtons >= 3 }
+        // Outer buttons as wide as the bar's corner buttons, the rest sharing what's left
+        val middleWidth = outer?.let {
+            ((availableWidth - 2 * it - spacing * (totalButtons - 1)) / (totalButtons - 2)).coerceAtLeast(1)
+        }
+        fun widthAt(index: Int): Int = when {
+            outer == null || middleWidth == null -> equalWidth
+            index == 0 || index == totalButtons - 1 -> outer
+            else -> middleWidth
+        }
         // MATCH_PARENT, not a pixel height: on the Titan 2 Elite the chrome stretches this row after
         // the normal layout pass, and fixed heights got clipped whenever the row was re-laid out.
         val fill = ViewGroup.LayoutParams.MATCH_PARENT
@@ -273,6 +289,7 @@ class HamburgerMenuView(
             val child = rowView.getChildAt(index)
             val current = child.layoutParams as? LinearLayout.LayoutParams
             val marginEnd = if (index == totalButtons - 1) 0 else spacing
+            val buttonWidth = widthAt(index)
             if (current == null || current.width != buttonWidth || current.height != fill || current.marginEnd != marginEnd) {
                 child.layoutParams = (current ?: LinearLayout.LayoutParams(buttonWidth, fill)).apply {
                     width = buttonWidth
@@ -281,8 +298,8 @@ class HamburgerMenuView(
                 }
             }
         }
-        currentButtons.forEach { hosted ->
-            buttonHost.updateButtonLayout(hosted.id, buttonWidth, fill)
+        currentButtons.forEachIndexed { index, hosted ->
+            buttonHost.updateButtonLayout(hosted.id, widthAt(index + 1), fill)
         }
     }
 

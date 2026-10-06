@@ -1199,4 +1199,8 @@
     <string name="extra_keys_text_set">Ovunque altrove</string>
     <string name="extra_keys_pick_hint">Scegli fino a %1$d tasti, nell\'ordine che vuoi. La lettera accanto è il tasto che lo preme.</string>
     <string name="extra_keys_reset">Predefiniti</string>
+    <string name="shizuku_request_not_running">Shizuku non è ancora in esecuzione. Avvialo in Shizuku (Avvia tramite debug wireless), poi torna qui e riprova.</string>
+    <string name="shizuku_request_refused_before">Shizuku ricorda il rifiuto di Flux Keyboard e non lo chiederà più. In Shizuku, apri App autorizzate e attiva Flux Keyboard.</string>
+    <string name="shizuku_request_old">Questo Shizuku è troppo vecchio per chiedere. Aggiornalo dalla pagina GitHub di Shizuku e riprova.</string>
+    <string name="shizuku_request_no_question">Shizuku non ha mostrato la sua domanda. In Shizuku, apri App autorizzate e attiva Flux Keyboard.</string>
 </resources>

@@ -1700,4 +1700,8 @@
     <string name="extra_keys_text_set">Деінде</string>
     <string name="extra_keys_pick_hint">Виберіть до %1$d клавіш у потрібному порядку. Літера поруч — клавіша, яка її натискає.</string>
     <string name="extra_keys_reset">Типові</string>
+    <string name="shizuku_request_not_running">Shizuku ще не запущено. Запустіть його в Shizuku (запуск через налагодження Wi-Fi), потім поверніться й спробуйте знову.</string>
+    <string name="shizuku_request_refused_before">Shizuku пам\'ятає відмову Flux Keyboard і більше не запитає. У Shizuku відкрийте Авторизовані застосунки й увімкніть Flux Keyboard.</string>
+    <string name="shizuku_request_old">Цей Shizuku надто старий, щоб запитати. Оновіть його зі сторінки Shizuku на GitHub і спробуйте знову.</string>
+    <string name="shizuku_request_no_question">Shizuku не показав свого запитання. У Shizuku відкрийте Авторизовані застосунки й увімкніть Flux Keyboard.</string>
 </resources>

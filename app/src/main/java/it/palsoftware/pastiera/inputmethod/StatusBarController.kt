@@ -463,6 +463,14 @@ class StatusBarController(
 
     /** Hidden app with "Show status LEDs only": draw nothing but the LED strip, over the app. */
     var ledsOnlyMode: Boolean = false
+
+    /** LEDs only, right on the screen's edge (minimal mode); hidden-keyboard apps keep the usual place. */
+    var ledsAtScreenEdge: Boolean = false
+        set(value) {
+            if (field == value) return
+            field = value
+            if ((statusBarLayout as? ImeChromeLayout)?.ledsOnly == true) refreshWindowInsets()
+        }
     private var emojiPickerSearchPopup: PopupWindow? = null
     private var emojiPickerSearchPopupShowPending: Boolean = false
     private var softwareKeyboardView: AospKeyboardView? = null
@@ -811,7 +819,9 @@ class StatusBarController(
                         0
                     }
                     val bottomInset = max(navAndGestures.bottom, cutout.bottom)
-                    val appliedBottomPadding = baseBottomPadding + bottomInset
+                    // Only the LEDs showing (minimal and terminal modes): right on the screen's edge
+                    val appliedBottomPadding = if ((view as? ImeChromeLayout)?.ledsOnly == true && ledsAtScreenEdge) 0
+                        else baseBottomPadding + bottomInset
                     (view as? ImeChromeLayout)?.bottomCornerRadiiPx =
                         if (useTitan2EliteRoundedCornerInsets) {
                             Pair(
@@ -1580,7 +1590,9 @@ class StatusBarController(
         ledStatusView.layout = modifierLedLayout()
         // Only lit LEDs, where the LEDs normally are (between the corner buttons' places)
         ledStatusView.hideOffLeds = true
+        val wasLedsOnly = (statusBarLayout as? ImeChromeLayout)?.ledsOnly == true
         (statusBarLayout as? ImeChromeLayout)?.ledsOnly = true
+        if (!wasLedsOnly) refreshWindowInsets()
         ledStatusView.update(snapshot)
         hideHamburgerMenu()
         releaseEmojiSearchFromBar()
@@ -3874,6 +3886,7 @@ class StatusBarController(
         if (ledStatusView.hideOffLeds) {
             ledStatusView.hideOffLeds = false
             (statusBarLayout as? ImeChromeLayout)?.ledsOnly = false
+            refreshWindowInsets()
             // The bar is back: the navigation bar's strip takes the keyboard's colour again
             applyKeyboardThemeOverrides(activeThemeColors())
             ledStatusView.update(snapshot)
@@ -3889,7 +3902,8 @@ class StatusBarController(
         // Keep the suggestion/status row stable in both full-status-bar and Pastierina mode.
         val expansionActive = expansionSuggestions.isNotEmpty()
         val autofillActive = inlineAutofillViews.isNotEmpty() && snapshot.symPage == 0 && !snapshot.clipboardOverlay
-        val showFullBar = expansionActive || autofillActive || (
+        // The extra keys row lives in the bar: open, it shows even where suggestions are off (terminals)
+        val showFullBar = extraKeysRow != null || expansionActive || autofillActive || (
             suggestionsEnabledSetting &&
                 (experimentalEnabled || isFullSoftwareKeyboardMode) &&
                 (isFullSoftwareKeyboardMode || !snapshot.shouldDisableSuggestions) &&

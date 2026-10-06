@@ -402,7 +402,7 @@
       "after": "202610051915"
     },
     {
-      "text": "The menu bar starts with extra keys, undo, redo and the clipboard.",
+      "text": "The menu bar starts with extra keys, undo, redo, the clipboard and settings, with its first and last buttons the same size as the bar's corner buttons, so the LEDs stay clear.",
       "after": "202610051915"
     },
     {
@@ -415,6 +415,10 @@
     },
     {
       "text": "Language versions: full releases come as one APK per language, each opening in its translation and its language's usual layout, and updating to the same language's APK.",
+      "after": "202610051915"
+    },
+    {
+      "text": "In minimal mode the LEDs sit right on the screen's edge.",
       "after": "202610051915"
     }
   ],
@@ -536,6 +540,14 @@
     },
     {
       "text": "Reinstalling starts fresh, tutorial included: Android no longer brings back an old copy of the settings from its cloud backup (the in-app backup, and moving to a new phone, still carry them).",
+      "after": "202610051915"
+    },
+    {
+      "text": "Allowing Flux Keyboard in Shizuku always says what's happening: when Shizuku isn't running, remembers a refusal or doesn't show its question, Flux Keyboard says where to allow it and opens Shizuku.",
+      "after": "202610051915"
+    },
+    {
+      "text": "The menu bar keeps its shape with more buttons than it started with.",
       "after": "202610051915"
     }
   ],

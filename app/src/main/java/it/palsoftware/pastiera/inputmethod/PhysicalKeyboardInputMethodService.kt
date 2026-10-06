@@ -3656,7 +3656,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun onMinimalModeToggled() {
         val wasOutOfSight = keyboardOutOfSight
         updateOutOfSight(currentInputEditorInfo?.packageName)
-        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(keyboardOutOfSight && outOfSightLedsOnly())
+        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(keyboardOutOfSight && outOfSightLedsOnly(), atScreenEdge = keyboardOutOfSight)
         if (keyboardOutOfSight) {
             // Out of sight: let syncHiddenAppPanel hide the surface (or leave the LEDs)
             outOfSightSurfaceShown = true
@@ -3672,7 +3672,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     /** Show the keyboard while a panel is open in a hidden app; hide it (or back to LEDs) afterwards. */
     private fun syncHiddenAppPanel() {
         if (keyboardOutOfSight && !keyboardHiddenForApp) {
-            if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(outOfSightLedsOnly())
+            if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(outOfSightLedsOnly(), atScreenEdge = keyboardOutOfSight)
             val show = !outOfSightSurfaceHidden()
             if (show == outOfSightSurfaceShown) return
             outOfSightSurfaceShown = show
@@ -4372,7 +4372,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         hiddenAppAllowsPanels = keyboardHiddenForApp && SettingsManager.hiddenAppAllowsPanels(this, info?.packageName)
         if (showLeds != hiddenAppShowsLeds || !restarting) observedModifierLeds.reset()
         hiddenAppShowsLeds = showLeds
-        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(showLeds || outOfSightLedsOnly())
+        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(showLeds || outOfSightLedsOnly(), atScreenEdge = keyboardOutOfSight && !keyboardHiddenForApp)
         HiddenAppKeyObserver.sink = if (showLeds) ::observeHiddenAppKey else null
         hiddenAppPanelShown = false
         hiddenAppPassedThroughKeys.clear()
@@ -5527,6 +5527,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (!open) extraKeysLatched.clear()
         renderExtraKeys()
         if (keyboardOutOfSight) syncHiddenAppPanel()
+        invalidateRenderedStatusSnapshot()
         updateStatusBarText()
     }
 

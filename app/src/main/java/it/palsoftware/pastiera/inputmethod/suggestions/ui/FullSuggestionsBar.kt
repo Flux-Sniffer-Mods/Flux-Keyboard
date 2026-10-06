@@ -215,7 +215,7 @@ class FullSuggestionsBar(
             frameContainer?.let { frame ->
                 if (buttonRegistry != null && callbacksProvider != null) {
                     if (hamburgerMenuView == null) {
-                        hamburgerMenuView = HamburgerMenuView(context, buttonRegistry).apply {
+                        hamburgerMenuView = HamburgerMenuView(context, buttonRegistry) { sideButtonWidthPx() }.apply {
                             themeOverride = this@FullSuggestionsBar.themeOverride
                         }
                     }
@@ -362,7 +362,7 @@ class FullSuggestionsBar(
             return
         }
         val frame = frameContainer ?: return
-        val view = extraKeysView ?: it.palsoftware.pastiera.inputmethod.ui.ExtraKeysView(context).also {
+        val view = extraKeysView ?: it.palsoftware.pastiera.inputmethod.ui.ExtraKeysView(context) { sideButtonWidthPx() }.also {
             it.themeOverride = themeOverride
             extraKeysView = it
         }

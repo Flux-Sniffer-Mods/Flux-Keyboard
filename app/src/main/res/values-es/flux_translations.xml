@@ -1694,4 +1694,8 @@
     <string name="extra_keys_text_set">En todo lo demás</string>
     <string name="extra_keys_pick_hint">Elige hasta %1$d teclas, en el orden que quieras. La letra al lado es la tecla que la pulsa.</string>
     <string name="extra_keys_reset">Predeterminadas</string>
+    <string name="shizuku_request_not_running">Shizuku aún no está en marcha. Inícialo en Shizuku (Iniciar mediante depuración inalámbrica), vuelve e inténtalo de nuevo.</string>
+    <string name="shizuku_request_refused_before">Shizuku recuerda que Flux Keyboard fue rechazado y no volverá a preguntar. En Shizuku, abre Aplicaciones autorizadas y activa Flux Keyboard.</string>
+    <string name="shizuku_request_old">Este Shizuku es demasiado antiguo para preguntar. Actualízalo desde la página de GitHub de Shizuku e inténtalo de nuevo.</string>
+    <string name="shizuku_request_no_question">Shizuku no mostró su pregunta. En Shizuku, abre Aplicaciones autorizadas y activa Flux Keyboard.</string>
 </resources>

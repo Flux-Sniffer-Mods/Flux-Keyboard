@@ -1247,12 +1247,13 @@ object SettingsManager {
         STATUS_BAR_BUTTON_SETTINGS
     )
 
-    /** Until chosen, the menu bar has the extra keys, undo, redo and the clipboard. */
+    /** Until chosen, the menu bar has the extra keys, undo, redo, the clipboard and settings. */
     internal val MENU_BAR_DEFAULT = listOf(
         STATUS_BAR_BUTTON_EXTRA_KEYS,
         STATUS_BAR_BUTTON_UNDO,
         STATUS_BAR_BUTTON_REDO,
-        STATUS_BAR_BUTTON_CLIPBOARD
+        STATUS_BAR_BUTTON_CLIPBOARD,
+        STATUS_BAR_BUTTON_SETTINGS
     )
 
     data class AppEnterBehaviorOverride(

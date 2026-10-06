@@ -1682,4 +1682,8 @@
     <string name="extra_keys_text_set">Mọi nơi khác</string>
     <string name="extra_keys_pick_hint">Chọn tối đa %1$d phím theo thứ tự bạn muốn. Chữ cái bên cạnh là phím nhấn nó.</string>
     <string name="extra_keys_reset">Mặc định</string>
+    <string name="shizuku_request_not_running">Shizuku chưa chạy. Khởi động nó trong Shizuku (Khởi động qua gỡ lỗi không dây), rồi quay lại và thử lại.</string>
+    <string name="shizuku_request_refused_before">Shizuku nhớ rằng Flux Keyboard đã bị từ chối nên sẽ không hỏi lại. Trong Shizuku, mở Ứng dụng được ủy quyền và bật Flux Keyboard.</string>
+    <string name="shizuku_request_old">Shizuku này quá cũ để hỏi. Cập nhật nó từ trang GitHub của Shizuku rồi thử lại.</string>
+    <string name="shizuku_request_no_question">Shizuku không hiện câu hỏi. Trong Shizuku, mở Ứng dụng được ủy quyền và bật Flux Keyboard.</string>
 </resources>

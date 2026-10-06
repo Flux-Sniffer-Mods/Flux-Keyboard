@@ -43,6 +43,15 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         runCatching { rikka.shizuku.Shizuku.addRequestPermissionResultListener(listener) }
         onDispose { runCatching { rikka.shizuku.Shizuku.removeRequestPermissionResultListener(listener) } }
     }
+    // Shizuku started (or allowed) while this screen was away: check again on coming back
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) status = resolveShizukuStatus()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
     LaunchedEffect(status) {
         if (status != ShizukuStatus.Connected) return@LaunchedEffect
         withContext(Dispatchers.IO) {
@@ -75,7 +84,7 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 title = stringResource(R.string.adb_allow_title),
                 description = stringResource(R.string.adb_allow_description)
             ) {
-                runCatching { rikka.shizuku.Shizuku.requestPermission(4207) }
+                it.palsoftware.pastiera.adb.ShizukuPermission.request(context) { status = resolveShizukuStatus() }
             }
         }
         if (status != ShizukuStatus.Connected) return@FluxScreenScaffold

@@ -13,16 +13,23 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.getTitan2EliteStraightOuterButtons
 import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey
 import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets
 import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysRow
+import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonPosition
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonStyles
 
 /**
  * The extra keys row: takes the bar's place like the menu bar, a close button then the row's
  * keys. Each key shows the top-row letter that presses it while the row is open.
  */
-class ExtraKeysView(private val context: Context) {
+class ExtraKeysView(
+    private val context: Context,
+    /** The bar's corner-button width: the first and last buttons match it, like the menu's. */
+    private val outerButtonWidthPx: () -> Int = { 0 }
+) {
 
     private var root: FrameLayout? = null
     private var row: LinearLayout? = null
@@ -97,17 +104,22 @@ class ExtraKeysView(private val context: Context) {
         rowView.setPadding(0, padding, 0, padding)
         val spacing = dpToPx(3f)
         val count = state.keys.size + 1
-        rowView.addView(closeButton(state), keyParams(isLast = false, spacing))
+        val outer = outerButtonWidthPx().takeIf { it > 0 && count >= 3 }
+        rowView.addView(closeButton(state), keyParams(isLast = false, spacing, outer))
         state.keys.forEachIndexed { index, key ->
             val view = keyView(key, index, state)
             keyViews[key] = view.getChildAt(0) as TextView
-            rowView.addView(view, keyParams(isLast = index == count - 2, spacing))
+            val isLast = index == count - 2
+            if (isLast) view.setTag(R.id.tag_outer_edge_button, StatusBarButtonPosition.RIGHT)
+            rowView.addView(view, keyParams(isLast, spacing, if (isLast) outer else null))
         }
         applyLatched(state.latched)
     }
 
-    private fun keyParams(isLast: Boolean, spacing: Int) =
-        LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
+    /** A fixed [fixedWidth] for the outer buttons, the rest sharing the width equally. */
+    private fun keyParams(isLast: Boolean, spacing: Int, fixedWidth: Int? = null) =
+        (if (fixedWidth != null) LinearLayout.LayoutParams(fixedWidth, ViewGroup.LayoutParams.MATCH_PARENT)
+        else LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f)).apply {
             marginEnd = if (isLast) 0 else spacing
         }
 
@@ -116,7 +128,8 @@ class ExtraKeysView(private val context: Context) {
         contentDescription = context.getString(R.string.extra_keys_close)
         scaleType = ImageView.ScaleType.CENTER
         setColorFilter(themeOverride?.textAndIcons ?: Color.WHITE)
-        background = buttonDrawable(latched = false)
+        setTag(R.id.tag_outer_edge_button, StatusBarButtonPosition.LEFT)
+        background = buttonDrawable(latched = false, view = this, edge = StatusBarButtonPosition.LEFT)
         setOnClickListener {
             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             state.onClose()
@@ -163,11 +176,45 @@ class ExtraKeysView(private val context: Context) {
 
     private fun applyLatched(latched: Set<ExtraKey>) {
         keyViews.forEach { (key, label) ->
-            (label.parent as? View)?.background = buttonDrawable(latched = key in latched)
+            val button = label.parent as? View ?: return@forEach
+            button.background = buttonDrawable(
+                latched = key in latched,
+                view = button,
+                edge = button.getTag(R.id.tag_outer_edge_button) as? StatusBarButtonPosition
+            )
         }
     }
 
-    private fun buttonDrawable(latched: Boolean) = StatusBarButtonStyles.createButtonDrawable(
+    /** The display's curved bottom corners: the outer buttons follow them, as the bar's do. */
+    private fun curvedCorners(): Boolean =
+        it.palsoftware.pastiera.SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context) &&
+            !it.palsoftware.pastiera.SettingsManager.getTitan2EliteStraightOuterButtons(context)
+
+    private fun buttonDrawable(
+        latched: Boolean,
+        view: View? = null,
+        edge: StatusBarButtonPosition? = null
+    ): android.graphics.drawable.Drawable {
+        val normal = if (latched) {
+            themeOverride?.accent ?: StatusBarButtonStyles.PRESSED_BLUE
+        } else {
+            themeOverride?.statusBarButton ?: StatusBarButtonStyles.NORMAL_COLOR
+        }
+        if (view != null && edge != null && curvedCorners()) {
+            val height = view.height.takeIf { it > 0 } ?: dpToPx(39f)
+            return it.palsoftware.pastiera.inputmethod.statusbar.CurvedCornerButtonDrawable(
+                view, normal,
+                themeOverride?.accent ?: StatusBarButtonStyles.PRESSED_BLUE,
+                height * (themeOverride?.chromeCornerRadiusRatio ?: StatusBarButtonStyles.BUTTON_CORNER_RADIUS_RATIO),
+                themeOverride?.divider,
+                if (themeOverride != null) dpToPx(1f) else 0,
+                leftEdge = edge == StatusBarButtonPosition.LEFT
+            )
+        }
+        return plainDrawable(latched)
+    }
+
+    private fun plainDrawable(latched: Boolean) = StatusBarButtonStyles.createButtonDrawable(
         heightPx = dpToPx(39f),
         normalColor = if (latched) {
             themeOverride?.accent ?: StatusBarButtonStyles.PRESSED_BLUE

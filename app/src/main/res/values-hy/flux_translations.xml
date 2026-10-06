@@ -1688,4 +1688,8 @@
     <string name="extra_keys_text_set">Մնացած բոլոր տեղերում</string>
     <string name="extra_keys_pick_hint">Ընտրեք մինչև %1$d ստեղն՝ ցանկալի հերթականությամբ։ Կողքի տառը այն ստեղնն է, որը սեղմում է այն։</string>
     <string name="extra_keys_reset">Լռելյայն</string>
+    <string name="shizuku_request_not_running">Shizuku-ն դեռ չի աշխատում։ Գործարկեք այն Shizuku-ում (գործարկում անլար վրիպազերծմամբ), ապա վերադարձեք և նորից փորձեք։</string>
+    <string name="shizuku_request_refused_before">Shizuku-ն հիշում է, որ Flux Keyboard-ը մերժվել է, և այլևս չի հարցնի։ Shizuku-ում բացեք Լիազորված հավելվածները և միացրեք Flux Keyboard-ը։</string>
+    <string name="shizuku_request_old">Այս Shizuku-ն չափազանց հին է հարցնելու համար։ Թարմացրեք այն Shizuku-ի GitHub էջից և նորից փորձեք։</string>
+    <string name="shizuku_request_no_question">Shizuku-ն չցուցադրեց իր հարցը։ Shizuku-ում բացեք Լիազորված հավելվածները և միացրեք Flux Keyboard-ը։</string>
 </resources>
