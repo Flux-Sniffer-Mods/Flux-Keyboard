@@ -42,6 +42,16 @@ import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonId
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonPosition
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarCallbacks
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonStyles
+import it.palsoftware.pastiera.areStatusBarVariationsEnabled
+import it.palsoftware.pastiera.getDefaultStaticVariationAltPreset
+import it.palsoftware.pastiera.getDefaultStaticVariationShiftPreset
+import it.palsoftware.pastiera.getDynamicVariationBarResizeToContent
+import it.palsoftware.pastiera.getDynamicVariationBarSlotCount
+import it.palsoftware.pastiera.getStaticVariationBasePreset
+import it.palsoftware.pastiera.getSwipeIncrementalThreshold
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.isStaticVariationBarModeEnabled
+import it.palsoftware.pastiera.isTitan2LayoutEnabled
 
 /**
  * Handles the variations row (suggestions + microphone/language) rendered above the LED strip.

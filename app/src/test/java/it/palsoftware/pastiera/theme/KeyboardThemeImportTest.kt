@@ -13,6 +13,15 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.defaultKeyboardTheme
+import it.palsoftware.pastiera.getKeyboardTheme
+import it.palsoftware.pastiera.getKeyboardThemeDrafts
+import it.palsoftware.pastiera.getSavedKeyboardThemes
+import it.palsoftware.pastiera.keyboardThemeFromJsonString
+import it.palsoftware.pastiera.keyboardThemeToJsonString
+import it.palsoftware.pastiera.saveKeyboardTheme
+import it.palsoftware.pastiera.saveKeyboardThemeDraft
+import it.palsoftware.pastiera.setKeyboardTheme
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

@@ -10,6 +10,17 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.applyClicksRecommendedButtonModes
+import it.palsoftware.pastiera.getClicksAltButtonMode
+import it.palsoftware.pastiera.getClicksButtonMode
+import it.palsoftware.pastiera.getClicksDesiredButtonBinding
+import it.palsoftware.pastiera.getClicksMetaButtonMode
+import it.palsoftware.pastiera.getClicksMicrophoneButtonMode
+import it.palsoftware.pastiera.setClicksAltButtonMode
+import it.palsoftware.pastiera.setClicksButtonMode
+import it.palsoftware.pastiera.setClicksDesiredButtonBinding
+import it.palsoftware.pastiera.setClicksMetaButtonMode
+import it.palsoftware.pastiera.setClicksMicrophoneButtonMode
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

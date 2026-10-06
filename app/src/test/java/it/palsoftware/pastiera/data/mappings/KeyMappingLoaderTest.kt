@@ -13,6 +13,9 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setAltModifierBinding
+import it.palsoftware.pastiera.setPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.setSymPagesConfig
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

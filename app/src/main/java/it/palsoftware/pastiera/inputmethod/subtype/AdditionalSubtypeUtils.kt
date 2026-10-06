@@ -16,6 +16,11 @@ import it.palsoftware.pastiera.ImeIdentity
 import it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodService
 import org.json.JSONObject
 import java.util.Locale
+import it.palsoftware.pastiera.getCustomInputStyles
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.isKeyboardLayoutAutoByLocale
+import it.palsoftware.pastiera.isSystemInputStyleHidden
+import it.palsoftware.pastiera.setCustomInputStyles
 
 /**
  * Utility class for managing additional IME subtypes (custom input styles).

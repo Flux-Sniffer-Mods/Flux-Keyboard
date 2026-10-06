@@ -31,6 +31,24 @@ import it.palsoftware.pastiera.SymCustomizationActivity
 import it.palsoftware.pastiera.TutorialFeaturePageContent
 import it.palsoftware.pastiera.settings.RecommendedSettings
 import it.palsoftware.pastiera.settings.SettingLinkRegistry
+import it.palsoftware.pastiera.getAutoCorrectEnabled
+import it.palsoftware.pastiera.getDoubleSpaceToPeriod
+import it.palsoftware.pastiera.getEmojiKeyOpensLayer
+import it.palsoftware.pastiera.getEmojiLayerPages
+import it.palsoftware.pastiera.getEmojiSuggestionsEnabled
+import it.palsoftware.pastiera.getGifsEnabled
+import it.palsoftware.pastiera.getKeyboardWallpaperColours
+import it.palsoftware.pastiera.getQuickLauncherBehavior
+import it.palsoftware.pastiera.getSymbolsPages
+import it.palsoftware.pastiera.setAutoCorrectEnabled
+import it.palsoftware.pastiera.setDoubleSpaceToPeriod
+import it.palsoftware.pastiera.setEmojiKeyOpensLayer
+import it.palsoftware.pastiera.setEmojiLayerPages
+import it.palsoftware.pastiera.setEmojiSuggestionsEnabled
+import it.palsoftware.pastiera.setGifsEnabled
+import it.palsoftware.pastiera.setKeyboardWallpaperColours
+import it.palsoftware.pastiera.setQuickLauncherBehavior
+import it.palsoftware.pastiera.setSymbolsPages
 
 /**
  * Flux Keyboard's own tutorial pages: one-step setup, then what's different from Pastiera,

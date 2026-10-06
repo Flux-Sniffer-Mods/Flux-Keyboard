@@ -13,6 +13,8 @@ import it.palsoftware.pastiera.inputmethod.StatusBarController
 import kotlin.math.PI
 import it.palsoftware.pastiera.device.T2eCornerCalibration
 import it.palsoftware.pastiera.device.T2eCornerGeometry
+import it.palsoftware.pastiera.getTitan2EliteMaxIconShrink
+import it.palsoftware.pastiera.getTitan2EliteTopCornerMultiplier
 
 /** Draws the button and its border inside the display contour without shrinking its touch target. */
 internal class CurvedCornerButtonDrawable(

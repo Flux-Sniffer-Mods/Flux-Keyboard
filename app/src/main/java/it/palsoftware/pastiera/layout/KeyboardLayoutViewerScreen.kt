@@ -61,6 +61,7 @@ import it.palsoftware.pastiera.data.layout.LayoutFileStore.LayoutImportResult
 import it.palsoftware.pastiera.data.layout.LayoutMapping
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.notifyKeyboardLayoutAutoMappingUpdated
 
 private data class KeyMappingRowModel(
     val keyCode: Int,

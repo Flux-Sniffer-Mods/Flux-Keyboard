@@ -14,6 +14,10 @@ import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.setInp
 import it.palsoftware.pastiera.data.layout.LayoutFileStore
 import it.palsoftware.pastiera.SettingsManager
 import java.util.Locale
+import it.palsoftware.pastiera.getAdditionalSuggestionLocalesForInputStyle
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.isSystemInputStyleHidden
+import it.palsoftware.pastiera.setKeyboardLayout
 
 /**
  * Utility class for cycling between IME subtypes.

@@ -33,6 +33,13 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.SettingsSectionDivider
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.getAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.getAppEnterBehaviorOverrides
+import it.palsoftware.pastiera.getAppEnterBehaviorPreset
+import it.palsoftware.pastiera.getQuickLauncherShortcutKey
+import it.palsoftware.pastiera.setAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.setAppEnterBehaviorOverrides
+import it.palsoftware.pastiera.setAppEnterBehaviorPreset
 
 private data class EnterBehaviorApp(
     val packageName: String,

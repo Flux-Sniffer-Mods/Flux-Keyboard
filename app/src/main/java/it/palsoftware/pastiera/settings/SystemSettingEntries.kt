@@ -2,6 +2,8 @@ package it.palsoftware.pastiera.settings
 
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getNavModeEnabled
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
 /** Entries for system controls whose screens also expose the same stable IDs. */
 internal fun systemSettingEntries(): List<SettingEntry> = listOf(
     SettingEntry("advanced.corner_calibration", R.string.corner_calibration_title,

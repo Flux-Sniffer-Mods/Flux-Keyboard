@@ -43,6 +43,10 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.openSettingsChild
 import it.palsoftware.pastiera.settings.settingsActivity
 import it.palsoftware.pastiera.settings.settingsChild
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.isKeyboardLayoutAutoByLocale
+import it.palsoftware.pastiera.setKeyboardLayout
+import it.palsoftware.pastiera.setKeyboardLayoutAutoByLocale
 
 /**
  * Settings screen for keyboard layout selection for a specific locale.

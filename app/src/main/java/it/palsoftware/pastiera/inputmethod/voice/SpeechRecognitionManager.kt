@@ -19,6 +19,8 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.AutoCapitalizeHelper
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
 import java.util.Locale
+import it.palsoftware.pastiera.getAutoCapitalizeAfterPeriod
+import it.palsoftware.pastiera.getAutoCapitalizeFirstLetter
 
 /**
  * Manages speech recognition using SpeechRecognizer.

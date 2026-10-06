@@ -14,6 +14,10 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.isTerminalModeApp
+import it.palsoftware.pastiera.setHiddenKeyboardApps
+import it.palsoftware.pastiera.setTerminalModeApps
+import it.palsoftware.pastiera.setTerminalModeEnabled
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

@@ -3,6 +3,9 @@ package it.palsoftware.pastiera.inputmethod.keys
 import android.content.Context
 import android.view.KeyEvent
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getBounceKeysCategoryEnabled
+import it.palsoftware.pastiera.getBounceKeysDelayMs
+import it.palsoftware.pastiera.getBounceKeysEnabled
 
 class BounceKeyFilter {
     data class SuppressedEvent(

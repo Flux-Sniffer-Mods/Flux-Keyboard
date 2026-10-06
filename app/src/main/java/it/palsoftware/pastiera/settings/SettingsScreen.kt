@@ -53,6 +53,7 @@ import it.palsoftware.pastiera.layout.CustomInputStylesScreen
 import it.palsoftware.pastiera.sym.DeviceSymLayerEditorScreen
 import it.palsoftware.pastiera.sym.EmojiLayerProfilesScreen
 import it.palsoftware.pastiera.theme.LedColorsScreen
+import it.palsoftware.pastiera.isOfflineMode
 
 /**
  * Where the settings navigation is.

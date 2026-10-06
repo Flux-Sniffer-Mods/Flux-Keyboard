@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.shortcuts.AppActionDiscovery
+import it.palsoftware.pastiera.getQuickLauncherAppShortcuts
 
 /**
  * Apps' own shortcuts, the ones their launcher icon shows on a long press ("New message",

@@ -5,6 +5,8 @@ import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getEmoticonPunctuation
+import it.palsoftware.pastiera.getSpaceAfterPunctuation
 
 /**
  * Defers spaces after configured punctuation until more text is actually typed.

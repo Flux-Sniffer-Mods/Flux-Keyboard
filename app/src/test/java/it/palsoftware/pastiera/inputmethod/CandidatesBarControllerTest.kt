@@ -21,6 +21,13 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.util.ReflectionHelpers
 import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector
+import it.palsoftware.pastiera.getDevChoiceStaticVariationBasePreset
+import it.palsoftware.pastiera.getVariationsFile
+import it.palsoftware.pastiera.saveVariations
+import it.palsoftware.pastiera.setSoftwareKeyboardMode
+import it.palsoftware.pastiera.setStaticVariationBarPreset
+import it.palsoftware.pastiera.setStatusBarVariationsVisible
+import it.palsoftware.pastiera.setSuggestionsEnabled
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

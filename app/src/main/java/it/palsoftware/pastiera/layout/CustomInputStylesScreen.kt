@@ -49,6 +49,25 @@ import it.palsoftware.pastiera.KeyboardLayoutActivity
 import it.palsoftware.pastiera.settings.SettingLinkIds
 import it.palsoftware.pastiera.settings.SettingsSectionDivider
 import it.palsoftware.pastiera.settings.settingRow
+import it.palsoftware.pastiera.getAdditionalSuggestionLocalesForInputStyle
+import it.palsoftware.pastiera.getCustomInputStyles
+import it.palsoftware.pastiera.hideSystemInputStyle
+import it.palsoftware.pastiera.isAltEnterLayoutSwitchEnabled
+import it.palsoftware.pastiera.isAltShiftLayoutSwitchEnabled
+import it.palsoftware.pastiera.isCtrlSpaceLayoutSwitchEnabled
+import it.palsoftware.pastiera.isKeyboardLayoutAutoByLocale
+import it.palsoftware.pastiera.isSystemInputStyleHidden
+import it.palsoftware.pastiera.isToastOnLayoutSwitchEnabled
+import it.palsoftware.pastiera.notifyKeyboardLayoutAutoMappingUpdated
+import it.palsoftware.pastiera.removeAdditionalSuggestionLocalesForInputStyle
+import it.palsoftware.pastiera.setAdditionalSuggestionLocalesForInputStyle
+import it.palsoftware.pastiera.setAltEnterLayoutSwitchEnabled
+import it.palsoftware.pastiera.setAltShiftLayoutSwitchEnabled
+import it.palsoftware.pastiera.setCtrlSpaceLayoutSwitchEnabled
+import it.palsoftware.pastiera.setCustomInputStyles
+import it.palsoftware.pastiera.setKeyboardLayoutAutoByLocale
+import it.palsoftware.pastiera.setToastOnLayoutSwitchEnabled
+import it.palsoftware.pastiera.showSystemInputStyle
 
 /**
  * Data class representing a custom input style entry.

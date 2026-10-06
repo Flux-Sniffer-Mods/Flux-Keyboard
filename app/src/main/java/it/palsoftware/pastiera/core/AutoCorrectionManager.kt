@@ -8,6 +8,9 @@ import it.palsoftware.pastiera.inputmethod.AutoCorrector
 import it.palsoftware.pastiera.inputmethod.DebugCaptureStore
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
 import it.palsoftware.pastiera.core.AutoSpaceTracker
+import it.palsoftware.pastiera.getAutoSpacePunctuation
+import it.palsoftware.pastiera.getCommaSpace
+import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 
 class AutoCorrectionManager(
     private val context: Context

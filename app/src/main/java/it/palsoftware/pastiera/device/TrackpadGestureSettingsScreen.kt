@@ -40,6 +40,40 @@ import it.palsoftware.pastiera.settings.SwipePadThresholdRow
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.settings.settingsActivity
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.getMaxTrackpadSwipeThreshold
+import it.palsoftware.pastiera.getMinTrackpadSwipeThreshold
+import it.palsoftware.pastiera.getSuggestionsEnabled
+import it.palsoftware.pastiera.getSwipeToDelete
+import it.palsoftware.pastiera.getSwipeToDeleteProvider
+import it.palsoftware.pastiera.getTrackpadAppMode
+import it.palsoftware.pastiera.getTrackpadApps
+import it.palsoftware.pastiera.getTrackpadCaptureWhileTyping
+import it.palsoftware.pastiera.getTrackpadDeleteSwipeThreshold
+import it.palsoftware.pastiera.getTrackpadGestureAddWordEnabled
+import it.palsoftware.pastiera.getTrackpadGestureAddWordFullWidthEnabled
+import it.palsoftware.pastiera.getTrackpadGesturesEnabled
+import it.palsoftware.pastiera.getTrackpadProvider
+import it.palsoftware.pastiera.getTrackpadShizukuDevice
+import it.palsoftware.pastiera.getTrackpadSideSwipeThreshold
+import it.palsoftware.pastiera.getTrackpadSuggestionSwipeDirections
+import it.palsoftware.pastiera.getTrackpadSuggestionSwipeThreshold
+import it.palsoftware.pastiera.getTrackpadSwipeDownDeletesWord
+import it.palsoftware.pastiera.isExperimentalSuggestionsEnabled
+import it.palsoftware.pastiera.setSwipeToDelete
+import it.palsoftware.pastiera.setSwipeToDeleteProvider
+import it.palsoftware.pastiera.setTrackpadAppMode
+import it.palsoftware.pastiera.setTrackpadApps
+import it.palsoftware.pastiera.setTrackpadCaptureWhileTyping
+import it.palsoftware.pastiera.setTrackpadDeleteSwipeThreshold
+import it.palsoftware.pastiera.setTrackpadGestureAddWordEnabled
+import it.palsoftware.pastiera.setTrackpadGestureAddWordFullWidthEnabled
+import it.palsoftware.pastiera.setTrackpadGesturesEnabled
+import it.palsoftware.pastiera.setTrackpadProvider
+import it.palsoftware.pastiera.setTrackpadShizukuDevice
+import it.palsoftware.pastiera.setTrackpadSideSwipeThreshold
+import it.palsoftware.pastiera.setTrackpadSuggestionSwipeDirections
+import it.palsoftware.pastiera.setTrackpadSuggestionSwipeThreshold
+import it.palsoftware.pastiera.setTrackpadSwipeDownDeletesWord
 
 /**
  * Settings screen for trackpad gesture suggestions.

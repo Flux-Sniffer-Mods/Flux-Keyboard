@@ -14,6 +14,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getLauncherShortcut
+import it.palsoftware.pastiera.setLauncherCommand
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

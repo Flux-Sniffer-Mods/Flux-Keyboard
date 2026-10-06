@@ -11,6 +11,23 @@ import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.data.emoji.RecentEmojiManager
 import it.palsoftware.pastiera.data.symbols.Kaomoji
 import it.palsoftware.pastiera.inputmethod.AlternateCharacterManager
+import it.palsoftware.pastiera.activeEmojiLayerGifKey
+import it.palsoftware.pastiera.clearRestoreSymPage
+import it.palsoftware.pastiera.emojiScreenClosesAfterInput
+import it.palsoftware.pastiera.getEmojiLayerCloseOnKey
+import it.palsoftware.pastiera.getEmojiLayerPages
+import it.palsoftware.pastiera.getEmojiLayerRecentsKey
+import it.palsoftware.pastiera.getEmojiLayerTypeToSearch
+import it.palsoftware.pastiera.getKaomojiCloseOnKey
+import it.palsoftware.pastiera.getRestoreSymPage
+import it.palsoftware.pastiera.getSearchKey
+import it.palsoftware.pastiera.getSymAutoClose
+import it.palsoftware.pastiera.getSymPagesConfig
+import it.palsoftware.pastiera.getSymbolsCloseOnKey
+import it.palsoftware.pastiera.getSymbolsPages
+import it.palsoftware.pastiera.getSymbolsTypeToSearch
+import it.palsoftware.pastiera.gifsAvailable
+import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 
 class SymLayoutController(
     private val context: Context,

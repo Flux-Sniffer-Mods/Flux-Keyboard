@@ -17,6 +17,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.saveSymMappings
 
 /** The emoji layer and the symbols page as pages (on by default): Q back, P on, recents first. */
 @RunWith(RobolectricTestRunner::class)

@@ -9,6 +9,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
 import it.palsoftware.pastiera.apps.AppEnterStandards
+import it.palsoftware.pastiera.activeEmojiLayerGifKey
+import it.palsoftware.pastiera.getEmojiLayerRecentsKey
+import it.palsoftware.pastiera.getSearchKey
+import it.palsoftware.pastiera.saveSymMappings
 
 /**
  * Emoji layer profiles (Settings > Modifiers & SYM > Emoji layer profiles): 26 emoji, one per

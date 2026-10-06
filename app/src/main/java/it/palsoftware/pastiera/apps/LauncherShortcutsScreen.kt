@@ -47,6 +47,9 @@ import it.palsoftware.pastiera.commands.PastieraCommandSource
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.getLauncherShortcuts
+import it.palsoftware.pastiera.removeLauncherShortcut
+import it.palsoftware.pastiera.swapLauncherShortcuts
 
 /**
  * Screen for managing launcher shortcuts.

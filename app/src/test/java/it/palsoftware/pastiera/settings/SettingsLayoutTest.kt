@@ -13,6 +13,7 @@ import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsActivity
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.markClicksKeyboardSeen
 
 /** Settings grouped by task: moved rows keep their IDs and route to their new screens. */
 @RunWith(RobolectricTestRunner::class)

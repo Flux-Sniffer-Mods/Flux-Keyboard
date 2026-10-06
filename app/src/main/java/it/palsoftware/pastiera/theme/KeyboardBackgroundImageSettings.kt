@@ -34,6 +34,13 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.SettingLinkIds
 import it.palsoftware.pastiera.settings.settingRow
+import it.palsoftware.pastiera.getEffectiveKeyboardTheme
+import it.palsoftware.pastiera.getKeyboardBackgroundAutoColours
+import it.palsoftware.pastiera.getKeyboardBackgroundFraming
+import it.palsoftware.pastiera.getKeyboardBackgroundKeyOpacity
+import it.palsoftware.pastiera.setKeyboardBackgroundAutoColours
+import it.palsoftware.pastiera.setKeyboardBackgroundFraming
+import it.palsoftware.pastiera.setKeyboardBackgroundKeyOpacity
 
 /** Flux Keyboard: a picture behind the keyboard, with Auto colours and the keys' opacity. */
 @Composable

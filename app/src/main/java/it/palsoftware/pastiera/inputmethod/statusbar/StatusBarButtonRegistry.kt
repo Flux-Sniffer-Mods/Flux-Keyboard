@@ -15,6 +15,10 @@ import it.palsoftware.pastiera.inputmethod.statusbar.button.SoftwareKeyboardMode
 import it.palsoftware.pastiera.inputmethod.statusbar.button.SymbolsButtonFactory
 import it.palsoftware.pastiera.inputmethod.statusbar.button.StatusBarButtonFactory
 import it.palsoftware.pastiera.inputmethod.statusbar.button.UndoButtonFactory
+import it.palsoftware.pastiera.getPastierinaStatusBarSlotsLeft
+import it.palsoftware.pastiera.getPastierinaStatusBarSlotsRight
+import it.palsoftware.pastiera.getStatusBarSlotsLeft
+import it.palsoftware.pastiera.getStatusBarSlotsRight
 
 /**
  * Central registry for status bar button factories.

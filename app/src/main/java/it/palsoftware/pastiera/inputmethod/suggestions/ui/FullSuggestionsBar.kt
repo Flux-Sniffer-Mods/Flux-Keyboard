@@ -37,6 +37,8 @@ import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonPosition
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonStyles
 import android.view.inputmethod.InputMethodManager
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.languageCode
+import it.palsoftware.pastiera.getSuggestionsBold
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
 
 /**
  * Renders the full-width suggestion bar with up to 3 items. Always occupies

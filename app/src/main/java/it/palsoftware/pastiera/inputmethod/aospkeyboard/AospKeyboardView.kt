@@ -42,6 +42,8 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
 import java.util.Locale
 import kotlin.math.abs
+import it.palsoftware.pastiera.getSoftwareKeyboardLeftModifierKey
+import it.palsoftware.pastiera.getSoftwareKeyboardRightModifierKey
 
 /**
  * AOSP LatinIME alphabet key plane embedded in Pastiera.

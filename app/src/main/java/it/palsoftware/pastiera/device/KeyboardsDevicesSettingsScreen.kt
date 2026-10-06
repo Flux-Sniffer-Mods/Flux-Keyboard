@@ -48,6 +48,13 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.SettingLinkIds
 import it.palsoftware.pastiera.settings.VirtualKeyboardBehaviorSettingsScreen
 import it.palsoftware.pastiera.settings.settingRow
+import it.palsoftware.pastiera.getSoftwareKeyboardMode
+import it.palsoftware.pastiera.getSoftwareKeyboardModeRuntimeOverride
+import it.palsoftware.pastiera.getSoftwareKeyboardModeToggleToastsEnabled
+import it.palsoftware.pastiera.hasClicksKeyboard
+import it.palsoftware.pastiera.resolveEffectiveSoftwareKeyboardMode
+import it.palsoftware.pastiera.setSoftwareKeyboardMode
+import it.palsoftware.pastiera.setSoftwareKeyboardModeToggleToastsEnabled
 
 enum class KeyboardsDevicesDestination { Main, OnScreen, BuiltIn, PowerKeyboard }
 

@@ -6,6 +6,8 @@ import android.util.Log
 import it.palsoftware.pastiera.SettingsManager
 import org.json.JSONObject
 import java.io.File
+import it.palsoftware.pastiera.getGlobalVariationLayoutOverride
+import it.palsoftware.pastiera.getKeyboardLayout
 
 /**
  * Loads character variations from JSON assets or custom file.

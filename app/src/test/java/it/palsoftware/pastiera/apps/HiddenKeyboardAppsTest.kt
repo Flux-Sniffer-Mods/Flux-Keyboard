@@ -10,6 +10,14 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getHiddenKeyboardApps
+import it.palsoftware.pastiera.hiddenAppAllowsPanels
+import it.palsoftware.pastiera.hiddenAppShowsLeds
+import it.palsoftware.pastiera.isKeyboardHiddenForApp
+import it.palsoftware.pastiera.parsePackageList
+import it.palsoftware.pastiera.setHiddenAppAllowsPanels
+import it.palsoftware.pastiera.setHiddenAppShowsLeds
+import it.palsoftware.pastiera.setHiddenKeyboardApps
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

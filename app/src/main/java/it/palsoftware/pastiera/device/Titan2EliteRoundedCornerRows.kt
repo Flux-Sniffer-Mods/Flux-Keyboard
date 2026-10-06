@@ -24,6 +24,12 @@ import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.settingRow
+import it.palsoftware.pastiera.getTitan2EliteMaxIconShrink
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.getTitan2EliteTopCornerMultiplier
+import it.palsoftware.pastiera.setTitan2EliteMaxIconShrink
+import it.palsoftware.pastiera.setTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.setTitan2EliteTopCornerMultiplier
 
 /**
  * The Titan 2 Elite's rounded status bar (moved here from the status bar screen, so every

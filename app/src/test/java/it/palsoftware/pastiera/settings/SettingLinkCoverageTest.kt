@@ -14,6 +14,8 @@ import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.device.KeyboardsDevicesDestination
+import it.palsoftware.pastiera.setNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.setNavModeEnabled
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

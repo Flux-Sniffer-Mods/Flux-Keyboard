@@ -8,6 +8,8 @@ import android.provider.Settings
 import android.util.Log
 import it.palsoftware.pastiera.commands.CommandLaunchSpec
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getLauncherShortcuts
+import it.palsoftware.pastiera.removeLauncherShortcut
 
 /**
  * An installed app.

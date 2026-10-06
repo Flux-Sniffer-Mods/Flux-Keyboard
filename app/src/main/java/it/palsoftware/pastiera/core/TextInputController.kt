@@ -5,6 +5,12 @@ import android.view.KeyEvent
 import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.AutoCapitalizeHelper
+import it.palsoftware.pastiera.getDoubleSpaceToPeriod
+import it.palsoftware.pastiera.getMidWordQuoteToApostrophe
+import it.palsoftware.pastiera.getSmartQuotes
+import it.palsoftware.pastiera.getSmartQuotesStyle
+import it.palsoftware.pastiera.getSpacedHyphenDashStyle
+import it.palsoftware.pastiera.getSpacedHyphenToEnDash
 
 /**
  * Orchestrates text-level helpers such as double-space-to-period and

@@ -33,6 +33,19 @@ import it.palsoftware.pastiera.inputmethod.ui.VariationBarView
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.sym.SymPagesConfig
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.getLongPressModifier
+import it.palsoftware.pastiera.getLongPressThreshold
+import it.palsoftware.pastiera.getModifierIndicatorShowsBottomStrip
+import it.palsoftware.pastiera.getModifierIndicatorShowsStatusBar
+import it.palsoftware.pastiera.getSoftwareKeyboardLayoutStyle
+import it.palsoftware.pastiera.getSoftwareKeyboardLongPressLayerPopupBelowKey
+import it.palsoftware.pastiera.getSoftwareKeyboardLongPressLayerPopupEnabled
+import it.palsoftware.pastiera.getSoftwareKeyboardNumberRowEnabled
+import it.palsoftware.pastiera.getSymMappings
+import it.palsoftware.pastiera.getSymMappingsPage2
+import it.palsoftware.pastiera.getSymPagesConfig
+import it.palsoftware.pastiera.resolveLongPressSymPage
 
 private const val HARDWARE_PREVIEW_MAX_CHROME_SCALE = 1.6f
 private const val HARDWARE_PREVIEW_EXTRA_HEIGHT_DP = 12f

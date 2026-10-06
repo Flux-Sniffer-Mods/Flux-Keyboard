@@ -29,6 +29,23 @@ import it.palsoftware.pastiera.commands.CommandSurface
 import it.palsoftware.pastiera.data.layout.LayoutMapping
 import it.palsoftware.pastiera.data.layout.LayoutMappingRepository
 import it.palsoftware.pastiera.data.layout.isRealMultiTap
+import it.palsoftware.pastiera.getAltBackspaceDelete
+import it.palsoftware.pastiera.getAltLatchStaysOnSpace
+import it.palsoftware.pastiera.getBackspaceAtStartDelete
+import it.palsoftware.pastiera.getLauncherShortcutsEnabled
+import it.palsoftware.pastiera.getLayoutAwareCtrlShortcutsEnabled
+import it.palsoftware.pastiera.getLongPressModifier
+import it.palsoftware.pastiera.getNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.getQuickLauncherAltShortcutsOutsideTextFields
+import it.palsoftware.pastiera.getQuickLauncherTextFieldShortcuts
+import it.palsoftware.pastiera.getShiftBackspaceDelete
+import it.palsoftware.pastiera.getSmartAltOffAfterOpening
+import it.palsoftware.pastiera.getSmartCtrlOffAfterShortcut
+import it.palsoftware.pastiera.getSwipeToDelete
+import it.palsoftware.pastiera.getSwipeToDeleteProvider
+import it.palsoftware.pastiera.isQuickLauncherShortcut
+import it.palsoftware.pastiera.isSuggestionDebugLoggingEnabled
+import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 
 /**
  * Routes IME key events to the appropriate handlers so that the service can

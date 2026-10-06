@@ -12,6 +12,9 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setBounceKeysDelayMs
+import it.palsoftware.pastiera.setBounceKeysEnabled
+import it.palsoftware.pastiera.setBounceKeysModifierKeysEnabled
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

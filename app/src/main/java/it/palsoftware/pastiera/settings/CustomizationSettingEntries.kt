@@ -2,6 +2,14 @@ package it.palsoftware.pastiera.settings
 
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.areStatusBarVariationsEnabled
+import it.palsoftware.pastiera.getKeyboardThemeAssignmentMode
+import it.palsoftware.pastiera.getPowerShortcutsEnabled
+import it.palsoftware.pastiera.getQuickLauncherAltShortcutsOutsideTextFields
+import it.palsoftware.pastiera.getQuickLauncherBehavior
+import it.palsoftware.pastiera.getStatusBarPresentationMode
+import it.palsoftware.pastiera.getTapHapticUseSystem
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
 /** Addressable customization controls; dynamic data rows remain inside their aggregate editors. */
 internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
     SettingEntry(

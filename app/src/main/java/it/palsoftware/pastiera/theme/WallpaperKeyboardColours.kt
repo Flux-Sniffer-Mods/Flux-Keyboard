@@ -2,6 +2,7 @@ package it.palsoftware.pastiera.theme
 import android.content.Context
 import android.os.Build
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.isSystemDarkTheme
 
 /**
  * Keyboard colours from the wallpaper (Material You): the chosen theme keeps its shapes and

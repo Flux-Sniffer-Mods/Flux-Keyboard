@@ -19,6 +19,9 @@ import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setAltBackspaceDelete
+import it.palsoftware.pastiera.setBackspaceAtStartDelete
+import it.palsoftware.pastiera.setShiftBackspaceDelete
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

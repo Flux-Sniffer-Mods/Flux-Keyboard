@@ -76,6 +76,9 @@ import it.palsoftware.pastiera.RestrictedSettings
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.TutorialActivity
 import it.palsoftware.pastiera.device.TrackpadGestureSettingsScreen
+import it.palsoftware.pastiera.getExperimentalCandidatesViewEnabled
+import it.palsoftware.pastiera.isOfflineMode
+import it.palsoftware.pastiera.setExperimentalCandidatesViewEnabled
 
 /**
  * Advanced settings screen.

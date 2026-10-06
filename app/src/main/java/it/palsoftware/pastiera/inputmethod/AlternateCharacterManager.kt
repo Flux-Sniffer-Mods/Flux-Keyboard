@@ -18,6 +18,15 @@ import it.palsoftware.pastiera.data.variation.VariationRepository
 import it.palsoftware.pastiera.core.AutoSpaceTracker
 import it.palsoftware.pastiera.core.DeferredPunctuationSpaceTracker
 import java.util.concurrent.ConcurrentHashMap
+import it.palsoftware.pastiera.getAutoSpacePunctuation
+import it.palsoftware.pastiera.getEmojiLayerRecentsKey
+import it.palsoftware.pastiera.getLongPressModifier
+import it.palsoftware.pastiera.getSymMappings
+import it.palsoftware.pastiera.getSymMappingsPage2
+import it.palsoftware.pastiera.personaliseSymbolsDefaults
+import it.palsoftware.pastiera.resolveLongPressSymPage
+import it.palsoftware.pastiera.saveSymMappingsPage2
+import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 
 /**
  * Coordinates modifier-bound and SYM character mappings, long presses, and character insertion.

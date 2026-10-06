@@ -2,6 +2,10 @@ package it.palsoftware.pastiera.settings
 
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getEmojiKeyLedEnabled
+import it.palsoftware.pastiera.getLedIndividualColorsEnabled
+import it.palsoftware.pastiera.getTerminalModeEnabled
+import it.palsoftware.pastiera.getTerminalModeHideKeyboard
 /**
  * The main screen's groups (Keyboards & layouts, Typing, Look & sound, Apps) and the
  * screens that only exist since the settings were grouped by task. Their rows use

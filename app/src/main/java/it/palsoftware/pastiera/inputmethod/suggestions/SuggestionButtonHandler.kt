@@ -11,6 +11,7 @@ import it.palsoftware.pastiera.inputmethod.DebugCaptureStore
 import it.palsoftware.pastiera.inputmethod.VariationButtonHandler
 import it.palsoftware.pastiera.core.AutoSpaceTracker
 import it.palsoftware.pastiera.core.Punctuation
+import it.palsoftware.pastiera.getAutoCapitalizeFirstLetter
 
 /**
  * Handles clicks on suggestion buttons (full word replacements).

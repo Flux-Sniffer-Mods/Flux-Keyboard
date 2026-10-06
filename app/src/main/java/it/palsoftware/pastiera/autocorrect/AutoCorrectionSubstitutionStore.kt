@@ -4,6 +4,10 @@ import it.palsoftware.pastiera.inputmethod.AutoCorrector
 import java.util.LinkedHashMap
 import java.util.Locale
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getAutoCorrectEnabledLanguages
+import it.palsoftware.pastiera.getCustomAutoCorrections
+import it.palsoftware.pastiera.saveCustomAutoCorrections
+import it.palsoftware.pastiera.setAutoCorrectEnabledLanguages
 
 object AutoCorrectionSubstitutionStore {
     fun addCustomSubstitution(

@@ -14,6 +14,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.getAutoSpacePunctuation
+import it.palsoftware.pastiera.saveCustomAutoCorrections
+import it.palsoftware.pastiera.setAutoCorrectEnabledLanguages
+import it.palsoftware.pastiera.setAutoSpacePunctuation
+import it.palsoftware.pastiera.setCommaSpace
+import it.palsoftware.pastiera.setFrenchPunctuationSpacing
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

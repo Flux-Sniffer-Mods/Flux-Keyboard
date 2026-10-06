@@ -6,6 +6,7 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.data.mappings.AltModifierMappingResolver
 import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import java.io.File
+import it.palsoftware.pastiera.getSymMappingsPage2
 
 /**
  * The Linux desktop's keyboard layout: an X keyboard layout ("titan") built from Pastiera's own

@@ -26,6 +26,31 @@ import java.io.IOException
 import java.io.RandomAccessFile
 import java.lang.reflect.Modifier
 import java.util.zip.ZipInputStream
+import it.palsoftware.pastiera.defaultKeyboardTheme
+import it.palsoftware.pastiera.getAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.getAppEnterBehaviorOverrides
+import it.palsoftware.pastiera.getAppEnterBehaviorPreset
+import it.palsoftware.pastiera.getDynamicVariationBarResizeToContent
+import it.palsoftware.pastiera.getKeyboardTheme
+import it.palsoftware.pastiera.getKeyboardThemeDrafts
+import it.palsoftware.pastiera.getNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.getSavedKeyboardThemes
+import it.palsoftware.pastiera.getTypingSoundCustomDisplayName
+import it.palsoftware.pastiera.getTypingSoundCustomGroupFiles
+import it.palsoftware.pastiera.getTypingSoundMode
+import it.palsoftware.pastiera.getTypingSoundOutputMode
+import it.palsoftware.pastiera.isKeyboardLayoutAutoByLocale
+import it.palsoftware.pastiera.saveKeyboardTheme
+import it.palsoftware.pastiera.saveKeyboardThemeDraft
+import it.palsoftware.pastiera.setAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.setAppEnterBehaviorOverrides
+import it.palsoftware.pastiera.setAppEnterBehaviorPreset
+import it.palsoftware.pastiera.setDynamicVariationBarResizeToContent
+import it.palsoftware.pastiera.setKeyboardLayoutAutoByLocale
+import it.palsoftware.pastiera.setKeyboardTheme
+import it.palsoftware.pastiera.setNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.setTypingSoundMode
+import it.palsoftware.pastiera.setTypingSoundOutputMode
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

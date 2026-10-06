@@ -8,6 +8,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.getTitan2EliteStraightOuterButtons
 
 /**
  * Shared host for status bar buttons across different containers.

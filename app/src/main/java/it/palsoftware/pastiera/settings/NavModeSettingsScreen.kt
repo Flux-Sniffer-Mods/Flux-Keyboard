@@ -48,6 +48,15 @@ import it.palsoftware.pastiera.data.layout.JsonLayoutLoader
 import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import kotlin.math.min
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.getLayoutAwareCtrlShortcutsEnabled
+import it.palsoftware.pastiera.getNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.getNavModeEnabled
+import it.palsoftware.pastiera.resetNavModeKeyMappings
+import it.palsoftware.pastiera.saveNavModeKeyMappings
+import it.palsoftware.pastiera.setLayoutAwareCtrlShortcutsEnabled
+import it.palsoftware.pastiera.setNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.setNavModeEnabled
 
 /**
  * Nav Mode settings screen with keyboard visualization.

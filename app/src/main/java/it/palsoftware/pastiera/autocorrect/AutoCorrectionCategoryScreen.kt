@@ -52,6 +52,38 @@ import it.palsoftware.pastiera.settings.openSettingsPage
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.settings.settingsActivity
 import it.palsoftware.pastiera.settings.settingsChild
+import it.palsoftware.pastiera.getAccentMatchingEnabled
+import it.palsoftware.pastiera.getAddLastWordShortcut
+import it.palsoftware.pastiera.getAutoCorrectEnabled
+import it.palsoftware.pastiera.getAutoReplaceOnSpaceEnter
+import it.palsoftware.pastiera.getEmojiSuggestionsEnabled
+import it.palsoftware.pastiera.getInlineAutofillEnabled
+import it.palsoftware.pastiera.getLearnContactDetails
+import it.palsoftware.pastiera.getLearnFrequentWords
+import it.palsoftware.pastiera.getMaxAutoReplaceDistance
+import it.palsoftware.pastiera.getShowAddWordSuggestion
+import it.palsoftware.pastiera.getSuggestionKeys
+import it.palsoftware.pastiera.getSuggestionsBold
+import it.palsoftware.pastiera.getSuggestionsEnabled
+import it.palsoftware.pastiera.getUseEditTypeRanking
+import it.palsoftware.pastiera.getUseKeyboardProximity
+import it.palsoftware.pastiera.isExperimentalSuggestionsEnabled
+import it.palsoftware.pastiera.setAccentMatchingEnabled
+import it.palsoftware.pastiera.setAddLastWordShortcut
+import it.palsoftware.pastiera.setAutoCorrectEnabled
+import it.palsoftware.pastiera.setAutoReplaceOnSpaceEnter
+import it.palsoftware.pastiera.setEmojiSuggestionsEnabled
+import it.palsoftware.pastiera.setExperimentalSuggestionsEnabled
+import it.palsoftware.pastiera.setInlineAutofillEnabled
+import it.palsoftware.pastiera.setLearnContactDetails
+import it.palsoftware.pastiera.setLearnFrequentWords
+import it.palsoftware.pastiera.setMaxAutoReplaceDistance
+import it.palsoftware.pastiera.setShowAddWordSuggestion
+import it.palsoftware.pastiera.setSuggestionKeys
+import it.palsoftware.pastiera.setSuggestionsBold
+import it.palsoftware.pastiera.setSuggestionsEnabled
+import it.palsoftware.pastiera.setUseEditTypeRanking
+import it.palsoftware.pastiera.setUseKeyboardProximity
 
 /**
  * Auto-correction category screen.

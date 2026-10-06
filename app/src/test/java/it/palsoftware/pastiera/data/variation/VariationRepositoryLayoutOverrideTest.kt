@@ -10,6 +10,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.io.File
+import it.palsoftware.pastiera.getDevChoiceStaticVariationBasePreset
+import it.palsoftware.pastiera.saveStaticVariationBasePreset
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

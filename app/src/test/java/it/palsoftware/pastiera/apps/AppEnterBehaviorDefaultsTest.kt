@@ -10,6 +10,10 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.getAppEnterBehaviorPreset
+import it.palsoftware.pastiera.setAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.setAppEnterBehaviorPreset
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

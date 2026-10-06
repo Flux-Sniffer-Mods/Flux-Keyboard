@@ -17,6 +17,10 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector
+import it.palsoftware.pastiera.getExperimentalCandidatesViewEnabled
+import it.palsoftware.pastiera.setExperimentalCandidatesViewEnabled
+import it.palsoftware.pastiera.setSoftwareKeyboardMode
+import it.palsoftware.pastiera.setSoftwareKeyboardModeRuntimeOverride
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

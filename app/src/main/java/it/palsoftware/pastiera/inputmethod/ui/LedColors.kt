@@ -3,6 +3,9 @@ package it.palsoftware.pastiera.inputmethod.ui
 import android.content.Context
 import android.graphics.Color
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getLedColor
+import it.palsoftware.pastiera.getLedIndividualColorsEnabled
+import it.palsoftware.pastiera.getLedLockedAnimationEnabled
 
 /**
  * Individual status LED colours (Settings > Look & sound > Status LED colours). Each LED has

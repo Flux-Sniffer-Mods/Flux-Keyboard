@@ -24,6 +24,11 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.getSoftwareKeyboardMode
+import it.palsoftware.pastiera.getSoftwareKeyboardModeRuntimeOverride
+import it.palsoftware.pastiera.setLayoutAwareCtrlShortcutsEnabled
+import it.palsoftware.pastiera.setNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.setSoftwareKeyboardMode
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

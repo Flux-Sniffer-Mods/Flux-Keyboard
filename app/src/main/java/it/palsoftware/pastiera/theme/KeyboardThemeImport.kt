@@ -1,6 +1,10 @@
 package it.palsoftware.pastiera.theme
 import android.content.Context
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getKeyboardThemeDrafts
+import it.palsoftware.pastiera.getSavedKeyboardThemes
+import it.palsoftware.pastiera.saveKeyboardTheme
+import it.palsoftware.pastiera.setKeyboardTheme
 
 internal val KEYBOARD_THEME_DRAFT_REQUIRED_FIELDS = setOf(
     DRAFT_BACKGROUND,

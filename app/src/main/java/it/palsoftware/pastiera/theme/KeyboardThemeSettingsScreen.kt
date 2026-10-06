@@ -97,6 +97,32 @@ import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.settings.settingsActivity
 import it.palsoftware.pastiera.settings.settingsChild
 import it.palsoftware.pastiera.ImeIdentity
+import it.palsoftware.pastiera.defaultKeyboardTheme
+import it.palsoftware.pastiera.deleteKeyboardTheme
+import it.palsoftware.pastiera.deleteKeyboardThemeDraft
+import it.palsoftware.pastiera.getCustomInputStyles
+import it.palsoftware.pastiera.getKeyboardTheme
+import it.palsoftware.pastiera.getKeyboardThemeAssignmentMode
+import it.palsoftware.pastiera.getKeyboardThemeDrafts
+import it.palsoftware.pastiera.getKeyboardThemeLayoutOverrides
+import it.palsoftware.pastiera.getKeyboardThemePreviewViewportScale
+import it.palsoftware.pastiera.getKeyboardThemeSystemSlot
+import it.palsoftware.pastiera.getKeyboardWallpaperColours
+import it.palsoftware.pastiera.getSavedKeyboardThemes
+import it.palsoftware.pastiera.isSystemDarkTheme
+import it.palsoftware.pastiera.isSystemInputStyleHidden
+import it.palsoftware.pastiera.keyboardThemeFromJsonString
+import it.palsoftware.pastiera.keyboardThemeToJsonString
+import it.palsoftware.pastiera.removeKeyboardThemeLayoutOverride
+import it.palsoftware.pastiera.resolveEffectiveSoftwareKeyboardMode
+import it.palsoftware.pastiera.saveKeyboardTheme
+import it.palsoftware.pastiera.saveKeyboardThemeDraft
+import it.palsoftware.pastiera.setKeyboardTheme
+import it.palsoftware.pastiera.setKeyboardThemeAssignmentMode
+import it.palsoftware.pastiera.setKeyboardThemePreviewViewportScale
+import it.palsoftware.pastiera.setKeyboardThemeSystemSlot
+import it.palsoftware.pastiera.setKeyboardWallpaperColours
+import it.palsoftware.pastiera.upsertKeyboardThemeLayoutOverride
 
 @Composable
 fun KeyboardThemeScreen(

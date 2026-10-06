@@ -5,6 +5,8 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.core.InputContextState
+import it.palsoftware.pastiera.getAutoCapitalizeAfterPeriod
+import it.palsoftware.pastiera.getAutoCapitalizeFirstLetter
 
 /**
  * Central helper for smart auto-capitalization rules.

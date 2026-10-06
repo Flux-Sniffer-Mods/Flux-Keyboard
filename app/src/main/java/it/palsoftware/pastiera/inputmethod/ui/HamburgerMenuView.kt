@@ -17,6 +17,11 @@ import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarCallbacks
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonStyles
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonPosition
 import it.palsoftware.pastiera.inputmethod.statusbar.CurvedCornerButtonDrawable
+import it.palsoftware.pastiera.getMenuBarButtons
+import it.palsoftware.pastiera.getTitan2EliteContourLeds
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.getTitan2EliteStraightOuterButtons
+import it.palsoftware.pastiera.gifsAvailable
 
 /**
  * Overlay menu that replaces the status bar row with fixed buttons.

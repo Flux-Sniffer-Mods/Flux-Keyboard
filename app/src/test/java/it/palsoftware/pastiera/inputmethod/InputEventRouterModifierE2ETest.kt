@@ -29,6 +29,28 @@ import org.robolectric.annotation.Config
 import org.robolectric.RuntimeEnvironment
 import java.lang.reflect.Proxy
 import it.palsoftware.pastiera.inputmethod.keys.MultiTapController
+import it.palsoftware.pastiera.resetSymMappings
+import it.palsoftware.pastiera.resetSymMappingsPage2
+import it.palsoftware.pastiera.resetVariationsToDefault
+import it.palsoftware.pastiera.saveSymMappings
+import it.palsoftware.pastiera.saveSymMappingsPage2
+import it.palsoftware.pastiera.saveVariations
+import it.palsoftware.pastiera.setAltLatchStaysOnSpace
+import it.palsoftware.pastiera.setAutoSpacePunctuation
+import it.palsoftware.pastiera.setEmojiLayerPages
+import it.palsoftware.pastiera.setEmojiLayerRecentsKey
+import it.palsoftware.pastiera.setFrenchPunctuationSpacing
+import it.palsoftware.pastiera.setLongPressModifier
+import it.palsoftware.pastiera.setMidWordQuoteToApostrophe
+import it.palsoftware.pastiera.setPhysicalKeyboardCurrencySymbol
+import it.palsoftware.pastiera.setPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.setSearchKey
+import it.palsoftware.pastiera.setSmartAltOffAfterOpening
+import it.palsoftware.pastiera.setSmartCtrlOffAfterShortcut
+import it.palsoftware.pastiera.setSwipeToDelete
+import it.palsoftware.pastiera.setSwipeToDeleteProvider
+import it.palsoftware.pastiera.setSymPagesConfig
+import it.palsoftware.pastiera.setSymbolsPages
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

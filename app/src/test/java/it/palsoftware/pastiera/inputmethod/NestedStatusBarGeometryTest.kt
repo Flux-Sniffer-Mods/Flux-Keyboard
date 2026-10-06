@@ -16,6 +16,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import it.palsoftware.pastiera.getTitan2EliteStatusBarLiftPx
+import it.palsoftware.pastiera.setTitan2EliteContourLeds
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

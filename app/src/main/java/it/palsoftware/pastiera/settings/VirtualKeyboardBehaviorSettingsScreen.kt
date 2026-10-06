@@ -22,6 +22,20 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getSoftwareKeyboardLayoutStyle
+import it.palsoftware.pastiera.getSoftwareKeyboardLeftModifierKey
+import it.palsoftware.pastiera.getSoftwareKeyboardLongPressLayerPopupBelowKey
+import it.palsoftware.pastiera.getSoftwareKeyboardLongPressLayerPopupEnabled
+import it.palsoftware.pastiera.getSoftwareKeyboardNearestKeyTouchEnabled
+import it.palsoftware.pastiera.getSoftwareKeyboardNumberRowEnabled
+import it.palsoftware.pastiera.getSoftwareKeyboardRightModifierKey
+import it.palsoftware.pastiera.setSoftwareKeyboardLayoutStyle
+import it.palsoftware.pastiera.setSoftwareKeyboardLeftModifierKey
+import it.palsoftware.pastiera.setSoftwareKeyboardLongPressLayerPopupBelowKey
+import it.palsoftware.pastiera.setSoftwareKeyboardLongPressLayerPopupEnabled
+import it.palsoftware.pastiera.setSoftwareKeyboardNearestKeyTouchEnabled
+import it.palsoftware.pastiera.setSoftwareKeyboardNumberRowEnabled
+import it.palsoftware.pastiera.setSoftwareKeyboardRightModifierKey
 
 @Composable
 internal fun VirtualKeyboardBehaviorSettingsScreen(

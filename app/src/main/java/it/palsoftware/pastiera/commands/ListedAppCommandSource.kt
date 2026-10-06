@@ -11,6 +11,8 @@ import it.palsoftware.pastiera.shortcuts.AppCategory
 import it.palsoftware.pastiera.shortcuts.AppIntent
 import it.palsoftware.pastiera.shortcuts.AppShortcutPresets
 import it.palsoftware.pastiera.shortcuts.StandardShortcut
+import it.palsoftware.pastiera.getQuickLauncherListedAppShortcuts
+import it.palsoftware.pastiera.getQuickLauncherListedAppsOff
 
 /**
  * Flux Keyboard's own quick launcher commands for the apps in its app shortcut and Enter lists

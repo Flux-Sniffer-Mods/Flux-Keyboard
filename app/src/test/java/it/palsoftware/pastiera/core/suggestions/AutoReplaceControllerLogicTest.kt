@@ -17,6 +17,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.util.Locale
+import it.palsoftware.pastiera.saveCustomAutoCorrections
+import it.palsoftware.pastiera.setAutoCorrectEnabledLanguages
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

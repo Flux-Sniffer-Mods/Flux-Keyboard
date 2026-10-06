@@ -29,6 +29,28 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.areStatusBarVariationsEnabled
+import it.palsoftware.pastiera.getAvailableStatusBarButtons
+import it.palsoftware.pastiera.getDynamicVariationBarResizeToContent
+import it.palsoftware.pastiera.getDynamicVariationBarSlotCount
+import it.palsoftware.pastiera.getMenuBarButtons
+import it.palsoftware.pastiera.getPastierinaStatusBarSlotsLeft
+import it.palsoftware.pastiera.getPastierinaStatusBarSlotsRight
+import it.palsoftware.pastiera.getStatusBarPresentationMode
+import it.palsoftware.pastiera.getStatusBarSlotsLeft
+import it.palsoftware.pastiera.getStatusBarSlotsRight
+import it.palsoftware.pastiera.resetMenuBarButtons
+import it.palsoftware.pastiera.resetPastierinaStatusBarSlotsToDefault
+import it.palsoftware.pastiera.resetStatusBarSlotsToDefault
+import it.palsoftware.pastiera.setDynamicVariationBarResizeToContent
+import it.palsoftware.pastiera.setDynamicVariationBarSlotCount
+import it.palsoftware.pastiera.setMenuBarButtons
+import it.palsoftware.pastiera.setPastierinaStatusBarSlotsLeft
+import it.palsoftware.pastiera.setPastierinaStatusBarSlotsRight
+import it.palsoftware.pastiera.setStatusBarPresentationMode
+import it.palsoftware.pastiera.setStatusBarSlotsLeft
+import it.palsoftware.pastiera.setStatusBarSlotsRight
+import it.palsoftware.pastiera.setStatusBarVariationsEnabled
 
 private enum class StatusBarEditorMode { Extended, Pastierina }
 

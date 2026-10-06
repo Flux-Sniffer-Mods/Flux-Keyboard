@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import it.palsoftware.pastiera.SettingsManager
 import org.json.JSONObject
 import java.io.InputStream
+import it.palsoftware.pastiera.getNavModeMappingsFile
 
 /**
  * Helper for loading key mappings from JSON files.

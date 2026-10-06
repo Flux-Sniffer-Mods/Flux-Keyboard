@@ -19,6 +19,7 @@ import it.palsoftware.pastiera.core.NavModeController
 import it.palsoftware.pastiera.inputmethod.QuickLauncherActivity
 import rikka.shizuku.Shizuku
 import it.palsoftware.pastiera.device.PhoneTrackpadSettings
+import it.palsoftware.pastiera.getSoftwareKeyboardModeToggleToastsEnabled
 
 class CommandExecutor(
     private val context: Context,

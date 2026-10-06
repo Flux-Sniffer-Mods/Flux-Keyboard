@@ -7,6 +7,7 @@ import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.core.AutoSpaceTracker
 import it.palsoftware.pastiera.core.DeferredPunctuationSpaceTracker
+import it.palsoftware.pastiera.getAutoSpacePunctuation
 
 /**
  * Handles clicks on variation buttons.

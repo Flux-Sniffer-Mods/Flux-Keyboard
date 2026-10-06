@@ -102,6 +102,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import it.palsoftware.pastiera.apps.builtInKindsFor
 import it.palsoftware.pastiera.apps.builtInTitle
+import it.palsoftware.pastiera.getEffectiveKeyboardTheme
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.getQuickLauncherAnimationDurationMs
+import it.palsoftware.pastiera.getQuickLauncherAutoStartSingle
+import it.palsoftware.pastiera.getQuickLauncherCommandCustomizations
+import it.palsoftware.pastiera.getQuickLauncherFavoriteColor
+import it.palsoftware.pastiera.getQuickLauncherHighlightFavorites
+import it.palsoftware.pastiera.getQuickLauncherIconColors
+import it.palsoftware.pastiera.getQuickLauncherLimitResults
+import it.palsoftware.pastiera.getQuickLauncherListedAppsOff
+import it.palsoftware.pastiera.getQuickLauncherPillMode
+import it.palsoftware.pastiera.getQuickLauncherRespectKeyboardLayout
+import it.palsoftware.pastiera.getQuickLauncherShowAliasFirst
+import it.palsoftware.pastiera.getQuickLauncherStaticTopHighlight
+import it.palsoftware.pastiera.getQuickLauncherStaticTopHighlightColor
+import it.palsoftware.pastiera.getQuickLauncherTypoTolerantRanking
+import it.palsoftware.pastiera.getQuickLauncherWidthPercent
+import it.palsoftware.pastiera.isCommandSourceEnabled
+import it.palsoftware.pastiera.isQuickLauncherShortcut
+import it.palsoftware.pastiera.setQuickLauncherCommandCustomization
+import it.palsoftware.pastiera.setQuickLauncherListedAppOff
 
 class QuickLauncherActivity : LocalizedComponentActivity() {
     private var commands: List<CommandTarget> = emptyList()

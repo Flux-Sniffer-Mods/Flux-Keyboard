@@ -6,6 +6,9 @@ import android.media.SoundPool
 import android.view.KeyEvent
 import it.palsoftware.pastiera.SettingsManager
 import kotlin.random.Random
+import it.palsoftware.pastiera.getTypingSoundCustomGroupFiles
+import it.palsoftware.pastiera.getTypingSoundMode
+import it.palsoftware.pastiera.getTypingSoundOutputMode
 
 class TypingSoundPlayer(private val context: Context) {
     companion object {

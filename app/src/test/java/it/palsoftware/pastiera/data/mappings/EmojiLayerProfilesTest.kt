@@ -11,6 +11,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.getSymMappings
+import it.palsoftware.pastiera.resetSymMappings
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

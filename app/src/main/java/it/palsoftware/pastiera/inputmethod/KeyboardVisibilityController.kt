@@ -7,6 +7,11 @@ import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.core.SymLayoutController
 import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector
+import it.palsoftware.pastiera.getExperimentalCandidatesViewEnabled
+import it.palsoftware.pastiera.getStatusBarPresentationMode
+import it.palsoftware.pastiera.resolveEffectiveSoftwareKeyboardMode
+import it.palsoftware.pastiera.setPastierinaModeActive
+import it.palsoftware.pastiera.setStatusBarPresentationMode
 
 /** Owns explicit show requests; framework callbacks alone never prove that a child was drawn. */
 class KeyboardVisibilityController(

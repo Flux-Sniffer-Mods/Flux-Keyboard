@@ -12,6 +12,7 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowVibrator
+import it.palsoftware.pastiera.setTapHapticDurationMs
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

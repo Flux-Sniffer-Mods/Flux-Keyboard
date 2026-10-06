@@ -29,6 +29,9 @@ import java.util.Locale
 import android.widget.Toast
 import it.palsoftware.pastiera.ImeIdentity
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getAutoCorrectEnabledLanguages
+import it.palsoftware.pastiera.getCustomLanguageName
+import it.palsoftware.pastiera.setAutoCorrectEnabledLanguages
 
 /**
  * Gets language codes from all enabled IME subtypes.

@@ -6,6 +6,13 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsActivity
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.device.KeyboardsDevicesDestination
+import it.palsoftware.pastiera.getAutoCapitalizeFirstLetter
+import it.palsoftware.pastiera.getAutoCorrectEnabled
+import it.palsoftware.pastiera.getAutoReplaceOnSpaceEnter
+import it.palsoftware.pastiera.getCtrlTapLatches
+import it.palsoftware.pastiera.getFrenchPunctuationSpacing
+import it.palsoftware.pastiera.getTrackpadProvider
+import it.palsoftware.pastiera.hasClicksKeyboard
 
 /**
  * Stable identifiers for addressable settings entries. They are the path segment

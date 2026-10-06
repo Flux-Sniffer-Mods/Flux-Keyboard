@@ -14,6 +14,7 @@ import it.palsoftware.pastiera.commands.CommandSurface
 import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import it.palsoftware.pastiera.inputmethod.NavModeHandler
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
+import it.palsoftware.pastiera.getNavModeEnabled
 
 /**
  * Encapsulates nav-mode specific state and routing logic (Ctrl latch double-tap,

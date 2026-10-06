@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.isOfflineMode
+import it.palsoftware.pastiera.setOfflineMode
 
 /**
  * Private mode, from a key shortcut or the quick launcher: Incognito typing in every field and

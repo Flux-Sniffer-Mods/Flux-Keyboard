@@ -15,6 +15,7 @@ import org.robolectric.annotation.Config
 import java.util.Locale
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.device.KeyboardsDevicesDestination
+import it.palsoftware.pastiera.setSoftwareKeyboardLongPressLayerPopupEnabled
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33], qualifiers = "en")

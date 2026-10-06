@@ -8,6 +8,7 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.SoftwareKeyboardModeActions
 import it.palsoftware.pastiera.inputmethod.launcher.QuickLauncherOpener
+import it.palsoftware.pastiera.getSoftwareKeyboardModeToggleToastsEnabled
 
 enum class ClicksButtonDirectAction {
     QUICK_LAUNCHER,

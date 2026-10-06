@@ -31,6 +31,9 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setEmojiKeyAutoClose
+import it.palsoftware.pastiera.setEmojiPickerKey
+import it.palsoftware.pastiera.setSymbolSearchEnterPicks
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

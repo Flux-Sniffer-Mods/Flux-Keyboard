@@ -51,6 +51,26 @@ import it.palsoftware.pastiera.inputmethod.expansion.TextExpansionEngine
 import java.util.Locale
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getEmojiShortcodesEnabled
+import it.palsoftware.pastiera.getEmojiSymbolsActivationPolicy
+import it.palsoftware.pastiera.getEmojiSymbolsExactOnClose
+import it.palsoftware.pastiera.getEmojiSymbolsPresentation
+import it.palsoftware.pastiera.getSnippets
+import it.palsoftware.pastiera.getSnippetsActivationPolicy
+import it.palsoftware.pastiera.getSnippetsEnabled
+import it.palsoftware.pastiera.getSnippetsPrefix
+import it.palsoftware.pastiera.getSnippetsPresentation
+import it.palsoftware.pastiera.getSymbolShortcodesEnabled
+import it.palsoftware.pastiera.saveSnippets
+import it.palsoftware.pastiera.setEmojiShortcodesEnabled
+import it.palsoftware.pastiera.setEmojiSymbolsActivationPolicy
+import it.palsoftware.pastiera.setEmojiSymbolsExactOnClose
+import it.palsoftware.pastiera.setEmojiSymbolsPresentation
+import it.palsoftware.pastiera.setSnippetsActivationPolicy
+import it.palsoftware.pastiera.setSnippetsEnabled
+import it.palsoftware.pastiera.setSnippetsPrefix
+import it.palsoftware.pastiera.setSnippetsPresentation
+import it.palsoftware.pastiera.setSymbolShortcodesEnabled
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

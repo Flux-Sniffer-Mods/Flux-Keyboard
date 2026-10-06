@@ -18,6 +18,9 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import java.lang.reflect.Proxy
 import java.util.concurrent.TimeUnit
+import it.palsoftware.pastiera.resetVariationsToDefault
+import it.palsoftware.pastiera.saveVariations
+import it.palsoftware.pastiera.setLongPressModifier
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

@@ -51,6 +51,13 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.LocalSettingHighlightId
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.sym.DeviceSymLayerEditorScreen
+import it.palsoftware.pastiera.getPhysicalKeyboardCurrencySymbol
+import it.palsoftware.pastiera.getPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.isTitan2LayoutEnabled
+import it.palsoftware.pastiera.physicalKeyboardCurrencySymbols
+import it.palsoftware.pastiera.setPhysicalKeyboardCurrencySymbol
+import it.palsoftware.pastiera.setPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.setTitan2LayoutEnabled
 
 private val hardwareKeyboardProfiles = listOf(
     "auto" to R.string.keyboard_profile_option_auto,

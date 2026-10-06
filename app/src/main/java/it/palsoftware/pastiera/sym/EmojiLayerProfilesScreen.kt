@@ -32,6 +32,7 @@ import it.palsoftware.pastiera.settings.FluxScreenScaffold
 import it.palsoftware.pastiera.settings.FluxSwitchRow
 import it.palsoftware.pastiera.settings.SettingLinkIds
 import it.palsoftware.pastiera.settings.SettingsSectionDivider
+import it.palsoftware.pastiera.getSymMappings
 
 /**
  * Emoji layer profiles: apply a situation's emoji to the emoji layer, keep your own, or let the

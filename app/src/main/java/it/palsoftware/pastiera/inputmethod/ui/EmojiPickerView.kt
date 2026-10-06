@@ -64,6 +64,21 @@ import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import it.palsoftware.pastiera.emojiScreenClosesAfterInput
+import it.palsoftware.pastiera.getEmojiPickerExpandedHeight
+import it.palsoftware.pastiera.getEmojiSearchEnterPicks
+import it.palsoftware.pastiera.getGifFocusSearch
+import it.palsoftware.pastiera.getGifSearchEnterPicks
+import it.palsoftware.pastiera.getGifShowFavourites
+import it.palsoftware.pastiera.getGifShowRecents
+import it.palsoftware.pastiera.getKaomojiCloseOnTap
+import it.palsoftware.pastiera.getKlipyApiKey
+import it.palsoftware.pastiera.getRecentsFirstInSearch
+import it.palsoftware.pastiera.getSymAutoClose
+import it.palsoftware.pastiera.getSymAutoCloseOnTouch
+import it.palsoftware.pastiera.getSymbolSearchEnterPicks
+import it.palsoftware.pastiera.getTitan2EliteStraightOuterButtons
+import it.palsoftware.pastiera.gifsAvailable
 
 /**
  * Emoji picker view: single vertical list with section headers and bottom tabs.

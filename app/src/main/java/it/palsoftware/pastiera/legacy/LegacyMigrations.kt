@@ -8,6 +8,11 @@ import it.palsoftware.pastiera.SettingsManager.KeyboardThemeTarget
 import it.palsoftware.pastiera.core.writeTextAtomically
 import org.json.JSONObject
 import java.io.File
+import it.palsoftware.pastiera.getNavModeMappingsFile
+import it.palsoftware.pastiera.keyboardThemeAssignmentModeKeyForTarget
+import it.palsoftware.pastiera.keyboardThemeDarkKeyForTarget
+import it.palsoftware.pastiera.keyboardThemeKeyForTarget
+import it.palsoftware.pastiera.keyboardThemeLightKeyForTarget
 
 /**
  * One-time conversions of data saved by earlier versions. Each runs until it has finished once

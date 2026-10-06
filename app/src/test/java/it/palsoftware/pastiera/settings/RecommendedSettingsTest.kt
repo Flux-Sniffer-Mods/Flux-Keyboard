@@ -10,6 +10,17 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getDevChoiceStaticVariationBasePreset
+import it.palsoftware.pastiera.getEmojiSuggestionsEnabled
+import it.palsoftware.pastiera.getGifsEnabled
+import it.palsoftware.pastiera.getHiddenKeyboardApps
+import it.palsoftware.pastiera.getLedIndividualColorsEnabled
+import it.palsoftware.pastiera.getQuickLauncherBehavior
+import it.palsoftware.pastiera.getShiftBackspaceDelete
+import it.palsoftware.pastiera.getSmartAltOffAfterOpening
+import it.palsoftware.pastiera.getSmartCtrlOffAfterShortcut
+import it.palsoftware.pastiera.getStaticVariationBarPreset
+import it.palsoftware.pastiera.setSmartAltOffAfterOpening
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

@@ -25,6 +25,36 @@ import org.robolectric.annotation.Config
 import org.robolectric.RuntimeEnvironment
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
+import it.palsoftware.pastiera.resetSymMappings
+import it.palsoftware.pastiera.resetSymMappingsPage2
+import it.palsoftware.pastiera.setAltEnterLayoutSwitchEnabled
+import it.palsoftware.pastiera.setAltModifierBinding
+import it.palsoftware.pastiera.setAltShiftLayoutSwitchEnabled
+import it.palsoftware.pastiera.setAppEnterBehaviorEnabled
+import it.palsoftware.pastiera.setAppEnterBehaviorOverrides
+import it.palsoftware.pastiera.setAppEnterBehaviorPreset
+import it.palsoftware.pastiera.setAutoCapitalizeAfterPeriod
+import it.palsoftware.pastiera.setAutoCapitalizeFirstLetter
+import it.palsoftware.pastiera.setAutoCapitalizeRespectManualShiftOff
+import it.palsoftware.pastiera.setAutoCapitalizeRestrictedFields
+import it.palsoftware.pastiera.setEmojiLayerPages
+import it.palsoftware.pastiera.setEmojiPickerKey
+import it.palsoftware.pastiera.setEmojiStickyTap
+import it.palsoftware.pastiera.setExactTypingForNoSuggestionFields
+import it.palsoftware.pastiera.setPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.setQuickLauncherShortcut
+import it.palsoftware.pastiera.setQuickLauncherTextFieldShortcuts
+import it.palsoftware.pastiera.setSearchKey
+import it.palsoftware.pastiera.setShiftBackspaceDelete
+import it.palsoftware.pastiera.setStaticVariationBarLayerStickyEnabled
+import it.palsoftware.pastiera.setSymAutoClose
+import it.palsoftware.pastiera.setSymPagesConfig
+import it.palsoftware.pastiera.setSymStickyTap
+import it.palsoftware.pastiera.setSymbolsPages
+import it.palsoftware.pastiera.setTerminalModeEmojiKeyAction
+import it.palsoftware.pastiera.setTerminalModeEnabled
+import it.palsoftware.pastiera.setTerminalModeHideKeyboard
+import it.palsoftware.pastiera.setTerminalModeShowLeds
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

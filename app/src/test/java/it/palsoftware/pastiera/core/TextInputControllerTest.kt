@@ -14,6 +14,14 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setAutoCapitalizeAfterPeriod
+import it.palsoftware.pastiera.setAutoCapitalizeFirstLetter
+import it.palsoftware.pastiera.setDoubleSpaceToPeriod
+import it.palsoftware.pastiera.setMidWordQuoteToApostrophe
+import it.palsoftware.pastiera.setSmartQuotes
+import it.palsoftware.pastiera.setSmartQuotesStyle
+import it.palsoftware.pastiera.setSpacedHyphenDashStyle
+import it.palsoftware.pastiera.setSpacedHyphenToEnDash
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

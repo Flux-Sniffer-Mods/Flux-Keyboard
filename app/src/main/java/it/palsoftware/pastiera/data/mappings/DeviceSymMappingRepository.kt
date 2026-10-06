@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.KeyEvent
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
+import it.palsoftware.pastiera.getPhysicalKeyboardCurrencySymbol
+import it.palsoftware.pastiera.getPhysicalKeyboardProfileOverride
 
 object DeviceSymProfileResolver {
     fun resolve(context: Context): String {

@@ -40,6 +40,18 @@ import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getMaxTapHapticDurationMs
+import it.palsoftware.pastiera.getMinTapHapticDurationMs
+import it.palsoftware.pastiera.getTapHapticDurationMs
+import it.palsoftware.pastiera.getTapHapticUseSystem
+import it.palsoftware.pastiera.getTypingSoundCustomDisplayName
+import it.palsoftware.pastiera.getTypingSoundMode
+import it.palsoftware.pastiera.getTypingSoundOutputMode
+import it.palsoftware.pastiera.importTypingSound
+import it.palsoftware.pastiera.setTapHapticDurationMs
+import it.palsoftware.pastiera.setTapHapticUseSystem
+import it.palsoftware.pastiera.setTypingSoundMode
+import it.palsoftware.pastiera.setTypingSoundOutputMode
 
 @Composable
 fun TypingSoundSettingsRow() {

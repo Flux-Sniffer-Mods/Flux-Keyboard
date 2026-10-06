@@ -12,6 +12,11 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.getTitan2EliteTopCornerMultiplier
+import it.palsoftware.pastiera.setTitan2EliteContourLeds
+import it.palsoftware.pastiera.setTitan2EliteMaxIconShrink
+import it.palsoftware.pastiera.setTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.setTitan2EliteTopCornerMultiplier
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

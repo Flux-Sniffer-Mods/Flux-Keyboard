@@ -33,6 +33,9 @@ import java.util.Locale
 import java.util.LinkedHashMap
 import it.palsoftware.pastiera.AppBroadcastActions
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getCustomAutoCorrections
+import it.palsoftware.pastiera.getCustomLanguageName
+import it.palsoftware.pastiera.saveCustomAutoCorrections
 
 /**
  * Screen for editing corrections for a specific language.

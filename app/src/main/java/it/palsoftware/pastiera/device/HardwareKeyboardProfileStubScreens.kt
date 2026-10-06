@@ -113,6 +113,36 @@ import it.palsoftware.pastiera.settings.SettingsPage
 import it.palsoftware.pastiera.settings.openSettingsPage
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.clicks.projectChargeUntilReserve
+import it.palsoftware.pastiera.applyClicksRecommendedButtonModes
+import it.palsoftware.pastiera.getClicksAltButtonMode
+import it.palsoftware.pastiera.getClicksButtonMode
+import it.palsoftware.pastiera.getClicksChargingStartPercent
+import it.palsoftware.pastiera.getClicksChargingStopPercent
+import it.palsoftware.pastiera.getClicksCloseInputOnDisconnect
+import it.palsoftware.pastiera.getClicksDesiredButtonBinding
+import it.palsoftware.pastiera.getClicksMetaButtonMode
+import it.palsoftware.pastiera.getClicksMicrophoneButtonMode
+import it.palsoftware.pastiera.getClicksNumberRowInputMode
+import it.palsoftware.pastiera.getClicksOverlappingKeysMode
+import it.palsoftware.pastiera.getClicksShowKeyboardOnlyWithTextFocus
+import it.palsoftware.pastiera.hasExplainedClicksBluetoothPermission
+import it.palsoftware.pastiera.isClicksChargingAutomationEnabled
+import it.palsoftware.pastiera.isClicksNumberRowRepeatEnabled
+import it.palsoftware.pastiera.setClicksAltButtonMode
+import it.palsoftware.pastiera.setClicksBluetoothPermissionExplained
+import it.palsoftware.pastiera.setClicksButtonMode
+import it.palsoftware.pastiera.setClicksChargingAutomationEnabled
+import it.palsoftware.pastiera.setClicksChargingStartPercent
+import it.palsoftware.pastiera.setClicksChargingStopPercent
+import it.palsoftware.pastiera.setClicksCloseInputOnDisconnect
+import it.palsoftware.pastiera.setClicksDesiredButtonBinding
+import it.palsoftware.pastiera.setClicksMetaButtonMode
+import it.palsoftware.pastiera.setClicksMicrophoneButtonMode
+import it.palsoftware.pastiera.setClicksNumberRowInputMode
+import it.palsoftware.pastiera.setClicksNumberRowRepeatEnabled
+import it.palsoftware.pastiera.setClicksOverlappingKeysMode
+import it.palsoftware.pastiera.setClicksShowKeyboardOnlyWithTextFocus
+import it.palsoftware.pastiera.setCtrlSpaceLayoutSwitchEnabled
 
 private enum class ClicksMappingPage { HostSlots, Buttons, NumberRow }
 

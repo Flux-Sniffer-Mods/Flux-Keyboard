@@ -41,6 +41,32 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.roundToLong
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getAccessibilityLiveAnnouncementsEnabled
+import it.palsoftware.pastiera.getAccessibilityReadSecondRowEnabled
+import it.palsoftware.pastiera.getAccessibilitySuggestionsAnnouncementDelayMs
+import it.palsoftware.pastiera.getBounceKeysBackspaceEnabled
+import it.palsoftware.pastiera.getBounceKeysCharacterKeysEnabled
+import it.palsoftware.pastiera.getBounceKeysDelayMs
+import it.palsoftware.pastiera.getBounceKeysEnabled
+import it.palsoftware.pastiera.getBounceKeysEnterEnabled
+import it.palsoftware.pastiera.getBounceKeysModifierKeysEnabled
+import it.palsoftware.pastiera.getBounceKeysSpaceEnabled
+import it.palsoftware.pastiera.getMaxAccessibilitySuggestionsAnnouncementDelayMs
+import it.palsoftware.pastiera.getMaxBounceKeysDelayMs
+import it.palsoftware.pastiera.getMinAccessibilitySuggestionsAnnouncementDelayMs
+import it.palsoftware.pastiera.getMinBounceKeysDelayMs
+import it.palsoftware.pastiera.getOverlappingKeysEnabled
+import it.palsoftware.pastiera.setAccessibilityLiveAnnouncementsEnabled
+import it.palsoftware.pastiera.setAccessibilityReadSecondRowEnabled
+import it.palsoftware.pastiera.setAccessibilitySuggestionsAnnouncementDelayMs
+import it.palsoftware.pastiera.setBounceKeysBackspaceEnabled
+import it.palsoftware.pastiera.setBounceKeysCharacterKeysEnabled
+import it.palsoftware.pastiera.setBounceKeysDelayMs
+import it.palsoftware.pastiera.setBounceKeysEnabled
+import it.palsoftware.pastiera.setBounceKeysEnterEnabled
+import it.palsoftware.pastiera.setBounceKeysModifierKeysEnabled
+import it.palsoftware.pastiera.setBounceKeysSpaceEnabled
+import it.palsoftware.pastiera.setOverlappingKeysEnabled
 
 @Composable
 fun AccessibilitySettingsScreen(

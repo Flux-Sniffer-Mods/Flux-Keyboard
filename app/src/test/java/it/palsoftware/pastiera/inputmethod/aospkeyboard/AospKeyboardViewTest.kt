@@ -23,6 +23,8 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import java.util.concurrent.TimeUnit
+import it.palsoftware.pastiera.setTapHapticDurationMs
+import it.palsoftware.pastiera.setTapHapticUseSystem
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

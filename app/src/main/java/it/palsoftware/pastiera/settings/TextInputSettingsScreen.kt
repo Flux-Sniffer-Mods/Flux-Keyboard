@@ -25,6 +25,40 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.core.Punctuation
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.foldCommaSpaceIntoPunctuationSpacing
+import it.palsoftware.pastiera.getAutoCapAfterEmoticon
+import it.palsoftware.pastiera.getAutoCapitalizeAfterPeriod
+import it.palsoftware.pastiera.getAutoCapitalizeFirstLetter
+import it.palsoftware.pastiera.getAutoCapitalizeRespectManualShiftOff
+import it.palsoftware.pastiera.getAutoCapitalizeRestrictedFields
+import it.palsoftware.pastiera.getAutoSpacePunctuation
+import it.palsoftware.pastiera.getBackspaceAtStartDelete
+import it.palsoftware.pastiera.getDoubleSpaceToPeriod
+import it.palsoftware.pastiera.getEmoticonPunctuation
+import it.palsoftware.pastiera.getFrenchPunctuationOnlyFrenchLayouts
+import it.palsoftware.pastiera.getFrenchPunctuationSpacing
+import it.palsoftware.pastiera.getMidWordQuoteToApostrophe
+import it.palsoftware.pastiera.getSmartQuotes
+import it.palsoftware.pastiera.getSmartQuotesStyle
+import it.palsoftware.pastiera.getSpaceAfterPunctuation
+import it.palsoftware.pastiera.getSpacedHyphenDashStyle
+import it.palsoftware.pastiera.getSpacedHyphenToEnDash
+import it.palsoftware.pastiera.setAutoCapAfterEmoticon
+import it.palsoftware.pastiera.setAutoCapitalizeAfterPeriod
+import it.palsoftware.pastiera.setAutoCapitalizeFirstLetter
+import it.palsoftware.pastiera.setAutoCapitalizeRespectManualShiftOff
+import it.palsoftware.pastiera.setAutoSpacePunctuation
+import it.palsoftware.pastiera.setBackspaceAtStartDelete
+import it.palsoftware.pastiera.setDoubleSpaceToPeriod
+import it.palsoftware.pastiera.setEmoticonPunctuation
+import it.palsoftware.pastiera.setFrenchPunctuationOnlyFrenchLayouts
+import it.palsoftware.pastiera.setFrenchPunctuationSpacing
+import it.palsoftware.pastiera.setMidWordQuoteToApostrophe
+import it.palsoftware.pastiera.setSmartQuotes
+import it.palsoftware.pastiera.setSmartQuotesStyle
+import it.palsoftware.pastiera.setSpaceAfterPunctuation
+import it.palsoftware.pastiera.setSpacedHyphenDashStyle
+import it.palsoftware.pastiera.setSpacedHyphenToEnDash
 
 /** The two Typing screens built from these rows. */
 enum class TextInputPage {

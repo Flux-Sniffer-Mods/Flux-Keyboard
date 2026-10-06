@@ -14,6 +14,7 @@ import android.net.Uri
 import androidx.core.graphics.ColorUtils
 import java.io.File
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.touchKeyboardBackgroundImage
 
 /**
  * A picture behind the keyboard, kept as filesDir/keyboard_background.jpg (and in backups).

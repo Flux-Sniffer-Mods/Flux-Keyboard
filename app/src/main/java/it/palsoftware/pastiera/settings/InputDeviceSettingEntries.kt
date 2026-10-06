@@ -3,6 +3,8 @@ package it.palsoftware.pastiera.settings
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.device.KeyboardsDevicesDestination
+import it.palsoftware.pastiera.getSoftwareKeyboardLongPressLayerPopupEnabled
+import it.palsoftware.pastiera.hasClicksKeyboard
 /** Static rows and aggregate editors; individual user/device data is not indexed. */
 internal fun inputDeviceSettingEntries(): List<SettingEntry> = listOf(
     SettingEntry("text_expansion.snippets.enabled", R.string.snippets_enable_title, summaryRes = R.string.snippets_title, route = SettingRoute(SettingsDestination.TextExpansion)),

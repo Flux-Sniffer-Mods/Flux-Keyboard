@@ -2,6 +2,7 @@ package it.palsoftware.pastiera.commands
 
 import android.content.Context
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.isCommandSourceEnabled
 
 class CommandRegistry(
     private val context: Context,

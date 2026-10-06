@@ -16,6 +16,17 @@ import androidx.core.content.ContextCompat
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
 import java.io.Closeable
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getClicksChargingStartPercent
+import it.palsoftware.pastiera.getClicksChargingStopPercent
+import it.palsoftware.pastiera.getClicksDesiredButtonBinding
+import it.palsoftware.pastiera.getClicksManualChargingUntil
+import it.palsoftware.pastiera.getClicksPowerKeyboardSnapshot
+import it.palsoftware.pastiera.getMostRecentClicksPowerKeyboardSnapshot
+import it.palsoftware.pastiera.isClicksChargingAutomationEnabled
+import it.palsoftware.pastiera.markClicksKeyboardSeen
+import it.palsoftware.pastiera.saveClicksPowerKeyboardSnapshot
+import it.palsoftware.pastiera.setClicksDesiredButtonBinding
+import it.palsoftware.pastiera.setClicksManualChargingUntil
 
 data class ClicksPowerKeyboardControllerState(
     val deviceName: String? = null,

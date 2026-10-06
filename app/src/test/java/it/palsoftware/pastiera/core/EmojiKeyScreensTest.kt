@@ -16,6 +16,22 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.emojiScreenClosesAfterInput
+import it.palsoftware.pastiera.getEmojiLayerGifKey
+import it.palsoftware.pastiera.getEmojiLayerRecentsKey
+import it.palsoftware.pastiera.getSearchKey
+import it.palsoftware.pastiera.setEmojiKeyAutoClose
+import it.palsoftware.pastiera.setEmojiLayerGifKey
+import it.palsoftware.pastiera.setEmojiLayerPages
+import it.palsoftware.pastiera.setEmojiLayerRecentsKey
+import it.palsoftware.pastiera.setEmojiLayerTypeToSearch
+import it.palsoftware.pastiera.setEmojiPickerKey
+import it.palsoftware.pastiera.setGifsEnabled
+import it.palsoftware.pastiera.setSearchKey
+import it.palsoftware.pastiera.setSymAutoClose
+import it.palsoftware.pastiera.setSymAutoCloseOnTouch
+import it.palsoftware.pastiera.setSymPagesConfig
+import it.palsoftware.pastiera.setSymbolsPages
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

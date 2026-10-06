@@ -8,6 +8,20 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getClicksNumberRowInputMode
+import it.palsoftware.pastiera.getClicksOverlappingKeysMode
+import it.palsoftware.pastiera.getOverlappingKeysEnabled
+import it.palsoftware.pastiera.getPhysicalKeyboardCurrencySymbol
+import it.palsoftware.pastiera.getPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.isClicksNumberRowRepeatEnabled
+import it.palsoftware.pastiera.isTitan2LayoutEnabled
+import it.palsoftware.pastiera.setClicksNumberRowInputMode
+import it.palsoftware.pastiera.setClicksNumberRowRepeatEnabled
+import it.palsoftware.pastiera.setClicksOverlappingKeysMode
+import it.palsoftware.pastiera.setOverlappingKeysEnabled
+import it.palsoftware.pastiera.setPhysicalKeyboardCurrencySymbol
+import it.palsoftware.pastiera.setPhysicalKeyboardProfileOverride
+import it.palsoftware.pastiera.setTitan2LayoutEnabled
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

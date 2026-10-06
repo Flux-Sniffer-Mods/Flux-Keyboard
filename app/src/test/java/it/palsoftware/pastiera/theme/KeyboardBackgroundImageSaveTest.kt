@@ -13,6 +13,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getEffectiveKeyboardTheme
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

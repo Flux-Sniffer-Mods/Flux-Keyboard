@@ -11,6 +11,8 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setQuickLauncherAnimationDurationMs
+import it.palsoftware.pastiera.setQuickLauncherShortcut
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

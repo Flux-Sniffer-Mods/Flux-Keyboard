@@ -20,6 +20,8 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.update.forkReleasesPage
 import it.palsoftware.pastiera.update.successorReleasesPage
+import it.palsoftware.pastiera.getTapHapticDurationMs
+import it.palsoftware.pastiera.getTapHapticUseSystem
 
 /**
  * Helper for managing app notifications.

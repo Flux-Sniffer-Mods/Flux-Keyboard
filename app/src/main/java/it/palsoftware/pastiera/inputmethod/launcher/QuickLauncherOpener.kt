@@ -6,6 +6,8 @@ import android.net.Uri
 import android.util.Log
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.QuickLauncherActivity
+import it.palsoftware.pastiera.getNiagaraBackReturns
+import it.palsoftware.pastiera.getQuickLauncherBehavior
 
 object QuickLauncherOpener {
     private const val TAG = "QuickLauncherOpener"

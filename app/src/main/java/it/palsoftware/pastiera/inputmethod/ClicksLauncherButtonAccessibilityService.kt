@@ -7,6 +7,11 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.clicks.ClicksAccessibilityKeyBridge
 import it.palsoftware.pastiera.clicks.ClicksButtonDirectActionExecutor
 import it.palsoftware.pastiera.clicks.ClicksLauncherAccessibilityKeyMapper
+import it.palsoftware.pastiera.getClicksAltButtonMode
+import it.palsoftware.pastiera.getClicksButtonMode
+import it.palsoftware.pastiera.getClicksMetaButtonMode
+import it.palsoftware.pastiera.getClicksMicrophoneButtonMode
+import it.palsoftware.pastiera.trackpadBlockedIn
 
 /**
  * The keyboard's optional helper, for what an input method can't do alone:

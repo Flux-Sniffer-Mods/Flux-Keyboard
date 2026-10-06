@@ -12,6 +12,9 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.io.File
 import java.util.Locale
+import it.palsoftware.pastiera.getKlipyApiKey
+import it.palsoftware.pastiera.getUserKlipyApiKey
+import it.palsoftware.pastiera.setKlipyApiKey
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

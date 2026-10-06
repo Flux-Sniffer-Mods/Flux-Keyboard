@@ -62,6 +62,27 @@ import it.palsoftware.pastiera.TrackpadDebugActivity
 import it.palsoftware.pastiera.TutorialActivity
 import it.palsoftware.pastiera.apps.AppListHelper
 import it.palsoftware.pastiera.apps.AppPickerDialog
+import it.palsoftware.pastiera.getExactTypingApps
+import it.palsoftware.pastiera.getExactTypingForNoSuggestionFields
+import it.palsoftware.pastiera.getForkUpdateChannel
+import it.palsoftware.pastiera.getMaxSwipeIncrementalThreshold
+import it.palsoftware.pastiera.getMinSwipeIncrementalThreshold
+import it.palsoftware.pastiera.getSwipeIncrementalThreshold
+import it.palsoftware.pastiera.getTerminalModeApps
+import it.palsoftware.pastiera.getTerminalModeEmojiKeyAction
+import it.palsoftware.pastiera.getTerminalModeEnabled
+import it.palsoftware.pastiera.getTerminalModeHideKeyboard
+import it.palsoftware.pastiera.getTerminalModeShowLeds
+import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
+import it.palsoftware.pastiera.setExactTypingApps
+import it.palsoftware.pastiera.setExactTypingForNoSuggestionFields
+import it.palsoftware.pastiera.setForkUpdateChannel
+import it.palsoftware.pastiera.setSwipeIncrementalThreshold
+import it.palsoftware.pastiera.setTerminalModeApps
+import it.palsoftware.pastiera.setTerminalModeEmojiKeyAction
+import it.palsoftware.pastiera.setTerminalModeEnabled
+import it.palsoftware.pastiera.setTerminalModeHideKeyboard
+import it.palsoftware.pastiera.setTerminalModeShowLeds
 
 /*
  * The main screen's groups, most used first, each ordered the same way:

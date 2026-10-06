@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.setSoftwareKeyboardMode
 
 /**
  * Search keeps the main IME at keyboard height and moves the compact picker into a separate

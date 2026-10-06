@@ -13,6 +13,7 @@ import it.palsoftware.pastiera.commands.CommandSourceId
 import it.palsoftware.pastiera.commands.CommandTarget
 import it.palsoftware.pastiera.commands.PastieraCommandSource
 import it.palsoftware.pastiera.inputmethod.LauncherShortcutAssignmentActivity
+import it.palsoftware.pastiera.getLauncherShortcut
 
 /**
  * Controller for handling launcher shortcuts functionality.

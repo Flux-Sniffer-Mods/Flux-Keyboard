@@ -41,6 +41,21 @@ import android.view.inputmethod.InputMethodManager
 import org.json.JSONObject
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.settingRow
+import it.palsoftware.pastiera.getDefaultStaticVariationAltPreset
+import it.palsoftware.pastiera.getDefaultStaticVariationShiftPreset
+import it.palsoftware.pastiera.getDevChoiceStaticVariationBasePreset
+import it.palsoftware.pastiera.getGlobalVariationLayoutOverride
+import it.palsoftware.pastiera.getKeyboardLayout
+import it.palsoftware.pastiera.getStaticVariationBarPreset
+import it.palsoftware.pastiera.getStaticVariationBasePreset
+import it.palsoftware.pastiera.getStaticVariationNumbersPreset
+import it.palsoftware.pastiera.hasCustomVariations
+import it.palsoftware.pastiera.isStaticVariationBarLayerStickyEnabled
+import it.palsoftware.pastiera.resetVariationsToDefault
+import it.palsoftware.pastiera.saveVariations
+import it.palsoftware.pastiera.setGlobalVariationLayoutOverride
+import it.palsoftware.pastiera.setStaticVariationBarLayerStickyEnabled
+import it.palsoftware.pastiera.setStaticVariationBarPreset
 
 private fun staticVariationPresetOptions(): List<String> {
     return listOf(

@@ -54,6 +54,12 @@ import kotlinx.coroutines.withContext
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.RestrictedSettings
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getHiddenKeyboardApps
+import it.palsoftware.pastiera.hiddenAppAllowsPanels
+import it.palsoftware.pastiera.hiddenAppShowsLeds
+import it.palsoftware.pastiera.setHiddenAppAllowsPanels
+import it.palsoftware.pastiera.setHiddenAppShowsLeds
+import it.palsoftware.pastiera.setHiddenKeyboardApps
 
 private data class HiddenAppRow(val packageName: String, val name: String, val icon: Drawable?)
 

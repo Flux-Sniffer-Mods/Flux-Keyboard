@@ -33,6 +33,12 @@ import it.palsoftware.pastiera.settings.FluxScreenScaffold
 import it.palsoftware.pastiera.settings.FluxSwitchRow
 import it.palsoftware.pastiera.settings.SettingLinkIds
 import it.palsoftware.pastiera.settings.settingRow
+import it.palsoftware.pastiera.getEmojiKeyLedEnabled
+import it.palsoftware.pastiera.getEmojiPickerKey
+import it.palsoftware.pastiera.setEmojiKeyLedEnabled
+import it.palsoftware.pastiera.setLedColor
+import it.palsoftware.pastiera.setLedIndividualColorsEnabled
+import it.palsoftware.pastiera.setLedLockedAnimationEnabled
 
 /**
  * Status LED colours: keep the theme's shared LED colours, or give Shift, Ctrl, Alt and SYM a

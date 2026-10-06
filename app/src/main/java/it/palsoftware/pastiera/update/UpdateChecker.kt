@@ -16,6 +16,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONArray
 import java.io.IOException
+import it.palsoftware.pastiera.getForkUpdateChannel
 
 internal fun successorReleasesApiUrl(): String =
     "https://api.github.com/repos/${BuildConfig.SUCCESSOR_GITHUB_REPOSITORY}/releases?per_page=20"

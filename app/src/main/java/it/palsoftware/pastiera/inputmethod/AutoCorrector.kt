@@ -6,6 +6,8 @@ import android.util.Log
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
 import org.json.JSONObject
 import java.text.Normalizer
+import it.palsoftware.pastiera.getAutoCorrectEnabledLanguages
+import it.palsoftware.pastiera.getCustomAutoCorrections
 
 /**
  * Handles auto-correction of accents, apostrophes, and contractions.

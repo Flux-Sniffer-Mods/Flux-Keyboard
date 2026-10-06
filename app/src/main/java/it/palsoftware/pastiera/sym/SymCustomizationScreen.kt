@@ -43,6 +43,16 @@ import it.palsoftware.pastiera.settings.LocalSettingHighlightId
 import it.palsoftware.pastiera.settings.openSettingsChild
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.settings.settingsChild
+import it.palsoftware.pastiera.getSymMappings
+import it.palsoftware.pastiera.getSymMappingsPage2
+import it.palsoftware.pastiera.getSymPagesConfig
+import it.palsoftware.pastiera.isTitan2LayoutEnabled
+import it.palsoftware.pastiera.personaliseSymbolsDefaults
+import it.palsoftware.pastiera.resetSymMappings
+import it.palsoftware.pastiera.resetSymMappingsPage2
+import it.palsoftware.pastiera.saveSymMappings
+import it.palsoftware.pastiera.saveSymMappingsPage2
+import it.palsoftware.pastiera.setSymPagesConfig
 
 /**
  * Screen for customizing SYM mappings.
