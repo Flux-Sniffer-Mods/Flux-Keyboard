@@ -70,7 +70,8 @@ jobs:
     name: apk
     needs: version
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # A full release builds an APK per dictionary language too
+    timeout-minutes: 120
     permissions:
       contents: write
     env:
@@ -143,6 +144,34 @@ jobs:
           # Hand-written notes for a release, when there are some, in place of the generated list
           if [ -f ".github/release-notes/$VERSION.md" ]; then cp ".github/release-notes/$VERSION.md" out/RELEASE_NOTES.md; fi
           cat out/RELEASE_NOTES.md
+
+      # A full release comes in one APK per dictionary language as well: each carries only its
+      # language's dictionary (flux-keyboard-<version>-<language>.apk; the plain APK is English)
+      # and opens in that language's translation, where there is one. Only the dictionary
+      # differs, so each is the same build repackaged.
+      - name: Language APKs (full releases)
+        if: ${{ needs.version.outputs.kind == 'release' }}
+        env:
+          VERSION: ${{ needs.version.outputs.name }}
+        run: |
+          dir=app/src/main/assets/common/dictionaries_serialized
+          tag=$(grep -E '^tag=' .github/dictionaries.txt | cut -d= -f2)
+          base="https://github.com/$GITHUB_REPOSITORY/releases/download/$tag"
+          curl -fsSL "$base/dicts-manifest.json" -o dicts-manifest.json
+          mkdir -p language-dicts
+          for language in $(python3 -c "import json; print(' '.join(i['id'].split('_')[0] for i in json.load(open('dicts-manifest.json'))['items']))"); do
+            [ "$language" = en ] && continue
+            curl -fsSL "$base/${language}_base.dict" -o "language-dicts/${language}_base.dict"
+            mv "$dir/en_base.dict" language-dicts/en_base.dict.keep 2>/dev/null || true
+            rm -f "${dir:?}"/*_base.dict
+            cp "language-dicts/${language}_base.dict" "$dir/"
+            ./gradlew :app:assembleStableRelease $GRADLE_ARGS -q
+            cp app/build/outputs/apk/stable/release/app-stable-release.apk "out/flux-keyboard-$VERSION-$language.apk"
+            echo "Built the $language APK"
+          done
+          rm -f "${dir:?}"/*_base.dict
+          mv language-dicts/en_base.dict.keep "$dir/en_base.dict"
+          ls -l out
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

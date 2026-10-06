@@ -203,7 +203,10 @@ private fun checkRelease(
                     val releases = if (feed == ReleaseFeed.FORK) {
                         // The fork's release tags (see forkReleasesApiUrl)
                         val refs = JSONArray(body)
-                        forkReleasesFromTags((0 until refs.length()).mapNotNull { refs.optJSONObject(it)?.optString("ref") })
+                        forkReleasesFromTags(
+                            (0 until refs.length()).mapNotNull { refs.optJSONObject(it)?.optString("ref") },
+                            editionSuffix = it.palsoftware.pastiera.LanguageEdition.apkSuffix(context)
+                        )
                     } else parseGitHubReleases(JSONArray(body))
                     when (feed) {
                         ReleaseFeed.PASTIERA_NIGHTLY -> findNewerNightlyRelease(releases, BuildConfig.VERSION_NAME)

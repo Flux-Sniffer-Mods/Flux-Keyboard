@@ -17,7 +17,10 @@ class PastieraApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         // A fresh install starts from the default configuration, before anything writes settings
-        RecommendedSettings.applyIfFreshInstall(this)
+        if (RecommendedSettings.applyIfFreshInstall(this)) {
+            // A language edition opens in its language
+            LanguageEdition.applyOnFreshInstall(this)
+        }
         SettingsManager.keepDevBuildChoices(this)
         OfflineMode.load(this)
         AppEnterStandards.installSystemCategoryLookup(this)
