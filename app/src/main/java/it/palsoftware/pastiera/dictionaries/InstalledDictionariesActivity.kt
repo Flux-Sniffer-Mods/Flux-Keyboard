@@ -616,17 +616,21 @@ private fun importDictionaryFromSaf(context: Context, uri: android.net.Uri): Imp
     val destFile = File(destDir, name)
 
     return try {
-        context.contentResolver.openInputStream(uri)?.use { input ->
-            // Validate by attempting to deserialize
+        // Read once and checked by deserialising; the same bytes are saved
+        val bytes = context.contentResolver.openInputStream(uri)?.use { input ->
             validateDictionaryStream(input)
         } ?: return ImportResult.CopyError
 
-        // Copy once more because stream was consumed during validation
-        context.contentResolver.openInputStream(uri)?.use { input ->
-            destFile.outputStream().use { output ->
-                input.copyTo(output)
+        // Through a temporary file, so a failed write never leaves half a dictionary
+        val temp = File(destDir, "$name.tmp")
+        try {
+            temp.writeBytes(bytes)
+            if (!temp.renameTo(destFile)) {
+                temp.copyTo(destFile, overwrite = true)
             }
-        } ?: return ImportResult.CopyError
+        } finally {
+            temp.delete()
+        }
 
         ImportResult.Success(destFile.name)
     } catch (e: SerializationException) {
@@ -639,7 +643,7 @@ private fun importDictionaryFromSaf(context: Context, uri: android.net.Uri): Imp
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-private fun validateDictionaryStream(input: InputStream) {
+private fun validateDictionaryStream(input: InputStream): ByteArray {
     val bytes = input.readBytes()
     val isJson = bytes.isNotEmpty() && bytes[0] == '{'.code.toByte()
     if (isJson) {
@@ -648,6 +652,7 @@ private fun validateDictionaryStream(input: InputStream) {
     } else {
         Cbor.decodeFromByteArray<DictionaryIndex>(bytes)
     }
+    return bytes
 }
 
 private fun deleteDictionaryFile(context: Context, dictionary: UnifiedDictionaryItem): UninstallResult {
