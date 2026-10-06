@@ -1810,17 +1810,11 @@ private fun keyboardThemeOverrideTargets(context: Context): List<KeyboardThemeOv
 private fun keyboardThemeSystemLocales(context: Context): List<String> {
     val locales = mutableListOf<String>()
     val config = context.applicationContext.resources.configuration
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val localeList = config.locales
-        for (index in 0 until localeList.size()) {
-            val locale = localeList[index]
-            val value = keyboardThemeFormatLocale(locale)
-            if (value.isNotBlank() && value !in locales) locales += value
-        }
-    } else {
-        @Suppress("DEPRECATION")
-        val value = keyboardThemeFormatLocale(config.locale)
-        if (value.isNotBlank()) locales += value
+    val localeList = config.locales
+    for (index in 0 until localeList.size()) {
+        val locale = localeList[index]
+        val value = keyboardThemeFormatLocale(locale)
+        if (value.isNotBlank() && value !in locales) locales += value
     }
     return locales
 }

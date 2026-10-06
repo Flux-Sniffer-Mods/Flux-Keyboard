@@ -593,20 +593,11 @@ object AdditionalSubtypeUtils {
         val locales = mutableListOf<String>()
         try {
             val config = context.applicationContext.resources.configuration
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val localeList = config.locales
-                for (i in 0 until localeList.size()) {
-                    val locale = localeList[i]
-                    val localeStr = formatLocaleStringForSystem(locale)
-                    if (localeStr.isNotEmpty() && !locales.contains(localeStr)) {
-                        locales.add(localeStr)
-                    }
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                val locale = config.locale
+            val localeList = config.locales
+            for (i in 0 until localeList.size()) {
+                val locale = localeList[i]
                 val localeStr = formatLocaleStringForSystem(locale)
-                if (localeStr.isNotEmpty()) {
+                if (localeStr.isNotEmpty() && !locales.contains(localeStr)) {
                     locales.add(localeStr)
                 }
             }

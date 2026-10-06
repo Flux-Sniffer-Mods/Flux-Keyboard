@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils
@@ -34,9 +33,6 @@ class PastieraApplication : Application() {
     }
 
     private fun publishSoftwareKeyboardModeShortcut() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
-            return
-        }
         val shortcutManager = getSystemService(ShortcutManager::class.java) ?: return
         val shortcut = ShortcutInfo.Builder(this, SOFTWARE_KEYBOARD_MODE_SHORTCUT_ID)
             .setShortLabel(getString(R.string.software_keyboard_mode_toggle_shortcut_short))

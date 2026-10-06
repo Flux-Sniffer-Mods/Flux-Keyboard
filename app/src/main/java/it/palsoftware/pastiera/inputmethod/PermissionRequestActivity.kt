@@ -76,12 +76,10 @@ class PermissionRequestActivity : Activity() {
     override fun finish() {
         super.finish()
         // Remove activity from recent tasks
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            try {
-                finishAndRemoveTask()
-            } catch (e: Exception) {
-                // Ignore
-            }
+        try {
+            finishAndRemoveTask()
+        } catch (e: Exception) {
+            // Ignore
         }
     }
 }

@@ -9,7 +9,6 @@ import android.graphics.Typeface
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.text.Editable
 import android.text.InputType
 import android.text.Selection
@@ -208,9 +207,7 @@ class EmojiPickerView(
             ).apply {
                 setMargins(smallPadding, smallPadding, smallPadding, 0)
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                showSoftInputOnFocus = false
-            }
+            showSoftInputOnFocus = false
             addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit

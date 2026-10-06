@@ -584,9 +584,7 @@ class StatusBarController(
         (context as? InputMethodService)?.window?.window?.let { imeWindow ->
             imeWindow.navigationBarColor = backgroundImage?.let { KeyboardBackgroundImage.averageColour(context) }
                 ?: activeColors.background
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                imeWindow.isNavigationBarContrastEnforced = false
-            }
+            imeWindow.isNavigationBarContrastEnforced = false
         }
         statusBarLayout?.let { layout ->
             // Flux Keyboard: the background picture, under the (see-through) theme background

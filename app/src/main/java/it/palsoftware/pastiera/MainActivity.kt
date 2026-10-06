@@ -1121,9 +1121,7 @@ private fun buildKeyboardDebugReport(
         appendLine("android_release=${Build.VERSION.RELEASE ?: "unknown"}")
         appendLine("android_sdk=${Build.VERSION.SDK_INT}")
         appendLine("android_incremental=${Build.VERSION.INCREMENTAL ?: "unknown"}")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            appendLine("android_security_patch=${Build.VERSION.SECURITY_PATCH}")
-        }
+        appendLine("android_security_patch=${Build.VERSION.SECURITY_PATCH}")
         appendLine()
         appendLine("[app]")
         appendLine("package=${context.packageName}")

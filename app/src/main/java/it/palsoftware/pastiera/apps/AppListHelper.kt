@@ -3,7 +3,6 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import it.palsoftware.pastiera.commands.CommandLaunchSpec
@@ -45,9 +44,6 @@ object AppListHelper {
     }
 
     fun syncPackageChanges(context: Context): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return false
-        }
 
         val appContext = context.applicationContext
         val prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

@@ -2,7 +2,6 @@ package it.palsoftware.pastiera
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import java.util.Locale
 
 object AppLocaleManager {
@@ -16,9 +15,7 @@ object AppLocaleManager {
 
         val config = Configuration(base.resources.configuration)
         config.setLocale(locale)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocales(android.os.LocaleList(locale))
-        }
+        config.setLocales(android.os.LocaleList(locale))
         return base.createConfigurationContext(config)
     }
 }

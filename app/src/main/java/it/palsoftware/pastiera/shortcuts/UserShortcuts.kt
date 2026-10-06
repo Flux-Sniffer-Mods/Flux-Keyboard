@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
 import it.palsoftware.pastiera.SettingsManager
 import org.json.JSONArray
 import org.json.JSONObject
@@ -86,7 +85,7 @@ object UserShortcuts {
         var intent: Intent? = LegacyShortcutExtras.intent(data)
         var icon: Bitmap? = LegacyShortcutExtras.icon(data)
 
-        if (intent == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (intent == null) {
             val info = runCatching {
                 context.getSystemService(LauncherApps::class.java)?.getPinItemRequest(data)?.shortcutInfo
             }.getOrNull()

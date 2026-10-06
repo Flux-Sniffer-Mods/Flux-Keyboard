@@ -142,9 +142,7 @@ class ClipboardHistoryManager internal constructor(
         clipboardDao?.clearNonPinned()
         try {
             // Clear system clipboard (API 28+)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                clipboardManager.clearPrimaryClip()
-            }
+            clipboardManager.clearPrimaryClip()
         } catch (e: Exception) {
             Log.w(TAG, "Failed to clear system clipboard", e)
         }

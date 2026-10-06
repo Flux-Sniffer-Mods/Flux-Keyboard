@@ -2721,12 +2721,7 @@ private fun checkImeStatus(
 private fun getTutorialLanguageOptionLabel(context: Context, languageTag: String): String {
     return try {
         val languageLocale = Locale.forLanguageTag(languageTag)
-        val uiLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            context.resources.configuration.locale
-        }
+        val uiLocale = context.resources.configuration.locales[0]
         val nativeName = languageLocale.getDisplayLanguage(languageLocale)
         val uiName = languageLocale.getDisplayLanguage(uiLocale)
         if (nativeName.equals(uiName, ignoreCase = true)) nativeName else "$nativeName - $uiName"
@@ -2736,12 +2731,7 @@ private fun getTutorialLanguageOptionLabel(context: Context, languageTag: String
 }
 
 private fun getTutorialSystemDefaultLanguageLabel(context: Context): String {
-    val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        android.content.res.Resources.getSystem().configuration.locales[0]
-    } else {
-        @Suppress("DEPRECATION")
-        android.content.res.Resources.getSystem().configuration.locale
-    }
+    val systemLocale = android.content.res.Resources.getSystem().configuration.locales[0]
     val detected = getTutorialLanguageOptionLabel(context, systemLocale.toLanguageTag())
     return context.getString(R.string.app_language_system_default_with_detected, detected)
 }

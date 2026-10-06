@@ -3,7 +3,6 @@ import it.palsoftware.pastiera.legacy.LegacyMigrations
 import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.clickable
@@ -1161,12 +1160,7 @@ internal fun getCurrentAppLanguageTag(context: Context): String? {
 internal fun getLanguageOptionLabel(context: Context, languageTag: String): String {
     return try {
         val languageLocale = Locale.forLanguageTag(languageTag)
-        val uiLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            context.resources.configuration.locale
-        }
+        val uiLocale = context.resources.configuration.locales[0]
 
         val nativeName = languageLocale.getDisplayLanguage(languageLocale)
         val uiName = languageLocale.getDisplayLanguage(uiLocale)

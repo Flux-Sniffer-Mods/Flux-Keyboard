@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import it.palsoftware.pastiera.inputmethod.AutoCorrector
 import it.palsoftware.pastiera.core.suggestions.UserDictionaryStore
 import it.palsoftware.pastiera.R

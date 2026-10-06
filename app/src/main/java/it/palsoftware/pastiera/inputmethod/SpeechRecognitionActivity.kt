@@ -190,13 +190,9 @@ class SpeechRecognitionActivity : Activity() {
             }
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            try {
-                finishAndRemoveTask()
-            } catch (e: Exception) {
-                finish()
-            }
-        } else {
+        try {
+            finishAndRemoveTask()
+        } catch (e: Exception) {
             finish()
         }
     }

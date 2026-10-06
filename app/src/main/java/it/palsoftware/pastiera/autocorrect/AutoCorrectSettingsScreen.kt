@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.WindowInsets
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
 import androidx.compose.foundation.layout.statusBars
