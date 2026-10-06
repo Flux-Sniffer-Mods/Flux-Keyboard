@@ -22,8 +22,8 @@
     <string name="setting_link_max_icon_shrink">Riduzione massima delle icone</string>
     <string name="setting_link_status_extended_left">Barra di stato estesa: pulsanti a sinistra</string>
     <string name="setting_link_status_extended_right">Barra di stato estesa: pulsanti a destra</string>
-    <string name="setting_link_status_pastierina_left">Pastierina: pulsanti a sinistra</string>
-    <string name="setting_link_status_pastierina_right">Pastierina: pulsanti a destra</string>
+    <string name="setting_link_status_pastierina_left">Solderina: pulsanti a sinistra</string>
+    <string name="setting_link_status_pastierina_right">Solderina: pulsanti a destra</string>
     <string name="setting_link_theme_software_key_rounding">Tastiera su schermo: arrotondamento dei tasti</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Tastiera fisica: arrotondamento di suggerimenti / varianti</string>
     <string name="setting_link_theme_software_chrome_rounding">Tastiera su schermo: arrotondamento di suggerimenti / varianti</string>
@@ -852,11 +852,11 @@
     <string name="pastierina_preview_suggestions">Suggerimenti</string>
     <string name="titan2_elite_rounded_corners_title">Angoli arrotondati del Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Arrotonda gli angoli inferiori della barra di stato per seguire gli angoli arrotondati dello schermo dell’Elite.</string>
-    <string name="pastierina_status_bar_buttons_title">Modalità Pastierina</string>
-    <string name="pastierina_status_bar_buttons_description">Scegli quali pulsanti compaiono ai bordi sinistro e destro della riga compatta di Pastierina.</string>
-    <string name="pastierina_status_bar_slots_left">Pulsanti sinistri di Pastierina</string>
-    <string name="pastierina_status_bar_slots_right">Pulsanti destri di Pastierina</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="pastierina_status_bar_buttons_title">Modalità Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Scegli quali pulsanti compaiono ai bordi sinistro e destro della riga compatta di Solderina.</string>
+    <string name="pastierina_status_bar_slots_left">Pulsanti sinistri di Solderina</string>
+    <string name="pastierina_status_bar_slots_right">Pulsanti destri di Solderina</string>
+    <string name="status_bar_button_minimal_ui">Solderina</string>
     <string name="status_bar_button_software_keyboard_mode">Modalità tastiera</string>
     <string name="status_bar_button_software_keyboard_mode_description">Apri / chiudi temporaneamente la tastiera su schermo (Ctrl+B)</string>
     <string name="modifier_indicators_title">Indicatori dei modificatori</string>

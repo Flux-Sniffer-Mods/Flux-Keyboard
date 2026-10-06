@@ -117,8 +117,8 @@
     <string name="setting_link_max_icon_shrink">Maksymalne zmniejszenie ikon</string>
     <string name="setting_link_status_extended_left">Rozszerzony pasek stanu: przyciski po lewej</string>
     <string name="setting_link_status_extended_right">Rozszerzony pasek stanu: przyciski po prawej</string>
-    <string name="setting_link_status_pastierina_left">Pastierina: przyciski po lewej</string>
-    <string name="setting_link_status_pastierina_right">Pastierina: przyciski po prawej</string>
+    <string name="setting_link_status_pastierina_left">Solderina: przyciski po lewej</string>
+    <string name="setting_link_status_pastierina_right">Solderina: przyciski po prawej</string>
     <string name="setting_link_theme_software_key_rounding">Klawiatura ekranowa: zaokrąglenie klawiszy</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Klawiatura fizyczna: zaokrąglenie podpowiedzi / wariantów</string>
     <string name="setting_link_theme_software_chrome_rounding">Klawiatura ekranowa: zaokrąglenie podpowiedzi / wariantów</string>
@@ -1170,11 +1170,11 @@
     <string name="pastierina_preview_suggestions">Podpowiedzi</string>
     <string name="titan2_elite_rounded_corners_title">Zaokrąglone rogi Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Zaokrąglaj dolne rogi paska stanu zgodnie z zaokrąglonymi rogami ekranu Elite.</string>
-    <string name="pastierina_status_bar_buttons_title">Tryb Pastierina</string>
-    <string name="pastierina_status_bar_buttons_description">Wybierz, które przyciski pojawiają się przy lewej i prawej krawędzi kompaktowego wiersza Pastierina.</string>
-    <string name="pastierina_status_bar_slots_left">Lewe przyciski Pastierina</string>
-    <string name="pastierina_status_bar_slots_right">Prawe przyciski Pastierina</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="pastierina_status_bar_buttons_title">Tryb Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Wybierz, które przyciski pojawiają się przy lewej i prawej krawędzi kompaktowego wiersza Solderina.</string>
+    <string name="pastierina_status_bar_slots_left">Lewe przyciski Solderina</string>
+    <string name="pastierina_status_bar_slots_right">Prawe przyciski Solderina</string>
+    <string name="status_bar_button_minimal_ui">Solderina</string>
     <string name="status_bar_button_software_keyboard_mode">Tryb klawiatury</string>
     <string name="status_bar_button_software_keyboard_mode_description">Tymczasowo otwórz / zamknij klawiaturę ekranową (Ctrl+B)</string>
     <string name="status_bar_button_gif">GIF-y</string>

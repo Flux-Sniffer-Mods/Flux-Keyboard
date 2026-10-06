@@ -117,8 +117,8 @@
     <string name="setting_link_max_icon_shrink">Μέγιστη σμίκρυνση εικονιδίων</string>
     <string name="setting_link_status_extended_left">Εκτεταμένη γραμμή κατάστασης: αριστερά κουμπιά</string>
     <string name="setting_link_status_extended_right">Εκτεταμένη γραμμή κατάστασης: δεξιά κουμπιά</string>
-    <string name="setting_link_status_pastierina_left">Pastierina: αριστερά κουμπιά</string>
-    <string name="setting_link_status_pastierina_right">Pastierina: δεξιά κουμπιά</string>
+    <string name="setting_link_status_pastierina_left">Solderina: αριστερά κουμπιά</string>
+    <string name="setting_link_status_pastierina_right">Solderina: δεξιά κουμπιά</string>
     <string name="setting_link_theme_software_key_rounding">Πληκτρολόγιο οθόνης: στρογγύλεμα πλήκτρων</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Φυσικό πληκτρολόγιο: στρογγύλεμα προτάσεων / παραλλαγών</string>
     <string name="setting_link_theme_software_chrome_rounding">Πληκτρολόγιο οθόνης: στρογγύλεμα προτάσεων / παραλλαγών</string>

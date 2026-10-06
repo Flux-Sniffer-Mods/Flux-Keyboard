@@ -117,8 +117,8 @@
     <string name="setting_link_max_icon_shrink">Պատկերակների առավելագույն փոքրացում</string>
     <string name="setting_link_status_extended_left">Ընդլայնված կարգավիճակի գոտի՝ ձախ կոճակներ</string>
     <string name="setting_link_status_extended_right">Ընդլայնված կարգավիճակի գոտի՝ աջ կոճակներ</string>
-    <string name="setting_link_status_pastierina_left">Pastierina՝ ձախ կոճակներ</string>
-    <string name="setting_link_status_pastierina_right">Pastierina՝ աջ կոճակներ</string>
+    <string name="setting_link_status_pastierina_left">Solderina՝ ձախ կոճակներ</string>
+    <string name="setting_link_status_pastierina_right">Solderina՝ աջ կոճակներ</string>
     <string name="setting_link_theme_software_key_rounding">Էկրանային ստեղնաշար՝ ստեղների կլորացում</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Ֆիզիկական ստեղնաշար՝ առաջարկների / տարբերակների կլորացում</string>
     <string name="setting_link_theme_software_chrome_rounding">Էկրանային ստեղնաշար՝ առաջարկների / տարբերակների կլորացում</string>
@@ -1170,11 +1170,11 @@
     <string name="pastierina_preview_suggestions">Առաջարկներ</string>
     <string name="titan2_elite_rounded_corners_title">Titan 2 Elite-ի կլորացված անկյուններ</string>
     <string name="titan2_elite_rounded_corners_description">Կլորացնել կարգավիճակի գոտու ներքևի անկյունները՝ Elite-ի էկրանի կլորացված անկյուններին համապատասխան։</string>
-    <string name="pastierina_status_bar_buttons_title">Pastierina ռեժիմ</string>
-    <string name="pastierina_status_bar_buttons_description">Ընտրեք, թե որ կոճակներն են հայտնվում Pastierina կոմպակտ տողի ձախ և աջ եզրերին։</string>
-    <string name="pastierina_status_bar_slots_left">Pastierina-ի ձախ կոճակներ</string>
-    <string name="pastierina_status_bar_slots_right">Pastierina-ի աջ կոճակներ</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="pastierina_status_bar_buttons_title">Solderina ռեժիմ</string>
+    <string name="pastierina_status_bar_buttons_description">Ընտրեք, թե որ կոճակներն են հայտնվում Solderina կոմպակտ տողի ձախ և աջ եզրերին։</string>
+    <string name="pastierina_status_bar_slots_left">Solderina-ի ձախ կոճակներ</string>
+    <string name="pastierina_status_bar_slots_right">Solderina-ի աջ կոճակներ</string>
+    <string name="status_bar_button_minimal_ui">Solderina</string>
     <string name="status_bar_button_software_keyboard_mode">Ստեղնաշարի ռեժիմ</string>
     <string name="status_bar_button_software_keyboard_mode_description">Ժամանակավորապես բացել / փակել էկրանային ստեղնաշարը (Ctrl+B)</string>
     <string name="status_bar_button_gif">GIF-եր</string>

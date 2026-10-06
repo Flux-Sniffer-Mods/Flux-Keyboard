@@ -117,8 +117,8 @@
     <string name="setting_link_max_icon_shrink">Reducción máxima de iconos</string>
     <string name="setting_link_status_extended_left">Barra de estado ampliada: botones izquierdos</string>
     <string name="setting_link_status_extended_right">Barra de estado ampliada: botones derechos</string>
-    <string name="setting_link_status_pastierina_left">Pastierina: botones izquierdos</string>
-    <string name="setting_link_status_pastierina_right">Pastierina: botones derechos</string>
+    <string name="setting_link_status_pastierina_left">Solderina: botones izquierdos</string>
+    <string name="setting_link_status_pastierina_right">Solderina: botones derechos</string>
     <string name="setting_link_theme_software_key_rounding">Teclado en pantalla: redondeo de teclas</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Teclado físico: redondeo de sugerencias / variantes</string>
     <string name="setting_link_theme_software_chrome_rounding">Teclado en pantalla: redondeo de sugerencias / variantes</string>
@@ -1170,11 +1170,11 @@
     <string name="pastierina_preview_suggestions">Sugerencias</string>
     <string name="titan2_elite_rounded_corners_title">Esquinas redondeadas del Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Redondea las esquinas inferiores de la barra de estado para que coincidan con las esquinas redondeadas de la pantalla del Elite.</string>
-    <string name="pastierina_status_bar_buttons_title">Modo Pastierina</string>
-    <string name="pastierina_status_bar_buttons_description">Elige qué botones aparecen en los bordes izquierdo y derecho de la fila compacta de Pastierina.</string>
-    <string name="pastierina_status_bar_slots_left">Botones izquierdos de Pastierina</string>
-    <string name="pastierina_status_bar_slots_right">Botones derechos de Pastierina</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="pastierina_status_bar_buttons_title">Modo Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Elige qué botones aparecen en los bordes izquierdo y derecho de la fila compacta de Solderina.</string>
+    <string name="pastierina_status_bar_slots_left">Botones izquierdos de Solderina</string>
+    <string name="pastierina_status_bar_slots_right">Botones derechos de Solderina</string>
+    <string name="status_bar_button_minimal_ui">Solderina</string>
     <string name="status_bar_button_software_keyboard_mode">Modo de teclado</string>
     <string name="status_bar_button_software_keyboard_mode_description">Abrir / cerrar temporalmente el teclado en pantalla (Ctrl+B)</string>
     <string name="status_bar_button_gif">GIF</string>

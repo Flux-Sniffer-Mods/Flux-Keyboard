@@ -693,10 +693,10 @@
     <string name="extended_status_bar_features_section">Erweiterte Funktionen</string>
     <string name="status_bar_buttons_section">Schaltflächen</string>
     <string name="pastierina_preview_suggestions">Vorschläge</string>
-    <string name="pastierina_status_bar_buttons_title">Pastierina-Modus</string>
-    <string name="pastierina_status_bar_buttons_description">Wähle, welche Schaltflächen am linken und rechten Rand der kompakten Pastierina-Zeile erscheinen.</string>
-    <string name="pastierina_status_bar_slots_left">Linke Pastierina-Schaltflächen</string>
-    <string name="pastierina_status_bar_slots_right">Rechte Pastierina-Schaltflächen</string>
+    <string name="pastierina_status_bar_buttons_title">Solderina-Modus</string>
+    <string name="pastierina_status_bar_buttons_description">Wähle, welche Schaltflächen am linken und rechten Rand der kompakten Solderina-Zeile erscheinen.</string>
+    <string name="pastierina_status_bar_slots_left">Linke Solderina-Schaltflächen</string>
+    <string name="pastierina_status_bar_slots_right">Rechte Solderina-Schaltflächen</string>
     <string name="status_bar_button_gif">GIFs</string>
     <string name="status_bar_button_gif_description">GIF-Suche</string>
     <string name="text_expansion_title">Textersetzung</string>

@@ -12,6 +12,8 @@ import it.palsoftware.pastiera.getStatusBarPresentationMode
 import it.palsoftware.pastiera.resolveEffectiveSoftwareKeyboardMode
 import it.palsoftware.pastiera.setPastierinaModeActive
 import it.palsoftware.pastiera.setStatusBarPresentationMode
+import it.palsoftware.pastiera.getMinimalMode
+import it.palsoftware.pastiera.setMinimalMode
 
 /** Owns explicit show requests; framework callbacks alone never prove that a child was drawn. */
 class KeyboardVisibilityController(
@@ -273,14 +275,14 @@ class KeyboardVisibilityController(
     fun shouldRecoverSurfaceOnHardwareKey() = !isExpectedSurfaceRequestedOrShown()
     internal fun isCandidatesSurfaceExplicitlyDismissedForTests() = dismissed
 
+    /** Between Solderina and minimal mode (the minimal UI button and its shortcut). */
     fun togglePastierinaMode() {
-        val next = when (SettingsManager.getStatusBarPresentationMode(context)) {
-            SettingsManager.StatusBarPresentationMode.PASTIERINA -> SettingsManager.StatusBarPresentationMode.FULL_STATUS_BAR
-            SettingsManager.StatusBarPresentationMode.FULL_STATUS_BAR -> SettingsManager.StatusBarPresentationMode.PASTIERINA
-        }
-        SettingsManager.setStatusBarPresentationMode(context, next)
-        syncStatusBarPresentationModeFromSettings()
+        SettingsManager.setMinimalMode(context, !SettingsManager.getMinimalMode(context))
+        onMinimalModeToggled?.invoke()
     }
+
+    /** The keyboard applies minimal mode to the field in front at once. */
+    var onMinimalModeToggled: (() -> Unit)? = null
 
     fun syncStatusBarPresentationModeFromSettings() {
         val minimal = SettingsManager.getStatusBarPresentationMode(context) == SettingsManager.StatusBarPresentationMode.PASTIERINA

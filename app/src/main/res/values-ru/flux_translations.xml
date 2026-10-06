@@ -117,8 +117,8 @@
     <string name="setting_link_max_icon_shrink">Максимальное уменьшение значков</string>
     <string name="setting_link_status_extended_left">Расширенная строка состояния: кнопки слева</string>
     <string name="setting_link_status_extended_right">Расширенная строка состояния: кнопки справа</string>
-    <string name="setting_link_status_pastierina_left">Pastierina: кнопки слева</string>
-    <string name="setting_link_status_pastierina_right">Pastierina: кнопки справа</string>
+    <string name="setting_link_status_pastierina_left">Solderina: кнопки слева</string>
+    <string name="setting_link_status_pastierina_right">Solderina: кнопки справа</string>
     <string name="setting_link_theme_software_key_rounding">Экранная клавиатура: скругление клавиш</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Физическая клавиатура: скругление подсказок / вариантов</string>
     <string name="setting_link_theme_software_chrome_rounding">Экранная клавиатура: скругление подсказок / вариантов</string>
@@ -1170,11 +1170,11 @@
     <string name="pastierina_preview_suggestions">Подсказки</string>
     <string name="titan2_elite_rounded_corners_title">Скруглённые углы Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Скруглять нижние углы строки состояния под скруглённые углы экрана Elite.</string>
-    <string name="pastierina_status_bar_buttons_title">Режим Pastierina</string>
-    <string name="pastierina_status_bar_buttons_description">Выберите, какие кнопки появляются у левого и правого края компактной строки Pastierina.</string>
-    <string name="pastierina_status_bar_slots_left">Левые кнопки Pastierina</string>
-    <string name="pastierina_status_bar_slots_right">Правые кнопки Pastierina</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="pastierina_status_bar_buttons_title">Режим Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Выберите, какие кнопки появляются у левого и правого края компактной строки Solderina.</string>
+    <string name="pastierina_status_bar_slots_left">Левые кнопки Solderina</string>
+    <string name="pastierina_status_bar_slots_right">Правые кнопки Solderina</string>
+    <string name="status_bar_button_minimal_ui">Solderina</string>
     <string name="status_bar_button_software_keyboard_mode">Режим клавиатуры</string>
     <string name="status_bar_button_software_keyboard_mode_description">Временно открыть / закрыть экранную клавиатуру (Ctrl+B)</string>
     <string name="status_bar_button_gif">GIF</string>

@@ -260,7 +260,7 @@
     <string name="tutorial_page_nav_mode_description">Режим навігації дозволяє керувати інтерфейсом пристрою за допомогою літерних скорочень, таких як IJKL або ESDF.\nЩоб активувати:\n• Натисніть Ctrl двічі швидко\n• Літерні клавіші стають елементами керування навігацією\n• Натисніть Ctrl знову, щоб вийти\nКожне скорочення можна переналаштувати в Додаткових налаштуваннях.</string>
     <string name="tutorial_nav_mode_bullet_selection">Дії виділення розширюють виділений текст ліворуч, праворуч або по словах.</string>
     <string name="tutorial_nav_mode_bullet_words">Дії зі словами швидше переміщують курсор цілими словами в текстових полях.</string>
-    <string name="tutorial_nav_mode_bullet_media">Призначення також можуть запускати ярлики застосунків, медіакерування, Escape, Tab, Page Up/Down і Pastierina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Призначення також можуть запускати ярлики застосунків, медіакерування, Escape, Tab, Page Up/Down і Solderina.</string>
     <string name="tutorial_quick_launcher_title">QuickLauncher</string>
     <string name="tutorial_quick_launcher_description">Відкривайте застосунки з клавіатури, не виходячи з потоку введення.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Утримуйте SYM і натисніть Пробіл, щоб відкрити QuickLauncher будь-де.</string>
@@ -429,7 +429,7 @@
     <string name="event_action_label">Дія: </string>
     <string name="event_keycode_label">KeyCode: </string>
     <string name="event_scancode_label">ScanCode: </string>
-    <string name="nav_mode_action_toggle_pastierina">Pastierina</string>
+    <string name="nav_mode_action_toggle_pastierina">Solderina</string>
     <string name="titan2_layout_title">Titan 2 Layout Alignment</string>
     <string name="titan2_layout_description">Align on-screen keyboard with Titan 2 physical keys</string>
     <string name="installed_dictionaries_installed_badge">Installed</string>

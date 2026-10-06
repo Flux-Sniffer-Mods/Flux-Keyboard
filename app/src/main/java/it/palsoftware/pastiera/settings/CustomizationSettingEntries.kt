@@ -453,38 +453,6 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         )
     ),
     SettingEntry(
-        id = "status_bar.variations_visible",
-        titleRes = R.string.status_bar_variations_visible_title,
-        summaryRes = R.string.status_bar_variations_visible_description,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
-        ),
-        availabilityCheck = { SettingsManager.getStatusBarPresentationMode(it) != SettingsManager.StatusBarPresentationMode.PASTIERINA },
-        unavailableFallbackId = "status_bar.presentation"
-    ),
-    SettingEntry(
-        id = "status_bar.variation_slots",
-        titleRes = R.string.dynamic_variation_slot_count_title,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
-        ),
-        availabilityCheck = { SettingsManager.getStatusBarPresentationMode(it) != SettingsManager.StatusBarPresentationMode.PASTIERINA && SettingsManager.areStatusBarVariationsEnabled(it) },
-        unavailableFallbackId = "status_bar.variations_visible"
-    ),
-    SettingEntry(
-        id = "status_bar.resize_variations",
-        titleRes = R.string.dynamic_variation_resize_to_content_title,
-        summaryRes = R.string.dynamic_variation_resize_to_content_description,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
-        ),
-        availabilityCheck = { SettingsManager.getStatusBarPresentationMode(it) != SettingsManager.StatusBarPresentationMode.PASTIERINA && SettingsManager.areStatusBarVariationsEnabled(it) },
-        unavailableFallbackId = "status_bar.variations_visible"
-    ),
-    SettingEntry(
         id = "status_bar.top_corner",
         titleRes = R.string.titan2_elite_top_corner_title,
         summaryRes = R.string.titan2_elite_top_corner_description,
@@ -512,26 +480,6 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
             destination = SettingsDestination.Customization,
             customizationDestination = "status_bar_buttons"
         )
-    ),
-    SettingEntry(
-        id = "status_bar.extended_left",
-        titleRes = R.string.setting_link_status_extended_left,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
-        ),
-        availabilityCheck = { SettingsManager.getStatusBarPresentationMode(it) != SettingsManager.StatusBarPresentationMode.PASTIERINA },
-        unavailableFallbackId = "status_bar.presentation"
-    ),
-    SettingEntry(
-        id = "status_bar.extended_right",
-        titleRes = R.string.setting_link_status_extended_right,
-        route = SettingRoute(
-            destination = SettingsDestination.Customization,
-            customizationDestination = "status_bar_buttons"
-        ),
-        availabilityCheck = { SettingsManager.getStatusBarPresentationMode(it) != SettingsManager.StatusBarPresentationMode.PASTIERINA },
-        unavailableFallbackId = "status_bar.presentation"
     ),
     SettingEntry(
         id = "status_bar.pastierina_left",

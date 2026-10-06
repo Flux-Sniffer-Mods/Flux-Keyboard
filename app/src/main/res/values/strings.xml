@@ -1032,7 +1032,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="nav_mode_action_expand_selection_word_right">WordSel→</string>
     <string name="nav_mode_action_page_start">DocStart</string>
     <string name="nav_mode_action_page_end">DocEnd</string>
-    <string name="nav_mode_action_toggle_pastierina">Pastierina</string>
+    <string name="nav_mode_action_toggle_pastierina">Minimal mode</string>
     <string name="nav_mode_action_media_play_pause">Play/Pause</string>
     <string name="nav_mode_action_media_previous">Media Previous</string>
     <string name="nav_mode_action_media_next">Media Next</string>
@@ -1095,7 +1095,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="tutorial_page_nav_mode_description">Nav Mode turns letter keys into navigation and editing controls. Press Ctrl twice to latch it, or enable Ctrl-hold navigation below.</string>
     <string name="tutorial_nav_mode_bullet_selection">Selection actions can extend text selection left, right, or word by word.</string>
     <string name="tutorial_nav_mode_bullet_words">Word actions jump by whole words for faster cursor movement in text fields.</string>
-    <string name="tutorial_nav_mode_bullet_media">Mappings can also handle app shortcuts, media controls, Escape, Tab, Page Up/Down, and Pastierina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Mappings can also handle app shortcuts, media controls, Escape, Tab, Page Up/Down, and Solderina.</string>
     <string name="tutorial_quick_launcher_title">Quick launcher</string>
     <string name="tutorial_quick_launcher_description">Open apps from the keyboard without leaving your typing flow.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Hold SYM and press Space to open the quick launcher from anywhere.</string>
@@ -1365,8 +1365,8 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
 
     <!-- Status Bar Buttons Configuration -->
     <string name="status_bar_buttons_title">Status Bar</string>
-    <string name="status_bar_buttons_description">Configure the Status Bar and Pastierina Mode.</string>
-    <string name="status_bar_style_section">Status bar style</string>
+    <string name="status_bar_buttons_description">Solderina or minimal mode, and the buttons on the bar.</string>
+    <string name="status_bar_style_section">Keyboard bar</string>
     <string name="extended_status_bar_title">Extended Status Bar</string>
     <string name="extended_status_bar_features_section">Extended features</string>
     <string name="status_bar_buttons_section">Buttons</string>
@@ -1378,10 +1378,10 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="status_bar_slot_right_2">Right Slot 2</string>
     <string name="status_bar_slots_left">Left buttons</string>
     <string name="status_bar_slots_right">Right buttons</string>
-    <string name="pastierina_status_bar_buttons_title">Pastierina mode</string>
-    <string name="pastierina_status_bar_buttons_description">Choose which buttons appear on the left and right edges of the compact Pastierina row.</string>
-    <string name="pastierina_status_bar_slots_left">Pastierina left buttons</string>
-    <string name="pastierina_status_bar_slots_right">Pastierina right buttons</string>
+    <string name="pastierina_status_bar_buttons_title">Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Choose which buttons appear on the left and right edges of the compact Solderina row.</string>
+    <string name="pastierina_status_bar_slots_left">Solderina left buttons</string>
+    <string name="pastierina_status_bar_slots_right">Solderina right buttons</string>
     <string name="status_bar_slot_add">Add status bar button</string>
     <string name="status_bar_slot_remove">Remove status bar button</string>
     <string name="status_bar_button_none">None</string>
@@ -1397,7 +1397,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="status_bar_button_language_state_description">Language %1$s, layout %2$s</string>
     <string name="status_bar_button_hamburger">Menu</string>
     <string name="status_bar_button_hamburger_description">Quick actions</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="status_bar_button_minimal_ui">Minimal mode</string>
     <string name="status_bar_button_software_keyboard_mode">Keyboard mode</string>
     <string name="status_bar_button_software_keyboard_mode_description">Temporarily open / close the on-screen keyboard (Ctrl+B)</string>
     <string name="status_bar_button_close_menu_description">Close quick actions</string>
@@ -1432,7 +1432,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="status_bar_button_clipboard_state_empty">Empty</string>
     <string name="status_bar_button_clipboard_state_items">%1$d items</string>
     <string name="sym_key_content_description">%1$s, %2$s</string>
-    <string name="status_bar_button_minimal_ui_description">Toggle compact keyboard UI</string>
+    <string name="status_bar_button_minimal_ui_description">Turn minimal mode on or off: no keyboard bar in any app</string>
     <string name="status_bar_buttons_reset">Reset</string>
     <string name="text_expansion_title">Text expansion</string>
     <string name="text_expansion_description">Configure snippets and typed emoji or symbol shortcodes.</string>

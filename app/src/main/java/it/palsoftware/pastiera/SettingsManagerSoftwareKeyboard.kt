@@ -8,17 +8,13 @@ import it.palsoftware.pastiera.SettingsManager.SoftwareKeyboardModifierKey
 
 // SettingsManager: the status bar presentation and the software (on-screen) keyboard. The keys and defaults live in SettingsManager.kt.
 
-fun SettingsManager.getStatusBarPresentationMode(context: Context): StatusBarPresentationMode {
-    val value = getPreferences(context).getString(
-        KEY_PASTIERINA_MODE_OVERRIDE,
-        StatusBarPresentationMode.FULL_STATUS_BAR.storageValue
-    )
-    return when (value) {
-        StatusBarPresentationMode.PASTIERINA.storageValue,
-        "force_minimal" -> StatusBarPresentationMode.PASTIERINA
-        else -> StatusBarPresentationMode.FULL_STATUS_BAR
-    }
-}
+/**
+ * The bar is Solderina: the extended status bar was retired in 1.2 (a choice of it saved before
+ * is no longer read). Minimal mode, next to it, hides the bar altogether.
+ */
+@Suppress("UNUSED_PARAMETER")
+fun SettingsManager.getStatusBarPresentationMode(context: Context): StatusBarPresentationMode =
+    StatusBarPresentationMode.PASTIERINA
 
 fun SettingsManager.setStatusBarPresentationMode(context: Context, mode: StatusBarPresentationMode) {
     getPreferences(context).edit()

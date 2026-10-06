@@ -117,8 +117,8 @@
     <string name="setting_link_max_icon_shrink">Mức thu nhỏ biểu tượng tối đa</string>
     <string name="setting_link_status_extended_left">Thanh trạng thái mở rộng: nút bên trái</string>
     <string name="setting_link_status_extended_right">Thanh trạng thái mở rộng: nút bên phải</string>
-    <string name="setting_link_status_pastierina_left">Pastierina: nút bên trái</string>
-    <string name="setting_link_status_pastierina_right">Pastierina: nút bên phải</string>
+    <string name="setting_link_status_pastierina_left">Solderina: nút bên trái</string>
+    <string name="setting_link_status_pastierina_right">Solderina: nút bên phải</string>
     <string name="setting_link_theme_software_key_rounding">Bàn phím ảo: bo tròn phím</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Bàn phím vật lý: bo tròn gợi ý / biến thể</string>
     <string name="setting_link_theme_software_chrome_rounding">Bàn phím ảo: bo tròn gợi ý / biến thể</string>
@@ -1170,11 +1170,11 @@
     <string name="pastierina_preview_suggestions">Gợi ý</string>
     <string name="titan2_elite_rounded_corners_title">Góc bo tròn Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Bo tròn các góc dưới của thanh trạng thái cho khớp với góc bo tròn màn hình của Elite.</string>
-    <string name="pastierina_status_bar_buttons_title">Chế độ Pastierina</string>
-    <string name="pastierina_status_bar_buttons_description">Chọn các nút xuất hiện ở mép trái và phải của hàng gọn Pastierina.</string>
-    <string name="pastierina_status_bar_slots_left">Nút trái của Pastierina</string>
-    <string name="pastierina_status_bar_slots_right">Nút phải của Pastierina</string>
-    <string name="status_bar_button_minimal_ui">Pastierina</string>
+    <string name="pastierina_status_bar_buttons_title">Chế độ Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Chọn các nút xuất hiện ở mép trái và phải của hàng gọn Solderina.</string>
+    <string name="pastierina_status_bar_slots_left">Nút trái của Solderina</string>
+    <string name="pastierina_status_bar_slots_right">Nút phải của Solderina</string>
+    <string name="status_bar_button_minimal_ui">Solderina</string>
     <string name="status_bar_button_software_keyboard_mode">Chế độ bàn phím</string>
     <string name="status_bar_button_software_keyboard_mode_description">Tạm mở / đóng bàn phím trên màn hình (Ctrl+B)</string>
     <string name="status_bar_button_gif">GIF</string>

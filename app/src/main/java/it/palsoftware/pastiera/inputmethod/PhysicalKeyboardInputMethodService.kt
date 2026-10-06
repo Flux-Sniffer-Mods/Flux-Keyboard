@@ -2576,6 +2576,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             },
             isHiddenForApp = { hiddenAppSurfaceBlocked() }
         )
+        keyboardVisibilityController.onMinimalModeToggled = ::onMinimalModeToggled
         inputManager = getSystemService(InputManager::class.java)
         InputDevice.getDeviceIds().forEach { deviceId ->
             InputDevice.getDevice(deviceId)
@@ -3631,6 +3632,35 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         return inputType and android.text.InputType.TYPE_MASK_CLASS != EditorInfo.TYPE_NULL
     }
 
+    /** Minimal mode: every app but terminals (their own option) and hidden apps (keys to the app). */
+    private fun updateOutOfSight(packageName: String?) {
+        minimalModeActive = !terminalModeActive && SettingsManager.getMinimalMode(this) &&
+            !SettingsManager.isKeyboardHiddenForApp(this, packageName)
+        keyboardOutOfSight = (terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)) || minimalModeActive
+        outOfSightShowsLeds = keyboardOutOfSight && if (minimalModeActive) {
+            SettingsManager.getMinimalModeShowLeds(this)
+        } else {
+            SettingsManager.getTerminalModeShowLeds(this)
+        }
+    }
+
+    /** Minimal mode switched by its shortcut: the field in front follows at once. */
+    private fun onMinimalModeToggled() {
+        val wasOutOfSight = keyboardOutOfSight
+        updateOutOfSight(currentInputEditorInfo?.packageName)
+        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(keyboardOutOfSight && outOfSightLedsOnly())
+        if (keyboardOutOfSight) {
+            // Out of sight: let syncHiddenAppPanel hide the surface (or leave the LEDs)
+            outOfSightSurfaceShown = true
+            syncHiddenAppPanel()
+        } else if (wasOutOfSight) {
+            outOfSightSurfaceShown = false
+            invalidateRenderedStatusSnapshot()
+            ensureImeSurfaceVisible()
+        }
+        updateStatusBarText()
+    }
+
     /** Show the keyboard while a panel is open in a hidden app; hide it (or back to LEDs) afterwards. */
     private fun syncHiddenAppPanel() {
         if (keyboardOutOfSight && !keyboardHiddenForApp) {
@@ -4315,15 +4345,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         )
         // Shizuku users: keyboard swipes through Shizuku, unless a source was picked by hand
         SettingsManager.adoptShizukuTrackpadIfUnchosen(this)
-        // Minimal mode: every app but terminals (their own option) and hidden apps (keys to the app)
-        minimalModeActive = !terminalModeActive && SettingsManager.getMinimalMode(this) &&
-            !SettingsManager.isKeyboardHiddenForApp(this, info?.packageName)
-        keyboardOutOfSight = (terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)) || minimalModeActive
-        outOfSightShowsLeds = keyboardOutOfSight && if (minimalModeActive) {
-            SettingsManager.getMinimalModeShowLeds(this)
-        } else {
-            SettingsManager.getTerminalModeShowLeds(this)
-        }
+        updateOutOfSight(info?.packageName)
         outOfSightSurfaceShown = false
         terminalCtrlKeysDown.clear()
         terminalCtrlSent.clear()
