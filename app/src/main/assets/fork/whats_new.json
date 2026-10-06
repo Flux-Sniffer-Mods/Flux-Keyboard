@@ -453,7 +453,16 @@
       "after": "202610050759"
     }
   ],
-  "bugFixes": [],
+  "bugFixes": [
+    {
+      "text": "Deleting every custom input style now removes them from Android's language switcher too; before, the last ones could stay listed.",
+      "after": "202610051915"
+    },
+    {
+      "text": "One-time codes are found in conversation notifications (texts and chats) on Android 10 as well.",
+      "after": "202610051915"
+    }
+  ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
   "docsLabel": "Full Flux Keyboard changelog",
   "introSince": "What's new in Flux Keyboard since the version you had.",
