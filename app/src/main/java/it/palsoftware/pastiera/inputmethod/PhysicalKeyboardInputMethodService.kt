@@ -5677,7 +5677,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             event?.isCtrlPressed != true && event?.isAltPressed != true
         ) {
             val ic = initialInputConnection
-            if (ic != null && ic.getSelectedText(0).isNullOrEmpty()) {
+            if (ic.getSelectedText(0).isNullOrEmpty()) {
                 ic.deleteSurroundingTextInCodePoints(0, 1)
                 return true
             }

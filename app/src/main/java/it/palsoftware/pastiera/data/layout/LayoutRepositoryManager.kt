@@ -14,6 +14,8 @@ import okhttp3.Request
 import java.io.File
 import java.security.MessageDigest
 
+private val manifestJson = Json { ignoreUnknownKeys = true }
+
 private const val TAG = "LayoutRepositoryManager"
 private const val MANIFEST_URL = "https://palsoftware.github.io/pastiera-dict/layouts-manifest.json"
 private val httpClient = OkHttpClient()
@@ -71,7 +73,7 @@ object LayoutRepositoryManager {
                 return@withContext Result.failure(Exception("Empty response"))
             }
 
-            val manifest = Json { ignoreUnknownKeys = true }.decodeFromString<LayoutManifest>(body)
+            val manifest = manifestJson.decodeFromString<LayoutManifest>(body)
             Log.d(TAG, "Parsed ${manifest.items.size} layout entries")
             Result.success(manifest)
         } catch (e: SerializationException) {

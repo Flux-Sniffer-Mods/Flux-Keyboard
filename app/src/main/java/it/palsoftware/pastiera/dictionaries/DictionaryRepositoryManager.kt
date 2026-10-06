@@ -18,6 +18,8 @@ import java.io.InputStream
 import java.security.MessageDigest
 import it.palsoftware.pastiera.core.suggestions.DictionaryIndex
 
+private val manifestJson = Json { ignoreUnknownKeys = true }
+
 private const val TAG = "DictionaryRepositoryManager"
 private const val MANIFEST_URL = "https://palsoftware.github.io/pastiera-dict/dicts-manifest.json"
 private val client = OkHttpClient()
@@ -81,7 +83,7 @@ object DictionaryRepositoryManager {
             }
             
             Log.d(TAG, "Manifest response received, size: ${body.length} bytes")
-            val manifest = Json { ignoreUnknownKeys = true }.decodeFromString<DictionaryManifest>(body)
+            val manifest = manifestJson.decodeFromString<DictionaryManifest>(body)
             Log.d(TAG, "Manifest parsed successfully. Found ${manifest.items.size} dictionaries: ${manifest.items.map { it.filename }.joinToString(", ")}")
             Result.success(manifest)
         } catch (e: SerializationException) {

@@ -24,7 +24,7 @@ import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.OpenWith
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.RoundedCorner
-import androidx.compose.material.icons.filled.ShortText
+import androidx.compose.material.icons.automirrored.filled.ShortText
 import androidx.compose.material.icons.filled.SmartButton
 import androidx.compose.material.icons.filled.Spellcheck
 import androidx.compose.material.icons.filled.SwapHoriz
@@ -175,7 +175,7 @@ fun TypingHubScreen(
             onClick = { onNavigate(SettingsDestination.TextInput) }
         )
         SettingsCategoryRow(
-            icon = Icons.Filled.ShortText,
+            icon = Icons.AutoMirrored.Filled.ShortText,
             title = stringResource(R.string.text_expansion_title),
             description = stringResource(R.string.settings_text_expansion_hub_description),
             linkId = SettingLinkIds.TEXT_INPUT_TEXT_EXPANSION,

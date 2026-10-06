@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -149,7 +150,7 @@ fun TextExpansionSettingsScreen(onBack: () -> Unit) {
                         readOnly = true,
                         label = { Text(stringResource(R.string.expansion_presentation_title)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(presentationExpanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
                     )
                     ExposedDropdownMenu(
                         expanded = presentationExpanded,
@@ -259,7 +260,7 @@ fun TextExpansionSettingsScreen(onBack: () -> Unit) {
                         readOnly = true,
                         label = { Text(stringResource(R.string.expansion_presentation_title)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(emojiPresentationExpanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
                     )
                     ExposedDropdownMenu(
                         expanded = emojiPresentationExpanded,
