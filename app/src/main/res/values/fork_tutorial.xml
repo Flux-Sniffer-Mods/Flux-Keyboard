@@ -100,6 +100,9 @@
     <string name="flux_tutorial_personalise_bullet_theme">Keyboard themes: the theme page shows which theme is in use in light and dark mode, and sets it with a tap.</string>
     <string name="trackpad_apps_section">Keyboard swipes per app</string>
     <string name="trackpad_apps_note">Turn Scroll assistant on for every app in the phone\'s settings (select all apps there), then choose here where keyboard swipes may scroll. Flux Keyboard keeps them from the other apps through the accessibility service (Android 14 and later). While you type, they always go to the keyboard.</string>
+    <string name="trackpad_apps_note_shizuku">Flux Keyboard reads keyboard swipes through Shizuku, so they work while you type in any app. Which apps they scroll is up to Scroll assistant: untick the ones you don\'t want scrolled in its app list.</string>
+    <string name="trackpad_apps_open_scroll_assistant">Choose apps in Scroll assistant</string>
+    <string name="trackpad_apps_open_scroll_assistant_description">The phone\'s list of apps keyboard swipes scroll</string>
     <string name="trackpad_apps_mode_title">Where keyboard swipes scroll</string>
     <string name="trackpad_apps_mode_off">Every app Scroll assistant allows</string>
     <string name="trackpad_apps_mode_block">Every app except the ones chosen</string>

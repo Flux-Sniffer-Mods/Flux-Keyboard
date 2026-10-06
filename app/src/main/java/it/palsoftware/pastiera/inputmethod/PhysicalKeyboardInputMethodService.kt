@@ -3198,26 +3198,57 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     private fun buildTrackpadGestureDetector(): TrackpadGestureDetector {
         val gesturesEnabled = SettingsManager.getTrackpadGesturesEnabled(this)
-        val swipeThreshold = SettingsManager.getTrackpadSuggestionSwipeThreshold(this).toInt()
         val eventDeviceSelection = SettingsManager.getTrackpadShizukuDevice(this)
         val fallbackEventDevice = resolveTrackpadEventDevice()
         Log.d(
             TRACKPAD_DEBUG_TAG,
-            "buildTrackpadGestureDetector() - gesturesEnabled=$gesturesEnabled, swipeThreshold=$swipeThreshold, eventDeviceSelection=$eventDeviceSelection, fallbackEventDevice=$fallbackEventDevice"
+            "buildTrackpadGestureDetector() - gesturesEnabled=$gesturesEnabled, eventDeviceSelection=$eventDeviceSelection, fallbackEventDevice=$fallbackEventDevice"
         )
         return TrackpadGestureDetector(
             isEnabled = { shouldStartShizukuTrackpadDetector() },
-            onSwipeUp = { third ->
-                if (it.palsoftware.pastiera.core.SuggestionSwipeLearning.swipesPick(this)) {
-                    it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
-                    acceptSuggestionAtIndex(third)
-                }
-            },
+            onTouch = { phase, x, y, xRange -> uiHandler.post { handleShizukuTrackpadTouch(phase, x, y, xRange) } },
             scope = trackpadScope,
-            swipeUpThreshold = swipeThreshold,
             eventDeviceSelection = eventDeviceSelection,
             fallbackEventDevice = fallbackEventDevice
         )
+    }
+
+    /** A swipe that started while typing; one that started elsewhere is the app's (a scroll). */
+    private var shizukuTrackpadTouchDownAt = 0L
+
+    /**
+     * A touch on the keys, read through Shizuku: handled as Android's own keyboard swipes are,
+     * but only while a field is being typed in (otherwise the swipe is a scroll, or nothing).
+     */
+    private fun handleShizukuTrackpadTouch(
+        phase: TrackpadGestureDetector.TouchPhase,
+        x: Float,
+        y: Float,
+        xRange: TrackpadAxisRange
+    ) {
+        val now = android.os.SystemClock.uptimeMillis()
+        val action = when (phase) {
+            TrackpadGestureDetector.TouchPhase.DOWN -> {
+                val typing = isInputViewActive && inputContextState.isEditable && !terminalModeActive && !keyboardHiddenForApp
+                if (!typing) {
+                    shizukuTrackpadTouchDownAt = 0L
+                    return
+                }
+                shizukuTrackpadTouchDownAt = now
+                MotionEvent.ACTION_DOWN
+            }
+            TrackpadGestureDetector.TouchPhase.MOVE -> MotionEvent.ACTION_MOVE
+            TrackpadGestureDetector.TouchPhase.UP -> MotionEvent.ACTION_UP
+        }
+        if (shizukuTrackpadTouchDownAt == 0L) return
+        val event = MotionEvent.obtain(shizukuTrackpadTouchDownAt, now, action, x, y, 0)
+        event.source = InputDevice.SOURCE_TOUCHPAD
+        try {
+            processTrackpadMotion(event, origin = "shizuku", xRangeOverride = xRange)
+        } finally {
+            event.recycle()
+        }
+        if (phase == TrackpadGestureDetector.TouchPhase.UP) shizukuTrackpadTouchDownAt = 0L
     }
 
     private fun resolveTrackpadEventDevice(): String {
@@ -6852,10 +6883,18 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             TRACKPAD_DEBUG_TAG,
             "NativeMotion[$origin]: action=${motionActionName(event.actionMasked)} source=${event.source}(0x${event.source.toString(16)}) deviceId=${event.deviceId} device='$deviceName' x=${event.x} y=${event.y}"
         )
+        return processTrackpadMotion(event, origin, xRangeOverride = null)
+    }
 
+    /**
+     * A keyboard swipe as it happens, from Android or read through Shizuku: picks a suggestion
+     * or deletes a word once it ends. [xRangeOverride] is the touch surface's width when the
+     * event doesn't come from its own input device.
+     */
+    private fun processTrackpadMotion(event: MotionEvent, origin: String, xRangeOverride: TrackpadAxisRange?): Boolean {
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                val xRange = nativeImeTrackpadAxisRange(event, MotionEvent.AXIS_X)
+                val xRange = xRangeOverride ?: nativeImeTrackpadAxisRange(event, MotionEvent.AXIS_X)
                 nativeTrackpadGestureStart = NativeTrackpadGestureStart(
                     x = event.x,
                     y = event.y,
@@ -6893,7 +6932,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 nativeTrackpadGestureStart ?: NativeTrackpadGestureStart(
                     x = event.x,
                     y = event.y,
-                    xRange = nativeImeTrackpadAxisRange(event, MotionEvent.AXIS_X),
+                    xRange = xRangeOverride ?: nativeImeTrackpadAxisRange(event, MotionEvent.AXIS_X),
                     origin = origin,
                     actionName = motionActionName(event.actionMasked),
                     deviceId = event.deviceId,

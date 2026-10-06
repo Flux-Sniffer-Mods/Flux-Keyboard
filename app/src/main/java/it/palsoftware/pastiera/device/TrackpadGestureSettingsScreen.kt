@@ -568,7 +568,7 @@ fun TrackpadGestureSettingsScreen(
                     SettingsManager.setTrackpadCaptureWhileTyping(context, it)
                 }
             )
-            TrackpadAppsSection()
+            TrackpadAppsSection(shizukuSource = trackpadProvider == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU)
             FluxSwitchRow(
                 linkId = "trackpad.suggestion_swipe_directions",
                 title = stringResource(R.string.trackpad_swipe_directions_title),
@@ -1090,12 +1090,25 @@ private data class TutorialPage(
 )
 
 /**
- * Keyboard swipes per app: with Scroll assistant on for every app, the swipes scroll only where
- * you want; the accessibility service keeps them from the other apps.
+ * Keyboard swipes per app. Read through Shizuku, the swipes reach the keyboard whatever the phone
+ * does with them, so Scroll assistant's own app list decides where they scroll. Otherwise, with
+ * Scroll assistant on for every app, the accessibility service keeps them from the apps chosen
+ * here (where the phone passes them through it).
  */
 @Composable
-private fun TrackpadAppsSection() {
+private fun TrackpadAppsSection(shizukuSource: Boolean) {
     val context = LocalContext.current
+    if (shizukuSource) {
+        SettingsSectionDivider(stringResource(R.string.trackpad_apps_section))
+        FluxNote(stringResource(R.string.trackpad_apps_note_shizuku))
+        FluxActionRow(
+            linkId = null,
+            title = stringResource(R.string.trackpad_apps_open_scroll_assistant),
+            description = stringResource(R.string.trackpad_apps_open_scroll_assistant_description),
+            icon = "\u21C5"
+        ) { PhoneTrackpadSettings.open(context) }
+        return
+    }
     var mode by remember { mutableStateOf(SettingsManager.getTrackpadAppMode(context)) }
     var apps by remember { mutableStateOf(SettingsManager.getTrackpadApps(context)) }
     var choosingMode by remember { mutableStateOf(false) }

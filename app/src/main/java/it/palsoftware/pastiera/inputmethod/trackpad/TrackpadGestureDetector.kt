@@ -12,37 +12,32 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 /**
- * Listens to trackpad events via Shizuku and triggers callbacks on swipe.
- * Keeps gesture logic isolated so the IME can stay lean and only react to events.
+ * Reads the keyboard's touch surface through Shizuku (getevent), so keyboard swipes reach the
+ * keyboard without the phone's own scrolling (on the Titan 2 Elite, Scroll assistant) having to
+ * be on for the app in front. Each touch is passed on as it happens (down, moves, up), in the
+ * device's own coordinates, for the keyboard's gesture handling to judge.
  */
 class TrackpadGestureDetector(
     private val isEnabled: () -> Boolean,
-    private val onSwipeUp: (third: Int) -> Unit,
+    private val onTouch: (phase: TouchPhase, x: Float, y: Float, xRange: TrackpadAxisRange) -> Unit,
     private val scope: CoroutineScope,
     private val eventDeviceSelection: String = AUTO_EVENT_DEVICE,
     private val fallbackEventDevice: String = DEFAULT_EVENT_DEVICE,
     private val trackpadMaxX: Int = DEFAULT_TRACKPAD_MAX_X,
-    private val swipeUpThreshold: Int = DEFAULT_SWIPE_UP_THRESHOLD,
-    private val minVelocityThreshold: Double = DEFAULT_MIN_VELOCITY_THRESHOLD,
-    private val logTag: String = DEFAULT_LOG_TAG,
-    private val shizukuPing: () -> Boolean = { 
-        Shizuku.pingBinder() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED 
-    }
+    private val logTag: String = DEFAULT_LOG_TAG
 ) {
+    enum class TouchPhase { DOWN, MOVE, UP }
 
     private var geteventJob: Job? = null
     @Volatile
     private var geteventProcess: Process? = null
     private var touchDown = false
-    private var startX = 0
-    private var startY = 0
+    private var downSent = false
     private var currentX = 0
     private var currentY = 0
-    private var startXSet = false
-    private var startYSet = false
+    private var xSet = false
+    private var ySet = false
     private var trackpadXRange = TrackpadAxisRange(0f, trackpadMaxX.toFloat())
-    private var startTime: Long = 0
-    private var endTime: Long = 0
 
     fun start() {
         // Guard: if already running, do nothing
@@ -52,7 +47,7 @@ class TrackpadGestureDetector(
         }
         
         val enabled = isEnabled()
-        Log.d(DEBUG_TAG, "start() called - isEnabled=$enabled, swipeUpThreshold=$swipeUpThreshold, eventDeviceSelection=$eventDeviceSelection")
+        Log.d(DEBUG_TAG, "start() called - isEnabled=$enabled, eventDeviceSelection=$eventDeviceSelection")
         
         if (!enabled) {
             Log.d(DEBUG_TAG, "start() ABORTED: gestures disabled in settings")
@@ -150,85 +145,43 @@ class TrackpadGestureDetector(
         return geteventJob != null && geteventJob?.isActive == true
     }
 
-    private fun parseTrackpadEvent(line: String) {
+    /**
+     * One line of getevent -l: the touch surface reports one finger (BTN_TOUCH), its position
+     * (ABS_MT_POSITION_X/Y) and the end of each report (SYN_REPORT).
+     */
+    internal fun parseTrackpadEvent(line: String) {
         when {
             line.contains("BTN_TOUCH") && line.contains("DOWN") -> {
                 touchDown = true
-                startXSet = false
-                startYSet = false
-                startTime = System.nanoTime()
+                downSent = false
+                xSet = false
+                ySet = false
             }
 
             line.contains("BTN_TOUCH") && line.contains("UP") -> {
-                if (touchDown && startXSet && startYSet) {
-                    endTime = System.nanoTime()
-                    detectGesture()
-                }
+                if (downSent) onTouch(TouchPhase.UP, currentX.toFloat(), currentY.toFloat(), trackpadXRange)
                 touchDown = false
-                startXSet = false
-                startYSet = false
+                downSent = false
             }
 
-            line.contains("ABS_MT_POSITION_X") -> {
-                val parts = line.trim().split(Regex("\\s+"))
-                if (parts.size >= 3) {
-                    val hexValue = parts.last()
-                    val newX = hexValue.toIntOrNull(16)
-                    if (newX != null) {
-                        currentX = newX
-                        if (touchDown && !startXSet) {
-                            startX = newX
-                            startXSet = true
-                        }
-                    }
-                }
-            }
+            line.contains("ABS_MT_POSITION_X") -> axisValue(line)?.let { currentX = it; xSet = true }
 
-            line.contains("ABS_MT_POSITION_Y") -> {
-                val parts = line.trim().split(Regex("\\s+"))
-                if (parts.size >= 3) {
-                    val hexValue = parts.last()
-                    val newY = hexValue.toIntOrNull(16)
-                    if (newY != null) {
-                        currentY = newY
-                        if (touchDown && !startYSet) {
-                            startY = newY
-                            startYSet = true
-                        }
-                    }
-                }
+            line.contains("ABS_MT_POSITION_Y") -> axisValue(line)?.let { currentY = it; ySet = true }
+
+            // A report is complete: the touch starts once its position is known, then moves
+            line.contains("SYN_REPORT") && touchDown && xSet && ySet -> {
+                val phase = if (downSent) TouchPhase.MOVE else TouchPhase.DOWN
+                downSent = true
+                onTouch(phase, currentX.toFloat(), currentY.toFloat(), trackpadXRange)
             }
         }
     }
 
-    private fun detectGesture() {
-        val deltaY = startY - currentY  // Positive = swipe up
-        val deltaX = currentX - startX
-        val absDeltaX = kotlin.math.abs(deltaX)
-
-        // Calculate duration in milliseconds
-        val durationMs = (endTime - startTime) / 1_000_000.0
-        
-        // Calculate velocity (pixels per millisecond)
-        val velocity = if (durationMs > 0) deltaY / durationMs else 0.0
-
-        // Require primarily vertical swipe: deltaY must be at least 5x larger than horizontal drift
-        // AND velocity must exceed minimum threshold
-        if (deltaY > swipeUpThreshold && absDeltaX < deltaY / 4 && velocity >= minVelocityThreshold) {
-            val third = TrackpadCoordinateMapper.third(startX.toFloat(), trackpadXRange)
-
-            Log.d(
-                logTag,
-                ">>> SWIPE UP DETECTED in third $third (deltaY=$deltaY, absDeltaX=$absDeltaX, velocity=${String.format("%.2f", velocity)} px/ms, duration=${String.format("%.1f", durationMs)}ms, startX=$startX, xRange=${trackpadXRange.min}..${trackpadXRange.max}) <<<"
-            )
-            onSwipeUp(third)
-        }
-    }
+    private fun axisValue(line: String): Int? =
+        line.trim().split(Regex("\\s+")).takeIf { it.size >= 3 }?.last()?.toIntOrNull(16)
 
     companion object {
         const val DEFAULT_TRACKPAD_MAX_X = 1440
-        const val DEFAULT_SWIPE_UP_THRESHOLD = 300
-        const val DEFAULT_MIN_VELOCITY_THRESHOLD = 2.0  // pixels per millisecond (e.g., 1.0 px/ms = 1000 px/s)
         const val DEFAULT_EVENT_DEVICE = TrackpadEventDeviceResolver.LEGACY_EVENT_DEVICE
         const val AUTO_EVENT_DEVICE = "auto"
         const val DEFAULT_LOG_TAG = "PastieraIME"

@@ -1323,10 +1323,10 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="trackpad_gestures_shizuku_connected">Shizuku Connected</string>
     <string name="trackpad_gestures_shizuku_not_connected">Shizuku Not Connected</string>
     <string name="trackpad_gestures_shizuku_not_authorized">App Not Authorized in Shizuku</string>
-    <string name="trackpad_provider_title">Trackpad input provider</string>
-    <string name="trackpad_provider_shizuku">Shizuku (getevent)</string>
-    <string name="trackpad_provider_native_ime">Native IME events (experimental)</string>
-    <string name="trackpad_provider_native_ime_status">Native IME events active (experimental)</string>
+    <string name="trackpad_provider_title">Keyboard swipes come from</string>
+    <string name="trackpad_provider_shizuku">Shizuku: in every app, Scroll assistant or not</string>
+    <string name="trackpad_provider_native_ime">Android: only in apps Scroll assistant scrolls</string>
+    <string name="trackpad_provider_native_ime_status">Keyboard swipes from Android in use</string>
     <string name="trackpad_shizuku_device_title">Shizuku input device</string>
     <string name="trackpad_shizuku_device_automatic">Automatic (recommended)</string>
     <string name="trackpad_shizuku_device_unavailable">%1$s (currently unavailable)</string>
