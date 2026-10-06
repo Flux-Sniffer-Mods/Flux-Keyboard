@@ -438,7 +438,7 @@
     <string name="clicks_button_binding_failure">Δεν ήταν δυνατή η εφαρμογή της αντιστοίχισης κουμπιού.</string>
     <string name="clicks_button_binding_pending">Θα εφαρμοστεί όταν είναι έτοιμη μια υποστηριζόμενη σύνδεση πληκτρολογίου.</string>
     <string name="clicks_launcher_interception_service_label">Πλήκτρα Pastiera και μέγεθος οθόνης</string>
-    <string name="clicks_launcher_interception_service_description">Επιτρέπει στο Pastiera να κάνει ό,τι δεν μπορεί μόνο ένα πληκτρολόγιο, για τις επιλογές που ενεργοποιείτε: να χειρίζεται πλήκτρα που αλλιώς θα διάβαζε πρώτα μια εφαρμογή (κουμπιά με ενέργειες Pastiera και, σε εφαρμογές όπου το Pastiera είναι κρυμμένο, τα πλήκτρα για λυχνίες, emoji και Sym) και να βλέπει ποια εφαρμογή είναι μπροστά, ώστε να ακολουθεί το μέγεθος οθόνης ανά εφαρμογή. Δεν μπορεί να διαβάσει τι υπάρχει στην οθόνη.</string>
+    <string name="clicks_launcher_interception_service_description">Επιτρέπει στο Flux Keyboard να κάνει ό,τι δεν μπορεί ένα πληκτρολόγιο μόνο του, για τις επιλογές που ενεργοποιείτε: να διαβάζει τις σαρώσεις στο πληκτρολόγιο, να χειρίζεται πλήκτρα που μια εφαρμογή θα διάβαζε πρώτη (κουμπιά που αντιστοιχίσατε σε ενέργειες του Flux Keyboard και, σε εφαρμογές όπου το πληκτρολόγιο είναι κρυφό, τα πλήκτρα για τις λυχνίες κατάστασης, το πλήκτρο emoji και το Sym) και να βλέπει ποια εφαρμογή είναι μπροστά, ώστε το μέγεθος οθόνης ανά εφαρμογή να την ακολουθεί. Δεν μπορεί να διαβάσει τι υπάρχει στην οθόνη.</string>
     <string name="clicks_launcher_interception_title">Παρεμπόδιση κουμπιών Clicks Android</string>
     <string name="clicks_launcher_interception_enabled">Ενεργό · Φιλτράρονται μόνο ρητά ρυθμισμένα κουμπιά ενός υποστηριζόμενου Clicks Power Keyboard.</string>
     <string name="clicks_launcher_interception_disabled">Απαιτείται για κουμπιά Clicks που αντιστοιχίζονται από το λογισμικό. Πατήστε για ενεργοποίηση στις ρυθμίσεις Προσβασιμότητας Android.</string>
@@ -992,7 +992,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="nav_mode_action_expand_selection_word_right">ΛέξηΕπ.→</string>
     <string name="nav_mode_action_page_start">ΑρχήΕγγρ.</string>
     <string name="nav_mode_action_page_end">ΤέλοςΕγγρ.</string>
-    <string name="nav_mode_action_toggle_pastierina">Solderina</string>
+    <string name="nav_mode_action_toggle_pastierina">Ελάχιστη λειτουργία</string>
     <string name="nav_mode_action_media_play_pause">Αναπ./Παύση</string>
     <string name="nav_mode_action_media_previous">Προηγ. μέσο</string>
     <string name="nav_mode_action_media_next">Επόμ. μέσο</string>
@@ -1055,7 +1055,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="tutorial_page_nav_mode_description">Το Nav Mode μετατρέπει τα πλήκτρα γραμμάτων σε στοιχεία πλοήγησης και επεξεργασίας. Πατήστε Ctrl δύο φορές για να το κλειδώσετε ή ενεργοποιήστε παρακάτω την πλοήγηση με κρατημένο Ctrl.</string>
     <string name="tutorial_nav_mode_bullet_selection">Οι ενέργειες επιλογής μπορούν να επεκτείνουν την επιλογή κειμένου αριστερά, δεξιά ή λέξη προς λέξη.</string>
     <string name="tutorial_nav_mode_bullet_words">Οι ενέργειες λέξεων μετακινούνται ανά ολόκληρες λέξεις για ταχύτερη μετακίνηση δρομέα σε πεδία κειμένου.</string>
-    <string name="tutorial_nav_mode_bullet_media">Οι αντιστοιχίσεις μπορούν επίσης να χειρίζονται συντομεύσεις εφαρμογών, στοιχεία ελέγχου media, Escape, Tab, Page Up/Down και Solderina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Οι αντιστοιχίσεις μπορούν επίσης να χειριστούν συντομεύσεις εφαρμογών, χειριστήρια πολυμέσων, Escape, Tab, Page Up/Down και Solderina.</string>
     <string name="tutorial_quick_launcher_title">QuickLauncher</string>
     <string name="tutorial_quick_launcher_description">Ανοίξτε εφαρμογές από το πληκτρολόγιο χωρίς να βγείτε από τη ροή πληκτρολόγησης.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Κρατήστε SYM και πατήστε Space για να ανοίξετε το QuickLauncher από οπουδήποτε.</string>
@@ -1279,10 +1279,10 @@ QWERTZ σε φυσικό QWERTY
     <string name="trackpad_gestures_shizuku_connected">Το Shizuku είναι συνδεδεμένο</string>
     <string name="trackpad_gestures_shizuku_not_connected">Το Shizuku δεν είναι συνδεδεμένο</string>
     <string name="trackpad_gestures_shizuku_not_authorized">Η εφαρμογή δεν έχει εξουσιοδοτηθεί στο Shizuku</string>
-    <string name="trackpad_provider_title">Πάροχος εισόδου trackpad</string>
-    <string name="trackpad_provider_shizuku">Shizuku (getevent)</string>
-    <string name="trackpad_provider_native_ime">Εγγενή συμβάντα IME (πειραματικό)</string>
-    <string name="trackpad_provider_native_ime_status">Εγγενή συμβάντα IME ενεργά (πειραματικό)</string>
+    <string name="trackpad_provider_title">Οι σαρώσεις στο πληκτρολόγιο έρχονται από</string>
+    <string name="trackpad_provider_shizuku">Shizuku: σε κάθε εφαρμογή, με ή χωρίς βοηθό κύλισης</string>
+    <string name="trackpad_provider_native_ime">Android: μόνο σε εφαρμογές που κυλά ο βοηθός κύλισης</string>
+    <string name="trackpad_provider_native_ime_status">Σε χρήση οι σαρώσεις πληκτρολογίου από το Android</string>
     <string name="trackpad_shizuku_device_title">Συσκευή εισόδου Shizuku</string>
     <string name="trackpad_shizuku_device_automatic">Αυτόματο (προτεινόμενο)</string>
     <string name="trackpad_shizuku_device_unavailable">%1$s (προς το παρόν μη διαθέσιμο)</string>
@@ -1321,8 +1321,8 @@ QWERTZ σε φυσικό QWERTY
 
     <!-- Status Bar Buttons Configuration -->
     <string name="status_bar_buttons_title">Γραμμή κατάστασης</string>
-    <string name="status_bar_buttons_description">Ρυθμίστε τη γραμμή κατάστασης και το Solderina Mode.</string>
-    <string name="status_bar_style_section">Στυλ γραμμής κατάστασης</string>
+    <string name="status_bar_buttons_description">Solderina ή ελάχιστη λειτουργία, και τα κουμπιά της γραμμής.</string>
+    <string name="status_bar_style_section">Γραμμή πληκτρολογίου</string>
     <string name="extended_status_bar_title">Εκτεταμένη γραμμή κατάστασης</string>
     <string name="extended_status_bar_features_section">Εκτεταμένες λειτουργίες</string>
     <string name="status_bar_buttons_section">Κουμπιά</string>
@@ -1334,10 +1334,10 @@ QWERTZ σε φυσικό QWERTY
     <string name="status_bar_slot_right_2">Δεξί slot 2</string>
     <string name="status_bar_slots_left">Αριστερά κουμπιά</string>
     <string name="status_bar_slots_right">Δεξιά κουμπιά</string>
-    <string name="pastierina_status_bar_buttons_title">Λειτουργία Solderina</string>
-    <string name="pastierina_status_bar_buttons_description">Επιλέξτε ποια κουμπιά εμφανίζονται στα αριστερά και δεξιά άκρα της συμπαγούς γραμμής Solderina.</string>
-    <string name="pastierina_status_bar_slots_left">Αριστερά κουμπιά Solderina</string>
-    <string name="pastierina_status_bar_slots_right">Δεξιά κουμπιά Solderina</string>
+    <string name="pastierina_status_bar_buttons_title">Solderina</string>
+    <string name="pastierina_status_bar_buttons_description">Επιλέξτε ποια κουμπιά εμφανίζονται στην αριστερή και δεξιά άκρη της συμπαγούς γραμμής Solderina.</string>
+    <string name="pastierina_status_bar_slots_left">Solderina: αριστερά κουμπιά</string>
+    <string name="pastierina_status_bar_slots_right">Solderina: δεξιά κουμπιά</string>
     <string name="status_bar_slot_add">Προσθήκη κουμπιού γραμμής κατάστασης</string>
     <string name="status_bar_slot_remove">Αφαίρεση κουμπιού γραμμής κατάστασης</string>
     <string name="status_bar_button_none">Κανένα</string>
@@ -1353,7 +1353,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="status_bar_button_language_state_description">Γλώσσα %1$s, διάταξη %2$s</string>
     <string name="status_bar_button_hamburger">Μενού</string>
     <string name="status_bar_button_hamburger_description">Γρήγορες ενέργειες</string>
-    <string name="status_bar_button_minimal_ui">Solderina</string>
+    <string name="status_bar_button_minimal_ui">Ελάχιστη λειτουργία</string>
     <string name="status_bar_button_software_keyboard_mode">Λειτουργία πληκτρολογίου</string>
     <string name="status_bar_button_software_keyboard_mode_description">Προσωρινό άνοιγμα / κλείσιμο πληκτρολογίου οθόνης (Ctrl+B)</string>
     <string name="status_bar_button_close_menu_description">Κλείσιμο γρήγορων ενεργειών</string>
@@ -1386,7 +1386,7 @@ QWERTZ σε φυσικό QWERTY
     <string name="status_bar_button_clipboard_state_empty">Κενό</string>
     <string name="status_bar_button_clipboard_state_items">%1$d στοιχεία</string>
     <string name="sym_key_content_description">%1$s, %2$s</string>
-    <string name="status_bar_button_minimal_ui_description">Εναλλαγή συμπαγούς UI πληκτρολογίου</string>
+    <string name="status_bar_button_minimal_ui_description">Ενεργοποίηση ή απενεργοποίηση της ελάχιστης λειτουργίας: χωρίς γραμμή πληκτρολογίου σε καμία εφαρμογή</string>
     <string name="status_bar_buttons_reset">Επαναφορά</string>
     <string name="text_expansion_title">Επέκταση κειμένου</string>
     <string name="text_expansion_description">Ρυθμίστε snippets και πληκτρολογημένα shortcodes emoji ή συμβόλων.</string>

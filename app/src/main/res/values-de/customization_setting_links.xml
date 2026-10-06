@@ -18,8 +18,8 @@
     <string name="setting_link_theme_assignment">Designzuordnung</string>
     <string name="setting_link_status_extended_left">Erweiterte Statusleiste: linke Schaltflächen</string>
     <string name="setting_link_status_extended_right">Erweiterte Statusleiste: rechte Schaltflächen</string>
-    <string name="setting_link_status_pastierina_left">Solderina: linke Schaltflächen</string>
-    <string name="setting_link_status_pastierina_right">Solderina: rechte Schaltflächen</string>
+    <string name="setting_link_status_pastierina_left">Solderina: linke Tasten</string>
+    <string name="setting_link_status_pastierina_right">Solderina: rechte Tasten</string>
     <string name="setting_link_theme_hardware_chrome_rounding">Hardwaretastatur: Rundung von Vorschlägen und Varianten</string>
     <string name="setting_link_theme_hardware_suggestions_height">Hardwaretastatur: Höhe der Vorschläge</string>
     <string name="setting_link_theme_hardware_variations_height">Hardwaretastatur: Höhe der Varianten</string>

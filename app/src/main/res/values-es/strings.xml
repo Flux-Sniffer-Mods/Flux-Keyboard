@@ -203,7 +203,7 @@
     <string name="nav_mode_action_select_all">SelTodo</string>
     <string name="nav_mode_action_expand_selection_left">←Sel</string>
     <string name="nav_mode_action_expand_selection_right">→Sel</string>
-    <string name="nav_mode_action_toggle_pastierina">Solderina</string>
+    <string name="nav_mode_action_toggle_pastierina">Modo mínimo</string>
     <string name="nav_mode_keycode_up">↑</string>
     <string name="nav_mode_keycode_down">↓</string>
     <string name="nav_mode_keycode_left">←</string>
@@ -228,7 +228,7 @@
     <string name="tutorial_page_nav_mode_description">El modo Nav te permite navegar por la interfaz del dispositivo con atajos como IJKL o ESDF.\nPara activarlo:\n• Presiona Ctrl dos veces rápidamente\n• Las teclas de letras se convierten en controles de navegación\n• Presiona Ctrl otra vez para salir\nCada atajo se puede reasignar en la Configuración Avanzada.</string>
     <string name="tutorial_nav_mode_bullet_selection">Las acciones de selección amplían el texto seleccionado a la izquierda, derecha o palabra por palabra.</string>
     <string name="tutorial_nav_mode_bullet_words">Las acciones por palabra saltan palabras completas para mover el cursor más rápido en campos de texto.</string>
-    <string name="tutorial_nav_mode_bullet_media">Las asignaciones también pueden manejar atajos de apps, controles multimedia, Escape, Tab, Page Up/Down y Solderina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Las asignaciones también pueden manejar atajos de apps, controles multimedia, Escape, Tab, Re Pág/Av Pág y Solderina.</string>
     <string name="tutorial_quick_launcher_title">QuickLauncher</string>
     <string name="tutorial_quick_launcher_description">Abre apps desde el teclado sin salir del flujo de escritura.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Mantén SYM y pulsa Espacio para abrir QuickLauncher desde cualquier lugar.</string>
@@ -350,7 +350,7 @@
     <string name="trackpad_tutorial_next">Siguiente</string>
     <string name="trackpad_tutorial_previous">Anterior</string>
     <string name="status_bar_buttons_title">Botones de Barra</string>
-    <string name="status_bar_buttons_description">Personalizar botones</string>
+    <string name="status_bar_buttons_description">Solderina o modo mínimo, y los botones de la barra.</string>
     <string name="status_bar_slot_left">Ranura Izq.</string>
     <string name="status_bar_slot_right_1">Ranura Der. 1</string>
     <string name="status_bar_slot_right_2">Ranura Der. 2</string>
@@ -374,7 +374,7 @@
     <string name="status_bar_button_clipboard_state_empty">Vacío</string>
     <string name="status_bar_button_clipboard_state_items">%1$d elementos</string>
     <string name="sym_key_content_description">%1$s, %2$s</string>
-    <string name="status_bar_button_minimal_ui_description">Alternar interfaz compacta del teclado</string>
+    <string name="status_bar_button_minimal_ui_description">Activar o desactivar el modo mínimo: sin barra de teclado en ninguna app</string>
     <string name="status_bar_buttons_reset">Restablecer</string>
     <string name="layout_import_from_file">Importar desde archivo</string>
     <string name="layout_download_from_cloud">Descargar desde repositorio</string>

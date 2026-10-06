@@ -260,7 +260,7 @@
     <string name="tutorial_page_nav_mode_description">Режим навігації дозволяє керувати інтерфейсом пристрою за допомогою літерних скорочень, таких як IJKL або ESDF.\nЩоб активувати:\n• Натисніть Ctrl двічі швидко\n• Літерні клавіші стають елементами керування навігацією\n• Натисніть Ctrl знову, щоб вийти\nКожне скорочення можна переналаштувати в Додаткових налаштуваннях.</string>
     <string name="tutorial_nav_mode_bullet_selection">Дії виділення розширюють виділений текст ліворуч, праворуч або по словах.</string>
     <string name="tutorial_nav_mode_bullet_words">Дії зі словами швидше переміщують курсор цілими словами в текстових полях.</string>
-    <string name="tutorial_nav_mode_bullet_media">Призначення також можуть запускати ярлики застосунків, медіакерування, Escape, Tab, Page Up/Down і Solderina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Призначення також можуть викликати ярлики застосунків, керування медіа, Escape, Tab, Page Up/Down і Solderina.</string>
     <string name="tutorial_quick_launcher_title">QuickLauncher</string>
     <string name="tutorial_quick_launcher_description">Відкривайте застосунки з клавіатури, не виходячи з потоку введення.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Утримуйте SYM і натисніть Пробіл, щоб відкрити QuickLauncher будь-де.</string>
@@ -372,7 +372,7 @@
     <string name="trackpad_tutorial_next">Далі</string>
     <string name="trackpad_tutorial_previous">Назад</string>
     <string name="status_bar_button_close_menu_description">Закрити швидкі дії</string>
-    <string name="status_bar_button_minimal_ui_description">Перемкнути компактний інтерфейс клавіатури</string>
+    <string name="status_bar_button_minimal_ui_description">Увімкнути або вимкнути мінімальний режим: без панелі клавіатури в жодному застосунку</string>
     <string name="status_bar_state_on">Увімкнено</string>
     <string name="status_bar_state_off">Вимкнено</string>
     <string name="status_bar_button_clipboard_state_empty">Порожньо</string>
@@ -429,7 +429,7 @@
     <string name="event_action_label">Дія: </string>
     <string name="event_keycode_label">KeyCode: </string>
     <string name="event_scancode_label">ScanCode: </string>
-    <string name="nav_mode_action_toggle_pastierina">Solderina</string>
+    <string name="nav_mode_action_toggle_pastierina">Мінімальний режим</string>
     <string name="titan2_layout_title">Titan 2 Layout Alignment</string>
     <string name="titan2_layout_description">Align on-screen keyboard with Titan 2 physical keys</string>
     <string name="installed_dictionaries_installed_badge">Installed</string>
@@ -451,7 +451,7 @@
     <string name="installed_dictionaries_uninstall_cannot_delete_asset">Cannot uninstall built-in dictionaries</string>
     <string name="installed_dictionaries_uninstall_failed">Failed to uninstall dictionary</string>
     <string name="status_bar_buttons_title">Status Bar Buttons</string>
-    <string name="status_bar_buttons_description">Customize status bar buttons</string>
+    <string name="status_bar_buttons_description">Solderina або мінімальний режим, і кнопки на панелі.</string>
     <string name="status_bar_slot_left">Left Slot</string>
     <string name="status_bar_slot_right_1">Right Slot 1</string>
     <string name="status_bar_slot_right_2">Right Slot 2</string>

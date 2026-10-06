@@ -244,7 +244,7 @@
     <string name="nav_mode_action_select_all">Выд.Всё</string>
     <string name="nav_mode_action_expand_selection_left">←Выб</string>
     <string name="nav_mode_action_expand_selection_right">→Выб</string>
-    <string name="nav_mode_action_toggle_pastierina">Solderina</string>
+    <string name="nav_mode_action_toggle_pastierina">Минимальный режим</string>
     <string name="nav_mode_keycode_up">↑</string>
     <string name="nav_mode_keycode_down">↓</string>
     <string name="nav_mode_keycode_left">←</string>
@@ -269,7 +269,7 @@
     <string name="tutorial_page_nav_mode_description">Режим навигации позволяет перемещаться по пользовательскому интерфейсу устройства с помощью буквенных сочетаний клавиш, таких как IJKL или ESDF.\nДля активации:\n• Быстро нажмите CTRL дважды\n• Буквенные клавиши становятся элементами управления навигацией\n• Нажмите CTRL ещё раз для выхода\nКаждое сочетание клавиш можно переназначить в расширенных настройках.</string>
     <string name="tutorial_nav_mode_bullet_selection">Действия выделения расширяют выделенный текст влево, вправо или по словам.</string>
     <string name="tutorial_nav_mode_bullet_words">Действия по словам быстрее перемещают курсор целыми словами в текстовых полях.</string>
-    <string name="tutorial_nav_mode_bullet_media">Назначения также могут выполнять ярлыки приложений, медиа-кнопки, Escape, Tab, Page Up/Down и Solderina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Назначения также могут вызывать ярлыки приложений, управление медиа, Escape, Tab, Page Up/Down и Solderina.</string>
     <string name="tutorial_quick_launcher_title">QuickLauncher</string>
     <string name="tutorial_quick_launcher_description">Открывайте приложения с клавиатуры, не прерывая ввод.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Удерживайте SYM и нажмите Пробел, чтобы открыть QuickLauncher из любого места.</string>
@@ -399,7 +399,7 @@
     <string name="trackpad_tutorial_next">Далее</string>
     <string name="trackpad_tutorial_previous">Назад</string>
     <string name="status_bar_buttons_title">Кнопки Панели</string>
-    <string name="status_bar_buttons_description">Настроить кнопки</string>
+    <string name="status_bar_buttons_description">Solderina или минимальный режим, и кнопки на панели.</string>
     <string name="status_bar_slot_left">Левый слот</string>
     <string name="status_bar_slot_right_1">Правый слот 1</string>
     <string name="status_bar_slot_right_2">Правый слот 2</string>
@@ -425,7 +425,7 @@
     <string name="status_bar_button_clipboard_state_empty">Пусто</string>
     <string name="status_bar_button_clipboard_state_items">%1$d элементов</string>
     <string name="sym_key_content_description">%1$s, %2$s</string>
-    <string name="status_bar_button_minimal_ui_description">Переключить компактный интерфейс клавиатуры</string>
+    <string name="status_bar_button_minimal_ui_description">Включить или выключить минимальный режим: без панели клавиатуры ни в одном приложении</string>
     <string name="status_bar_buttons_reset">Сброс</string>
     <string name="layout_import_from_file">Импортировать из файла</string>
     <string name="layout_download_from_cloud">Скачать из репозитория</string>

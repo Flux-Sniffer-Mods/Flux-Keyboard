@@ -121,7 +121,7 @@
     <string name="autocorrect_section_dictionary">Dizionario, apprendimento e ortografia</string>
     <string name="autocorrect_section_replacements">Sostituzioni del testo</string>
     <string name="autocorrect_section_tuning">Regolazioni</string>
-    <string name="clicks_launcher_interception_service_description">Permette a Pastiera di fare ciò che una tastiera da sola non può, per le opzioni che attivi: gestire i tasti che un’app leggerebbe per prima (pulsanti con azioni di Pastiera e, nelle app dove Pastiera è nascosta, i tasti per i LED di stato, il tasto emoji e Sym) e vedere quale app è in primo piano, così la dimensione dello schermo per app la segue. Non può leggere ciò che è sullo schermo.</string>
+    <string name="clicks_launcher_interception_service_description">Permette a Flux Keyboard di fare ciò che una tastiera da sola non può, per le opzioni che attivi: leggere gli scorrimenti sulla tastiera, gestire i tasti che un\'app leggerebbe per prima (pulsanti assegnati ad azioni di Flux Keyboard e, nelle app in cui la tastiera è nascosta, i tasti per i LED di stato, il tasto emoji e Sym) e vedere quale app è in primo piano, così la dimensione dello schermo per app può seguirla. Non può leggere ciò che c\'è sullo schermo.</string>
     <string name="inline_autofill_title">Compilazione automatica nella barra</string>
     <string name="inline_autofill_description">Gli accessi salvati, i codici monouso e gli indirizzi del tuo gestore password compaiono come chip nella barra dei suggerimenti; toccane uno per compilare il campo.</string>
     <string name="led_colors_title">Colori dei LED di stato</string>
@@ -162,7 +162,7 @@
     <string name="emoji_profile_travel">Viaggi e aria aperta</string>
     <string name="emoji_profile_gaming">Giochi</string>
     <string name="terminal_mode_hide_keyboard_title">Nascondi la tastiera</string>
-    <string name="terminal_mode_hide_keyboard_description">Come per il desktop Linux: Pastiera resta nascosta nei terminali. Alt scrive comunque il tuo livello Alt e SYM i suoi simboli, senza mostrarli; Ctrl resta Ctrl. Appunti e selettore emoji si mostrano mentre sono aperti.</string>
+    <string name="terminal_mode_hide_keyboard_description">Come sul desktop Linux: Flux Keyboard resta nascosta nei terminali. Alt scrive ancora il tuo livello Alt e SYM i suoi simboli, senza vedersi; Ctrl resta Ctrl. Appunti e selettore emoji si vedono finché sono aperti.</string>
     <string name="led_locked_animation_title">Anima i LED bloccati</string>
     <string name="led_locked_animation_description">Il LED di un modificatore bloccato scorre un gradiente tra il suo colore e una versione più intensa, così un blocco non passa inosservato.</string>
     <string name="titan2_elite_section_status_bar">Barra di stato arrotondata</string>

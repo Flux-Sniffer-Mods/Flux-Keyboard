@@ -576,7 +576,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="nav_mode_action_move_word_right">Parola→</string>
     <string name="nav_mode_action_expand_selection_word_left">←SelParola</string>
     <string name="nav_mode_action_expand_selection_word_right">SelParola→</string>
-    <string name="nav_mode_action_toggle_pastierina">Solderina</string>
+    <string name="nav_mode_action_toggle_pastierina">Modalità minima</string>
     <string name="nav_mode_action_media_play_pause">Play/Pausa</string>
     <string name="nav_mode_action_media_previous">Media precedente</string>
     <string name="nav_mode_action_media_next">Media successivo</string>
@@ -627,7 +627,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="tutorial_page_nav_mode_description">Il Nav Mode ti fa navigare nell\'interfaccia con scorciatoie come IJKL o ESDF.\nPer attivarlo:\n• Premi Ctrl due volte rapidamente\n• I tasti alfabetici diventano controlli di navigazione\n• Premi Ctrl di nuovo per uscire\nOgni scorciatoia è rimappabile nelle impostazioni avanzate.</string>
     <string name="tutorial_nav_mode_bullet_selection">Le azioni di selezione estendono il testo selezionato a sinistra, a destra o parola per parola.</string>
     <string name="tutorial_nav_mode_bullet_words">Le azioni parola saltano parole intere per muovere più rapidamente il cursore nei campi di testo.</string>
-    <string name="tutorial_nav_mode_bullet_media">Le mappature possono gestire anche scorciatoie app, controlli multimediali, Escape, Tab, Page Up/Down e Solderina.</string>
+    <string name="tutorial_nav_mode_bullet_media">Le mappature possono gestire anche scorciatoie delle app, controlli multimediali, Esc, Tab, Pagina su/giù e Solderina.</string>
     <string name="tutorial_quick_launcher_title">QuickLauncher</string>
     <string name="tutorial_quick_launcher_description">Apri app dalla tastiera senza interrompere il flusso di scrittura.</string>
     <string name="tutorial_quick_launcher_bullet_sym_space">Tieni premuto SYM e premi Spazio per aprire QuickLauncher da ovunque.</string>
@@ -798,7 +798,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
 
     <!-- Status Bar Buttons Configuration -->
     <string name="status_bar_buttons_title">Pulsanti Barra</string>
-    <string name="status_bar_buttons_description">Personalizza pulsanti</string>
+    <string name="status_bar_buttons_description">Solderina o modalità minima, e i pulsanti della barra.</string>
     <string name="status_bar_slot_left">Slot Sinistro</string>
     <string name="status_bar_slot_right_1">Slot Destro 1</string>
     <string name="status_bar_slot_right_2">Slot Destro 2</string>
@@ -842,7 +842,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="status_bar_button_clipboard_state_empty">Vuoto</string>
     <string name="status_bar_button_clipboard_state_items">%1$d elementi</string>
     <string name="sym_key_content_description">%1$s, %2$s</string>
-    <string name="status_bar_button_minimal_ui_description">Attiva/disattiva interfaccia tastiera compatta</string>
+    <string name="status_bar_button_minimal_ui_description">Attiva o disattiva la modalità minima: nessuna barra della tastiera in nessuna app</string>
     <string name="status_bar_buttons_reset">Reset</string>
     <string name="tutorial_page_software_keyboard_title">Modalità tastiera</string>
     <string name="tutorial_page_software_keyboard_description">Scegli quale superficie tastiera deve usare Pastiera qui.</string>
