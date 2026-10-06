@@ -1528,7 +1528,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="titan2_elite_top_corner_title">Upper button corners</string>
     <string name="titan2_elite_top_corner_description">Round only the upper corner facing the display edge. Corners facing inward and inner buttons stay unchanged.</string>
     <string name="titan2_elite_max_icon_shrink_title">Maximum icon reduction: %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Automatically shrink outer button icons only as much as needed, up to this limit. 0% disables shrinking; positioning stays active.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Automatically shrink outer button icons only as much as needed, up to this limit. 0% disables shrinking; positioning stays active.</string>
     <string name="titan2_elite_fill_corners_title">Fill corners with the bar background</string>
     <string name="titan2_elite_fill_corners_description">Paint the keyboard background right into the display’s rounded corners, so the app behind never shows around the bar.</string>
     <string name="titan2_elite_corner_style_title">Corner style</string>

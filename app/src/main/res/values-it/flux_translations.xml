@@ -908,7 +908,7 @@
     <string name="titan2_elite_top_corner_title">Angoli superiori dei pulsanti</string>
     <string name="titan2_elite_top_corner_description">Arrotonda solo l’angolo superiore rivolto verso il bordo dello schermo. Gli angoli interni e i pulsanti interni restano invariati.</string>
     <string name="titan2_elite_max_icon_shrink_title">Riduzione massima delle icone: %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Riduci automaticamente le icone dei pulsanti esterni solo quanto serve, fino a questo limite. 0% disattiva la riduzione; il posizionamento resta attivo.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Riduci automaticamente le icone dei pulsanti esterni solo quanto serve, fino a questo limite. 0% disattiva la riduzione; il posizionamento resta attivo.</string>
     <string name="titan2_elite_corner_style_title">Stile degli angoli</string>
     <string name="show_add_word_suggestion_title">Proponi di aggiungere parole nuove</string>
     <string name="show_add_word_suggestion_description">Mostra un suggerimento “aggiungi al dizionario” quando scrivi una parola che il dizionario non conosce. Disattivato, puoi comunque aggiungere parole con Ctrl + Shift + D o dalle impostazioni del dizionario.</string>

@@ -291,316 +291,315 @@ fun CustomizationSettingsScreen(
     }
     fun navigateBack() { context.settingsActivity().finish() }
 
-
     val destination = currentDestination
-        when (destination) {
-            CustomizationDestination.Main -> {
-                Scaffold(
-                    topBar = {
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .windowInsetsPadding(WindowInsets.statusBars),
-                            tonalElevation = 1.dp
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                IconButton(onClick = { navigateBack() }) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = stringResource(R.string.settings_back_content_description)
-                                    )
-                                }
-                                Text(
-                                    text = stringResource(R.string.settings_category_customization),
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(start = 8.dp)
-                                )
-                            }
-                        }
-                    }
-                ) { paddingValues ->
-                    Column(
-                        modifier = modifier
+    when (destination) {
+        CustomizationDestination.Main -> {
+            Scaffold(
+                topBar = {
+                    Surface(
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .padding(paddingValues)
-                            .verticalScroll(rememberScrollState())
+                            .windowInsetsPadding(WindowInsets.statusBars),
+                        tonalElevation = 1.dp
                     ) {
-                        // Variations Customization
-                        Surface(
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 64.dp)
-                                .settingRow("customization.variations") { navigateTo(CustomizationDestination.Variations) }
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
+                            IconButton(onClick = { navigateBack() }) {
                                 Icon(
-                                    imageVector = Icons.Filled.Tune,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.variation_customize_title),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.settings_back_content_description)
                                 )
                             }
+                            Text(
+                                text = stringResource(R.string.settings_category_customization),
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
                         }
-
-                        // Sound Settings
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 64.dp)
-                                .settingRow("customization.sounds") { navigateTo(CustomizationDestination.Sounds) }
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.VolumeUp,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.settings_category_sounds),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.settings_sounds_description),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-
                     }
                 }
-            }
-
-            CustomizationDestination.Variations -> {
-                VariationCustomizationScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() }
-                )
-            }
-
-            CustomizationDestination.AppEnterBehavior -> {
-                AppEnterBehaviorScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() },
-                    onOpenLauncherShortcutAssignments = {
-                        navigateTo(CustomizationDestination.LauncherShortcutAssignments)
+            ) { paddingValues ->
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    // Variations Customization
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 64.dp)
+                            .settingRow("customization.variations") { navigateTo(CustomizationDestination.Variations) }
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Tune,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.variation_customize_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
-                )
-            }
 
-            CustomizationDestination.LauncherShortcuts, CustomizationDestination.KeyShortcuts -> {
-                StarterLauncherShortcutsSettingsScreen(
-                    modifier = modifier,
-                    keyShortcutsPage = destination == CustomizationDestination.KeyShortcuts,
-                    onBack = { navigateBack() },
-                    launcherShortcutsEnabled = launcherShortcutsEnabled,
-                    onLauncherShortcutsEnabledChanged = { enabled ->
-                        launcherShortcutsEnabled = enabled
-                        SettingsManager.setLauncherShortcutsEnabled(context, enabled)
-                    },
-                    powerShortcutsEnabled = powerShortcutsEnabled,
-                    onPowerShortcutsEnabledChanged = { enabled ->
-                        powerShortcutsEnabled = enabled
-                        SettingsManager.setPowerShortcutsEnabled(context, enabled)
-                    },
-                    symShortcutsInTextFields = quickLauncherTextFieldShortcuts,
-                    onSymShortcutsInTextFieldsChanged = { enabled ->
-                        quickLauncherTextFieldShortcuts = enabled
-                        SettingsManager.setQuickLauncherTextFieldShortcuts(context, enabled)
-                    },
-                    altKeyShortcutsEnabled = quickLauncherAltShortcutsOutsideTextFields,
-                    onAltKeyShortcutsEnabledChanged = { enabled ->
-                        quickLauncherAltShortcutsOutsideTextFields = enabled
-                        SettingsManager.setQuickLauncherAltShortcutsOutsideTextFields(context, enabled)
-                    },
-                    altShortcutsInTextFields = quickLauncherAltSpaceInTextFields,
-                    onAltShortcutsInTextFieldsChanged = { enabled ->
-                        quickLauncherAltSpaceInTextFields = enabled
-                        SettingsManager.setQuickLauncherAltSpaceInTextFields(context, enabled)
-                    },
-                    quickLauncherDefaultBlocked = quickLauncherDefaultBlocked,
-                    quickLauncherShortcutKey = quickLauncherShortcutKey,
-                    onOpenBehavior = { navigateTo(CustomizationDestination.LauncherShortcutBehavior) },
-                    onOpenCosmetic = { navigateTo(CustomizationDestination.LauncherShortcutCosmetic) },
-                    onManageAssignments = { navigateTo(CustomizationDestination.LauncherShortcutAssignments) }
-                )
-            }
-
-            CustomizationDestination.LauncherShortcutBehavior -> {
-                StarterLauncherBehaviorScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() },
-                    quickLauncherAutoStartSingle = quickLauncherAutoStartSingle,
-                    onQuickLauncherAutoStartSingleChanged = { enabled ->
-                        quickLauncherAutoStartSingle = enabled
-                        SettingsManager.setQuickLauncherAutoStartSingle(context, enabled)
-                    },
-                    quickLauncherLimitResults = quickLauncherLimitResults,
-                    onQuickLauncherLimitResultsChanged = { enabled ->
-                        quickLauncherLimitResults = enabled
-                        SettingsManager.setQuickLauncherLimitResults(context, enabled)
-                    },
-                    quickLauncherRespectKeyboardLayout = quickLauncherRespectKeyboardLayout,
-                    onQuickLauncherRespectKeyboardLayoutChanged = { enabled ->
-                        quickLauncherRespectKeyboardLayout = enabled
-                        SettingsManager.setQuickLauncherRespectKeyboardLayout(context, enabled)
-                    },
-                    quickLauncherTypoTolerantRanking = quickLauncherTypoTolerantRanking,
-                    onQuickLauncherTypoTolerantRankingChanged = { enabled ->
-                        quickLauncherTypoTolerantRanking = enabled
-                        SettingsManager.setQuickLauncherTypoTolerantRanking(context, enabled)
-                    },
-                    quickLauncherBehavior = quickLauncherBehavior,
-                    onQuickLauncherBehaviorChanged = { behavior ->
-                        quickLauncherBehavior = behavior
-                        SettingsManager.setQuickLauncherBehavior(context, behavior)
-                    },
-                    quickLauncherAnimationDurationMs = quickLauncherAnimationDurationMs,
-                    onQuickLauncherAnimationDurationChanged = { durationMs ->
-                        quickLauncherAnimationDurationMs = durationMs
-                        SettingsManager.setQuickLauncherAnimationDurationMs(context, durationMs)
+                    // Sound Settings
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 64.dp)
+                            .settingRow("customization.sounds") { navigateTo(CustomizationDestination.Sounds) }
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.settings_category_sounds),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.settings_sounds_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
-                )
-            }
 
-            CustomizationDestination.LauncherShortcutCosmetic -> {
-                StarterLauncherCosmeticScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() },
-                    quickLauncherWidthPercent = quickLauncherWidthPercent,
-                    onQuickLauncherWidthPercentChanged = { percent ->
-                        quickLauncherWidthPercent = percent
-                        SettingsManager.setQuickLauncherWidthPercent(context, percent)
-                    },
-                    quickLauncherPillMode = quickLauncherPillMode,
-                    onQuickLauncherPillModeChanged = { enabled ->
-                        quickLauncherPillMode = enabled
-                        SettingsManager.setQuickLauncherPillMode(context, enabled)
-                    },
-                    quickLauncherHighlightFavorites = quickLauncherHighlightFavorites,
-                    onQuickLauncherHighlightFavoritesChanged = { enabled ->
-                        quickLauncherHighlightFavorites = enabled
-                        SettingsManager.setQuickLauncherHighlightFavorites(context, enabled)
-                    },
-                    quickLauncherFavoriteColor = quickLauncherFavoriteColor,
-                    onQuickLauncherFavoriteColorChanged = { color ->
-                        quickLauncherFavoriteColor = color
-                        SettingsManager.setQuickLauncherFavoriteColor(context, color)
-                    },
-                    quickLauncherIconColors = quickLauncherIconColors,
-                    onQuickLauncherIconColorsChanged = { enabled ->
-                        quickLauncherIconColors = enabled
-                        SettingsManager.setQuickLauncherIconColors(context, enabled)
-                    },
-                    quickLauncherShowAliasFirst = quickLauncherShowAliasFirst,
-                    onQuickLauncherShowAliasFirstChanged = { enabled ->
-                        quickLauncherShowAliasFirst = enabled
-                        SettingsManager.setQuickLauncherShowAliasFirst(context, enabled)
-                    },
-                    quickLauncherStaticTopHighlight = quickLauncherStaticTopHighlight,
-                    onQuickLauncherStaticTopHighlightChanged = { enabled ->
-                        quickLauncherStaticTopHighlight = enabled
-                        SettingsManager.setQuickLauncherStaticTopHighlight(context, enabled)
-                    },
-                    quickLauncherStaticTopHighlightColor = quickLauncherStaticTopHighlightColor,
-                    onQuickLauncherStaticTopHighlightColorChanged = { color ->
-                        quickLauncherStaticTopHighlightColor = color
-                        SettingsManager.setQuickLauncherStaticTopHighlightColor(context, color)
-                    },
-                    commandSourceVisibility = commandSourceVisibility,
-                    onCommandSourceVisibilityChanged = { visibility ->
-                        commandSourceVisibility = visibility
-                        SettingsManager.setCommandSourceVisibility(context, visibility)
-                    }
-                )
-            }
-
-            CustomizationDestination.LauncherShortcutAssignments -> {
-                LauncherShortcutsScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() }
-                )
-            }
-
-            CustomizationDestination.StatusBarButtons -> {
-                StatusBarButtonsScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() },
-                    onCustomizeVariations = { navigateTo(CustomizationDestination.Variations) },
-                    onOpenModifiers = onOpenModifiers
-                )
-            }
-
-            CustomizationDestination.KeyboardTheme -> {
-                KeyboardThemeScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() },
-                    initialTarget = when {
-                        initialKeyboardThemeTarget.equals(
-                            SettingsManager.KeyboardThemeTarget.SOFTWARE.name,
-                            ignoreCase = true
-                        ) ->
-                            SettingsManager.KeyboardThemeTarget.SOFTWARE
-                        initialKeyboardThemeTarget.equals(
-                            SettingsManager.KeyboardThemeTarget.HARDWARE.name,
-                            ignoreCase = true
-                        ) ->
-                            SettingsManager.KeyboardThemeTarget.HARDWARE
-                        else -> null
-                    },
-                    initialAssignment = initialDestination == "keyboard_theme_assignment",
-                    initialTab = KeyboardThemeEditorTab.values().firstOrNull { tab ->
-                        tab.name.equals(initialKeyboardThemeTab, ignoreCase = true)
-                    }
-                )
-            }
-
-            CustomizationDestination.Sounds -> {
-                SoundSettingsScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() }
-                )
+                }
             }
         }
+
+        CustomizationDestination.Variations -> {
+            VariationCustomizationScreen(
+                modifier = modifier,
+                onBack = { navigateBack() }
+            )
+        }
+
+        CustomizationDestination.AppEnterBehavior -> {
+            AppEnterBehaviorScreen(
+                modifier = modifier,
+                onBack = { navigateBack() },
+                onOpenLauncherShortcutAssignments = {
+                    navigateTo(CustomizationDestination.LauncherShortcutAssignments)
+                }
+            )
+        }
+
+        CustomizationDestination.LauncherShortcuts, CustomizationDestination.KeyShortcuts -> {
+            StarterLauncherShortcutsSettingsScreen(
+                modifier = modifier,
+                keyShortcutsPage = destination == CustomizationDestination.KeyShortcuts,
+                onBack = { navigateBack() },
+                launcherShortcutsEnabled = launcherShortcutsEnabled,
+                onLauncherShortcutsEnabledChanged = { enabled ->
+                    launcherShortcutsEnabled = enabled
+                    SettingsManager.setLauncherShortcutsEnabled(context, enabled)
+                },
+                powerShortcutsEnabled = powerShortcutsEnabled,
+                onPowerShortcutsEnabledChanged = { enabled ->
+                    powerShortcutsEnabled = enabled
+                    SettingsManager.setPowerShortcutsEnabled(context, enabled)
+                },
+                symShortcutsInTextFields = quickLauncherTextFieldShortcuts,
+                onSymShortcutsInTextFieldsChanged = { enabled ->
+                    quickLauncherTextFieldShortcuts = enabled
+                    SettingsManager.setQuickLauncherTextFieldShortcuts(context, enabled)
+                },
+                altKeyShortcutsEnabled = quickLauncherAltShortcutsOutsideTextFields,
+                onAltKeyShortcutsEnabledChanged = { enabled ->
+                    quickLauncherAltShortcutsOutsideTextFields = enabled
+                    SettingsManager.setQuickLauncherAltShortcutsOutsideTextFields(context, enabled)
+                },
+                altShortcutsInTextFields = quickLauncherAltSpaceInTextFields,
+                onAltShortcutsInTextFieldsChanged = { enabled ->
+                    quickLauncherAltSpaceInTextFields = enabled
+                    SettingsManager.setQuickLauncherAltSpaceInTextFields(context, enabled)
+                },
+                quickLauncherDefaultBlocked = quickLauncherDefaultBlocked,
+                quickLauncherShortcutKey = quickLauncherShortcutKey,
+                onOpenBehavior = { navigateTo(CustomizationDestination.LauncherShortcutBehavior) },
+                onOpenCosmetic = { navigateTo(CustomizationDestination.LauncherShortcutCosmetic) },
+                onManageAssignments = { navigateTo(CustomizationDestination.LauncherShortcutAssignments) }
+            )
+        }
+
+        CustomizationDestination.LauncherShortcutBehavior -> {
+            StarterLauncherBehaviorScreen(
+                modifier = modifier,
+                onBack = { navigateBack() },
+                quickLauncherAutoStartSingle = quickLauncherAutoStartSingle,
+                onQuickLauncherAutoStartSingleChanged = { enabled ->
+                    quickLauncherAutoStartSingle = enabled
+                    SettingsManager.setQuickLauncherAutoStartSingle(context, enabled)
+                },
+                quickLauncherLimitResults = quickLauncherLimitResults,
+                onQuickLauncherLimitResultsChanged = { enabled ->
+                    quickLauncherLimitResults = enabled
+                    SettingsManager.setQuickLauncherLimitResults(context, enabled)
+                },
+                quickLauncherRespectKeyboardLayout = quickLauncherRespectKeyboardLayout,
+                onQuickLauncherRespectKeyboardLayoutChanged = { enabled ->
+                    quickLauncherRespectKeyboardLayout = enabled
+                    SettingsManager.setQuickLauncherRespectKeyboardLayout(context, enabled)
+                },
+                quickLauncherTypoTolerantRanking = quickLauncherTypoTolerantRanking,
+                onQuickLauncherTypoTolerantRankingChanged = { enabled ->
+                    quickLauncherTypoTolerantRanking = enabled
+                    SettingsManager.setQuickLauncherTypoTolerantRanking(context, enabled)
+                },
+                quickLauncherBehavior = quickLauncherBehavior,
+                onQuickLauncherBehaviorChanged = { behavior ->
+                    quickLauncherBehavior = behavior
+                    SettingsManager.setQuickLauncherBehavior(context, behavior)
+                },
+                quickLauncherAnimationDurationMs = quickLauncherAnimationDurationMs,
+                onQuickLauncherAnimationDurationChanged = { durationMs ->
+                    quickLauncherAnimationDurationMs = durationMs
+                    SettingsManager.setQuickLauncherAnimationDurationMs(context, durationMs)
+                }
+            )
+        }
+
+        CustomizationDestination.LauncherShortcutCosmetic -> {
+            StarterLauncherCosmeticScreen(
+                modifier = modifier,
+                onBack = { navigateBack() },
+                quickLauncherWidthPercent = quickLauncherWidthPercent,
+                onQuickLauncherWidthPercentChanged = { percent ->
+                    quickLauncherWidthPercent = percent
+                    SettingsManager.setQuickLauncherWidthPercent(context, percent)
+                },
+                quickLauncherPillMode = quickLauncherPillMode,
+                onQuickLauncherPillModeChanged = { enabled ->
+                    quickLauncherPillMode = enabled
+                    SettingsManager.setQuickLauncherPillMode(context, enabled)
+                },
+                quickLauncherHighlightFavorites = quickLauncherHighlightFavorites,
+                onQuickLauncherHighlightFavoritesChanged = { enabled ->
+                    quickLauncherHighlightFavorites = enabled
+                    SettingsManager.setQuickLauncherHighlightFavorites(context, enabled)
+                },
+                quickLauncherFavoriteColor = quickLauncherFavoriteColor,
+                onQuickLauncherFavoriteColorChanged = { color ->
+                    quickLauncherFavoriteColor = color
+                    SettingsManager.setQuickLauncherFavoriteColor(context, color)
+                },
+                quickLauncherIconColors = quickLauncherIconColors,
+                onQuickLauncherIconColorsChanged = { enabled ->
+                    quickLauncherIconColors = enabled
+                    SettingsManager.setQuickLauncherIconColors(context, enabled)
+                },
+                quickLauncherShowAliasFirst = quickLauncherShowAliasFirst,
+                onQuickLauncherShowAliasFirstChanged = { enabled ->
+                    quickLauncherShowAliasFirst = enabled
+                    SettingsManager.setQuickLauncherShowAliasFirst(context, enabled)
+                },
+                quickLauncherStaticTopHighlight = quickLauncherStaticTopHighlight,
+                onQuickLauncherStaticTopHighlightChanged = { enabled ->
+                    quickLauncherStaticTopHighlight = enabled
+                    SettingsManager.setQuickLauncherStaticTopHighlight(context, enabled)
+                },
+                quickLauncherStaticTopHighlightColor = quickLauncherStaticTopHighlightColor,
+                onQuickLauncherStaticTopHighlightColorChanged = { color ->
+                    quickLauncherStaticTopHighlightColor = color
+                    SettingsManager.setQuickLauncherStaticTopHighlightColor(context, color)
+                },
+                commandSourceVisibility = commandSourceVisibility,
+                onCommandSourceVisibilityChanged = { visibility ->
+                    commandSourceVisibility = visibility
+                    SettingsManager.setCommandSourceVisibility(context, visibility)
+                }
+            )
+        }
+
+        CustomizationDestination.LauncherShortcutAssignments -> {
+            LauncherShortcutsScreen(
+                modifier = modifier,
+                onBack = { navigateBack() }
+            )
+        }
+
+        CustomizationDestination.StatusBarButtons -> {
+            StatusBarButtonsScreen(
+                modifier = modifier,
+                onBack = { navigateBack() },
+                onCustomizeVariations = { navigateTo(CustomizationDestination.Variations) },
+                onOpenModifiers = onOpenModifiers
+            )
+        }
+
+        CustomizationDestination.KeyboardTheme -> {
+            KeyboardThemeScreen(
+                modifier = modifier,
+                onBack = { navigateBack() },
+                initialTarget = when {
+                    initialKeyboardThemeTarget.equals(
+                        SettingsManager.KeyboardThemeTarget.SOFTWARE.name,
+                        ignoreCase = true
+                    ) ->
+                        SettingsManager.KeyboardThemeTarget.SOFTWARE
+                    initialKeyboardThemeTarget.equals(
+                        SettingsManager.KeyboardThemeTarget.HARDWARE.name,
+                        ignoreCase = true
+                    ) ->
+                        SettingsManager.KeyboardThemeTarget.HARDWARE
+                    else -> null
+                },
+                initialAssignment = initialDestination == "keyboard_theme_assignment",
+                initialTab = KeyboardThemeEditorTab.values().firstOrNull { tab ->
+                    tab.name.equals(initialKeyboardThemeTab, ignoreCase = true)
+                }
+            )
+        }
+
+        CustomizationDestination.Sounds -> {
+            SoundSettingsScreen(
+                modifier = modifier,
+                onBack = { navigateBack() }
+            )
+        }
+    }
 }
 
 @Composable

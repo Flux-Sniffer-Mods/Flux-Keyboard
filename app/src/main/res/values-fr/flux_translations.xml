@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Coins supérieurs des boutons</string>
     <string name="titan2_elite_top_corner_description">Arrondir seulement le coin supérieur tourné vers le bord de l’écran. Les coins intérieurs et les boutons intérieurs ne changent pas.</string>
     <string name="titan2_elite_max_icon_shrink_title">Réduction maximale des icônes : %1$d %%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Réduire automatiquement les icônes des boutons extérieurs juste ce qu’il faut, jusqu’à cette limite. 0 désactive la réduction ; le positionnement reste actif.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Réduire automatiquement les icônes des boutons extérieurs juste ce qu’il faut, jusqu’à cette limite. 0 désactive la réduction ; le positionnement reste actif.</string>
     <string name="titan2_elite_fill_corners_title">Remplir les coins avec l’arrière-plan de la barre</string>
     <string name="titan2_elite_fill_corners_description">Peindre l’arrière-plan du clavier jusque dans les coins arrondis de l’écran, pour que l’app derrière n’apparaisse jamais autour de la barre.</string>
     <string name="titan2_elite_corner_style_title">Style des coins</string>

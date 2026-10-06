@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Կոճակների վերին անկյուններ</string>
     <string name="titan2_elite_top_corner_description">Կլորացնել միայն էկրանի եզրին նայող վերին անկյունը։ Ներքին անկյուններն ու ներքին կոճակները չեն փոխվում։</string>
     <string name="titan2_elite_max_icon_shrink_title">Պատկերակների առավելագույն փոքրացում՝ %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Ինքնաշխատ փոքրացնել արտաքին կոճակների պատկերակներն այնքան, որքան պետք է, մինչև այս սահմանը։ 0 արժեքն անջատում է փոքրացումը․ դիրքավորումը մնում է ակտիվ։</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Ինքնաշխատ փոքրացնել արտաքին կոճակների պատկերակներն այնքան, որքան պետք է, մինչև այս սահմանը։ 0 արժեքն անջատում է փոքրացումը․ դիրքավորումը մնում է ակտիվ։</string>
     <string name="titan2_elite_fill_corners_title">Լցնել անկյունները գոտու ֆոնով</string>
     <string name="titan2_elite_fill_corners_description">Ներկում է ստեղնաշարի ֆոնը մինչև էկրանի կլորացված անկյունների ներսը, որպեսզի հետևի հավելվածը երբեք չերևա վահանակի շուրջը։</string>
     <string name="titan2_elite_corner_style_title">Անկյունների ոճ</string>

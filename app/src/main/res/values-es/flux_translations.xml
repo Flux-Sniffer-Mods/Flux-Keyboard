@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Esquinas superiores de los botones</string>
     <string name="titan2_elite_top_corner_description">Redondea solo la esquina superior que da al borde de la pantalla. Las esquinas interiores y los botones interiores no cambian.</string>
     <string name="titan2_elite_max_icon_shrink_title">Reducción máxima de iconos: %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Reduce automáticamente los iconos de los botones exteriores solo lo necesario, hasta este límite. 0 % desactiva la reducción; el posicionamiento sigue activo.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Reduce automáticamente los iconos de los botones exteriores solo lo necesario, hasta este límite. 0 % desactiva la reducción; el posicionamiento sigue activo.</string>
     <string name="titan2_elite_fill_corners_title">Rellenar las esquinas con el fondo de la barra</string>
     <string name="titan2_elite_fill_corners_description">Pinta el fondo del teclado hasta dentro de las esquinas redondeadas de la pantalla, para que la app de detrás nunca asome alrededor de la barra.</string>
     <string name="titan2_elite_corner_style_title">Estilo de esquinas</string>

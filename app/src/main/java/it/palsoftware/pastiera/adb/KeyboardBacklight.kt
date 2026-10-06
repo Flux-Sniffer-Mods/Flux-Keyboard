@@ -401,7 +401,7 @@ object KeyboardBacklight {
         poller = tick
         pollHandler.post { update() }
         pollHandler.post(tick)
-        this.pollContext = context
+        this.pollContext = context.applicationContext
     }
 
     private var pollContext: Context? = null

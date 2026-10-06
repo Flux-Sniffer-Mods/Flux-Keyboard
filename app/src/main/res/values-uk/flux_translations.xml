@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Верхні кути кнопок</string>
     <string name="titan2_elite_top_corner_description">Заокруглювати лише верхній кут, звернений до краю екрана. Внутрішні кути й внутрішні кнопки не змінюються.</string>
     <string name="titan2_elite_max_icon_shrink_title">Максимальне зменшення значків: %1$d %%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Автоматично зменшувати значки зовнішніх кнопок лише наскільки потрібно, до цієї межі. Значення 0 вимикає зменшення; позиціювання лишається.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Автоматично зменшувати значки зовнішніх кнопок лише наскільки потрібно, до цієї межі. Значення 0 вимикає зменшення; позиціювання лишається.</string>
     <string name="titan2_elite_fill_corners_title">Заповнювати кути тлом панелі</string>
     <string name="titan2_elite_fill_corners_description">Заливати тло клавіатури просто в заокруглені кути екрана, щоб застосунок позаду ніколи не проглядав навколо панелі.</string>
     <string name="titan2_elite_corner_style_title">Стиль кутів</string>

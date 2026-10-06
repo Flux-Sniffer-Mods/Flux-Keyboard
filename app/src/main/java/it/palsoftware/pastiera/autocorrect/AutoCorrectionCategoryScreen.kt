@@ -139,650 +139,650 @@ fun AutoCorrectionCategoryScreen(
     fun navigateBack() { context.settingsActivity().finish() }
 
     val destination = currentDestination
-        when (destination) {
-            AutoCorrectionDestination.Main -> {
-                Scaffold(
-                    topBar = {
-                        Surface(
+    when (destination) {
+        AutoCorrectionDestination.Main -> {
+            Scaffold(
+                topBar = {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.statusBars),
+                        tonalElevation = 1.dp
+                    ) {
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .windowInsetsPadding(WindowInsets.statusBars),
-                            tonalElevation = 1.dp
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(onClick = { navigateBack() }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.settings_back_content_description)
+                                )
+                            }
+                            Text(
+                                text = stringResource(R.string.settings_category_auto_correction),
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                    }
+                }
+            ) { paddingValues ->
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    SettingsSectionDivider(stringResource(R.string.autocorrect_section_suggestions))
+                    // Advanced suggestions master toggle
+                    Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 80.dp)
+                                .settingRow(SettingLinkIds.AUTO_CORRECTION_EXPERIMENTAL_SUGGESTIONS)
                         ) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                IconButton(onClick = { navigateBack() }) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = stringResource(R.string.settings_back_content_description)
+                                Icon(
+                                    imageVector = Icons.Filled.Code,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = stringResource(R.string.experimental_suggestions_title),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.experimental_suggestions_subtitle),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
+                                FeatureStatusIcon(FeatureStatus.Experimental)
+                                Switch(
+                                    checked = experimentalSuggestionsEnabled,
+                                    onCheckedChange = { enabled ->
+                                        experimentalSuggestionsEnabled = enabled
+                                        SettingsManager.setExperimentalSuggestionsEnabled(context, enabled)
+                                        if (enabled && !suggestionsEnabled) {
+                                            suggestionsEnabled = true
+                                            SettingsManager.setSuggestionsEnabled(context, true)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 64.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_SUGGESTIONS)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.TextFields,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = stringResource(R.string.settings_category_auto_correction),
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(start = 8.dp)
+                                    text = stringResource(R.string.auto_correct_suggestions_toggle_title),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                                Switch(
+                                    checked = suggestionsEnabled,
+                                    onCheckedChange = { enabled ->
+                                        suggestionsEnabled = enabled
+                                        SettingsManager.setSuggestionsEnabled(context, enabled)
+                                    },
+                                    enabled = experimentalSuggestionsEnabled
+                                )
+                            }
+                        }
+
+                    // Automatic correction: dictionary/suggestion based guessing on boundaries.
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 80.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_AUTO_REPLACE)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.TextFields,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.auto_correct_auto_replace_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.auto_correct_auto_replace_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = autoReplaceOnSpaceEnter,
+                                onCheckedChange = { enabled ->
+                                    autoReplaceOnSpaceEnter = enabled
+                                    SettingsManager.setAutoReplaceOnSpaceEnter(context, enabled)
+                                },
+                                enabled = experimentalSuggestionsEnabled
+                            )
+                        }
+                    }
+
+                    // Max auto-replace distance slider (only shown when automatic correction is enabled)
+                    if (autoReplaceOnSpaceEnter) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .settingRow(SettingLinkIds.AUTO_CORRECTION_MAX_DISTANCE)
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_max_distance_title),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = if (maxAutoReplaceDistance == 0) {
+                                            stringResource(R.string.auto_correct_max_distance_off)
+                                        } else {
+                                            maxAutoReplaceDistance.toString()
+                                        },
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                                Slider(
+                                    value = maxAutoReplaceDistance.toFloat(),
+                                    onValueChange = { value ->
+                                        val newValue = value.toInt().coerceIn(0, 3)
+                                        maxAutoReplaceDistance = newValue
+                                        SettingsManager.setMaxAutoReplaceDistance(context, newValue)
+                                    },
+                                    valueRange = 0f..3f,
+                                    steps = 2,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Text(
+                                    text = stringResource(R.string.auto_correct_max_distance_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
                     }
-                ) { paddingValues ->
-                    Column(
-                        modifier = modifier
+
+                    FluxActionRow(
+                        linkId = SettingLinkIds.AUTO_CORRECTION_SUGGESTION_KEYS,
+                        title = stringResource(R.string.suggestion_keys_title),
+                        description = suggestionKeysLabel(suggestionKeys),
+                        onClick = { choosingSuggestionKeys = true }
+                    )
+                    if (choosingSuggestionKeys) {
+                        AlertDialog(
+                            onDismissRequest = { choosingSuggestionKeys = false },
+                            title = { Text(stringResource(R.string.suggestion_keys_title)) },
+                            text = {
+                                Column {
+                                    it.palsoftware.pastiera.inputmethod.SuggestionKeys.OPTIONS.forEach { option ->
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier.fillMaxWidth().clickable {
+                                                suggestionKeys = option
+                                                SettingsManager.setSuggestionKeys(context, option)
+                                                choosingSuggestionKeys = false
+                                            }.padding(vertical = 6.dp)
+                                        ) {
+                                            RadioButton(selected = option == suggestionKeys, onClick = null)
+                                            Text(suggestionKeysLabel(option), modifier = Modifier.padding(start = 12.dp))
+                                        }
+                                    }
+                                }
+                            },
+                            confirmButton = {},
+                            dismissButton = {
+                                TextButton(onClick = { choosingSuggestionKeys = false }) {
+                                    Text(stringResource(R.string.cancel))
+                                }
+                            }
+                        )
+                    }
+
+                    FluxSwitchRow(
+                        linkId = SettingLinkIds.AUTO_CORRECTION_SUGGESTIONS_BOLD,
+                        title = stringResource(R.string.suggestions_bold_title),
+                        description = stringResource(R.string.suggestions_bold_description),
+                        checked = suggestionsBold,
+                        onCheckedChange = { enabled ->
+                            suggestionsBold = enabled
+                            SettingsManager.setSuggestionsBold(context, enabled)
+                        }
+                    )
+
+                    FluxSwitchRow(
+                        linkId = SettingLinkIds.AUTO_CORRECTION_EMOJI_SUGGESTIONS,
+                        title = stringResource(R.string.emoji_suggestions_title),
+                        description = stringResource(R.string.emoji_suggestions_description),
+                        checked = emojiSuggestionsEnabled,
+                        onCheckedChange = { enabled ->
+                            emojiSuggestionsEnabled = enabled
+                            SettingsManager.setEmojiSuggestionsEnabled(context, enabled)
+                        }
+                    )
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                        FluxSwitchRow(
+                            linkId = SettingLinkIds.AUTO_CORRECTION_INLINE_AUTOFILL,
+                            title = stringResource(R.string.inline_autofill_title),
+                            description = stringResource(R.string.inline_autofill_description),
+                            checked = inlineAutofillEnabled,
+                            onCheckedChange = { enabled ->
+                                inlineAutofillEnabled = enabled
+                                SettingsManager.setInlineAutofillEnabled(context, enabled)
+                            }
+                        )
+                    }
+
+                    // Gestures that pick, add or delete words live with the suggestions
+                    FluxActionRow(
+                        linkId = SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
+                        title = stringResource(R.string.settings_trackpad_gestures_title),
+                        description = stringResource(R.string.settings_trackpad_gestures_description),
+                        onClick = {
+                            openSettingsPage(context, SettingsPage(SettingsDestination.TrackpadGestures))
+                        }
+                    )
+
+                    SettingsSectionDivider(stringResource(R.string.autocorrect_section_dictionary))
+                    Surface(
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .padding(paddingValues)
-                            .verticalScroll(rememberScrollState())
+                            .heightIn(min = 80.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_USER_DICTIONARY) {
+                                navigateTo(AutoCorrectionDestination.UserDictionary)
+                            }
                     ) {
-                        SettingsSectionDivider(stringResource(R.string.autocorrect_section_suggestions))
-                        // Advanced suggestions master toggle
-                        Surface(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .heightIn(min = 80.dp)
-                                    .settingRow(SettingLinkIds.AUTO_CORRECTION_EXPERIMENTAL_SUGGESTIONS)
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Code,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(24.dp)
+                                Icon(
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_manage_user_dict_title),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Medium
                                     )
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_manage_user_dict_description),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            }
+
+                    // What it learns as you type: words, and the emails and numbers you type
+                    FluxCheckTable(
+                        linkId = "auto_correction.learn_frequent_words",
+                        title = stringResource(R.string.learn_table_title),
+                        description = stringResource(R.string.learn_table_description),
+                        columns = listOf(stringResource(R.string.learn_table_words), stringResource(R.string.learn_table_contacts)),
+                        rows = listOf(
+                            "" to listOf(
+                                CheckCell({ SettingsManager.getLearnFrequentWords(context) }) { SettingsManager.setLearnFrequentWords(context, it) },
+                                CheckCell({ SettingsManager.getLearnContactDetails(context) }, "auto_correction.learn_contact_details") { SettingsManager.setLearnContactDetails(context, it) }
+                            )
+                        )
+                    )
+
+                    var showAddWordSuggestion by remember { mutableStateOf(SettingsManager.getShowAddWordSuggestion(context)) }
+                    FluxSwitchRow(
+                        linkId = "auto_correction.show_add_word",
+                        title = stringResource(R.string.show_add_word_suggestion_title),
+                        description = stringResource(R.string.show_add_word_suggestion_description),
+                        checked = showAddWordSuggestion,
+                        onCheckedChange = { enabled ->
+                            showAddWordSuggestion = enabled
+                            SettingsManager.setShowAddWordSuggestion(context, enabled)
+                        }
+                    )
+                    var addLastWordShortcut by remember { mutableStateOf(SettingsManager.getAddLastWordShortcut(context)) }
+                    FluxSwitchRow(
+                        linkId = "auto_correction.add_last_word_shortcut",
+                        title = stringResource(R.string.add_last_word_shortcut_title),
+                        description = stringResource(R.string.add_last_word_shortcut_description),
+                        checked = addLastWordShortcut,
+                        onCheckedChange = { enabled ->
+                            addLastWordShortcut = enabled
+                            SettingsManager.setAddLastWordShortcut(context, enabled)
+                        }
+                    )
+                    FluxActionRow(
+                        linkId = SettingLinkIds.AUTO_CORRECTION_SPELL_CHECKER,
+                        title = stringResource(R.string.spell_checker_title),
+                        description = stringResource(R.string.spell_checker_description),
+                        onClick = { it.palsoftware.pastiera.spellcheck.SpellCheckRules.openSystemSettings(context) }
+                    )
+                    var phoneSpellChecker by remember {
+                        mutableStateOf(SettingsManager.getPreferences(context).getBoolean(it.palsoftware.pastiera.spellcheck.PhoneSpellChecker.KEY_ENABLED, true))
+                    }
+                    FluxSwitchRow(
+                        linkId = "auto_correction.phone_spell_checker",
+                        title = stringResource(R.string.phone_spell_checker_title),
+                        description = stringResource(R.string.phone_spell_checker_description),
+                        checked = phoneSpellChecker,
+                        onCheckedChange = { enabled ->
+                            phoneSpellChecker = enabled
+                            SettingsManager.getPreferences(context).edit()
+                                .putBoolean(it.palsoftware.pastiera.spellcheck.PhoneSpellChecker.KEY_ENABLED, enabled).apply()
+                        }
+                    )
+
+                    SettingsSectionDivider(stringResource(R.string.autocorrect_section_replacements))
+                    // Text replacements: explicit user/default rules like "ca -> ça".
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 80.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_TEXT_REPLACEMENTS)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.TextFields,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_title),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_title_description),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            Switch(
+                                checked = autoCorrectEnabled,
+                                onCheckedChange = { enabled ->
+                                    autoCorrectEnabled = enabled
+                                    SettingsManager.setAutoCorrectEnabled(context, enabled)
+                                }
+                            )
+                        }
+                    }
+
+                    // Text replacement language/rule sets (only if text replacements are enabled)
+                    if (autoCorrectEnabled) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 80.dp)
+                                .settingRow(SettingLinkIds.AUTO_CORRECTION_LANGUAGES) {
+                                    navigateTo(AutoCorrectionDestination.Settings)
+                                }
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Language,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp)
+                                )
                                     Column(modifier = Modifier.weight(1f)) {
                                         Text(
-                                            text = stringResource(R.string.experimental_suggestions_title),
+                                            text = stringResource(R.string.auto_correct_languages_title),
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Medium
                                         )
                                         Text(
-                                            text = stringResource(R.string.experimental_suggestions_subtitle),
+                                            text = stringResource(R.string.auto_correct_languages_description),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
-                                    FeatureStatusIcon(FeatureStatus.Experimental)
-                                    Switch(
-                                        checked = experimentalSuggestionsEnabled,
-                                        onCheckedChange = { enabled ->
-                                            experimentalSuggestionsEnabled = enabled
-                                            SettingsManager.setExperimentalSuggestionsEnabled(context, enabled)
-                                            if (enabled && !suggestionsEnabled) {
-                                                suggestionsEnabled = true
-                                                SettingsManager.setSuggestionsEnabled(context, true)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 64.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_SUGGESTIONS)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
                                 Icon(
-                                    imageVector = Icons.Filled.TextFields,
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_suggestions_toggle_title),
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                    }
-                                    Switch(
-                                        checked = suggestionsEnabled,
-                                        onCheckedChange = { enabled ->
-                                            suggestionsEnabled = enabled
-                                            SettingsManager.setSuggestionsEnabled(context, enabled)
-                                        },
-                                        enabled = experimentalSuggestionsEnabled
-                                    )
-                                }
-                            }
-
-                        // Automatic correction: dictionary/suggestion based guessing on boundaries.
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 80.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_AUTO_REPLACE)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.TextFields,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_auto_replace_title),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_auto_replace_description),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Switch(
-                                    checked = autoReplaceOnSpaceEnter,
-                                    onCheckedChange = { enabled ->
-                                        autoReplaceOnSpaceEnter = enabled
-                                        SettingsManager.setAutoReplaceOnSpaceEnter(context, enabled)
-                                    },
-                                    enabled = experimentalSuggestionsEnabled
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                        }
-
-                        // Max auto-replace distance slider (only shown when automatic correction is enabled)
-                        if (autoReplaceOnSpaceEnter) {
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .settingRow(SettingLinkIds.AUTO_CORRECTION_MAX_DISTANCE)
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 8.dp, vertical = 12.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.auto_correct_max_distance_title),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                        Text(
-                                            text = if (maxAutoReplaceDistance == 0) {
-                                                stringResource(R.string.auto_correct_max_distance_off)
-                                            } else {
-                                                maxAutoReplaceDistance.toString()
-                                            },
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.primary,
-                                            fontWeight = FontWeight.SemiBold
-                                        )
-                                    }
-                                    Slider(
-                                        value = maxAutoReplaceDistance.toFloat(),
-                                        onValueChange = { value ->
-                                            val newValue = value.toInt().coerceIn(0, 3)
-                                            maxAutoReplaceDistance = newValue
-                                            SettingsManager.setMaxAutoReplaceDistance(context, newValue)
-                                        },
-                                        valueRange = 0f..3f,
-                                        steps = 2,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_max_distance_description),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
                             }
-                        }
-
-                        FluxActionRow(
-                            linkId = SettingLinkIds.AUTO_CORRECTION_SUGGESTION_KEYS,
-                            title = stringResource(R.string.suggestion_keys_title),
-                            description = suggestionKeysLabel(suggestionKeys),
-                            onClick = { choosingSuggestionKeys = true }
-                        )
-                        if (choosingSuggestionKeys) {
-                            AlertDialog(
-                                onDismissRequest = { choosingSuggestionKeys = false },
-                                title = { Text(stringResource(R.string.suggestion_keys_title)) },
-                                text = {
-                                    Column {
-                                        it.palsoftware.pastiera.inputmethod.SuggestionKeys.OPTIONS.forEach { option ->
-                                            Row(
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                modifier = Modifier.fillMaxWidth().clickable {
-                                                    suggestionKeys = option
-                                                    SettingsManager.setSuggestionKeys(context, option)
-                                                    choosingSuggestionKeys = false
-                                                }.padding(vertical = 6.dp)
-                                            ) {
-                                                RadioButton(selected = option == suggestionKeys, onClick = null)
-                                                Text(suggestionKeysLabel(option), modifier = Modifier.padding(start = 12.dp))
-                                            }
-                                        }
-                                    }
-                                },
-                                confirmButton = {},
-                                dismissButton = {
-                                    TextButton(onClick = { choosingSuggestionKeys = false }) {
-                                        Text(stringResource(R.string.cancel))
-                                    }
-                                }
-                            )
-                        }
-
-                        FluxSwitchRow(
-                            linkId = SettingLinkIds.AUTO_CORRECTION_SUGGESTIONS_BOLD,
-                            title = stringResource(R.string.suggestions_bold_title),
-                            description = stringResource(R.string.suggestions_bold_description),
-                            checked = suggestionsBold,
-                            onCheckedChange = { enabled ->
-                                suggestionsBold = enabled
-                                SettingsManager.setSuggestionsBold(context, enabled)
-                            }
-                        )
-
-                        FluxSwitchRow(
-                            linkId = SettingLinkIds.AUTO_CORRECTION_EMOJI_SUGGESTIONS,
-                            title = stringResource(R.string.emoji_suggestions_title),
-                            description = stringResource(R.string.emoji_suggestions_description),
-                            checked = emojiSuggestionsEnabled,
-                            onCheckedChange = { enabled ->
-                                emojiSuggestionsEnabled = enabled
-                                SettingsManager.setEmojiSuggestionsEnabled(context, enabled)
-                            }
-                        )
-
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-                            FluxSwitchRow(
-                                linkId = SettingLinkIds.AUTO_CORRECTION_INLINE_AUTOFILL,
-                                title = stringResource(R.string.inline_autofill_title),
-                                description = stringResource(R.string.inline_autofill_description),
-                                checked = inlineAutofillEnabled,
-                                onCheckedChange = { enabled ->
-                                    inlineAutofillEnabled = enabled
-                                    SettingsManager.setInlineAutofillEnabled(context, enabled)
-                                }
-                            )
-                        }
-
-                        // Gestures that pick, add or delete words live with the suggestions
-                        FluxActionRow(
-                            linkId = SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
-                            title = stringResource(R.string.settings_trackpad_gestures_title),
-                            description = stringResource(R.string.settings_trackpad_gestures_description),
-                            onClick = {
-                                openSettingsPage(context, SettingsPage(SettingsDestination.TrackpadGestures))
-                            }
-                        )
-
-                        SettingsSectionDivider(stringResource(R.string.autocorrect_section_dictionary))
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 80.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_USER_DICTIONARY) {
-                                    navigateTo(AutoCorrectionDestination.UserDictionary)
-                                }
-                        ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Add,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-	                                        text = stringResource(R.string.auto_correct_manage_user_dict_title),
-	                                        style = MaterialTheme.typography.titleMedium,
-	                                        fontWeight = FontWeight.Medium
-	                                    )
-	                                    Text(
-	                                        text = stringResource(R.string.auto_correct_manage_user_dict_description),
-	                                        style = MaterialTheme.typography.bodySmall,
-	                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-	                                    )
-	                                }
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-	                            }
-
-                        // What it learns as you type: words, and the emails and numbers you type
-                        FluxCheckTable(
-                            linkId = "auto_correction.learn_frequent_words",
-                            title = stringResource(R.string.learn_table_title),
-                            description = stringResource(R.string.learn_table_description),
-                            columns = listOf(stringResource(R.string.learn_table_words), stringResource(R.string.learn_table_contacts)),
-                            rows = listOf(
-                                "" to listOf(
-                                    CheckCell({ SettingsManager.getLearnFrequentWords(context) }) { SettingsManager.setLearnFrequentWords(context, it) },
-                                    CheckCell({ SettingsManager.getLearnContactDetails(context) }, "auto_correction.learn_contact_details") { SettingsManager.setLearnContactDetails(context, it) }
-                                )
-                            )
-                        )
-
-                        var showAddWordSuggestion by remember { mutableStateOf(SettingsManager.getShowAddWordSuggestion(context)) }
-                        FluxSwitchRow(
-                            linkId = "auto_correction.show_add_word",
-                            title = stringResource(R.string.show_add_word_suggestion_title),
-                            description = stringResource(R.string.show_add_word_suggestion_description),
-                            checked = showAddWordSuggestion,
-                            onCheckedChange = { enabled ->
-                                showAddWordSuggestion = enabled
-                                SettingsManager.setShowAddWordSuggestion(context, enabled)
-                            }
-                        )
-                        var addLastWordShortcut by remember { mutableStateOf(SettingsManager.getAddLastWordShortcut(context)) }
-                        FluxSwitchRow(
-                            linkId = "auto_correction.add_last_word_shortcut",
-                            title = stringResource(R.string.add_last_word_shortcut_title),
-                            description = stringResource(R.string.add_last_word_shortcut_description),
-                            checked = addLastWordShortcut,
-                            onCheckedChange = { enabled ->
-                                addLastWordShortcut = enabled
-                                SettingsManager.setAddLastWordShortcut(context, enabled)
-                            }
-                        )
-                        FluxActionRow(
-                            linkId = SettingLinkIds.AUTO_CORRECTION_SPELL_CHECKER,
-                            title = stringResource(R.string.spell_checker_title),
-                            description = stringResource(R.string.spell_checker_description),
-                            onClick = { it.palsoftware.pastiera.spellcheck.SpellCheckRules.openSystemSettings(context) }
-                        )
-                        var phoneSpellChecker by remember {
-                            mutableStateOf(SettingsManager.getPreferences(context).getBoolean(it.palsoftware.pastiera.spellcheck.PhoneSpellChecker.KEY_ENABLED, true))
-                        }
-                        FluxSwitchRow(
-                            linkId = "auto_correction.phone_spell_checker",
-                            title = stringResource(R.string.phone_spell_checker_title),
-                            description = stringResource(R.string.phone_spell_checker_description),
-                            checked = phoneSpellChecker,
-                            onCheckedChange = { enabled ->
-                                phoneSpellChecker = enabled
-                                SettingsManager.getPreferences(context).edit()
-                                    .putBoolean(it.palsoftware.pastiera.spellcheck.PhoneSpellChecker.KEY_ENABLED, enabled).apply()
-                            }
-                        )
-
-                        SettingsSectionDivider(stringResource(R.string.autocorrect_section_replacements))
-                        // Text replacements: explicit user/default rules like "ca -> ça".
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 80.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_TEXT_REPLACEMENTS)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.TextFields,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-	                                Column(modifier = Modifier.weight(1f)) {
-	                                    Text(
-	                                        text = stringResource(R.string.auto_correct_title),
-	                                        style = MaterialTheme.typography.titleMedium,
-	                                        fontWeight = FontWeight.Medium
-	                                    )
-	                                    Text(
-	                                        text = stringResource(R.string.auto_correct_title_description),
-	                                        style = MaterialTheme.typography.bodySmall,
-	                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-	                                    )
-	                                }
-                                Switch(
-                                    checked = autoCorrectEnabled,
-                                    onCheckedChange = { enabled ->
-                                        autoCorrectEnabled = enabled
-                                        SettingsManager.setAutoCorrectEnabled(context, enabled)
-                                    }
-                                )
-                            }
-                        }
-
-                        // Text replacement language/rule sets (only if text replacements are enabled)
-                        if (autoCorrectEnabled) {
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(min = 80.dp)
-                                    .settingRow(SettingLinkIds.AUTO_CORRECTION_LANGUAGES) {
-                                        navigateTo(AutoCorrectionDestination.Settings)
-                                    }
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Language,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-	                                    Column(modifier = Modifier.weight(1f)) {
-	                                        Text(
-	                                            text = stringResource(R.string.auto_correct_languages_title),
-	                                            style = MaterialTheme.typography.titleMedium,
-	                                            fontWeight = FontWeight.Medium
-	                                        )
-	                                        Text(
-	                                            text = stringResource(R.string.auto_correct_languages_description),
-	                                            style = MaterialTheme.typography.bodySmall,
-	                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-	                                        )
-	                                    }
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-	                            }
-                        }
-
-                        SettingsSectionDivider(stringResource(R.string.autocorrect_section_tuning))
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 64.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_ACCENT_MATCHING)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.TextFields,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_accent_matching_title),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_accent_matching_description),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Switch(
-                                    checked = accentMatchingEnabled,
-                                    onCheckedChange = { enabled ->
-                                        accentMatchingEnabled = enabled
-                                        SettingsManager.setAccentMatchingEnabled(context, enabled)
-                                    },
-                                    enabled = experimentalSuggestionsEnabled
-                                )
-                            }
-                        }
-
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 64.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_KEYBOARD_PROXIMITY)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.TextFields,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_keyboard_proximity_title),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_keyboard_proximity_description),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Switch(
-                                    checked = useKeyboardProximity,
-                                    onCheckedChange = { enabled ->
-                                        useKeyboardProximity = enabled
-                                        SettingsManager.setUseKeyboardProximity(context, enabled)
-                                    },
-                                    enabled = experimentalSuggestionsEnabled
-                                )
-                            }
-                        }
-
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 64.dp)
-                                .settingRow(SettingLinkIds.AUTO_CORRECTION_EDIT_TYPE_RANKING)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.TextFields,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_edit_type_ranking_title),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.auto_correct_edit_type_ranking_description),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Switch(
-                                    checked = useEditTypeRanking,
-                                    onCheckedChange = { enabled ->
-                                        useEditTypeRanking = enabled
-                                        SettingsManager.setUseEditTypeRanking(context, enabled)
-                                    },
-                                    enabled = experimentalSuggestionsEnabled
-                                )
-                            }
-                        }
-
                     }
+
+                    SettingsSectionDivider(stringResource(R.string.autocorrect_section_tuning))
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 64.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_ACCENT_MATCHING)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.TextFields,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.auto_correct_accent_matching_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.auto_correct_accent_matching_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = accentMatchingEnabled,
+                                onCheckedChange = { enabled ->
+                                    accentMatchingEnabled = enabled
+                                    SettingsManager.setAccentMatchingEnabled(context, enabled)
+                                },
+                                enabled = experimentalSuggestionsEnabled
+                            )
+                        }
+                    }
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 64.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_KEYBOARD_PROXIMITY)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.TextFields,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.auto_correct_keyboard_proximity_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.auto_correct_keyboard_proximity_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = useKeyboardProximity,
+                                onCheckedChange = { enabled ->
+                                    useKeyboardProximity = enabled
+                                    SettingsManager.setUseKeyboardProximity(context, enabled)
+                                },
+                                enabled = experimentalSuggestionsEnabled
+                            )
+                        }
+                    }
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 64.dp)
+                            .settingRow(SettingLinkIds.AUTO_CORRECTION_EDIT_TYPE_RANKING)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.TextFields,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.auto_correct_edit_type_ranking_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.auto_correct_edit_type_ranking_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = useEditTypeRanking,
+                                onCheckedChange = { enabled ->
+                                    useEditTypeRanking = enabled
+                                    SettingsManager.setUseEditTypeRanking(context, enabled)
+                                },
+                                enabled = experimentalSuggestionsEnabled
+                            )
+                        }
+                    }
+
                 }
             }
-
-            AutoCorrectionDestination.Settings -> {
-                AutoCorrectSettingsScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() },
-                    onEditLanguage = { languageCode ->
-                        navigateTo(AutoCorrectionDestination.Edit(languageCode))
-                    }
-                )
-            }
-
-            is AutoCorrectionDestination.Edit -> {
-                AutoCorrectEditScreen(
-                    languageCode = destination.languageCode,
-                    modifier = modifier,
-                    onBack = { navigateBack() }
-                )
-            }
-
-            AutoCorrectionDestination.UserDictionary -> {
-                UserDictionaryScreen(
-                    modifier = modifier,
-                    onBack = { navigateBack() }
-                )
-            }
         }
+
+        AutoCorrectionDestination.Settings -> {
+            AutoCorrectSettingsScreen(
+                modifier = modifier,
+                onBack = { navigateBack() },
+                onEditLanguage = { languageCode ->
+                    navigateTo(AutoCorrectionDestination.Edit(languageCode))
+                }
+            )
+        }
+
+        is AutoCorrectionDestination.Edit -> {
+            AutoCorrectEditScreen(
+                languageCode = destination.languageCode,
+                modifier = modifier,
+                onBack = { navigateBack() }
+            )
+        }
+
+        AutoCorrectionDestination.UserDictionary -> {
+            UserDictionaryScreen(
+                modifier = modifier,
+                onBack = { navigateBack() }
+            )
+        }
+    }
 
 }
 

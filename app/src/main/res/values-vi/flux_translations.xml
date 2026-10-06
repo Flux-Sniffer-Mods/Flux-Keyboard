@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Góc trên của nút</string>
     <string name="titan2_elite_top_corner_description">Chỉ bo tròn góc trên hướng ra mép màn hình. Các góc hướng vào trong và các nút bên trong không đổi.</string>
     <string name="titan2_elite_max_icon_shrink_title">Mức thu nhỏ biểu tượng tối đa: %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Tự động thu nhỏ biểu tượng nút bên ngoài chỉ vừa đủ, tối đa đến giới hạn này. Giá trị 0 tắt thu nhỏ; việc định vị vẫn hoạt động.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Tự động thu nhỏ biểu tượng nút bên ngoài chỉ vừa đủ, tối đa đến giới hạn này. Giá trị 0 tắt thu nhỏ; việc định vị vẫn hoạt động.</string>
     <string name="titan2_elite_fill_corners_title">Tô kín góc bằng nền thanh</string>
     <string name="titan2_elite_fill_corners_description">Tô nền bàn phím vào tận các góc bo tròn của màn hình, để ứng dụng phía sau không bao giờ lộ ra quanh thanh.</string>
     <string name="titan2_elite_corner_style_title">Kiểu góc</string>

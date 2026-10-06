@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Верхние углы кнопок</string>
     <string name="titan2_elite_top_corner_description">Скруглять только верхний угол, обращённый к краю экрана. Внутренние углы и внутренние кнопки не меняются.</string>
     <string name="titan2_elite_max_icon_shrink_title">Максимальное уменьшение значков: %1$d %%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Автоматически уменьшать значки внешних кнопок только насколько нужно, до этого предела. Значение 0 отключает уменьшение; позиционирование остаётся.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Автоматически уменьшать значки внешних кнопок только насколько нужно, до этого предела. Значение 0 отключает уменьшение; позиционирование остаётся.</string>
     <string name="titan2_elite_fill_corners_title">Заполнять углы фоном панели</string>
     <string name="titan2_elite_fill_corners_description">Заливать фон клавиатуры прямо в скруглённые углы экрана, чтобы приложение позади никогда не проглядывало вокруг панели.</string>
     <string name="titan2_elite_corner_style_title">Стиль углов</string>

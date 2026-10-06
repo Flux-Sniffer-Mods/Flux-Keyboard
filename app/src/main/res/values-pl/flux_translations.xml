@@ -1269,7 +1269,7 @@
     <string name="titan2_elite_top_corner_title">Górne rogi przycisków</string>
     <string name="titan2_elite_top_corner_description">Zaokrąglaj tylko górny róg zwrócony ku krawędzi ekranu. Rogi wewnętrzne i przyciski wewnętrzne się nie zmieniają.</string>
     <string name="titan2_elite_max_icon_shrink_title">Maksymalne zmniejszenie ikon: %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Automatycznie zmniejszaj ikony zewnętrznych przycisków tylko tyle, ile trzeba, do tego limitu. Wartość 0 wyłącza zmniejszanie; pozycjonowanie pozostaje aktywne.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Automatycznie zmniejszaj ikony zewnętrznych przycisków tylko tyle, ile trzeba, do tego limitu. Wartość 0 wyłącza zmniejszanie; pozycjonowanie pozostaje aktywne.</string>
     <string name="titan2_elite_fill_corners_title">Wypełniaj rogi tłem paska</string>
     <string name="titan2_elite_fill_corners_description">Maluj tło klawiatury aż w zaokrąglone rogi ekranu, aby aplikacja w tle nigdy nie prześwitywała wokół paska.</string>
     <string name="titan2_elite_corner_style_title">Styl rogów</string>

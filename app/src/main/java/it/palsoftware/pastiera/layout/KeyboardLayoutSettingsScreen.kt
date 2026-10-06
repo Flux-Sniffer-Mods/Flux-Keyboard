@@ -267,13 +267,7 @@ fun KeyboardLayoutSettingsScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
-        AnimatedContent(
-            targetState = Unit,
-            transitionSpec = {
-                fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
-            },
-            label = "keyboard_layout_animation"
-        ) {
+        Box {
             Column(
                 modifier = modifier
                     .fillMaxWidth()

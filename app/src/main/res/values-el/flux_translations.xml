@@ -643,7 +643,7 @@
     <string name="titan2_elite_top_corner_title">Πάνω γωνίες κουμπιών</string>
     <string name="titan2_elite_top_corner_description">Στρογγυλεύει μόνο την πάνω γωνία προς την άκρη της οθόνης. Οι εσωτερικές γωνίες και τα εσωτερικά κουμπιά δεν αλλάζουν.</string>
     <string name="titan2_elite_max_icon_shrink_title">Μέγιστη σμίκρυνση εικονιδίων: %1$d%%</string>
-    <string name="titan2_elite_max_icon_shrink_description">Σμικρύνει αυτόματα τα εικονίδια των εξωτερικών κουμπιών μόνο όσο χρειάζεται, ως αυτό το όριο. Η τιμή 0 απενεργοποιεί τη σμίκρυνση· η τοποθέτηση μένει ενεργή.</string>
+    <string name="titan2_elite_max_icon_shrink_description" formatted="false">Σμικρύνει αυτόματα τα εικονίδια των εξωτερικών κουμπιών μόνο όσο χρειάζεται, ως αυτό το όριο. Η τιμή 0 απενεργοποιεί τη σμίκρυνση· η τοποθέτηση μένει ενεργή.</string>
     <string name="titan2_elite_fill_corners_title">Γέμισμα γωνιών με το φόντο της γραμμής</string>
     <string name="titan2_elite_fill_corners_description">Βάφει το φόντο του πληκτρολογίου μέσα στις στρογγυλεμένες γωνίες της οθόνης, ώστε η εφαρμογή από πίσω να μη φαίνεται ποτέ γύρω από τη γραμμή.</string>
     <string name="titan2_elite_corner_style_title">Στυλ γωνιών</string>

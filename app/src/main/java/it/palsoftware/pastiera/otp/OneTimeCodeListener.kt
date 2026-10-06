@@ -1,6 +1,8 @@
 package it.palsoftware.pastiera.otp
 
 import android.app.Notification
+import android.os.Build
+import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import it.palsoftware.pastiera.SettingsManager
@@ -40,8 +42,15 @@ class OneTimeCodeListener : NotificationListenerService() {
 
     /** The newest message of a conversation-style notification, if it is one. */
     private fun latestMessage(notification: Notification): String? = runCatching {
-        Notification.MessagingStyle.Message
-            .getMessagesFromBundleArray(notification.extras.getParcelableArray(Notification.EXTRA_MESSAGES))
-            .maxByOrNull { it.timestamp }?.text?.toString()
+        @Suppress("DEPRECATION")
+        val messages = notification.extras.getParcelableArray(Notification.EXTRA_MESSAGES) ?: return null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Notification.MessagingStyle.Message.getMessagesFromBundleArray(messages)
+                .maxByOrNull { it.timestamp }?.text?.toString()
+        } else {
+            // Android 10 has no reader for these; each message is a bundle with its text and time
+            messages.filterIsInstance<Bundle>()
+                .maxByOrNull { it.getLong("time") }?.getCharSequence("text")?.toString()
+        }
     }.getOrNull()
 }

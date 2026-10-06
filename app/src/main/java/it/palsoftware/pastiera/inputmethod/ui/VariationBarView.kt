@@ -712,10 +712,10 @@ class VariationBarView(
             context.resources.displayMetrics
         )
 
-            overlayView.setOnTouchListener { _, motionEvent ->
-                if (isSymModeActive) {
-                    return@setOnTouchListener false
-                }
+        overlayView.setOnTouchListener { _, motionEvent ->
+            if (isSymModeActive) {
+                return@setOnTouchListener false
+            }
 
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {

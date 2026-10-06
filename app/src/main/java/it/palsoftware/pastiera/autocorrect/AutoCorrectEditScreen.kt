@@ -119,13 +119,7 @@ fun AutoCorrectEditScreen(
             }
         }
         ) { paddingValues ->
-            AnimatedContent(
-                targetState = Unit,
-                transitionSpec = {
-                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
-                },
-                label = "auto_correct_edit_animation"
-            ) {
+            Box {
                 Column(
                     modifier = modifier
                         .fillMaxWidth()

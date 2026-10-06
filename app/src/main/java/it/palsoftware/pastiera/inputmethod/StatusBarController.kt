@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.inputmethod
 
+import android.annotation.SuppressLint
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
@@ -4897,6 +4898,8 @@ class StatusBarController(
             }
         }
 
+        // Part of onLayout: the frame lays its children out first
+        @SuppressLint("WrongCall")
         private fun layoutChrome(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
             super.onLayout(changed, left, top, right, bottom)
             originalIconTransforms.forEach { (icon, original) ->
