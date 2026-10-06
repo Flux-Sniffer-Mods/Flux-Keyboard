@@ -86,7 +86,7 @@
     <string name="trackpad_capture_title">Swipes go to the keyboard while you type</string>
     <string name="trackpad_capture_description">While a text field is being typed in, the keyboard takes the trackpad\'s swipes before the app, so they pick suggestions and don\'t scroll the page. Scroll assistant has to be on for the app in front, or the phone passes no swipes on at all. Needs the accessibility service and Android 14 or later.</string>
     <string name="termux_setup_title">Set up Termux for the keyboard</string>
-    <string name="termux_setup_description">Copies a command and opens Termux: paste it there (long press, Paste) and press Enter. It lets other apps run commands (allow-external-apps, which the quick launcher\'s scripts need) and removes the extra-keys row and its text box, which a phone with keys like the Titan 2 Elite doesn\'t need. Pasting it again changes nothing.</string>
+    <string name="termux_setup_description">Copies a command and opens Termux: paste it there (long press, Paste) and press Enter. It lets other apps run commands (allow-external-apps, which the quick launcher\'s scripts need) and removes the extra-keys row and its text box, which a phone with keys like the Titan 2 Elite doesn\'t need. It also offers to start Shizuku by itself after a restart (with the Termux:Boot app): it installs what that needs and walks you through pairing Termux with wireless debugging, once. Pasting it again changes nothing.</string>
     <string name="termux_setup_button">Copy the command and open Termux</string>
     <string name="termux_setup_copied">Command copied: paste it into Termux and press Enter</string>
     <string name="flux_tutorial_extras_termux_button">Allow running Termux commands</string>
