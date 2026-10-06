@@ -4,6 +4,7 @@ import android.os.Build
 import android.view.InputDevice
 import android.view.KeyEvent
 import it.palsoftware.pastiera.device.DeviceIdentitySnapshot
+import it.palsoftware.pastiera.inputmethod.keys.PhysicalKeyPositionNormalizer
 
 object DeviceSpecific {
     enum class InputDeviceKind {

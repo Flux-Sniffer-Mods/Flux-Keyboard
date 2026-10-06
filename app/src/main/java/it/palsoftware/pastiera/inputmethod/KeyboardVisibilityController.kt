@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.core.SymLayoutController
+import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector
 
 /** Owns explicit show requests; framework callbacks alone never prove that a child was drawn. */
 class KeyboardVisibilityController(

@@ -1,5 +1,4 @@
 package it.palsoftware.pastiera.clicks
-import it.palsoftware.pastiera.inputmethod.directActionOrNull
 import it.palsoftware.pastiera.SettingsManager
 
 internal data class ClicksButtonBindingChoice(

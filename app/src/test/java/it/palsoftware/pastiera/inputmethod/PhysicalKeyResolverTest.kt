@@ -10,6 +10,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import it.palsoftware.pastiera.inputmethod.keys.AccidentalKeyPressFilter
+import it.palsoftware.pastiera.inputmethod.keys.ClicksPowerKeyboardLayout
+import it.palsoftware.pastiera.inputmethod.keys.PhysicalKeyResolver
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

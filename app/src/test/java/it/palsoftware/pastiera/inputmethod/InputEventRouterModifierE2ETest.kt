@@ -28,6 +28,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.RuntimeEnvironment
 import java.lang.reflect.Proxy
+import it.palsoftware.pastiera.inputmethod.keys.MultiTapController
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])

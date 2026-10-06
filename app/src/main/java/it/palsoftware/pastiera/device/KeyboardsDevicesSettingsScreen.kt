@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.commands.PastieraCommandSource
 import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
-import it.palsoftware.pastiera.inputmethod.SoftwareKeyboardAutoDetector
+import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.settings.SettingLinkIds

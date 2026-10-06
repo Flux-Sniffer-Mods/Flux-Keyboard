@@ -4,6 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.clicks.ClicksAccessibilityKeyBridge
+import it.palsoftware.pastiera.clicks.ClicksButtonDirectActionExecutor
+import it.palsoftware.pastiera.clicks.ClicksLauncherAccessibilityKeyMapper
 
 /**
  * The keyboard's optional helper, for what an input method can't do alone:

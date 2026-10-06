@@ -43,7 +43,7 @@ class AdbCommandSource : CommandSource {
 
         /** Runs an ADB shortcut; false when it isn't one. */
         fun execute(context: Context, action: String): Boolean {
-            val front = it.palsoftware.pastiera.inputmethod.QuickLauncherOpener.foregroundPackage
+            val front = it.palsoftware.pastiera.inputmethod.launcher.QuickLauncherOpener.foregroundPackage
             when (action.removePrefix("root_")) {
                 FORCE_STOP -> front?.takeIf { it != context.packageName }?.let { AdbShell.runAsync("am force-stop $it") }
                 BATTERY_SAVER -> AdbShell.runAsync(

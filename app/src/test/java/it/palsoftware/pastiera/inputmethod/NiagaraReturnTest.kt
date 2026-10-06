@@ -3,6 +3,7 @@ package it.palsoftware.pastiera.inputmethod
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import it.palsoftware.pastiera.inputmethod.launcher.QuickLauncherOpener
 
 /** Back out of Niagara's search returns to the app it was opened from. */
 class NiagaraReturnTest {

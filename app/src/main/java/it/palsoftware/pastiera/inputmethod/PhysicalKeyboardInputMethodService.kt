@@ -102,6 +102,22 @@ import it.palsoftware.pastiera.clipboard.ClipboardHistoryManager
 import android.content.pm.PackageManager
 import rikka.shizuku.Shizuku
 import it.palsoftware.pastiera.device.T2eCornerCalibration
+import it.palsoftware.pastiera.clicks.ClicksAccessibilityKeyBridge
+import it.palsoftware.pastiera.clicks.ClicksButtonDirectAction
+import it.palsoftware.pastiera.clicks.ClicksButtonDirectActionExecutor
+import it.palsoftware.pastiera.clicks.ClicksPowerButtonEventMapper
+import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector
+import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardDeviceTransitionPolicy
+import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardTextInputHandler
+import it.palsoftware.pastiera.inputmethod.keys.AccidentalKeyPressFilter
+import it.palsoftware.pastiera.inputmethod.keys.AccidentalKeyPressPolicy
+import it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter
+import it.palsoftware.pastiera.inputmethod.keys.ClicksPowerKeyboardLayout
+import it.palsoftware.pastiera.inputmethod.keys.MultiTapController
+import it.palsoftware.pastiera.inputmethod.keys.PhysicalKeyResolver
+import it.palsoftware.pastiera.inputmethod.launcher.LauncherShortcutController
+import it.palsoftware.pastiera.inputmethod.launcher.QuickLauncherOpener
+import it.palsoftware.pastiera.inputmethod.voice.SpeechRecognitionManager
 
 /**
  * Input method service specialized for physical keyboards.

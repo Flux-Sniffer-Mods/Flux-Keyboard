@@ -80,7 +80,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import it.palsoftware.pastiera.inputmethod.ClicksLauncherButtonAccessibilityService
-import it.palsoftware.pastiera.inputmethod.directActionOrNull
+import it.palsoftware.pastiera.clicks.directActionOrNull
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.RestrictedSettings
 import it.palsoftware.pastiera.SettingsManager

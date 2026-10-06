@@ -1584,7 +1584,7 @@ object SettingsManager {
         if (configured != SoftwareKeyboardMode.AUTO) {
             return configured
         }
-        return it.palsoftware.pastiera.inputmethod.SoftwareKeyboardAutoDetector.resolve(context)
+        return it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardAutoDetector.resolve(context)
     }
 
     fun isTitan2LayoutEnabled(context: Context): Boolean {
@@ -2762,20 +2762,20 @@ object SettingsManager {
 
     fun getBounceKeysCategoryEnabled(
         context: Context,
-        category: it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category
+        category: it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category
     ): Boolean {
         return when (category) {
-            it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category.CHARACTER ->
+            it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category.CHARACTER ->
                 getBounceKeysCharacterKeysEnabled(context)
-            it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category.MODIFIER ->
+            it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category.MODIFIER ->
                 getBounceKeysModifierKeysEnabled(context)
-            it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category.SPACE ->
+            it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category.SPACE ->
                 getBounceKeysSpaceEnabled(context)
-            it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category.ENTER ->
+            it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category.ENTER ->
                 getBounceKeysEnterEnabled(context)
-            it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category.BACKSPACE ->
+            it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category.BACKSPACE ->
                 getBounceKeysBackspaceEnabled(context)
-            it.palsoftware.pastiera.inputmethod.BounceKeyFilter.Category.UNSUPPORTED -> false
+            it.palsoftware.pastiera.inputmethod.keys.BounceKeyFilter.Category.UNSUPPORTED -> false
         }
     }
 
@@ -3043,7 +3043,7 @@ object SettingsManager {
 
     fun setTrackpadAppMode(context: Context, mode: TrackpadAppMode) {
         getPreferences(context).edit().putString("trackpad_app_mode", mode.id).apply()
-        it.palsoftware.pastiera.inputmethod.ClicksAccessibilityKeyBridge.refreshTrackpadClaim()
+        it.palsoftware.pastiera.clicks.ClicksAccessibilityKeyBridge.refreshTrackpadClaim()
     }
 
     fun getTrackpadApps(context: Context): List<String> =
@@ -3052,7 +3052,7 @@ object SettingsManager {
     fun setTrackpadApps(context: Context, packages: Collection<String>) {
         val clean = packages.joinToString("\n").let(::parsePackageList)
         getPreferences(context).edit().putString("trackpad_apps", clean.joinToString("\n")).apply()
-        it.palsoftware.pastiera.inputmethod.ClicksAccessibilityKeyBridge.refreshTrackpadClaim()
+        it.palsoftware.pastiera.clicks.ClicksAccessibilityKeyBridge.refreshTrackpadClaim()
     }
 
     /** Whether keyboard swipes are kept from [packageName] (it doesn't scroll with them). */
