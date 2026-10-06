@@ -287,11 +287,9 @@ fun SettingsManager.saveStaticVariationBasePreset(context: Context, staticVariat
 fun SettingsManager.resetVariationsToDefault(context: Context) {
     try {
         val variationsFile = getVariationsFile(context)
-        val inputStream = context.assets.open("common/variations/defaultvariations.json")
-        FileOutputStream(variationsFile).use { outputStream ->
-            inputStream.copyTo(outputStream)
+        context.assets.open("common/variations/defaultvariations.json").use { inputStream ->
+            FileOutputStream(variationsFile).use { outputStream -> inputStream.copyTo(outputStream) }
         }
-        inputStream.close()
         
         notifyVariationsUpdated(context)
         

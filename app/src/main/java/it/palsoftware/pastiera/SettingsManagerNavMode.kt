@@ -63,11 +63,9 @@ fun SettingsManager.initializeNavModeMappingsFile(context: Context) {
     }
     
     try {
-        val inputStream: InputStream = context.assets.open("common/ctrl/$NAV_MODE_MAPPINGS_FILE_NAME")
-        val outputStream = FileOutputStream(mappingsFile)
-        inputStream.copyTo(outputStream)
-        inputStream.close()
-        outputStream.close()
+        context.assets.open("common/ctrl/$NAV_MODE_MAPPINGS_FILE_NAME").use { input ->
+            FileOutputStream(mappingsFile).use { output -> input.copyTo(output) }
+        }
         LegacyMigrations.navModeDefaultMappings(context)
         Log.d(TAG, "Nav mode mappings file initialized from assets")
     } catch (e: Exception) {
