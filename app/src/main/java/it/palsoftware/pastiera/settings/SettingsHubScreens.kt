@@ -58,6 +58,10 @@ import it.palsoftware.pastiera.CornerCalibrationActivity
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsActivity
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.getMinimalMode
+import it.palsoftware.pastiera.getMinimalModeShowLeds
+import it.palsoftware.pastiera.setMinimalMode
+import it.palsoftware.pastiera.setMinimalModeShowLeds
 import it.palsoftware.pastiera.TrackpadDebugActivity
 import it.palsoftware.pastiera.TutorialActivity
 import it.palsoftware.pastiera.apps.AppListHelper
@@ -237,6 +241,30 @@ fun LookSoundHubScreen(
             linkId = SettingLinkIds.MAIN_STATUS_BAR_BUTTONS,
             onClick = { onOpenCustomization(SettingsActivity.CUSTOMIZATION_DESTINATION_STATUS_BAR_BUTTONS) }
         )
+        val context = androidx.compose.ui.platform.LocalContext.current
+        var minimal by remember { mutableStateOf(SettingsManager.getMinimalMode(context)) }
+        FluxSwitchRow(
+            linkId = SettingLinkIds.LOOK_MINIMAL_MODE,
+            title = stringResource(R.string.minimal_mode_title),
+            description = stringResource(R.string.minimal_mode_description),
+            checked = minimal,
+            icon = "\u2581"
+        ) {
+            minimal = it
+            SettingsManager.setMinimalMode(context, it)
+        }
+        if (minimal) {
+            var minimalLeds by remember { mutableStateOf(SettingsManager.getMinimalModeShowLeds(context)) }
+            FluxSwitchRow(
+                linkId = SettingLinkIds.LOOK_MINIMAL_MODE_LEDS,
+                title = stringResource(R.string.minimal_mode_show_leds_title),
+                description = stringResource(R.string.minimal_mode_show_leds_description),
+                checked = minimalLeds
+            ) {
+                minimalLeds = it
+                SettingsManager.setMinimalModeShowLeds(context, it)
+            }
+        }
         SettingsCategoryRow(
             icon = Icons.AutoMirrored.Filled.VolumeUp,
             title = stringResource(R.string.settings_category_sounds),

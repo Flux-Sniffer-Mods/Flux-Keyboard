@@ -195,6 +195,8 @@ import it.palsoftware.pastiera.getSymbolShortcodesEnabled
 import it.palsoftware.pastiera.getTerminalModeEmojiKeyAction
 import it.palsoftware.pastiera.getTerminalModeHideKeyboard
 import it.palsoftware.pastiera.getTerminalModeShowLeds
+import it.palsoftware.pastiera.getMinimalMode
+import it.palsoftware.pastiera.getMinimalModeShowLeds
 import it.palsoftware.pastiera.getTrackpadCaptureWhileTyping
 import it.palsoftware.pastiera.getTrackpadDeleteSwipeThreshold
 import it.palsoftware.pastiera.getTrackpadGestureAddWordEnabled
@@ -3496,25 +3498,31 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     /** Hidden apps keep the keyboard's surface closed, except for the status LEDs or an open panel. */
     private fun hiddenAppSurfaceBlocked(): Boolean =
-        (keyboardHiddenForApp && !hiddenAppShowsLeds && !hiddenAppPanelOpen()) || terminalSurfaceHidden()
+        (keyboardHiddenForApp && !hiddenAppShowsLeds && !hiddenAppPanelOpen()) || outOfSightSurfaceHidden()
 
     /**
-     * Terminal mode, like the Linux desktop: the keyboard out of sight while its keys keep working
-     * (Alt layer, SYM layers typed blind, real Ctrl). The clipboard (3) and emoji picker (4) need
-     * to be seen, so they show while open.
+     * The keyboard out of sight while its keys keep working: terminal mode's option (like the
+     * Linux desktop: Alt layer, SYM layers typed blind, real Ctrl), or minimal mode in every app.
      */
-    private fun terminalSurfaceHidden(): Boolean =
-        terminalModeActive && !keyboardHiddenForApp && terminalHidesKeyboard && !terminalShowsLeds &&
-            symPage != 3 && symPage != 4
+    private fun outOfSightSurfaceHidden(): Boolean =
+        !keyboardHiddenForApp && keyboardOutOfSight && !outOfSightShowsLeds && !outOfSightPanelOpen()
 
-    /** Terminal mode keeps the keyboard out of sight but its status LEDs show (an option). */
-    private fun terminalLedsOnly(): Boolean =
-        terminalModeActive && !keyboardHiddenForApp && terminalHidesKeyboard && terminalShowsLeds &&
-            symPage != 3 && symPage != 4
+    /** Out of sight, but its status LEDs show (an option). */
+    private fun outOfSightLedsOnly(): Boolean =
+        !keyboardHiddenForApp && keyboardOutOfSight && outOfSightShowsLeds && !outOfSightPanelOpen()
 
-    private var terminalHidesKeyboard = false
-    private var terminalShowsLeds = false
-    private var terminalSurfaceShown = false
+    /**
+     * A page that has to be seen while it's open. Terminals: the clipboard (3) and emoji picker (4);
+     * the SYM layers are typed blind there. Minimal mode: every SYM and emoji page.
+     */
+    private fun outOfSightPanelOpen(): Boolean =
+        if (minimalModeActive) symPage > 0 else symPage == 3 || symPage == 4
+
+    private var keyboardOutOfSight = false
+    private var outOfSightShowsLeds = false
+    /** Minimal mode applies to the field in front (not a terminal or a hidden app). */
+    private var minimalModeActive = false
+    private var outOfSightSurfaceShown = false
 
     /** In a hidden app with the panels option: its panel keys, and every key while a panel is open. */
     private fun hiddenAppKeyGoesToPastiera(keyCode: Int): Boolean {
@@ -3541,11 +3549,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     /** Show the keyboard while a panel is open in a hidden app; hide it (or back to LEDs) afterwards. */
     private fun syncHiddenAppPanel() {
-        if (terminalModeActive && terminalHidesKeyboard && !keyboardHiddenForApp) {
-            if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(terminalLedsOnly())
-            val show = !terminalSurfaceHidden()
-            if (show == terminalSurfaceShown) return
-            terminalSurfaceShown = show
+        if (keyboardOutOfSight && !keyboardHiddenForApp) {
+            if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(outOfSightLedsOnly())
+            val show = !outOfSightSurfaceHidden()
+            if (show == outOfSightSurfaceShown) return
+            outOfSightSurfaceShown = show
             invalidateRenderedStatusSnapshot()
             if (show) ensureImeSurfaceVisible() else hideSurfaceIfHiddenForApp()
             return
@@ -3711,7 +3719,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         super.onViewClicked(focusChanged)
         // Tapping a search bar that waited for typing brings the keyboard bar up
         if (::keyboardVisibilityController.isInitialized && keyboardVisibilityController.shouldRecoverSurfaceOnHardwareKey() &&
-            !keyboardHiddenForApp && !terminalHidesKeyboard
+            !keyboardHiddenForApp && !keyboardOutOfSight
         ) keyboardVisibilityController.onHardwareInputRequested()
         if (symPage == 4 && ::candidatesBarController.isInitialized) {
             disableEmojiSearchInputCapture()
@@ -4221,9 +4229,16 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry.setTerminalApp(
             SettingsManager.isTerminalModeApp(this, info?.packageName)
         )
-        terminalHidesKeyboard = terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)
-        terminalShowsLeds = terminalHidesKeyboard && SettingsManager.getTerminalModeShowLeds(this)
-        terminalSurfaceShown = false
+        // Minimal mode: every app but terminals (their own option) and hidden apps (keys to the app)
+        minimalModeActive = !terminalModeActive && SettingsManager.getMinimalMode(this) &&
+            !SettingsManager.isKeyboardHiddenForApp(this, info?.packageName)
+        keyboardOutOfSight = (terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)) || minimalModeActive
+        outOfSightShowsLeds = keyboardOutOfSight && if (minimalModeActive) {
+            SettingsManager.getMinimalModeShowLeds(this)
+        } else {
+            SettingsManager.getTerminalModeShowLeds(this)
+        }
+        outOfSightSurfaceShown = false
         terminalCtrlKeysDown.clear()
         terminalCtrlSent.clear()
         terminalRawKeysDown.clear()
@@ -4238,7 +4253,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         hiddenAppAllowsPanels = keyboardHiddenForApp && SettingsManager.hiddenAppAllowsPanels(this, info?.packageName)
         if (showLeds != hiddenAppShowsLeds || !restarting) observedModifierLeds.reset()
         hiddenAppShowsLeds = showLeds
-        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(showLeds || terminalLedsOnly())
+        if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(showLeds || outOfSightLedsOnly())
         HiddenAppKeyObserver.sink = if (showLeds) ::observeHiddenAppKey else null
         hiddenAppPanelShown = false
         hiddenAppPassedThroughKeys.clear()
@@ -5607,7 +5622,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         countContactKey(keyCode_, event_)
         val handled = handleKeyDown(keyCode_, event_)
-        if (keyboardHiddenForApp || terminalHidesKeyboard) syncHiddenAppPanel()
+        if (keyboardHiddenForApp || keyboardOutOfSight) syncHiddenAppPanel()
         return handled
     }
 
@@ -6517,7 +6532,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         val handled = handleKeyUp(keyCode_, event_)
-        if (keyboardHiddenForApp || terminalHidesKeyboard) syncHiddenAppPanel()
+        if (keyboardHiddenForApp || keyboardOutOfSight) syncHiddenAppPanel()
         return handled
     }
 

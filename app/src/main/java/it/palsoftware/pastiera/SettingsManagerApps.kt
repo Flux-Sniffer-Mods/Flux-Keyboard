@@ -50,6 +50,25 @@ fun SettingsManager.setTerminalModeHideKeyboard(context: Context, enabled: Boole
     getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_HIDE_KEYBOARD, enabled).apply()
 }
 
+/**
+ * Minimal mode: in every app the keyboard stays out of sight while its keys work as usual (Alt
+ * layer, SYM, Ctrl shortcuts, corrections); the emoji and symbols pages still open on their keys.
+ */
+fun SettingsManager.getMinimalMode(context: Context): Boolean =
+    getPreferences(context).getBoolean(KEY_MINIMAL_MODE, false)
+
+fun SettingsManager.setMinimalMode(context: Context, enabled: Boolean) {
+    getPreferences(context).edit().putBoolean(KEY_MINIMAL_MODE, enabled).apply()
+}
+
+/** In minimal mode, the status LEDs still show (on until changed). */
+fun SettingsManager.getMinimalModeShowLeds(context: Context): Boolean =
+    getPreferences(context).getBoolean(KEY_MINIMAL_MODE_SHOW_LEDS, true)
+
+fun SettingsManager.setMinimalModeShowLeds(context: Context, enabled: Boolean) {
+    getPreferences(context).edit().putBoolean(KEY_MINIMAL_MODE_SHOW_LEDS, enabled).apply()
+}
+
 /** With the keyboard hidden in terminals, its status LEDs still show (on until changed). */
 fun SettingsManager.getTerminalModeShowLeds(context: Context): Boolean =
     getPreferences(context).getBoolean(KEY_TERMINAL_MODE_SHOW_LEDS, true)

@@ -176,10 +176,14 @@
     <string name="emoji_profile_food">Food and drink</string>
     <string name="emoji_profile_travel">Travel and outdoors</string>
     <string name="emoji_profile_gaming">Gaming</string>
+    <string name="minimal_mode_title">Minimal mode</string>
+    <string name="minimal_mode_description">No keyboard bar in any app. The keys work as usual (Alt layer, SYM, Ctrl shortcuts, corrections), and the emoji and symbols pages still open on their keys.</string>
+    <string name="minimal_mode_show_leds_title">Show the LEDs</string>
+    <string name="minimal_mode_show_leds_description">The status LEDs still show where they usually are, drawn over the app, so you can see Shift, Alt, Ctrl and SYM.</string>
     <string name="terminal_mode_show_leds_title">Show the LEDs</string>
     <string name="terminal_mode_show_leds_description">With the keyboard hidden, its status LEDs still show where they usually are, so you can see Shift, Alt, Ctrl and SYM.</string>
     <string name="terminal_mode_hide_keyboard_title">Hide the keyboard</string>
-    <string name="terminal_mode_hide_keyboard_description">Like the Linux desktop: Pastiera stays out of sight in terminals. Alt still types your Alt layer and SYM its symbols, unseen; Ctrl stays Ctrl. The clipboard and emoji picker show while open.</string>
+    <string name="terminal_mode_hide_keyboard_description">Like the Linux desktop: Flux Keyboard stays out of sight in terminals. Alt still types your Alt layer and SYM its symbols, unseen; Ctrl stays Ctrl. The clipboard and emoji picker show while open.</string>
     <string name="led_locked_animation_title">Animate locked LEDs</string>
     <string name="led_locked_animation_description">A locked modifier\'s LED sweeps a gradient between its colour and a more intense version, so a lock is hard to miss.</string>
     <string name="titan2_elite_section_status_bar">Rounded status bar</string>

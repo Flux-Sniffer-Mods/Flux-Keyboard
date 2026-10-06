@@ -4,6 +4,7 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.getEmojiKeyLedEnabled
 import it.palsoftware.pastiera.getLedIndividualColorsEnabled
+import it.palsoftware.pastiera.getMinimalMode
 import it.palsoftware.pastiera.getTerminalModeEnabled
 import it.palsoftware.pastiera.getTerminalModeHideKeyboard
 /**
@@ -24,6 +25,14 @@ internal fun layoutSettingEntries(): List<SettingEntry> = listOf(
     SettingEntry(SettingLinkIds.MAIN_LOOK_SOUND, R.string.settings_look_sound_title,
         summaryRes = R.string.settings_look_sound_description,
         route = SettingRoute(SettingsDestination.LookSound)),
+    SettingEntry(SettingLinkIds.LOOK_MINIMAL_MODE, R.string.minimal_mode_title,
+        summaryRes = R.string.minimal_mode_description,
+        route = SettingRoute(SettingsDestination.LookSound)),
+    SettingEntry(SettingLinkIds.LOOK_MINIMAL_MODE_LEDS, R.string.minimal_mode_show_leds_title,
+        summaryRes = R.string.minimal_mode_show_leds_description,
+        route = SettingRoute(SettingsDestination.LookSound),
+        availabilityCheck = { SettingsManager.getMinimalMode(it) },
+        unavailableFallbackId = SettingLinkIds.LOOK_MINIMAL_MODE),
     SettingEntry(SettingLinkIds.MAIN_APPS, R.string.settings_apps_title,
         summaryRes = R.string.settings_apps_description,
         route = SettingRoute(SettingsDestination.Apps)),

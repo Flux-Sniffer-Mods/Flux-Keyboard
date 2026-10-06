@@ -380,6 +380,10 @@
     {
       "text": "A much smaller app: English comes built in, and other languages' dictionaries download the first time you use them (or from Installed dictionaries), from Flux Keyboard's own releases. Languages you already type in download by themselves after the update.",
       "after": "202610051915"
+    },
+    {
+      "text": "Minimal mode (Look & sound): no keyboard bar in any app, the LEDs optional, while the keys work as usual and the emoji and symbols pages still open on their keys.",
+      "after": "202610051915"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
