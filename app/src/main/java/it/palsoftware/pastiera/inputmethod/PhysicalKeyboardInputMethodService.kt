@@ -196,6 +196,7 @@ import it.palsoftware.pastiera.getTerminalModeEmojiKeyAction
 import it.palsoftware.pastiera.getTerminalModeHideKeyboard
 import it.palsoftware.pastiera.getTerminalModeShowLeds
 import it.palsoftware.pastiera.getMinimalMode
+import it.palsoftware.pastiera.adoptShizukuTrackpadIfUnchosen
 import it.palsoftware.pastiera.getMinimalModeShowLeds
 import it.palsoftware.pastiera.getTrackpadCaptureWhileTyping
 import it.palsoftware.pastiera.getTrackpadDeleteSwipeThreshold
@@ -4229,6 +4230,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry.setTerminalApp(
             SettingsManager.isTerminalModeApp(this, info?.packageName)
         )
+        // Shizuku users: keyboard swipes through Shizuku, unless a source was picked by hand
+        SettingsManager.adoptShizukuTrackpadIfUnchosen(this)
         // Minimal mode: every app but terminals (their own option) and hidden apps (keys to the app)
         minimalModeActive = !terminalModeActive && SettingsManager.getMinimalMode(this) &&
             !SettingsManager.isKeyboardHiddenForApp(this, info?.packageName)

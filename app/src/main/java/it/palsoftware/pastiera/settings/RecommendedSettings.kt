@@ -60,7 +60,6 @@ object RecommendedSettings {
         "trackpad_gesture_add_word_enabled" to false,
         "trackpad_gesture_add_word_full_width_enabled" to false,
         "trackpad_gestures_enabled" to true,
-        "trackpad_provider" to "native_ime",
         "trackpad_side_swipe_threshold" to 100f,
         "trackpad_suggestion_swipe_directions" to true,
         "trackpad_suggestion_swipe_threshold" to 100f,

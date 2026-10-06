@@ -207,6 +207,7 @@ object SettingsManager {
     internal const val KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad_delete_swipe_threshold"
     internal const val KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad_side_swipe_threshold"
     internal const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
+    internal const val KEY_TRACKPAD_PROVIDER_CHOSEN = "trackpad_provider_chosen" // Picked by hand: never changed for you
     internal const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     internal const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
     const val KEY_SHOW_ADD_WORD_SUGGESTION = "show_add_word_suggestion" // Offer "add to dictionary" in the suggestions

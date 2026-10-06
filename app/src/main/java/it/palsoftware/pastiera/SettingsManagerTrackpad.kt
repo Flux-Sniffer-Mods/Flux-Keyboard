@@ -225,11 +225,28 @@ fun SettingsManager.getTrackpadProvider(context: Context): String {
     return if (TRACKPAD_PROVIDER_VALUES.contains(value)) value else DEFAULT_TRACKPAD_PROVIDER
 }
 
+/** Where keyboard swipes come from, picked by hand (it then stays as picked). */
 fun SettingsManager.setTrackpadProvider(context: Context, provider: String) {
     val normalized = if (TRACKPAD_PROVIDER_VALUES.contains(provider)) provider else DEFAULT_TRACKPAD_PROVIDER
     getPreferences(context).edit()
         .putString(KEY_TRACKPAD_PROVIDER, normalized)
+        .putBoolean(KEY_TRACKPAD_PROVIDER_CHOSEN, true)
         .commit()
+}
+
+/**
+ * Shizuku users get keyboard swipes through Shizuku (they then work in every app, Scroll
+ * assistant or not), unless they picked a source by hand: on the Titan 2 phones, once Shizuku is
+ * running and allowed. Returns whether it switched.
+ */
+fun SettingsManager.adoptShizukuTrackpadIfUnchosen(context: Context): Boolean {
+    val prefs = getPreferences(context)
+    if (prefs.getBoolean(KEY_TRACKPAD_PROVIDER_CHOSEN, false)) return false
+    if (getTrackpadProvider(context) == TRACKPAD_PROVIDER_SHIZUKU) return false
+    if (!it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2Device()) return false
+    if (it.palsoftware.pastiera.resolveShizukuStatus() != it.palsoftware.pastiera.ShizukuStatus.Connected) return false
+    prefs.edit().putString(KEY_TRACKPAD_PROVIDER, TRACKPAD_PROVIDER_SHIZUKU).apply()
+    return true
 }
 
 fun SettingsManager.getTrackpadShizukuDevice(context: Context): String {
