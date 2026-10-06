@@ -27,12 +27,9 @@
     <string name="settings_editing_keys_description">Backspace and Delete combinations</string>
     <string name="settings_auto_correction_description">Suggestions, automatic correction, emoji suggestions, spell checker, dictionaries and replacements</string>
     <string name="settings_text_expansion_hub_description">Snippets, and emoji and symbol shortcodes</string>
-    <string name="settings_section_enter">Enter</string>
 
     <string name="settings_theme_led_colours_title">Theme</string>
     <string name="settings_theme_led_colours_description">Keyboard colours and key shapes</string>
-    <string name="settings_section_status_bar">Status bar</string>
-    <string name="settings_section_sound_popups">Sound &amp; popups</string>
     <string name="settings_variations_popup_description">The characters offered when you hold a key</string>
     <string name="settings_section_language">Language</string>
 
@@ -135,8 +132,6 @@
     <string name="led_colors_individual_title">Colour each LED</string>
     <string name="led_colors_individual_off">Off: all LEDs use the theme\'s LED colours.</string>
     <string name="led_colors_individual_on">Each LED has its own colour: dim when off, the colour when active, brighter and more saturated when locked.</string>
-    <string name="led_colors_section">LEDs</string>
-    <string name="led_colors_states">Off, active, locked. Tap to change.</string>
     <string name="led_colors_tap_hint">Tap an LED to change its colour</string>
     <string name="led_colors_level_off">Off</string>
     <string name="led_colors_level_active">Active</string>
@@ -189,7 +184,6 @@
     <string name="led_locked_animation_description">A locked modifier\'s LED sweeps a gradient between its colour and a more intense version, so a lock is hard to miss.</string>
     <string name="titan2_elite_section_status_bar">Rounded status bar</string>
     <string name="titan2_elite_section_screen">Screen fit</string>
-    <string name="titan2_elite_section_calibration">Calibration</string>
     <string name="terminal_mode_emoji_key_title">Emoji key</string>
     <string name="terminal_mode_emoji_key_description">What your emoji key does in terminals</string>
     <string name="terminal_emoji_key_picker">Emoji picker (as elsewhere)</string>

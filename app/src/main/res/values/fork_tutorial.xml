@@ -17,7 +17,6 @@
     <string name="flux_tutorial_emoji_bullet_key">Tap the emoji key (Right Shift by default) to open the picker. Held with Ctrl, it still works as Shift.</string>
     <string name="flux_tutorial_emoji_bullet_gif">GIFs: L on the emoji recents page, or the picker\'s GIF tab. Keep favourites and recents.</string>
     <string name="flux_tutorial_emoji_bullet_symbols">Kaomoji: L on the symbols recents page. Search them by mood, action or name, like lenny face or table flip.</string>
-    <string name="flux_tutorial_emoji_bullet_profiles">Emoji layer profiles (chatting, work, social…) can follow the app you\'re in.</string>
     <string name="flux_tutorial_emoji_button">Choose the emoji key</string>
 
     <string name="flux_tutorial_typing_title">Type faster</string>
@@ -79,8 +78,6 @@
     <string name="flux_tutorial_personalise_bullet_colours">Colours from your wallpaper or a theme of your own, or a picture behind the keyboard: drag and zoom it into place on a preview, and its colours can set the keys\'.</string>
     <string name="flux_tutorial_personalise_bullet_menu">Choose the menu bar\'s buttons and their order.</string>
     <string name="flux_tutorial_personalise_button">Status LED colours</string>
-    <string name="flux_tutorial_extras_restricted_text">One-time codes and the keyboard\'s LEDs in hidden-keyboard apps need notification access or the accessibility service, which Android blocks for apps installed from a file until you allow restricted settings once.</string>
-    <string name="flux_tutorial_extras_restricted_button">Show me how</string>
     <string name="flux_tutorial_typing_bullet_punctuation">Punctuation spacing: choose which marks take a space after them, and which never have one before.</string>
     <string name="flux_tutorial_personalise_bullet_contour">On the Titan 2 Elite, the LEDs can follow the screen\'s rounded bottom corners on two rails, the same length on every page (Titan 2 Elite settings).</string>
     <string name="flux_tutorial_apps_bullet_updates">Updates download inside the app and install when you say so.</string>

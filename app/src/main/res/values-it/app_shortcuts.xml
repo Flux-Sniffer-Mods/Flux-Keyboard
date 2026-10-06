@@ -98,7 +98,6 @@
     <string name="app_shortcuts_category_other">Aggiunte da te</string>
     <string name="enter_standards_title">Standard per categoria</string>
     <string name="enter_standards_description">Le app installate della lista delle scorciatoie seguono la loro categoria: le app di chat e social usano il tuo preset di messaggistica nei campi messaggio (i campi per post e note tengono Invio come a capo), le app email usano Ctrl+Invio per inviare, le altre app tengono il loro Invio. Tocca un\'app per regolarla.</string>
-    <string name="enter_standards_empty">Nessun\'altra app di chat o email della lista installata.</string>
     <string name="enter_standard_chat">Chat · %1$s</string>
     <string name="enter_standard_email">Email · Invio a capo, Ctrl+Invio invia</string>
     <string name="app_shortcut_settings">Impostazioni dell\'app</string>

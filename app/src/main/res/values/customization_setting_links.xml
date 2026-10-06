@@ -30,12 +30,10 @@
     <string name="setting_link_theme_software_key_width">Software keyboard: key width</string>
     <string name="setting_link_theme_software_row_spacing">Software keyboard: row spacing</string>
     <string name="setting_link_theme_preview_viewport">Preview max viewport</string>
-    <string name="setting_link_theme_hardware_led_colors">Hardware keyboard: LED colors</string>
     <string name="setting_link_theme_hardware_assignment">Hardware keyboard: theme assignment</string>
     <string name="setting_link_theme_hardware_light_theme">Hardware keyboard: light mode theme</string>
     <string name="setting_link_theme_hardware_dark_theme">Hardware keyboard: dark mode theme</string>
     <string name="setting_link_theme_hardware_layout_overrides">Hardware keyboard: theme layout overrides</string>
-    <string name="setting_link_theme_software_led_colors">Software keyboard: LED colors</string>
     <string name="setting_link_theme_software_assignment">Software keyboard: theme assignment</string>
     <string name="setting_link_theme_software_light_theme">Software keyboard: light mode theme</string>
     <string name="setting_link_theme_software_dark_theme">Software keyboard: dark mode theme</string>

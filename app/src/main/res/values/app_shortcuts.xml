@@ -99,7 +99,6 @@
     <string name="app_shortcuts_category_other">Added by you</string>
     <string name="enter_standards_title">Following their category</string>
     <string name="enter_standards_description">Every app follows the preset unless you set it above: by default Enter sends and Shift+Enter is a new line. Email and note-taking apps keep Enter for a new line: Ctrl+Enter sends an email. Tap an app to set it yourself.</string>
-    <string name="enter_standards_empty">No other chat or email apps installed from the list.</string>
     <string name="enter_standard_chat">Chat · %1$s</string>
     <string name="enter_standard_email">Email · Enter newline, Ctrl+Enter sends</string>
     <string name="app_shortcut_settings">App settings</string>

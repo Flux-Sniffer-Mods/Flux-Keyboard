@@ -26,12 +26,9 @@
     <string name="settings_editing_keys_description">Combinazioni di Backspace e Canc</string>
     <string name="settings_auto_correction_description">Suggerimenti, correzione automatica, emoji suggerite, controllo ortografico, dizionari e sostituzioni</string>
     <string name="settings_text_expansion_hub_description">Snippet e codici brevi per emoji e simboli</string>
-    <string name="settings_section_enter">Invio</string>
 
     <string name="settings_theme_led_colours_title">Tema</string>
     <string name="settings_theme_led_colours_description">Colori della tastiera e forma dei tasti</string>
-    <string name="settings_section_status_bar">Barra di stato</string>
-    <string name="settings_section_sound_popups">Suono e popup</string>
     <string name="settings_variations_popup_description">I caratteri proposti tenendo premuto un tasto</string>
     <string name="settings_section_language">Lingua</string>
 
@@ -132,8 +129,6 @@
     <string name="led_colors_individual_title">Colora ogni LED</string>
     <string name="led_colors_individual_off">Disattivato: tutti i LED usano i colori LED del tema.</string>
     <string name="led_colors_individual_on">Ogni LED ha il suo colore: tenue quando è spento, il colore quando è attivo, più luminoso e saturo quando è bloccato.</string>
-    <string name="led_colors_section">LED</string>
-    <string name="led_colors_states">Spento, attivo, bloccato. Tocca per cambiare.</string>
     <string name="led_colors_reset_title">Ripristina i colori dei LED</string>
     <string name="led_colors_reset_description">Torna ai colori suggeriti blu, arancio, verde e viola.</string>
     <string name="emoji_profiles_title">Profili del livello emoji</string>
@@ -172,7 +167,6 @@
     <string name="led_locked_animation_description">Il LED di un modificatore bloccato scorre un gradiente tra il suo colore e una versione più intensa, così un blocco non passa inosservato.</string>
     <string name="titan2_elite_section_status_bar">Barra di stato arrotondata</string>
     <string name="titan2_elite_section_screen">Adattamento allo schermo</string>
-    <string name="titan2_elite_section_calibration">Calibrazione</string>
     <string name="terminal_mode_emoji_key_title">Tasto emoji</string>
     <string name="terminal_mode_emoji_key_description">Cosa fa il tasto emoji nei terminali</string>
     <string name="terminal_emoji_key_picker">Selettore emoji (come altrove)</string>
