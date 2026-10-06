@@ -291,6 +291,8 @@ class StatusBarController(
             variationBarView?.onRedoRequested = value
         }
 
+    var onExtraKeysRequested: (() -> Unit)? = null
+
     var onSoftwareKeyboardKeyPressed: ((Int) -> Unit)? = null
 
     var onSoftwareKeyboardModifierKeyDown: ((Int) -> Boolean)? = null
@@ -644,6 +646,7 @@ class StatusBarController(
             onSymbolsPageRequested = onSymbolsPageRequested,
             onUndoRequested = onUndoRequested,
             onRedoRequested = onRedoRequested,
+            onExtraKeysRequested = onExtraKeysRequested,
             onHapticFeedback = { NotificationHelper.triggerHapticFeedback(context) }
         )
 
@@ -910,6 +913,7 @@ class StatusBarController(
             if (assets != null && imeServiceClass != null) {
                 fullSuggestionsBar?.setSubtypeCyclingParams(assets, imeServiceClass)
             }
+            extraKeysRow?.let { row -> fullSuggestionsBar?.apply { ensureView(); setExtraKeys(row) } }
 
             symSurfaceStack = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
@@ -1007,6 +1011,18 @@ class StatusBarController(
     }
 
     private fun menuBarOpen(): Boolean = hamburgerMenuView?.isVisible() == true
+
+    private var extraKeysRow: it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysRow? = null
+
+    /** The extra keys row in the bar's place (null: the bar). */
+    fun setExtraKeys(row: it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysRow?) {
+        extraKeysRow = row
+        if (row != null) hideHamburgerMenu()
+        fullSuggestionsBar?.apply {
+            if (row != null) ensureView()
+            setExtraKeys(row)
+        }
+    }
 
     fun resetSuggestionActionMode() {
         fullSuggestionsBar?.resetActionMode()

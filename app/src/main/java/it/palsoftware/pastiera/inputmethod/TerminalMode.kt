@@ -44,6 +44,8 @@ internal object TerminalMode {
      */
     enum class EmojiKeyAction(val id: String, val keyCode: Int, val ctrl: Boolean = false) {
         EmojiPicker("emoji_picker", KeyEvent.KEYCODE_UNKNOWN),
+        // Opens and closes the extra keys row (Esc, Tab, Ctrl, Alt, arrows)
+        ExtraKeys("extra_keys", KeyEvent.KEYCODE_UNKNOWN),
         Escape("esc", KeyEvent.KEYCODE_ESCAPE),
         Tab("tab", KeyEvent.KEYCODE_TAB),
         PreviousCommand("up", KeyEvent.KEYCODE_DPAD_UP),

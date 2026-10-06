@@ -162,6 +162,8 @@ object SettingsManager {
     internal const val KEY_EXACT_TYPING_NO_SUGGESTIONS = "exact_typing_no_suggestions" // Honour the app's no-suggestions flag
     internal const val KEY_TERMINAL_MODE_HIDE_KEYBOARD = "terminal_mode_hide_keyboard"
     internal const val KEY_TERMINAL_MODE_EMOJI_KEY = "terminal_mode_emoji_key"
+    internal const val KEY_EXTRA_KEYS_TERMINAL = "extra_keys_terminal"
+    internal const val KEY_EXTRA_KEYS_TEXT = "extra_keys_text"
     internal const val KEY_TERMINAL_MODE_SWIPE_CURSOR = "terminal_mode_swipe_cursor" // Keyboard swipes move the terminal's cursor
     internal const val KEY_MINIMAL_MODE = "minimal_mode" // No keyboard bar in any app; the keys work as usual
     internal const val KEY_MINIMAL_MODE_SHOW_LEDS = "minimal_mode_show_leds"
@@ -301,6 +303,7 @@ object SettingsManager {
     const val STATUS_BAR_BUTTON_SYMBOLS = "symbols"
     const val STATUS_BAR_BUTTON_UNDO = "undo"
     const val STATUS_BAR_BUTTON_REDO = "redo"
+    const val STATUS_BAR_BUTTON_EXTRA_KEYS = "extra_keys"
     const val MODIFIER_INDICATOR_BOTTOM_STRIP = "bottom_strip"
     const val MODIFIER_INDICATOR_MENU_BAR = "menu_bar"
     const val MODIFIER_INDICATOR_STATUS_BAR = "status_bar"
@@ -1230,6 +1233,7 @@ object SettingsManager {
 
     /** Buttons the menu bar (the ☰ button's row) can show, in their default order. */
     val MENU_BAR_BUTTON_OPTIONS: List<String> = listOf(
+        STATUS_BAR_BUTTON_EXTRA_KEYS,
         STATUS_BAR_BUTTON_SYMBOLS,
         STATUS_BAR_BUTTON_EMOJI,
         STATUS_BAR_BUTTON_GIF,
@@ -1243,17 +1247,12 @@ object SettingsManager {
         STATUS_BAR_BUTTON_SETTINGS
     )
 
-    /**
-     * Until chosen, the menu bar leaves out the symbols, emoji and GIF buttons (the SYM and emoji
-     * keys open those), Solderina and keyboard mode; and the language button while only one
-     * input language is on.
-     */
-    internal val MENU_BAR_OFF_BY_DEFAULT = setOf(
-        STATUS_BAR_BUTTON_SYMBOLS,
-        STATUS_BAR_BUTTON_EMOJI,
-        STATUS_BAR_BUTTON_GIF,
-        STATUS_BAR_BUTTON_MINIMAL_UI,
-        STATUS_BAR_BUTTON_SOFTWARE_KEYBOARD_MODE
+    /** Until chosen, the menu bar has the extra keys, undo, redo and the clipboard. */
+    internal val MENU_BAR_DEFAULT = listOf(
+        STATUS_BAR_BUTTON_EXTRA_KEYS,
+        STATUS_BAR_BUTTON_UNDO,
+        STATUS_BAR_BUTTON_REDO,
+        STATUS_BAR_BUTTON_CLIPBOARD
     )
 
     data class AppEnterBehaviorOverride(

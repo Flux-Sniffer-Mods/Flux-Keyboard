@@ -249,6 +249,13 @@ class CandidatesBarController(
         candidatesStatusBar.requestEmojiPickerSearch(initialText)
     }
 
+    var onExtraKeysRequested: (() -> Unit)? = null
+        set(value) {
+            field = value
+            inputStatusBar.onExtraKeysRequested = value
+            candidatesStatusBar.onExtraKeysRequested = value
+        }
+
     var onUndoRequested: (() -> Unit)? = null
         set(value) {
             field = value
@@ -390,6 +397,11 @@ class CandidatesBarController(
     fun setPastierinaModeActive(active: Boolean) {
         inputStatusBar.setPastierinaModeActive(active)
         candidatesStatusBar.setPastierinaModeActive(active)
+    }
+
+    fun setExtraKeys(row: it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysRow?) {
+        inputStatusBar.setExtraKeys(row)
+        candidatesStatusBar.setExtraKeys(row)
     }
 
     fun handleBackPressed(): Boolean {

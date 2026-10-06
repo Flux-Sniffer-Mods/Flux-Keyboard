@@ -38,6 +38,7 @@ class HamburgerMenuView(
 
     // Every button the menu can show; which ones and in what order is a setting
     private val menuButtonIds = listOf(
+        StatusBarButtonId.ExtraKeys,
         StatusBarButtonId.Symbols,
         StatusBarButtonId.Emoji,
         StatusBarButtonId.Gif,
@@ -206,6 +207,10 @@ class HamburgerMenuView(
             onRedoRequested = {
                 onClose()
                 callbacks.onRedoRequested?.invoke()
+            },
+            onExtraKeysRequested = {
+                onClose()
+                callbacks.onExtraKeysRequested?.invoke()
             },
             onHapticFeedback = callbacks.onHapticFeedback
         )

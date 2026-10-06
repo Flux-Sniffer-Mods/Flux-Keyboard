@@ -58,6 +58,19 @@ class PastieraCommandSource : CommandSource {
                 defaultSurfaces = setOf(CommandSurface.AssignedKey, CommandSurface.NavMode),
                 searchTokens = listOf("Select", "Selection", "Highlight", "Cursor")
             ),
+            // The extra keys row, from a key or here
+            CommandTarget(
+                id = COMMAND_TOGGLE_EXTRA_KEYS,
+                source = id,
+                kind = CommandKind.PastieraAction,
+                label = context.getString(R.string.extra_keys_title),
+                subtitle = context.getString(R.string.extra_keys_command_subtitle),
+                icon = CommandIcon.DrawableIcon(ContextCompat.getDrawable(context, R.drawable.modifier_keys_24)),
+                launch = CommandLaunchSpec.InternalAction(ACTION_TOGGLE_EXTRA_KEYS),
+                capabilities = setOf(CommandCapability.AdjustsDeviceState),
+                defaultSurfaces = setOf(CommandSurface.AssignedKey, CommandSurface.NavMode),
+                searchTokens = listOf("Extra keys", "Esc", "Tab", "Arrows", "Termux")
+            ),
             // Incognito typing and Offline mode together, from a key or here
             CommandTarget(
                 id = COMMAND_TOGGLE_PRIVATE_MODE,
@@ -85,5 +98,7 @@ class PastieraCommandSource : CommandSource {
         const val COMMAND_SELECT_FROM_CURSOR = "pastiera.select_from_cursor"
         const val ACTION_SELECT_FROM_CURSOR = "select_from_cursor"
         const val ACTION_TOGGLE_PRIVATE_MODE = "toggle_private_mode"
+        const val COMMAND_TOGGLE_EXTRA_KEYS = "pastiera.toggle_extra_keys"
+        const val ACTION_TOGGLE_EXTRA_KEYS = "toggle_extra_keys"
     }
 }

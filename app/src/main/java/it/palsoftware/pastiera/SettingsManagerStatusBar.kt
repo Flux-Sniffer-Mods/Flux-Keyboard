@@ -71,11 +71,8 @@ fun SettingsManager.resetStatusBarSlotsToDefault(context: Context): StatusBarSlo
     return defaults
 }
 
-fun SettingsManager.defaultMenuBarButtons(context: Context): List<String> =
-    MENU_BAR_BUTTON_OPTIONS.filter { button ->
-        button !in MENU_BAR_OFF_BY_DEFAULT &&
-            !(button == STATUS_BAR_BUTTON_LANGUAGE && hasSingleInputLanguage(context))
-    }
+@Suppress("UNUSED_PARAMETER")
+fun SettingsManager.defaultMenuBarButtons(context: Context): List<String> = MENU_BAR_DEFAULT
 
 /** Whether only one input language is on for this keyboard (false when it can't tell). */
 fun SettingsManager.hasSingleInputLanguage(context: Context): Boolean = runCatching {
@@ -387,6 +384,7 @@ fun SettingsManager.getAvailableStatusBarButtons(): List<String> {
         STATUS_BAR_BUTTON_SETTINGS,
         STATUS_BAR_BUTTON_SYMBOLS,
         STATUS_BAR_BUTTON_UNDO,
-        STATUS_BAR_BUTTON_REDO
+        STATUS_BAR_BUTTON_REDO,
+        STATUS_BAR_BUTTON_EXTRA_KEYS
     )
 }

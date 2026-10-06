@@ -55,6 +55,7 @@ class StatusBarButtonRegistry {
     private val symbolsFactory = SymbolsButtonFactory()
     private val undoFactory = UndoButtonFactory(isRedo = false)
     private val redoFactory = UndoButtonFactory(isRedo = true)
+    private val extraKeysFactory = it.palsoftware.pastiera.inputmethod.statusbar.button.ExtraKeysButtonFactory()
     
     init {
         // Register built-in button factories
@@ -70,6 +71,7 @@ class StatusBarButtonRegistry {
         factories[StatusBarButtonId.Symbols] = symbolsFactory
         factories[StatusBarButtonId.Undo] = undoFactory
         factories[StatusBarButtonId.Redo] = redoFactory
+        factories[StatusBarButtonId.ExtraKeys] = extraKeysFactory
     }
     
     /**
@@ -232,6 +234,7 @@ class StatusBarButtonRegistry {
             SettingsManager.STATUS_BAR_BUTTON_SYMBOLS -> StatusBarButtonId.Symbols
             SettingsManager.STATUS_BAR_BUTTON_UNDO -> StatusBarButtonId.Undo
             SettingsManager.STATUS_BAR_BUTTON_REDO -> StatusBarButtonId.Redo
+            SettingsManager.STATUS_BAR_BUTTON_EXTRA_KEYS -> StatusBarButtonId.ExtraKeys
             SettingsManager.STATUS_BAR_BUTTON_NONE -> null
             else -> null
         }

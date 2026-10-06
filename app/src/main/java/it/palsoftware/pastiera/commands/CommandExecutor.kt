@@ -161,6 +161,9 @@ class CommandExecutor(
                 controller.startSelectingFromCursor()
                 CommandExecutionResult.Success
             }
+            PastieraCommandSource.ACTION_TOGGLE_EXTRA_KEYS ->
+                if (it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysToggle.toggle()) CommandExecutionResult.Success
+                else fail("The keyboard isn't running")
             PastieraCommandSource.ACTION_TOGGLE_PRIVATE_MODE -> {
                 it.palsoftware.pastiera.core.PrivateMode.toggle(context)
                 CommandExecutionResult.Success

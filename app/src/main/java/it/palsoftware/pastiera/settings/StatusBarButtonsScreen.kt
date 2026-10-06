@@ -761,6 +761,7 @@ private fun getButtonDisplayName(buttonId: String): String {
         SettingsManager.STATUS_BAR_BUTTON_SYMBOLS -> stringResource(R.string.status_bar_button_symbols)
         SettingsManager.STATUS_BAR_BUTTON_UNDO -> stringResource(R.string.status_bar_button_undo)
         SettingsManager.STATUS_BAR_BUTTON_REDO -> stringResource(R.string.status_bar_button_redo)
+        SettingsManager.STATUS_BAR_BUTTON_EXTRA_KEYS -> stringResource(R.string.extra_keys_title)
         else -> buttonId
     }
 }
@@ -781,6 +782,7 @@ private fun getButtonDescription(buttonId: String): String {
         SettingsManager.STATUS_BAR_BUTTON_SYMBOLS -> stringResource(R.string.status_bar_button_symbols_description)
         SettingsManager.STATUS_BAR_BUTTON_UNDO -> stringResource(R.string.status_bar_button_undo_description)
         SettingsManager.STATUS_BAR_BUTTON_REDO -> stringResource(R.string.status_bar_button_redo_description)
+        SettingsManager.STATUS_BAR_BUTTON_EXTRA_KEYS -> stringResource(R.string.extra_keys_button_description)
         else -> ""
     }
 }
@@ -803,6 +805,7 @@ private fun getButtonIconRes(buttonId: String): Int {
         SettingsManager.STATUS_BAR_BUTTON_SYMBOLS -> R.drawable.ic_emoji_symbols_24
         SettingsManager.STATUS_BAR_BUTTON_UNDO -> R.drawable.ic_undo_24
         SettingsManager.STATUS_BAR_BUTTON_REDO -> R.drawable.ic_redo_24
+        SettingsManager.STATUS_BAR_BUTTON_EXTRA_KEYS -> R.drawable.modifier_keys_24
         else -> R.drawable.ic_settings_24 // Fallback
     }
 }

@@ -414,6 +414,8 @@ internal object BackupPreferenceContract {
             "pastierina_status_bar_slots_left" to PreferenceValueType.STRING,
             "pastierina_status_bar_slots_right" to PreferenceValueType.STRING,
             "status_bar_variations_visible" to PreferenceValueType.BOOLEAN,
+            "extra_keys_terminal" to PreferenceValueType.STRING,
+            "extra_keys_text" to PreferenceValueType.STRING,
             "dynamic_variation_bar_slot_count" to PreferenceValueType.INT,
             "dynamic_variation_bar_resize_to_content" to PreferenceValueType.BOOLEAN,
             "launcher_shortcuts" to PreferenceValueType.STRING,

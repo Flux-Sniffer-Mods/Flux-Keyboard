@@ -529,6 +529,7 @@ private fun terminalEmojiKeyLabel(action: it.palsoftware.pastiera.inputmethod.Te
     stringResource(
         when (action) {
             it.palsoftware.pastiera.inputmethod.TerminalMode.EmojiKeyAction.EmojiPicker -> R.string.terminal_emoji_key_picker
+            it.palsoftware.pastiera.inputmethod.TerminalMode.EmojiKeyAction.ExtraKeys -> R.string.extra_keys_title
             it.palsoftware.pastiera.inputmethod.TerminalMode.EmojiKeyAction.Escape -> R.string.terminal_emoji_key_esc
             it.palsoftware.pastiera.inputmethod.TerminalMode.EmojiKeyAction.Tab -> R.string.terminal_emoji_key_tab
             it.palsoftware.pastiera.inputmethod.TerminalMode.EmojiKeyAction.PreviousCommand -> R.string.terminal_emoji_key_up

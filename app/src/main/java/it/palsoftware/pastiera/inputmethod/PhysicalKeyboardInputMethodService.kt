@@ -33,6 +33,11 @@ import androidx.core.content.ContextCompat
 import android.view.InputDevice
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
+import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey
+import it.palsoftware.pastiera.getExtraKeysTerminal
+import it.palsoftware.pastiera.getExtraKeysText
+import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets
+import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysRow
 import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
@@ -2577,6 +2582,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             isHiddenForApp = { hiddenAppSurfaceBlocked() }
         )
         keyboardVisibilityController.onMinimalModeToggled = ::onMinimalModeToggled
+        candidatesBarController.onExtraKeysRequested = { toggleExtraKeys() }
+        it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysToggle.handler = { uiHandler.post { toggleExtraKeys() } }
         inputManager = getSystemService(InputManager::class.java)
         InputDevice.getDeviceIds().forEach { deviceId ->
             InputDevice.getDevice(deviceId)
@@ -3354,6 +3361,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
     
     override fun onDestroy() {
+        it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysToggle.handler = null
         it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = null
         it.palsoftware.pastiera.spellcheck.PastieraSpellCheckerService.keyboardController = null
         gifScope.cancel()
@@ -3601,7 +3609,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
      * the SYM layers are typed blind there. Minimal mode: every SYM and emoji page.
      */
     private fun outOfSightPanelOpen(): Boolean =
-        if (minimalModeActive) symPage > 0 else symPage == 3 || symPage == 4
+        extraKeysOpen || if (minimalModeActive) symPage > 0 else symPage == 3 || symPage == 4
 
     private var keyboardOutOfSight = false
     private var outOfSightShowsLeds = false
@@ -4347,6 +4355,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         SettingsManager.adoptShizukuTrackpadIfUnchosen(this)
         updateOutOfSight(info?.packageName)
         outOfSightSurfaceShown = false
+        if (extraKeysOpen) {
+            if (info?.packageName != extraKeysPackage) setExtraKeysOpen(false) else uiHandler.post { renderExtraKeys() }
+        }
         terminalCtrlKeysDown.clear()
         terminalCtrlSent.clear()
         terminalRawKeysDown.clear()
@@ -5483,12 +5494,118 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (emojiKey == KeyEvent.KEYCODE_UNKNOWN || keyCode != emojiKey) return false
         val action = TerminalMode.EmojiKeyAction.byId(SettingsManager.getTerminalModeEmojiKeyAction(this))
         if (action == TerminalMode.EmojiKeyAction.EmojiPicker) return false
+        if (action == TerminalMode.EmojiKeyAction.ExtraKeys) {
+            if (event.repeatCount == 0) {
+                terminalEmojiKeysDown[pressedKeyCode] = action
+                toggleExtraKeys()
+            }
+            return true
+        }
         if (event.repeatCount > 0) {
             if (action.repeats) sendTerminalActionKey(action, KeyEvent.ACTION_DOWN, event.repeatCount)
             return true
         }
         terminalEmojiKeysDown[pressedKeyCode] = action
         sendTerminalActionKey(action, KeyEvent.ACTION_DOWN, 0)
+        return true
+    }
+
+    // The extra keys row: Esc, Tab, arrows and the like in the bar's place (terminals: their own set)
+    private var extraKeysOpen = false
+    private var extraKeysPackage: String? = null
+    private var extraKeysShown: List<ExtraKey> = emptyList()
+    private val extraKeysLatched = mutableSetOf<ExtraKey>()
+    // Physical keys pressed while the row was open, whose release is the row's too
+    private val extraKeysKeysDown = mutableSetOf<Int>()
+
+    private fun toggleExtraKeys() = setExtraKeysOpen(!extraKeysOpen)
+
+    private fun setExtraKeysOpen(open: Boolean) {
+        if (open && currentInputConnection == null) return
+        extraKeysOpen = open
+        extraKeysPackage = if (open) currentInputEditorInfo?.packageName else null
+        if (!open) extraKeysLatched.clear()
+        renderExtraKeys()
+        if (keyboardOutOfSight) syncHiddenAppPanel()
+        updateStatusBarText()
+    }
+
+    private fun renderExtraKeys() {
+        if (!::candidatesBarController.isInitialized) return
+        if (!extraKeysOpen) {
+            extraKeysShown = emptyList()
+            candidatesBarController.setExtraKeys(null)
+            return
+        }
+        extraKeysShown = if (terminalModeActive) SettingsManager.getExtraKeysTerminal(this) else SettingsManager.getExtraKeysText(this)
+        candidatesBarController.setExtraKeys(
+            ExtraKeysRow(extraKeysShown, extraKeysLatched.toSet(), ::pressExtraKey) { setExtraKeysOpen(false) }
+        )
+    }
+
+    private fun extraKeysMeta(): Int {
+        var meta = 0
+        if (ExtraKey.CTRL in extraKeysLatched) meta = meta or KeyEvent.META_CTRL_ON or KeyEvent.META_CTRL_LEFT_ON
+        if (ExtraKey.ALT in extraKeysLatched) meta = meta or KeyEvent.META_ALT_ON or KeyEvent.META_ALT_LEFT_ON
+        return meta
+    }
+
+    /** A key on the row, tapped or pressed through its top-row letter. */
+    private fun pressExtraKey(key: ExtraKey) {
+        val ic = currentInputConnection ?: return
+        if (key.isModifier) {
+            if (!extraKeysLatched.remove(key)) extraKeysLatched += key
+            renderExtraKeys()
+            return
+        }
+        when {
+            key.editAction != 0 -> ic.performContextMenuAction(key.editAction)
+            key.text != null -> ic.commitText(key.text, 1)
+            else -> sendExtraKeyEvent(ic, key.keyCode, extraKeysMeta())
+        }
+        if (extraKeysLatched.isNotEmpty()) {
+            extraKeysLatched.clear()
+            renderExtraKeys()
+        }
+    }
+
+    private fun sendExtraKeyEvent(ic: android.view.inputmethod.InputConnection, keyCode: Int, meta: Int) {
+        val now = SystemClock.uptimeMillis()
+        val flags = KeyEvent.FLAG_SOFT_KEYBOARD or KeyEvent.FLAG_KEEP_TOUCH_MODE
+        ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0, meta, KeyCharacterMap.VIRTUAL_KEYBOARD, 0, flags))
+        ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0, meta, KeyCharacterMap.VIRTUAL_KEYBOARD, 0, flags))
+    }
+
+    /**
+     * While the row is open, the top row of letters presses its keys (Q the first, P the tenth).
+     * With the row's Ctrl or Alt latched, the next key is that key with the modifier instead, so
+     * Ctrl then C is Ctrl+C even where C has a place on the row.
+     */
+    private fun extraKeysPhysicalKey(pressedKeyCode: Int, keyCode: Int, event: KeyEvent?): Boolean {
+        if (!extraKeysOpen || event == null || event.action != KeyEvent.ACTION_DOWN) return false
+        if (KeyEvent.isModifierKey(pressedKeyCode) || pressedKeyCode == KeyEvent.KEYCODE_BACK ||
+            pressedKeyCode == KEYCODE_SYM
+        ) return false
+        val ic = currentInputConnection ?: return false
+        if (event.repeatCount > 0) {
+            if (pressedKeyCode !in extraKeysKeysDown) return false
+            // Arrows and Delete repeat while held; the rest press once
+            val key = extraKeysShown.getOrNull(ExtraKeySets.indexForPhysicalKey(pressedKeyCode))
+            if (key != null && key.keyCode != KeyEvent.KEYCODE_UNKNOWN && !key.isModifier && extraKeysLatched.isEmpty()) {
+                sendExtraKeyEvent(ic, key.keyCode, 0)
+            }
+            return true
+        }
+        if (extraKeysLatched.isNotEmpty()) {
+            sendExtraKeyEvent(ic, keyCode, extraKeysMeta() or (event.metaState and KeyEvent.META_SHIFT_MASK))
+            extraKeysLatched.clear()
+            renderExtraKeys()
+            extraKeysKeysDown += pressedKeyCode
+            return true
+        }
+        val key = extraKeysShown.getOrNull(ExtraKeySets.indexForPhysicalKey(pressedKeyCode)) ?: return false
+        pressExtraKey(key)
+        extraKeysKeysDown += pressedKeyCode
         return true
     }
 
@@ -5821,6 +5938,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             return true
         }
 
+        if (extraKeysPhysicalKey(keyCode_, keyCode, event)) {
+            return true
+        }
         if (terminalModeActive && sendTerminalEmojiKeyAction(keyCode_, keyCode, event)) {
             return true
         }
@@ -6121,6 +6241,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
         // If any SYM page or clipboard overlay is open, close on BACK and consume
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (extraKeysOpen) {
+                setExtraKeysOpen(false)
+                return true
+            }
             if (candidatesBarController.handleBackPressed()) {
                 return true
             }
@@ -6681,11 +6805,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun handleKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
         // The release of a key sent to the app as its own shortcut, or to a terminal with Ctrl
         if (appShortcutKeysDown.remove(keyCode_)) return true
+        if (extraKeysKeysDown.remove(keyCode_)) return true
         if (terminalRawKeysDown.remove(keyCode_)) return super.onKeyUp(keyCode_, event_)
         // Nav Mode in a terminal sends each key whole on its press
         if (terminalNavModeKey(keyCode_, event_, down = false)) return true
         terminalEmojiKeysDown.remove(keyCode_)?.let { action ->
-            sendTerminalActionKey(action, KeyEvent.ACTION_UP, 0)
+            if (action != TerminalMode.EmojiKeyAction.ExtraKeys) sendTerminalActionKey(action, KeyEvent.ACTION_UP, 0)
             return true
         }
         if (terminalCtrlKeysDown.remove(keyCode_)) {

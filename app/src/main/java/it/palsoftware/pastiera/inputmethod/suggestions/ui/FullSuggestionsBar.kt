@@ -68,6 +68,7 @@ class FullSuggestionsBar(
     private var centerAccessoryActive = false
     private var modifierIndicatorsContainer: LinearLayout? = null
     private var hamburgerMenuView: HamburgerMenuView? = null
+    private var extraKeysView: it.palsoftware.pastiera.inputmethod.ui.ExtraKeysView? = null
     private var modifierIndicatorView: ModifierIndicatorView? = null
     private var lastMinimalUiActive: Boolean? = null
     private var lastSlots: List<String?> = emptyList()
@@ -92,6 +93,7 @@ class FullSuggestionsBar(
             }
             field = value
             hamburgerMenuView?.themeOverride = value
+            extraKeysView?.themeOverride = value
             modifierIndicatorView?.themeOverride = value
             buttonHost?.themeOverride = value?.let {
                 StatusBarButtonStyles.ThemeOverride(
@@ -220,6 +222,7 @@ class FullSuggestionsBar(
                 }
                 hamburgerMenuView?.attachTo(frame)
                 lastMinimalUiActive?.let { hamburgerMenuView?.setMinimalUiActive(it) }
+                extraKeysView?.attachTo(frame)
             }
             // Ensure the outer layout (when attached to parent LinearLayout) keeps the target height
             frameContainer?.layoutParams = (frameContainer?.layoutParams as? LinearLayout.LayoutParams)
@@ -350,6 +353,22 @@ class FullSuggestionsBar(
         modifierIndicatorsContainer?.visibility = if (visible) View.VISIBLE else View.GONE
         applyContainerInsetsForMinimalButtons()
         frameContainer?.requestLayout()
+    }
+
+    /** The extra keys row in the bar's place, or null to put the bar back. */
+    fun setExtraKeys(row: it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysRow?) {
+        if (row == null) {
+            extraKeysView?.hide()
+            return
+        }
+        val frame = frameContainer ?: return
+        val view = extraKeysView ?: it.palsoftware.pastiera.inputmethod.ui.ExtraKeysView(context).also {
+            it.themeOverride = themeOverride
+            extraKeysView = it
+        }
+        hamburgerMenuView?.hide()
+        view.attachTo(frame)
+        view.show(row)
     }
 
     fun isHamburgerMenuVisible(): Boolean = hamburgerMenuView?.isVisible() == true

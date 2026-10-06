@@ -193,6 +193,10 @@
     <string name="terminal_mode_emoji_key_title">Emoji key</string>
     <string name="terminal_mode_emoji_key_description">What your emoji key does in terminals</string>
     <string name="terminal_emoji_key_picker">Emoji picker (as elsewhere)</string>
+    <string name="extra_keys_title">Extra keys</string>
+    <string name="extra_keys_button_description">Extra keys: Esc, Tab, Ctrl, Alt and arrows in the bar\'s place</string>
+    <string name="extra_keys_command_subtitle">Show or hide the extra keys row</string>
+    <string name="extra_keys_close">Close the extra keys</string>
     <string name="terminal_emoji_key_esc">Esc</string>
     <string name="terminal_emoji_key_tab">Tab (complete)</string>
     <string name="terminal_emoji_key_up">↑ Previous command (repeats while held)</string>

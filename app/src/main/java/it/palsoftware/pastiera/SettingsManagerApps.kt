@@ -85,9 +85,33 @@ fun SettingsManager.setTerminalModeShowLeds(context: Context, enabled: Boolean) 
     getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_SHOW_LEDS, enabled).apply()
 }
 
-/** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id (the previous command until chosen). */
+/** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id (the extra keys row until chosen). */
 fun SettingsManager.getTerminalModeEmojiKeyAction(context: Context): String =
-    getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "up") ?: "up"
+    getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "extra_keys") ?: "extra_keys"
+
+/** The extra keys row's keys in terminal apps. */
+fun SettingsManager.getExtraKeysTerminal(context: Context): List<it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey> =
+    it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets.parse(
+        getPreferences(context).getString(KEY_EXTRA_KEYS_TERMINAL, null),
+        it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets.TERMINAL
+    )
+
+fun SettingsManager.setExtraKeysTerminal(context: Context, keys: List<it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey>) {
+    getPreferences(context).edit()
+        .putString(KEY_EXTRA_KEYS_TERMINAL, it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets.serialize(keys)).apply()
+}
+
+/** The extra keys row's keys everywhere else. */
+fun SettingsManager.getExtraKeysText(context: Context): List<it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey> =
+    it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets.parse(
+        getPreferences(context).getString(KEY_EXTRA_KEYS_TEXT, null),
+        it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets.TEXT
+    )
+
+fun SettingsManager.setExtraKeysText(context: Context, keys: List<it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey>) {
+    getPreferences(context).edit()
+        .putString(KEY_EXTRA_KEYS_TEXT, it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets.serialize(keys)).apply()
+}
 
 fun SettingsManager.setTerminalModeEmojiKeyAction(context: Context, id: String) {
     getPreferences(context).edit().putString(KEY_TERMINAL_MODE_EMOJI_KEY, id).apply()
