@@ -1338,7 +1338,7 @@ fun TutorialWhatsNewPageContent(
 
         OutlinedButton(
             onClick = {
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(page.summary.docsUrl)))
+                runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(page.summary.docsUrl))) }
             },
             modifier = Modifier.fillMaxWidth()
         ) {

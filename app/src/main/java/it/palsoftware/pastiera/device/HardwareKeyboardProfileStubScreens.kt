@@ -1416,7 +1416,7 @@ private fun openClicksFirmwareUpdates(context: android.content.Context) {
         Intent.ACTION_VIEW,
         Uri.parse(CLICKS_COMPANION_PLAY_STORE_URL)
     ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    context.startActivity(intent)
+    runCatching { context.startActivity(intent) }
 }
 
 private const val CLICKS_COMPANION_PACKAGE = "com.clicks.companionapp"

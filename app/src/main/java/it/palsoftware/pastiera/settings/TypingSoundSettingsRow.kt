@@ -342,7 +342,7 @@ fun TypingSoundSettingsRow() {
                     Intent.ACTION_VIEW,
                     Uri.parse(context.getString(R.string.typing_sound_docs_url))
                 )
-                context.startActivity(intent)
+                runCatching { context.startActivity(intent) }
             }
     ) {
         Row(

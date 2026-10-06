@@ -314,7 +314,8 @@ private fun showPastieraStableUpdateDialog(
 private fun openUrl(context: Context, url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    context.startActivity(intent)
+    // No browser (or none enabled) to open it in
+    runCatching { context.startActivity(intent) }
 }
 
 internal fun showReleaseNotice(context: Context, result: UpdateCheckResult) {
