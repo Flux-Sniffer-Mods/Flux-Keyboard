@@ -162,6 +162,7 @@ object SettingsManager {
     internal const val KEY_EXACT_TYPING_NO_SUGGESTIONS = "exact_typing_no_suggestions" // Honour the app's no-suggestions flag
     internal const val KEY_TERMINAL_MODE_HIDE_KEYBOARD = "terminal_mode_hide_keyboard"
     internal const val KEY_TERMINAL_MODE_EMOJI_KEY = "terminal_mode_emoji_key"
+    internal const val KEY_TERMINAL_MODE_SWIPE_CURSOR = "terminal_mode_swipe_cursor" // Keyboard swipes move the terminal's cursor
     internal const val KEY_MINIMAL_MODE = "minimal_mode" // No keyboard bar in any app; the keys work as usual
     internal const val KEY_MINIMAL_MODE_SHOW_LEDS = "minimal_mode_show_leds"
     const val TERMUX_PACKAGE = "com.termux"

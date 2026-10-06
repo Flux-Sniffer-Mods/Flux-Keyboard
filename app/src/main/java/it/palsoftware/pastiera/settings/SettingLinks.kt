@@ -122,6 +122,7 @@ object SettingLinkIds {
     const val LOOK_MINIMAL_MODE = "look.minimal_mode"
     const val LOOK_MINIMAL_MODE_LEDS = "look.minimal_mode_leds"
     const val TERMINAL_MODE_EMOJI_KEY = "terminal_mode.emoji_key"
+    const val TERMINAL_MODE_SWIPE_CURSOR = "terminal_mode.swipe_cursor"
     const val EMOJI_PROFILES_SWITCH_BY_APP = "emoji_profiles.switch_by_app"
     const val EMOJI_PROFILES_SAVE_CURRENT = "emoji_profiles.save_current"
     const val LED_INDIVIDUAL_COLORS = "led_colors.individual"

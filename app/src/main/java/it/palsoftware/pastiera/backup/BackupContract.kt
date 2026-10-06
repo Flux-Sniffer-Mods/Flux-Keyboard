@@ -383,6 +383,7 @@ internal object BackupPreferenceContract {
             "terminal_mode_enabled" to PreferenceValueType.BOOLEAN,
             "terminal_mode_apps" to PreferenceValueType.STRING,
             "terminal_mode_show_leds" to PreferenceValueType.BOOLEAN,
+            "terminal_mode_swipe_cursor" to PreferenceValueType.BOOLEAN,
             "minimal_mode" to PreferenceValueType.BOOLEAN,
             "minimal_mode_show_leds" to PreferenceValueType.BOOLEAN,
             "trackpad_capture_while_typing" to PreferenceValueType.BOOLEAN,

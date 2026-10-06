@@ -69,6 +69,14 @@ fun SettingsManager.setMinimalModeShowLeds(context: Context, enabled: Boolean) {
     getPreferences(context).edit().putBoolean(KEY_MINIMAL_MODE_SHOW_LEDS, enabled).apply()
 }
 
+/** In a terminal, swipes on the keys move its cursor (left, right) and recall commands (up, down). On until changed. */
+fun SettingsManager.getTerminalModeSwipeCursor(context: Context): Boolean =
+    getPreferences(context).getBoolean(KEY_TERMINAL_MODE_SWIPE_CURSOR, true)
+
+fun SettingsManager.setTerminalModeSwipeCursor(context: Context, enabled: Boolean) {
+    getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_SWIPE_CURSOR, enabled).apply()
+}
+
 /** With the keyboard hidden in terminals, its status LEDs still show (on until changed). */
 fun SettingsManager.getTerminalModeShowLeds(context: Context): Boolean =
     getPreferences(context).getBoolean(KEY_TERMINAL_MODE_SHOW_LEDS, true)

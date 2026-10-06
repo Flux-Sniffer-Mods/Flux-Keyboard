@@ -62,6 +62,8 @@ import it.palsoftware.pastiera.getMinimalMode
 import it.palsoftware.pastiera.getMinimalModeShowLeds
 import it.palsoftware.pastiera.setMinimalMode
 import it.palsoftware.pastiera.setMinimalModeShowLeds
+import it.palsoftware.pastiera.getTerminalModeSwipeCursor
+import it.palsoftware.pastiera.setTerminalModeSwipeCursor
 import it.palsoftware.pastiera.TrackpadDebugActivity
 import it.palsoftware.pastiera.TutorialActivity
 import it.palsoftware.pastiera.apps.AppListHelper
@@ -612,6 +614,17 @@ fun TerminalModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     }
                 )
             }
+            var swipeCursor by remember { mutableStateOf(SettingsManager.getTerminalModeSwipeCursor(context)) }
+            FluxSwitchRow(
+                linkId = SettingLinkIds.TERMINAL_MODE_SWIPE_CURSOR,
+                title = stringResource(R.string.terminal_mode_swipe_cursor_title),
+                description = stringResource(R.string.terminal_mode_swipe_cursor_description),
+                checked = swipeCursor,
+                onCheckedChange = {
+                    swipeCursor = it
+                    SettingsManager.setTerminalModeSwipeCursor(context, it)
+                }
+            )
             FluxActionRow(
                 linkId = SettingLinkIds.TERMINAL_MODE_EMOJI_KEY,
                 title = stringResource(R.string.terminal_mode_emoji_key_title),

@@ -180,6 +180,8 @@
     <string name="minimal_mode_description">No keyboard bar in any app. The keys work as usual (Alt layer, SYM, Ctrl shortcuts, corrections), and the emoji and symbols pages still open on their keys.</string>
     <string name="minimal_mode_show_leds_title">Show the LEDs</string>
     <string name="minimal_mode_show_leds_description">The status LEDs still show where they usually are, drawn over the app, so you can see Shift, Alt, Ctrl and SYM.</string>
+    <string name="terminal_mode_swipe_cursor_title">Swipes move the cursor</string>
+    <string name="terminal_mode_swipe_cursor_description">Swipe across the keys to move the terminal\'s cursor a character at a time; swipe up or down for the commands before and after (the arrow keys). Nav Mode (double-tap Ctrl) works in terminals too: its keys move the cursor there.</string>
     <string name="terminal_mode_show_leds_title">Show the LEDs</string>
     <string name="terminal_mode_show_leds_description">With the keyboard hidden, its status LEDs still show where they usually are, so you can see Shift, Alt, Ctrl and SYM.</string>
     <string name="terminal_mode_hide_keyboard_title">Hide the keyboard</string>

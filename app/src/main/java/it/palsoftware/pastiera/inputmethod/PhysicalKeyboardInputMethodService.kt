@@ -166,6 +166,8 @@ import it.palsoftware.pastiera.getMaxAutoReplaceDistance
 import it.palsoftware.pastiera.getModifierIndicatorShowsMenuBar
 import it.palsoftware.pastiera.getModifierIndicators
 import it.palsoftware.pastiera.getNavModeCtrlHoldEnabled
+import it.palsoftware.pastiera.getNavModeEnabled
+import it.palsoftware.pastiera.getTerminalModeSwipeCursor
 import it.palsoftware.pastiera.getOverlappingKeysEnabled
 import it.palsoftware.pastiera.getPastierinaModeActive
 import it.palsoftware.pastiera.getPhysicalKeyboardProfileOverride
@@ -238,6 +240,9 @@ import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibilityKeyBridge.Target {
 
     companion object {
+        /** A terminal swipe: a character per half a key's width, a line per key's height or so. */
+        private const val TERMINAL_SWIPE_CHARACTER_KEYS = 0.5f
+        private const val TERMINAL_SWIPE_LINE_KEYS = 1.2f
         /** Root page: read the keyboard's touch pad as root (and pause the scroll module while typing) */
         private const val PASTE_SUGGESTION_WINDOW_MS = 60_000L
         private const val TAG = "PastieraInputMethod"
@@ -3226,6 +3231,69 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     /** A swipe that started while typing; one that started elsewhere is the app's (a scroll). */
     private var shizukuTrackpadTouchDownAt = 0L
+    private var shizukuTerminalSwipe = false
+
+    /** Swipes on the keys move a terminal's cursor (Terminal mode > Swipes move the cursor). */
+    private fun terminalSwipesMoveCursor(): Boolean =
+        terminalModeActive && currentInputConnection != null && !keyboardHiddenForApp && symPage == 0 &&
+            SettingsManager.getTerminalModeSwipeCursor(this)
+
+    private var terminalSwipeLastX = 0f
+    private var terminalSwipeLastY = 0f
+    /** The swipe's direction once it's clear: 0 not yet, 1 across (cursor), 2 up or down (history). */
+    private var terminalSwipeAxis = 0
+    private var terminalSwipeActive = false
+
+    /**
+     * A swipe on the keys in a terminal: across, the cursor moves a character for each half a
+     * key's width; up or down, an arrow key for each key's height or so (the shell's history).
+     * Each swipe keeps to the direction it starts in.
+     */
+    private fun terminalCursorSwipe(action: Int, x: Float, y: Float, xRange: TrackpadAxisRange) {
+        val keyWidth = (xRange.span / TrackpadCoordinateMapper.KEYS_ACROSS).coerceAtLeast(1f)
+        val stepX = keyWidth * TERMINAL_SWIPE_CHARACTER_KEYS
+        val stepY = keyWidth * TERMINAL_SWIPE_LINE_KEYS
+        when (action) {
+            MotionEvent.ACTION_DOWN -> {
+                terminalSwipeLastX = x
+                terminalSwipeLastY = y
+                terminalSwipeAxis = 0
+                terminalSwipeActive = true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (!terminalSwipeActive) return
+                val dx = x - terminalSwipeLastX
+                val dy = y - terminalSwipeLastY
+                if (terminalSwipeAxis == 0) {
+                    if (kotlin.math.abs(dx) < stepX * 0.6f && kotlin.math.abs(dy) < stepY * 0.6f) return
+                    terminalSwipeAxis = if (kotlin.math.abs(dx) >= kotlin.math.abs(dy)) 1 else 2
+                }
+                if (terminalSwipeAxis == 1) {
+                    val steps = (dx / stepX).toInt()
+                    repeat(kotlin.math.abs(steps)) {
+                        sendTerminalKey(if (steps > 0) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT)
+                    }
+                    terminalSwipeLastX += steps * stepX
+                } else {
+                    val steps = (dy / stepY).toInt()
+                    repeat(kotlin.math.abs(steps)) {
+                        sendTerminalKey(if (steps > 0) KeyEvent.KEYCODE_DPAD_DOWN else KeyEvent.KEYCODE_DPAD_UP)
+                    }
+                    terminalSwipeLastY += steps * stepY
+                }
+            }
+            else -> terminalSwipeActive = false
+        }
+    }
+
+    /** One key, pressed and released, sent to the terminal. */
+    private fun sendTerminalKey(keyCode: Int) {
+        val ic = currentInputConnection ?: return
+        val now = SystemClock.uptimeMillis()
+        val flags = KeyEvent.FLAG_SOFT_KEYBOARD or KeyEvent.FLAG_KEEP_TOUCH_MODE
+        ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0, flags))
+        ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0, flags))
+    }
 
     /**
      * A touch on the keys, read through Shizuku: handled as Android's own keyboard swipes are,
@@ -3238,6 +3306,21 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         xRange: TrackpadAxisRange
     ) {
         val now = android.os.SystemClock.uptimeMillis()
+        // In a terminal, swipes move its cursor instead
+        if (phase == TrackpadGestureDetector.TouchPhase.DOWN) {
+            shizukuTerminalSwipe = terminalSwipesMoveCursor()
+        }
+        if (shizukuTerminalSwipe) {
+            terminalCursorSwipe(
+                when (phase) {
+                    TrackpadGestureDetector.TouchPhase.DOWN -> MotionEvent.ACTION_DOWN
+                    TrackpadGestureDetector.TouchPhase.MOVE -> MotionEvent.ACTION_MOVE
+                    TrackpadGestureDetector.TouchPhase.UP -> MotionEvent.ACTION_UP
+                },
+                x, y, xRange
+            )
+            return
+        }
         val action = when (phase) {
             TrackpadGestureDetector.TouchPhase.DOWN -> {
                 val typing = isInputViewActive && inputContextState.isEditable && !terminalModeActive && !keyboardHiddenForApp
@@ -4343,7 +4426,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 val inputConnection = currentInputConnection
                 val hasValidInputConnection = inputConnection != null
 
-                if (isReallyEditable && hasValidInputConnection) {
+                // A terminal keeps Nav Mode: its keys move the terminal's cursor
+                if (terminalModeActive) {
+                    // Nothing to reset
+                } else if (isReallyEditable && hasValidInputConnection) {
                     // Remember that nav mode was on before entering the text field
                     navModeWasActiveBeforeEditableField = true
                     navModeController.exitNavMode()
@@ -5269,6 +5355,34 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     // Pressed key -> (key sent, meta state sent)
     private val terminalCtrlSent = mutableMapOf<Int, Pair<Int, Int>>()
 
+    // Keys handled by Nav Mode in a terminal: their release goes the same way
+    private val terminalNavKeysDown = mutableSetOf<Int>()
+
+    /**
+     * Nav Mode in a terminal: a double-tapped (locked) Ctrl turns it on there as outside text
+     * fields, and its keys (arrows, Home, End, Page Up and Down...) reach the terminal as those
+     * keys, moving its cursor; a tap on Ctrl turns it off. A held or tapped Ctrl still sends real
+     * Ctrl combos (Ctrl+C).
+     */
+    private fun terminalNavModeKey(pressedKeyCode: Int, event: KeyEvent?, down: Boolean): Boolean {
+        if (!down) return terminalNavKeysDown.remove(pressedKeyCode)
+        if (event == null || event.action != KeyEvent.ACTION_DOWN) return false
+        if (ctrlLatchActive && !ctrlLatchFromNavMode && SettingsManager.getNavModeEnabled(this)) {
+            navModeController.enterNavMode()
+        }
+        if (!navModeController.isNavModeActive()) return false
+        val keyCode = event.keyCode
+        if (KeyEvent.isModifierKey(keyCode) || keyCode == KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_BACK || symPage != 0) {
+            return false
+        }
+        if (event.repeatCount > 0 && pressedKeyCode !in terminalNavKeysDown) return false
+        val handled = navModeController.handleNavModeKey(keyCode, event, isKeyDown = true, ctrlKeyMap = ctrlKeyMap) {
+            currentInputConnection
+        }
+        if (handled) terminalNavKeysDown += pressedKeyCode
+        return handled
+    }
+
     /**
      * In a terminal, any Ctrl (held, tapped or latched; not Nav Mode's) sends the key as a real
      * Ctrl combo, with Alt and Shift if they are held too, so Ctrl+C, Ctrl+D and the rest reach
@@ -5706,6 +5820,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (::clipboardHistoryManager.isInitialized) clipboardHistoryManager.consumeRecentCopy()
         }
         if (remapAppShortcut(keyCode_, event, hasEditableField)) {
+            return true
+        }
+        if (terminalModeActive && terminalNavModeKey(keyCode_, event, down = true)) {
             return true
         }
         if (terminalModeActive && sendTerminalCtrlCombo(keyCode_, event)) {
@@ -6543,6 +6660,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // The release of a key sent to the app as its own shortcut, or to a terminal with Ctrl
         if (appShortcutKeysDown.remove(keyCode_)) return true
         if (terminalRawKeysDown.remove(keyCode_)) return super.onKeyUp(keyCode_, event_)
+        // Nav Mode in a terminal sends each key whole on its press
+        if (terminalNavModeKey(keyCode_, event_, down = false)) return true
         terminalEmojiKeysDown.remove(keyCode_)?.let { action ->
             sendTerminalActionKey(action, KeyEvent.ACTION_UP, 0)
             return true
@@ -6909,6 +7028,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             TRACKPAD_DEBUG_TAG,
             "NativeMotion[$origin]: action=${motionActionName(event.actionMasked)} source=${event.source}(0x${event.source.toString(16)}) deviceId=${event.deviceId} device='$deviceName' x=${event.x} y=${event.y}"
         )
+        // In a terminal, swipes move its cursor instead
+        if (terminalSwipesMoveCursor()) {
+            terminalCursorSwipe(event.actionMasked, event.x, event.y, nativeImeTrackpadAxisRange(event, MotionEvent.AXIS_X))
+            return true
+        }
         return processTrackpadMotion(event, origin, xRangeOverride = null)
     }
 
