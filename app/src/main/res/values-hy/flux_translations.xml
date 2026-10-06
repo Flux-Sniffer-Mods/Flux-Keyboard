@@ -1683,4 +1683,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Ներբեռնել Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Ներբեռնել Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Պատճենել Termux կարգավորումը</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt և սլաքներ վահանակի տեղում՝ ընտրացանկից, դյուրանցմամբ կամ տերմինալներում էմոջիի ստեղնով։ Քանի դեռ շարքը բաց է, Q-ից P ստեղները սեղմում են դրա ստեղները՝ ձախից աջ։ Տերմինալներն ու այլ հավելվածներն ունեն իրենց հավաքածուն։</string>
+    <string name="extra_keys_terminal_set">Տերմինալներում</string>
+    <string name="extra_keys_text_set">Մնացած բոլոր տեղերում</string>
+    <string name="extra_keys_pick_hint">Ընտրեք մինչև %1$d ստեղն՝ ցանկալի հերթականությամբ։ Կողքի տառը այն ստեղնն է, որը սեղմում է այն։</string>
+    <string name="extra_keys_reset">Լռելյայն</string>
 </resources>

@@ -444,6 +444,15 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         )
     ),
     SettingEntry(
+        id = "status_bar.extra_keys",
+        titleRes = R.string.extra_keys_title,
+        summaryRes = R.string.extra_keys_settings_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "status_bar_buttons"
+        )
+    ),
+    SettingEntry(
         id = "status_bar.rounded_corners",
         titleRes = R.string.titan2_elite_rounded_corners_title,
         summaryRes = R.string.titan2_elite_rounded_corners_description,

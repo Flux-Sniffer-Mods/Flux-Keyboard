@@ -1057,4 +1057,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Λήψη Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Λήψη Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Αντιγραφή ρύθμισης Termux</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt και βέλη στη θέση της γραμμής, από το μενού, με συντόμευση ή με το πλήκτρο emoji στα τερματικά. Όσο η σειρά είναι ανοιχτή, τα Q έως P πατούν τα πλήκτρα της, από αριστερά προς τα δεξιά. Τα τερματικά και οι άλλες εφαρμογές έχουν το καθένα δικό του σετ.</string>
+    <string name="extra_keys_terminal_set">Στα τερματικά</string>
+    <string name="extra_keys_text_set">Οπουδήποτε αλλού</string>
+    <string name="extra_keys_pick_hint">Διαλέξτε έως %1$d πλήκτρα, με τη σειρά που θέλετε. Το γράμμα δίπλα είναι το πλήκτρο που το πατά.</string>
+    <string name="extra_keys_reset">Προεπιλογές</string>
 </resources>

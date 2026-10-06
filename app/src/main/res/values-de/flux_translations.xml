@@ -1148,4 +1148,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Termux herunterladen</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Termux:Boot herunterladen</string>
     <string name="flux_tutorial_shizuku_copy_setup">Termux-Einrichtung kopieren</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Strg, Alt und Pfeile anstelle der Leiste, aus dem Menü, per Kürzel oder mit der Emoji-Taste in Terminals. Solange die Leiste offen ist, drücken Q bis P ihre Tasten, von links nach rechts. Terminals und andere Apps haben je einen eigenen Satz.</string>
+    <string name="extra_keys_terminal_set">In Terminals</string>
+    <string name="extra_keys_text_set">Überall sonst</string>
+    <string name="extra_keys_pick_hint">Wähle bis zu %1$d Tasten in der gewünschten Reihenfolge. Der Buchstabe daneben ist die Taste, die sie drückt.</string>
+    <string name="extra_keys_reset">Standard</string>
 </resources>

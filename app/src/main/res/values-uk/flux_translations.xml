@@ -1695,4 +1695,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Завантажити Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Завантажити Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Скопіювати налаштування Termux</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt і стрілки замість панелі — з меню, сполученням або клавішею емодзі в терміналах. Поки ряд відкритий, клавіші від Q до P натискають його клавіші зліва направо. Термінали й інші застосунки мають власні набори.</string>
+    <string name="extra_keys_terminal_set">У терміналах</string>
+    <string name="extra_keys_text_set">Деінде</string>
+    <string name="extra_keys_pick_hint">Виберіть до %1$d клавіш у потрібному порядку. Літера поруч — клавіша, яка її натискає.</string>
+    <string name="extra_keys_reset">Типові</string>
 </resources>

@@ -1695,4 +1695,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Pobierz Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Pobierz Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Skopiuj konfigurację Termuxa</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt i strzałki w miejscu paska, z menu, skrótem lub klawiszem emoji w terminalach. Gdy rząd jest otwarty, klawisze od Q do P naciskają jego klawisze, od lewej do prawej. Terminale i inne aplikacje mają osobne zestawy.</string>
+    <string name="extra_keys_terminal_set">W terminalach</string>
+    <string name="extra_keys_text_set">Wszędzie indziej</string>
+    <string name="extra_keys_pick_hint">Wybierz do %1$d klawiszy w wybranej kolejności. Litera obok to klawisz, który go naciska.</string>
+    <string name="extra_keys_reset">Domyślne</string>
 </resources>

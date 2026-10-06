@@ -1677,4 +1677,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Tải Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Tải Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Sao chép thiết lập Termux</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt và mũi tên thay cho thanh, từ menu, phím tắt hoặc phím emoji trong terminal. Khi hàng đang mở, Q đến P nhấn các phím của nó, từ trái sang phải. Terminal và các ứng dụng khác có bộ phím riêng.</string>
+    <string name="extra_keys_terminal_set">Trong terminal</string>
+    <string name="extra_keys_text_set">Mọi nơi khác</string>
+    <string name="extra_keys_pick_hint">Chọn tối đa %1$d phím theo thứ tự bạn muốn. Chữ cái bên cạnh là phím nhấn nó.</string>
+    <string name="extra_keys_reset">Mặc định</string>
 </resources>

@@ -1194,4 +1194,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Scarica Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Scarica Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Copia la configurazione di Termux</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt e frecce al posto della barra, dal menu, con una scorciatoia o con il tasto emoji nei terminali. Mentre la fila è aperta, Q-P premono i suoi tasti, da sinistra a destra. Terminali e altre app hanno ciascuno il proprio set.</string>
+    <string name="extra_keys_terminal_set">Nei terminali</string>
+    <string name="extra_keys_text_set">Ovunque altrove</string>
+    <string name="extra_keys_pick_hint">Scegli fino a %1$d tasti, nell\'ordine che vuoi. La lettera accanto è il tasto che lo preme.</string>
+    <string name="extra_keys_reset">Predefiniti</string>
 </resources>

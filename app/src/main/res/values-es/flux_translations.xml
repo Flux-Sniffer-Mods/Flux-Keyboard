@@ -1689,4 +1689,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Descargar Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Descargar Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Copiar la configuración de Termux</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt y flechas en lugar de la barra, desde el menú, un atajo o la tecla emoji en terminales. Mientras la fila está abierta, Q a P pulsan sus teclas, de izquierda a derecha. Los terminales y las demás apps tienen cada uno su propio juego.</string>
+    <string name="extra_keys_terminal_set">En terminales</string>
+    <string name="extra_keys_text_set">En todo lo demás</string>
+    <string name="extra_keys_pick_hint">Elige hasta %1$d teclas, en el orden que quieras. La letra al lado es la tecla que la pulsa.</string>
+    <string name="extra_keys_reset">Predeterminadas</string>
 </resources>

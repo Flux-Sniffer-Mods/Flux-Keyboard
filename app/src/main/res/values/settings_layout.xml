@@ -197,6 +197,11 @@
     <string name="extra_keys_button_description">Extra keys: Esc, Tab, Ctrl, Alt and arrows in the bar\'s place</string>
     <string name="extra_keys_command_subtitle">Show or hide the extra keys row</string>
     <string name="extra_keys_close">Close the extra keys</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt and arrows in the bar\'s place, from the menu, a shortcut or the emoji key in terminals. While the row is open, Q to P press its keys, left to right. Terminals and other apps each have their own set.</string>
+    <string name="extra_keys_terminal_set">In terminals</string>
+    <string name="extra_keys_text_set">Everywhere else</string>
+    <string name="extra_keys_pick_hint">Pick up to %1$d keys, in the order you want them. The letter beside each is the key that presses it.</string>
+    <string name="extra_keys_reset">Defaults</string>
     <string name="terminal_emoji_key_esc">Esc</string>
     <string name="terminal_emoji_key_tab">Tab (complete)</string>
     <string name="terminal_emoji_key_up">↑ Previous command (repeats while held)</string>

@@ -1689,4 +1689,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Télécharger Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Télécharger Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Copier la configuration Termux</string>
+    <string name="extra_keys_settings_description">Échap, Tab, Ctrl, Alt et flèches à la place de la barre, depuis le menu, un raccourci ou la touche emoji dans les terminaux. Tant que la rangée est ouverte, Q à P tapent ses touches, de gauche à droite. Les terminaux et les autres apps ont chacun leur jeu.</string>
+    <string name="extra_keys_terminal_set">Dans les terminaux</string>
+    <string name="extra_keys_text_set">Partout ailleurs</string>
+    <string name="extra_keys_pick_hint">Choisissez jusqu\'à %1$d touches, dans l\'ordre voulu. La lettre à côté est la touche qui la tape.</string>
+    <string name="extra_keys_reset">Par défaut</string>
 </resources>

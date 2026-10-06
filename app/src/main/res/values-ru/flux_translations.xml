@@ -1695,4 +1695,9 @@
     <string name="flux_tutorial_shizuku_get_termux">Скачать Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Скачать Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Скопировать настройку Termux</string>
+    <string name="extra_keys_settings_description">Esc, Tab, Ctrl, Alt и стрелки вместо панели — из меню, сочетанием или клавишей эмодзи в терминалах. Пока ряд открыт, клавиши от Q до P нажимают его клавиши слева направо. У терминалов и других приложений свои наборы.</string>
+    <string name="extra_keys_terminal_set">В терминалах</string>
+    <string name="extra_keys_text_set">Везде ещё</string>
+    <string name="extra_keys_pick_hint">Выберите до %1$d клавиш в нужном порядке. Буква рядом — клавиша, которая её нажимает.</string>
+    <string name="extra_keys_reset">По умолчанию</string>
 </resources>

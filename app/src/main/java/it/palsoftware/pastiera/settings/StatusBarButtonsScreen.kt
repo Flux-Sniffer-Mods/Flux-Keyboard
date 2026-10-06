@@ -2,6 +2,7 @@ package it.palsoftware.pastiera.settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -52,6 +53,12 @@ import it.palsoftware.pastiera.setStatusBarSlotsLeft
 import it.palsoftware.pastiera.setStatusBarSlotsRight
 import it.palsoftware.pastiera.setStatusBarVariationsEnabled
 import it.palsoftware.pastiera.getMinimalMode
+import it.palsoftware.pastiera.getExtraKeysTerminal
+import it.palsoftware.pastiera.getExtraKeysText
+import it.palsoftware.pastiera.setExtraKeysTerminal
+import it.palsoftware.pastiera.setExtraKeysText
+import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKey
+import it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeySets
 import it.palsoftware.pastiera.getMinimalModeShowLeds
 import it.palsoftware.pastiera.setMinimalMode
 import it.palsoftware.pastiera.setMinimalModeShowLeds
@@ -278,6 +285,10 @@ fun StatusBarButtonsScreen(
             SettingsSectionDivider(stringResource(R.string.menu_bar_section))
             MenuBarEditor()
         }
+
+        // The extra keys row (in either bar mode: minimal mode opens it with a shortcut)
+        SettingsSectionDivider(stringResource(R.string.extra_keys_title))
+        ExtraKeysEditor()
 
         Spacer(modifier = Modifier.height(16.dp))
     }
@@ -807,5 +818,105 @@ private fun getButtonIconRes(buttonId: String): Int {
         SettingsManager.STATUS_BAR_BUTTON_REDO -> R.drawable.ic_redo_24
         SettingsManager.STATUS_BAR_BUTTON_EXTRA_KEYS -> R.drawable.modifier_keys_24
         else -> R.drawable.ic_settings_24 // Fallback
+    }
+}
+
+/** The extra keys row's two sets: terminals, and everything else. Up to ten keys each, in order. */
+@Composable
+private fun ExtraKeysEditor() {
+    val context = LocalContext.current
+    var terminal by remember { mutableStateOf(SettingsManager.getExtraKeysTerminal(context)) }
+    var text by remember { mutableStateOf(SettingsManager.getExtraKeysText(context)) }
+    var editing by remember { mutableStateOf<Boolean?>(null) } // true: terminals, false: elsewhere
+    Text(
+        text = stringResource(R.string.extra_keys_settings_description),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).settingRow("status_bar.extra_keys")
+    )
+    listOf(true to terminal, false to text).forEach { (isTerminal, keys) ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { editing = isTerminal }
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+        ) {
+            Text(
+                stringResource(if (isTerminal) R.string.extra_keys_terminal_set else R.string.extra_keys_text_set),
+                style = MaterialTheme.typography.titleSmall
+            )
+            Text(
+                keys.joinToString("  ") { it.label },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+    editing?.let { isTerminal ->
+        val defaults = if (isTerminal) ExtraKeySets.TERMINAL
+            else ExtraKeySets.TEXT
+        var chosen by remember(isTerminal) { mutableStateOf(if (isTerminal) terminal else text) }
+        val max = ExtraKeySets.MAX_KEYS
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { editing = null },
+            title = { Text(stringResource(if (isTerminal) R.string.extra_keys_terminal_set else R.string.extra_keys_text_set)) },
+            text = {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text(
+                        stringResource(R.string.extra_keys_pick_hint, max),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    ExtraKey.entries.forEach { key ->
+                        val position = chosen.indexOf(key)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    chosen = if (position >= 0) chosen - key
+                                        else if (chosen.size < max) chosen + key else chosen
+                                }
+                                .padding(vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            androidx.compose.material3.Checkbox(
+                                checked = position >= 0,
+                                onCheckedChange = null,
+                                enabled = position >= 0 || chosen.size < max
+                            )
+                            Text(key.label, modifier = Modifier.weight(1f).padding(start = 8.dp))
+                            if (position >= 0) {
+                                // Which top-row letter presses it while the row is open
+                                Text(
+                                    android.view.KeyEvent.keyCodeToString(
+                                        ExtraKeySets.PHYSICAL_KEYS[position]
+                                    ).removePrefix("KEYCODE_"),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                androidx.compose.material3.TextButton(
+                    enabled = chosen.isNotEmpty(),
+                    onClick = {
+                        if (isTerminal) {
+                            terminal = chosen; SettingsManager.setExtraKeysTerminal(context, chosen)
+                        } else {
+                            text = chosen; SettingsManager.setExtraKeysText(context, chosen)
+                        }
+                        editing = null
+                    }
+                ) { Text(stringResource(android.R.string.ok)) }
+            },
+            dismissButton = {
+                androidx.compose.material3.TextButton(onClick = { chosen = defaults }) {
+                    Text(stringResource(R.string.extra_keys_reset))
+                }
+            }
+        )
     }
 }
