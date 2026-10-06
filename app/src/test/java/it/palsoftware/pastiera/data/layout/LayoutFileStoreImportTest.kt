@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.data.layout
 
+import it.palsoftware.pastiera.legacy.LegacyLayoutFiles
 import it.palsoftware.pastiera.data.layout.LayoutFileStore.LayoutImportError
 import it.palsoftware.pastiera.data.layout.LayoutFileStore.LayoutImportResult
 import org.junit.After
@@ -192,7 +193,7 @@ class LayoutFileStoreImportTest {
             writeText(validJson("b", "B"))
         }
 
-        val migrated = LayoutFileStore.migrateLegacyLayoutFile(
+        val migrated = LegacyLayoutFiles.migrate(
             context = context,
             layoutName = decomposedName,
             legacyFile = decomposedLegacy

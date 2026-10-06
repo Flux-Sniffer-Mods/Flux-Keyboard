@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.inputmethod
 
+import it.palsoftware.pastiera.legacy.LegacySettings
 import it.palsoftware.pastiera.clipboard.PasteSuggestion
 import it.palsoftware.pastiera.shortcuts.AppShortcutRemapper
 import it.palsoftware.pastiera.shortcuts.AppShortcutSettings
@@ -2548,7 +2549,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 }
             } else if (
                 key == SettingsManager.KEY_ALT_MODIFIER_BINDING ||
-                key == SettingsManager.LEGACY_KEY_ALT_CHARACTER_LAYER_BINDING
+                key == LegacySettings.KEY_ALT_CHARACTER_LAYER_BINDING
             ) {
                 SettingsManager.getAltModifierBinding(this)
                 Log.d(TAG, "Alt modifier binding changed, reloading mappings...")

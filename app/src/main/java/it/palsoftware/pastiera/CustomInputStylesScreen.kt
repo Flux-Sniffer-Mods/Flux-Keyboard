@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.legacy.LegacyMigrations
 import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.content.Intent
@@ -75,7 +76,7 @@ fun CustomInputStylesScreen(
 
     // Load custom input styles
     var inputStyles by remember {
-        migrateLegacyGermanSystemLayoutMapping(context)
+        LegacyMigrations.germanSystemLayoutMapping(context)
         mutableStateOf(loadCustomInputStyles(context))
     }
 
@@ -1249,36 +1250,6 @@ private fun ensureAtLeastOneVisibleInputStyle(context: Context) {
 
     if (visibleSystemCount == 0 && visibleCustomCount == 0 && firstHiddenSystemStyle != null) {
         SettingsManager.showSystemInputStyle(context, firstHiddenSystemStyle.first, firstHiddenSystemStyle.second)
-    }
-}
-
-private fun migrateLegacyGermanSystemLayoutMapping(context: Context) {
-    val prefs = SettingsManager.getPreferences(context)
-    val migrationKey = "legacy_german_qwertz_default_migrated"
-    if (prefs.getBoolean(migrationKey, false)) return
-
-    val file = java.io.File(context.filesDir, "locale_layout_mapping.json")
-    if (!file.exists() || !file.canRead() || !file.canWrite()) {
-        prefs.edit().putBoolean(migrationKey, true).apply()
-        return
-    }
-
-    try {
-        val json = org.json.JSONObject(file.readText())
-        val germanLocales = listOf("de", "de_DE", "de_AT", "de_CH", "de_LU")
-        var changed = false
-        germanLocales.forEach { locale ->
-            if (json.optString(locale) == "german_multitap_qwertz") {
-                json.put(locale, "qwertz")
-                changed = true
-            }
-        }
-        if (changed) {
-            file.writeTextAtomically(json.toString(2))
-        }
-        prefs.edit().putBoolean(migrationKey, true).apply()
-    } catch (e: Exception) {
-        android.util.Log.w("CustomInputStyles", "Error migrating legacy German layout mapping", e)
     }
 }
 

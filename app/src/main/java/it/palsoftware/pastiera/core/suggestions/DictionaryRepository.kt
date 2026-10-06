@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.core.suggestions
 
+import it.palsoftware.pastiera.legacy.LegacyMigrations
 import android.content.Context
 import android.content.res.AssetManager
 import android.util.Log
@@ -138,7 +139,7 @@ class AndroidDictionaryRepository(
                 val startTime = System.currentTimeMillis()
 
                 // Move legacy local dictionaries into the custom folder to isolate imports.
-                migrateLegacyLocalDictionaries()
+                LegacyMigrations.localDictionariesToCustomFolder(context)
 
                 // Determine paths for custom and bundled dictionaries
                 val customDir = File(context.filesDir, "dictionaries_serialized/custom").apply { mkdirs() }
@@ -620,34 +621,6 @@ class AndroidDictionaryRepository(
         }
         symSpell = engine
         symSpellBuilt = true
-    }
-
-    /**
-     * Move legacy dictionaries from the root local directory into the custom folder.
-     * This isolates user-imported dictionaries from bundled assets.
-     */
-    private fun migrateLegacyLocalDictionaries() {
-        val rootDir = File(context.filesDir, "dictionaries_serialized")
-        val customDir = File(rootDir, "custom").apply { mkdirs() }
-        if (!rootDir.exists() || rootDir == customDir) return
-
-        rootDir.listFiles()?.forEach { file ->
-            if (file.isDirectory && file.name == "custom") return@forEach
-            if (file.isFile && file.extension == "dict") {
-                val dest = File(customDir, file.name)
-                if (!dest.exists()) {
-                    val moved = file.renameTo(dest)
-                    Log.i(tag, "Migrating legacy dictionary ${file.name} to custom folder: success=$moved")
-                    if (!moved) {
-                        file.copyTo(dest, overwrite = false)
-                        file.delete()
-                    }
-                } else {
-                    Log.i(tag, "Removing duplicate legacy dictionary ${file.name}")
-                    file.delete()
-                }
-            }
-        }
     }
 
     private fun addToSymSpell(entries: List<DictionaryEntry>) {

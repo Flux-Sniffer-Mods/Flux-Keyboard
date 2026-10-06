@@ -18,6 +18,10 @@ affecting the app.
 | `github/` | Pre-1.0 release notes and upstream nightly release templates |
 | `scripts/` | Upstream nightly, F-Droid, PIV signing, key rotation and old dictionary scripts |
 | `tools/prediction_bench/` | Upstream next-word model benchmark |
+| `app-code/` | Upstream app code nothing used any more (an emoji list adapter, a trackpad debug overlay) |
 
-Code kept only for backwards compatibility lives in the app's `legacy` package
-(`app/src/main/java/it/palsoftware/pastiera/legacy/`).
+Code the app still needs only for backwards compatibility lives in its `legacy` package
+(`app/src/main/java/it/palsoftware/pastiera/legacy/`): settings and files saved by earlier
+versions, read and converted to today's format (old Alt binding, SYM page order, launcher
+shortcuts, removed themes, nav mode defaults, the German layout default, custom layouts and
+dictionaries saved under old names), and shortcuts apps still return the pre-Android 8 way.

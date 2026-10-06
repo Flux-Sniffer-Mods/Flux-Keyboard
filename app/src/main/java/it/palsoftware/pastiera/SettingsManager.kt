@@ -23,6 +23,8 @@ import it.palsoftware.pastiera.inputmethod.ui.KeyboardThemeColors
 import it.palsoftware.pastiera.inputmethod.expansion.ExpansionActivationPolicy
 import it.palsoftware.pastiera.inputmethod.expansion.ExpansionPresentation
 import it.palsoftware.pastiera.inputmethod.expansion.TextExpansionEngine
+import it.palsoftware.pastiera.legacy.LegacyMigrations
+import it.palsoftware.pastiera.legacy.LegacySettings
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -163,7 +165,6 @@ object SettingsManager {
     private const val KEY_PENDING_RESTORE_SYM_PAGE = "pending_restore_sym_page" // Temporary SYM page state saved when opening settings
     private const val KEY_SYM_PAGES_CONFIG = "sym_pages_config" // Order/enabled pages for SYM
     const val KEY_ALT_MODIFIER_BINDING = "alt_modifier_binding"
-    internal const val LEGACY_KEY_ALT_CHARACTER_LAYER_BINDING = "alt_character_layer_binding"
     private const val KEY_SYM_AUTO_CLOSE = "sym_auto_close" // Auto-close SYM layout after key press
     private const val KEY_SYM_AUTO_CLOSE_ON_TOUCH = "sym_auto_close_on_touch" // Auto-close SYM layout after tapping on-screen SYM keys
     private const val KEY_SHIFT_TAP_LATCHES = "shift_tap_latches"
@@ -185,9 +186,6 @@ object SettingsManager {
     private const val KEY_TERMINAL_MODE_HIDE_KEYBOARD = "terminal_mode_hide_keyboard"
     private const val KEY_TERMINAL_MODE_EMOJI_KEY = "terminal_mode_emoji_key"
     const val TERMUX_PACKAGE = "com.termux"
-    // Earlier global switches; still read once, as the default for apps hidden at the time
-    private const val KEY_HIDDEN_APPS_SHOW_LEDS = "hidden_keyboard_apps_show_leds"
-    private const val KEY_HIDDEN_APPS_ALLOW_PANELS = "hidden_keyboard_apps_allow_panels"
     // Per hidden app (package names, one per line)
     private const val KEY_HIDDEN_APPS_LEDS = "hidden_keyboard_apps_leds"
     private const val KEY_HIDDEN_APPS_PANELS = "hidden_keyboard_apps_panels"
@@ -924,19 +922,19 @@ object SettingsManager {
             KeyboardThemeTarget.SOFTWARE -> KEY_KEYBOARD_THEME_SOFTWARE
         }
 
-    private fun keyboardThemeAssignmentModeKeyForTarget(target: KeyboardThemeTarget): String =
+    internal fun keyboardThemeAssignmentModeKeyForTarget(target: KeyboardThemeTarget): String =
         when (target) {
             KeyboardThemeTarget.HARDWARE -> KEY_KEYBOARD_THEME_ASSIGNMENT_MODE_HARDWARE
             KeyboardThemeTarget.SOFTWARE -> KEY_KEYBOARD_THEME_ASSIGNMENT_MODE_SOFTWARE
         }
 
-    private fun keyboardThemeLightKeyForTarget(target: KeyboardThemeTarget): String =
+    internal fun keyboardThemeLightKeyForTarget(target: KeyboardThemeTarget): String =
         when (target) {
             KeyboardThemeTarget.HARDWARE -> KEY_KEYBOARD_THEME_LIGHT_HARDWARE
             KeyboardThemeTarget.SOFTWARE -> KEY_KEYBOARD_THEME_LIGHT_SOFTWARE
         }
 
-    private fun keyboardThemeDarkKeyForTarget(target: KeyboardThemeTarget): String =
+    internal fun keyboardThemeDarkKeyForTarget(target: KeyboardThemeTarget): String =
         when (target) {
             KeyboardThemeTarget.HARDWARE -> KEY_KEYBOARD_THEME_DARK_HARDWARE
             KeyboardThemeTarget.SOFTWARE -> KEY_KEYBOARD_THEME_DARK_SOFTWARE
@@ -1081,47 +1079,13 @@ object SettingsManager {
         return getEffectiveKeyboardTheme(context, target, locale = null, layout = null)
     }
 
-    private const val KEY_REMOVED_THEMES_MIGRATED = "removed_builtin_themes_migrated"
-
-    /**
-     * Once: a keyboard still coloured like a built-in theme that's gone (Flux Dark, Nord…) moves
-     * to the system-matched classic theme. Themes are saved as colours, so they're recognised by
-     * their colours; your own and your saved themes stay.
-     */
-    fun migrateRemovedBuiltInThemes(context: Context) {
-        val prefs = getPreferences(context)
-        if (prefs.getBoolean(KEY_REMOVED_THEMES_MIGRATED, false)) return
-        val removed = removedBuiltInThemes()
-        fun wasBuiltIn(key: String): Boolean {
-            val stored = prefs.getString(key, null) ?: return false
-            val json = runCatching { JSONObject(stored) }.getOrNull() ?: return false
-            return removed.any { preset ->
-                json.optInt("background") == preset.background &&
-                    json.optInt("normal_key") == preset.normalKey &&
-                    json.optInt("text_and_icons") == preset.textAndIcons &&
-                    json.optInt("accent") == preset.accent
-            }
-        }
-        val editor = prefs.edit()
-        KeyboardThemeTarget.values().forEach { target ->
-            if (wasBuiltIn(keyboardThemeKeyForTarget(target))) {
-                editor.remove(keyboardThemeKeyForTarget(target))
-                editor.putString(keyboardThemeAssignmentModeKeyForTarget(target), KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM)
-            }
-            listOf(keyboardThemeDarkKeyForTarget(target), keyboardThemeLightKeyForTarget(target)).forEach { key ->
-                if (wasBuiltIn(key)) editor.remove(key)
-            }
-        }
-        editor.putBoolean(KEY_REMOVED_THEMES_MIGRATED, true).apply()
-    }
-
     fun getEffectiveKeyboardTheme(
         context: Context,
         target: KeyboardThemeTarget,
         locale: String?,
         layout: String?
     ): KeyboardThemeSettings {
-        migrateRemovedBuiltInThemes(context)
+        LegacyMigrations.removedBuiltInThemes(context)
         val theme = findKeyboardThemeLayoutOverride(context, target, locale, layout)?.theme
             ?: if (getKeyboardThemeAssignmentMode(context, target) == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
                 getKeyboardThemeSystemSlot(context, target, dark = isSystemDarkTheme(context))
@@ -4141,10 +4105,8 @@ object SettingsManager {
     private const val DEFAULT_NAV_MODE_ENABLED = true
     private const val KEY_NAV_MODE_CTRL_HOLD_ENABLED = "nav_mode_ctrl_hold_enabled"
     private const val DEFAULT_NAV_MODE_CTRL_HOLD_ENABLED = false
-    private const val KEY_NAV_MODE_DEFAULT_MAPPINGS_VERSION = "nav_mode_default_mappings_version"
-    private const val CURRENT_NAV_MODE_DEFAULT_MAPPINGS_VERSION = 3
     private const val NAV_MODE_MAPPINGS_FILE_NAME = "ctrl_key_mappings.json"
-    private const val KEY_NAV_MODE_MAPPINGS_UPDATED = "nav_mode_mappings_updated"
+    internal const val KEY_NAV_MODE_MAPPINGS_UPDATED = "nav_mode_mappings_updated"
     
     /**
      * Imposta una scorciatoia del launcher per un tasto (tipo app).
@@ -4333,7 +4295,7 @@ object SettingsManager {
                         commandTitle = shortcutObj.optString("title").takeIf { it.isNotEmpty() },
                         commandSubtitle = shortcutObj.optString("subtitle").takeIf { it.isNotEmpty() },
                         commandLaunch = CommandJson.launchFromJson(shortcutObj.optJSONObject("launch"))
-                            ?: legacyLaunchSpec(type, shortcutObj)
+                            ?: LegacySettings.launcherShortcutLaunchSpec(type, shortcutObj)
                     )
                 }
             }
@@ -4400,18 +4362,6 @@ object SettingsManager {
         return type == LauncherShortcut.TYPE_QUICK_LAUNCHER ||
             commandId == PastieraCommandSource.COMMAND_QUICK_LAUNCHER ||
             commandLaunch == CommandLaunchSpec.InternalAction(PastieraCommandSource.ACTION_OPEN_QUICK_LAUNCHER)
-    }
-
-    private fun legacyLaunchSpec(type: String, shortcutObj: JSONObject): CommandLaunchSpec? {
-        return when (type) {
-            LauncherShortcut.TYPE_APP -> shortcutObj.optString("packageName")
-                .takeIf { it.isNotBlank() }
-                ?.let { CommandLaunchSpec.AppPackage(it) }
-            LauncherShortcut.TYPE_QUICK_LAUNCHER -> {
-                CommandLaunchSpec.InternalAction(PastieraCommandSource.ACTION_OPEN_QUICK_LAUNCHER)
-            }
-            else -> null
-        }
     }
 
     data class CommandSourceVisibility(
@@ -4909,7 +4859,7 @@ object SettingsManager {
     fun initializeNavModeMappingsFile(context: Context) {
         val mappingsFile = getNavModeMappingsFile(context)
         if (mappingsFile.exists()) {
-            migrateNavModeMappingsFileIfNeeded(context)
+            LegacyMigrations.navModeDefaultMappings(context)
             return // File already exists, don't overwrite
         }
         
@@ -4919,67 +4869,13 @@ object SettingsManager {
             inputStream.copyTo(outputStream)
             inputStream.close()
             outputStream.close()
-            migrateNavModeMappingsFileIfNeeded(context)
+            LegacyMigrations.navModeDefaultMappings(context)
             Log.d(TAG, "Nav mode mappings file initialized from assets")
         } catch (e: Exception) {
             Log.e(TAG, "Error initializing nav mode mappings file", e)
         }
     }
 
-    private fun migrateNavModeMappingsFileIfNeeded(context: Context) {
-        val prefs = getPreferences(context)
-        if (prefs.getInt(KEY_NAV_MODE_DEFAULT_MAPPINGS_VERSION, 1) >= CURRENT_NAV_MODE_DEFAULT_MAPPINGS_VERSION) {
-            return
-        }
-
-        try {
-            val mappingsFile = getNavModeMappingsFile(context)
-            if (!mappingsFile.exists()) {
-                return
-            }
-
-            val jsonObject = JSONObject(mappingsFile.readText())
-            val mappingsObject = jsonObject.getJSONObject("mappings")
-            val defaultWordMappings = mapOf(
-                "KEYCODE_N" to "move_word_left",
-                "KEYCODE_M" to "move_word_right",
-                "KEYCODE_U" to "expand_selection_word_left",
-                "KEYCODE_I" to "expand_selection_word_right"
-            )
-
-            defaultWordMappings.forEach { (keyName, action) ->
-                val existing = mappingsObject.optJSONObject(keyName)
-                if (existing == null || existing.optString("type") == "none") {
-                    mappingsObject.put(
-                        keyName,
-                        JSONObject().apply {
-                            put("type", "action")
-                            put("action", action)
-                        }
-                    )
-                }
-            }
-            val ctrlBExisting = mappingsObject.optJSONObject("KEYCODE_B")
-            if (ctrlBExisting == null || ctrlBExisting.optString("type") == "none") {
-                mappingsObject.put(
-                    "KEYCODE_B",
-                    JSONObject().apply {
-                        put("type", "command")
-                        put("command", "pastiera.toggle_software_keyboard_mode")
-                    }
-                )
-            }
-
-            mappingsFile.writeTextAtomically(jsonObject.toString())
-            prefs.edit()
-                .putInt(KEY_NAV_MODE_DEFAULT_MAPPINGS_VERSION, CURRENT_NAV_MODE_DEFAULT_MAPPINGS_VERSION)
-                .putLong(KEY_NAV_MODE_MAPPINGS_UPDATED, System.currentTimeMillis())
-                .apply()
-            Log.d(TAG, "Nav mode mappings migrated to version $CURRENT_NAV_MODE_DEFAULT_MAPPINGS_VERSION")
-        } catch (e: Exception) {
-            Log.e(TAG, "Error migrating nav mode mappings file", e)
-        }
-    }
     
     /**
      * Saves nav mode key mappings to the JSON file in filesDir.
@@ -5691,7 +5587,6 @@ object SettingsManager {
             val symbolsEnabled = jsonObject.optBoolean("symbolsEnabled", true)
             val clipboardEnabled = jsonObject.optBoolean("clipboardEnabled", false)
             val emojiPickerEnabled = jsonObject.optBoolean("emojiPickerEnabled", false)
-            val legacyEmojiFirst = jsonObject.optBoolean("emojiFirst", true)
 
             val parsedOrder = if (jsonObject.has("symPageOrder")) {
                 val orderArray = jsonObject.optJSONArray("symPageOrder")
@@ -5706,16 +5601,9 @@ object SettingsManager {
                 }
                 collected
             } else {
-                // Legacy migration from emojiFirst behavior.
-                val cyclePages = mutableListOf(
-                    SymPagesConfig.PAGE_EMOJI,
-                    SymPagesConfig.PAGE_SYMBOLS,
-                    SymPagesConfig.PAGE_CLIPBOARD
+                LegacySettings.symPageOrderFromEmojiFirst(
+                    jsonObject.optBoolean(LegacySettings.SYM_PAGES_EMOJI_FIRST_FIELD, true)
                 )
-                if (!legacyEmojiFirst) {
-                    cyclePages.reverse()
-                }
-                cyclePages + SymPagesConfig.PAGE_EMOJI_PICKER
             }
 
             val parsedConfig = SymPagesConfig(
@@ -5726,7 +5614,8 @@ object SettingsManager {
                 emojiPickerEnabled = emojiPickerEnabled,
                 symPageOrder = parsedOrder
             )
-            val migratedConfig = if (schemaVersion < SYM_PAGES_SCHEMA_VERSION && parsedConfig.isLegacyDefault()) {
+            val migratedConfig = if (schemaVersion < SYM_PAGES_SCHEMA_VERSION &&
+                LegacySettings.isDefaultFromBeforeDevicePage(parsedConfig)) {
                 parsedConfig.copy(deviceEnabled = true)
             } else {
                 parsedConfig
@@ -5753,8 +5642,8 @@ object SettingsManager {
                 put("symbolsEnabled", config.symbolsEnabled)
                 put("clipboardEnabled", config.clipboardEnabled)
                 put("emojiPickerEnabled", config.emojiPickerEnabled)
-                // Keep legacy field for backward compatibility with older builds.
-                put("emojiFirst", config.prefersEmojiLongPressLayer())
+                // Still written so older builds read the same order
+                put(LegacySettings.SYM_PAGES_EMOJI_FIRST_FIELD, config.prefersEmojiLongPressLayer())
                 val orderArray = org.json.JSONArray()
                 config.normalizedOrder().forEach { orderArray.put(it) }
                 put("symPageOrder", orderArray)
@@ -5768,35 +5657,20 @@ object SettingsManager {
         }
     }
 
-    private fun SymPagesConfig.isLegacyDefault(): Boolean =
-        !deviceEnabled &&
-            emojiEnabled &&
-            symbolsEnabled &&
-            !clipboardEnabled &&
-            !emojiPickerEnabled &&
-            normalizedOrder() == SymPagesConfig.DEFAULT_ORDER
-
     fun getAltModifierBinding(context: Context): AltModifierBinding {
         val prefs = getPreferences(context)
         prefs.getString(KEY_ALT_MODIFIER_BINDING, null)?.let {
             return AltModifierBinding.fromPersistedValue(it)
         }
 
-        val legacyValue = prefs.getString(LEGACY_KEY_ALT_CHARACTER_LAYER_BINDING, null)
-        val binding = AltModifierBinding.fromPersistedValue(legacyValue)
-        if (legacyValue != null) {
-            prefs.edit()
-                .putString(KEY_ALT_MODIFIER_BINDING, binding.persistedValue)
-                .remove(LEGACY_KEY_ALT_CHARACTER_LAYER_BINDING)
-                .apply()
-        }
-        return binding
+        return LegacySettings.moveAltCharacterLayerBinding(prefs, KEY_ALT_MODIFIER_BINDING)
+            ?: AltModifierBinding.fromPersistedValue(null)
     }
 
     fun setAltModifierBinding(context: Context, binding: AltModifierBinding) {
         getPreferences(context).edit()
             .putString(KEY_ALT_MODIFIER_BINDING, binding.persistedValue)
-            .remove(LEGACY_KEY_ALT_CHARACTER_LAYER_BINDING)
+            .remove(LegacySettings.KEY_ALT_CHARACTER_LAYER_BINDING)
             .apply()
     }
     
@@ -6109,18 +5983,18 @@ object SettingsManager {
     /** This hidden app keeps the modifier LEDs visible, drawn over it. */
     fun hiddenAppShowsLeds(context: Context, packageName: String?): Boolean =
         !packageName.isNullOrBlank() &&
-            packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_LEDS, KEY_HIDDEN_APPS_SHOW_LEDS)
+            packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_LEDS, LegacySettings.KEY_HIDDEN_APPS_SHOW_LEDS)
 
     fun setHiddenAppShowsLeds(context: Context, packageName: String, enabled: Boolean) =
-        setHiddenAppOption(context, KEY_HIDDEN_APPS_LEDS, KEY_HIDDEN_APPS_SHOW_LEDS, packageName, enabled)
+        setHiddenAppOption(context, KEY_HIDDEN_APPS_LEDS, LegacySettings.KEY_HIDDEN_APPS_SHOW_LEDS, packageName, enabled)
 
     /** In this hidden app, the emoji picker key and Sym still open Pastiera's emoji and symbols. */
     fun hiddenAppAllowsPanels(context: Context, packageName: String?): Boolean =
         !packageName.isNullOrBlank() &&
-            packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_PANELS, KEY_HIDDEN_APPS_ALLOW_PANELS)
+            packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_PANELS, LegacySettings.KEY_HIDDEN_APPS_ALLOW_PANELS)
 
     fun setHiddenAppAllowsPanels(context: Context, packageName: String, enabled: Boolean) =
-        setHiddenAppOption(context, KEY_HIDDEN_APPS_PANELS, KEY_HIDDEN_APPS_ALLOW_PANELS, packageName, enabled)
+        setHiddenAppOption(context, KEY_HIDDEN_APPS_PANELS, LegacySettings.KEY_HIDDEN_APPS_ALLOW_PANELS, packageName, enabled)
 
     /** Stores [keyCode] (KEYCODE_UNKNOWN turns the feature off). Returns false if not allowed. */
     fun setEmojiPickerKey(context: Context, keyCode: Int): Boolean {
@@ -6947,19 +6821,12 @@ object SettingsManager {
         root.optJSONArray(exactKey)?.let { return it }
         root.optJSONArray(languageLayoutKey)?.let { return it }
 
-        legacySuggestionLayoutAliases(layout).forEach { legacyLayout ->
+        LegacySettings.suggestionLayoutAliases(layout).forEach { legacyLayout ->
             root.optJSONArray(inputStyleKey(normalizedLocale, legacyLayout))?.let { return it }
             root.optJSONArray(inputStyleKey(language, legacyLayout))?.let { return it }
         }
 
         return null
-    }
-
-    private fun legacySuggestionLayoutAliases(layout: String): List<String> {
-        return when (layout.trim()) {
-            "qwertz" -> listOf("german_multitap_qwertz")
-            else -> emptyList()
-        }
     }
 
     private fun suggestionLocalesFromArray(array: org.json.JSONArray): List<String> {

@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.data.layout
 
+import it.palsoftware.pastiera.legacy.LegacyLayoutFiles
 import android.content.Context
 import android.content.res.AssetManager
 import android.util.Log
@@ -25,8 +26,8 @@ object LayoutFileStore {
     private const val TAG = "LayoutFileStore"
     private const val LAYOUTS_DIR_NAME = "keyboard_layouts"
     private const val STORAGE_ID_PREFIX = "custom-"
-    private const val STORAGE_ID_FIELD = "storage_id"
-    private const val LAYOUT_ID_FIELD = "layout_id"
+    internal const val STORAGE_ID_FIELD = "storage_id"
+    internal const val LAYOUT_ID_FIELD = "layout_id"
 
     private val keyboardLayoutNameToKeyCode = mapOf(
         "KEYCODE_Q" to KeyEvent.KEYCODE_Q,
@@ -128,9 +129,9 @@ object LayoutFileStore {
     fun getLayoutFile(context: Context, layoutName: String): File {
         findSafeLayoutFileByExactId(context, layoutName)?.let { return it }
 
-        val legacyFile = findLegacyLayoutFile(context, layoutName)
+        val legacyFile = LegacyLayoutFiles.find(context, layoutName)
             ?: return safeLayoutFile(context, layoutName)
-        return migrateLegacyLayoutFile(context, layoutName, legacyFile)
+        return LegacyLayoutFiles.migrate(context, layoutName, legacyFile)
     }
 
     fun loadLayoutFromFile(file: File): Map<Int, LayoutMapping>? {
@@ -331,7 +332,7 @@ object LayoutFileStore {
             }
 
             val exactSafeFile = findSafeLayoutFileByExactId(context, layoutName)
-            val legacyFile = findLegacyLayoutFile(context, layoutName)
+            val legacyFile = LegacyLayoutFiles.find(context, layoutName)
             val canonicalSafeFile = safeLayoutFile(context, layoutName)
             if (
                 exactSafeFile == null &&
@@ -345,7 +346,7 @@ object LayoutFileStore {
                 return LayoutImportResult.Failure(LayoutImportError.NAME_CONFLICT)
             }
             val layoutFile = exactSafeFile ?: if (legacyFile != null) {
-                safeLayoutFileForLegacyMigration(context, layoutName)
+                LegacyLayoutFiles.safeFileFor(context, layoutName)
             } else {
                 canonicalSafeFile
             }
@@ -502,7 +503,7 @@ object LayoutFileStore {
         }
     }
 
-    private fun safeLayoutFile(context: Context, layoutName: String): File {
+    internal fun safeLayoutFile(context: Context, layoutName: String): File {
         val root = getLayoutsDirectory(context).canonicalFile
         val target = File(root, "${storageIdFor(layoutName)}.json").canonicalFile
         require(target.parentFile == root) { "Layout path escaped storage root" }
@@ -514,37 +515,27 @@ object LayoutFileStore {
         return storageIdForOpaqueValue(normalizedName)
     }
 
-    private fun storageIdForOpaqueValue(value: String): String {
+    internal fun storageIdForOpaqueValue(value: String): String {
         val digest = MessageDigest.getInstance("SHA-256")
             .digest(value.toByteArray(StandardCharsets.UTF_8))
             .joinToString("") { "%02x".format(it) }
         return "$STORAGE_ID_PREFIX$digest"
     }
 
-    private fun isSafeStorageFile(file: File): Boolean {
+    internal fun isSafeStorageFile(file: File): Boolean {
         val baseName = file.name.removeSuffix(".json")
         return baseName.startsWith(STORAGE_ID_PREFIX) &&
             baseName.length == STORAGE_ID_PREFIX.length + 64 &&
             baseName.drop(STORAGE_ID_PREFIX.length).all { it in '0'..'9' || it in 'a'..'f' }
     }
 
-    private fun findLegacyLayoutFile(context: Context, layoutName: String): File? {
-        val root = getLayoutsDirectory(context).canonicalFile
-        return root.listFiles { file ->
-            file.isFile && file.name.endsWith(".json") && !isSafeStorageFile(file)
-        }?.firstOrNull { file ->
-            file.name.removeSuffix(".json") == layoutName &&
-                runCatching { file.canonicalFile.parentFile == root }.getOrDefault(false)
-        }
-    }
-
     private fun findExistingLayoutFile(context: Context, layoutName: String): File? {
         return findSafeLayoutFileByExactId(context, layoutName)
-            ?: findLegacyLayoutFile(context, layoutName)
+            ?: LegacyLayoutFiles.find(context, layoutName)
             ?: safeLayoutFile(context, layoutName).takeIf { it.exists() }
     }
 
-    private fun findSafeLayoutFileByExactId(context: Context, layoutName: String): File? {
+    internal fun findSafeLayoutFileByExactId(context: Context, layoutName: String): File? {
         val root = getLayoutsDirectory(context).canonicalFile
         return root.listFiles { file ->
             file.isFile && file.name.endsWith(".json") && isSafeStorageFile(file)
@@ -555,64 +546,18 @@ object LayoutFileStore {
         }
     }
 
-    private fun safeLayoutFileForLegacyMigration(context: Context, layoutName: String): File {
-        findSafeLayoutFileByExactId(context, layoutName)?.let { return it }
-
-        val primary = safeLayoutFile(context, layoutName)
-        if (!primary.exists()) return primary
-
-        var collisionIndex = 0
-        while (true) {
-            val collisionStorageId = storageIdForOpaqueValue(
-                "legacy-layout-collision:$collisionIndex:$layoutName"
-            )
-            val candidate = safeStorageFile(context, collisionStorageId)
-            if (!candidate.exists() || storedLogicalLayoutId(candidate) == layoutName) {
-                return candidate
-            }
-            collisionIndex += 1
-        }
-    }
-
-    private fun safeStorageFile(context: Context, storageId: String): File {
+    internal fun safeStorageFile(context: Context, storageId: String): File {
         val root = getLayoutsDirectory(context).canonicalFile
         val target = File(root, "$storageId.json").canonicalFile
         require(target.parentFile == root) { "Layout path escaped storage root" }
         return target
     }
 
-    private fun storedLogicalLayoutId(file: File): String? = runCatching {
+    internal fun storedLogicalLayoutId(file: File): String? = runCatching {
         val jsonObject = JSONObject(file.readText())
         jsonObject.optString(LAYOUT_ID_FIELD).takeIf { it.isNotBlank() }
             ?: jsonObject.optString("name").takeIf { it.isNotBlank() }
     }.getOrNull()
-
-    internal fun migrateLegacyLayoutFile(
-        context: Context,
-        layoutName: String,
-        legacyFile: File
-    ): File {
-        return try {
-            val root = getLayoutsDirectory(context).canonicalFile
-            val canonicalLegacy = legacyFile.canonicalFile
-            val safeFile = safeLayoutFileForLegacyMigration(context, layoutName)
-            if (canonicalLegacy.parentFile != root || safeFile.parentFile != root) return legacyFile
-            if (safeFile.exists()) return safeFile
-            val jsonObject = JSONObject(legacyFile.readText()).apply {
-                put(LAYOUT_ID_FIELD, layoutName)
-                put(STORAGE_ID_FIELD, safeFile.nameWithoutExtension)
-            }
-            writeAtomically(safeFile, jsonObject.toString(2).toByteArray(StandardCharsets.UTF_8))
-            if (!legacyFile.delete()) {
-                Log.w(TAG, "Migrated legacy layout but could not delete old file: ${legacyFile.name}")
-            }
-            Log.i(TAG, "Migrated legacy layout to safe storage: $layoutName")
-            safeFile
-        } catch (e: Exception) {
-            Log.e(TAG, "Could not migrate legacy layout without data loss: $layoutName", e)
-            legacyFile
-        }
-    }
 
     private fun logicalLayoutId(context: Context, file: File): String? {
         if (!file.isFile || !file.name.endsWith(".json")) return null
@@ -620,7 +565,7 @@ object LayoutFileStore {
         if (runCatching { file.canonicalFile.parentFile }.getOrNull() != root) return null
         if (!isSafeStorageFile(file)) {
             val legacyId = file.name.removeSuffix(".json")
-            migrateLegacyLayoutFile(
+            LegacyLayoutFiles.migrate(
                 context = context,
                 layoutName = legacyId,
                 legacyFile = file

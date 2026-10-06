@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.shortcuts
 
+import it.palsoftware.pastiera.legacy.LegacyShortcutExtras
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
@@ -82,8 +83,8 @@ object UserShortcuts {
     fun addFromResult(context: Context, packageName: String, data: Intent?): UserShortcut? {
         data ?: return null
         var label: String? = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)
-        var intent: Intent? = legacyIntent(data)
-        var icon: Bitmap? = legacyIcon(data)
+        var intent: Intent? = LegacyShortcutExtras.intent(data)
+        var icon: Bitmap? = LegacyShortcutExtras.icon(data)
 
         if (intent == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val info = runCatching {
@@ -148,22 +149,6 @@ object UserShortcuts {
             .putExtra("com.termux.RUN_COMMAND_PATH", path)
             .putExtra("com.termux.RUN_COMMAND_BACKGROUND", background)
             .apply { arguments?.let { putExtra("com.termux.RUN_COMMAND_ARGUMENTS", it) } }
-
-    @Suppress("DEPRECATION")
-    private fun legacyIntent(data: Intent): Intent? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT, Intent::class.java)
-        } else {
-            data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT)
-        }
-
-    @Suppress("DEPRECATION")
-    private fun legacyIcon(data: Intent): Bitmap? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap::class.java)
-        } else {
-            data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON)
-        }
 
     private fun appLabel(context: Context, packageName: String): String = runCatching {
         val pm = context.packageManager

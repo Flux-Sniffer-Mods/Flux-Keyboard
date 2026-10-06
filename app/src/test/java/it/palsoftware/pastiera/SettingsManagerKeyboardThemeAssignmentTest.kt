@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.legacy.removedBuiltInThemePresets
 import it.palsoftware.pastiera.backup.PreferenceSchemas
 import it.palsoftware.pastiera.backup.PreferenceValueType
 import org.junit.Assert.assertEquals
@@ -50,7 +51,7 @@ class SettingsManagerKeyboardThemeAssignmentTest {
         val prefs = context.getSharedPreferences("pastiera_prefs", android.content.Context.MODE_PRIVATE)
         prefs.edit().clear().commit()
         val target = SettingsManager.KeyboardThemeTarget.HARDWARE
-        val nord = removedBuiltInThemes().first { it.name == "Nord" }
+        val nord = removedBuiltInThemePresets().first { it.name == "Nord" }
         SettingsManager.setKeyboardThemeAssignmentMode(context, target, SettingsManager.KEYBOARD_THEME_ASSIGNMENT_MODE_FIXED)
         prefs.edit().putString(
             SettingsManager.keyboardThemeKeyForTarget(target),
