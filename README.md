@@ -20,141 +20,146 @@ Flux Keyboard is up to date with **Pastiera 0.86**, Pastiera's final planned fea
 merges Pastiera's later changes as they land. Pastiera keeps receiving security fixes, and its
 development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 
-## Highlights
+## Only in Flux Keyboard
 
-### For the Titan 2 Elite
-- **Trackpad swipes**: swipe left, up or right on the keyboard to pick a suggestion, or down to delete a word, in every app while you type; it learns how far you swipe.
-- **Keyboard light, no root (Shizuku)**: on with the screen and off with it, following the screen's brightness as it changes (adaptive brightness and fades included), or flashing for notifications.
-
-<p align="center">
-  <img src="docs/cards/keyboard-light.webp" alt="The keyboard light, no root. On and off with the screen, following its brightness as it changes, or flashing for notifications, through Shizuku." width="840">
-</p>
-
-- **Screen size presets** for the whole phone, each applied with one tap: Default (300 dpi), Tablet and Desktop (about 200 dpi on the Titan 2 Elite).
-
-<p align="center">
-  <img src="docs/cards/screen-size.webp" alt="Screen size presets. Default, Tablet and Desktop for the whole phone, each applied with one tap." width="840">
-</p>
-
-- **Screen size per app**: each app at its own size, kept through the recent apps screen and back to yours when you leave. Plus shortcuts to force-stop the app in front, toggle Battery Saver or cut an app off the network.
-
-<p align="center">
-  <img src="docs/cards/screen-size-per-app.webp" alt="Screen size per app. Each app at its own size, kept through the recent apps screen and back to yours when you leave." width="840">
-</p>
-
-- **The same app at two sizes**: Instagram at the phone's own size, then at Desktop, with more on the screen.
-
-<p align="center">
-  <img src="docs/cards/two-sizes.webp" alt="The same app at two sizes. Instagram at the phone's own size, then at Desktop, with more on the screen." width="840">
-</p>
-
-- **Recommended settings**: the setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates as a "from → to" list.
-
-<p align="center">
-  <img src="docs/cards/recommended.webp" alt="Recommended settings. The setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates." width="840">
-</p>
-
-- **Modifier LEDs** under the suggestions, with a colour each: Shift, Alt, SYM, Ctrl, and a fifth for the emoji key.
-
-<p align="center">
-  <img src="docs/cards/led-strip.webp" alt="Modifier LEDs. Shift, Alt, SYM, Ctrl and the emoji key, each with its own colour, under the suggestions." width="840">
-</p>
-
-### A keyboard built around physical keys
-- **Emoji, symbols and kaomoji as pages**: Q and P turn through every emoji by category, symbols (arrows, maths, currency, punctuation, shapes) and over 300 kaomoji, each going round on its own, opening on what you use most.
-
-<p align="center">
-  <img src="docs/cards/pages.webp" alt="Emoji, symbols and kaomoji as pages. Q and P turn through every emoji by category, the symbols and over 300 kaomoji, right on the keys." width="840">
-</p>
-
-- **Skin tones**: hold an emoji for its skin tones, one per key on the pages or in a row in the picker, and pick a default one.
-
-<p align="center">
-  <img src="docs/cards/skin-tones.webp" alt="Skin tones. Hold an emoji for its skin tones, one per key on the pages or in a row in the picker." width="840">
-</p>
-
-- **Search everything**: emoji by name, every Unicode symbol, and kaomoji (here "double" among the emoji). Each search has its own tabs in the bottom bar: emoji categories, the symbols' groups (# → ∑ € § ★ ♪) and the kaomoji's moods (Joy, Love, Sad, Mad and more), each jumping straight to its place.
-
-<p align="center">
-  <img src="docs/cards/search.webp" alt="Search everything. Emoji by name, every Unicode symbol and kaomoji, each search with tabs that jump straight to a group." width="840">
-</p>
-
-- **Kaomoji by mood, action or name**: happy, sad, lenny face and hundreds more.
-
-<p align="center">
-  <img src="docs/cards/kaomoji-moods.webp" alt="Kaomoji by mood, action or name. Happy, sad, lenny face and hundreds more." width="840">
-</p>
-
-- **GIFs**: search them from the emoji pages or the picker, with quick searches (LOL, Love, Sad, Wow, Yes, No, Bye) in the bar, and star one to keep it in your **favourites** (★), with the ones you sent last under them.
-
-<p align="center">
-  <img src="docs/cards/gifs.webp" alt="GIFs, with favourites. Search from the emoji pages or the picker, with quick searches in the bar, and star the ones you want to keep." width="840">
-</p>
-
-- **Tap SYM or the emoji key** for one symbol or emoji, with no screen in the way; a dedicated **emoji key** (Right Shift by default) for the picker.
-- **Shortcuts everywhere**: Ctrl+Z undo in any app, the same app shortcuts in every app, Ctrl+Shift+Q/W/E to pick a suggestion, Enter that sends or adds a line the way each app expects, and Nav Mode for arrows on the letters.
-
-<p align="center">
-  <img src="docs/cards/app-shortcuts.webp" alt="Shortcuts everywhere. Ctrl+Z in any app, and the same standard shortcuts in every app." width="840">
-</p>
-
-- **Shift, Alt and Ctrl your way**, side by side: what a tap does, whether two taps lock it, what Space does, whether it lets go after use, and Backspace deleting forwards.
-
-<p align="center">
-  <img src="docs/cards/modifiers.webp" alt="Shift, Alt and Ctrl your way. What a tap does, whether two taps lock it, and whether it lets go after use, side by side." width="840">
-</p>
-
-- **A quick launcher that does more**: apps, their own shortcuts (Discord's "New message"), contacts to call or message, websites, Termux scripts and tasks, and Niagara search if you prefer it.
-
-<p align="center">
-  <img src="docs/cards/quick-launcher.webp" alt="A quick launcher that does more. Apps and their own shortcuts, contacts to call or message, websites and Termux scripts, by typing their name." width="840">
-</p>
-
-### Typing that keeps up
-- **Suggestions as you type**, in the bar above the keys.
+### The trackpad picks your words
+- **Swipe on the keys to pick a suggestion**: left, up or right for each of the three, down to delete a word. It learns how far you swipe, and with Shizuku it works in every app, not only the ones the phone's Scroll assistant scrolls.
 
 <p align="center">
   <img src="docs/cards/suggestions.webp" alt="Suggestions as you type. In the bar above the keys, picked with a swipe on the trackpad." width="840">
 </p>
 
-- **Spell checking in every app**, working with Gboard's corrections, plus password managers' autofill chips, **one-time codes** from your notifications and copied passwords offered without ever being shown.
+### Emoji, symbols, kaomoji and GIFs on the keys
+- **Pages on the keys**: Q and P turn through every emoji by category, symbols (arrows, maths, currency, punctuation, shapes) and over 300 kaomoji, opening on what you use most. Tap SYM or the emoji key for one, with no screen in the way.
+
+<p align="center">
+  <img src="docs/cards/pages.webp" alt="Emoji, symbols and kaomoji as pages. Q and P turn through every emoji by category, the symbols and over 300 kaomoji, right on the keys." width="840">
+</p>
+
+- **Search everything**: emoji by name, every Unicode symbol, and kaomoji by mood, action or name, each search with tabs that jump straight to a group.
+
+<p align="center">
+  <img src="docs/cards/search.webp" alt="Search everything. Emoji by name, every Unicode symbol and kaomoji, each search with tabs that jump straight to a group." width="840">
+</p>
+
+<p align="center">
+  <img src="docs/cards/kaomoji-moods.webp" alt="Kaomoji by mood, action or name. Happy, sad, lenny face and hundreds more." width="840">
+</p>
+
+- **GIFs with favourites**: search from the emoji pages or the picker, with quick searches in the bar, and star the ones you want to keep.
+
+<p align="center">
+  <img src="docs/cards/gifs.webp" alt="GIFs, with favourites. Search from the emoji pages or the picker, with quick searches in the bar, and star the ones you want to keep." width="840">
+</p>
+
+- **Skin tones** one per key, with a default of your choice.
+
+<p align="center">
+  <img src="docs/cards/skin-tones.webp" alt="Skin tones. Hold an emoji for its skin tones, one per key on the pages or in a row in the picker." width="840">
+</p>
+
+### The rest of the phone, without root
+- **Screen size per app**: each app at its own size, kept through the recent apps screen and back to yours when you leave. The same app at two sizes:
+
+<p align="center">
+  <img src="docs/cards/screen-size-per-app.webp" alt="Screen size per app. Each app at its own size, kept through the recent apps screen and back to yours when you leave." width="840">
+</p>
+
+<p align="center">
+  <img src="docs/cards/two-sizes.webp" alt="The same app at two sizes. Instagram at the phone's own size, then at Desktop, with more on the screen." width="840">
+</p>
+
+- **Keyboard light that follows the screen** (Shizuku): on and off with it, following its brightness as it changes, or flashing for notifications.
+
+<p align="center">
+  <img src="docs/cards/keyboard-light.webp" alt="The keyboard light, no root. On and off with the screen, following its brightness as it changes, or flashing for notifications, through Shizuku." width="840">
+</p>
+
+- **Shortcuts the phone hides away**: force-stop the app in front, toggle Battery Saver or cut an app off the network, from a key.
+
+### Typing that knows where it is
+- **One-time codes from your notifications**, password managers' autofill chips in the bar, and copied passwords offered without ever being shown.
 
 <p align="center">
   <img src="docs/cards/autofill.webp" alt="Autofill and one-time codes. Password managers' chips in the suggestion bar, and codes from your notifications." width="840">
 </p>
 
-- **Learns as you go** (words you use, the emails and numbers you type) and **forgets when asked**: Incognito typing and **Offline mode**, together as a private mode on one key.
+- **Ctrl+Z in any app**, the same app shortcuts in every app, and Enter that sends or adds a line the way each app expects.
+
+<p align="center">
+  <img src="docs/cards/app-shortcuts.webp" alt="Shortcuts everywhere. Ctrl+Z in any app, and the same standard shortcuts in every app." width="840">
+</p>
+
+- **A quick launcher that does more**: apps and their own shortcuts (Discord's "New message"), contacts to call or message, websites, Termux scripts, or Niagara search if you prefer it.
+
+<p align="center">
+  <img src="docs/cards/quick-launcher.webp" alt="A quick launcher that does more. Apps and their own shortcuts, contacts to call or message, websites and Termux scripts, by typing their name." width="840">
+</p>
+
 - **Clean links**: tracking and Google, Facebook and Instagram redirects gone from what you copy and paste.
-- **Small things right**: capitals after a full stop or an emoticon, no stray spaces in emails, web addresses or numbers, emoticons that keep their shape, and voice input that keeps listening.
 
-### Yours
-- **A background picture** you place behind the keys.
-
-<p align="center">
-  <img src="docs/cards/background-picture.webp" alt="A picture behind the keys. Place a photo of your own behind the keyboard." width="840">
-</p>
-
-- **Themes**: one for light mode and one for dark, colours from your wallpaper, and every colour editable.
-
-<p align="center">
-  <img src="docs/cards/themes.webp" alt="Themes. One for light mode and one for dark, colours from your wallpaper, and every colour editable." width="840">
-</p>
-
-- **Edit layouts in the app**, and keyboard-free apps like Termux:X11 and Niagara that still get the keys (and the LEDs).
-- **Terminal mode** for Termux: the keyboard stays out of sight with just its LEDs showing, Alt and SYM type their symbols, Ctrl stays Ctrl, and Termux is set up for the keyboard with one pasted command.
+### Terminals done properly
+- **Terminal mode** for Termux: the keyboard out of sight with just its LEDs, Alt and SYM for symbols, Ctrl staying Ctrl, and Nav Mode and swipes on the keys moving the cursor.
+- **Extra keys**: Esc, Tab, Ctrl, Alt and arrows in the bar's place, opened with the emoji key in a terminal (or from the menu, or a shortcut). While it's open, Q to P press them. Text fields get their own set: arrows, Home, End, cut, copy and paste.
+- **Termux set up in one paste**, including Shizuku starting by itself after a restart (with Termux:Boot).
 
 <p align="center">
   <img src="docs/cards/terminal-mode.webp" alt="Terminal mode. The keyboard out of sight in Termux with just its LEDs, Alt and SYM for symbols, and Ctrl staying Ctrl." width="840">
 </p>
 
-- **A tutorial** that sets up the extras for you, and **updates from the app**, full releases or dev builds.
+### Made to look right
+- **Modifier LEDs** with a colour each: Shift, Alt, SYM, Ctrl, and a fifth for the emoji key, drawn along the Titan 2 Elite's display contour if you like.
+
+<p align="center">
+  <img src="docs/cards/led-strip.webp" alt="Modifier LEDs. Shift, Alt, SYM, Ctrl and the emoji key, each with its own colour, under the suggestions." width="840">
+</p>
+
+- **A background picture** behind the keys, and **themes** for light and dark, with colours from your wallpaper and every colour editable.
+
+<p align="center">
+  <img src="docs/cards/background-picture.webp" alt="A picture behind the keys. Place a photo of your own behind the keyboard." width="840">
+</p>
+
+<p align="center">
+  <img src="docs/cards/themes.webp" alt="Themes. One for light mode and one for dark, colours from your wallpaper, and every colour editable." width="840">
+</p>
+
+- **Recommended settings**: the setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates as a "from → to" list, with a tutorial that walks through permissions, Shizuku and the rest.
+
+<p align="center">
+  <img src="docs/cards/recommended.webp" alt="Recommended settings. The setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates." width="840">
+</p>
 
 <p align="center">
   <img src="docs/cards/tutorial.webp" alt="A tutorial that sets things up. The extras set up for you, and updates from the app, full releases or dev builds." width="840">
 </p>
 
-Everything else, including per-app exact typing and languages, automatic Shift by field type,
-snippet placeholders and voice input that keeps listening, is in the [changelog](FORK_CHANGES.md).
+## Also here, all in one app
+
+Things you'd otherwise need a different fork for, side by side with everything above:
+
+- **Minimal mode**: no keyboard bar in any app, the LEDs optional, emoji and symbols still on their keys.
+- **Screen size presets** for the whole phone: Default, Tablet and Desktop, each one tap.
+
+<p align="center">
+  <img src="docs/cards/screen-size.webp" alt="Screen size presets. Default, Tablet and Desktop for the whole phone, each applied with one tap." width="840">
+</p>
+
+- **One language per download**: each full release comes as an APK per language, opening in its translation and its usual layout. Other languages' dictionaries download when you add them.
+- **Undo that steps back** through what you typed, one chunk at a time.
+- **Voice input that keeps listening**, from the bar or a key.
+- **Exact typing per app** (no corrections or capitals where they get in the way) and languages remembered per app.
+- **Shift, Alt and Ctrl your way**: what a tap does, whether two taps lock it, and whether it lets go after use, side by side.
+
+<p align="center">
+  <img src="docs/cards/modifiers.webp" alt="Shift, Alt and Ctrl your way. What a tap does, whether two taps lock it, and whether it lets go after use, side by side." width="840">
+</p>
+
+- **No root**: Shizuku for everything that needs Android's shell.
+- **Private mode**: Incognito typing and Offline mode together, on one key.
+
+Everything else, including automatic Shift by field type and snippet placeholders, is in the
+[changelog](FORK_CHANGES.md).
 
 ## Built on Pastiera
 

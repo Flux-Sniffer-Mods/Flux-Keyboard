@@ -384,6 +384,38 @@
     {
       "text": "Minimal mode (Look & sound): no keyboard bar in any app, the LEDs optional, while the keys work as usual and the emoji and symbols pages still open on their keys.",
       "after": "202610051915"
+    },
+    {
+      "text": "Keyboard swipes through Shizuku: with Shizuku running, swipes on the keys reach the keyboard in every app, whether or not the phone's Scroll assistant scrolls it, so Scroll assistant can be switched off for the apps you want kept still. It's the default for Shizuku users until you pick a source.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Extra keys: Esc, Tab, Ctrl, Alt and arrows in the bar's place, Termux style, from the menu bar, a shortcut or the emoji key in terminal apps (its new default there). While the row is open, Q to P press its keys, and its Ctrl or Alt goes with the next key you press. Text fields get their own set: arrows, Home, End, select all, cut, copy and paste.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Terminals: Nav Mode works in Termux, sending its arrows straight to the terminal, and swipes on the keys move the cursor (Terminal mode > Swipes move the cursor).",
+      "after": "202610051915"
+    },
+    {
+      "text": "The keyboard bar is Solderina, with Minimal mode beside it (Look & sound > Keyboard bar); the older extended bar is retired. The minimal mode shortcut and menu button switch it on the spot.",
+      "after": "202610051915"
+    },
+    {
+      "text": "The menu bar starts with extra keys, undo, redo and the clipboard.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Shizuku at boot through Termux:Boot: the Termux setup command offers to start Shizuku by itself after a restart, waiting for Wi-Fi, pairing Termux with wireless debugging once and finding Shizuku wherever it's installed.",
+      "after": "202610051915"
+    },
+    {
+      "text": "A new tutorial start: allowing restricted settings goes try, allow, try again and ends with the accessibility service on; a page to pick Solderina or minimal mode; and a Shizuku page from download to starting after a restart, with links to Shizuku, Termux and Termux:Boot on GitHub.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Language versions: full releases come as one APK per language, each opening in its translation and its language's usual layout, and updating to the same language's APK.",
+      "after": "202610051915"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
