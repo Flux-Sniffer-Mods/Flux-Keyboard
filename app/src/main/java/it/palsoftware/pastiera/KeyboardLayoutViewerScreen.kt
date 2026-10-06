@@ -60,7 +60,6 @@ import it.palsoftware.pastiera.data.layout.LayoutFileStore.LayoutConflictPolicy
 import it.palsoftware.pastiera.data.layout.LayoutFileStore.LayoutImportError
 import it.palsoftware.pastiera.data.layout.LayoutFileStore.LayoutImportResult
 import it.palsoftware.pastiera.data.layout.LayoutMapping
-import it.palsoftware.pastiera.data.layout.TapMapping
 
 private data class KeyMappingRowModel(
     val keyCode: Int,

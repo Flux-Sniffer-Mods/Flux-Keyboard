@@ -27,7 +27,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.util.Log
@@ -38,12 +37,10 @@ import it.palsoftware.pastiera.data.symbols.SymbolSearch
 import it.palsoftware.pastiera.data.symbols.Kaomoji
 import it.palsoftware.pastiera.data.emoji.EmojiLayerRecents
 import it.palsoftware.pastiera.data.emoji.RecentEmojiManager
-import it.palsoftware.pastiera.MainActivity
 import it.palsoftware.pastiera.SymCustomizationActivity
 import it.palsoftware.pastiera.KeyboardBackgroundImage
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.SymPagesConfig
-import it.palsoftware.pastiera.data.layout.LayoutFileStore
 import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import it.palsoftware.pastiera.data.mappings.AltModifierMappingResolver
 import it.palsoftware.pastiera.data.variation.VariationRepository

@@ -2,7 +2,6 @@ package it.palsoftware.pastiera
 
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.provider.Settings
 import android.view.ViewGroup

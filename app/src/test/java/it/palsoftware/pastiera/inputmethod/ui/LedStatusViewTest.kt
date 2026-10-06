@@ -3,7 +3,6 @@ package it.palsoftware.pastiera.inputmethod.ui
 import android.graphics.Color
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.PointF
 import android.view.View
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.inputmethod.StatusBarController

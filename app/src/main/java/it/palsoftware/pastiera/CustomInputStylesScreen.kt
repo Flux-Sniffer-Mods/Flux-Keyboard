@@ -4,7 +4,6 @@ import it.palsoftware.pastiera.legacy.LegacyMigrations
 import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Build
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -43,13 +41,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import it.palsoftware.pastiera.data.layout.LayoutFileStore
-import it.palsoftware.pastiera.data.layout.LayoutMappingRepository
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.dictionaries.InstalledDictionariesActivity
 import java.util.Locale
-import android.content.res.AssetManager
 
 /**
  * Data class representing a custom input style entry.

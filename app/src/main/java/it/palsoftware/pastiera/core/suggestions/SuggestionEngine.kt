@@ -3,7 +3,6 @@ package it.palsoftware.pastiera.core.suggestions
 import kotlin.math.min
 import java.text.Normalizer
 import java.util.Locale
-import android.util.Log
 
 data class SuggestionResult(
     val candidate: String,

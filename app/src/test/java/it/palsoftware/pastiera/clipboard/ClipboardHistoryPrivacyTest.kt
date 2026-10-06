@@ -11,7 +11,6 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.BaseInputConnection
-import android.widget.FrameLayout
 import android.widget.TextView
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager

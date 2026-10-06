@@ -3,7 +3,6 @@ package it.palsoftware.pastiera
 import android.content.Context
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodSubtype
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
 import androidx.compose.foundation.layout.*

@@ -18,7 +18,6 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.T2eCornerCalibration
 import it.palsoftware.pastiera.T2eCornerGeometry
 import it.palsoftware.pastiera.inputmethod.StatusBarController
-import kotlin.math.hypot
 import kotlin.math.roundToInt
 
 /**

@@ -3,7 +3,6 @@ package it.palsoftware.pastiera
 import android.hardware.input.InputManager
 import android.view.InputDevice
 import android.view.KeyEvent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

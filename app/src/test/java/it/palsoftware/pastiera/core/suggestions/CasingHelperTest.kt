@@ -2,7 +2,6 @@ package it.palsoftware.pastiera.core.suggestions
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.Locale
 
 class CasingHelperTest {
 
