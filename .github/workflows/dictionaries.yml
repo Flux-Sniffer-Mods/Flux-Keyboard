@@ -1,0 +1,113 @@
+name: Dictionaries
+run-name: Dictionaries ${{ github.sha }}
+
+# Publishes the word lists Flux Keyboard downloads when you add an input language (English is
+# built in) as a release of their own, with the manifest the app reads:
+#   releases/download/<tag>/dicts-manifest.json
+# The release is named in .github/dictionaries.txt (tag, and the commit whose built dictionaries
+# it takes). Changing that file publishes it; a tag already published is left alone.
+# Languages Flux Keyboard doesn't build itself are copied from Pastiera's dictionary list, each
+# checked against its checksum, so downloads never depend on another project's server.
+on:
+  push:
+    branches: [flux-dev, flux-release]
+    paths: [".github/dictionaries.txt", ".github/workflows/dictionaries.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
+      UPSTREAM_MANIFEST: https://palsoftware.github.io/pastiera-dict/dicts-manifest.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+
+      - name: Read the release to publish
+        id: release
+        run: |
+          tag=$(grep -E '^tag=' .github/dictionaries.txt | cut -d= -f2)
+          source=$(grep -E '^source=' .github/dictionaries.txt | cut -d= -f2)
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "$tag is already published: nothing to do"
+          fi
+
+      - name: Take the built dictionaries from their commit
+        if: steps.release.outputs.exists != 'true'
+        run: |
+          mkdir -p out
+          git fetch --depth 1 origin "${{ steps.release.outputs.source }}"
+          dir=app/src/main/assets/common/dictionaries_serialized
+          git ls-tree --name-only FETCH_HEAD "$dir/" | grep '\.dict$' | while read -r path; do
+            git show "FETCH_HEAD:$path" > "out/$(basename "$path")"
+          done
+          ls -l out
+
+      - name: Add the languages from Pastiera's list
+        if: steps.release.outputs.exists != 'true'
+        run: |
+          curl -fsSL "$UPSTREAM_MANIFEST" -o upstream.json
+          python3 - <<'EOF'
+          import hashlib, json, os, urllib.request
+          for item in json.load(open("upstream.json"))["items"]:
+              path = os.path.join("out", item["filename"])
+              if os.path.exists(path):
+                  continue
+              urllib.request.urlretrieve(item["url"], path)
+              digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
+              if digest != item["sha256"]:
+                  raise SystemExit(f"{item['filename']}: checksum doesn't match")
+              print("added", item["filename"])
+          EOF
+
+      - name: Write the manifest
+        if: steps.release.outputs.exists != 'true'
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          python3 - <<'EOF'
+          import datetime, hashlib, json, os
+          tag = os.environ["TAG"]
+          repo = os.environ["GITHUB_REPOSITORY"]
+          upstream = {i["filename"]: i for i in json.load(open("upstream.json"))["items"]}
+          now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+          items = []
+          for name in sorted(f for f in os.listdir("out") if f.endswith(".dict")):
+              data = open(os.path.join("out", name), "rb").read()
+              language = name.split("_")[0]
+              known = upstream.get(name, {})
+              items.append({
+                  "id": name.removesuffix(".dict"),
+                  "filename": name,
+                  "url": f"https://github.com/{repo}/releases/download/{tag}/{name}",
+                  "bytes": len(data),
+                  "sha256": hashlib.sha256(data).hexdigest(),
+                  "updatedAt": now,
+                  "name": known.get("name", language),
+                  "shortDescription": known.get("shortDescription", "Common words"),
+                  "languageTag": known.get("languageTag", language),
+              })
+          manifest = {"schemaVersion": 1, "generatedAt": now, "releaseTag": tag, "items": items}
+          json.dump(manifest, open("out/dicts-manifest.json", "w"), indent=2, ensure_ascii=False)
+          print(len(items), "dictionaries")
+          EOF
+
+      - name: Publish
+        if: steps.release.outputs.exists != 'true'
+        run: |
+          # Not an app release: never "Latest", and the app's update check only reads flux/v tags
+          gh release create "${{ steps.release.outputs.tag }}" out/*.dict out/dicts-manifest.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Dictionaries" \
+            --notes "Word lists Flux Keyboard downloads when you add an input language (Settings > Installed dictionaries). English comes built in. Not an app release." \
+            --latest=false
