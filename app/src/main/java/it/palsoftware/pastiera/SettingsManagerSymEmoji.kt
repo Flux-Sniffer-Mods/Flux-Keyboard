@@ -574,7 +574,7 @@ fun SettingsManager.emojiScreenClosesAfterInput(
 }
 
 /**
- * In apps with Pastiera hidden (Termux:X11), send the Titan's Ctrl and Sym on as standard Left
+ * In apps with the keyboard hidden (Termux:X11), send the Titan's Ctrl and Sym on as standard Left
  * Ctrl and Right Alt: Android gives them Unihertz key codes such apps can't use. On by default.
  */
 fun SettingsManager.getHiddenAppStandardModifiers(context: Context): Boolean =
@@ -635,7 +635,7 @@ fun SettingsManager.setSearchKey(context: Context, keyCode: Int): Boolean {
     return true
 }
 
-/** Offline mode (see [OfflineMode]): nothing in Pastiera goes online. Off by default. */
+/** Offline mode (see [OfflineMode]): nothing in the keyboard goes online. Off by default. */
 fun SettingsManager.isOfflineMode(context: Context): Boolean =
     getPreferences(context).getBoolean(KEY_OFFLINE_MODE, false)
 

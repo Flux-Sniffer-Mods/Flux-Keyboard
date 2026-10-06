@@ -21,7 +21,7 @@ data class KeyboardThemeColors(
     val variationsHeightScale: Float = 1f
 ) {
     // Themes are persisted as colors rather than preset names. Match the unchanged
-    // Pastiera Dark surfaces so custom palettes keep their configured divider.
+    // Dark surfaces so custom palettes keep their configured divider.
     val statusButtonBorder: Int
         get() = if (
             (background == 0xFF000000.toInt() || background == 0x00000000) &&

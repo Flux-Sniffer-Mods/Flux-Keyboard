@@ -16,8 +16,8 @@ import java.util.Locale
 import kotlinx.coroutines.runBlocking
 
 /**
- * Pastiera as Android's spell checker (Settings > System > Languages > Spell checker): apps
- * underline words that aren't in Pastiera's dictionary for the language, words you added
+ * The keyboard as Android's spell checker (Settings > System > Languages > Spell checker): apps
+ * underline words that aren't in the keyboard's dictionary for the language, words you added
  * included, and offer its suggestions. It uses the keyboard's loaded dictionary when the
  * languages match, so the dictionary isn't loaded twice.
  */
@@ -107,7 +107,7 @@ class PastieraSpellCheckerService : SpellCheckerService() {
             SuggestionsInfo(SuggestionsInfo.RESULT_ATTR_IN_THE_DICTIONARY, emptyArray(), cookie, sequence)
     }
 
-    /** A dictionary of its own for a language the keyboard isn't typing in; null if Pastiera has none. */
+    /** A dictionary of its own for a language the keyboard isn't typing in; null if the keyboard has none. */
     private fun ownDictionary(language: String): Pair<DictionaryRepository, SuggestionEngine>? = synchronized(dictionaries) {
         dictionaries[language]?.let { return it }
         if (language !in SpellCheckRules.LANGUAGES) return null

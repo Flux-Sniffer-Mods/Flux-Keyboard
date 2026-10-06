@@ -1696,7 +1696,7 @@ class InputEventRouter(
                 return callSuper()
             }
 
-            // No explicit Pastiera mapping: preserve app-native Ctrl shortcuts (e.g. Ctrl+B/Ctrl+I).
+            // No explicit keyboard mapping: preserve app-native Ctrl shortcuts (e.g. Ctrl+B/Ctrl+I).
             if (isPhysicalCtrlCombo && !ctrlLatchFromNavMode) {
                 return passThroughCtrlCombo()
             }

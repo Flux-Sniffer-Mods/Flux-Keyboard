@@ -18,8 +18,8 @@ internal data class ClicksRecommendedSettingsPlan(
  * Builds the firmware part of the single recommended-settings action.
  *
  * The recommended state keeps the keyboard's native Tab and Alt events, while the microphone
- * button emits Pastiera's Alt+Ctrl dictation trigger instead of Android's native voice action.
- * Pastiera's software settings are persisted only after these writes have completed successfully.
+ * button emits the keyboard's Alt+Ctrl dictation trigger instead of Android's native voice action.
+ * The keyboard's software settings are persisted only after these writes have completed successfully.
  */
 internal object ClicksRecommendedSettingsPlanner {
     fun plan(snapshot: ClicksRecommendedSettingsSnapshot): ClicksRecommendedSettingsPlan =

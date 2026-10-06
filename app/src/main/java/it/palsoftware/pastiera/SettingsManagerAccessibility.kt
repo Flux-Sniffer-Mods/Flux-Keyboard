@@ -6,7 +6,7 @@ import android.content.Context
 
 /**
  * Returns whether Ctrl+letter app shortcuts should be resolved through
- * the active Pastiera layout before being passed to the target app.
+ * the keyboard's active layout before being passed to the target app.
  */
 fun SettingsManager.getLayoutAwareCtrlShortcutsEnabled(context: Context): Boolean {
     return getPreferences(context).getBoolean(
@@ -16,7 +16,7 @@ fun SettingsManager.getLayoutAwareCtrlShortcutsEnabled(context: Context): Boolea
 }
 
 /**
- * Sets whether Ctrl+letter app shortcuts should use the active Pastiera layout.
+ * Sets whether Ctrl+letter app shortcuts should use the keyboard's active layout.
  */
 fun SettingsManager.setLayoutAwareCtrlShortcutsEnabled(context: Context, enabled: Boolean) {
     getPreferences(context).edit()

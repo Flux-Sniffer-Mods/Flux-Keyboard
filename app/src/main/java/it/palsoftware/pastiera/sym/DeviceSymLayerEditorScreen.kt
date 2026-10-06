@@ -50,7 +50,7 @@ import it.palsoftware.pastiera.settings.SettingsSectionDivider
 /**
  * Your own Device SYM profiles: start blank or from a curated profile, choose which keyboards it
  * replaces, set what each key types, and export or import it. Custom profiles are kept with the
- * other settings, so Pastiera's backup includes them.
+ * other settings, so the keyboard's backup includes them.
  */
 @Composable
 fun DeviceSymLayerEditorScreen(

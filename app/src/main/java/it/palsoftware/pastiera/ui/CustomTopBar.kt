@@ -57,7 +57,7 @@ private val PastieraOrangeLight = Color(0xFFC9A2FF)
 private val PastieraYellow = Color(0xFFB98AF0)
 
 /**
- * Custom top bar with Pastiera lattice pattern.
+ * Custom top bar with the lattice pattern.
  * Features light diagonal stripes over a dark toasted gradient.
  */
 @Composable

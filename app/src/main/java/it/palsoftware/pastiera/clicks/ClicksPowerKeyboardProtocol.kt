@@ -48,7 +48,7 @@ internal object ClicksPowerKeyboardProtocol {
 
     fun languageSwitchRemapOutput(): ByteArray = byteArrayOf(HID_LEFT_CTRL.toByte(), HID_SPACE.toByte())
 
-    /** Emits the existing Pastiera Alt+Ctrl trigger without invoking Android's native voice action. */
+    /** Emits the keyboard's existing Alt+Ctrl trigger without invoking Android's native voice action. */
     fun dictationRemapOutput(): ByteArray = byteArrayOf(HID_LEFT_ALT.toByte(), HID_LEFT_CTRL.toByte())
 
     /** Emits a supported key reserved for a software-handled action on the keyboard button. */

@@ -6,9 +6,9 @@ import android.view.inputmethod.EditorInfo
 
 /**
  * Terminal mode (Termux and other terminals you add): a terminal tells input methods it has no
- * text field (TYPE_NULL), so Pastiera would leave Alt and SYM to the app. Treated instead as a
+ * text field (TYPE_NULL), so the keyboard would leave Alt and SYM to the app. Treated instead as a
  * visible-password text field, the same thing Termux's own "enforce-char-based-input" option
- * asks for, Pastiera types its Alt and SYM symbols into it, with no suggestions, corrections or
+ * asks for, the keyboard types its Alt and SYM symbols into it, with no suggestions, corrections or
  * automatic capitals; Ctrl goes to the terminal as a real Ctrl (see the service).
  */
 internal object TerminalMode {
@@ -20,7 +20,7 @@ internal object TerminalMode {
     fun isTerminalView(inputType: Int): Boolean =
         inputType and InputType.TYPE_MASK_CLASS == InputType.TYPE_NULL
 
-    /** Rewrites a terminal's field in place, as Pastiera sees it; true when it did. */
+    /** Rewrites a terminal's field in place, as the keyboard sees it; true when it did. */
     fun apply(info: EditorInfo?): Boolean {
         if (info == null || !isTerminalView(info.inputType)) return info?.inputType == INPUT_TYPE
         info.inputType = INPUT_TYPE

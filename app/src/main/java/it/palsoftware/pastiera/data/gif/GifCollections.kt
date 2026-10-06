@@ -5,7 +5,7 @@ import java.io.File
 
 /**
  * The user's own GIFs: recently sent (newest first, up to [MAX_RECENTS]) and favourites
- * (long-press a GIF in GIF search to add or remove it; newest first). Kept in Pastiera's own
+ * (long-press a GIF in GIF search to add or remove it; newest first). Kept in the keyboard's own
  * files on the phone.
  */
 object GifCollections {

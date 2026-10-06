@@ -12,7 +12,7 @@ import it.palsoftware.pastiera.sym.SymPagesConfig
 
 /**
  * Manages the app settings.
- * Centralizes access to SharedPreferences for Pastiera settings.
+ * Centralizes access to SharedPreferences for the keyboard settings.
  */
 object SettingsManager {
     internal const val TAG = "SettingsManager"
@@ -153,7 +153,7 @@ object SettingsManager {
     internal const val KEY_ALT_LATCH_STAYS_ON_SPACE = "alt_latch_stays_on_space"
     internal const val KEY_CTRL_LATCH_STAYS_ON_SPACE = "ctrl_latch_stays_on_space"
     internal const val KEY_EMOJI_PICKER_EXPANDED_HEIGHT = "emoji_picker_expanded_height"
-    internal const val KEY_HIDDEN_KEYBOARD_APPS = "hidden_keyboard_apps" // Packages where Pastiera stays hidden
+    internal const val KEY_HIDDEN_KEYBOARD_APPS = "hidden_keyboard_apps" // Packages where the keyboard stays hidden
     internal const val KEY_TERMINAL_MODE_ENABLED = "terminal_mode_enabled"
     internal const val KEY_TERMINAL_MODE_APPS = "terminal_mode_apps"
     internal const val KEY_TERMINAL_MODE_SHOW_LEDS = "terminal_mode_show_leds"
@@ -609,7 +609,7 @@ object SettingsManager {
     )
 
     /**
-     * Returns the SharedPreferences instance for Pastiera.
+     * Returns the SharedPreferences instance for the keyboard.
      */
     fun getPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -786,7 +786,7 @@ object SettingsManager {
     fun titan2LayoutApplies(context: Context): Boolean =
         it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2Device() || isTitan2LayoutEnabled(context)
 
-    /** Links Pastiera pastes lose their tracking parameters and mobile hosts. On by default. */
+    /** Links the keyboard pastes lose their tracking parameters and mobile hosts. On by default. */
     fun getCleanPastedLinks(context: Context): Boolean =
         getPreferences(context).getBoolean(KEY_CLEAN_PASTED_LINKS, true)
 
@@ -794,7 +794,7 @@ object SettingsManager {
         getPreferences(context).edit().putBoolean(KEY_CLEAN_PASTED_LINKS, enabled).apply()
     }
 
-    /** [text] as Pastiera pastes it: links cleaned when that's on. */
+    /** [text] as the keyboard pastes it: links cleaned when that's on. */
     fun textToPaste(context: Context, text: String): String =
         if (getCleanPastedLinks(context)) it.palsoftware.pastiera.clipboard.LinkCleaner.clean(text) else text
 
@@ -861,7 +861,7 @@ object SettingsManager {
         getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, enabled).apply()
     }
 
-    /** Incognito typing everywhere: Pastiera learns nothing from what you type. */
+    /** Incognito typing everywhere: the keyboard learns nothing from what you type. */
     fun getIncognitoAlways(context: Context): Boolean =
         getPreferences(context).getBoolean(KEY_INCOGNITO_ALWAYS, false)
 
@@ -1033,7 +1033,7 @@ object SettingsManager {
         }
     }
 
-    /** Keys that type or edit text, or that Android and Pastiera need while typing. */
+    /** Keys that type or edit text, or that Android and the keyboard need while typing. */
     internal val EMOJI_PICKER_KEY_DENYLIST: Set<Int> = setOf(
         KeyEvent.KEYCODE_SPACE,
         KeyEvent.KEYCODE_ENTER,

@@ -64,7 +64,7 @@ import it.palsoftware.pastiera.setHiddenKeyboardApps
 private data class HiddenAppRow(val packageName: String, val name: String, val icon: Drawable?)
 
 /**
- * Picks the apps where Pastiera stays hidden and, per app, what it may still do there (status
+ * Picks the apps where the keyboard stays hidden and, per app, what it may still do there (status
  * LEDs; the emoji key and Sym opening Pastiera). Changes are saved as they are made.
  */
 @Composable
@@ -236,7 +236,7 @@ private fun AppRowItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (checked) {
-                // What Pastiera may still do in this hidden app
+                // What the keyboard may still do in this hidden app
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(
                         selected = showsLeds,
@@ -255,7 +255,7 @@ private fun AppRowItem(
     }
 }
 
-/** Whether Pastiera's accessibility service (needed for apps like Termux:X11) is switched on. */
+/** Whether the keyboard's accessibility service (needed for apps like Termux:X11) is switched on. */
 fun isPastieraAccessibilityServiceEnabled(context: Context): Boolean {
     val enabled = Settings.Secure.getString(
         context.contentResolver,

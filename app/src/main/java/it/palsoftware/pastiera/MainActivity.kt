@@ -1321,7 +1321,7 @@ private fun buildKeyboardDebugReport(
 }
 
 /**
- * Checks if Pastiera IME is enabled and selected.
+ * Checks if the keyboard is enabled and selected.
  * Uses InputMethodManager for Android 14+ compatibility.
  */
 private fun checkImeStatus(
@@ -1333,14 +1333,14 @@ private fun checkImeStatus(
         val pastieraPackageName = ImeIdentity.packageName
         val pastieraImeId = ImeIdentity.imeId
 
-        // Check if Pastiera is enabled using InputMethodManager
+        // Check if the keyboard is enabled using InputMethodManager
         val enabledInputMethods = imm.enabledInputMethodList
         val isEnabled = enabledInputMethods.any { inputMethodInfo ->
             inputMethodInfo.packageName == pastieraPackageName ||
             ImeIdentity.matchesImeId(inputMethodInfo.id)
         }
 
-        // Check if Pastiera is selected
+        // Check if the keyboard is selected
         var isSelected = false
         if (isEnabled) {
             // Try to read DEFAULT_INPUT_METHOD
@@ -1366,7 +1366,7 @@ private fun checkImeStatus(
                         val pastieraInputMethod = allInputMethods.find {
                             it.packageName == pastieraPackageName || ImeIdentity.matchesImeId(it.id)
                         }
-                        // If Pastiera is the only enabled IME, assume it's selected
+                        // If the keyboard is the only enabled IME, assume it's selected
                         if (pastieraInputMethod != null && enabledInputMethods.size == 1) {
                             isSelected = true
                         } else {

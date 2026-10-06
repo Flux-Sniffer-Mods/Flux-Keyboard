@@ -74,7 +74,7 @@ object RecommendedSettings {
 
     /** On a fresh install (no settings yet), applies the recommended settings. */
     fun applyIfFreshInstall(context: Context): Boolean {
-        // Unit tests start every app from scratch and expect Pastiera's own defaults
+        // Unit tests start every app from scratch and expect the keyboard's own defaults
         if (android.os.Build.FINGERPRINT == "robolectric") return false
         if (SettingsManager.getPreferences(context).all.isNotEmpty()) return false
         return apply(context)

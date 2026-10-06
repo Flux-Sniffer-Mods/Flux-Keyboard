@@ -2662,7 +2662,7 @@ private fun TutorialStatusRow(
 }
 
 /**
- * Checks if Pastiera IME is enabled and selected.
+ * Checks if the keyboard is enabled and selected.
  */
 private fun checkImeStatus(
     context: Context,

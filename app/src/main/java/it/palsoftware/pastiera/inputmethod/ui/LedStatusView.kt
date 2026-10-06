@@ -210,7 +210,7 @@ class LedStatusView(
         val outerRail = railPoints(0f) ?: return
         val innerRail = railPoints(stroke + gap) ?: return
         val width = chrome.width.toFloat()
-        // Pastiera's contour LEDs: two rails round each corner button, as on the keyboard: Left
+        // The keyboard's contour LEDs: two rails round each corner button, as on the keyboard: Left
         // Shift outside and Alt inside on the left; on the right Right Shift (or the emoji key's
         // LED) outside, and Sym and Ctrl sharing the inside
         // The same length on every panel: up to the panels' shared side-button width
@@ -425,7 +425,7 @@ class LedStatusView(
                     return
                 }
                 paint.shader = null
-                // Pastiera's contour LEDs: rails along the outer buttons (bar not lifted)
+                // The keyboard's contour LEDs: rails along the outer buttons (bar not lifted)
                 // (drawn by the keyboard frame over everything else: see drawRailOverlay)
                 if (contourIntegrated && ModifierLedLayouts.isSplit(layout)) return
                 // One physical contour per side in rounded mode. Alt/Sym and

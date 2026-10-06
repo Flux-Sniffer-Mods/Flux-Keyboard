@@ -10,7 +10,7 @@ import java.util.UUID
 /**
  * Device SYM profiles you make yourself (Settings > Keyboards & layouts > Hardware keyboard >
  * Device SYM layer editor): a name, the keyboards it applies to, and what each key types on the
- * Device SYM layer (and with Alt, when Alt uses it). Kept in one preference, so Pastiera's backup
+ * Device SYM layer (and with Alt, when Alt uses it). Kept in one preference, so the keyboard's backup
  * includes them.
  */
 data class CustomDeviceSymProfile(

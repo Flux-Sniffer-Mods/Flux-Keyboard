@@ -17,10 +17,10 @@ fun SettingsManager.parsePackageList(text: String): List<String> =
         .distinct()
 
 /**
- * Apps where Pastiera shows nothing and leaves every key to the app, e.g. an X11 desktop
+ * Apps where the keyboard shows nothing and leaves every key to the app, e.g. an X11 desktop
  * such as Termux:X11 that handles the keyboard itself.
  */
-/** Niagara Launcher by default: its own search reads keys directly, so Pastiera stays out of sight. */
+/** Niagara Launcher by default: its own search reads keys directly, so the keyboard stays out of sight. */
 fun SettingsManager.getHiddenKeyboardApps(context: Context): List<String> =
     parsePackageList(getPreferences(context).getString(KEY_HIDDEN_KEYBOARD_APPS, DEFAULT_HIDDEN_KEYBOARD_APPS) ?: "")
 
@@ -33,15 +33,15 @@ fun SettingsManager.setHiddenKeyboardApps(context: Context, packages: Collection
 
 /**
  * Terminal mode: in these apps (Termux unless changed) the terminal is typed into like a
- * text field without smart features, so Alt and SYM type Pastiera's symbols, and every Ctrl
+ * text field without smart features, so Alt and SYM type the keyboard's symbols, and every Ctrl
  * (held, tapped or latched) reaches the terminal as a real Ctrl.
  */
 fun SettingsManager.getTerminalModeEnabled(context: Context): Boolean =
     getPreferences(context).getBoolean(KEY_TERMINAL_MODE_ENABLED, true)
 
 /**
- * Terminal mode keeps Pastiera out of sight, as for the Linux desktop: Alt and SYM still type
- * Pastiera's characters, only the clipboard and emoji picker show while open.
+ * Terminal mode keeps the keyboard out of sight, as for the Linux desktop: Alt and SYM still type
+ * The keyboard's characters, only the clipboard and emoji picker show while open.
  */
 fun SettingsManager.getTerminalModeHideKeyboard(context: Context): Boolean =
     getPreferences(context).getBoolean(KEY_TERMINAL_MODE_HIDE_KEYBOARD, true)
@@ -94,7 +94,7 @@ fun SettingsManager.setTerminalModeApps(context: Context, packages: Collection<S
         .apply()
 }
 
-/** Apps where Pastiera types exactly what you key: no auto-correct, replacements or auto-capitals. */
+/** Apps where the keyboard types exactly what you key: no auto-correct, replacements or auto-capitals. */
 fun SettingsManager.getExactTypingApps(context: Context): List<String> =
     parsePackageList(getPreferences(context).getString(KEY_EXACT_TYPING_APPS, "") ?: "")
 
@@ -120,7 +120,7 @@ fun SettingsManager.isExactTypingField(context: Context, packageName: String?, i
             // no-suggestions flag says (Instagram's message box asks for both)
             (inputType and android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT) == 0)
 
-/** Terminal mode applies to [packageName] (never while Pastiera is hidden for it). */
+/** Terminal mode applies to [packageName] (never while the keyboard is hidden for it). */
 fun SettingsManager.isTerminalModeApp(context: Context, packageName: String?): Boolean =
     !packageName.isNullOrBlank() &&
         getTerminalModeEnabled(context) &&
@@ -162,7 +162,7 @@ fun SettingsManager.hiddenAppShowsLeds(context: Context, packageName: String?): 
 fun SettingsManager.setHiddenAppShowsLeds(context: Context, packageName: String, enabled: Boolean) =
     setHiddenAppOption(context, KEY_HIDDEN_APPS_LEDS, LegacySettings.KEY_HIDDEN_APPS_SHOW_LEDS, packageName, enabled)
 
-/** In this hidden app, the emoji picker key and Sym still open Pastiera's emoji and symbols. */
+/** In this hidden app, the emoji picker key and Sym still open the keyboard's emoji and symbols. */
 fun SettingsManager.hiddenAppAllowsPanels(context: Context, packageName: String?): Boolean =
     !packageName.isNullOrBlank() &&
         packageName in hiddenAppsWithOption(context, KEY_HIDDEN_APPS_PANELS, LegacySettings.KEY_HIDDEN_APPS_ALLOW_PANELS)

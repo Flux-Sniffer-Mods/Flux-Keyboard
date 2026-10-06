@@ -12,9 +12,9 @@ import it.palsoftware.pastiera.getSymMappingsPage2
  * The Linux desktop's keyboard layout: an X keyboard layout ("titan") built from Pastiera's own
  * Alt map and SYM symbols page, so the desktop's Alt and Sym layers match what's set here.
  *
- * It's written to Pastiera's folder on shared storage (no permission needed), where the Titan 2
+ * It's written to the keyboard's folder on shared storage (no permission needed), where the Titan 2
  * Elite Debian chroot's boot script picks it up at the next desktop start. Shift, Ctrl, Alt and
- * Sym latch as in Pastiera: tap for the next key only, double-tap to lock, or hold.
+ * Sym latch as in the keyboard: tap for the next key only, double-tap to lock, or hold.
  */
 object DesktopKeyboardLayout {
     const val FILE_NAME = "titan_xkb_symbols"
@@ -94,11 +94,11 @@ object DesktopKeyboardLayout {
 
     private const val HEADER = """// titan_xkb_symbols - X keyboard layout for the Unihertz Titan 2 Elite, installed
 // as the "titan" layout. Written by Flux Keyboard from its Alt map and symbols (Sym)
-// page (Settings > Linux desktop). Shift, Ctrl, Alt and Sym behave as in Pastiera:
+// page (Settings > Linux desktop). Shift, Ctrl, Alt and Sym behave as in the keyboard:
 // tap for the next key only, double-tap to lock, hold for as long as it is held.
 //   Level 1/2: letter / Shift+letter
-//   Level 3/4: Alt+key        (Pastiera Alt map)
-//   Level 5/6: Sym+key        (Pastiera SYM symbols page; Shift gives its default where changed)
+//   Level 3/4: Alt+key        (the keyboard's Alt map)
+//   Level 5/6: Sym+key        (the keyboard's SYM symbols page; Shift gives its default where changed)
 default partial alphanumeric_keys modifier_keys
 xkb_symbols "basic" {
     include "us(basic)"
@@ -106,7 +106,7 @@ xkb_symbols "basic" {
 """
 
     private const val MODIFIERS = """
-    // Alt = Pastiera Alt layer, Sym (Pastiera sends it as Right Alt) = SYM layer.
+    // Alt = the keyboard's Alt layer, Sym (the keyboard sends it as Right Alt) = SYM layer.
     key <LALT> { type[Group1] = "ONE_LEVEL", symbols[Group1] = [ ISO_Level3_Latch ] };
     key <RALT> { type[Group1] = "ONE_LEVEL", symbols[Group1] = [ ISO_Level5_Latch ] };
     modifier_map Mod5 { <LALT> };

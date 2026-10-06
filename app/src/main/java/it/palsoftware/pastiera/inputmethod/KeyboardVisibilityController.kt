@@ -38,7 +38,7 @@ class KeyboardVisibilityController(
     private val requestShowInputView: () -> Unit,
     private val refreshStatusBar: () -> Unit,
     private val trace: (String) -> Unit = {},
-    // Apps where Pastiera stays hidden (Settings > Advanced > Hide keyboard in these apps)
+    // Apps where the keyboard stays hidden (Settings > Advanced > Hide keyboard in these apps)
     private val isHiddenForApp: () -> Boolean = { false }
 ) {
     enum class RenderedSurface { HIDDEN, FULL_INPUT_VIEW, CANDIDATES_VIEW }
@@ -210,7 +210,7 @@ class KeyboardVisibilityController(
         if (!restarting) dismissed = false
     }
 
-    /** For apps where Pastiera stays hidden: drop any pending show and close the surface. */
+    /** For apps where the keyboard stays hidden: drop any pending show and close the surface. */
     fun hideForApp() {
         cancelPendingSurfaceTransition()
         changingSurface = true

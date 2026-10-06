@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 /**
- * Offline mode: nothing in Pastiera goes online. GIF search (KLIPY) disappears, and dictionary
+ * Offline mode: nothing in the keyboard goes online. GIF search (KLIPY) disappears, and dictionary
  * and layout downloads, update checks, release notes and the downloadable emoji font are all
  * skipped. Loaded when the app starts and updated by its setting, so code without a Context
  * (the download managers) can check it too.

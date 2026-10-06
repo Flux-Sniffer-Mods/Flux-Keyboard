@@ -515,7 +515,7 @@ fun DeveloperOptionsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
 }
 
 /**
- * Terminal mode (Settings > Apps): in Termux and other terminals, Alt and SYM type Pastiera's
+ * Terminal mode (Settings > Apps): in Termux and other terminals, Alt and SYM type the keyboard's
  * symbols and Ctrl reaches the shell as a real Ctrl.
  */
 @Composable

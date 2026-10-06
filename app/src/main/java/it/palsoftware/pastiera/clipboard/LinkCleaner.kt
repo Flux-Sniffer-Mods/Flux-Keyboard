@@ -1,7 +1,7 @@
 package it.palsoftware.pastiera.clipboard
 
 /**
- * Cleans links Pastiera pastes (clipboard history and the paste chip): tracking parameters go
+ * Cleans links the keyboard pastes (clipboard history and the paste chip): tracking parameters go
  * (utm_*, fbclid, gclid, si and the like) and mobile hosts become the normal site
  * (m.youtube.com → youtube.com, en.m.wikipedia.org → en.wikipedia.org), and redirect links (a
  * Google result's google.com/url?q=…) become the link they lead to. Text around the links,
@@ -119,7 +119,7 @@ object LinkCleaner {
     }
 
     /**
-     * The clipboard's link, cleaned in place (so any paste is clean: Pastiera's, the app's own and
+     * The clipboard's link, cleaned in place (so any paste is clean: the keyboard's, the app's own and
      * Ctrl+V). Only plain text is replaced, or formatted text that's just a link; never a password
      * manager's copy or a file. Returns whether the clip was replaced.
      */

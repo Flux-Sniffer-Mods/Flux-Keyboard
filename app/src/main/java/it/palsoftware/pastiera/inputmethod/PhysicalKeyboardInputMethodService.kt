@@ -318,10 +318,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var keyboardHiddenForApp: Boolean = false
     // ...but with "Show status LEDs only": the LED strip stays, following observed modifiers
     private var hiddenAppShowsLeds: Boolean = false
-    // ...and this hidden app lets the emoji key and Sym open Pastiera (per-app option)
+    // ...and this hidden app lets the emoji key and Sym open the keyboard (per-app option)
     private var hiddenAppAllowsPanels: Boolean = false
     private val observedModifierLeds = ObservedModifierLeds()
-    // Hidden app with the panels option: Pastiera's surface is up for an emoji/symbols panel
+    // Hidden app with the panels option: the keyboard's surface is up for an emoji/symbols panel
     private var hiddenAppPanelShown: Boolean = false
     // Keys whose press went to the hidden app / to Pastiera (their release goes the same way)
     private val hiddenAppPassedThroughKeys = mutableSetOf<Int>()
@@ -1803,7 +1803,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
     
     private fun enforceSmartFeatureDisabledState() {
-        // The candidates surface also contains Pastiera's hardware-keyboard status bar.
+        // The candidates surface also contains the keyboard's hardware-keyboard status bar.
         // Individual smart features hide their own content; the surface itself stays visible.
         deactivateVariations()
     }
@@ -3455,12 +3455,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun hiddenAppPanelOpen(): Boolean =
         keyboardHiddenForApp && symPage > 0 && hiddenAppAllowsPanels
 
-    /** Hidden apps keep Pastiera's surface closed, except for the status LEDs or an open panel. */
+    /** Hidden apps keep the keyboard's surface closed, except for the status LEDs or an open panel. */
     private fun hiddenAppSurfaceBlocked(): Boolean =
         (keyboardHiddenForApp && !hiddenAppShowsLeds && !hiddenAppPanelOpen()) || terminalSurfaceHidden()
 
     /**
-     * Terminal mode, like the Linux desktop: Pastiera out of sight while its keys keep working
+     * Terminal mode, like the Linux desktop: the keyboard out of sight while its keys keep working
      * (Alt layer, SYM layers typed blind, real Ctrl). The clipboard (3) and emoji picker (4) need
      * to be seen, so they show while open.
      */
@@ -3491,7 +3491,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     /**
      * In a hidden app, a held character key repeats into the app, and an ordinary text field
      * (not a terminal or X11 view, which read raw keys) answers a held letter with Android's
-     * accent picker. Pastiera is hidden there, so the repeats are dropped instead.
+     * accent picker. The keyboard is hidden there, so the repeats are dropped instead.
      */
     private fun hiddenAppHoldOpensAccentPicker(keyCode: Int): Boolean {
         if (hiddenAppKeyGoesToPastiera(keyCode)) return false
@@ -3500,7 +3500,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         return inputType and android.text.InputType.TYPE_MASK_CLASS != EditorInfo.TYPE_NULL
     }
 
-    /** Show Pastiera while a panel is open in a hidden app; hide it (or back to LEDs) afterwards. */
+    /** Show the keyboard while a panel is open in a hidden app; hide it (or back to LEDs) afterwards. */
     private fun syncHiddenAppPanel() {
         if (terminalModeActive && terminalHidesKeyboard && !keyboardHiddenForApp) {
             if (::candidatesBarController.isInitialized) candidatesBarController.setLedsOnlyMode(terminalLedsOnly())
@@ -3530,7 +3530,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     /**
      * Accessibility path for hidden apps that read keys before any input method (Termux:X11):
-     * hands the panel keys, and every key while a panel is open, to Pastiera; sends the Titan's
+     * hands the panel keys, and every key while a panel is open, to the keyboard; sends the Titan's
      * Ctrl and Sym on as standard keys ([translateHiddenAppKey]).
      */
     private fun interceptHiddenAppKey(event: KeyEvent): Boolean {
@@ -3561,7 +3561,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     // The Titan's Ctrl and Sym in hidden apps (Termux:X11). Android names them FUNC3 and
     // AGUI_SYM (Unihertz key codes), or keeps the press and only marks the next key with a Ctrl
-    // or Sym meta state; apps such as Termux:X11 can turn neither into keys. Pastiera sends
+    // or Sym meta state; apps such as Termux:X11 can turn neither into keys. The keyboard sends
     // standard Left Ctrl and Right Alt (the desktop layout's Sym) through the input connection.
     private val hiddenAppTranslatedKeys = mutableMapOf<Int, Int>()          // original -> sent modifier
     private val hiddenAppWrappedKeys = mutableMapOf<Int, List<Int>>()       // original -> modifiers around it
@@ -3650,7 +3650,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (changed) updateStatusBarText()
     }
 
-    /** Close any Pastiera surface once the framework's start/show pass is over. */
+    /** Close any keyboard surface once the framework's start/show pass is over. */
     private fun hideSurfaceIfHiddenForApp() {
         if (!hiddenAppSurfaceBlocked() || !::keyboardVisibilityController.isInitialized) return
         uiHandler.post {
@@ -4211,7 +4211,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Every hidden app: panel keys (with the panels option) and the Titan's Ctrl and Sym
         HiddenAppKeyObserver.interceptor = if (keyboardHiddenForApp) ::interceptHiddenAppKey else null
         if (keyboardHiddenForApp) {
-            // Keep the Linux desktop's keyboard layout in step with Pastiera's Alt map and SYM
+            // Keep the Linux desktop's keyboard layout in step with the keyboard's Alt map and SYM
             // page (written only when it changed; the chroot picks it up at the next start)
             val appContext = applicationContext
             Thread({
@@ -5347,7 +5347,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun appShortcutKeyCode(event: KeyEvent, ctrl: Boolean, alt: Boolean): Pair<Int, Boolean> {
         val keyCode = event.keyCode
         if (!ctrl || !alt || it.palsoftware.pastiera.shortcuts.ShortcutKeys.charOf(keyCode) != null) return keyCode to alt
-        // The keyboard's own Alt character, then Pastiera's Alt layer: a digit keeps Alt
+        // The keyboard's own Alt character, then the keyboard's Alt layer: a digit keeps Alt
         // (Ctrl+Alt+1), "/" or "," drops it (Ctrl+/), for keyboards without those keys
         val hardwareChar = runCatching { event.keyCharacterMap.get(keyCode, KeyEvent.META_ALT_ON).toChar() }
             .getOrNull()?.takeIf { it.code != 0 }
@@ -5365,7 +5365,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (::candidatesBarController.isInitialized && candidatesBarController.isEmojiPickerSearchInputActive()) return false
         val heldCtrl = event.isCtrlPressed || ctrlPressed || ctrlPhysicallyPressed
         // In a text field a latched Ctrl (and a held one with "held Ctrl uses Nav Mode") is
-        // Pastiera's cursor and selection grid; only a held Ctrl the app would get counts there
+        // The keyboard's cursor and selection grid; only a held Ctrl the app would get counts there
         val ctrl = if (hasEditableField) {
             heldCtrl && !SettingsManager.getNavModeCtrlHoldEnabled(this)
         } else {
@@ -7372,7 +7372,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 }
 
-/** Keys that always belong to Android, even while a hidden app's Pastiera panel is open. */
+/** Keys that always belong to Android, even while a hidden app's keyboard panel is open. */
 /** The Titan 2 Elite's Ctrl (scancode 251) and Sym (253), as the standard keys apps understand. */
 private val TITAN_MODIFIER_SCAN_CODES = mapOf(
     251 to KeyEvent.KEYCODE_CTRL_LEFT,

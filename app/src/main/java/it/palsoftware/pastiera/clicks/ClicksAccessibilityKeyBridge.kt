@@ -3,7 +3,7 @@ package it.palsoftware.pastiera.clicks
 import android.view.KeyEvent
 import android.view.MotionEvent
 
-/** Connects the optional system key filter to the currently active Pastiera input method. */
+/** Connects the optional system key filter to the keyboard while it is the active input method. */
 internal object ClicksAccessibilityKeyBridge {
     interface Target {
         fun dispatchClicksAccessibilityKeyEvent(event: KeyEvent): Boolean

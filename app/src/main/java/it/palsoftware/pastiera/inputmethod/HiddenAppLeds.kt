@@ -6,10 +6,10 @@ import android.util.Log
 import android.view.KeyEvent
 
 /**
- * Modifier state rebuilt from raw key events, for apps where Pastiera leaves every key to the app
+ * Modifier state rebuilt from raw key events, for apps where the keyboard leaves every key to the app
  * but still shows its status LEDs ("Hide keyboard in these apps" with "Show status LEDs only").
  *
- * Shift, Ctrl, Alt and Sym behave like Pastiera and the Titan X layout: tap = next key only, tap
+ * Shift, Ctrl, Alt and Sym behave like the keyboard and the Titan X layout: tap = next key only, tap
  * again = locked, tap once more = off, hold = only while held. The same event can arrive twice
  * (accessibility service and input method); duplicates are ignored.
  */
@@ -82,7 +82,7 @@ internal class ObservedModifierLeds {
         return Modifier.values().map(::level) != before
     }
 
-    /** Pastiera's status snapshot with the observed modifier states in place of its own. */
+    /** The keyboard's status snapshot with the observed modifier states in place of its own. */
     fun applyTo(snapshot: StatusBarController.StatusSnapshot): StatusBarController.StatusSnapshot {
         val shift = states.getValue(Modifier.SHIFT)
         val ctrl = states.getValue(Modifier.CTRL)
@@ -128,7 +128,7 @@ internal class ObservedModifierLeds {
 }
 
 /**
- * Hands key events seen by Pastiera's accessibility service to the input method while a hidden
+ * Hands key events seen by the keyboard's accessibility service to the input method while a hidden
  * app shows status LEDs. Apps such as Termux:X11 read hardware keys before any input method, so
  * this is the only way for the LEDs to follow them. Observing never consumes an event.
  */
@@ -136,7 +136,7 @@ internal object HiddenAppKeyObserver {
     @Volatile
     var sink: ((KeyEvent) -> Unit)? = null
 
-    /** An app with Pastiera hidden is in front (key diagnostics are logged only then). */
+    /** An app with the keyboard hidden is in front (key diagnostics are logged only then). */
     @Volatile
     var hiddenAppInFront: Boolean = false
 
@@ -169,9 +169,9 @@ internal object HiddenAppKeyObserver {
     }
 
     /**
-     * Set while a hidden app allows Pastiera's emoji/symbols panels. Returns true when the input
+     * Set while a hidden app allows the keyboard's emoji/symbols panels. Returns true when the input
      * method took the event (it then never reaches the app). Called on the main thread: the
-     * accessibility service and the input method share Pastiera's process.
+     * accessibility service and the input method share the keyboard's process.
      */
     @Volatile
     var interceptor: ((KeyEvent) -> Boolean)? = null

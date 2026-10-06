@@ -6,7 +6,7 @@ import it.palsoftware.pastiera.R
 /**
  * Universal app shortcuts: one set of standard key combos that does the same thing in
  * every app. Each app's preset says which of its own documented shortcuts a standard combo
- * becomes; Pastiera sends the app that shortcut instead of the combo you pressed.
+ * becomes; the keyboard sends the app that shortcut instead of the combo you pressed.
  *
  * Key shortcuts in the presets are only those an app documents for its Android version (or
  * ships in its source code). Where an app documents none, its preset can suggest intents into
@@ -407,7 +407,7 @@ data class AppShortcutConfig(
     val apps: Map<String, AppShortcutAppSettings> = emptyMap()
 )
 
-/** What Pastiera does for a standard combo in an app. */
+/** What the keyboard does for a standard combo in an app. */
 sealed class ShortcutAction {
     /** Send the app its own key shortcut. */
     data class SendKeys(val combo: KeyCombo) : ShortcutAction()

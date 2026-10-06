@@ -60,7 +60,7 @@ class ClipboardHistoryManager internal constructor(
     }
 
     /**
-     * The last text copied while Pastiera was listening, for the paste suggestion. [sensitive]:
+     * The last text copied while the keyboard was listening, for the paste suggestion. [sensitive]:
      * marked so by the app it came from (a password manager); kept in memory only and offered
      * only in password fields, masked.
      */
@@ -87,7 +87,7 @@ class ClipboardHistoryManager internal constructor(
 
     /**
      * A link just copied loses its tracking on the clipboard itself (Clean links), so it's clean
-     * wherever it's pasted: an app's own Paste and Ctrl+V too, not only Pastiera's. Only a plain
+     * wherever it's pasted: an app's own Paste and Ctrl+V too, not only the keyboard's. Only a plain
      * text copy is replaced, never a password manager's, formatted text or a file. Returns
      * whether the clip was replaced.
      */

@@ -58,7 +58,7 @@ internal object ModifierLedLayouts {
      * Photo-derived Titan 2 Elite modifier map.
      *
      * Alt and Sym follow their upper physical row. Shift is intentionally mirrored at both
-     * outer bottom positions because Pastiera tracks the active Shift state, not its origin.
+     * outer bottom positions because the keyboard tracks the active Shift state, not its origin.
      * Ctrl follows the Fn key that users configure as Ctrl, just inside the right Shift key.
      */
     val TITAN_2_ELITE = ModifierLedLayout(

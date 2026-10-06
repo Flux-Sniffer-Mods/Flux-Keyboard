@@ -43,7 +43,7 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
         result.directAction?.let { ClicksButtonDirectActionExecutor.execute(this, it) }
         val forwardedEvent = result.forwardedEvent
         if (forwardedEvent != null && !ClicksAccessibilityKeyBridge.dispatch(forwardedEvent)) {
-            // Fail open when Pastiera has no active editor. Keeping the mapper's held-modifier
+            // Fail open when the keyboard has no active editor. Keeping the mapper's held-modifier
             // state would otherwise consume the following native key events as well.
             mapper.resetDevice(event.deviceId)
             return false

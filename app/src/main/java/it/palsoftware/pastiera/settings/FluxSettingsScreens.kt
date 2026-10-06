@@ -156,7 +156,7 @@ import it.palsoftware.pastiera.setTitan2EliteFillCorners
  * Flux Keyboard settings, one screen per area (Settings > Flux Keyboard):
  *   Emoji & GIFs          - emoji key, emoji layer keys, GIF search
  *   Titan 2 Elite screen  - rounded corners, outer buttons, status bar
- *   Hidden keyboard apps  - apps where Pastiera stays out of sight, and the service they need
+ *   Hidden keyboard apps  - apps where the keyboard stays out of sight, and the service they need
  *   Linux desktop         - Ctrl and Sym, and the desktop's keyboard layout
  */
 
@@ -468,7 +468,7 @@ internal val fluxRowIcons: Map<String?, String> = mapOf(
 internal fun fluxTitanScreenAvailable(context: Context): Boolean =
     DeviceSpecific.isTitan2EliteDevice() || SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)
 
-/** Pastiera's accessibility service is on: hidden apps' status LEDs, panels, Ctrl and Sym need it. */
+/** The keyboard's accessibility service is on: hidden apps' status LEDs, panels, Ctrl and Sym need it. */
 internal fun isPastieraAccessibilityServiceOn(context: Context): Boolean {
     val expected = ComponentName(context, ClicksLauncherButtonAccessibilityService::class.java)
     val manager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager ?: return false
