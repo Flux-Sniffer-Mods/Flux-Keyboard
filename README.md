@@ -223,7 +223,7 @@ doesn't replace or update it.
 - Dev work goes on `flux-dev` as individual commits, one per change, and Pastiera's changes are merged into it as they land. For a full release, add it to `"releases"`, fold the commits since the last full release into category commits, move `flux-release` up to the result and run the workflow on `flux-release`. Commits at or below `flux-release` are never rewritten.
 - A full release deletes the dev builds before it (their releases and tags) when it publishes; builds run one at a time.
 - `tools/find-keyboard-gesture-page.sh` (as root from Termux, with the page open) prints which screen a phone's keyboard gesture settings are.
-- `tools/find-scroll-assistant.sh` (as root from Termux) shows where the phone's Scroll assistant keeps its switch and app list, and how it scrolls apps while no keyboard is showing.
+- `tools/find-scroll-assistant.sh` (from Termux, through Shizuku's rish or as root) shows where the phone's Scroll assistant keeps its switch and app list, and how it scrolls apps while no keyboard is showing.
 
 Pastiera's release, nightly and CI workflows aren't kept: Flux Keyboard builds only with
 `fork-build.yml`. When Pastiera changes them, a merge keeps them deleted.

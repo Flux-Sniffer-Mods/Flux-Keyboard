@@ -1,16 +1,22 @@
 #!/system/bin/sh
 PATH=/system/bin:/system/xbin:$PATH
-# Needs root: run it with su from Termux.
 # Finds out how the phone's Scroll assistant (Titan 2 Elite: Settings > Gestures > Keyboard
 # gestures > Scroll assistant) scrolls apps while no keyboard is showing, and where it keeps its
-# switch and app list, so Flux Keyboard can keep swipes from the apps you block:
+# switch and app list, so Flux Keyboard can keep swipes from the apps you block.
 #
-#   su -c sh find-scroll-assistant.sh
+# Runs as the shell user, through Shizuku's terminal helper (no root): in the Shizuku app, "Use
+# Shizuku in terminal apps" > Export files, into a folder Termux can read; then in Termux
+#
+#   sh /path/to/rish -c "sh find-scroll-assistant.sh"
+#
+# or with root: su -c sh find-scroll-assistant.sh (root also compares the settings app's own
+# saved files, which the shell user can't read).
 #
 # It asks you to do three things in turn, pressing Enter in Termux after each.
 # Everything is written to /sdcard/Download/flux-scroll-assistant.txt as well.
 
 OUT=/sdcard/Download/flux-scroll-assistant.txt
+# Somewhere both the shell user and root can write
 DIR=/data/local/tmp/flux-scroll-assistant
 rm -rf "$DIR"; mkdir -p "$DIR"
 
