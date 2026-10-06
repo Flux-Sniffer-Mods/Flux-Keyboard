@@ -93,6 +93,22 @@ object DebugCaptureStore {
         val after: String?
     )
 
+    private const val MAX_TRACKPAD_CLAIM = 60
+    private val trackpadClaimEvents = ArrayDeque<Pair<Long, String>>()
+
+    /**
+     * Keyboard swipes per app: the app in front, whether swipes are taken from it, and the swipes
+     * the accessibility service received (one line per swipe), for the debug export.
+     */
+    @Synchronized
+    fun recordTrackpadClaim(message: String) {
+        trackpadClaimEvents.addLast(System.currentTimeMillis() to message)
+        while (trackpadClaimEvents.size > MAX_TRACKPAD_CLAIM) trackpadClaimEvents.removeFirst()
+    }
+
+    @Synchronized
+    fun trackpadClaimSnapshot(): List<Pair<Long, String>> = trackpadClaimEvents.toList()
+
     private const val MAX_AUTOFILL = 40
     private val autofillEvents = ArrayDeque<Pair<Long, String>>()
 

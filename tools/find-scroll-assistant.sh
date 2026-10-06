@@ -109,6 +109,16 @@ echo "Recorded."
   sed -n '/RecentQueue/,/PendingEvent\|Connections:/p' "$DIR/input.txt" | head -40
   echo "-- Vendor log lines"
   cat "$DIR/logcat.txt"
+
+  echo; echo "== 4. What Unihertz's settings app offers other apps"
+  echo "-- Content providers"
+  dumpsys package com.agui.settings | grep -iE "Provider|authority|readPermission|writePermission" | sort -u | head -30
+  echo "-- Services"
+  dumpsys package com.agui.settings | grep -iE "^ +[0-9a-f]+ com.agui.settings/.*(Service|Receiver)" | head -30
+  echo "-- System services named like it"
+  service list | grep -iE "agui|touch|scroll|gesture" | head -20
+  echo "-- Scroll assistant's screen"
+  dumpsys package com.agui.settings | grep -iE "touchpad|scroll" | sort -u | head -30
 } 2>&1 | tee "$OUT"
 
 rm -rf "$DIR"

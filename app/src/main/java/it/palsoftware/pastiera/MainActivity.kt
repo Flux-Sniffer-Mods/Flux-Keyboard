@@ -1212,6 +1212,11 @@ private fun buildKeyboardDebugReport(
         autofill.forEach { (time, message) -> appendLine("${formatDebugTimestamp(time)} $message") }
         appendLine("candidates_view_backend=${SettingsManager.getExperimentalCandidatesViewEnabled(context)}")
         appendLine()
+        appendLine("[keyboard_swipes_per_app]")
+        val trackpadClaim = DebugCaptureStore.trackpadClaimSnapshot()
+        if (trackpadClaim.isEmpty()) appendLine("(none)")
+        trackpadClaim.forEach { (time, message) -> appendLine("${formatDebugTimestamp(time)} $message") }
+        appendLine()
         appendLine("[automatic_shift]")
         val autoCap = DebugCaptureStore.autoCapSnapshot()
         if (autoCap.isEmpty()) appendLine("(none)")

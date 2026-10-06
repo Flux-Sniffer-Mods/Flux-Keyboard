@@ -63,8 +63,12 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
             if (!overlay) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
             // Keyboard swipes per app follow the app's own screens (the quick launcher, over
             // another app, keeps that app's choice)
+            if (!confirmed && !overlay && pkg != frontPackage && pkg != packageName) {
+                DebugCaptureStore.recordTrackpadClaim("window from $pkg (${event.className}) isn't an app screen: ignored")
+            }
             if (confirmed && !overlay && pkg != frontPackage) {
                 frontPackage = pkg
+                DebugCaptureStore.recordTrackpadClaim("in front: $pkg, swipes kept from it: ${blockedHere()}")
                 claimTrackpad(ClicksAccessibilityKeyBridge.trackpadCaptured)
             }
         }
@@ -85,6 +89,17 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
         // Keyboard swipes: taken from apps while a field is typed in, handed to the keyboard
         ClicksAccessibilityKeyBridge.onTrackpadCaptureChanged = { captured -> claimTrackpad(captured) }
         claimTrackpad(ClicksAccessibilityKeyBridge.trackpadCaptured)
+        // Started with an app already in front (after an update, or the service turned on): ask
+        // Android which, through Shizuku, rather than wait for the next app to open
+        Thread {
+            val front = it.palsoftware.pastiera.adb.PerAppDensity.resumedPackage() ?: return@Thread
+            android.os.Handler(mainLooper).post {
+                if (frontPackage != null) return@post
+                frontPackage = front
+                DebugCaptureStore.recordTrackpadClaim("in front at start: $front, swipes kept from it: ${blockedHere()}")
+                claimTrackpad(ClicksAccessibilityKeyBridge.trackpadCaptured)
+            }
+        }.start()
     }
 
     /** The app whose screen is in front, for keyboard swipes per app. */
@@ -104,13 +119,24 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
                 val info = serviceInfo ?: return@runCatching
                 info.motionEventSources = if (captured) android.view.InputDevice.SOURCE_TOUCHPAD else 0
                 serviceInfo = info
-            }
+                DebugCaptureStore.recordTrackpadClaim(
+                    "claim: typing=$typing app=$frontPackage kept=${captured && !typing} " +
+                        "sources=0x${Integer.toHexString(serviceInfo?.motionEventSources ?: -1)}"
+                )
+            }.onFailure { DebugCaptureStore.recordTrackpadClaim("claim failed: ${it.javaClass.simpleName}: ${it.message}") }
         }
     }
 
     override fun onMotionEvent(event: android.view.MotionEvent) {
+        val typing = ClicksAccessibilityKeyBridge.trackpadCaptured
+        if (event.actionMasked == android.view.MotionEvent.ACTION_DOWN) {
+            DebugCaptureStore.recordTrackpadClaim(
+                "swipe taken from $frontPackage: source=0x${Integer.toHexString(event.source)} " +
+                    if (typing) "to the keyboard" else "dropped"
+            )
+        }
         // Taken only to keep them from the app (not typing): dropped
-        if (!ClicksAccessibilityKeyBridge.trackpadCaptured) return
+        if (!typing) return
         ClicksAccessibilityKeyBridge.dispatch(event)
     }
 
