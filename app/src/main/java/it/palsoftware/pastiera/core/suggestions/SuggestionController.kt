@@ -572,6 +572,16 @@ class SuggestionController(
     }
 
     /**
+     * [language]'s dictionary was just downloaded: the keyboard's language loads it now (others
+     * load the next time they're used, as their engines retry).
+     */
+    fun onDictionaryInstalled(language: String) {
+        if (currentLocale.language.equals(language, ignoreCase = true) && !dictionaryRepository.isReady) {
+            schedulePrimaryDictionaryLoad(refreshAfterLoad = true)
+        }
+    }
+
+    /**
      * Forces a refresh of user dictionary entries.
      * Should be called when words are added/removed from settings.
      */

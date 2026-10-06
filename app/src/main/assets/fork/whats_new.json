@@ -376,6 +376,10 @@
     {
       "text": "About ends with the flux sniffer mods mark, light or dark to match the app's theme (tap it for their GitHub), and has a Support me on Ko-fi link.",
       "after": "202610050800"
+    },
+    {
+      "text": "A much smaller app: English comes built in, and other languages' dictionaries download the first time you use them (or from Installed dictionaries), from Flux Keyboard's own releases. Languages you already type in download by themselves after the update.",
+      "after": "202610051915"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

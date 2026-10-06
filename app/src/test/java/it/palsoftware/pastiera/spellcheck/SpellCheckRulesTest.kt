@@ -32,7 +32,8 @@ class SpellCheckRulesTest {
     fun everyBundledDictionaryIsALanguage() {
         val bundled = java.io.File("src/main/assets/common/dictionaries_serialized").list().orEmpty()
             .map { it.substringBefore('_') }.toSet()
-        assertTrue(bundled.isNotEmpty())
-        org.junit.Assert.assertEquals(bundled, SpellCheckRules.LANGUAGES)
+        // English is built in; the other languages' dictionaries download on first use
+        org.junit.Assert.assertEquals(setOf("en"), bundled)
+        assertTrue(SpellCheckRules.LANGUAGES.containsAll(bundled))
     }
 }

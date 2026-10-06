@@ -195,8 +195,8 @@ object SpellCheckRules {
         return forms.distinct()
     }
 
-    /** Languages with a bundled dictionary (assets/common/dictionaries_serialized). */
-    val LANGUAGES = setOf("da", "de", "en", "es", "fr", "it", "nl", "no", "pl", "pt", "ru", "uk")
+    /** Languages it checks: English built in, the others' dictionaries downloaded on first use. */
+    val LANGUAGES = it.palsoftware.pastiera.dictionaries.DictionaryDownloads.OFFERED_LANGUAGES
 
     /**
      * Words worth checking: not numbers, links, addresses, handles, hashtags, acronyms or

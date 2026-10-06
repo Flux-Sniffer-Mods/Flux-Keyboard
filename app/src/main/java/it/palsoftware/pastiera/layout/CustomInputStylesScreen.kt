@@ -1380,7 +1380,9 @@ private fun normalizeLocaleTag(locale: String): String {
  * Uses serialized (.dict) from assets and custom/imported folder.
  */
 private fun getLocalesWithDictionary(context: Context): List<String> {
-    val localesWithDict = mutableSetOf<String>()
+    // The languages earlier versions carried in the app: their dictionaries download on first use
+    val localesWithDict = it.palsoftware.pastiera.dictionaries.DictionaryDownloads.OFFERED_LANGUAGES
+        .flatMap { getLocaleVariantsForLanguage(it) }.toMutableSet()
 
     try {
         val assets = context.assets
@@ -1451,6 +1453,8 @@ private fun hasDictionaryForLocale(context: Context, locale: String): Boolean {
     try {
         val assets = context.assets
         val langCode = locale.split("_")[0].lowercase()
+        // Downloads the first time it's used
+        if (langCode in it.palsoftware.pastiera.dictionaries.DictionaryDownloads.OFFERED_LANGUAGES) return true
 
         // Check serialized dictionaries from assets
         try {

@@ -2916,11 +2916,19 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     if (::suggestionController.isInitialized) {
                         suggestionController.refreshUserDictionary()
                     }
+                } else if (intent?.action == AppBroadcastActions.DICTIONARY_INSTALLED) {
+                    // A language's dictionary arrived: in use, it loads now
+                    val language = intent.getStringExtra(it.palsoftware.pastiera.dictionaries.DictionaryDownloads.EXTRA_LANGUAGE)
+                    if (language != null && ::suggestionController.isInitialized) {
+                        suggestionController.onDictionaryInstalled(language)
+                    }
                 }
             }
         }
         
-        val userDictFilter = IntentFilter(AppBroadcastActions.USER_DICTIONARY_UPDATED)
+        val userDictFilter = IntentFilter(AppBroadcastActions.USER_DICTIONARY_UPDATED).apply {
+            addAction(AppBroadcastActions.DICTIONARY_INSTALLED)
+        }
         // Not exported on every Android version: other apps can't type into fields through it
         ContextCompat.registerReceiver(this, userDictionaryReceiver, userDictFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         

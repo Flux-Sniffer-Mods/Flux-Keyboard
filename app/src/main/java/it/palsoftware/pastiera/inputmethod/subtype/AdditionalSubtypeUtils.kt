@@ -625,7 +625,9 @@ object AdditionalSubtypeUtils {
      * Checks both serialized (.dict) and JSON (.json) formats.
      */
     private fun getLocalesWithDictionary(context: Context): Set<String> {
-        val localesWithDict = mutableSetOf<String>()
+        // The languages earlier versions carried in the app: their dictionaries download on first use
+        val localesWithDict = it.palsoftware.pastiera.dictionaries.DictionaryDownloads.OFFERED_LANGUAGES
+            .flatMap { getLocaleVariantsForLanguage(it) }.toMutableSet()
         try {
             val assets = context.assets
             

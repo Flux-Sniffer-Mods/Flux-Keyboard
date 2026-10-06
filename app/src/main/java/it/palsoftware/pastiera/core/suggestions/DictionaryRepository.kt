@@ -158,6 +158,10 @@ class AndroidDictionaryRepository(
 
                 if (!loadedSerialized) {
                     Log.e(tag, "Failed to load serialized dictionary for locale=${baseLocale.language}")
+                    // Not on the phone yet (only English is built in): it downloads, and loads once it's here
+                    if (!customFile.exists()) {
+                        it.palsoftware.pastiera.dictionaries.DictionaryDownloads.requestMissing(context, baseLocale.language)
+                    }
                     synchronized(this) { loadStarted = false }
                     return
                 }
