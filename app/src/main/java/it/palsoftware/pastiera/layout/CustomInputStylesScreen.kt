@@ -1174,7 +1174,7 @@ private fun loadCustomInputStyles(context: Context): List<CustomInputStyle> {
     val styles = mutableListOf<CustomInputStyle>()
 
     // First, add system-enabled locales
-    val systemLocales = getSystemEnabledLocales(context)
+    val systemLocales = AdditionalSubtypeUtils.getSystemEnabledLocales(context)
     systemLocales.forEach { locale ->
         val layout = AdditionalSubtypeUtils.getLayoutForLocale(context.assets, locale, context)
         val isHidden = SettingsManager.isSystemInputStyleHidden(context, locale, layout)
@@ -1229,7 +1229,7 @@ private fun loadCustomInputStyles(context: Context): List<CustomInputStyle> {
 }
 
 private fun ensureAtLeastOneVisibleInputStyle(context: Context) {
-    val systemLocales = getSystemEnabledLocales(context)
+    val systemLocales = AdditionalSubtypeUtils.getSystemEnabledLocales(context)
     val firstHiddenSystemStyle = systemLocales.firstNotNullOfOrNull { locale ->
         val layout = AdditionalSubtypeUtils.getLayoutForLocale(context.assets, locale, context)
         if (SettingsManager.isSystemInputStyleHidden(context, locale, layout)) {
@@ -1249,55 +1249,6 @@ private fun ensureAtLeastOneVisibleInputStyle(context: Context) {
 
     if (visibleSystemCount == 0 && visibleCustomCount == 0 && firstHiddenSystemStyle != null) {
         SettingsManager.showSystemInputStyle(context, firstHiddenSystemStyle.first, firstHiddenSystemStyle.second)
-    }
-}
-
-/**
- * Gets the list of system-enabled locales.
- * Returns locales in format "en_US", "it_IT", etc.
- */
-private fun getSystemEnabledLocales(context: Context): List<String> {
-    val locales = mutableListOf<String>()
-
-    try {
-            val config = context.applicationContext.resources.configuration
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // Android N+ (API 24+)
-            val localeList = config.locales
-            for (i in 0 until localeList.size()) {
-                val locale = localeList[i]
-                val localeStr = formatLocaleString(locale)
-                if (localeStr.isNotEmpty() && !locales.contains(localeStr)) {
-                    locales.add(localeStr)
-                }
-            }
-        } else {
-            // Pre-Android N
-            @Suppress("DEPRECATION")
-            val locale = config.locale
-            val localeStr = formatLocaleString(locale)
-            if (localeStr.isNotEmpty()) {
-                locales.add(localeStr)
-            }
-        }
-    } catch (e: Exception) {
-        android.util.Log.e("CustomInputStyles", "Error getting system locales", e)
-    }
-
-    return locales
-}
-
-/**
- * Formats a Locale object to "en_US" format.
- */
-private fun formatLocaleString(locale: Locale): String {
-    val language = locale.language
-    val country = locale.country
-
-    return if (country.isNotEmpty()) {
-        "${language}_$country"
-    } else {
-        language
     }
 }
 

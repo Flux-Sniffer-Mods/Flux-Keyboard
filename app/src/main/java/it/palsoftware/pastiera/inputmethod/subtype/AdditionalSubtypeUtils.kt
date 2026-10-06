@@ -12,6 +12,7 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.data.layout.LayoutFileStore
 import it.palsoftware.pastiera.data.layout.LayoutMappingRepository
+import it.palsoftware.pastiera.ImeIdentity
 import it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodService
 import org.json.JSONObject
 import java.util.Locale
@@ -582,7 +583,8 @@ object AdditionalSubtypeUtils {
      * Gets the list of system-enabled locales.
      * Returns locales in format "en_US", "it_IT", etc.
      */
-    private fun getSystemEnabledLocales(context: Context): List<String> {
+    /** The system languages, as "en_US", "it_IT"… */
+    internal fun getSystemEnabledLocales(context: Context): List<String> {
         val locales = mutableListOf<String>()
         try {
             val config = context.applicationContext.resources.configuration
@@ -710,10 +712,7 @@ object AdditionalSubtypeUtils {
             )
             
             // Find the actual IME in the system list to get the correct ID format
-            val inputMethodInfo = imm.inputMethodList.firstOrNull { info ->
-                info.packageName == context.packageName && 
-                info.serviceName == PhysicalKeyboardInputMethodService::class.java.name
-            }
+            val inputMethodInfo = ImeIdentity.findIn(imm.inputMethodList, context.packageName)
             
             if (inputMethodInfo == null) {
                 Log.d(TAG, "IME not found in system list, will retry when IME is enabled")
@@ -741,10 +740,7 @@ object AdditionalSubtypeUtils {
                 Handler(Looper.getMainLooper()).postDelayed({
                     try {
                         // Re-fetch InputMethodInfo to get updated subtype list
-                        val updatedInfo = imm.inputMethodList.firstOrNull { 
-                            it.packageName == context.packageName && 
-                            it.serviceName == PhysicalKeyboardInputMethodService::class.java.name
-                        }
+                        val updatedInfo = ImeIdentity.findIn(imm.inputMethodList, context.packageName)
                         
                         if (updatedInfo != null) {
                             // Get all subtypes from InputMethodInfo (including the newly added ones)
@@ -813,10 +809,7 @@ object AdditionalSubtypeUtils {
                 // When removing all subtypes, also clean up enabled subtypes list
                 Handler(Looper.getMainLooper()).postDelayed({
                     try {
-                        val updatedInfo = imm.inputMethodList.firstOrNull { 
-                            it.packageName == context.packageName && 
-                            it.serviceName == PhysicalKeyboardInputMethodService::class.java.name
-                        }
+                        val updatedInfo = ImeIdentity.findIn(imm.inputMethodList, context.packageName)
                         
                         if (updatedInfo != null) {
                             // Get currently enabled subtypes (include implicit ones from method.xml)

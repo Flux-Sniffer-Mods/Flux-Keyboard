@@ -75,7 +75,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodService
 import it.palsoftware.pastiera.inputmethod.SubtypeCycler
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
@@ -97,6 +96,7 @@ import it.palsoftware.pastiera.settings.SettingsDestination
 import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.settings.settingsActivity
 import it.palsoftware.pastiera.settings.settingsChild
+import it.palsoftware.pastiera.ImeIdentity
 
 @Composable
 fun KeyboardThemeScreen(
@@ -1717,10 +1717,7 @@ private fun keyboardThemeOverrideTargets(context: Context): List<KeyboardThemeOv
         description = listOfNotNull(activeLocale, activeLayout).joinToString(" / ")
     )
 
-    val imeInfo = imm?.getInputMethodList()?.firstOrNull { info ->
-        info.packageName == context.packageName &&
-            info.serviceName == PhysicalKeyboardInputMethodService::class.java.name
-    }
+    val imeInfo = imm?.let { ImeIdentity.findIn(it.inputMethodList, context.packageName) }
     val cycleableSubtypes = if (imm != null && imeInfo != null) {
         SubtypeCycler.getCycleableSubtypes(
             context = context,
