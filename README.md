@@ -252,6 +252,10 @@ never-off value and the broadcast that turns the light off) follows what
 [PhysiBoard](https://github.com/brobata/physiboard) by brobata found and documented on the
 phone. Thank you to brobata.
 
+Minimal mode and the single-language versions were inspired by
+[Numen](https://github.com/jlo-aug/numen) by jlo-aug, a Pastiera-based keyboard for the Titan 2
+Elite with a hidden bar and a build tuned for one language. Thank you to jlo-aug.
+
 If you enjoy Flux Keyboard, you can [support me on Ko-fi](https://ko-fi.com/fluxsniffermods),
 and the people it's built on:
 [Pastiera on Open Collective](https://pastiera.eu/donate) and

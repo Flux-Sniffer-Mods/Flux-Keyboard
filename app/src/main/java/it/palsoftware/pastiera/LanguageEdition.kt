@@ -31,17 +31,31 @@ object LanguageEdition {
     fun apkSuffix(context: Context): String = language(context).let { if (it == "en") "" else "-$it" }
 
     /**
-     * A fresh install of a language edition opens in that language's translation (Android 13 and
-     * later, as Android's per-app language; it can be changed there), unless one is already set.
+     * A fresh install of a language edition: it opens in that language's translation (Android 13
+     * and later, as Android's per-app language; it can be changed there), and types in the
+     * language's usual layout (QWERTZ for German, AZERTY for French). On a phone set to that
+     * language the layout already follows it; on one set to another, the edition's layout is the
+     * keyboard's (Keyboard layout, where following the language can be turned back on).
      */
     fun applyOnFreshInstall(context: Context) {
         val language = language(context)
-        if (language == "en" || language !in TRANSLATED) return
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        if (language == "en") return
+        applyLayout(context, language)
+        if (language !in TRANSLATED || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
         runCatching {
             val locales = context.getSystemService(LocaleManager::class.java) ?: return
             if (!locales.applicationLocales.isEmpty) return
             locales.applicationLocales = LocaleList.forLanguageTags(language)
+        }
+    }
+
+    private fun applyLayout(context: Context, language: String) {
+        val layout = it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils
+            .getLayoutForLocale(context.assets, language, context)
+        SettingsManager.setKeyboardLayout(context, layout)
+        val phoneLanguage = context.resources.configuration.locales[0]?.language
+        if (!language.equals(phoneLanguage, ignoreCase = true)) {
+            SettingsManager.setKeyboardLayoutAutoByLocale(context, false)
         }
     }
 }
