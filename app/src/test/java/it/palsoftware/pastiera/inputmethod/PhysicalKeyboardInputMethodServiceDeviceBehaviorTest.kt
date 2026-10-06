@@ -7,7 +7,7 @@ import android.view.inputmethod.ExtractedText
 import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.AltModifierBinding
 import it.palsoftware.pastiera.SettingsManager
-import it.palsoftware.pastiera.SymPagesConfig
+import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.core.InputContextState
 import it.palsoftware.pastiera.core.ModifierStateController
 import it.palsoftware.pastiera.core.SymLayoutController
@@ -588,7 +588,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     @Test
     fun autoCap_recommendedSettings_startEveryTextBoxWithShift() {
         val context = RuntimeEnvironment.getApplication()
-        assertTrue(it.palsoftware.pastiera.RecommendedSettings.apply(context))
+        assertTrue(it.palsoftware.pastiera.settings.RecommendedSettings.apply(context))
         val kinds = mapOf(
             "plain" to InputType.TYPE_CLASS_TEXT,
             "sentences" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES),

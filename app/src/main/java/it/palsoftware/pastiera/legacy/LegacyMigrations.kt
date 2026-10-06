@@ -2,7 +2,7 @@ package it.palsoftware.pastiera.legacy
 
 import android.content.Context
 import android.util.Log
-import it.palsoftware.pastiera.KeyboardThemePreset
+import it.palsoftware.pastiera.theme.KeyboardThemePreset
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.SettingsManager.KeyboardThemeTarget
 import it.palsoftware.pastiera.core.writeTextAtomically

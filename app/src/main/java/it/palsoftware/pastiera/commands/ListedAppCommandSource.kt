@@ -3,8 +3,8 @@ package it.palsoftware.pastiera.commands
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import it.palsoftware.pastiera.AppEnterStandards
-import it.palsoftware.pastiera.EnterStandard
+import it.palsoftware.pastiera.apps.AppEnterStandards
+import it.palsoftware.pastiera.apps.EnterStandard
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.shortcuts.AppCategory

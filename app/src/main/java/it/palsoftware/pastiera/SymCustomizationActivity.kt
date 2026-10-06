@@ -14,6 +14,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
+import it.palsoftware.pastiera.settings.LocalSettingHighlightId
+import it.palsoftware.pastiera.settings.LocalSettingLinkLongPress
+import it.palsoftware.pastiera.settings.SettingEntry
+import it.palsoftware.pastiera.settings.SettingLinkRegistry
+import it.palsoftware.pastiera.settings.SettingLinkSheet
+import it.palsoftware.pastiera.sym.SymCustomizationScreen
 
 class SymCustomizationActivity : LocalizedComponentActivity() {
     companion object {

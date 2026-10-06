@@ -19,6 +19,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import it.palsoftware.pastiera.theme.KeyboardBackgroundImage
 
 object BackupManager {
     private const val TAG = "BackupManager"
@@ -282,7 +283,7 @@ object FileBackupHelper {
         "variations.json",
         "user_defaults.json",
         "locale_layout_mapping.json",
-        it.palsoftware.pastiera.KeyboardBackgroundImage.FILE_NAME
+        it.palsoftware.pastiera.theme.KeyboardBackgroundImage.FILE_NAME
     )
     private val allowedDirectories = setOf(
         "keyboard_layouts"

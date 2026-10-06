@@ -62,6 +62,13 @@ import it.palsoftware.pastiera.inputmethod.SoftwareKeyboardAutoDetector
 import it.palsoftware.pastiera.inputmethod.TypingSoundPlayer
 import it.palsoftware.pastiera.data.variation.VariationRepository
 import java.util.Locale
+import it.palsoftware.pastiera.tutorial.FluxTutorialAppsPageContent
+import it.palsoftware.pastiera.tutorial.FluxTutorialChoicesPageContent
+import it.palsoftware.pastiera.tutorial.FluxTutorialEmojiPageContent
+import it.palsoftware.pastiera.tutorial.FluxTutorialExtrasPageContent
+import it.palsoftware.pastiera.tutorial.FluxTutorialPersonalisePageContent
+import it.palsoftware.pastiera.tutorial.FluxTutorialSetupPageContent
+import it.palsoftware.pastiera.tutorial.FluxTutorialTypingPageContent
 
 private const val ACTION_UNIHERTZ_GESTURE_NAVIGATION_SETTINGS = "com.android.settings.GESTURE_NAVIGATION_SETTINGS"
 private const val SETTINGS_FRAGMENT_ARGS_KEY = ":settings:fragment_args_key"

@@ -2,7 +2,7 @@ package it.palsoftware.pastiera.legacy
 
 import android.content.SharedPreferences
 import it.palsoftware.pastiera.AltModifierBinding
-import it.palsoftware.pastiera.SymPagesConfig
+import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.commands.CommandLaunchSpec
 import it.palsoftware.pastiera.commands.PastieraCommandSource
 import it.palsoftware.pastiera.SettingsManager.LauncherShortcut

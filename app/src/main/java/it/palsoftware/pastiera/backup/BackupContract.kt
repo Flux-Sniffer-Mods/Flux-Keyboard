@@ -1,6 +1,6 @@
 package it.palsoftware.pastiera.backup
 
-import it.palsoftware.pastiera.DeviceIdentitySnapshot
+import it.palsoftware.pastiera.device.DeviceIdentitySnapshot
 import org.json.JSONArray
 import org.json.JSONObject
 

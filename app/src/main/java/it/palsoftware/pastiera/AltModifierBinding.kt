@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.sym.SymPagesConfig
+
 /**
  * Selects the character mapping triggered by the Alt modifier.
  *

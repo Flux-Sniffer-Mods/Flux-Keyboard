@@ -8,6 +8,7 @@ import it.palsoftware.pastiera.shortcuts.AppShortcutPresets
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
+import it.palsoftware.pastiera.apps.AppEnterStandards
 
 /**
  * Emoji layer profiles (Settings > Modifiers & SYM > Emoji layer profiles): 26 emoji, one per
@@ -151,7 +152,7 @@ object EmojiLayerProfiles {
      */
     fun forApp(packageName: String?): EmojiLayerProfile? {
         // Email is work, though Play files Gmail and Outlook under Communication
-        if (packageName in it.palsoftware.pastiera.AppEnterStandards.EMAIL_CTRL_ENTER_APPS) return BUILT_IN.first { it.id == "work" }
+        if (packageName in it.palsoftware.pastiera.apps.AppEnterStandards.EMAIL_CTRL_ENTER_APPS) return BUILT_IN.first { it.id == "work" }
         val category = packageName?.let { AppShortcutPresets.forPackage(it)?.category } ?: return null
         val id = when (category) {
             AppCategory.Communication -> "chatting"

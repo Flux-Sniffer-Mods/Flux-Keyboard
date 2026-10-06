@@ -3,7 +3,7 @@ package it.palsoftware.pastiera.data.mappings
 import android.view.KeyEvent
 import it.palsoftware.pastiera.AltModifierBinding
 import it.palsoftware.pastiera.SettingsManager
-import it.palsoftware.pastiera.SymPagesConfig
+import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
 import org.junit.After
 import org.junit.Assert.assertEquals

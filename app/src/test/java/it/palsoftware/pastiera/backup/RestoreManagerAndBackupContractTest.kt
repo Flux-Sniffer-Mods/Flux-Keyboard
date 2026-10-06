@@ -1,6 +1,6 @@
 package it.palsoftware.pastiera.backup
 
-import it.palsoftware.pastiera.DeviceIdentitySnapshot
+import it.palsoftware.pastiera.device.DeviceIdentitySnapshot
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

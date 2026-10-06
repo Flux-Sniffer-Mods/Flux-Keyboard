@@ -7,7 +7,7 @@ import android.os.Looper
 import android.view.KeyEvent
 import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.SettingsManager
-import it.palsoftware.pastiera.SymPagesConfig
+import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.data.emoji.RecentEmojiManager
 import it.palsoftware.pastiera.data.symbols.Kaomoji
 import it.palsoftware.pastiera.inputmethod.AlternateCharacterManager

@@ -1,7 +1,7 @@
 package it.palsoftware.pastiera.inputmethod
 
 import android.view.KeyEvent
-import it.palsoftware.pastiera.ClicksPowerKeyboardState
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull

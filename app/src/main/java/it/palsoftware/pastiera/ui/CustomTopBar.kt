@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asComposePath
-import it.palsoftware.pastiera.T2eCornerCalibration
-import it.palsoftware.pastiera.T2eCornerGeometry
+import it.palsoftware.pastiera.device.T2eCornerCalibration
+import it.palsoftware.pastiera.device.T2eCornerGeometry
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
 import androidx.compose.runtime.getValue

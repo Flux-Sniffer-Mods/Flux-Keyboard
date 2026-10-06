@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.AppBroadcastActions
-import it.palsoftware.pastiera.AutoCorrectionSubstitutionStore
+import it.palsoftware.pastiera.autocorrect.AutoCorrectionSubstitutionStore
 import it.palsoftware.pastiera.LocalizedComponentActivity
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.core.suggestions.UserDictionaryStore

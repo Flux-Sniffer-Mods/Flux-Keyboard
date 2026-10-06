@@ -79,7 +79,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import it.palsoftware.pastiera.AppListHelper
+import it.palsoftware.pastiera.apps.AppListHelper
 import it.palsoftware.pastiera.LocalizedComponentActivity
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
@@ -100,6 +100,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import it.palsoftware.pastiera.apps.builtInKindsFor
+import it.palsoftware.pastiera.apps.builtInTitle
 
 class QuickLauncherActivity : LocalizedComponentActivity() {
     private var commands: List<CommandTarget> = emptyList()
@@ -1079,7 +1081,7 @@ private fun QuickLauncherEntryContextMenu(
         // task); the app's home screen variants only where Flux Keyboard has none
         val builtInKinds = remember(appPackage, expanded) {
             if (appPackage == null || !expanded) emptyList()
-            else it.palsoftware.pastiera.builtInKindsFor(menuContext, appPackage)
+            else it.palsoftware.pastiera.apps.builtInKindsFor(menuContext, appPackage)
         }
         builtInKinds.forEach { kind ->
             DropdownMenuItem(
@@ -1087,7 +1089,7 @@ private fun QuickLauncherEntryContextMenu(
                     Column {
                         Text(stringResource(R.string.user_shortcuts_title))
                         Text(
-                            stringResource(it.palsoftware.pastiera.builtInTitle(kind)),
+                            stringResource(it.palsoftware.pastiera.apps.builtInTitle(kind)),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

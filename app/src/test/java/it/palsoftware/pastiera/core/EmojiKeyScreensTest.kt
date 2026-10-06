@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.KeyEvent
 import it.palsoftware.pastiera.SettingsManager
-import it.palsoftware.pastiera.SymPagesConfig
+import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.data.emoji.RecentEmojiManager
 import it.palsoftware.pastiera.inputmethod.AlternateCharacterManager
 import org.junit.Assert.assertEquals

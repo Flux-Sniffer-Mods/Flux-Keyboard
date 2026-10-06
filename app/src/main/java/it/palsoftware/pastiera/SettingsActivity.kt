@@ -9,6 +9,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
+import it.palsoftware.pastiera.settings.SettingLinkRegistry
+import it.palsoftware.pastiera.settings.SettingsScreen
+import it.palsoftware.pastiera.settings.putSettingsPage
+import it.palsoftware.pastiera.settings.settingsPage
 
 data class SettingLinkRequest(
     val id: String,

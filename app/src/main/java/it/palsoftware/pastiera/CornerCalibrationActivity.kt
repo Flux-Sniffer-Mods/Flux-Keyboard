@@ -14,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import java.util.Locale
 import kotlin.math.roundToInt
+import it.palsoftware.pastiera.device.T2eCornerCalibration
+import it.palsoftware.pastiera.device.T2eCornerGeometry
 
 /** Full-display optical calibration; no IME or button-top rounding in the preview. */
 class CornerCalibrationActivity : LocalizedComponentActivity() {

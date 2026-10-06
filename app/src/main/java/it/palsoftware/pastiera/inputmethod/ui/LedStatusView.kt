@@ -15,8 +15,8 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import it.palsoftware.pastiera.R
-import it.palsoftware.pastiera.T2eCornerCalibration
-import it.palsoftware.pastiera.T2eCornerGeometry
+import it.palsoftware.pastiera.device.T2eCornerCalibration
+import it.palsoftware.pastiera.device.T2eCornerGeometry
 import it.palsoftware.pastiera.inputmethod.StatusBarController
 import kotlin.math.roundToInt
 

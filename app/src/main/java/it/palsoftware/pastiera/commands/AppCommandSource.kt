@@ -1,7 +1,7 @@
 package it.palsoftware.pastiera.commands
 
 import android.content.Context
-import it.palsoftware.pastiera.AppListHelper
+import it.palsoftware.pastiera.apps.AppListHelper
 
 class AppCommandSource : CommandSource {
     override val id = CommandSourceId.Apps

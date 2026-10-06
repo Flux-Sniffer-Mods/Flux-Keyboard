@@ -18,6 +18,7 @@ import it.palsoftware.pastiera.SoftwareKeyboardModeActions
 import it.palsoftware.pastiera.core.NavModeController
 import it.palsoftware.pastiera.inputmethod.QuickLauncherActivity
 import rikka.shizuku.Shizuku
+import it.palsoftware.pastiera.device.PhoneTrackpadSettings
 
 class CommandExecutor(
     private val context: Context,
@@ -165,7 +166,7 @@ class CommandExecutor(
             }
             DeviceControlCommandSource.ACTION_HOME_SCREEN -> goHome()
             DeviceControlCommandSource.ACTION_PHONE_TRACKPAD_SETTINGS ->
-                if (it.palsoftware.pastiera.PhoneTrackpadSettings.open(context)) CommandExecutionResult.Success
+                if (it.palsoftware.pastiera.device.PhoneTrackpadSettings.open(context)) CommandExecutionResult.Success
                 else fail("Could not open the trackpad settings")
             DeviceControlCommandSource.ACTION_MEDIA_PLAY_PAUSE -> dispatchMediaKey(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
             DeviceControlCommandSource.ACTION_MEDIA_PREVIOUS -> dispatchMediaKey(KeyEvent.KEYCODE_MEDIA_PREVIOUS)

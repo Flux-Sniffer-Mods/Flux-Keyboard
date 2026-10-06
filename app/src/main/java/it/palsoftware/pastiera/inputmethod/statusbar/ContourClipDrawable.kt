@@ -12,6 +12,8 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.view.View
 import it.palsoftware.pastiera.inputmethod.StatusBarController
+import it.palsoftware.pastiera.device.T2eCornerCalibration
+import it.palsoftware.pastiera.device.T2eCornerGeometry
 
 /**
  * Any corner button's own background, cut to the display contour a gap inside the contoured
@@ -47,9 +49,9 @@ internal class ContourClipDrawable(
         if (!chrome.contourIntegratedIndicators || chrome.width <= 0) return null
         view.getLocationInWindow(location)
         chrome.getLocationInWindow(chromeLocation)
-        val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
+        val calibration = it.palsoftware.pastiera.device.T2eCornerCalibration.read(view.context)
         val inset = it.palsoftware.pastiera.inputmethod.ui.LedStatusView.contourButtonInsetPx(view.context)
-        return it.palsoftware.pastiera.T2eCornerGeometry.path(
+        return it.palsoftware.pastiera.device.T2eCornerGeometry.path(
             chrome.width.toFloat(), chrome.height.toFloat(),
             radii.first.toFloat(), radii.second.toFloat(), calibration, inset
         ).apply {

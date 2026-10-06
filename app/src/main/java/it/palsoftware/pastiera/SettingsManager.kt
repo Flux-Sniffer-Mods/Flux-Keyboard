@@ -31,6 +31,21 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.ZipInputStream
+import it.palsoftware.pastiera.clicks.ClicksButtonBindingTarget
+import it.palsoftware.pastiera.clicks.ClicksDesiredButtonBinding
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardState
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardStateSnapshot
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardStateSnapshotCodec
+import it.palsoftware.pastiera.sym.SymPagesConfig
+import it.palsoftware.pastiera.theme.KeyboardBackgroundImage
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_CHROME_CORNER_RADIUS
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_KEY_CORNER_RADIUS
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_KEY_HEIGHT
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_NUMBER_ROW_HEIGHT
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_ROW_GAP
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_SUGGESTIONS_HEIGHT
+import it.palsoftware.pastiera.theme.SOFTWARE_THEME_DEFAULT_VARIATIONS_HEIGHT
+import it.palsoftware.pastiera.theme.WallpaperKeyboardColours
 
 /**
  * Manages the app settings.

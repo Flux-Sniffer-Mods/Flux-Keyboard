@@ -41,6 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import it.palsoftware.pastiera.shortcuts.UserShortcuts
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
+import it.palsoftware.pastiera.apps.BuiltInShortcuts
+import it.palsoftware.pastiera.settings.FluxNote
+import it.palsoftware.pastiera.settings.FluxScreenScaffold
+import it.palsoftware.pastiera.settings.SettingsSectionDivider
 
 /**
  * Add a shortcut: apps that offer shortcuts for the home screen (a contact's direct dial, a

@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
+import it.palsoftware.pastiera.layout.KeyboardLayoutSettingsScreen
 
 class KeyboardLayoutActivity : LocalizedComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

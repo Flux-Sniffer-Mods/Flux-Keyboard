@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import it.palsoftware.pastiera.DeviceIdentitySnapshot
+import it.palsoftware.pastiera.device.DeviceIdentitySnapshot
 import it.palsoftware.pastiera.AppBroadcastActions
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific

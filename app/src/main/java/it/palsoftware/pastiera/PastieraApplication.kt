@@ -9,6 +9,10 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils
+import it.palsoftware.pastiera.apps.AppEnterStandards
+import it.palsoftware.pastiera.apps.AppPackageChangeMonitor
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardController
+import it.palsoftware.pastiera.settings.RecommendedSettings
 
 class PastieraApplication : Application() {
     override fun onCreate() {

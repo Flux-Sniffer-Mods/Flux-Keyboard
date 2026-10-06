@@ -1,7 +1,7 @@
 package it.palsoftware.pastiera.inputmethod
 
 import android.view.KeyEvent
-import it.palsoftware.pastiera.ClicksPowerKeyboardState
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardState
 
 /**
  * Resolves firmware output back to one or more possible physical source keys.

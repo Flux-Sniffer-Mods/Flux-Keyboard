@@ -18,7 +18,7 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import it.palsoftware.pastiera.AppBroadcastActions
-import it.palsoftware.pastiera.ClicksPowerKeyboardController
+import it.palsoftware.pastiera.clicks.ClicksPowerKeyboardController
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.data.desktop.DesktopKeyboardLayout
 import it.palsoftware.pastiera.data.gif.GifCollections
@@ -57,7 +57,7 @@ import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import it.palsoftware.pastiera.BuildConfig
-import it.palsoftware.pastiera.AppEnterStandards
+import it.palsoftware.pastiera.apps.AppEnterStandards
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
 import it.palsoftware.pastiera.core.AutoCorrectionManager
@@ -84,7 +84,6 @@ import it.palsoftware.pastiera.inputmethod.aospkeyboard.AospKeyboardView
 import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardLayoutTemplates
 import it.palsoftware.pastiera.inputmethod.aospkeyboard.SoftwareKeyboardSymLabels
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
-import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.setAdditionalInputMethodSubtypesCompat
 import it.palsoftware.pastiera.inputmethod.telex.VietnameseTelexProcessor
 import it.palsoftware.pastiera.inputmethod.trackpad.TrackpadEventDeviceResolver
 import it.palsoftware.pastiera.inputmethod.trackpad.TrackpadGestureDetector
@@ -102,6 +101,7 @@ import android.view.inputmethod.InputMethodSubtype
 import it.palsoftware.pastiera.clipboard.ClipboardHistoryManager
 import android.content.pm.PackageManager
 import rikka.shizuku.Shizuku
+import it.palsoftware.pastiera.device.T2eCornerCalibration
 
 /**
  * Input method service specialized for physical keyboards.
@@ -2657,7 +2657,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else if (key == SettingsManager.KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS ||
                 key == SettingsManager.KEY_TITAN2_ELITE_FILL_CORNERS ||
                 key == SettingsManager.KEY_TITAN2_ELITE_CONTOUR_LEDS ||
-                key == it.palsoftware.pastiera.T2eCornerCalibration.KEY ||
+                key == it.palsoftware.pastiera.device.T2eCornerCalibration.KEY ||
                 key == SettingsManager.KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER ||
                 key == SettingsManager.KEY_TITAN2_ELITE_MAX_ICON_SHRINK) {
                 if (::candidatesBarController.isInitialized) {

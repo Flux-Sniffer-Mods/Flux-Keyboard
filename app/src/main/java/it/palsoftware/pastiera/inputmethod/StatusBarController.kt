@@ -38,9 +38,9 @@ import it.palsoftware.pastiera.data.symbols.Kaomoji
 import it.palsoftware.pastiera.data.emoji.EmojiLayerRecents
 import it.palsoftware.pastiera.data.emoji.RecentEmojiManager
 import it.palsoftware.pastiera.SymCustomizationActivity
-import it.palsoftware.pastiera.KeyboardBackgroundImage
+import it.palsoftware.pastiera.theme.KeyboardBackgroundImage
 import it.palsoftware.pastiera.SettingsManager
-import it.palsoftware.pastiera.SymPagesConfig
+import it.palsoftware.pastiera.sym.SymPagesConfig
 import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
 import it.palsoftware.pastiera.data.mappings.AltModifierMappingResolver
 import it.palsoftware.pastiera.data.variation.VariationRepository
@@ -70,6 +70,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import it.palsoftware.pastiera.SettingsActivity
+import it.palsoftware.pastiera.device.T2eCornerCalibration
+import it.palsoftware.pastiera.device.T2eCornerGeometry
 
 /**
  * Manages the status bar shown by the IME, handling view creation
@@ -2172,11 +2174,11 @@ class StatusBarController(
     private fun nextSoftwareSymKeySpec(currentPage: Int): SoftwareSymKeySpec {
         val pageValues = SettingsManager.getSymPagesConfig(context).enabledOrderedPages().mapNotNull { page ->
             when (page) {
-                it.palsoftware.pastiera.SymPagesConfig.PAGE_EMOJI -> 1
-                it.palsoftware.pastiera.SymPagesConfig.PAGE_SYMBOLS -> 2
-                it.palsoftware.pastiera.SymPagesConfig.PAGE_CLIPBOARD -> 3
-                it.palsoftware.pastiera.SymPagesConfig.PAGE_EMOJI_PICKER -> 4
-                it.palsoftware.pastiera.SymPagesConfig.PAGE_DEVICE -> 5
+                it.palsoftware.pastiera.sym.SymPagesConfig.PAGE_EMOJI -> 1
+                it.palsoftware.pastiera.sym.SymPagesConfig.PAGE_SYMBOLS -> 2
+                it.palsoftware.pastiera.sym.SymPagesConfig.PAGE_CLIPBOARD -> 3
+                it.palsoftware.pastiera.sym.SymPagesConfig.PAGE_EMOJI_PICKER -> 4
+                it.palsoftware.pastiera.sym.SymPagesConfig.PAGE_DEVICE -> 5
                 else -> null
             }
         }
@@ -4329,7 +4331,7 @@ class StatusBarController(
                     key == SettingsManager.KEY_TITAN2_ELITE_STATUS_BAR_LIFT ||
                     key == SettingsManager.KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS ||
                     key == SettingsManager.KEY_TITAN2_ELITE_CONTOUR_LEDS ||
-                    key == it.palsoftware.pastiera.T2eCornerCalibration.KEY
+                    key == it.palsoftware.pastiera.device.T2eCornerCalibration.KEY
                 ) {
                     redrawForNewContour()
                 }
@@ -4535,7 +4537,7 @@ class StatusBarController(
 
         override fun onAttachedToWindow() {
             super.onAttachedToWindow()
-            it.palsoftware.pastiera.T2eCornerCalibration.addPreviewListener(calibrationPreviewListener)
+            it.palsoftware.pastiera.device.T2eCornerCalibration.addPreviewListener(calibrationPreviewListener)
             SettingsManager.getPreferences(context).registerOnSharedPreferenceChangeListener(chromePrefsListener)
         }
 
@@ -4572,8 +4574,8 @@ class StatusBarController(
                 drawContourLeds(canvas)
                 return
             }
-            val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
-            val path = it.palsoftware.pastiera.T2eCornerGeometry.path(
+            val calibration = it.palsoftware.pastiera.device.T2eCornerCalibration.read(context)
+            val path = it.palsoftware.pastiera.device.T2eCornerGeometry.path(
                 width.toFloat(), height.toFloat(), radii.first.toFloat(), radii.second.toFloat(),
                 calibration
             ).apply {
@@ -4610,7 +4612,7 @@ class StatusBarController(
             cornerFillPaint.isAntiAlias = true
             cornerFillPaint.style = Paint.Style.FILL
             cornerFillPaint.color = bottomFillColors.first
-            val picture = background as? it.palsoftware.pastiera.KeyboardBackgroundImage.Drawable
+            val picture = background as? it.palsoftware.pastiera.theme.KeyboardBackgroundImage.Drawable
             if (picture != null) {
                 picture.setBounds(0, 0, width, height)
                 picture.fillPath(canvas, outside)
@@ -4702,7 +4704,7 @@ class StatusBarController(
          * above the LEDs instead of being pushed up out of the keyboard.
          */
         private fun contourRowInsetPx(): Int {
-            val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
+            val calibration = it.palsoftware.pastiera.device.T2eCornerCalibration.read(context)
             return kotlin.math.ceil(
                 calibration.offsetPx + LedStatusView.contourButtonInsetPx(context) - calibration.shiftYPx
             ).toInt().coerceAtLeast(0)
@@ -4751,12 +4753,12 @@ class StatusBarController(
                 expandedSurfaceView?.apply {
                     outlineProvider = object : ViewOutlineProvider() {
                         override fun getOutline(view: View, outline: Outline) {
-                            val path = it.palsoftware.pastiera.T2eCornerGeometry.path(
+                            val path = it.palsoftware.pastiera.device.T2eCornerGeometry.path(
                                 view.width.toFloat(),
                                 view.height.toFloat(),
                                 radii.first.toFloat(),
                                 radii.second.toFloat(),
-                                it.palsoftware.pastiera.T2eCornerCalibration.read(context),
+                                it.palsoftware.pastiera.device.T2eCornerCalibration.read(context),
                                 stripHeight.toFloat()
                             ).apply {
                                 // Only the corners follow the display: the contour's inward bottom
@@ -5089,9 +5091,9 @@ class StatusBarController(
                 override fun getOutline(view: View, outline: Outline) {
                     val left = radii!!.first.coerceIn(0, view.width / 2).toFloat()
                     val right = radii.second.coerceIn(0, view.width / 2).toFloat()
-                    val path = it.palsoftware.pastiera.T2eCornerGeometry.path(
+                    val path = it.palsoftware.pastiera.device.T2eCornerGeometry.path(
                         view.width.toFloat(), view.height.toFloat(), left, right,
-                        it.palsoftware.pastiera.T2eCornerCalibration.read(context)
+                        it.palsoftware.pastiera.device.T2eCornerCalibration.read(context)
                     )
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         outline.setPath(path)
@@ -5110,7 +5112,7 @@ class StatusBarController(
         }
 
         override fun onDetachedFromWindow() {
-            it.palsoftware.pastiera.T2eCornerCalibration.removePreviewListener(calibrationPreviewListener)
+            it.palsoftware.pastiera.device.T2eCornerCalibration.removePreviewListener(calibrationPreviewListener)
             SettingsManager.getPreferences(context).unregisterOnSharedPreferenceChangeListener(chromePrefsListener)
             screenAwakeController.release()
             super.onDetachedFromWindow()
