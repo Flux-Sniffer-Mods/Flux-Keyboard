@@ -3500,7 +3500,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         super.onComputeInsets(outInsets)
         val decor = window?.window?.decorView ?: return
         outInsets ?: return
-        if ((keyboardHiddenForApp && !hiddenAppPanelOpen()) || (minimalModeActive && outOfSightLedsOnly())) {
+        if ((keyboardHiddenForApp && !hiddenAppPanelOpen()) || outOfSightLedsOnly() || outOfSightSurfaceHidden()) {
             // Nothing (or only the LEDs) is shown: the app keeps the whole screen and every touch
             ImeInsetsPolicy.applyRenderedContentInsets(outInsets, null, decor.height)
             return

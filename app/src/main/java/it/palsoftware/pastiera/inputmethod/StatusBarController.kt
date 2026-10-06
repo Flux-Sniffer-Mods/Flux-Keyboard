@@ -820,8 +820,7 @@ class StatusBarController(
                     }
                     val bottomInset = max(navAndGestures.bottom, cutout.bottom)
                     // Only the LEDs showing (minimal and terminal modes): right on the screen's edge
-                    val appliedBottomPadding = if ((view as? ImeChromeLayout)?.ledsOnly == true && ledsAtScreenEdge) 0
-                        else baseBottomPadding + bottomInset
+                    val appliedBottomPadding = baseBottomPadding + bottomInset
                     (view as? ImeChromeLayout)?.bottomCornerRadiiPx =
                         if (useTitan2EliteRoundedCornerInsets) {
                             Pair(
@@ -4455,6 +4454,9 @@ class StatusBarController(
 
         /** Straight outer buttons: top of the band under the buttons, where the LEDs run. */
         var straightLedBandTopPx: Int = -1
+
+        /** How tall the LED band under Solderina's bar was: LEDs alone use the same band. */
+        private var lastLedBandHeightPx: Int = 0
             private set
 
         private fun straightOuterButtonsActive(): Boolean =
@@ -4584,11 +4586,15 @@ class StatusBarController(
                 else spanLeft to spanRight
             } else null
             var band = if (span != null) bandTop else -1
+            if (span != null && bandTop in 0 until height) lastLedBandHeightPx = height - bandTop
             if (span == null && ledsOnly && straightOuterButtonsActive() && width > 0) {
-                // No corner buttons shown: the LEDs keep the span they have between them
+                // No corner buttons shown: the LEDs keep the span they have between them, and
+                // the band they have under the bar, so they sit exactly where Solderina's do
                 val side = fixedSide.takeIf { it > 0 } ?: (width / 10)
                 span = (side + ledGap) to (width - side - ledGap)
-                band = 0
+                val bandHeight = lastLedBandHeightPx.takeIf { it > 0 }
+                    ?: (LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * resources.displayMetrics.density).toInt()
+                band = (height - bandHeight).coerceAtLeast(0)
             }
             if (span != straightLedSpanPx || band != straightLedBandTopPx) {
                 straightLedSpanPx = span
