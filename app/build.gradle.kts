@@ -10,7 +10,7 @@ import java.util.Properties
 import groovy.json.JsonOutput
 import org.gradle.api.GradleException
 
-// Config di firma letta da release/keystore.properties (non tracciato) o da env vars
+// Signing config from release/keystore.properties (not tracked) or environment variables
 val keystorePropertiesFileCandidates = listOf(
     rootProject.file("release/keystore.properties"),
     rootProject.file("keystore.properties")
@@ -435,9 +435,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
-    // RecyclerView per performance ottimali nella griglia emoji
+    // RecyclerView for the emoji grid
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    // Emoji2 per supporto emoji future-proof
+    // Emoji2, so newer emoji draw on older Android versions
     implementation("androidx.emoji2:emoji2:1.4.0")
     implementation("androidx.emoji2:emoji2-views:1.4.0")
     implementation("androidx.emoji2:emoji2-views-helper:1.4.0")

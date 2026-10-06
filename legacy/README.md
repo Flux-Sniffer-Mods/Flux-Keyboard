@@ -6,6 +6,8 @@ affecting the app.
 
 | Path | What it was |
 |---|---|
+| `CHANGELOG.md` | Upstream's changelog from Pastiera 0.2 |
+| `fastlane/` | Upstream's store listing (F-Droid) |
 | `refactoring.md` | Upstream's log of splitting up the input method service |
 | `build_and_run.bat`, `convert_dictionaries.py` | Upstream local build and one-off dictionary conversion |
 | `dict_backup/` | Untruncated source dictionaries used by the old truncate scripts |
@@ -15,9 +17,11 @@ affecting the app.
 | `signing/`, `docs/*attestation*` | Upstream signing lineages and key attestations |
 | `docs/device-archives/` | Upstream keyboard behaviour snapshots |
 | `docs/settings-links.md`, `docs/keyboard-phone-widths.md` | Upstream notes |
+| `docs/branding/` | Upstream's Pastiera and Plektra logos |
 | `github/` | Pre-1.0 release notes and upstream nightly release templates |
 | `scripts/` | Upstream nightly, F-Droid, PIV signing, key rotation and old dictionary scripts |
 | `tools/prediction_bench/` | Upstream next-word model benchmark |
+| `app-res/` | App resources nothing uses any more, and upstream's Play Store icon |
 | `app-code/` | Upstream app code nothing used any more (an emoji list adapter, a trackpad debug overlay) |
 
 Code the app still needs only for backwards compatibility lives in its `legacy` package
