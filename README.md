@@ -59,16 +59,6 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 </p>
 
 ### The rest of the phone, without root
-- **Screen size per app**: each app at its own size, kept through the recent apps screen and back to yours when you leave. The same app at two sizes:
-
-<p align="center">
-  <img src="docs/cards/screen-size-per-app.webp" alt="Screen size per app. Each app at its own size, kept through the recent apps screen and back to yours when you leave." width="840">
-</p>
-
-<p align="center">
-  <img src="docs/cards/two-sizes.webp" alt="The same app at two sizes. Instagram at the phone's own size, then at Desktop, with more on the screen." width="840">
-</p>
-
 - **Keyboard light that follows the screen** (Shizuku): on and off with it, following its brightness as it changes, or flashing for notifications.
 
 <p align="center">
@@ -143,6 +133,16 @@ Things you'd otherwise need a different fork for, side by side with everything a
 
 <p align="center">
   <img src="docs/cards/screen-size.webp" alt="Screen size presets. Default, Tablet and Desktop for the whole phone, each applied with one tap." width="840">
+</p>
+
+- **Screen size per app**: each app at its own size, kept through the recent apps screen and back to yours when you leave. The same app at two sizes:
+
+<p align="center">
+  <img src="docs/cards/screen-size-per-app.webp" alt="Screen size per app. Each app at its own size, kept through the recent apps screen and back to yours when you leave." width="840">
+</p>
+
+<p align="center">
+  <img src="docs/cards/two-sizes.webp" alt="The same app at two sizes. Instagram at the phone's own size, then at Desktop, with more on the screen." width="840">
 </p>
 
 - **One language per download**: each full release comes as an APK per language, opening in its translation and its usual layout. Other languages' dictionaries download when you add them.
