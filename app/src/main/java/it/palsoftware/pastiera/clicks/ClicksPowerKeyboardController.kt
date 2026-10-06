@@ -41,6 +41,11 @@ data class ClicksPowerKeyboardControllerState(
 object ClicksPowerKeyboardController {
     private lateinit var context: Context
     private var initialized = false
+    // Held here: SharedPreferences keeps its listeners only weakly, and a dropped one stops
+    // charging automation following its settings
+    private val chargingPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key?.startsWith("clicks_charging_") == true) evaluateChargingAutomation()
+    }
     private var client: ClicksPowerKeyboardGattClient? = null
     private var connectedDeviceName: String? = null
     private var pendingAutomaticChargingState: Boolean? = null
@@ -112,11 +117,7 @@ object ClicksPowerKeyboardController {
             }
         }, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         context.getSharedPreferences("pastiera_prefs", Context.MODE_PRIVATE)
-            .registerOnSharedPreferenceChangeListener(
-                SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                    if (key?.startsWith("clicks_charging_") == true) evaluateChargingAutomation()
-                }
-            )
+            .registerOnSharedPreferenceChangeListener(chargingPrefsListener)
         updateConnection()
     }
 
