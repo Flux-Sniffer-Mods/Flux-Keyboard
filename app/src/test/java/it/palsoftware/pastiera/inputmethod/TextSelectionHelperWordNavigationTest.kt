@@ -110,10 +110,33 @@ class TextSelectionHelperWordNavigationTest {
         verify(secondInputConnection).setSelection(5, 5)
     }
 
+    @Test
+    fun partOfALongField_movesInTheWholeFieldsPositions() {
+        // The app handed over the field from position 1000 on
+        val wordLeft = inputConnectionWithText(
+            text = "alpha beta gamma",
+            selectionStart = 16,
+            selectionEnd = 16,
+            startOffset = 1000
+        )
+        assertTrue(TextSelectionHelper.moveCursorWordLeft(wordLeft))
+        verify(wordLeft).setSelection(1011, 1011)
+
+        val charRight = inputConnectionWithText(
+            text = "alpha beta gamma",
+            selectionStart = 5,
+            selectionEnd = 5,
+            startOffset = 1000
+        )
+        assertTrue(TextSelectionHelper.expandSelectionRight(charRight))
+        verify(charRight).setSelection(1005, 1006)
+    }
+
     private fun inputConnectionWithText(
         text: String,
         selectionStart: Int,
-        selectionEnd: Int
+        selectionEnd: Int,
+        startOffset: Int = 0
     ): InputConnection {
         val inputConnection = mock(InputConnection::class.java)
         `when`(inputConnection.getExtractedText(any(ExtractedTextRequest::class.java), anyInt())).thenReturn(
@@ -121,6 +144,7 @@ class TextSelectionHelperWordNavigationTest {
                 this.text = text
                 this.selectionStart = selectionStart
                 this.selectionEnd = selectionEnd
+                this.startOffset = startOffset
             }
         )
         `when`(inputConnection.setSelection(anyInt(), anyInt())).thenReturn(true)
