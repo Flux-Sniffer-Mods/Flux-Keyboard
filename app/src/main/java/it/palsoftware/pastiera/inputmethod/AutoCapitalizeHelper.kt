@@ -72,7 +72,9 @@ object AutoCapitalizeHelper {
             val text = extracted.text
             val selStart = extracted.selectionStart
             val selEnd = extracted.selectionEnd
-            if (selStart >= 0 && selEnd >= selStart && selEnd <= text.length) {
+            // Part of a long field starting at the cursor isn't the field's start
+            val partAtCursor = extracted.startOffset > 0 && selStart == 0
+            if (selStart >= 0 && selEnd >= selStart && selEnd <= text.length && !partAtCursor) {
                 val before = text.subSequence(0, selStart)
                 val after = text.subSequence(selEnd, text.length)
                 return CursorContext(before, after)
