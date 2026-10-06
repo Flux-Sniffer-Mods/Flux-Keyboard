@@ -461,6 +461,34 @@
     {
       "text": "One-time codes are found in conversation notifications (texts and chats) on Android 10 as well.",
       "after": "202610051915"
+    },
+    {
+      "text": "The Clicks Power Keyboard's charging automation keeps following its settings; before, it could stop noticing changes after a while.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Ctrl+Z undo works only on fields it can read whole, so it never changes the wrong place, and redo keeps its step when the field can't be read.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Double space types a full stop only after something you typed, not at the start of a field or line.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Automatic Shift no longer capitalises in the middle of a long field that the app hands over in part.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Cursor and selection keys (Shift with the arrows, word by word) move to the right place in long fields.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Links to web pages no longer crash the app on a phone without a browser.",
+      "after": "202610051915"
+    },
+    {
+      "text": "An imported dictionary is saved exactly as checked, never half-written when copying fails.",
+      "after": "202610051915"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
