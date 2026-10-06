@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
+    <!-- No cloud backup: a reinstall starts fresh (the tutorial and recommended settings run
+         again) instead of bringing back an old copy of the settings. Settings move with the
+         in-app backup (a ZIP), or to a new phone when setting it up (below). -->
     <cloud-backup>
-        <!-- Include SharedPreferences for cloud backup, including Clicks snapshots and learned
-             SOC calibration. Restored device values remain stale until GATT validates identity. -->
+        <exclude domain="root" path="."/>
+        <exclude domain="file" path="."/>
+        <exclude domain="database" path="."/>
+        <exclude domain="sharedpref" path="."/>
+        <exclude domain="external" path="."/>
+    </cloud-backup>
+
+    <!-- Moving to a new phone when setting it up: settings, layouts and mappings come along.
+         Restored Clicks device values stay stale until a matching GATT serial is validated. -->
+    <device-transfer>
         <include domain="sharedpref" path="."/>
         <exclude domain="sharedpref" path="recent_emojis_prefs.xml"/>
-        
-        <!-- Include custom keyboard layouts directory -->
         <include domain="file" path="keyboard_layouts/"/>
-        
-        <!-- Include nav mode mappings file -->
         <include domain="file" path="ctrl_key_mappings.json"/>
-        
-        <!-- Include variations file -->
         <include domain="file" path="variations.json"/>
-
-        <!-- Include default/user dictionary file stored in app-private files -->
         <include domain="file" path="user_defaults.json"/>
-    </cloud-backup>
+    </device-transfer>
 </data-extraction-rules>

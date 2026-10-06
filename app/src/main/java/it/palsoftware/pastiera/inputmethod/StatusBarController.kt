@@ -1575,7 +1575,9 @@ class StatusBarController(
         emojiKeyboardView.visibility = View.GONE
         setSurfaceCloseVisible(false)
         resetSymSurfaceToLedOnly(symSurfaceView)
-        // Only the LEDs are drawn; the app stays visible (and touchable) around them
+        // Only the LEDs are drawn; the app stays visible (and touchable) around them, the
+        // navigation bar's strip too (it takes the keyboard's colour only with the bar)
+        (context as? InputMethodService)?.window?.window?.navigationBarColor = Color.TRANSPARENT
         layout.setBackgroundColor(Color.TRANSPARENT)
         symSurfaceStack?.setBackgroundColor(Color.TRANSPARENT)
         symSurfaceContainer?.setBackgroundColor(Color.TRANSPARENT)
@@ -3856,6 +3858,8 @@ class StatusBarController(
         if (ledStatusView.hideOffLeds) {
             ledStatusView.hideOffLeds = false
             (statusBarLayout as? ImeChromeLayout)?.ledsOnly = false
+            // The bar is back: the navigation bar's strip takes the keyboard's colour again
+            applyKeyboardThemeOverrides(activeThemeColors())
             ledStatusView.update(snapshot)
         }
         val showSecondRow = !pastierinaModeActive

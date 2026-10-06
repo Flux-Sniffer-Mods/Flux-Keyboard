@@ -497,6 +497,14 @@
     {
       "text": "An imported dictionary is saved exactly as checked, never half-written when copying fails.",
       "after": "202610051915"
+    },
+    {
+      "text": "Minimal mode no longer leaves a coloured strip at the bottom of apps: with only the LEDs showing, the app keeps the whole screen.",
+      "after": "202610051915"
+    },
+    {
+      "text": "Reinstalling starts fresh, tutorial included: Android no longer brings back an old copy of the settings from its cloud backup (the in-app backup, and moving to a new phone, still carry them).",
+      "after": "202610051915"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
