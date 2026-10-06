@@ -293,30 +293,6 @@ object AdditionalSubtypeUtils {
     }
 
     /**
-     * Finds a subtype by locale.
-     */
-    fun findSubtypeByLocale(
-        subtypes: Array<InputMethodSubtype>,
-        locale: String
-    ): InputMethodSubtype? {
-        return subtypes.firstOrNull { localesMatch(it.localeString(), locale) }
-    }
-    
-    /**
-     * Finds a subtype by locale and keyboard layout set.
-     */
-    fun findSubtypeByLocaleAndKeyboardLayoutSet(
-        subtypes: Array<InputMethodSubtype>,
-        locale: String,
-        layoutName: String
-    ): InputMethodSubtype? {
-        return subtypes.firstOrNull { subtype ->
-            localesMatch(subtype.localeString(), locale) &&
-            extractLayoutFromExtraValue(subtype.extraValue ?: "") == layoutName
-        }
-    }
-    
-    /**
      * Gets the keyboard layout name from a subtype's extraValue.
      */
     fun getKeyboardLayoutFromSubtype(subtype: InputMethodSubtype): String? {

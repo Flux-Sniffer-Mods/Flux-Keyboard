@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_uk">Українська</string>
     <string name="back">Հետ</string>
     <string name="settings_back_content_description">Հետ</string>
@@ -378,9 +377,6 @@
     <string name="variation_global_layout_override_description">Force variation ordering from one layout across all layouts. Default is current IME layout (%1$s).</string>
     <string name="variation_global_layout_override_none">None (use current layout)</string>
     <string name="auto_correct_ricette_pastiera_name">Ricette Pastiera</string>
-    <string name="languages_title">Լեզուներ</string>
-    <string name="languages_description">Ավելացրեք լեզուներ Android-ի մուտքագրման մեթոդի ընտրիչին։ Ցուցադրվում են միայն բառարան ունեցող և համակարգային չլինող լեզուները։</string>
-    <string name="languages_no_available">Բոլոր հասանելի լեզուներն արդեն ավելացված են կամ համակարգային են։</string>
     <string name="delete">Ջնջել</string>
     <string name="modifier_alt">ALT</string>
     <string name="event_action_label">Գործողություն՝ </string>

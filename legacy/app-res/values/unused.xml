@@ -296,4 +296,8 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <string name="input_method_name">Pastiera</string>
+    <string name="languages_description">Add languages to the Android input method selector. Only languages with dictionaries that are not system languages are shown.</string>
+    <string name="languages_no_available">All available languages are already added or are system languages.</string>
+    <string name="languages_title">Languages</string>
 </resources>

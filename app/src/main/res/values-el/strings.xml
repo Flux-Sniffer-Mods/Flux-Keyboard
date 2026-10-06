@@ -1,5 +1,4 @@
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -916,9 +915,6 @@ QWERTZ σε φυσικό QWERTY
     <string name="settings_accessibility_overlapping_keys_description">Για κάθε φυσικό πληκτρολόγιο, αγνοεί ένα δεύτερο μη τροποποιητικό πλήκτρο μέχρι να απελευθερωθεί το πρώτο. Οι συντομεύσεις τροποποιητών εξακολουθούν να λειτουργούν.</string>
 
     <!-- Languages (Input Method Subtypes) -->
-    <string name="languages_title">Γλώσσες</string>
-    <string name="languages_description">Προσθέστε γλώσσες στον επιλογέα μεθόδου εισαγωγής Android. Εμφανίζονται μόνο γλώσσες με λεξικά που δεν είναι γλώσσες συστήματος.</string>
-    <string name="languages_no_available">Όλες οι διαθέσιμες γλώσσες έχουν ήδη προστεθεί ή είναι γλώσσες συστήματος.</string>
 
     <!-- Keyboard Layout Settings -->
     <string name="layout_save_content_description">Αποθήκευση διάταξης</string>

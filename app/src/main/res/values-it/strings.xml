@@ -1,5 +1,4 @@
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -512,9 +511,6 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="settings_accessibility_delay_feedback">Ritardo suggerimenti: %1$d ms</string>
 
     <!-- Languages (Input Method Subtypes) -->
-    <string name="languages_title">Lingue</string>
-    <string name="languages_description">Aggiungi lingue al selettore dei metodi di immissione Android. Sono mostrate solo le lingue con dizionari che non sono lingue di sistema.</string>
-    <string name="languages_no_available">Tutte le lingue disponibili sono già state aggiunte o sono lingue di sistema.</string>
     
     <!-- Keyboard Layout Settings -->
     <string name="layout_save_content_description">Salva layout</string>

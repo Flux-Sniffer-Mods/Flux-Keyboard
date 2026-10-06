@@ -217,7 +217,6 @@ object SettingsManager {
     private const val KEY_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED = "static_variation_bar_base_layer_enabled" // Toggle top-row preset
     private const val KEY_STATIC_VARIATION_BAR_MODIFIER_HOLD_RESTORATION = "static_variation_bar_modifier_hold_restoration"
     private const val KEY_VARIATIONS_UPDATED = "variations_updated" // Trigger for reloading variations in input method service
-    private const val KEY_ADDITIONAL_IME_SUBTYPES = "additional_ime_subtypes" // Comma-separated list of language codes for additional IME subtypes
     private const val KEY_CLIPBOARD_HISTORY_ENABLED = "clipboard_history_enabled" // Whether clipboard history is enabled
     private const val KEY_CLIPBOARD_RETENTION_TIME = "clipboard_retention_time" // How long to keep clipboard entries (in minutes)
     private const val KEY_TRACKPAD_GESTURES_ENABLED = "trackpad_gestures_enabled" // Whether trackpad gesture suggestions are enabled
@@ -1669,29 +1668,6 @@ object SettingsManager {
         }.apply()
     }
 
-    /**
-     * Returns the additional IME subtypes saved in preferences.
-     */
-    fun getAdditionalImeSubtypes(context: Context): Set<String> {
-        return getPreferences(context)
-            .getStringSet(KEY_ADDITIONAL_IME_SUBTYPES, emptySet())
-            ?: emptySet()
-    }
-
-    /**
-     * Persists the additional IME subtypes collection into preferences.
-     */
-    fun setAdditionalImeSubtypes(context: Context, subtypes: Collection<String>) {
-        val normalized = subtypes
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-            .toSet()
-
-        getPreferences(context).edit()
-            .putStringSet(KEY_ADDITIONAL_IME_SUBTYPES, normalized)
-            .apply()
-    }
-    
     /**
      * Returns the long-press threshold in milliseconds.
      */

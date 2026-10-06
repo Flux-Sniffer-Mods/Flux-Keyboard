@@ -1,5 +1,4 @@
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -956,9 +955,6 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="settings_accessibility_overlapping_keys_description">For every physical keyboard, ignore a second non-modifier key until the first is released. Modifier shortcuts still work.</string>
     
     <!-- Languages (Input Method Subtypes) -->
-    <string name="languages_title">Languages</string>
-    <string name="languages_description">Add languages to the Android input method selector. Only languages with dictionaries that are not system languages are shown.</string>
-    <string name="languages_no_available">All available languages are already added or are system languages.</string>
     
     <!-- Keyboard Layout Settings -->
     <string name="layout_save_content_description">Save layout</string>

@@ -1304,3 +1304,29 @@ private fun parseStringArray(json: JSONObject, key: String, limit: Int): List<St
         }
     }
 
+// ===== it/palsoftware/pastiera/inputmethod/subtype/AdditionalSubtypeUtils.kt : findSubtypeByLocale
+    /**
+     * Finds a subtype by locale.
+     */
+    fun findSubtypeByLocale(
+        subtypes: Array<InputMethodSubtype>,
+        locale: String
+    ): InputMethodSubtype? {
+        return subtypes.firstOrNull { localesMatch(it.localeString(), locale) }
+    }
+
+// ===== it/palsoftware/pastiera/inputmethod/subtype/AdditionalSubtypeUtils.kt : findSubtypeByLocaleAndKeyboardLayoutSet
+    /**
+     * Finds a subtype by locale and keyboard layout set.
+     */
+    fun findSubtypeByLocaleAndKeyboardLayoutSet(
+        subtypes: Array<InputMethodSubtype>,
+        locale: String,
+        layoutName: String
+    ): InputMethodSubtype? {
+        return subtypes.firstOrNull { subtype ->
+            localesMatch(subtype.localeString(), locale) &&
+            extractLayoutFromExtraValue(subtype.extraValue ?: "") == layoutName
+        }
+    }
+

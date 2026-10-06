@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -229,9 +228,6 @@
     <string name="settings_accessibility_delay_decrease">Giảm độ trễ 50 mili giây</string>
     <string name="settings_accessibility_delay_increase">Tăng độ trễ 50 mili giây</string>
     <string name="settings_accessibility_delay_feedback">Độ trễ gợi ý: %1$d ms</string>
-    <string name="languages_title">Ngôn ngữ</string>
-    <string name="languages_description">Thêm ngôn ngữ vào bộ chọn phương thức nhập của Android. Chỉ hiển thị ngôn ngữ có từ điển và không phải ngôn ngữ hệ thống.</string>
-    <string name="languages_no_available">Tất cả ngôn ngữ có sẵn đã được thêm hoặc là ngôn ngữ hệ thống.</string>
     <string name="layout_save_content_description">Lưu bố cục</string>
     <string name="layout_import_content_description">Nhập bố cục</string>
     <string name="layout_imported_successfully">Nhập bố cục thành công</string>

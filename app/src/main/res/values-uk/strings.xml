@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -217,9 +216,6 @@
     <string name="settings_accessibility_delay_decrease">Зменшити затримку на 50 мілісекунд</string>
     <string name="settings_accessibility_delay_increase">Збільшити затримку на 50 мілісекунд</string>
     <string name="settings_accessibility_delay_feedback">Затримка підказок: %1$d ms</string>
-    <string name="languages_title">Мови</string>
-    <string name="languages_description">Додавайте мови до вибору методів введення Android. Показуються лише мови зі словниками, які не є системними мовами.</string>
-    <string name="languages_no_available">Усі доступні мови вже додані або є системними.</string>
     <string name="layout_save_content_description">Зберегти розкладку</string>
     <string name="layout_import_content_description">Імпортувати розкладку</string>
     <string name="layout_imported_successfully">Розкладку успішно імпортовано</string>

@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="input_method_name">Pastiera</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -454,9 +453,6 @@
     <string name="settings_update_checking">Sprawdzanie aktualizacji zabezpieczeń Pastiera i wydań Nightly Plektra…</string>
     <string name="settings_update_up_to_date">Nie znaleziono aktualizacji zabezpieczeń Pastiera ani wydania Nightly Plektra.</string>
     <string name="settings_update_check_failed">Nie udało się połączyć z GitHubem.</string>
-    <string name="languages_title">Języki</string>
-    <string name="languages_description">Dodaj języki do selektora metody wprowadzania Androida. Pokazywane są tylko języki ze słownikiem, które nie są językami systemowymi.</string>
-    <string name="languages_no_available">Wszystkie dostępne języki są już dodane lub są językami systemowymi.</string>
     <string name="delete">Usuń</string>
     <string name="event_action_label">Akcja: </string>
     <string name="event_keycode_label">KeyCode: </string>
