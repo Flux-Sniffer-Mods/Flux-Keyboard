@@ -44,10 +44,11 @@ object EditHistory {
         val extracted = runCatching { ic.getExtractedText(ExtractedTextRequest().apply { hintMaxChars = MAX_TEXT }, 0) }
             .getOrNull() ?: return null
         val text = extracted.text?.toString() ?: return null
-        if (text.length >= MAX_TEXT) return null
-        val start = (extracted.selectionStart + extracted.startOffset).coerceIn(0, text.length)
-        val end = (extracted.selectionEnd + extracted.startOffset).coerceIn(start, text.length)
-        return Snapshot(text, start, end)
+        // Only the whole field: positions in part of it would undo the wrong place
+        if (text.length >= MAX_TEXT || extracted.startOffset != 0) return null
+        val a = extracted.selectionStart.coerceIn(0, text.length)
+        val b = extracted.selectionEnd.coerceIn(0, text.length)
+        return Snapshot(text, minOf(a, b), maxOf(a, b))
     }
 
     /** The field as it is now, as a step (when its text changed since the last one). */
@@ -88,8 +89,9 @@ object EditHistory {
     @Synchronized
     fun redo(ic: InputConnection): Boolean {
         val field = field() ?: return false
-        val target = field.redo.removeLastOrNull() ?: return false
+        if (field.redo.isEmpty()) return false
         val now = read(ic) ?: return false
+        val target = field.redo.removeLast()
         field.undo.addLast(target)
         apply(ic, now, target)
         return true
