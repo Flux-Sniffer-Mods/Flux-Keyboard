@@ -59,6 +59,8 @@ import it.palsoftware.pastiera.setSymbolsPages
 internal val fluxTutorialSettingIds = listOf("flux_emoji.picker_key", "auto_correction.spell_checker", "main.app_shortcuts", "hidden_apps.apps", "led_colors.individual", "main.typing", "main.root")
 
 /** Opens a setting by its link ID, as search and deep links do. */
+internal fun openTutorialSettingById(context: Context, id: String) = openTutorialSetting(context, id)
+
 private fun openTutorialSetting(context: Context, id: String) {
     val entry = SettingLinkRegistry.byId(id) ?: return
     val visible = SettingLinkRegistry.visibleTarget(context, entry)
@@ -250,15 +252,6 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
             androidx.compose.foundation.layout.Column(
                 verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
             ) {
-                // Installed from a file: some extras need Android's restricted settings allowed first
-                // (always shown, since Android doesn't always say it's blocking until you try)
-                ExtraStep(
-                    title = stringResource(R.string.restricted_settings_help_title),
-                    text = stringResource(R.string.restricted_settings_help_steps),
-                    button = stringResource(R.string.restricted_settings_help_open),
-                    enabled = true,
-                    onClick = { RestrictedSettings.openAppInfo(context) }
-                )
                 ExtraStep(
                     title = stringResource(R.string.flux_tutorial_extras_codes_title),
                     text = stringResource(
@@ -295,14 +288,6 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
                         onClick = { it.palsoftware.pastiera.shortcuts.TermuxSetup.copyAndOpen(context) }
                     )
                 }
-                // Shizuku: the Titan 2's keyboard light and the shortcuts that need the ADB shell
-                ExtraStep(
-                    title = stringResource(R.string.flux_tutorial_extras_shizuku_title),
-                    text = stringResource(R.string.flux_tutorial_extras_shizuku_text),
-                    button = stringResource(R.string.flux_tutorial_extras_shizuku_button),
-                    enabled = true,
-                    onClick = { openTutorialSetting(context, "main.root") }
-                )
                 if (niagaraInstalled) {
                     ExtraStep(
                         title = stringResource(R.string.flux_tutorial_extras_niagara_title),

@@ -48,6 +48,9 @@ object RestrictedSettings {
             .show()
     }
 
+    /** Flux Keyboard's App info, straight away (where ⋮ > Allow restricted settings is). */
+    fun openAppDetails(context: Context) = launchAppInfo(context)
+
     private fun launchAppInfo(context: Context) {
         runCatching {
             context.startActivity(

@@ -138,6 +138,9 @@ sealed class TutorialPageType {
     object FluxExtras : TutorialPageType()
     object FluxPersonalise : TutorialPageType()
     object FluxChoices : TutorialPageType()
+    object FluxPermissions : TutorialPageType()
+    object FluxBar : TutorialPageType()
+    object FluxShizuku : TutorialPageType()
     
     data class Standard(
         val title: String,
@@ -252,6 +255,7 @@ fun TutorialScreen(
 
     val pages = buildList {
         if (configureOnly) {
+            add(TutorialPageType.FluxBar)
             add(TutorialPageType.FluxChoices)
             add(TutorialPageType.FluxExtras)
             add(TutorialPageType.FluxPersonalise)
@@ -294,7 +298,10 @@ fun TutorialScreen(
         // Flux Keyboard's flow: get it working (set up, the caption bar), learn it (typing, emoji
         // and symbols, moving around), your apps (shortcuts, the quick launcher), make it yours
         // (choices, the look), then the extras that need a permission or another app
+        // Android's restricted settings first: everything after can then be switched on
+        add(TutorialPageType.FluxPermissions)
         add(TutorialPageType.FluxSetup)
+        add(TutorialPageType.FluxBar)
         if (DeviceSpecific.isTitan2Device()) {
             add(
                 TutorialPageType.ImeCaptionBar(
@@ -328,6 +335,7 @@ fun TutorialScreen(
         add(TutorialPageType.QuickLauncher)
         add(TutorialPageType.FluxChoices)
         add(TutorialPageType.FluxPersonalise)
+        add(TutorialPageType.FluxShizuku)
         add(TutorialPageType.FluxExtras)
         add(
             TutorialPageType.Standard(
@@ -437,6 +445,9 @@ fun TutorialScreen(
                         TutorialPageType.FluxExtras -> FluxTutorialExtrasPageContent(modifier = Modifier.fillMaxSize())
                         TutorialPageType.FluxPersonalise -> FluxTutorialPersonalisePageContent(modifier = Modifier.fillMaxSize())
                         TutorialPageType.FluxChoices -> FluxTutorialChoicesPageContent(modifier = Modifier.fillMaxSize())
+                        TutorialPageType.FluxPermissions -> it.palsoftware.pastiera.tutorial.FluxTutorialPermissionsPageContent(modifier = Modifier.fillMaxSize())
+                        TutorialPageType.FluxBar -> it.palsoftware.pastiera.tutorial.FluxTutorialBarPageContent(modifier = Modifier.fillMaxSize())
+                        TutorialPageType.FluxShizuku -> it.palsoftware.pastiera.tutorial.FluxTutorialShizukuPageContent(modifier = Modifier.fillMaxSize())
                         TutorialPageType.FeatureStatuses -> {
                             TutorialFeatureStatusesPageContent(modifier = Modifier.fillMaxSize())
                         }

@@ -452,7 +452,7 @@
     <string name="clicks_button_binding_failure">Button assignment could not be applied.</string>
     <string name="clicks_button_binding_pending">Will be applied when a supported keyboard connection is ready.</string>
     <string name="clicks_launcher_interception_service_label">Pastiera keys and screen size</string>
-    <string name="clicks_launcher_interception_service_description">Lets Pastiera do what a keyboard alone can\'t, for the options you turn on: handle the keys an app would otherwise read first (buttons you assigned to Pastiera actions and, in apps where Pastiera is hidden, the keys for the status LEDs, the emoji key and Sym), and see which app is in front, so screen size per app can follow it. It can\'t read what\'s on screen.</string>
+    <string name="clicks_launcher_interception_service_description">Lets Flux Keyboard do what a keyboard alone can\'t, for the options you turn on: read keyboard swipes, handle the keys an app would otherwise read first (buttons you assigned to Flux Keyboard actions and, in apps where the keyboard is hidden, the keys for the status LEDs, the emoji key and Sym), and see which app is in front, so screen size per app can follow it. It can\'t read what\'s on screen.</string>
     <string name="clicks_launcher_interception_title">Android Clicks-button interception</string>
     <string name="clicks_launcher_interception_enabled">Enabled · Only explicitly configured buttons of a supported Clicks Power Keyboard are filtered.</string>
     <string name="clicks_launcher_interception_disabled">Required for software-assigned Clicks buttons. Tap to enable it in Android Accessibility settings.</string>

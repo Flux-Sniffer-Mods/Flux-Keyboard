@@ -32,7 +32,7 @@
     <string name="flux_tutorial_apps_bullet_shortcuts">App shortcuts: Ctrl+F, Ctrl+N and friends work the same in every app.</string>
     <string name="flux_tutorial_apps_bullet_enter">Enter sends and Shift+Enter adds a new line in every app. In email and note apps, Enter adds a new line and Ctrl+Enter sends. Your installed apps are listed so you can change any of them.</string>
     <string name="flux_tutorial_apps_bullet_exact">Exact typing: nothing rewrites what you type in terminals, code editors or AI chats.</string>
-    <string name="flux_tutorial_apps_bullet_terminal">Terminal mode gives Termux a real Ctrl, hides the microphone and keeps the keyboard out of the way.</string>
+    <string name="flux_tutorial_apps_bullet_terminal">Terminal mode gives Termux a real Ctrl and keeps the keyboard out of the way. Nav Mode and swipes on the keys move the cursor, and the emoji key opens the extra keys: Esc, Tab, Ctrl, Alt and arrows, pressed with Q to P while open.</string>
     <string name="flux_tutorial_apps_button">Open App shortcuts</string>
     <string name="whats_new_done">Done</string>
     <string name="whats_new_close">Close</string>
@@ -52,7 +52,7 @@
     <string name="flux_choice_wallpaper_title">Colours from your wallpaper</string>
     <string name="flux_choice_wallpaper_text">The keyboard takes its colours from the wallpaper, light or dark with the system.</string>
     <string name="flux_tutorial_extras_title">Extras to set up</string>
-    <string name="flux_tutorial_extras_description">These need a permission or another app, so they start off. Set them up now, or later in Settings.</string>
+    <string name="flux_tutorial_extras_description">These need a permission or another app, so they start off. Set them up now, or later in Settings. Notification access needs restricted settings allowed (the Permissions page).</string>
     <string name="flux_tutorial_extras_on">On</string>
     <string name="flux_tutorial_extras_codes_title">One-time codes</string>
     <string name="flux_tutorial_extras_codes_text">Codes from your notifications, offered as a chip to fill in. Needs notification access.</string>
@@ -68,7 +68,7 @@
     <string name="flux_tutorial_emoji_bullet_sticky">Tap SYM or the emoji key once and the next key types its symbol or emoji, without opening a screen (turn them on in Modifiers &amp; SYM and in Emoji, symbols &amp; GIFs).</string>
     <string name="flux_tutorial_typing_bullet_swipes">On the trackpad, swipe left, up or right to pick a suggestion, and down to delete a word (Trackpad gestures).</string>
     <string name="flux_tutorial_typing_bullet_shift">Choose which kinds of text field start with a capital: messages, names and addresses by default.</string>
-    <string name="flux_tutorial_typing_bullet_language">Each app can keep the language you last typed in there.</string>
+    <string name="flux_tutorial_typing_bullet_language">Each app can keep the language you last typed in there. English is built in; another language\'s dictionary downloads the first time you add it.</string>
     <string name="flux_tutorial_apps_bullet_launcher">The quick launcher (SYM + Space, from any app) opens apps, their own shortcuts (\"New message\"), Flux Keyboard\'s New and Search for the apps it knows, your Termux scripts, and whatever you add: long-press an app there to add one.</string>
     <string name="flux_tutorial_apps_bullet_search">Apps that open with their search bar focused can keep the keyboard bar hidden until you type.</string>
     <string name="flux_tutorial_personalise_title">Make it yours</string>
@@ -113,4 +113,55 @@
     <string name="app_picker_select_all">Select all</string>
     <string name="app_picker_select_none">Select none</string>
     <string name="app_picker_done">Done (%1$d)</string>
+
+    <!-- Permissions: restricted settings, then accessibility -->
+    <string name="flux_tutorial_permissions_title">Permissions</string>
+    <string name="flux_tutorial_permissions_description">Flux Keyboard is installed from GitHub, not the Play Store, so Android holds back its accessibility service until you allow it once. Accessibility lets Flux Keyboard read keyboard swipes, follow the app in front for per-app screen size, and take keys that some apps read first. It can\'t read what\'s on screen.</string>
+    <string name="flux_tutorial_permissions_step1_title">1. Try to switch it on</string>
+    <string name="flux_tutorial_permissions_step1_text">Tap the button, then switch on Flux Keyboard. Android will refuse and call it a restricted setting. That\'s expected: the attempt is what makes step 2 appear.</string>
+    <string name="flux_tutorial_permissions_step2_title">2. Allow restricted settings</string>
+    <string name="flux_tutorial_permissions_step2_text">In App info, tap ⋮ at the top right, then Allow restricted settings, and confirm with your PIN or fingerprint.</string>
+    <string name="flux_tutorial_permissions_step3_title">3. Switch it on again</string>
+    <string name="flux_tutorial_permissions_step3_text">Back in accessibility, switch on Flux Keyboard. This time Android lets it.</string>
+    <string name="flux_tutorial_permissions_open_accessibility">Open accessibility</string>
+    <string name="flux_tutorial_permissions_open_app_info">Open App info</string>
+    <string name="flux_tutorial_permissions_allowed">✓ Already allowed</string>
+    <string name="flux_tutorial_permissions_on">✓ Accessibility is on</string>
+    <string name="flux_tutorial_permissions_notifications">One-time codes use notification access, which Android holds back the same way. Once restricted settings are allowed, it switches on in one go (Extras, near the end).</string>
+
+    <!-- The keyboard bar: Solderina or minimal mode -->
+    <string name="flux_tutorial_bar_title">Your keyboard bar</string>
+    <string name="flux_tutorial_bar_description">Pick how much of the screen the keyboard takes. You can switch any time in Look and sound, or with a shortcut.</string>
+    <string name="flux_tutorial_bar_solderina_text">A slim bar above the keys with suggestions and your buttons. ☰ opens the menu: extra keys, undo, redo and the clipboard.</string>
+    <string name="flux_tutorial_bar_minimal_text">No bar in any app, so apps get the whole screen. Emoji and symbols still open on their keys, and the extra keys on a shortcut.</string>
+    <string name="flux_tutorial_bar_chosen">✓ Chosen</string>
+
+    <!-- Shizuku -->
+    <string name="flux_tutorial_shizuku_title">Shizuku</string>
+    <string name="flux_tutorial_shizuku_description">Shizuku gives Flux Keyboard Android\'s developer shell without rooting the phone. With it:</string>
+    <string name="flux_tutorial_shizuku_bullet_swipes">Keyboard swipes work in every app, not only the ones the phone\'s Scroll assistant scrolls.</string>
+    <string name="flux_tutorial_shizuku_bullet_light">The keyboard light follows the screen and its brightness, or flashes for notifications.</string>
+    <string name="flux_tutorial_shizuku_bullet_shortcuts">Shortcuts can force-stop the app in front, toggle Battery Saver or cut an app off the network.</string>
+    <string name="flux_tutorial_shizuku_install_title">1. Install Shizuku</string>
+    <string name="flux_tutorial_shizuku_install_text">Get the latest release from Shizuku\'s GitHub page.</string>
+    <string name="flux_tutorial_shizuku_install_button">Download Shizuku</string>
+    <string name="flux_tutorial_shizuku_start_title">2. Start Shizuku</string>
+    <string name="flux_tutorial_shizuku_start_text">In Shizuku, choose Start via Wireless debugging and follow its pairing steps. It needs Wi-Fi.</string>
+    <string name="flux_tutorial_shizuku_start_button">Open Shizuku</string>
+    <string name="flux_tutorial_shizuku_allow_title">3. Allow Flux Keyboard</string>
+    <string name="flux_tutorial_shizuku_allow_text">Shizuku asks once whether Flux Keyboard may use it.</string>
+    <string name="flux_tutorial_shizuku_allow_button">Allow</string>
+    <string name="flux_tutorial_shizuku_installed">✓ Installed</string>
+    <string name="flux_tutorial_shizuku_running">✓ Running</string>
+    <string name="flux_tutorial_shizuku_allowed">✓ Allowed</string>
+    <string name="flux_tutorial_shizuku_boot_title">4. After a restart</string>
+    <string name="flux_tutorial_shizuku_boot_text">Android stops Shizuku whenever the phone restarts. Two ways to have it start again by itself:</string>
+    <string name="flux_tutorial_shizuku_boot_own_title">Shizuku\'s Start on boot</string>
+    <string name="flux_tutorial_shizuku_boot_own_text">The simplest. One tap here gives Shizuku the permission it needs, then switch on Start on boot in Shizuku. It only works if Wi-Fi is connected when the phone starts.</string>
+    <string name="flux_tutorial_shizuku_boot_own_button">Set up Start on boot</string>
+    <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Waits for Wi-Fi, then starts Shizuku, so it copes with a slow connection. Needs Termux and Termux:Boot, both from GitHub: Android won\'t let a Termux:Boot from F-Droid work with a Termux from GitHub, or the other way round. Open Termux:Boot once after installing it, then copy Flux Keyboard\'s Termux setup, paste it into Termux and answer yes to starting Shizuku at boot.</string>
+    <string name="flux_tutorial_shizuku_get_termux">Download Termux</string>
+    <string name="flux_tutorial_shizuku_get_termux_boot">Download Termux:Boot</string>
+    <string name="flux_tutorial_shizuku_copy_setup">Copy the Termux setup</string>
 </resources>
