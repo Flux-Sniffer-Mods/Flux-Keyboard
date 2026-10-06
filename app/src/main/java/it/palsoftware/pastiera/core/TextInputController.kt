@@ -101,9 +101,10 @@ class TextInputController(
             lastSpacePressTime = currentTime
             return false
         }
-        // Not after other punctuation: "Hello, " never becomes "Hello,. "
+        // Only after something typed: not at the start of the field or a line, and not after
+        // other punctuation ("Hello, " never becomes "Hello,. ")
         val beforeSpaces = textBeforeCursor.trimEnd(' ').lastOrNull()
-        if (beforeSpaces != null && beforeSpaces in ",;:-–—([{/\\") {
+        if (beforeSpaces == null || beforeSpaces.isWhitespace() || beforeSpaces in ",;:-–—([{/\\") {
             lastSpacePressTime = currentTime
             return false
         }
