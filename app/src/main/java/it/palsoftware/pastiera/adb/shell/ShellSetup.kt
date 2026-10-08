@@ -51,6 +51,8 @@ object ShellSetup {
     private const val EXTRA_PORT = "port"
     private const val SECURE_SETTINGS = "android.permission.WRITE_SECURE_SETTINGS"
     private const val ADB_WIFI = "adb_wifi_enabled"
+    /** The helper's own output, read back when it stops at once. */
+    private const val LOG = "/data/local/tmp/flux_shell.log"
 
     fun supported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
@@ -81,9 +83,15 @@ object ShellSetup {
         openWirelessDebugging(app)
     }
 
+    /** Developer options, scrolled to Wireless debugging and highlighting it. */
     fun openWirelessDebugging(context: Context) {
+        val key = "toggle_adb_wireless"
         val intents = listOf(
-            Intent("android.settings.WIRELESS_DEBUGGING_SETTINGS"),
+            Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
+                .putExtra(":settings:fragment_args_key", key)
+                .putExtra(":settings:show_fragment_args", android.os.Bundle().apply {
+                    putString(":settings:fragment_args_key", key)
+                }),
             Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
         )
         for (intent in intents) {
@@ -104,7 +112,7 @@ object ShellSetup {
             notify(app, app.getString(R.string.shell_pair_pairing), null)
             Thread {
                 try {
-                    val ok = runCatching { manager(app).pair("127.0.0.1", port, code) }
+                    val ok = runCatching { manager(app).pair("127.0.0.1", port, code.filter { it.isDigit() }) }
                         .onFailure { Log.w(TAG, "pairing failed: $it") }
                         .getOrDefault(false)
                     if (!ok) {
@@ -116,9 +124,12 @@ object ShellSetup {
                     if (started) grantSecureSettings(app)
                     notify(
                         app,
-                        app.getString(if (started) R.string.shell_pair_done else R.string.shell_start_failed),
+                        if (started) app.getString(R.string.shell_pair_done)
+                        else app.getString(R.string.shell_start_failed) + "\n\n" + lastError.orEmpty(),
                         null
                     )
+                } catch (e: Throwable) {
+                    notify(app, app.getString(R.string.shell_start_failed) + "\n\n" + e, null)
                 } finally {
                     pending.finish()
                 }
@@ -136,35 +147,57 @@ object ShellSetup {
     fun start(context: Context): Boolean {
         if (BuiltInShell.running()) return true
         if (!supported() || !paired(context)) return false
+        BuiltInShell.init(context)
         val resolver = context.contentResolver
-        val wasOn = Settings.Global.getInt(resolver, ADB_WIFI, 0) == 1
-        val switch = !wasOn && canSwitchWirelessDebugging(context)
-        if (switch) runCatching { Settings.Global.putInt(resolver, ADB_WIFI, 1) }
+        // Hidden setting: apps can't always read it (Android 12 and later), only write it with
+        // the permission; unknown means try anyway
+        val wasOn = runCatching { Settings.Global.getInt(resolver, ADB_WIFI, 0) == 1 }.getOrNull()
+        val switch = wasOn != true && canSwitchWirelessDebugging(context) &&
+            runCatching { Settings.Global.putInt(resolver, ADB_WIFI, 1) }.getOrDefault(false)
         try {
-            if (!wasOn && !switch) return false
+            if (wasOn == false && !switch) return fail("wireless debugging is off")
             val port = discover(context, AdbMdns.SERVICE_TYPE_TLS_CONNECT, 20_000L)
-            if (port <= 0) return false
+            if (port <= 0) return fail("wireless debugging wasn't found on this network")
+            var output: String? = null
             val adb = manager(context)
-            if (!adb.connect("127.0.0.1", port)) return false
+            if (!adb.connect("127.0.0.1", port)) return fail("couldn't connect to wireless debugging")
             try {
-                adb.openStream("shell:" + startCommand(context)).use { stream ->
-                    runCatching { stream.openInputStream().use { it.readBytes() } }
+                output = adb.openStream("shell:" + startCommand(context)).use { stream ->
+                    runCatching { stream.openInputStream().use { String(it.readBytes()) } }.getOrNull()
                 }
             } finally {
                 runCatching { adb.disconnect() }
             }
-            repeat(30) {
+            repeat(50) {
                 Thread.sleep(100)
                 BuiltInShell.markStarted()
-                if (BuiltInShell.running()) return true
+                if (BuiltInShell.running()) { lastError = null; return true }
             }
-            return false
-        } catch (e: Exception) {
-            Log.w(TAG, "couldn't start the shell helper: $e")
-            return false
+            return fail("the helper didn't answer" + output?.trim()?.takeIf { it.isNotEmpty() }?.let { ": ${it.take(600)}" }.orEmpty())
+        } catch (e: Throwable) {
+            return fail(e.toString())
         } finally {
             if (switch) runCatching { Settings.Global.putInt(resolver, ADB_WIFI, 0) }
         }
+    }
+
+    /** Why the last start failed, shown with the failure. */
+    @Volatile var lastError: String? = null
+        private set
+
+    private fun fail(reason: String): Boolean {
+        Log.w(TAG, "couldn't start the shell helper: $reason")
+        lastError = reason
+        return false
+    }
+
+    /** The label of the code field, while the notification asks for it. */
+    @Volatile private var codeLabel: String? = null
+
+    /** The notification's code field (System UI, our label): typed as digits. */
+    fun isPairingCodeField(info: android.view.inputmethod.EditorInfo): Boolean {
+        val label = codeLabel ?: return false
+        return info.packageName == "com.android.systemui" && info.hintText?.toString() == label
     }
 
     private fun startCommand(context: Context): String {
@@ -173,7 +206,7 @@ object ShellSetup {
         val token = BuiltInShell.token(context)
         return "${ShellProtocol.TOKEN_ENV}=$token CLASSPATH='$apk' setsid /system/bin/app_process /system/bin " +
             "--nice-name=flux_shell ${ShellServer::class.java.name} $uid " +
-            "</dev/null >/dev/null 2>&1 &"
+            "</dev/null >$LOG 2>&1 & sleep 1; pidof flux_shell >/dev/null || cat $LOG"
     }
 
     private fun grantSecureSettings(context: Context) {
@@ -292,6 +325,7 @@ object ShellSetup {
             .setContentText(text)
             .setStyle(android.app.Notification.BigTextStyle().bigText(text))
             .setOnlyAlertOnce(codePort == null)
+        codeLabel = if (codePort != null) context.getString(R.string.shell_pair_code_hint) else null
         if (codePort != null) {
             val input = RemoteInput.Builder(KEY_CODE)
                 .setLabel(context.getString(R.string.shell_pair_code_hint))

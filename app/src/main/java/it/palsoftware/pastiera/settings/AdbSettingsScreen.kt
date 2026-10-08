@@ -99,7 +99,11 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                         scope.launch {
                             val ok = withContext(Dispatchers.IO) { ShellSetup.start(context) }
                             if (!ok) {
-                                android.widget.Toast.makeText(context, R.string.shell_start_now_failed, android.widget.Toast.LENGTH_LONG).show()
+                                android.widget.Toast.makeText(
+                                    context,
+                                    context.getString(R.string.shell_start_now_failed) + "\n" + ShellSetup.lastError.orEmpty(),
+                                    android.widget.Toast.LENGTH_LONG
+                                ).show()
                             }
                             refresh()
                         }
