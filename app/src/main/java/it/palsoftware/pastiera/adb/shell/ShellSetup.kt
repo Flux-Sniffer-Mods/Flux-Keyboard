@@ -121,7 +121,10 @@ object ShellSetup {
                     }
                     File(keyDir(app), "paired").writeText("1")
                     val started = start(app)
-                    if (started) grantSecureSettings(app)
+                    if (started) {
+                        grantSecureSettings(app)
+                        keepUsbDebugging(app)
+                    }
                     notify(
                         app,
                         if (started) app.getString(R.string.shell_pair_done)
@@ -177,8 +180,22 @@ object ShellSetup {
         } catch (e: Throwable) {
             return fail(e.toString())
         } finally {
-            if (switch) runCatching { Settings.Global.putInt(resolver, ADB_WIFI, 0) }
+            // Android stops whatever the debugging service started when the service itself
+            // stops, which it does when wireless debugging goes off (or Wi-Fi drops) with USB
+            // debugging off: USB debugging stays on so the helper keeps running. Wireless
+            // debugging only goes back off once that's sure
+            val usbOn = keepUsbDebugging(context)
+            if (switch && usbOn) runCatching { Settings.Global.putInt(resolver, ADB_WIFI, 0) }
         }
+    }
+
+    /** USB debugging on (it keeps the debugging service, and so the helper, running). */
+    private fun keepUsbDebugging(context: Context): Boolean {
+        val resolver = context.contentResolver
+        if (Settings.Global.getInt(resolver, Settings.Global.ADB_ENABLED, 0) == 1) return true
+        if (!canSwitchWirelessDebugging(context)) return false
+        return runCatching { Settings.Global.putInt(resolver, Settings.Global.ADB_ENABLED, 1) }.isSuccess &&
+            Settings.Global.getInt(resolver, Settings.Global.ADB_ENABLED, 0) == 1
     }
 
     /** Why the last start failed, shown with the failure. */

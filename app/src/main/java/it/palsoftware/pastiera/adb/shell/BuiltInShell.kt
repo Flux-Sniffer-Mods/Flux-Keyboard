@@ -22,9 +22,11 @@ object BuiltInShell {
     private val ports = ShellProtocol.ports(AndroidProcess.myUid())
     @Volatile private var token: String? = null
     @Volatile private var port: Int? = null
+    @Volatile private var appContext: Context? = null
 
     /** Loads (or makes) the token the helper is started with. Called as the app starts. */
     fun init(context: Context) {
+        appContext = context.applicationContext
         if (token != null) return
         val file = File(File(context.noBackupFilesDir, "shell").apply { mkdirs() }, "token")
         token = runCatching { file.readText().trim() }.getOrNull()?.takeIf { it.length >= 32 }
@@ -51,6 +53,8 @@ object BuiltInShell {
         }.getOrDefault(false)
         lastCheck = now
         if (running && !lastRunning) startListeners.forEach { runCatching { it() } }
+        // Found gone after running: started again (now, or once Wi-Fi connects)
+        if (!running && lastRunning) appContext?.let { ShellSetup.ensureStarted(it) }
         lastRunning = running
         return running
     }
