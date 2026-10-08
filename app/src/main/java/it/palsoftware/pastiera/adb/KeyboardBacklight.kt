@@ -54,6 +54,8 @@ object KeyboardBacklight {
     private const val WAKE_LIGHT = "input keyevent 0"
     /** How often the screen is read while adaptive brightness changes it without a setting. */
     private const val ADAPTIVE_POLL_MS = 1000L
+    /** How often the shown brightness is read between fades (30 times a second). */
+    private const val SHOWN_POLL_MS = 33L
     private const val SCREEN_NODE = "/sys/class/leds/lcd-backlight"
 
     private sealed class Route {
@@ -211,6 +213,7 @@ object KeyboardBacklight {
      * system stores it (the float setting where there is one, else 0 to 255).
      */
     private fun screenShare(context: Context): Float {
+        shownShare(context)?.let { return it }
         if (panelReadable != false) {
             val panel = runCatching {
                 val now = File("$SCREEN_NODE/brightness").readText().trim().toInt()
@@ -225,6 +228,28 @@ object KeyboardBacklight {
             ?.takeIf { it in 0f..1f }?.let { return it }
         val setting = runCatching { Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS) }.getOrDefault(128)
         return (setting / 255f).coerceIn(0f, 1f)
+    }
+
+    @Volatile private var shownReadable: Boolean? = null
+
+    /**
+     * The brightness the screen shows right now, 0 to 1 (adaptive brightness and fades
+     * included), from Android's own display info (hidden API, Android 12 and later). Null where
+     * it can't be read.
+     */
+    private fun shownShare(context: Context): Float? {
+        if (shownReadable == false || android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.S) return null
+        val share = runCatching {
+            if (shownReadable == null) org.lsposed.hiddenapibypass.HiddenApiBypass.addHiddenApiExemptions("Landroid/view/Display;", "Landroid/hardware/display/BrightnessInfo;")
+            val display = context.getSystemService(android.hardware.display.DisplayManager::class.java)
+                .getDisplay(android.view.Display.DEFAULT_DISPLAY)
+            val info = android.view.Display::class.java.getMethod("getBrightnessInfo").invoke(display)!!
+            val now = info.javaClass.getField("brightness").getFloat(info)
+            val max = runCatching { info.javaClass.getField("brightnessMaximum").getFloat(info) }.getOrDefault(1f)
+            (now / max.takeIf { it > 0f }!!).coerceIn(0f, 1f)
+        }.getOrNull()
+        shownReadable = share != null
+        return share
     }
 
     private fun levelForScreen(context: Context): Int {
@@ -355,7 +380,13 @@ object KeyboardBacklight {
     private fun startPolling(context: Context) {
         stopPolling()
         if (!followBrightness(context)) return
-        // First choice: the shell follows the panel itself, once a frame
+        // First choice: the screen's shown brightness, read here 30 times a second and once a
+        // frame while it's changing, so fades stay smooth without a process per read
+        if (shownShare(context) != null) {
+            followShown(context)
+            return
+        }
+        // Next: the shell follows the panel itself, once a frame
         worker.execute {
             if (route() != Route.Vendor || brightnessKept == false) return@execute
             val refresh = context.getSystemService(android.hardware.display.DisplayManager::class.java)
@@ -368,6 +399,36 @@ object KeyboardBacklight {
                 pollHandler.post { followSetting(context) }
             }
         }
+    }
+
+    private fun followShown(context: Context) {
+        val app = context.applicationContext
+        val power = app.getSystemService(Context.POWER_SERVICE) as? PowerManager
+        val refresh = app.getSystemService(android.hardware.display.DisplayManager::class.java)
+            ?.getDisplay(android.view.Display.DEFAULT_DISPLAY)?.refreshRate?.takeIf { it > 0f } ?: 60f
+        val frameMs = (1000f / refresh.coerceAtMost(120f)).toLong().coerceAtLeast(8L)
+        var lastShare = -1f
+        var changedAt = 0L
+        val tick = object : Runnable {
+            override fun run() {
+                val now = android.os.SystemClock.uptimeMillis()
+                if (power?.isInteractive == false) {
+                    pollHandler.postDelayed(this, 1_000L)
+                    return
+                }
+                val share = shownShare(app)
+                if (share != null && share != lastShare) {
+                    lastShare = share
+                    changedAt = now
+                    if (brightnessKept != false) set(levelForScreen(app))
+                }
+                // Once a frame for a second after a change (a fade), else 30 times a second
+                pollHandler.postDelayed(this, if (now - changedAt < 1_000L) frameMs else SHOWN_POLL_MS)
+            }
+        }
+        poller = tick
+        pollContext = app
+        pollHandler.post(tick)
     }
 
     /** Where the shell can't read the panel: the brightness setting, as Android reports it changing. */
