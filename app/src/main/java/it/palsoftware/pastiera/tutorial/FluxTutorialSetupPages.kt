@@ -290,6 +290,8 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
     var refresh by remember { mutableIntStateOf(0) }
     val installed = remember(resumes, refresh) { ShizukuBoot.installed(context) }
     val status = remember(resumes, refresh) { resolveShizukuStatus() }
+    val shellRunning = remember(resumes, refresh) { it.palsoftware.pastiera.adb.shell.BuiltInShell.running() }
+    val shellPaired = remember(resumes, refresh) { it.palsoftware.pastiera.adb.shell.ShellSetup.paired(context) }
     val bootGranted = remember(resumes, refresh) { installed && ShizukuBoot.granted(context) }
     val termuxInstalled = remember(resumes) {
         runCatching { context.packageManager.getApplicationInfo("com.termux", 0) }.isSuccess
@@ -315,6 +317,27 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(top = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
+                if (it.palsoftware.pastiera.adb.shell.ShellSetup.supported()) {
+                    TutorialStep(
+                        title = stringResource(R.string.flux_tutorial_shell_title),
+                        text = stringResource(R.string.flux_tutorial_shell_text),
+                        done = when {
+                            shellRunning -> stringResource(R.string.flux_tutorial_shizuku_running)
+                            shellPaired -> stringResource(R.string.flux_tutorial_shell_paired)
+                            else -> null
+                        },
+                        buttons = if (shellRunning) emptyList() else listOf(
+                            stringResource(R.string.flux_tutorial_shell_button) to {
+                                openTutorialSettingById(context, "main.root.built_in_shell")
+                            }
+                        )
+                    )
+                    if (shellPaired) return@Column
+                    TutorialStep(
+                        title = stringResource(R.string.flux_tutorial_shell_or_shizuku_title),
+                        text = stringResource(R.string.flux_tutorial_shell_or_shizuku_text)
+                    )
+                }
                 TutorialStep(
                     title = stringResource(R.string.flux_tutorial_shizuku_install_title),
                     text = stringResource(R.string.flux_tutorial_shizuku_install_text),

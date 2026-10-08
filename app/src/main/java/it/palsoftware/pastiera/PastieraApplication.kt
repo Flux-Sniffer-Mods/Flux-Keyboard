@@ -29,6 +29,8 @@ class PastieraApplication : Application() {
         SettingsManager.enforceTitan2EliteRoundedCornersOnce(this)
         AppPackageChangeMonitor.register(this)
         ClicksPowerKeyboardController.initialize(this)
+        // The built-in shell: started now, or once Wi-Fi connects after a restart
+        it.palsoftware.pastiera.adb.shell.ShellSetup.ensureStarted(this)
         publishSoftwareKeyboardModeShortcut()
         Handler(Looper.getMainLooper()).post {
             AdditionalSubtypeUtils.registerAdditionalSubtypes(this)

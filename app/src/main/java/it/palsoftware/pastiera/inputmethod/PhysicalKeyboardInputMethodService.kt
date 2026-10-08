@@ -4575,9 +4575,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (::trackpadGestureDetector.isInitialized) {
             val gesturesEnabled = SettingsManager.getTrackpadGesturesEnabled(this)
             if (shouldStartShizukuTrackpadDetector() && !trackpadGestureDetector.isRunning()) {
-                val shizukuRunning = try { Shizuku.pingBinder() } catch (e: Exception) { false }
-                val shizukuAuthorized = try { 
-                    Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED 
+                val builtIn = it.palsoftware.pastiera.adb.shell.BuiltInShell.running()
+                val shizukuRunning = builtIn || try { Shizuku.pingBinder() } catch (e: Exception) { false }
+                val shizukuAuthorized = builtIn || try {
+                    Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
                 } catch (e: Exception) { false }
                 
                 if (shizukuRunning && shizukuAuthorized) {
@@ -4703,7 +4704,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Shizuku chosen but not running yet (no Wi-Fi at boot): Android's swipes meanwhile
         return provider == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU &&
             SettingsManager.getPreferences(this).getBoolean(SettingsManager.KEY_TRACKPAD_SHIZUKU_FALLBACK, true) &&
-            !runCatching { rikka.shizuku.Shizuku.pingBinder() }.getOrDefault(false)
+            !it.palsoftware.pastiera.adb.AdbShell.available()
     }
 
     private fun attachTrackpadDecorViewMotionHook(reason: String) {

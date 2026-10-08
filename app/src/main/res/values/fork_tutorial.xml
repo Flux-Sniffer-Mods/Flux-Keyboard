@@ -137,8 +137,14 @@
     <string name="flux_tutorial_bar_chosen">✓ Chosen</string>
 
     <!-- Shizuku -->
-    <string name="flux_tutorial_shizuku_title">Shizuku</string>
-    <string name="flux_tutorial_shizuku_description">Shizuku gives Flux Keyboard Android\'s developer shell without rooting the phone. With it:</string>
+    <string name="flux_tutorial_shizuku_title">Shell access</string>
+    <string name="flux_tutorial_shizuku_description">Flux Keyboard can use Android\'s developer shell without rooting the phone, through its own built-in shell or through Shizuku. With it:</string>
+    <string name="flux_tutorial_shell_title">Built-in shell (recommended)</string>
+    <string name="flux_tutorial_shell_text">Pair it once with wireless debugging: tap Set up, then in Wireless debugging tap Pair device with pairing code, and type the code into Flux Keyboard\'s notification. After that it starts by itself after every restart, once Wi-Fi connects. No Shizuku or Termux needed.</string>
+    <string name="flux_tutorial_shell_paired">Paired</string>
+    <string name="flux_tutorial_shell_button">Set up</string>
+    <string name="flux_tutorial_shell_or_shizuku_title">Or use Shizuku</string>
+    <string name="flux_tutorial_shell_or_shizuku_text">If you already use Shizuku, Flux Keyboard uses it whenever the built-in shell isn\'t running.</string>
     <string name="flux_tutorial_shizuku_bullet_swipes">Keyboard swipes work in every app, not only the ones the phone\'s Scroll assistant scrolls.</string>
     <string name="flux_tutorial_shizuku_bullet_light">The keyboard light follows the screen and its brightness, or flashes for notifications.</string>
     <string name="flux_tutorial_shizuku_bullet_shortcuts">Shortcuts can force-stop the app in front, toggle Battery Saver or cut an app off the network.</string>

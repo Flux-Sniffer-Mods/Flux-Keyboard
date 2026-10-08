@@ -70,6 +70,11 @@ object KeyboardBacklight {
     }
     private var receiver: BroadcastReceiver? = null
     private var waitingForShizuku: rikka.shizuku.Shizuku.OnBinderReceivedListener? = null
+    private var waitingContext: Context? = null
+    /** The built-in shell came up after the keyboard: start then, as for Shizuku. */
+    private val shellStarted: () -> Unit = {
+        waitingContext?.let { app -> android.os.Handler(android.os.Looper.getMainLooper()).post { start(app) } }
+    }
     private var poller: Runnable? = null
 
     private fun prefs(context: Context) = SettingsManager.getPreferences(context)
@@ -238,15 +243,18 @@ object KeyboardBacklight {
         if (!AdbShell.available()) {
             // Shizuku comes up after the keyboard (at boot, or started later): start then
             if (following && waitingForShizuku == null) {
+                waitingContext = app
                 val listener = rikka.shizuku.Shizuku.OnBinderReceivedListener {
                     if (AdbShell.available()) start(app)
                 }
                 waitingForShizuku = listener
                 runCatching { rikka.shizuku.Shizuku.addBinderReceivedListenerSticky(listener) }
+                it.palsoftware.pastiera.adb.shell.BuiltInShell.addStartListener(shellStarted)
             }
             return
         }
         waitingForShizuku?.let { runCatching { rikka.shizuku.Shizuku.removeBinderReceivedListener(it) } }
+        it.palsoftware.pastiera.adb.shell.BuiltInShell.removeStartListener(shellStarted)
         waitingForShizuku = null
         worker.execute { keepLit(app, following) }
         if (!following) return

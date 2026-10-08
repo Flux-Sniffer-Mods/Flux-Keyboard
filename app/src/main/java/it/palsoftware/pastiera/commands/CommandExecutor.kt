@@ -232,24 +232,12 @@ class CommandExecutor(
 
     private fun sendShellKeyEvent(keyCode: Int): CommandExecutionResult {
         return try {
-            val shizukuAvailable = Shizuku.pingBinder() &&
-                Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-            if (!shizukuAvailable) {
+            if (!it.palsoftware.pastiera.adb.AdbShell.available()) {
                 return fail("Shizuku required")
             }
-            val newProcessMethod = Shizuku::class.java.getDeclaredMethod(
-                "newProcess",
-                Array<String>::class.java,
-                Array<String>::class.java,
-                String::class.java
+            val process = it.palsoftware.pastiera.adb.AdbShell.newProcess(
+                arrayOf("input", "keyevent", keyCode.toString())
             )
-            newProcessMethod.isAccessible = true
-            val process = newProcessMethod.invoke(
-                null,
-                arrayOf("input", "keyevent", keyCode.toString()),
-                null,
-                null
-            ) as Process
             val exitCode = process.waitFor()
             if (exitCode == 0) {
                 CommandExecutionResult.Success

@@ -33,3 +33,7 @@
     private static rikka.shizuku.ShizukuRemoteProcess newProcess(java.lang.String[], java.lang.String[], java.lang.String);
 }
 -keep class rikka.shizuku.ShizukuRemoteProcess { *; }
+
+# The shell helper is started by name with app_process
+-keep class it.palsoftware.pastiera.adb.shell.ShellServer { public static void main(java.lang.String[]); }
+-keep class io.github.muntashirakon.adb.** { *; }

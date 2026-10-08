@@ -55,9 +55,11 @@ class TrackpadGestureDetector(
             return
         }
 
-        val shizukuRunning = try { Shizuku.pingBinder() } catch (e: Exception) { false }
-        val shizukuAuthorized = try { 
-            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED 
+        // The built-in shell helper counts as Shizuku here
+        val builtIn = it.palsoftware.pastiera.adb.shell.BuiltInShell.running()
+        val shizukuRunning = builtIn || try { Shizuku.pingBinder() } catch (e: Exception) { false }
+        val shizukuAuthorized = builtIn || try {
+            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
         } catch (e: Exception) { false }
         val shizukuAvailable = shizukuRunning && shizukuAuthorized
         Log.d(DEBUG_TAG, "start() Shizuku status: running=$shizukuRunning, authorized=$shizukuAuthorized, available=$shizukuAvailable")

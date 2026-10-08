@@ -14,7 +14,9 @@ enum class ShizukuStatus {
 
 fun resolveShizukuStatus(): ShizukuStatus {
     return try {
-        if (!Shizuku.pingBinder()) {
+        if (it.palsoftware.pastiera.adb.shell.BuiltInShell.running()) {
+            ShizukuStatus.Connected
+        } else if (!Shizuku.pingBinder()) {
             ShizukuStatus.NotConnected
         } else if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
             ShizukuStatus.Connected

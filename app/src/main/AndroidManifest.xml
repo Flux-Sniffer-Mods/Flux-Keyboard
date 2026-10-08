@@ -4,6 +4,10 @@
 
     <!-- Notifications (asked for on Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- The built-in shell switches wireless debugging on at boot (granted through it once) -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     <!-- Vibration, for haptic feedback -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -243,6 +247,10 @@
             android:exported="false"
             android:excludeFromRecents="true" />
         <!-- Termux's answer when the quick launcher asks for Termux:Widget's scripts -->
+        <!-- The pairing code typed into the built-in shell's notification -->
+        <receiver
+            android:name=".adb.shell.ShellSetup$PairReceiver"
+            android:exported="false" />
         <receiver
             android:name=".shortcuts.TermuxScripts$Receiver"
             android:exported="false" />

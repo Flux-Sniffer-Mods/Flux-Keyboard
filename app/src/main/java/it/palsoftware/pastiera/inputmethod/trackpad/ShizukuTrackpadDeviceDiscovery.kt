@@ -26,14 +26,6 @@ object ShizukuTrackpadDeviceDiscovery {
         }
     }
 
-    internal fun startProcess(command: Array<String>): Process {
-        val newProcessMethod = Shizuku::class.java.getDeclaredMethod(
-            "newProcess",
-            Array<String>::class.java,
-            Array<String>::class.java,
-            String::class.java
-        )
-        newProcessMethod.isAccessible = true
-        return newProcessMethod.invoke(null, command, null, null) as Process
-    }
+    internal fun startProcess(command: Array<String>): Process =
+        it.palsoftware.pastiera.adb.AdbShell.newProcess(command)
 }

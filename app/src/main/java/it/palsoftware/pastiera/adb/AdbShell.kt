@@ -2,22 +2,29 @@ package it.palsoftware.pastiera.adb
 
 import android.content.pm.PackageManager
 import android.util.Log
+import it.palsoftware.pastiera.adb.shell.BuiltInShell
 import rikka.shizuku.Shizuku
 import java.util.concurrent.TimeUnit
 
 /**
- * Commands run as the ADB shell, through Shizuku (no root needed): the keyboard light, ADB
- * shortcuts. Only while Shizuku is running and has allowed Flux Keyboard.
+ * Commands run as the ADB shell (no root needed): the keyboard light, ADB shortcuts. Through
+ * Flux Keyboard's own shell helper when it's running, otherwise Shizuku when it's running and
+ * has allowed Flux Keyboard.
  */
 object AdbShell {
     private const val TAG = "FluxAdb"
 
+    /** The shell helper or Shizuku can run commands. */
+    fun available(): Boolean = BuiltInShell.running() || shizukuAvailable()
+
     /** Shizuku is running and has allowed Flux Keyboard. */
-    fun available(): Boolean = runCatching {
+    fun shizukuAvailable(): Boolean = runCatching {
         Shizuku.pingBinder() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
     }.getOrDefault(false)
 
-    private fun newProcess(command: Array<String>): Process {
+    /** Starts [command] as the ADB shell user, through the shell helper or else Shizuku. */
+    fun newProcess(command: Array<String>): Process {
+        BuiltInShell.newProcess(command)?.let { return it }
         val method = Shizuku::class.java.getDeclaredMethod(
             "newProcess",
             Array<String>::class.java,
@@ -101,7 +108,8 @@ object AdbShell {
                     .apply { isDaemon = true; start() }
             }
             val ended = (process as? rikka.shizuku.ShizukuRemoteProcess)
-                ?.waitForTimeout(settleMs, TimeUnit.MILLISECONDS) ?: false
+                ?.waitForTimeout(settleMs, TimeUnit.MILLISECONDS)
+                ?: process.waitFor(settleMs, TimeUnit.MILLISECONDS)
             if (ended) null else process
         }.onFailure { Log.w(TAG, "loop couldn't start: $it") }.getOrNull()
     }

@@ -14,6 +14,8 @@ import androidx.compose.ui.res.stringResource
 import it.palsoftware.pastiera.adb.KeyboardBacklight
 import it.palsoftware.pastiera.adb.PerAppDensity
 import it.palsoftware.pastiera.adb.ScreenDensity
+import it.palsoftware.pastiera.adb.shell.BuiltInShell
+import it.palsoftware.pastiera.adb.shell.ShellSetup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,6 +36,13 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val context = LocalContext.current
     val prefs = SettingsManager.getPreferences(context)
     var status by remember { mutableStateOf(resolveShizukuStatus()) }
+    var shellRunning by remember { mutableStateOf(false) }
+    var shellPaired by remember { mutableStateOf(ShellSetup.paired(context)) }
+    fun refresh() {
+        status = resolveShizukuStatus()
+        shellRunning = BuiltInShell.running()
+        shellPaired = ShellSetup.paired(context)
+    }
     var backlightSupported by remember { mutableStateOf(false) }
     var backlightLevel by remember { mutableStateOf(100f) }
     var backlightTimeout by remember { mutableStateOf<Float?>(null) }
@@ -47,7 +56,7 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
         val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
-            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) status = resolveShizukuStatus()
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) refresh()
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
@@ -69,6 +78,55 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var flash by remember { mutableStateOf(pref(KeyboardBacklight.KEY_NOTIFICATION_FLASH)) }
 
     FluxScreenScaffold(stringResource(R.string.root_title), onBack, modifier) {
+        // The built-in shell: paired once through wireless debugging, in place of Shizuku
+        if (ShellSetup.supported()) {
+            val scope = androidx.compose.runtime.rememberCoroutineScope()
+            FluxActionRow(
+                linkId = "main.root.built_in_shell",
+                title = stringResource(R.string.shell_title),
+                description = stringResource(
+                    when {
+                        shellRunning -> R.string.shell_running
+                        shellPaired -> R.string.shell_paired
+                        else -> R.string.shell_setup
+                    }
+                )
+            ) {
+                when {
+                    shellRunning -> Unit
+                    shellPaired -> {
+                        android.widget.Toast.makeText(context, R.string.shell_starting, android.widget.Toast.LENGTH_SHORT).show()
+                        scope.launch {
+                            val ok = withContext(Dispatchers.IO) { ShellSetup.start(context) }
+                            if (!ok) {
+                                android.widget.Toast.makeText(context, R.string.shell_start_now_failed, android.widget.Toast.LENGTH_LONG).show()
+                            }
+                            refresh()
+                        }
+                    }
+                    !androidx.core.app.NotificationManagerCompat.from(context).areNotificationsEnabled() -> {
+                        android.widget.Toast.makeText(context, R.string.shell_notifications_off, android.widget.Toast.LENGTH_LONG).show()
+                        runCatching {
+                            context.startActivity(
+                                android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                    .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
+                            )
+                        }
+                    }
+                    else -> ShellSetup.beginPairing(context)
+                }
+            }
+            if (shellPaired) {
+                FluxActionRow(
+                    linkId = null,
+                    title = stringResource(R.string.shell_forget_title),
+                    description = stringResource(R.string.shell_forget_description)
+                ) {
+                    ShellSetup.forget(context)
+                    refresh()
+                }
+            }
+        }
         FluxNote(
             stringResource(
                 when (status) {
@@ -89,8 +147,9 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         }
         if (status != ShizukuStatus.Connected) return@FluxScreenScaffold
 
-        // Shizuku starting itself at boot (no root): it needs WRITE_SECURE_SETTINGS, granted here
-        if (remember { it.palsoftware.pastiera.adb.ShizukuBoot.installed(context) }) {
+        // Shizuku starting itself at boot (no root): it needs WRITE_SECURE_SETTINGS, granted here.
+        // Not needed once the built-in shell is set up
+        if (!shellPaired && remember { it.palsoftware.pastiera.adb.ShizukuBoot.installed(context) }) {
             var bootReady by remember { mutableStateOf(it.palsoftware.pastiera.adb.ShizukuBoot.granted(context)) }
             FluxActionRow(
                 linkId = "main.root.shizuku_boot",
