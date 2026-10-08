@@ -415,6 +415,8 @@ internal object BackupPreferenceContract {
             "pastierina_status_bar_slots_right" to PreferenceValueType.STRING,
             "status_bar_variations_visible" to PreferenceValueType.BOOLEAN,
             "extra_keys_terminal" to PreferenceValueType.STRING,
+            "trackpad_delete_swipe_haptic" to PreferenceValueType.BOOLEAN,
+            "trackpad_shizuku_fallback" to PreferenceValueType.BOOLEAN,
             "extra_keys_text" to PreferenceValueType.STRING,
             "dynamic_variation_bar_slot_count" to PreferenceValueType.INT,
             "dynamic_variation_bar_resize_to_content" to PreferenceValueType.BOOLEAN,

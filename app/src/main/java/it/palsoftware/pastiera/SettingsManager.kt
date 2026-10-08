@@ -208,6 +208,8 @@ object SettingsManager {
     internal const val KEY_TRACKPAD_SWIPE_THRESHOLD = "trackpad_swipe_threshold" // Threshold for swipe detection on trackpad
     internal const val KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad_suggestion_swipe_threshold"
     internal const val KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad_delete_swipe_threshold"
+    const val KEY_TRACKPAD_DELETE_SWIPE_HAPTIC = "trackpad_delete_swipe_haptic"
+    const val KEY_TRACKPAD_SHIZUKU_FALLBACK = "trackpad_shizuku_fallback"
     internal const val KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad_side_swipe_threshold"
     internal const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
     internal const val KEY_TRACKPAD_PROVIDER_CHOSEN = "trackpad_provider_chosen" // Picked by hand: never changed for you

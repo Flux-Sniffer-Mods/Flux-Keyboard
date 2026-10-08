@@ -799,6 +799,18 @@ object SettingLinkRegistry {
             destination = SettingsDestination.TrackpadGestures
         ),
         entry(
+            "trackpad.shizuku_fallback",
+            R.string.trackpad_shizuku_fallback_title,
+            R.string.trackpad_shizuku_fallback_description,
+            destination = SettingsDestination.TrackpadGestures
+        ),
+        entry(
+            "trackpad.delete_swipe_haptic",
+            R.string.trackpad_delete_swipe_haptic_title,
+            R.string.trackpad_delete_swipe_haptic_description,
+            destination = SettingsDestination.TrackpadGestures
+        ),
+        entry(
             SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
             R.string.trackpad_side_swipe_threshold_title,
             R.string.trackpad_side_swipe_threshold_description,

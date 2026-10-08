@@ -246,8 +246,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     companion object {
         /** A terminal swipe: a character per half a key's width, a line per key's height or so. */
-        private const val TERMINAL_SWIPE_CHARACTER_KEYS = 0.5f
-        private const val TERMINAL_SWIPE_LINE_KEYS = 1.2f
+        private const val TERMINAL_SWIPE_CHARACTER_KEYS = 1.0f
+        private const val TERMINAL_SWIPE_LINE_KEYS = 1.6f
+        /** Trackpad travel before a swipe moves the terminal cursor at all (of 1080 across). */
+        private const val TERMINAL_SWIPE_DEAD_ZONE = 175f
         /** Root page: read the keyboard's touch pad as root (and pause the scroll module while typing) */
         private const val PASTE_SUGGESTION_WINDOW_MS = 60_000L
         private const val TAG = "PastieraInputMethod"
@@ -3273,8 +3275,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 val dx = x - terminalSwipeLastX
                 val dy = y - terminalSwipeLastY
                 if (terminalSwipeAxis == 0) {
-                    if (kotlin.math.abs(dx) < stepX * 0.6f && kotlin.math.abs(dy) < stepY * 0.6f) return
+                    // A dead zone first, so resting or brushing the keys doesn't move the cursor
+                    val deadZone = TERMINAL_SWIPE_DEAD_ZONE * xRange.span / 1080f
+                    if (kotlin.math.abs(dx) < deadZone && kotlin.math.abs(dy) < deadZone) return
                     terminalSwipeAxis = if (kotlin.math.abs(dx) >= kotlin.math.abs(dy)) 1 else 2
+                    // Count from the end of the dead zone, not from the touch
+                    if (terminalSwipeAxis == 1) terminalSwipeLastX += kotlin.math.sign(dx) * deadZone
+                    else terminalSwipeLastY += kotlin.math.sign(dy) * deadZone
+                    return
                 }
                 if (terminalSwipeAxis == 1) {
                     val steps = (dx / stepX).toInt()
@@ -4689,8 +4697,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     private fun isNativeImeTrackpadProviderActive(): Boolean {
-        return SettingsManager.getTrackpadGesturesEnabled(this) &&
-            SettingsManager.getTrackpadProvider(this) == SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME
+        if (!SettingsManager.getTrackpadGesturesEnabled(this)) return false
+        val provider = SettingsManager.getTrackpadProvider(this)
+        if (provider == SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME) return true
+        // Shizuku chosen but not running yet (no Wi-Fi at boot): Android's swipes meanwhile
+        return provider == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU &&
+            SettingsManager.getPreferences(this).getBoolean(SettingsManager.KEY_TRACKPAD_SHIZUKU_FALLBACK, true) &&
+            !runCatching { rikka.shizuku.Shizuku.pingBinder() }.getOrDefault(false)
     }
 
     private fun attachTrackpadDecorViewMotionHook(reason: String) {
@@ -7514,6 +7527,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (ic == null) {
             Log.w(TRACKPAD_DEBUG_TAG, "Native swipe-to-delete ignored: no InputConnection")
             return
+        }
+        if (SettingsManager.getPreferences(this).getBoolean(SettingsManager.KEY_TRACKPAD_DELETE_SWIPE_HAPTIC, true)) {
+            NotificationHelper.triggerHapticFeedback(this)
         }
         if (TextSelectionHelper.deleteLastWord(ic)) {
             Log.d(TRACKPAD_DEBUG_TAG, "Native swipe-to-delete deleted previous word")

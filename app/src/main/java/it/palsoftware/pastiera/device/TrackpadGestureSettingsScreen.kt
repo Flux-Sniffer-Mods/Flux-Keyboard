@@ -866,8 +866,46 @@ private fun TrackpadSensitivitySettings(
             linkId = SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
             onValueChange = onDeleteSwipeThresholdChange
         )
+        DeleteSwipeHapticSetting()
+        ShizukuFallbackSetting()
         SuggestionSwipeLearningSettings()
     }
+}
+
+/** Shizuku chosen but not running (no Wi-Fi at boot): Android's swipes stand in until it is. */
+@Composable
+private fun ShizukuFallbackSetting() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
+    var on by remember { mutableStateOf(prefs.getBoolean(it.palsoftware.pastiera.SettingsManager.KEY_TRACKPAD_SHIZUKU_FALLBACK, true)) }
+    FluxSwitchRow(
+        linkId = "trackpad.shizuku_fallback",
+        title = stringResource(R.string.trackpad_shizuku_fallback_title),
+        description = stringResource(R.string.trackpad_shizuku_fallback_description),
+        checked = on,
+        onCheckedChange = { enabled ->
+            on = enabled
+            prefs.edit().putBoolean(it.palsoftware.pastiera.SettingsManager.KEY_TRACKPAD_SHIZUKU_FALLBACK, enabled).apply()
+        }
+    )
+}
+
+/** A buzz when a swipe down deletes a word, as picking a suggestion with a swipe gives. */
+@Composable
+private fun DeleteSwipeHapticSetting() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
+    var on by remember { mutableStateOf(prefs.getBoolean(it.palsoftware.pastiera.SettingsManager.KEY_TRACKPAD_DELETE_SWIPE_HAPTIC, true)) }
+    FluxSwitchRow(
+        linkId = "trackpad.delete_swipe_haptic",
+        title = stringResource(R.string.trackpad_delete_swipe_haptic_title),
+        description = stringResource(R.string.trackpad_delete_swipe_haptic_description),
+        checked = on,
+        onCheckedChange = { enabled ->
+            on = enabled
+            prefs.edit().putBoolean(it.palsoftware.pastiera.SettingsManager.KEY_TRACKPAD_DELETE_SWIPE_HAPTIC, enabled).apply()
+        }
+    )
 }
 
 /** Suggestion swipes that learn from your picks and undos, and a pause after which they scroll. */

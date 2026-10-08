@@ -15,4 +15,8 @@
     <string name="trackpad_section_phone">The phone\'s own trackpad</string>
     <string name="phone_trackpad_settings_query">Keyboard gesture</string>
     <string name="phone_trackpad_settings_fallback">Search Settings for \"%1$s\": it\'s copied, ready to paste.</string>
+    <string name="trackpad_delete_swipe_haptic_title">Buzz when a swipe deletes</string>
+    <string name="trackpad_delete_swipe_haptic_description">A short vibration when a swipe down deletes a word, like the one when a swipe picks a suggestion.</string>
+    <string name="trackpad_shizuku_fallback_title">Android\'s swipes while Shizuku is off</string>
+    <string name="trackpad_shizuku_fallback_description">With Shizuku chosen but not running yet (no Wi-Fi when the phone started), keyboard swipes come from Android in the apps Scroll assistant scrolls, until Shizuku is back.</string>
 </resources>
