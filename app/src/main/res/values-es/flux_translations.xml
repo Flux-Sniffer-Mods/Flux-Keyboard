@@ -1763,4 +1763,16 @@
     <string name="sym_start_most_popular">Empezar con los más populares</string>
     <string name="game_mode_add_key">Añadir una tecla</string>
     <string name="game_mode_press_key">Pulsa la tecla o el botón. El botón de encendido no sirve: Android lo reserva para sí.</string>
+    <string name="game_mode_touch_controls">Con los controles en pantalla de GameNative</string>
+    <string name="game_mode_touch_controls_description">GameNative solo acepta mandos reales como mandos. Con el perfil de controles de Flux Keyboard elegido en GameNative, los botones y sticks pulsan sus controles en pantalla invisibles, que GameNative transmite como un mando de Xbox.</string>
+    <string name="game_mode_gamenative_save">Guardar el perfil de controles para GameNative</string>
+    <string name="game_mode_gamenative_save_description">Guarda Flux Keyboard gamepad.icp en Descargas/Flux Keyboard. En GameNative, impórtalo desde sus perfiles de controles y elígelo para el juego, con los controles en pantalla visibles (son invisibles).</string>
+    <string name="game_mode_gamenative_saved">Guardado en Descargas/Flux Keyboard. Impórtalo en los perfiles de controles de GameNative y elígelo para el juego.</string>
+    <string name="game_mode_gamenative_save_failed">No se ha podido guardar.</string>
+    <string name="game_mode_place_keys">Colocar teclas en pantalla</string>
+    <string name="game_mode_place_hint">Arrastra cada tecla sobre el botón del juego y cada círculo de stick sobre su stick. Añade una tecla y luego púlsala.</string>
+    <string name="game_mode_place_overlay_needed">Permite que Flux Keyboard se muestre sobre otras apps y vuelve a intentarlo.</string>
+    <string name="game_mode_place_clear">Borrar</string>
+    <string name="game_mode_left_stick">Stick izquierdo</string>
+    <string name="game_mode_right_stick">Stick derecho</string>
 </resources>

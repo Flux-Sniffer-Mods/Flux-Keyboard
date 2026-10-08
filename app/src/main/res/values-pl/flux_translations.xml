@@ -1769,4 +1769,16 @@
     <string name="sym_start_most_popular">Zacznij od najpopularniejszych</string>
     <string name="game_mode_add_key">Dodaj klawisz</string>
     <string name="game_mode_press_key">Naciśnij klawisz lub przycisk. Przycisku zasilania nie da się użyć: Android zachowuje go dla siebie.</string>
+    <string name="game_mode_touch_controls">Przez sterowanie ekranowe GameNative</string>
+    <string name="game_mode_touch_controls_description">GameNative uznaje za kontrolery tylko prawdziwe kontrolery. Gdy w GameNative wybrany jest profil sterowania Flux Keyboard, przyciski i gałki naciskają jego niewidoczne sterowanie ekranowe, które GameNative przekazuje jako kontroler Xbox.</string>
+    <string name="game_mode_gamenative_save">Zapisz profil sterowania dla GameNative</string>
+    <string name="game_mode_gamenative_save_description">Zapisuje Flux Keyboard gamepad.icp w Pobrane/Flux Keyboard. W GameNative zaimportuj go z profili sterowania i wybierz dla gry, z widocznym sterowaniem ekranowym (jest niewidoczne).</string>
+    <string name="game_mode_gamenative_saved">Zapisano w Pobrane/Flux Keyboard. Zaimportuj go w profilach sterowania GameNative i wybierz dla gry.</string>
+    <string name="game_mode_gamenative_save_failed">Nie udało się zapisać.</string>
+    <string name="game_mode_place_keys">Umieść klawisze na ekranie</string>
+    <string name="game_mode_place_hint">Przeciągnij każdy klawisz na przycisk gry, a każde koło gałki na jej gałkę. Dodaj klawisz, a potem go naciśnij.</string>
+    <string name="game_mode_place_overlay_needed">Zezwól Flux Keyboard na wyświetlanie nad innymi aplikacjami i spróbuj ponownie.</string>
+    <string name="game_mode_place_clear">Wyczyść</string>
+    <string name="game_mode_left_stick">Lewa gałka</string>
+    <string name="game_mode_right_stick">Prawa gałka</string>
 </resources>

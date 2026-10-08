@@ -1222,4 +1222,16 @@
     <string name="sym_start_most_popular">Mit den beliebtesten beginnen</string>
     <string name="game_mode_add_key">Taste hinzufügen</string>
     <string name="game_mode_press_key">Drücke die Taste. Die Ein/Aus-Taste geht nicht: Android behält sie für sich.</string>
+    <string name="game_mode_touch_controls">Über die Bildschirmsteuerung von GameNative</string>
+    <string name="game_mode_touch_controls_description">GameNative nimmt nur echte Controller als Controller. Ist das Steuerungsprofil von Flux Keyboard in GameNative gewählt, drücken Tasten und Sticks stattdessen seine unsichtbare Bildschirmsteuerung, die GameNative als Xbox-Controller weitergibt.</string>
+    <string name="game_mode_gamenative_save">Steuerungsprofil für GameNative speichern</string>
+    <string name="game_mode_gamenative_save_description">Speichert Flux Keyboard gamepad.icp unter Downloads/Flux Keyboard. Importiere es in GameNative bei den Steuerungsprofilen und wähle es für das Spiel, mit eingeblendeter Bildschirmsteuerung (sie ist unsichtbar).</string>
+    <string name="game_mode_gamenative_saved">Unter Downloads/Flux Keyboard gespeichert. Importiere es in den Steuerungsprofilen von GameNative und wähle es für das Spiel.</string>
+    <string name="game_mode_gamenative_save_failed">Es konnte nicht gespeichert werden.</string>
+    <string name="game_mode_place_keys">Tasten auf dem Bildschirm platzieren</string>
+    <string name="game_mode_place_hint">Ziehe jede Taste auf die Taste des Spiels und jeden Stick-Kreis auf seinen Stick. Taste hinzufügen, dann drücken.</string>
+    <string name="game_mode_place_overlay_needed">Erlaube Flux Keyboard, über anderen Apps einzublenden, und versuche es erneut.</string>
+    <string name="game_mode_place_clear">Leeren</string>
+    <string name="game_mode_left_stick">Linker Stick</string>
+    <string name="game_mode_right_stick">Rechter Stick</string>
 </resources>

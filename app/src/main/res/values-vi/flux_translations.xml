@@ -1751,4 +1751,16 @@
     <string name="sym_start_most_popular">Bắt đầu với những mục phổ biến nhất</string>
     <string name="game_mode_add_key">Thêm phím</string>
     <string name="game_mode_press_key">Nhấn phím hoặc nút. Không dùng được nút nguồn: Android giữ nó cho riêng mình.</string>
+    <string name="game_mode_touch_controls">Qua điều khiển trên màn hình của GameNative</string>
+    <string name="game_mode_touch_controls_description">GameNative chỉ nhận tay cầm thật là tay cầm. Khi chọn hồ sơ điều khiển của Flux Keyboard trong GameNative, nút và cần sẽ bấm vào điều khiển trên màn hình vô hình của nó, mà GameNative truyền đi như tay cầm Xbox.</string>
+    <string name="game_mode_gamenative_save">Lưu hồ sơ điều khiển cho GameNative</string>
+    <string name="game_mode_gamenative_save_description">Lưu Flux Keyboard gamepad.icp vào Tải xuống/Flux Keyboard. Trong GameNative, nhập nó từ hồ sơ điều khiển và chọn cho trò chơi, với điều khiển trên màn hình được hiển thị (chúng vô hình).</string>
+    <string name="game_mode_gamenative_saved">Đã lưu vào Tải xuống/Flux Keyboard. Nhập nó trong hồ sơ điều khiển của GameNative và chọn cho trò chơi.</string>
+    <string name="game_mode_gamenative_save_failed">Không lưu được.</string>
+    <string name="game_mode_place_keys">Đặt phím trên màn hình</string>
+    <string name="game_mode_place_hint">Kéo từng phím lên nút của trò chơi và từng vòng cần lên cần của nó. Thêm phím, rồi nhấn phím đó.</string>
+    <string name="game_mode_place_overlay_needed">Hãy cho phép Flux Keyboard hiển thị trên ứng dụng khác rồi thử lại.</string>
+    <string name="game_mode_place_clear">Xóa</string>
+    <string name="game_mode_left_stick">Cần trái</string>
+    <string name="game_mode_right_stick">Cần phải</string>
 </resources>

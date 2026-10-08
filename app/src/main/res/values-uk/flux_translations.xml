@@ -1769,4 +1769,16 @@
     <string name="sym_start_most_popular">Почати з найпопулярніших</string>
     <string name="game_mode_add_key">Додати клавішу</string>
     <string name="game_mode_press_key">Натисніть клавішу або кнопку. Кнопку живлення використати не можна: Android залишає її собі.</string>
+    <string name="game_mode_touch_controls">Через екранне керування GameNative</string>
+    <string name="game_mode_touch_controls_description">GameNative вважає контролерами лише справжні контролери. Якщо в GameNative вибрано профіль керування Flux Keyboard, кнопки й стіки натискають його невидиме екранне керування, яке GameNative передає як контролер Xbox.</string>
+    <string name="game_mode_gamenative_save">Зберегти профіль керування для GameNative</string>
+    <string name="game_mode_gamenative_save_description">Зберігає Flux Keyboard gamepad.icp у «Завантаження/Flux Keyboard». У GameNative імпортуйте його в профілях керування й виберіть для гри, з увімкненим екранним керуванням (воно невидиме).</string>
+    <string name="game_mode_gamenative_saved">Збережено в «Завантаження/Flux Keyboard». Імпортуйте його в профілях керування GameNative і виберіть для гри.</string>
+    <string name="game_mode_gamenative_save_failed">Не вдалося зберегти.</string>
+    <string name="game_mode_place_keys">Розмістити клавіші на екрані</string>
+    <string name="game_mode_place_hint">Перетягніть кожну клавішу на кнопку гри, а кожне коло стіка на його стік. Додайте клавішу, потім натисніть її.</string>
+    <string name="game_mode_place_overlay_needed">Дозвольте Flux Keyboard показуватися поверх інших застосунків і спробуйте знову.</string>
+    <string name="game_mode_place_clear">Очистити</string>
+    <string name="game_mode_left_stick">Лівий стік</string>
+    <string name="game_mode_right_stick">Правий стік</string>
 </resources>
