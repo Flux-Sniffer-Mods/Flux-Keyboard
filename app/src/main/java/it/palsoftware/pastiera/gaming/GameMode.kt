@@ -186,6 +186,8 @@ object GameMode {
         }.apply { isDaemon = true; start() }
     }
 
+    private const val DEAD_ZONE = 0.33f
+
     private class TrackpadReader(private val min: Float, private val max: Float) {
         private var x = 0; private var y = 0
         private var down = false; private var started = false
@@ -230,7 +232,27 @@ object GameMode {
                     if (current != null && (current.stickZones.containsKey(at / 2) || current.touchControls)) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
+                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys((x - originX) / radius, (y - originY) / radius)
                 TrackpadRole.NONE -> Unit
+            }
+        }
+
+        /** Direction keys held: up, left, down, right. */
+        private val held = BooleanArray(4)
+
+        /** Each direction's key down once pushed past a third of the way, up when back. */
+        private fun directionKeys(vx: Float, vy: Float) {
+            val keys = if (role == TrackpadRole.WASD_KEYS) {
+                intArrayOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
+            } else {
+                intArrayOf(KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)
+            }
+            val want = booleanArrayOf(vy < -DEAD_ZONE, vx < -DEAD_ZONE, vy > DEAD_ZONE, vx > DEAD_ZONE)
+            for (i in 0..3) {
+                if (want[i] == held[i]) continue
+                held[i] = want[i]
+                val line = "K ${if (want[i]) 1 else 0} ${keys[i]} k"
+                worker.execute { send(line) }
             }
         }
 
@@ -249,6 +271,7 @@ object GameMode {
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - downAt < 200 && moved < radius / 4) {
                     worker.execute { send("B 1 1"); send("B 0 1") }
                 }
+                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(0f, 0f)
                 TrackpadRole.NONE -> Unit
             }
         }

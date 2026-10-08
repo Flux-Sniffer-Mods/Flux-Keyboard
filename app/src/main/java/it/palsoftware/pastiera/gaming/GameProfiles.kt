@@ -59,7 +59,11 @@ enum class TrackpadRole(val label: String) {
     NONE("Nothing"),
     LEFT_STICK("Left stick"),
     RIGHT_STICK("Right stick"),
-    MOUSE("Mouse")
+    MOUSE("Mouse"),
+    /** Pushed past the centre: W A S D held, for emulators that bind keys to a stick. */
+    WASD_KEYS("Direction keys: W A S D"),
+    /** The same with the arrow keys. */
+    ARROW_KEYS("Direction keys: arrows")
 }
 
 enum class GameStyle(val label: String) {
