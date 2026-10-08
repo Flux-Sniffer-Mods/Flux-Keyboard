@@ -21,7 +21,8 @@ import androidx.autofill.inline.v1.InlineSuggestionUi
 object InlineAutofill {
     private const val MAX_CHIPS = 6
     private const val BUTTON_HEIGHT_DP = 36
-    private const val CHIP_INSET_DP = 4
+    // The chip fills its button: its whole background answers a tap
+    private const val CHIP_INSET_DP = 0
     private const val CHIP_MIN_HEIGHT_DP = 24
     private const val CHIP_MAX_HEIGHT_DP = 64
     private const val CHIP_MIN_WIDTH_DP = 64

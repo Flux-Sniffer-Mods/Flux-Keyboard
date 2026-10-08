@@ -1132,9 +1132,10 @@ class StatusBarController(
                         android.view.Gravity.CENTER
                     ))
                 }
+                // The background exactly the chip's size: where it shows is where a tap lands
                 row.addView(button, android.widget.LinearLayout.LayoutParams(
-                    width, ViewGroup.LayoutParams.MATCH_PARENT
-                ).apply { marginStart = gap; marginEnd = gap })
+                    width, made?.height?.takeIf { it > 0 } ?: ViewGroup.LayoutParams.MATCH_PARENT
+                ).apply { marginStart = gap; marginEnd = gap; gravity = android.view.Gravity.CENTER_VERTICAL })
             }
         }
         if (scroller.parent !== host) {
