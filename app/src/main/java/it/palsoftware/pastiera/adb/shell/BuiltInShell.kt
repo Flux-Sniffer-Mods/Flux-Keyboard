@@ -42,12 +42,20 @@ object BuiltInShell {
     @Volatile private var lastRunning = false
     private val startListeners = CopyOnWriteArrayList<() -> Unit>()
 
+    // Sockets aren't allowed on the main thread: there they're opened on this one, waited for
+    private val socketThread = java.util.concurrent.Executors.newCachedThreadPool()
+
+    internal fun <T> offMain(block: () -> T): T =
+        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+            socketThread.submit<T> { block() }.get(3, TimeUnit.SECONDS)
+        } else block()
+
     /** The helper is answering. Checked at most once a second. */
     fun running(): Boolean {
         val now = System.currentTimeMillis()
         if (now - lastCheck < 1_000) return lastRunning
         val running = runCatching {
-            open(listOf(ShellProtocol.PING)).waitFor(1_000, TimeUnit.MILLISECONDS)
+            offMain { open(listOf(ShellProtocol.PING)).waitFor(1_000, TimeUnit.MILLISECONDS) }
         }.getOrDefault(false)
         lastCheck = now
         if (running && !lastRunning) startListeners.forEach { runCatching { it() } }
@@ -66,7 +74,7 @@ object BuiltInShell {
 
     /** Starts [argv] as the shell user; null when the helper isn't running. */
     fun newProcess(argv: Array<String>): Process? =
-        if (running()) runCatching { open(argv.toList()) }.getOrNull() else null
+        if (running()) runCatching { offMain { open(argv.toList()) } }.getOrNull() else null
 
     private fun open(argv: List<String>): ShellProcess {
         val token = token ?: throw IOException("not set up")
@@ -126,17 +134,19 @@ internal class ShellProcess(private val socket: Socket, argv: List<String>) : Pr
 
     override fun getOutputStream(): OutputStream = object : OutputStream() {
         override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
-        override fun write(b: ByteArray, off: Int, len: Int) {
+        override fun write(b: ByteArray, off: Int, len: Int) = BuiltInShell.offMain {
             synchronized(writer) {
                 writer.writeByte(ShellProtocol.STDIN)
                 writer.writeInt(len)
                 writer.write(b, off, len)
             }
         }
-        override fun flush() = synchronized(writer) { writer.flush() }
+        override fun flush() = BuiltInShell.offMain { synchronized(writer) { writer.flush() } }
         override fun close() {
             runCatching {
-                synchronized(writer) { writer.writeByte(ShellProtocol.STDIN_END); writer.flush() }
+                BuiltInShell.offMain {
+                    synchronized(writer) { writer.writeByte(ShellProtocol.STDIN_END); writer.flush() }
+                }
             }
         }
     }
