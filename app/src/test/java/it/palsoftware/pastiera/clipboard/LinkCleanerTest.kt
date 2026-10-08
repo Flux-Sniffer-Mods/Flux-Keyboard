@@ -65,4 +65,20 @@ class LinkCleanerTest {
         assertEquals("https://example.com/x", LinkCleaner.clean("https://l.facebook.com/l.php?u=https%3A%2F%2Fexample.com%2Fx%3Ffbclid%3D1&h=AT0"))
         assertEquals("See https://youtu.be/abc.", LinkCleaner.clean("See https://youtu.be/abc?si=zz."))
     }
+
+    @Test
+    fun shopTrackingGoesWhileTheItemStays() {
+        assertEquals(
+            "https://www.etsy.com/uk/listing/123/mug",
+            LinkCleaner.clean("https://www.etsy.com/uk/listing/123/mug?click_key=abc&click_sum=1&ref=hp_rv-3&pro=1&frs=1&sts=1")
+        )
+        assertEquals(
+            "https://www.ebay.co.uk/itm/2345?var=7",
+            LinkCleaner.clean("https://www.ebay.co.uk/itm/2345?_trkparms=x&_trksid=p1&hash=item1&var=7&mkcid=16")
+        )
+        assertEquals(
+            "https://www.amazon.de/dp/B01?th=1",
+            LinkCleaner.clean("https://www.amazon.de/dp/B01?th=1&tag=aff-21&psc=1&linkCode=ll1&ref_=x")
+        )
+    }
 }

@@ -16,7 +16,32 @@ object LinkCleaner {
         "fbclid", "gclid", "gclsrc", "dclid", "gbraid", "wbraid", "msclkid", "yclid", "twclid",
         "ttclid", "li_fat_id", "mc_cid", "mc_eid", "igshid", "igsh", "ref_src", "ref_url",
         "_ga", "_gl", "vero_id", "oly_anon_id", "oly_enc_id", "rb_clickid", "s_cid",
-        "spm", "scm", "trk", "trkCampaign", "sc_campaign", "ncid", "cmpid", "wt_mc"
+        "spm", "scm", "trk", "trkCampaign", "sc_campaign", "ncid", "cmpid", "wt_mc",
+        // Affiliate networks, email tools, app deep-link and shopping-ad tags
+        "irclickid", "irgwc", "_kx", "ck_subscriber_id", "mkt_tok", "_branch_match_id",
+        "_branch_referrer", "srsltid", "epik", "sc_cid", "icid", "ocid", "cvid", "obOrigUrl",
+        "ga_source", "ga_medium", "ga_campaign", "gad_source", "gad_campaignid", "dicbo"
+    )
+
+    private val AMAZON_TRACKING = setOf(
+        "ref", "ref_", "psc", "pd_rd_w", "pd_rd_r", "pd_rd_wg", "pd_rd_i", "pf_rd_p", "pf_rd_r", "pf_rd_s",
+        "pf_rd_t", "pf_rd_i", "pf_rd_m", "content-id", "tag", "linkCode", "linkId", "creative", "creativeASIN",
+        "camp", "dib", "dib_tag", "qid", "sr", "sprefix", "crid", "smid", "spLa", "sp_csd", "_encoding", "social_share",
+        "starsLeft", "skipTwisterOG", "ascsubtag", "asc_campaign", "asc_refurl", "asc_source"
+    )
+    private val AMAZON_DOMAINS = listOf(
+        "amazon.de", "amazon.fr", "amazon.it", "amazon.es", "amazon.nl", "amazon.se", "amazon.pl",
+        "amazon.com.be", "amazon.ca", "amazon.com.mx", "amazon.com.br", "amazon.com.au", "amazon.in",
+        "amazon.co.jp", "amazon.sg", "amazon.ae", "amazon.sa", "amazon.com.tr", "amazon.eg"
+    )
+    private val EBAY_TRACKING = setOf(
+        "_trkparms", "_trksid", "hash", "amdata", "mkcid", "mkrid", "campid", "toolid", "mkevt", "customid",
+        "_from", "itmmeta", "ssspo", "sssrc", "ssuid", "widget_ver", "norover", "siteid", "mkpid", "emsid",
+        "ul_noapp", "_ul", "srcrot", "rt", "epid_ref"
+    )
+    private val EBAY_DOMAINS = listOf(
+        "ebay.com", "ebay.co.uk", "ebay.de", "ebay.fr", "ebay.it", "ebay.es", "ebay.nl", "ebay.ie",
+        "ebay.at", "ebay.ch", "ebay.be", "ebay.pl", "ebay.ca", "ebay.com.au"
     )
 
     // Share ids some sites add; only removed on those sites, where they never change the page
@@ -32,10 +57,43 @@ object LinkCleaner {
         "x.com" to setOf("s", "t", "ref_src"),
         "reddit.com" to setOf("share_id", "utm_name", "rdt"),
         "tiktok.com" to setOf("is_from_webapp", "sender_device", "sender_web_id", "_r", "_t"),
-        "amazon.com" to setOf("ref", "ref_", "psc", "pd_rd_w", "pd_rd_r", "pd_rd_wg", "pf_rd_p", "pf_rd_r", "content-id"),
-        "amazon.co.uk" to setOf("ref", "ref_", "psc", "pd_rd_w", "pd_rd_r", "pd_rd_wg", "pf_rd_p", "pf_rd_r", "content-id"),
-        "linkedin.com" to setOf("trackingId", "refId", "lipi", "rcm")
-    )
+        "amazon.com" to AMAZON_TRACKING,
+        "amazon.co.uk" to AMAZON_TRACKING,
+        "linkedin.com" to setOf("trackingId", "refId", "lipi", "rcm"),
+        "google.com" to setOf("ved", "ei", "sca_esv", "sxsrf", "gs_lcp", "gs_lp", "aqs", "sourceid", "oq", "uact", "sclient", "iflsig", "biw", "bih", "dpr"),
+        "etsy.com" to setOf(
+            "click_key", "click_sum", "ref", "pro", "sts", "frs", "ga_order", "ga_search_type",
+            "ga_view_type", "ga_search_query", "sr_prefetch", "pf_from", "pla_spm", "plkey",
+            "organic_search_click", "content_source", "logging_key", "external", "dd_referrer", "share_time"
+        ),
+        "aliexpress.com" to setOf(
+            "aff_fcid", "aff_fsk", "aff_platform", "aff_trace_key", "sk", "terminal_id",
+            "afSmartRedirect", "gatewayAdapt", "pdp_npi", "pdp_ext_f", "algo_pvid", "algo_exp_id",
+            "gps-id", "scm_id", "scm-url", "pvid", "utparam", "_t", "sourceType", "srcSns", "bizType",
+            "social_params", "businessType", "tt", "shareId", "platform", "templateId", "spreadType", "curPageLogUid"
+        ),
+        "temu.com" to setOf("_x_ads_channel", "_x_ads_sub_channel", "_x_vst_scene", "_x_sessn_id", "refer_page_name", "refer_page_id", "refer_page_sn", "_x_share_id", "share_uin", "_bg_fs"),
+        "walmart.com" to setOf("athbdg", "athcpid", "athpgid", "athznid", "athieid", "athena", "athancid", "athrsid", "wl13", "adsRedirect", "classType", "from"),
+        "target.com" to setOf("lnk", "afid", "ref", "AFID", "CPNG", "adgroup"),
+        "bestbuy.com" to setOf("ref", "loc", "acampID", "irclickid"),
+        "facebook.com" to setOf("mibextid", "rdid", "share_url", "sfnsn", "__tn__", "__cft__[0]", "ref", "fs", "sh", "paipv", "eav", "extid", "comment_tracking", "notif_id", "notif_t"),
+        "threads.net" to setOf("xmt", "slof"),
+        "pinterest.com" to setOf("invite_code", "sender", "sfo", "mweb_unauth_id"),
+        "nytimes.com" to setOf("smid", "smtyp", "partner", "campaign_id", "emc", "instance_id", "nl", "regi_id", "segment_id", "te", "user_id"),
+        "medium.com" to setOf("source", "sk"),
+        "substack.com" to setOf("r", "triedRedirect", "showWelcomeOnShare", "publication_id", "post_id", "isFreemail"),
+        "twitch.tv" to setOf("sr", "tt_medium", "tt_content"),
+        "music.apple.com" to setOf("ls", "app", "at", "ct", "itscg", "itsct"),
+        "apps.apple.com" to setOf("ls", "at", "ct", "itscg", "itsct", "mt"),
+        "play.google.com" to setOf("pcampaignid", "referrer"),
+        "booking.com" to setOf("aid", "label", "sid", "srpvid", "ucfs", "arphpl", "dest_type", "dist", "type"),
+        "airbnb.com" to setOf("source_impression_id", "previous_page_section_name", "federated_search_id", "s", "unique_share_id", "viralityEntryPoint"),
+        "vinted.co.uk" to setOf("referrer", "homepage_session_id"),
+        "vinted.com" to setOf("referrer", "homepage_session_id"),
+        "depop.com" to setOf("utm_campaign", "_branch_match_id"),
+        "shein.com" to setOf("url_from", "share_time", "share_from", "onelink", "scene", "sharetype", "currency", "lang", "ici", "src_identifier", "src_module", "src_tab_page_id")
+    ) + AMAZON_DOMAINS.associateWith { AMAZON_TRACKING } + EBAY_DOMAINS.associateWith { EBAY_TRACKING }
+
 
     // Mobile hosts with a plain desktop twin
     private val MOBILE_HOSTS = mapOf(

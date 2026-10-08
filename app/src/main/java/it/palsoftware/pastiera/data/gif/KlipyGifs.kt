@@ -89,7 +89,20 @@ object KlipyGifs {
     }
 
     /** Words that search for something else. */
-    private val ALIASES = mapOf("cowsad" to "diddy kong")
+    private val ALIASES = mapOf("cowsad" to "diddy kong pointing at an unknown object with his hat on backwards")
+
+    /** Words that answer with one GIF only (its slug), over and over. */
+    private val PINNED = mapOf("cowsad" to "diddy-kong-pointing-at-an-unknown-object-with-his-hat-on-backwards")
+    private const val PINNED_REPEATS = 300
+
+    private fun pinned(query: String?, results: List<GifResult>): List<GifResult> {
+        val slug = PINNED[query?.trim()?.lowercase()] ?: return results
+        val words = slug.split('-').filter { it.length > 3 }
+        val one = results.firstOrNull { it.id == slug } ?: results.maxByOrNull { result ->
+            words.count { it in result.description.lowercase() }
+        } ?: return results
+        return List(PINNED_REPEATS) { one.copy(id = "${one.id}#$it") }
+    }
 
     internal fun searchTerm(query: String): String =
         query.trim().let { ALIASES[it.lowercase()] ?: it }
@@ -183,11 +196,11 @@ object KlipyGifs {
     suspend fun find(context: Context, apiKey: String, query: String?): List<GifResult> = withContext(Dispatchers.IO) {
         if (OfflineMode.enabled) throw GifSearchException("offline mode")
         val file = resultsFile(context, query)
-        readResults(file, maxAge(query))?.let { return@withContext it }
+        readResults(file, maxAge(query))?.let { return@withContext pinned(query, it) }
         try {
-            fetchResults(context, apiKey, query).also { writeResults(file, it) }
+            pinned(query, fetchResults(context, apiKey, query).also { writeResults(file, it) })
         } catch (e: GifSearchException) {
-            readResults(file, Long.MAX_VALUE)?.takeIf { it.isNotEmpty() } ?: throw e
+            readResults(file, Long.MAX_VALUE)?.takeIf { it.isNotEmpty() }?.let { pinned(query, it) } ?: throw e
         }
     }
 
@@ -206,7 +219,7 @@ object KlipyGifs {
     fun cachedResults(context: Context, query: String?): Pair<List<GifResult>, Boolean>? {
         val file = resultsFile(context, query)
         val results = readResults(file, Long.MAX_VALUE) ?: return null
-        return results to (System.currentTimeMillis() - file.lastModified() <= maxAge(query))
+        return pinned(query, results) to (System.currentTimeMillis() - file.lastModified() <= maxAge(query))
     }
 
     /** Stores [results] for [query] as a fresh answer. */
