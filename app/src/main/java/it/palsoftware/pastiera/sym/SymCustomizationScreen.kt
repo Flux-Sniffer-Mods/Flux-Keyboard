@@ -580,6 +580,33 @@ fun SymCustomizationScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // Start from your recents: the ones you used last on the keys, in order, the rest of
+        // the page kept; fine-tune from there
+        Button(
+            onClick = {
+                val page = editingLayerPage ?: 1
+                val recents = when (page) {
+                    1 -> it.palsoftware.pastiera.data.emoji.RecentEmojiManager.getRecentEmojis(context)
+                    2 -> it.palsoftware.pastiera.data.symbols.SymbolSearch.recentSymbols(context)
+                    else -> it.palsoftware.pastiera.data.symbols.Kaomoji.recents(context)
+                }
+                val current = when (page) { 1 -> symMappingsPage1; 2 -> symMappingsPage2; else -> kaomojiHome }
+                val filled = startFromRecents(current, recents)
+                when (page) {
+                    1 -> { symMappingsPage1 = filled; SettingsManager.saveSymMappings(context, filled) }
+                    2 -> { symMappingsPage2 = filled; SettingsManager.saveSymMappingsPage2(context, filled) }
+                    else -> { kaomojiHome = filled; SettingsManager.saveKaomojiHomePage(context, filled) }
+                }
+            },
+            enabled = editingLayerPage != null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+        ) {
+            Text(stringResource(R.string.sym_start_from_recents), style = MaterialTheme.typography.bodyMedium)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
         // Reset button (ripristina predefiniti)
         Button(
             onClick = {
@@ -594,7 +621,7 @@ fun SymCustomizationScreen(
             )
         ) {
             Text(
-                stringResource(R.string.sym_reset_to_default),
+                stringResource(R.string.sym_start_most_popular),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onError
             )
@@ -758,4 +785,22 @@ fun SymCustomizationScreen(
         }
         }
     }
+}
+
+/** The keys a default page fills, in order: every letter but the page buttons (Q, A, P, L). */
+private val DEFAULT_PAGE_SLOTS = listOf(
+    android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_E, android.view.KeyEvent.KEYCODE_R,
+    android.view.KeyEvent.KEYCODE_T, android.view.KeyEvent.KEYCODE_Y, android.view.KeyEvent.KEYCODE_U,
+    android.view.KeyEvent.KEYCODE_I, android.view.KeyEvent.KEYCODE_O, android.view.KeyEvent.KEYCODE_S,
+    android.view.KeyEvent.KEYCODE_D, android.view.KeyEvent.KEYCODE_F, android.view.KeyEvent.KEYCODE_G,
+    android.view.KeyEvent.KEYCODE_H, android.view.KeyEvent.KEYCODE_J, android.view.KeyEvent.KEYCODE_K,
+    android.view.KeyEvent.KEYCODE_Z, android.view.KeyEvent.KEYCODE_X, android.view.KeyEvent.KEYCODE_C,
+    android.view.KeyEvent.KEYCODE_V, android.view.KeyEvent.KEYCODE_B, android.view.KeyEvent.KEYCODE_N,
+    android.view.KeyEvent.KEYCODE_M
+)
+
+/** Your [recents] on the page's keys in order, then what was there that isn't among them. */
+internal fun startFromRecents(current: Map<Int, String>, recents: List<String>): Map<Int, String> {
+    val items = (recents + DEFAULT_PAGE_SLOTS.mapNotNull { current[it] }).distinct()
+    return current + DEFAULT_PAGE_SLOTS.zip(items).toMap()
 }
