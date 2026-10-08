@@ -1747,7 +1747,7 @@
     <string name="shell_pair_title">Shell intégré</string>
     <string name="shell_pair_waiting">Dans Débogage sans fil, touchez Associer l\'appareil avec un code d\'association.</string>
     <string name="shell_paired">Associé, pas encore lancé. Il démarre tout seul dès que le Wi-Fi est connecté. Touchez pour le lancer maintenant.</string>
-    <string name="shell_running">En marche. Shizuku et Termux ne sont pas nécessaires. Après un redémarrage, il démarre tout seul dès que le Wi-Fi est connecté.</string>
+    <string name="shell_running">En marche. Shizuku et Termux ne sont pas nécessaires. Après un redémarrage, il démarre tout seul dès que le Wi-Fi est connecté. Le débogage USB reste activé : Android arrête le shell quand le débogage est complètement désactivé.</string>
     <string name="shell_setup">Configurez-le une fois avec le débogage sans fil, et Flux Keyboard n\'a besoin ni de Shizuku ni de Termux. Touchez, puis dans Débogage sans fil touchez Associer l\'appareil avec un code d\'association et saisissez le code dans la notification de Flux Keyboard. Android 11 et versions ultérieures.</string>
     <string name="shell_start_failed">Associé, mais le shell n\'a pas démarré. Vérifiez que Débogage sans fil est activé, puis touchez Shell intégré dans les paramètres de Flux Keyboard.</string>
     <string name="shell_start_now_failed">Il n\'a pas démarré. Connectez-vous au Wi-Fi ou activez Débogage sans fil, puis réessayez.</string>
@@ -1759,4 +1759,8 @@
     <string name="trackpad_delete_swipe_haptic_title">Vibrer quand un balayage efface</string>
     <string name="trackpad_shizuku_fallback_description">Quand Shizuku est choisi mais ne tourne pas encore (pas de Wi-Fi au démarrage), les balayages du clavier viennent d\'Android dans les applis que l\'Assistant de défilement fait défiler, jusqu\'au retour de Shizuku.</string>
     <string name="trackpad_shizuku_fallback_title">Balayages d\'Android tant que Shizuku est arrêté</string>
+    <string name="sym_start_from_recents">Commencer par mes récents</string>
+    <string name="sym_start_most_popular">Commencer par les plus populaires</string>
+    <string name="game_mode_add_key">Ajouter une touche</string>
+    <string name="game_mode_press_key">Appuyez sur la touche ou le bouton. Le bouton marche/arrêt ne peut pas servir : Android le garde pour lui.</string>
 </resources>

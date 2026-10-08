@@ -1741,7 +1741,7 @@
     <string name="shell_pair_title">Ներկառուցված shell</string>
     <string name="shell_pair_waiting">«Անլար վրիպազերծում»-ում հպեք «Զուգակցել սարքը զուգակցման կոդով»։</string>
     <string name="shell_paired">Զուգակցված է, դեռ չի աշխատում։ Ինքն է միանում, հենց Wi-Fi-ը միանա։ Հպեք՝ հիմա միացնելու համար։</string>
-    <string name="shell_running">Աշխատում է։ Shizuku և Termux պետք չեն։ Վերագործարկումից հետո ինքն է միանում, հենց Wi-Fi-ը միանա։</string>
+    <string name="shell_running">Աշխատում է։ Shizuku և Termux պետք չեն։ Վերագործարկումից հետո ինքն է միանում, հենց Wi-Fi-ը միանա։ USB վրիպազերծումը մնում է միացված․ Android-ը կանգնեցնում է shell-ը, երբ վրիպազերծումը լրիվ անջատված է։</string>
     <string name="shell_setup">Կարգավորեք այն մեկ անգամ անլար վրիպազերծմամբ, և Flux Keyboard-ին պետք չեն լինի ոչ Shizuku, ոչ Termux։ Հպեք, ապա «Անլար վրիպազերծում»-ում հպեք «Զուգակցել սարքը զուգակցման կոդով» և մուտքագրեք կոդը Flux Keyboard-ի ծանուցման մեջ։ Android 11 և ավելի նոր։</string>
     <string name="shell_start_failed">Զուգակցված է, բայց shell-ը չմիացավ։ Համոզվեք, որ «Անլար վրիպազերծում»-ը միացված է, ապա Flux Keyboard-ի կարգավորումներում հպեք Ներկառուցված shell։</string>
     <string name="shell_start_now_failed">Չմիացավ։ Միացեք Wi-Fi-ին կամ միացրեք «Անլար վրիպազերծում»-ը և նորից փորձեք։</string>
@@ -1753,4 +1753,8 @@
     <string name="trackpad_delete_swipe_haptic_title">Թրթռալ սահեցնելով ջնջելիս</string>
     <string name="trackpad_shizuku_fallback_description">Երբ Shizuku-ն ընտրված է, բայց դեռ չի աշխատում (միացնելիս Wi-Fi չկար), ստեղնաշարի սահեցումները գալիս են Android-ից այն հավելվածներում, որոնք ոլորում է ոլորման օգնականը, մինչև Shizuku-ն վերադառնա։</string>
     <string name="trackpad_shizuku_fallback_title">Android-ի սահեցումներ, քանի դեռ Shizuku-ն անջատված է</string>
+    <string name="sym_start_from_recents">Սկսել իմ վերջիններից</string>
+    <string name="sym_start_most_popular">Սկսել ամենահայտնիներից</string>
+    <string name="game_mode_add_key">Ավելացնել ստեղն</string>
+    <string name="game_mode_press_key">Սեղմեք ստեղնը կամ կոճակը։ Սնուցման կոճակը հնարավոր չէ օգտագործել․ Android-ը այն պահում է իր համար։</string>
 </resources>

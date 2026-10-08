@@ -1735,7 +1735,7 @@
     <string name="shell_pair_title">Shell tích hợp</string>
     <string name="shell_pair_waiting">Trong Gỡ lỗi không dây, chạm Ghép nối thiết bị bằng mã ghép nối.</string>
     <string name="shell_paired">Đã ghép nối, chưa chạy. Nó tự khởi động ngay khi Wi-Fi kết nối. Chạm để khởi động ngay.</string>
-    <string name="shell_running">Đang chạy. Không cần Shizuku và Termux. Sau khi khởi động lại, nó tự khởi động ngay khi Wi-Fi kết nối.</string>
+    <string name="shell_running">Đang chạy. Không cần Shizuku và Termux. Sau khi khởi động lại, nó tự khởi động ngay khi Wi-Fi kết nối. Gỡ lỗi USB vẫn bật: Android dừng shell khi tắt hẳn gỡ lỗi.</string>
     <string name="shell_setup">Thiết lập một lần bằng gỡ lỗi không dây, và Flux Keyboard không cần Shizuku hay Termux. Chạm, rồi trong Gỡ lỗi không dây chạm Ghép nối thiết bị bằng mã ghép nối và nhập mã vào thông báo của Flux Keyboard. Android 11 trở lên.</string>
     <string name="shell_start_failed">Đã ghép nối nhưng shell không khởi động. Hãy bật Gỡ lỗi không dây, rồi chạm Shell tích hợp trong cài đặt của Flux Keyboard.</string>
     <string name="shell_start_now_failed">Không khởi động được. Hãy kết nối Wi-Fi hoặc bật Gỡ lỗi không dây rồi thử lại.</string>
@@ -1747,4 +1747,8 @@
     <string name="trackpad_delete_swipe_haptic_title">Rung khi vuốt để xóa</string>
     <string name="trackpad_shizuku_fallback_description">Khi đã chọn Shizuku nhưng nó chưa chạy (không có Wi-Fi lúc khởi động), thao tác vuốt bàn phím đến từ Android trong các ứng dụng mà Trợ lý cuộn cuộn, cho đến khi Shizuku chạy lại.</string>
     <string name="trackpad_shizuku_fallback_title">Vuốt của Android khi Shizuku tắt</string>
+    <string name="sym_start_from_recents">Bắt đầu từ mục gần đây của tôi</string>
+    <string name="sym_start_most_popular">Bắt đầu với những mục phổ biến nhất</string>
+    <string name="game_mode_add_key">Thêm phím</string>
+    <string name="game_mode_press_key">Nhấn phím hoặc nút. Không dùng được nút nguồn: Android giữ nó cho riêng mình.</string>
 </resources>

@@ -1252,7 +1252,7 @@
     <string name="shell_pair_title">Shell integrata</string>
     <string name="shell_pair_waiting">In Debug wireless, tocca Accoppia dispositivo con codice di accoppiamento.</string>
     <string name="shell_paired">Accoppiata, non ancora attiva. Si avvia da sola appena il Wi-Fi si connette. Tocca per avviarla ora.</string>
-    <string name="shell_running">Attiva. Shizuku e Termux non servono. Dopo un riavvio si avvia da sola appena il Wi-Fi si connette.</string>
+    <string name="shell_running">Attiva. Shizuku e Termux non servono. Dopo un riavvio si avvia da sola appena il Wi-Fi si connette. Il debug USB resta attivo: Android chiude la shell quando il debug è del tutto spento.</string>
     <string name="shell_setup">Configurala una volta con il debug wireless e Flux Keyboard non avrà bisogno né di Shizuku né di Termux. Tocca, poi in Debug wireless tocca Accoppia dispositivo con codice di accoppiamento e scrivi il codice nella notifica di Flux Keyboard. Android 11 e successivi.</string>
     <string name="shell_start_failed">Accoppiata, ma la shell non si è avviata. Controlla che Debug wireless sia attivo, poi tocca Shell integrata nelle impostazioni di Flux Keyboard.</string>
     <string name="shell_start_now_failed">Non si è avviata. Connettiti al Wi-Fi o attiva Debug wireless e riprova.</string>
@@ -1264,4 +1264,8 @@
     <string name="trackpad_delete_swipe_haptic_title">Vibra quando uno scorrimento cancella</string>
     <string name="trackpad_shizuku_fallback_description">Con Shizuku scelto ma non ancora attivo (niente Wi-Fi all\'avvio del telefono), gli scorrimenti sulla tastiera arrivano da Android nelle app che l\'Assistente di scorrimento fa scorrere, finché Shizuku non torna.</string>
     <string name="trackpad_shizuku_fallback_title">Scorrimenti di Android mentre Shizuku è spento</string>
+    <string name="sym_start_from_recents">Inizia dai miei recenti</string>
+    <string name="sym_start_most_popular">Inizia dai più popolari</string>
+    <string name="game_mode_add_key">Aggiungi un tasto</string>
+    <string name="game_mode_press_key">Premi il tasto o il pulsante. Il tasto di accensione non si può usare: Android lo tiene per sé.</string>
 </resources>

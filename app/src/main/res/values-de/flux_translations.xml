@@ -1206,7 +1206,7 @@
     <string name="shell_pair_title">Eingebaute Shell</string>
     <string name="shell_pair_waiting">Tippe in Debugging über WLAN auf Gerät mit einem Kopplungscode koppeln.</string>
     <string name="shell_paired">Gekoppelt, läuft noch nicht. Sie startet von selbst, sobald das WLAN verbunden ist. Tippe, um sie jetzt zu starten.</string>
-    <string name="shell_running">Läuft. Shizuku und Termux werden nicht gebraucht. Nach einem Neustart startet sie von selbst, sobald das WLAN verbunden ist.</string>
+    <string name="shell_running">Läuft. Shizuku und Termux werden nicht gebraucht. Nach einem Neustart startet sie von selbst, sobald das WLAN verbunden ist. USB-Debugging bleibt an: Android beendet die Shell, wenn Debugging ganz aus ist.</string>
     <string name="shell_setup">Einmal mit Debugging über WLAN einrichten, dann braucht Flux Keyboard weder Shizuku noch Termux. Tippe, dann in Debugging über WLAN auf Gerät mit einem Kopplungscode koppeln und gib den Code in die Benachrichtigung von Flux Keyboard ein. Ab Android 11.</string>
     <string name="shell_start_failed">Gekoppelt, aber die Shell ist nicht gestartet. Achte darauf, dass Debugging über WLAN an ist, und tippe dann in den Einstellungen von Flux Keyboard auf Eingebaute Shell.</string>
     <string name="shell_start_now_failed">Sie ist nicht gestartet. Verbinde dich mit einem WLAN oder schalte Debugging über WLAN ein und versuche es erneut.</string>
@@ -1218,4 +1218,8 @@
     <string name="trackpad_delete_swipe_haptic_title">Vibrieren beim Löschen per Wischen</string>
     <string name="trackpad_shizuku_fallback_description">Ist Shizuku gewählt, läuft aber noch nicht (kein WLAN beim Start), kommen Tastatur-Wischgesten von Android in den Apps, die der Scroll-Assistent scrollt, bis Shizuku wieder da ist.</string>
     <string name="trackpad_shizuku_fallback_title">Android-Wischgesten, solange Shizuku aus ist</string>
+    <string name="sym_start_from_recents">Mit meinen zuletzt verwendeten beginnen</string>
+    <string name="sym_start_most_popular">Mit den beliebtesten beginnen</string>
+    <string name="game_mode_add_key">Taste hinzufügen</string>
+    <string name="game_mode_press_key">Drücke die Taste. Die Ein/Aus-Taste geht nicht: Android behält sie für sich.</string>
 </resources>
