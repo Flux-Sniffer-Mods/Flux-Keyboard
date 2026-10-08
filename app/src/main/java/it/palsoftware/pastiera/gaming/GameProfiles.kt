@@ -25,6 +25,10 @@ enum class GameAction(val label: String, val keyCode: Int, val gamepad: Boolean)
     START("Start (+)", KeyEvent.KEYCODE_BUTTON_START, true),
     SELECT("Select (-)", KeyEvent.KEYCODE_BUTTON_SELECT, true),
     HOME("Home", KeyEvent.KEYCODE_BUTTON_MODE, true),
+    KEY_W("W", KeyEvent.KEYCODE_W, false),
+    KEY_A("A key", KeyEvent.KEYCODE_A, false),
+    KEY_S("S", KeyEvent.KEYCODE_S, false),
+    KEY_D("D", KeyEvent.KEYCODE_D, false),
     KEY_1("1", KeyEvent.KEYCODE_1, false),
     KEY_2("2", KeyEvent.KEYCODE_2, false),
     KEY_3("3", KeyEvent.KEYCODE_3, false),
@@ -58,7 +62,12 @@ enum class TrackpadRole(val label: String) {
     MOUSE("Mouse")
 }
 
-enum class GameStyle(val label: String) { GAMEPAD("Gamepad"), PC("PC (MMO)") }
+enum class GameStyle(val label: String) {
+    GAMEPAD("Gamepad"),
+    PC("PC (MMO)"),
+    /** Movement on D Z X C (W A S D's shape, lower down), so the whole top row is the number row. */
+    PC_DZXC("PC (MMO), moving on D Z X C")
+}
 
 /**
  * One game's (or app's) setup: the apps it's for, each key's action (keys not listed reach the
@@ -116,7 +125,8 @@ object GameProfiles {
     )
 
     /**
-     * WASD the d-pad, O L P K the X Y B A buttons (Nintendo's places), shoulders on Q E Z C and
+     * WASD the d-pad, O K P L the Y X B A buttons in an Xbox controller's places (O on top, K
+     * left, P right, L below), shoulders on Q E Z C and
      * the left ones on the volume keys too (up the shoulder, down the trigger).
      */
     fun gamepadDefaults(): Map<Int, GameAction> = mapOf(
@@ -124,10 +134,10 @@ object GameProfiles {
         KeyEvent.KEYCODE_A to GameAction.DPAD_LEFT,
         KeyEvent.KEYCODE_S to GameAction.DPAD_DOWN,
         KeyEvent.KEYCODE_D to GameAction.DPAD_RIGHT,
-        KeyEvent.KEYCODE_O to GameAction.BUTTON_X,
-        KeyEvent.KEYCODE_L to GameAction.BUTTON_Y,
+        KeyEvent.KEYCODE_O to GameAction.BUTTON_Y,
+        KeyEvent.KEYCODE_K to GameAction.BUTTON_X,
         KeyEvent.KEYCODE_P to GameAction.BUTTON_B,
-        KeyEvent.KEYCODE_K to GameAction.BUTTON_A,
+        KeyEvent.KEYCODE_L to GameAction.BUTTON_A,
         KeyEvent.KEYCODE_Q to GameAction.L1,
         KeyEvent.KEYCODE_E to GameAction.R1,
         KeyEvent.KEYCODE_Z to GameAction.L2,
@@ -154,12 +164,34 @@ object GameProfiles {
         KeyEvent.KEYCODE_P to GameAction.KEY_0
     )
 
+    /** D Z X C move (sent as W A S D), and Q to P the whole number row. */
+    fun pcDzxcDefaults(): Map<Int, GameAction> = mapOf(
+        KeyEvent.KEYCODE_D to GameAction.KEY_W,
+        KeyEvent.KEYCODE_Z to GameAction.KEY_A,
+        KeyEvent.KEYCODE_X to GameAction.KEY_S,
+        KeyEvent.KEYCODE_C to GameAction.KEY_D,
+        KeyEvent.KEYCODE_Q to GameAction.KEY_1,
+        KeyEvent.KEYCODE_W to GameAction.KEY_2,
+        KeyEvent.KEYCODE_E to GameAction.KEY_3,
+        KeyEvent.KEYCODE_R to GameAction.KEY_4,
+        KeyEvent.KEYCODE_T to GameAction.KEY_5,
+        KeyEvent.KEYCODE_Y to GameAction.KEY_6,
+        KeyEvent.KEYCODE_U to GameAction.KEY_7,
+        KeyEvent.KEYCODE_I to GameAction.KEY_8,
+        KeyEvent.KEYCODE_O to GameAction.KEY_9,
+        KeyEvent.KEYCODE_P to GameAction.KEY_0
+    )
+
     fun newProfile(name: String, style: GameStyle, packages: Set<String>): GameProfile = GameProfile(
         id = java.util.UUID.randomUUID().toString(),
         name = name,
         style = style,
         packages = packages,
-        keys = if (style == GameStyle.GAMEPAD) gamepadDefaults() else pcDefaults(),
+        keys = when (style) {
+            GameStyle.GAMEPAD -> gamepadDefaults()
+            GameStyle.PC -> pcDefaults()
+            GameStyle.PC_DZXC -> pcDzxcDefaults()
+        },
         leftHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.LEFT_STICK else TrackpadRole.NONE,
         rightHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.RIGHT_STICK else TrackpadRole.MOUSE
     )

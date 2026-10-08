@@ -60,7 +60,7 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 
 ### The rest of the phone, without root
 - **Its own shell, no Shizuku needed**: pair once with wireless debugging and Flux Keyboard starts its own developer shell after every restart, as soon as Wi-Fi connects. Shizuku still works if you use it.
-- **Gaming mode**: the keys and trackpad play games, as a controller (WASD the d-pad, O L P K Nintendo's X Y B A, a stick on each trackpad half) or as a PC (number row on top, the trackpad a mouse), with a profile per game, fully remappable, including the games in GameNative, GameHub and GameHub Lite. The screen stays upright while you play.
+- **Gaming mode**: the keys and trackpad play games, as a controller (WASD the d-pad, an Xbox controller's Y X B A on O K P L in its places, a stick on each trackpad half) or as a PC (number row on top, the trackpad a mouse, moving on WASD or on D Z X C), with a profile per game, fully remappable, including the games in GameNative, GameHub and GameHub Lite. The screen stays upright while you play.
 - **Keyboard light that follows the screen**: on and off with it, following its brightness as it changes, or flashing for notifications.
 
 <p align="center">
