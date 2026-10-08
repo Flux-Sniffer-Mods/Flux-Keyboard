@@ -1151,6 +1151,7 @@ object SettingLinkRegistry {
         SettingsDestination.FluxHiddenApps to R.string.flux_hidden_apps_title,
         SettingsDestination.FluxLinuxDesktop to R.string.flux_linux_desktop_title,
         SettingsDestination.FluxOffline to R.string.flux_offline_title,
+        SettingsDestination.GameMode to R.string.game_mode_title,
         SettingsDestination.Root to R.string.root_title,
         SettingsDestination.KeyboardsLayouts to R.string.settings_keyboards_layouts_title,
         SettingsDestination.Typing to R.string.settings_typing_title,

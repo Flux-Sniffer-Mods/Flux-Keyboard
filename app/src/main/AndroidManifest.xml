@@ -247,6 +247,10 @@
             android:exported="false"
             android:excludeFromRecents="true" />
         <!-- Termux's answer when the quick launcher asks for Termux:Widget's scripts -->
+        <!-- Gaming mode's notification: the next profile -->
+        <receiver
+            android:name=".gaming.GameMode$Receiver"
+            android:exported="false" />
         <!-- The pairing code typed into the built-in shell's notification -->
         <receiver
             android:name=".adb.shell.ShellSetup$PairReceiver"

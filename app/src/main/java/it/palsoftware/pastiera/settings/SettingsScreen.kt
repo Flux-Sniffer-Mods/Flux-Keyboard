@@ -79,6 +79,7 @@ enum class SettingsDestination {
     FluxHiddenApps,
     FluxLinuxDesktop,
     FluxOffline,
+    GameMode,
     Root,
     KeyboardsLayouts,
     Typing,
@@ -354,6 +355,9 @@ fun SettingsScreen(
             }
             SettingsDestination.FluxOffline -> {
                 FluxOfflineScreen(modifier = modifier, onBack = { navigateBack() })
+            }
+            SettingsDestination.GameMode -> {
+                GameModeScreen(modifier = modifier, onBack = { navigateBack() })
             }
             SettingsDestination.Root -> {
                 AdbSettingsScreen(modifier = modifier, onBack = { navigateBack() })

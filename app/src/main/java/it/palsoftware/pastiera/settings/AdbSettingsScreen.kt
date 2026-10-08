@@ -166,6 +166,16 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             }
         }
 
+        // Gaming mode plays games with the keys and trackpad, through the shell
+        FluxActionRow(
+            linkId = null,
+            icon = "\u271A",
+            title = stringResource(R.string.game_mode_title),
+            description = stringResource(R.string.game_mode_switch_description)
+        ) {
+            openSettingsPage(context, SettingsPage(SettingsDestination.GameMode))
+        }
+
         SettingsSectionDivider(stringResource(R.string.root_section_backlight))
         if (!backlightSupported) {
             FluxNote(

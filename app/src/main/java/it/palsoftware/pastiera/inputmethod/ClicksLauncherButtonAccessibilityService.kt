@@ -25,6 +25,8 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
     private val mapper = ClicksLauncherAccessibilityKeyMapper()
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
+        // Gaming mode: the key plays the game
+        if (it.palsoftware.pastiera.gaming.GameMode.onKeyEvent(event)) return true
         // Hidden apps: keys for Pastiera's emoji/symbols panels go to Pastiera, not the app
         val taken = HiddenAppKeyObserver.intercept(event)
         HiddenAppKeyObserver.logKey(event, if (taken) "accessibility, to the keyboard" else "accessibility, to the app")
@@ -61,6 +63,7 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
             // The quick launcher opens over the app you're in: that app keeps its screen size
             val overlay = pkg == packageName && event.className?.toString()?.contains("QuickLauncher") == true
             if (!overlay) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
+            if (confirmed && !overlay) it.palsoftware.pastiera.gaming.GameMode.onAppInFront(this, pkg)
             // Keyboard swipes per app follow the app's own screens (the quick launcher, over
             // another app, keeps that app's choice)
             if (!confirmed && !overlay && pkg != frontPackage && pkg != packageName) {

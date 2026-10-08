@@ -30,7 +30,7 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 </p>
 
 ### Emoji, symbols, kaomoji and GIFs on the keys
-- **Pages on the keys**: Q and P turn through every emoji by category, symbols (arrows, maths, currency, punctuation, shapes) and over 300 kaomoji, opening on what you use most. Tap SYM or the emoji key for one, with no screen in the way.
+- **Pages on the keys**: Q and P turn through every emoji by category, symbols (arrows, maths, currency, punctuation, shapes) and over 300 kaomoji, opening on a default page you map yourself, Developer's pick to start, with your recents a page back. Tap SYM or the emoji key for one, with no screen in the way.
 
 <p align="center">
   <img src="docs/cards/pages.webp" alt="Emoji, symbols and kaomoji as pages. Q and P turn through every emoji by category, the symbols and over 300 kaomoji, right on the keys." width="840">
@@ -59,7 +59,9 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 </p>
 
 ### The rest of the phone, without root
-- **Keyboard light that follows the screen** (Shizuku): on and off with it, following its brightness as it changes, or flashing for notifications.
+- **Its own shell, no Shizuku needed**: pair once with wireless debugging and Flux Keyboard starts its own developer shell after every restart, as soon as Wi-Fi connects. Shizuku still works if you use it.
+- **Gaming mode**: the keys and trackpad play games, as a controller (WASD the d-pad, O L P K Nintendo's X Y B A, a stick on each trackpad half) or as a PC (number row on top, the trackpad a mouse), with a profile per game, fully remappable, including the games in GameNative, GameHub and GameHub Lite. The screen stays upright while you play.
+- **Keyboard light that follows the screen**: on and off with it, following its brightness as it changes, or flashing for notifications.
 
 <p align="center">
   <img src="docs/cards/keyboard-light.webp" alt="The keyboard light, no root. On and off with the screen, following its brightness as it changes, or flashing for notifications, through Shizuku." width="840">
@@ -155,7 +157,7 @@ Things you'd otherwise need a different fork for, side by side with everything a
   <img src="docs/cards/modifiers.webp" alt="Shift, Alt and Ctrl your way. What a tap does, whether two taps lock it, and whether it lets go after use, side by side." width="840">
 </p>
 
-- **No root**: Shizuku for everything that needs Android's shell.
+- **No root**: its own shell (or Shizuku) for everything that needs Android's shell.
 - **Private mode**: Incognito typing and Offline mode together, on one key.
 
 Everything else, including automatic Shift by field type and snippet placeholders, is in the

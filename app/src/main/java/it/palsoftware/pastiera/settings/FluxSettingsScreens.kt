@@ -413,6 +413,7 @@ internal val fluxRowIcons: Map<String?, String> = mapOf(
     "root.backlight_flash" to "\u2726",           // ✦
     "main.root.shizuku_boot" to "\u21BB",         // ↻
     "main.root.built_in_shell" to "\u2318",       // ⌘
+    "main.root.game_mode" to "\u271A",            // ✚
     // Terminal mode
     SettingLinkIds.TERMINAL_MODE_ENABLED to "\u276F",       // ❯
     SettingLinkIds.TERMINAL_MODE_HIDE_KEYBOARD to "\u2298", // ⊘
