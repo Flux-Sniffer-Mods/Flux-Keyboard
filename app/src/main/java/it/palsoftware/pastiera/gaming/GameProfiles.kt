@@ -80,7 +80,9 @@ data class GameProfile(
     val packages: Set<String>,
     val keys: Map<Int, GameAction>,
     val leftHalf: TrackpadRole,
-    val rightHalf: TrackpadRole
+    val rightHalf: TrackpadRole,
+    /** Controller buttons and sticks as touches on Flux Keyboard's GameNative controls profile. */
+    val touchControls: Boolean = false
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
@@ -90,6 +92,7 @@ data class GameProfile(
         put("keys", JSONObject().apply { keys.forEach { (key, action) -> put(key.toString(), action.name) } })
         put("left", leftHalf.name)
         put("right", rightHalf.name)
+        put("touchControls", touchControls)
     }
 
     companion object {
@@ -105,7 +108,8 @@ data class GameProfile(
                     key.toIntOrNull()?.let { code -> action?.let { code to it } }
                 }?.toMap().orEmpty(),
                 leftHalf = TrackpadRole.valueOf(json.optString("left", TrackpadRole.NONE.name)),
-                rightHalf = TrackpadRole.valueOf(json.optString("right", TrackpadRole.NONE.name))
+                rightHalf = TrackpadRole.valueOf(json.optString("right", TrackpadRole.NONE.name)),
+                touchControls = json.optBoolean("touchControls", false)
             )
         }.getOrNull()
     }
@@ -193,7 +197,9 @@ object GameProfiles {
             GameStyle.PC_DZXC -> pcDzxcDefaults()
         },
         leftHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.LEFT_STICK else TrackpadRole.NONE,
-        rightHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.RIGHT_STICK else TrackpadRole.MOUSE
+        rightHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.RIGHT_STICK else TrackpadRole.MOUSE,
+        // GameNative only takes real controllers: its on-screen controls stand in
+        touchControls = style == GameStyle.GAMEPAD && GameNativeBridge.PACKAGE in packages
     )
 
     private fun prefs(context: Context) = SettingsManager.getPreferences(context)

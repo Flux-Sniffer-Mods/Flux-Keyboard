@@ -313,6 +313,12 @@
     <string name="game_mode_keys_note">Changing the style starts the keys again from its defaults.</string>
     <string name="game_mode_key_as_is">As it is</string>
     <string name="game_mode_save">Save</string>
+    <string name="game_mode_touch_controls">Through GameNative\'s on-screen controls</string>
+    <string name="game_mode_touch_controls_description">GameNative only takes real controllers as controllers. With Flux Keyboard\'s controls profile picked in GameNative, the buttons and sticks press its invisible on-screen controls instead, which GameNative passes on as an Xbox controller.</string>
+    <string name="game_mode_gamenative_save">Save the controls profile for GameNative</string>
+    <string name="game_mode_gamenative_save_description">Saves Flux Keyboard gamepad.icp to Downloads/Flux Keyboard. In GameNative, import it from its controls profiles and pick it for the game, with on-screen controls shown (they\'re invisible).</string>
+    <string name="game_mode_gamenative_saved">Saved to Downloads/Flux Keyboard. Import it in GameNative\'s controls profiles and pick it for the game.</string>
+    <string name="game_mode_gamenative_save_failed">It couldn\'t be saved.</string>
     <string name="game_mode_add_key">Add a key</string>
     <string name="game_mode_press_key">Press the key or button. The power button can\'t be used: Android keeps it for itself.</string>
     <string name="game_mode_delete">Delete profile</string>

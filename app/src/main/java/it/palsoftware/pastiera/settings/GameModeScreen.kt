@@ -109,6 +109,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) { picking = true }
         FluxActionRow(
             linkId = null,
+            icon = "\u2913",
+            title = stringResource(R.string.game_mode_gamenative_save),
+            description = stringResource(R.string.game_mode_gamenative_save_description)
+        ) {
+            val ok = it.palsoftware.pastiera.gaming.GameNativeBridge.save(context)
+            android.widget.Toast.makeText(
+                context,
+                if (ok) R.string.game_mode_gamenative_saved else R.string.game_mode_gamenative_save_failed,
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
+        FluxActionRow(
+            linkId = null,
             icon = "⇩",
             title = stringResource(R.string.game_mode_import),
             description = stringResource(R.string.game_mode_import_description)
@@ -209,6 +222,17 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
             }
             ChoiceRow(stringResource(R.string.game_mode_right_half), current.rightHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(rightHalf = TrackpadRole.entries[it])
+            }
+            // GameNative: buttons and sticks through its on-screen controls (Flux Keyboard's profile)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.game_mode_touch_controls))
+                    Text(stringResource(R.string.game_mode_touch_controls_description), style = MaterialTheme.typography.bodySmall)
+                }
+                androidx.compose.material3.Switch(
+                    checked = current.touchControls,
+                    onCheckedChange = { current = current.copy(touchControls = it) }
+                )
             }
             Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
             current.packages.forEach { pkg ->

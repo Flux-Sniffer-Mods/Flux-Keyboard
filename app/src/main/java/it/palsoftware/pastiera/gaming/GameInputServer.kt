@@ -17,6 +17,7 @@ import android.view.MotionEvent
  * - `J lx ly rx ry`: both sticks, -1 to 1
  * - `M dx dy`: the mouse moved
  * - `B 1|0 1|2`: the left or right mouse button down or up
+ * - `T d|m|u id x y`: a finger down, moved or up on the screen (several at once)
  */
 object GameInputServer {
     private var deviceId = 0
@@ -26,6 +27,13 @@ object GameInputServer {
     private var mouseY = 540f
     private var buttons = 0
     private var mouseDownTime = 0L
+    private val fingers = LinkedHashMap<Int, Pair<Float, Float>>()
+    private var touchDownTime = 0L
+    private val touchDevice: Int by lazy {
+        InputDevice.getDeviceIds().firstOrNull { id ->
+            InputDevice.getDevice(id)?.supportsSource(InputDevice.SOURCE_TOUCHSCREEN) == true
+        } ?: 0
+    }
 
     private val injector: (InputEvent) -> Unit by lazy {
         // InputManagerGlobal from Android 14, InputManager before
@@ -79,6 +87,7 @@ object GameInputServer {
                 mouseY = (mouseY + parts[2].toFloat()).coerceIn(0f, height - 1)
                 mouse(if (buttons != 0) MotionEvent.ACTION_MOVE else MotionEvent.ACTION_HOVER_MOVE, now)
             }
+            "T" -> touch(parts[1], parts[2].toInt(), parts.getOrNull(3)?.toFloat() ?: 0f, parts.getOrNull(4)?.toFloat() ?: 0f, now)
             "B" -> {
                 val button = if (parts[2] == "2") MotionEvent.BUTTON_SECONDARY else MotionEvent.BUTTON_PRIMARY
                 if (parts[1] == "1") {
@@ -93,6 +102,46 @@ object GameInputServer {
                 }
             }
         }
+    }
+
+    private fun touch(kind: String, id: Int, x: Float, y: Float, now: Long) {
+        when (kind) {
+            "d" -> {
+                if (id in fingers) return
+                if (fingers.isEmpty()) touchDownTime = now
+                fingers[id] = x to y
+                val index = fingers.keys.indexOf(id)
+                sendTouch(if (fingers.size == 1) MotionEvent.ACTION_DOWN
+                    else MotionEvent.ACTION_POINTER_DOWN or (index shl MotionEvent.ACTION_POINTER_INDEX_SHIFT), now)
+            }
+            "m" -> {
+                if (id !in fingers) return
+                fingers[id] = x to y
+                sendTouch(MotionEvent.ACTION_MOVE, now)
+            }
+            "u" -> {
+                if (id !in fingers) return
+                val index = fingers.keys.indexOf(id)
+                sendTouch(if (fingers.size == 1) MotionEvent.ACTION_UP
+                    else MotionEvent.ACTION_POINTER_UP or (index shl MotionEvent.ACTION_POINTER_INDEX_SHIFT), now)
+                fingers.remove(id)
+            }
+        }
+    }
+
+    private fun sendTouch(action: Int, now: Long) {
+        val properties = fingers.keys.map { id ->
+            MotionEvent.PointerProperties().apply { this.id = id; toolType = MotionEvent.TOOL_TYPE_FINGER }
+        }.toTypedArray()
+        val coords = fingers.values.map { (x, y) ->
+            MotionEvent.PointerCoords().apply { this.x = x; this.y = y; pressure = 1f; size = 1f }
+        }.toTypedArray()
+        val event = MotionEvent.obtain(
+            touchDownTime, now, action, fingers.size, properties, coords,
+            0, 0, 1f, 1f, touchDevice, 0, InputDevice.SOURCE_TOUCHSCREEN, 0
+        )
+        injector(event)
+        event.recycle()
     }
 
     private fun mouse(action: Int, now: Long, actionButton: Int = 0) {

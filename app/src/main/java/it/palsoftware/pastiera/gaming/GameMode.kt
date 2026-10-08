@@ -39,6 +39,8 @@ object GameMode {
     private var trackpad: Process? = null
     private var deviceSent = -1
     private var savedRotation: String? = null
+    @Volatile private var screenW = 1080f
+    @Volatile private var screenH = 1080f
 
     /** A text field of the game has the keyboard open: keys type, not play. */
     @Volatile var typing = false
@@ -65,7 +67,13 @@ object GameMode {
         val device = event.deviceId
         worker.execute {
             if (device != deviceSent) { send("D $device"); deviceSent = device }
+            // GameNative: the button's place on Flux Keyboard's on-screen controls, touched
+            val place = if (current.touchControls) GameNativeBridge.BUTTONS[action] else null
             when {
+                place != null -> {
+                    val finger = 10 + action.ordinal
+                    if (down) send("T d $finger ${place.first * screenW} ${place.second * screenH}") else send("T u $finger")
+                }
                 action == GameAction.MOUSE_LEFT -> send("B ${if (down) 1 else 0} 1")
                 action == GameAction.MOUSE_RIGHT -> send("B ${if (down) 1 else 0} 2")
                 else -> send("K ${if (down) 1 else 0} ${action.keyCode} ${if (action.gamepad) "g" else "k"}")
@@ -115,8 +123,13 @@ object GameMode {
             }
             inputProcess = process
             input = process.outputStream.bufferedWriter()
-            val metrics = context.resources.displayMetrics
-            send("S ${metrics.widthPixels} ${metrics.heightPixels}")
+            val size = android.graphics.Point()
+            @Suppress("DEPRECATION")
+            context.getSystemService(android.view.WindowManager::class.java)?.defaultDisplay?.getRealSize(size)
+            // Upright while gaming: the short side across
+            screenW = minOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
+            screenH = maxOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
+            send("S ${screenW.toInt()} ${screenH.toInt()}")
         }.onFailure { Log.w(TAG, "input helper couldn't start: $it") }
     }
 
@@ -197,7 +210,7 @@ object GameMode {
                     val at = if (role == TrackpadRole.LEFT_STICK) 0 else 2
                     sticks[at] = ((x - originX) / radius).coerceIn(-1f, 1f)
                     sticks[at + 1] = ((y - originY) / radius).coerceIn(-1f, 1f)
-                    sendSticks()
+                    if (profile?.touchControls == true) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.NONE -> Unit
@@ -209,13 +222,36 @@ object GameMode {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (role == TrackpadRole.LEFT_STICK) 0 else 2
                     sticks[at] = 0f; sticks[at + 1] = 0f
-                    sendSticks()
+                    if (profile?.touchControls == true) {
+                        val finger = 1 + at / 2
+                        worker.execute { send("T u $finger") }
+                        stickHeld[at / 2] = false
+                    } else sendSticks()
                 }
                 // A tap clicks
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - downAt < 200 && moved < radius / 4) {
                     worker.execute { send("B 1 1"); send("B 0 1") }
                 }
                 TrackpadRole.NONE -> Unit
+            }
+        }
+
+        private val stickHeld = BooleanArray(2)
+
+        /** GameNative: a finger on the stick's place, pushed as far as the stick goes. */
+        private fun dragStick(at: Int) {
+            val centre = if (at == 0) GameNativeBridge.LEFT_STICK else GameNativeBridge.RIGHT_STICK
+            val cx = centre.first * screenW
+            val cy = centre.second * screenH
+            val reach = GameNativeBridge.STICK_REACH * screenW
+            val finger = 1 + at / 2
+            val first = !stickHeld[at / 2]
+            stickHeld[at / 2] = true
+            val x = cx + sticks[at] * reach
+            val y = cy + sticks[at + 1] * reach
+            worker.execute {
+                if (first) send("T d $finger $cx $cy")
+                send("T m $finger $x $y")
             }
         }
 
