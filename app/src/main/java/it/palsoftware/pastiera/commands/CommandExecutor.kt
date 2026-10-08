@@ -230,10 +230,28 @@ class CommandExecutor(
         return CommandExecutionResult.Success
     }
 
+    /** Brightness a step up or down through the system setting (Modify system settings allowed). */
+    private fun brightnessWithoutShell(keyCode: Int): CommandExecutionResult? {
+        val up = when (keyCode) {
+            KeyEvent.KEYCODE_BRIGHTNESS_UP -> true
+            KeyEvent.KEYCODE_BRIGHTNESS_DOWN -> false
+            else -> return null
+        }
+        if (!android.provider.Settings.System.canWrite(context)) return null
+        val resolver = context.contentResolver
+        val now = android.provider.Settings.System.getInt(resolver, android.provider.Settings.System.SCREEN_BRIGHTNESS, 128)
+        val next = (now + if (up) 26 else -26).coerceIn(1, 255)
+        return runCatching {
+            android.provider.Settings.System.putInt(resolver, android.provider.Settings.System.SCREEN_BRIGHTNESS, next)
+            CommandExecutionResult.Success
+        }.getOrNull()
+    }
+
     private fun sendShellKeyEvent(keyCode: Int): CommandExecutionResult {
         return try {
             if (!it.palsoftware.pastiera.adb.AdbShell.available()) {
-                return fail("Shizuku required")
+                // Without the shell: brightness through the system setting, when allowed
+                return brightnessWithoutShell(keyCode) ?: fail("Shizuku required")
             }
             val process = it.palsoftware.pastiera.adb.AdbShell.newProcess(
                 arrayOf("input", "keyevent", keyCode.toString())

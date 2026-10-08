@@ -13,7 +13,20 @@ class AdbCommandSource : CommandSource {
     override val id = CommandSourceId.Pastiera
 
     override fun getCommands(context: Context): List<CommandTarget> {
-        if (!AdbShell.available()) return emptyList()
+        // Without the shell: what Android allows otherwise (Battery Saver, through the settings
+        // permission the shell setup grants)
+        if (!AdbShell.available()) return if (canWriteSecure(context)) listOf(
+            CommandTarget(
+                id = "root.$BATTERY_SAVER", source = id, kind = CommandKind.PastieraAction,
+                label = context.getString(R.string.root_battery_saver_title),
+                subtitle = context.getString(R.string.adb_command_subtitle),
+                icon = CommandIcon.Settings,
+                launch = CommandLaunchSpec.InternalAction("root_$BATTERY_SAVER"),
+                capabilities = setOf(CommandCapability.AdjustsDeviceState),
+                defaultSurfaces = setOf(CommandSurface.AssignedKey, CommandSurface.QuickLauncher, CommandSurface.NavMode),
+                searchTokens = listOf("Battery", "Saver", "Power")
+            )
+        ) else emptyList()
         fun command(action: String, label: Int, tokens: List<String>) = CommandTarget(
             // The ids keys were assigned with before (root.…) still run these
             id = "root.$action",
@@ -41,12 +54,24 @@ class AdbCommandSource : CommandSource {
         const val BATTERY_SAVER = "battery_saver"
         const val BLOCK_NETWORK = "block_network"
 
+        private fun canWriteSecure(context: Context): Boolean =
+            context.checkSelfPermission("android.permission.WRITE_SECURE_SETTINGS") ==
+                android.content.pm.PackageManager.PERMISSION_GRANTED
+
+        /** Battery Saver on or off through its setting, which Android follows. */
+        private fun toggleBatterySaver(context: Context) {
+            if (!canWriteSecure(context)) return
+            val resolver = context.contentResolver
+            val on = android.provider.Settings.Global.getInt(resolver, "low_power", 0) == 1
+            runCatching { android.provider.Settings.Global.putInt(resolver, "low_power", if (on) 0 else 1) }
+        }
+
         /** Runs an ADB shortcut; false when it isn't one. */
         fun execute(context: Context, action: String): Boolean {
             val front = it.palsoftware.pastiera.inputmethod.launcher.QuickLauncherOpener.foregroundPackage
             when (action.removePrefix("root_")) {
                 FORCE_STOP -> front?.takeIf { it != context.packageName }?.let { AdbShell.runAsync("am force-stop $it") }
-                BATTERY_SAVER -> AdbShell.runAsync(
+                BATTERY_SAVER -> if (!AdbShell.available()) toggleBatterySaver(context) else AdbShell.runAsync(
                     "if [ \"$(settings get global low_power)\" = \"1\" ]; then cmd power set-mode 0; else cmd power set-mode 1; fi"
                 )
                 // Android 14+: the app in front off the network (its own firewall chain), or back on
