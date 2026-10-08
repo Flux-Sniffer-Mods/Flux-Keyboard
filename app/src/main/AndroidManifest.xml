@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Gaming mode: placing keys over a game's own on-screen controls -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     
     <!-- Vibration, for haptic feedback -->
     <uses-permission android:name="android.permission.VIBRATE" />

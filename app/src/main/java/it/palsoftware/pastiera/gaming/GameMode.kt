@@ -29,6 +29,7 @@ object GameMode {
     private const val CHANNEL = "game_mode"
     private const val NOTIFICATION_ID = 7302
     private const val ACTION_NEXT = "it.palsoftware.pastiera.GAME_MODE_NEXT"
+    private const val ACTION_PLACE = "it.palsoftware.pastiera.GAME_MODE_PLACE"
 
     private val worker = Executors.newSingleThreadExecutor()
 
@@ -47,6 +48,12 @@ object GameMode {
 
     fun active(): Boolean = profile != null
 
+    /** The placer saved new spots: play with them from now on. */
+    internal fun placed(context: Context, updated: GameProfile) {
+        GameProfiles.save(context, updated)
+        if (profile?.id == updated.id) profile = updated
+    }
+
     /** The app in front changed (from the accessibility helper). */
     fun onAppInFront(context: Context, packageName: String) {
         val app = context.applicationContext
@@ -60,7 +67,16 @@ object GameMode {
     /** A key, before the app sees it: true when gaming mode took it. */
     fun onKeyEvent(event: KeyEvent): Boolean {
         val current = profile ?: return false
-        if (typing) return false
+        if (typing || GameTouchEditor.open) return false
+        // A key placed on the screen taps its spot, whatever else it's set to
+        val tap = current.taps[event.keyCode]
+        if (tap != null) {
+            if (event.repeatCount > 0) return true
+            val down = event.action == KeyEvent.ACTION_DOWN
+            val finger = 100 + event.keyCode
+            worker.execute { if (down) send("T d $finger ${tap.first * screenW} ${tap.second * screenH}") else send("T u $finger") }
+            return true
+        }
         val action = current.keys[event.keyCode] ?: return false
         if (event.repeatCount > 0) return true
         val down = event.action == KeyEvent.ACTION_DOWN
@@ -210,7 +226,8 @@ object GameMode {
                     val at = if (role == TrackpadRole.LEFT_STICK) 0 else 2
                     sticks[at] = ((x - originX) / radius).coerceIn(-1f, 1f)
                     sticks[at + 1] = ((y - originY) / radius).coerceIn(-1f, 1f)
-                    if (profile?.touchControls == true) dragStick(at) else sendSticks()
+                    val current = profile
+                    if (current != null && (current.stickZones.containsKey(at / 2) || current.touchControls)) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.NONE -> Unit
@@ -222,7 +239,7 @@ object GameMode {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (role == TrackpadRole.LEFT_STICK) 0 else 2
                     sticks[at] = 0f; sticks[at + 1] = 0f
-                    if (profile?.touchControls == true) {
+                    if (stickHeld[at / 2]) {
                         val finger = 1 + at / 2
                         worker.execute { send("T u $finger") }
                         stickHeld[at / 2] = false
@@ -240,10 +257,13 @@ object GameMode {
 
         /** GameNative: a finger on the stick's place, pushed as far as the stick goes. */
         private fun dragStick(at: Int) {
-            val centre = if (at == 0) GameNativeBridge.LEFT_STICK else GameNativeBridge.RIGHT_STICK
+            // A stick placed on the screen, else Flux Keyboard's GameNative controls
+            val zone = profile?.stickZones?.get(at / 2)
+            val centre = zone?.let { it.first to it.second }
+                ?: if (at == 0) GameNativeBridge.LEFT_STICK else GameNativeBridge.RIGHT_STICK
             val cx = centre.first * screenW
             val cy = centre.second * screenH
-            val reach = GameNativeBridge.STICK_REACH * screenW
+            val reach = (zone?.third ?: GameNativeBridge.STICK_REACH) * screenW
             val finger = 1 + at / 2
             val first = !stickHeld[at / 2]
             stickHeld[at / 2] = true
@@ -273,6 +293,18 @@ object GameMode {
             .setContentTitle(context.getString(R.string.game_mode_title))
             .setContentText(current.name)
             .setOngoing(true)
+        // Keys and sticks placed on the game's own on-screen controls (analogue sticks a game
+        // only takes by touch), drawn over it
+        val place = PendingIntent.getBroadcast(
+            context, 1, Intent(context, Receiver::class.java).setAction(ACTION_PLACE),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        // Only where a stick is wanted: other games take the keys as they are
+        val wantsSticks = listOf(current.leftHalf, current.rightHalf)
+            .any { it == TrackpadRole.LEFT_STICK || it == TrackpadRole.RIGHT_STICK }
+        if (wantsSticks) {
+            builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys), place).build())
+        }
         val pkg = frontPackage
         if (pkg != null && GameProfiles.forPackage(context, pkg).size > 1) {
             val next = PendingIntent.getBroadcast(
@@ -287,6 +319,10 @@ object GameMode {
     /** Next profile: the game launcher's next game. */
     class Receiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == ACTION_PLACE) {
+                profile?.let { GameTouchEditor.show(context.applicationContext, it) }
+                return
+            }
             val pkg = frontPackage ?: return
             val profiles = GameProfiles.forPackage(context, pkg).takeIf { it.isNotEmpty() } ?: return
             val at = profiles.indexOfFirst { it.id == profile?.id }

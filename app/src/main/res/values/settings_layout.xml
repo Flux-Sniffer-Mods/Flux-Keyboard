@@ -319,6 +319,12 @@
     <string name="game_mode_gamenative_save_description">Saves Flux Keyboard gamepad.icp to Downloads/Flux Keyboard. In GameNative, import it from its controls profiles and pick it for the game, with on-screen controls shown (they\'re invisible).</string>
     <string name="game_mode_gamenative_saved">Saved to Downloads/Flux Keyboard. Import it in GameNative\'s controls profiles and pick it for the game.</string>
     <string name="game_mode_gamenative_save_failed">It couldn\'t be saved.</string>
+    <string name="game_mode_place_keys">Place keys on screen</string>
+    <string name="game_mode_place_hint">Drag each key onto the game\'s own button, and each stick circle onto its stick. Add a key, then press it.</string>
+    <string name="game_mode_place_overlay_needed">Allow Flux Keyboard to display over other apps, then try again.</string>
+    <string name="game_mode_place_clear">Clear</string>
+    <string name="game_mode_left_stick">Left stick</string>
+    <string name="game_mode_right_stick">Right stick</string>
     <string name="game_mode_add_key">Add a key</string>
     <string name="game_mode_press_key">Press the key or button. The power button can\'t be used: Android keeps it for itself.</string>
     <string name="game_mode_delete">Delete profile</string>

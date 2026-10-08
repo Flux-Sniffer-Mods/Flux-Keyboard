@@ -82,7 +82,11 @@ data class GameProfile(
     val leftHalf: TrackpadRole,
     val rightHalf: TrackpadRole,
     /** Controller buttons and sticks as touches on Flux Keyboard's GameNative controls profile. */
-    val touchControls: Boolean = false
+    val touchControls: Boolean = false,
+    /** Keys placed on the screen: each taps its spot (a share of the screen's width and height). */
+    val taps: Map<Int, Pair<Float, Float>> = emptyMap(),
+    /** Sticks placed on the screen (0 left, 1 right): centre and reach (a share of the width). */
+    val stickZones: Map<Int, Triple<Float, Float, Float>> = emptyMap()
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
@@ -93,6 +97,12 @@ data class GameProfile(
         put("left", leftHalf.name)
         put("right", rightHalf.name)
         put("touchControls", touchControls)
+        put("taps", JSONObject().apply { taps.forEach { (key, at) -> put(key.toString(), JSONArray(listOf(at.first.toDouble(), at.second.toDouble()))) } })
+        put("stickZones", JSONObject().apply {
+            stickZones.forEach { (stick, zone) ->
+                put(stick.toString(), JSONArray(listOf(zone.first.toDouble(), zone.second.toDouble(), zone.third.toDouble())))
+            }
+        })
     }
 
     companion object {
@@ -109,7 +119,19 @@ data class GameProfile(
                 }?.toMap().orEmpty(),
                 leftHalf = TrackpadRole.valueOf(json.optString("left", TrackpadRole.NONE.name)),
                 rightHalf = TrackpadRole.valueOf(json.optString("right", TrackpadRole.NONE.name)),
-                touchControls = json.optBoolean("touchControls", false)
+                touchControls = json.optBoolean("touchControls", false),
+                taps = json.optJSONObject("taps")?.let { taps ->
+                    taps.keys().asSequence().mapNotNull { key ->
+                        val at = taps.optJSONArray(key) ?: return@mapNotNull null
+                        key.toIntOrNull()?.let { it to Pair(at.getDouble(0).toFloat(), at.getDouble(1).toFloat()) }
+                    }.toMap()
+                }.orEmpty(),
+                stickZones = json.optJSONObject("stickZones")?.let { zones ->
+                    zones.keys().asSequence().mapNotNull { key ->
+                        val z = zones.optJSONArray(key) ?: return@mapNotNull null
+                        key.toIntOrNull()?.let { it to Triple(z.getDouble(0).toFloat(), z.getDouble(1).toFloat(), z.getDouble(2).toFloat()) }
+                    }.toMap()
+                }.orEmpty()
             )
         }.getOrNull()
     }
