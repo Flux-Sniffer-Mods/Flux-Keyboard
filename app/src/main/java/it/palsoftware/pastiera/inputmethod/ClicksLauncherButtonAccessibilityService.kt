@@ -62,7 +62,11 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
             val confirmed = isActivity(pkg, event.className?.toString())
             // The quick launcher opens over the app you're in: that app keeps its screen size
             val overlay = pkg == packageName && event.className?.toString()?.contains("QuickLauncher") == true
-            if (!overlay) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
+            // Another app's window floating over the one in front (a widget, a picker, a
+            // dialog-style screen) keeps the screen size of the app beneath: switching would
+            // flicker the app between the two
+            val floating = confirmed && isFloating(pkg, event.className?.toString())
+            if (!overlay && !floating) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
             if (confirmed && !overlay) it.palsoftware.pastiera.gaming.GameMode.onAppInFront(this, pkg)
             // Keyboard swipes per app follow the app's own screens (the quick launcher, over
             // another app, keeps that app's choice)
@@ -78,6 +82,21 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
     }
 
     private val activities = HashMap<String, Boolean>()
+
+    private val floatingActivities = HashMap<String, Boolean>()
+
+    /** An activity drawn as a floating or see-through window, the app beneath still showing. */
+    private fun isFloating(pkg: String, className: String?): Boolean {
+        if (className.isNullOrEmpty()) return false
+        return floatingActivities.getOrPut("$pkg/$className") {
+            runCatching {
+                val info = packageManager.getActivityInfo(android.content.ComponentName(pkg, className), 0)
+                val theme = createPackageContext(pkg, 0).resources.newTheme().apply { applyStyle(info.themeResource, true) }
+                val attrs = theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowIsFloating, android.R.attr.windowIsTranslucent))
+                try { attrs.getBoolean(0, false) || attrs.getBoolean(1, false) } finally { attrs.recycle() }
+            }.getOrDefault(false)
+        }
+    }
 
     private fun isActivity(pkg: String, className: String?): Boolean {
         if (className.isNullOrEmpty()) return false
