@@ -81,21 +81,47 @@ fun SettingsManager.setPhysicalKeyboardProfileOverride(context: Context, profile
 fun SettingsManager.getPhysicalKeyboardCurrencySymbol(context: Context): String {
     // Until chosen: the phone's own currency (its region's), when it's one of ours
     val value = getPreferences(context).getString(KEY_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL, null)
-        ?: return localCurrencySymbol()
+        ?: return localCurrencySymbol(context)
     return normalizePhysicalKeyboardCurrencySymbol(value)
 }
 
-private fun SettingsManager.localCurrencySymbol(): String {
+private fun SettingsManager.localCurrencySymbol(context: Context): String {
     val code = runCatching { java.util.Currency.getInstance(java.util.Locale.getDefault()).currencyCode }.getOrNull()
-    return when (code) {
-        "USD", "CAD", "AUD", "NZD", "MXN", "SGD", "HKD" -> "$"
-        "GBP" -> "£"
-        "JPY", "CNY" -> "¥"
-        "INR" -> "₹"
-        "RUB" -> "₽"
-        else -> DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
-    }
+    return currencySymbolForCode(code)
+        // A region without its own (or none set): the language version's usual currency
+        ?: EDITION_CURRENCY[LanguageEdition.language(context)]
+        ?: DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
 }
+
+private fun currencySymbolForCode(code: String?): String? = when (code) {
+    "USD", "CAD", "AUD", "NZD", "MXN", "SGD", "HKD" -> "$"
+    "EUR" -> "€"
+    "GBP" -> "£"
+    "JPY", "CNY" -> "¥"
+    "INR" -> "₹"
+    "RUB" -> "₽"
+    "PLN" -> "zł"
+    "UAH" -> "₴"
+    "SEK", "NOK", "DKK", "ISK" -> "kr"
+    "HUF" -> "Ft"
+    "CZK" -> "Kč"
+    "TRY" -> "₺"
+    "AMD" -> "֏"
+    "VND" -> "₫"
+    "KRW" -> "₩"
+    "BRL" -> "R$"
+    "ILS" -> "₪"
+    "RON" -> "lei"
+    "CHF" -> "CHF"
+    else -> null
+}
+
+/** Each language version's usual currency, for a phone whose region doesn't say. */
+private val EDITION_CURRENCY = mapOf(
+    "de" to "€", "fr" to "€", "it" to "€", "es" to "€", "nl" to "€", "pt" to "€", "el" to "€",
+    "fi" to "€", "pl" to "zł", "ru" to "₽", "uk" to "₴", "da" to "kr", "no" to "kr", "sv" to "kr",
+    "hu" to "Ft", "cs" to "Kč", "tr" to "₺", "hy" to "֏", "vi" to "₫", "en" to "$"
+)
 
 /**
  * The symbols page's defaults made yours: N holds your currency (Keyboard > Currency
@@ -240,7 +266,8 @@ private fun SettingsManager.normalizePhysicalKeyboardCurrencySymbol(symbol: Stri
     }
 }
 
-fun SettingsManager.physicalKeyboardCurrencySymbols(): List<String> = listOf("€", "$", "£", "¥", "₹", "₽", "₿", "¤")
+fun SettingsManager.physicalKeyboardCurrencySymbols(): List<String> =
+    listOf("€", "$", "£", "¥", "₹", "₽", "zł", "₴", "kr", "Ft", "Kč", "₺", "֏", "₫", "₩", "R$", "₪", "lei", "CHF", "₿", "¤")
 
 /**
  * Saves the list of keyboard layouts used for cycling.
