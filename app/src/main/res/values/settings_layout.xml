@@ -325,6 +325,9 @@
     <string name="game_mode_place_clear">Clear</string>
     <string name="game_mode_left_stick">Left stick</string>
     <string name="game_mode_right_stick">Right stick</string>
+    <string name="game_mode_use_emulator_controls">Use %1$s\'s on-screen controls</string>
+    <string name="game_mode_emulator_applied">Keys and sticks set to the emulator\'s on-screen controls. Fine-tune them with Place keys on screen if you moved any.</string>
+    <string name="game_mode_emulator_unreadable">Its controls aren\'t known yet: open a game in it once with the screen upright and its on-screen controls showing, then try again.</string>
     <string name="game_mode_add_key">Add a key</string>
     <string name="game_mode_press_key">Press the key or button. The power button can\'t be used: Android keeps it for itself.</string>
     <string name="game_mode_delete">Delete profile</string>

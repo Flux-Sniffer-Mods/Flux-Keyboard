@@ -42,6 +42,7 @@ import it.palsoftware.pastiera.gaming.GameProfiles
 import it.palsoftware.pastiera.gaming.GameStyle
 import it.palsoftware.pastiera.gaming.TrackpadRole
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
@@ -132,7 +133,12 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         AppPickerDialog(
             onAppSelected = { app: InstalledApp ->
                 picking = false
-                editing = GameProfiles.newProfile(app.appName, GameStyle.GAMEPAD, setOf(app.packageName))
+                val fresh = GameProfiles.newProfile(app.appName, GameStyle.GAMEPAD, setOf(app.packageName))
+                // Dolphin: its on-screen gamepad's spots straight away (they come from its code)
+                editing = if (it.palsoftware.pastiera.gaming.EmulatorLayouts.name(app.packageName) == "Dolphin") {
+                    it.palsoftware.pastiera.gaming.EmulatorLayouts.layout(context, app.packageName)
+                        ?.let { layout -> it.palsoftware.pastiera.gaming.EmulatorLayouts.apply(fresh, layout) } ?: fresh
+                } else fresh
             },
             onDismiss = { picking = false }
         )
@@ -233,6 +239,26 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     checked = current.touchControls,
                     onCheckedChange = { current = current.copy(touchControls = it) }
                 )
+            }
+            // A known emulator: its on-screen gamepad's spots, read from its code or settings
+            val emulator = current.packages.firstNotNullOfOrNull { pkg ->
+                it.palsoftware.pastiera.gaming.EmulatorLayouts.name(pkg)?.let { pkg to it }
+            }
+            if (emulator != null) {
+                val scope = androidx.compose.runtime.rememberCoroutineScope()
+                TextButton(onClick = {
+                    scope.launch {
+                        val layout = withContext(Dispatchers.IO) {
+                            it.palsoftware.pastiera.gaming.EmulatorLayouts.layout(context, emulator.first)
+                        }
+                        if (layout != null) {
+                            current = it.palsoftware.pastiera.gaming.EmulatorLayouts.apply(current, layout)
+                            android.widget.Toast.makeText(context, R.string.game_mode_emulator_applied, android.widget.Toast.LENGTH_SHORT).show()
+                        } else {
+                            android.widget.Toast.makeText(context, R.string.game_mode_emulator_unreadable, android.widget.Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }) { Text(stringResource(R.string.game_mode_use_emulator_controls, emulator.second)) }
             }
             Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
             current.packages.forEach { pkg ->
