@@ -21,6 +21,7 @@ import it.palsoftware.pastiera.core.TextInputController
 import it.palsoftware.pastiera.core.AutoCorrectionManager
 import it.palsoftware.pastiera.core.ModifierStateController
 import it.palsoftware.pastiera.core.AutoSpaceTracker
+import it.palsoftware.pastiera.getAutoSpacePunctuation
 import android.view.inputmethod.ExtractedText
 import android.view.inputmethod.ExtractedTextRequest
 import it.palsoftware.pastiera.commands.CommandExecutor
@@ -892,6 +893,15 @@ class InputEventRouter(
             '’', '‘', 'ʼ' -> '\''
             else -> typedCharRaw
         }
+        // A picked suggestion's space stays only if another word follows: Enter right after
+        // it drops the space (a sent message or a new line doesn't end in one)
+        if (isEnterKey && inputConnection != null && AutoSpaceTracker.isPending()) {
+            val before = inputConnection.getTextBeforeCursor(2, 0)?.toString().orEmpty()
+            if (before.length == 2 && before[1] == ' ' && !before[0].isWhitespace()) {
+                inputConnection.deleteSurroundingText(1, 0)
+            }
+            AutoSpaceTracker.clear()
+        }
         val prevCharRaw = inputConnection?.getTextBeforeCursor(1, 0)?.lastOrNull()
         val prevChar = when (prevCharRaw) {
             '’', '‘', 'ʼ' -> '\''
@@ -1112,6 +1122,16 @@ class InputEventRouter(
                 onStatusBarUpdate = updateStatusBar,
                 isKnownWord = { word -> suggestionController?.isKnownWordInActiveDictionaries(word) == true }
             )
+        ) {
+            suggestionController?.onContextReset()
+            return true
+        }
+        // Punctuation straight after a picked suggestion goes next to the word (its space after)
+        if (
+            isPunctuation && typedChar != null && inputConnection != null &&
+            !SettingsManager.shouldApplyFrenchPunctuationSpacing(context) &&
+            (typedChar in SettingsManager.getAutoSpacePunctuation(context) || typedChar in ")]}…") &&
+            AutoSpaceTracker.replaceAutoSpaceWithPunctuation(inputConnection, typedChar.toString())
         ) {
             suggestionController?.onContextReset()
             return true
