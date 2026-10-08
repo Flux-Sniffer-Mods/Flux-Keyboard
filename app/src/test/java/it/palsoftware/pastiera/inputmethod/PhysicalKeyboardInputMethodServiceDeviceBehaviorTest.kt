@@ -976,7 +976,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
             KeyEvent.KEYCODE_F,
             keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_F, t0 + 300L, t0 + 300L)
         )
-        assertTrue("commits=${recorder.committedTexts}", recorder.committedTexts.contains("😢"))
+        assertTrue("commits=${recorder.committedTexts}", recorder.committedTexts.contains("🎉"))
 
         tapSym(t0 + 400L) // re-open SYM (Device SYM)
         tapSym(t0 + 460L) // next page -> emoji

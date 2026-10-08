@@ -50,9 +50,9 @@ object EmojiLayerProfiles {
     // The most used emoji of each situation first, on the top row where they're easiest to reach
     val BUILT_IN: List<EmojiLayerProfile> = listOf(
         EmojiLayerProfile("everyday", "Everyday", layer(
-            "😀", "😂", "😍", "😊", "😎", "👍", "❤️", "😘", "😡", "😉",
-            "😢", "😭", "😱", "😰", "😴", "🤔", "🤢", "🙄", "😌",
-            "😔", "🥳", "😅", "🤗", "🥰", "👎", "😳"), builtIn = true),
+            "😂", "❤️", "🤣", "👍", "😭", "🙏", "😘", "🥰", "😍", "😊",
+            "🎉", "😁", "🥺", "😅", "🔥", "✨", "🙄", "😉", "👏",
+            "😎", "🤔", "💯", "👀", "🤗", "👎", "😳"), builtIn = true),
         EmojiLayerProfile("chatting", "Chatting", layer(
             "😂", "❤️", "👍", "🙏", "😭", "🥺", "🔥", "✨", "😅", "🙌",
             "😊", "😍", "🤣", "😘", "🤔", "👀", "💀", "😎", "🥰",

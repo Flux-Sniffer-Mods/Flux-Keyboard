@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.core
 
+import it.palsoftware.pastiera.setPagesStartOnRecents
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.KeyEvent
@@ -82,20 +83,19 @@ class LayerPagesTest {
     }
 
     @Test
-    fun yourOwnMappingIsNotOneOfThePages() {
-        SettingsManager.saveSymMappings(context, mapOf(KeyEvent.KEYCODE_W to "🦄"))
-        controller = SymLayoutController(context, prefs, AlternateCharacterManager(context.assets, prefs, context))
+    fun opensOnTheDefaultPageWithRecentsOnQ() {
+        RecentEmojiManager.addRecentEmoji(context, "😀")
         controller.toggleEmojiKeyPage(layer = true)
-        val first = keys()
-        repeat(20) {
-            assertNotEquals("🦄", keys()[KeyEvent.KEYCODE_W])
-            press(KeyEvent.KEYCODE_P)
-            if (keys() == first) return
-        }
+        // Developer's pick: the most used emoji first
+        assertEquals("😂", keys()[KeyEvent.KEYCODE_W])
+        assertEquals(SymLayoutController.SEARCH_KEY_LABEL, keys()[KeyEvent.KEYCODE_A])
+        press(KeyEvent.KEYCODE_Q)
+        assertEquals("😀", keys()[KeyEvent.KEYCODE_W])
     }
 
     @Test
     fun recentEmojiOpenFirstWithSearchOnA() {
+        SettingsManager.setPagesStartOnRecents(context, "emoji", true)
         RecentEmojiManager.addRecentEmoji(context, "😀")
         controller.toggleEmojiKeyPage(layer = true)
         val shown = keys()

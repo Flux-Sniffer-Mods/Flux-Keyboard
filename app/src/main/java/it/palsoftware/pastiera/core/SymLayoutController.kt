@@ -21,6 +21,8 @@ import it.palsoftware.pastiera.getEmojiLayerTypeToSearch
 import it.palsoftware.pastiera.getKaomojiCloseOnKey
 import it.palsoftware.pastiera.getRestoreSymPage
 import it.palsoftware.pastiera.getSearchKey
+import it.palsoftware.pastiera.getKaomojiHomePage
+import it.palsoftware.pastiera.getPagesStartOnRecents
 import it.palsoftware.pastiera.getSymAutoClose
 import it.palsoftware.pastiera.getSymPagesConfig
 import it.palsoftware.pastiera.getSymbolsCloseOnKey
@@ -151,7 +153,17 @@ class SymLayoutController(
      * One page of a layer shown as pages: what each key types, and on a recents page the keys
      * holding starters from the first pages rather than recents (drawn in a tint of their own).
      */
-    private class LayerPage(val keys: Map<Int, String>, val kind: PageKind, val starters: Set<Int> = emptySet())
+    private class LayerPage(
+        val keys: Map<Int, String>,
+        val kind: PageKind,
+        val starters: Set<Int> = emptySet(),
+        /** The layer's default page (your mapping, Developer's pick until edited): where it opens. */
+        val home: Boolean = false
+    )
+
+    /** A layer's [mapping] as its default page, the keys kept for buttons left out. */
+    private fun homePage(mapping: Map<Int, String>, kind: PageKind, skip: Set<Int>): LayerPage =
+        LayerPage(mapping.filterKeys { it in pageSlots && it !in skip }, kind, home = true)
 
     /**
      * The recents as they were when the layer opened or turned to its recents page: using one
@@ -282,7 +294,9 @@ class SymLayoutController(
         val gifs = SettingsManager.gifsAvailable(context)
         val all = emojiInOrder()
         val recents = emojiRecentsShown ?: RecentEmojiManager.getRecentEmojis(context).also { emojiRecentsShown = it }
-        val pages = mutableListOf(recentsPage(recents, all, PageKind.RECENTS, if (gifs) setOf(PAGE_EXTRA_KEY) else emptySet()))
+        val keep = if (gifs) setOf(PAGE_EXTRA_KEY) else emptySet()
+        val pages = mutableListOf(recentsPage(recents, all, PageKind.RECENTS, keep))
+        pages += homePage(alternateCharacterManager.getSymMappings(), PageKind.LAYER, keep)
         all.chunked(pageSlots.size).forEach { emoji -> pages += LayerPage(sequential(emoji), PageKind.LAYER) }
         return pages
     }
@@ -316,20 +330,24 @@ class SymLayoutController(
         val recents = symbolRecentsShown
             ?: it.palsoftware.pastiera.data.symbols.SymbolSearch.recentSymbols(context).also { symbolRecentsShown = it }
         val pages = mutableListOf(recentsPage(recents, symbols, PageKind.RECENTS, setOf(PAGE_EXTRA_KEY)))
+        pages += homePage(alternateCharacterManager.getSymMappings2(), PageKind.LAYER, setOf(PAGE_EXTRA_KEY))
         symbols.chunked(pageSlots.size).forEach { pages += LayerPage(sequential(it), PageKind.LAYER) }
         val kaomoji = Kaomoji.all(context)
         val kaomojiRecents = kaomojiRecentsShown ?: Kaomoji.recents(context).also { kaomojiRecentsShown = it }
         pages += recentsPage(kaomojiRecents, kaomoji, PageKind.KAOMOJI, setOf(PAGE_EXTRA_KEY))
+        pages += homePage(SettingsManager.getKaomojiHomePage(context), PageKind.KAOMOJI, setOf(PAGE_EXTRA_KEY))
         kaomoji.chunked(pageSlots.size).forEach { pages += LayerPage(sequential(it), PageKind.KAOMOJI) }
         return pages
     }
 
     private fun pagesFor(emoji: Boolean): List<LayerPage> = if (emoji) emojiPages() else symbolPages()
 
-    /** The page a layer shows: the recents when it opens, then wherever Q and P took it. */
+    /** The page a layer shows: its default page when it opens (recents on Q), then wherever Q and P took it. */
     private fun pageIndex(emoji: Boolean, pages: List<LayerPage>): Int {
         val stored = if (emoji) emojiPageIndex else symbolsPageIndex
-        val index = if (stored in pages.indices) stored else 0
+        val start = if (SettingsManager.getPagesStartOnRecents(context, if (emoji) "emoji" else "symbols")) 0
+            else pages.indexOfFirst { it.home }.coerceAtLeast(0)
+        val index = if (stored in pages.indices) stored else start
         if (emoji) emojiPageIndex = index else symbolsPageIndex = index
         return index
     }
@@ -358,15 +376,19 @@ class SymLayoutController(
         // Search on every page: the emoji's, the symbols' or the kaomoji's
         shown[PAGE_SEARCH_KEY] = SEARCH_KEY_LABEL
         // The kaomoji's first page: L back to the symbols, as the symbols' L goes to the kaomoji
-        if (!emoji && pages.indexOfFirst { it.kind == PageKind.KAOMOJI } == pages.indexOf(page)) {
+        if (!emoji && isKaomojiStart(pages, page)) {
             shown[PAGE_EXTRA_KEY] = SYMBOLS_KEY_LABEL
         }
-        if (page.kind == PageKind.RECENTS) {
+        if (page.kind == PageKind.RECENTS || (page.home && page.kind == PageKind.LAYER)) {
             if (!emoji) shown[PAGE_EXTRA_KEY] = KAOMOJI_KEY_LABEL
             else if (SettingsManager.gifsAvailable(context)) shown[PAGE_EXTRA_KEY] = GIF_KEY_LABEL
         }
         return shown
     }
+
+    /** The kaomoji's recents or default page: L there goes back to the symbols. */
+    private fun isKaomojiStart(pages: List<LayerPage>, page: LayerPage): Boolean =
+        page.kind == PageKind.KAOMOJI && (page.home || pages.indexOfFirst { it.kind == PageKind.KAOMOJI } == pages.indexOf(page))
 
     /** The current layer is shown as pages: true for the emoji layer, false for symbols, null if neither. */
     private fun pagedLayer(): Boolean? = when (currentPageType()) {
@@ -404,7 +426,10 @@ class SymLayoutController(
     fun kaomojiKeyPressed(): Boolean {
         if (pagedLayer() != false) return nextKaomojiPage()
         val pages = symbolPages()
-        val first = pages.indexOfFirst { it.kind == PageKind.KAOMOJI }.takeIf { it >= 0 } ?: return false
+        val first = pages.indexOfFirst {
+            it.kind == PageKind.KAOMOJI && it.home && !SettingsManager.getPagesStartOnRecents(context, "kaomoji")
+        }.takeIf { it >= 0 }
+            ?: pages.indexOfFirst { it.kind == PageKind.KAOMOJI }.takeIf { it >= 0 } ?: return false
         forgetShownRecents()
         setPageIndex(false, first, symbolPages())
         return true
@@ -866,16 +891,17 @@ class SymLayoutController(
                         else -> SearchTarget.SYMBOLS
                     }
                 )
-                current.kind == PageKind.RECENTS && keyCode == PAGE_EXTRA_KEY && !pagedEmoji ->
+                (current.kind == PageKind.RECENTS || (current.home && current.kind == PageKind.LAYER)) &&
+                    keyCode == PAGE_EXTRA_KEY && !pagedEmoji ->
                     if (first && kaomojiKeyPressed()) updateStatusBar()
                 // Back from the kaomoji's first page to the symbols' first
-                !pagedEmoji && keyCode == PAGE_EXTRA_KEY &&
-                    pages.indexOfFirst { it.kind == PageKind.KAOMOJI } == pages.indexOf(current) -> if (first) {
+                !pagedEmoji && keyCode == PAGE_EXTRA_KEY && isKaomojiStart(pages, current) -> if (first) {
                     forgetShownRecents()
-                    setPageIndex(false, 0, symbolPages())
+                    val symbolPages = symbolPages()
+                    setPageIndex(false, symbolPages.indexOfFirst { it.home && it.kind == PageKind.LAYER }.coerceAtLeast(0), symbolPages)
                     updateStatusBar()
                 }
-                current.kind == PageKind.RECENTS && keyCode == PAGE_EXTRA_KEY && SettingsManager.gifsAvailable(context) ->
+                (current.kind == PageKind.RECENTS || current.home) && keyCode == PAGE_EXTRA_KEY && SettingsManager.gifsAvailable(context) ->
                     if (first) onEmojiLayerGifKey?.invoke()
                 else -> {
                     val text = current.keys[keyCode] ?: return SymKeyResult.CONSUME

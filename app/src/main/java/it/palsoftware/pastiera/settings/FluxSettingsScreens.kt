@@ -109,6 +109,8 @@ import it.palsoftware.pastiera.getSymbolSearchEnterPicks
 import it.palsoftware.pastiera.getSymbolsCloseOnKey
 import it.palsoftware.pastiera.getSymbolsCloseOnTap
 import it.palsoftware.pastiera.getSymbolsPages
+import it.palsoftware.pastiera.getPagesStartOnRecents
+import it.palsoftware.pastiera.setPagesStartOnRecents
 import it.palsoftware.pastiera.getSymbolsTypeToSearch
 import it.palsoftware.pastiera.getTitan2EliteContourLeds
 import it.palsoftware.pastiera.getTitan2EliteFillCorners
@@ -722,6 +724,29 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     )
                 )
             )
+            // Where each paged layer opens: its default page (the pencil edits it) or its recents
+            if (layerPages || symbolPagesOn) {
+                val layers = buildList {
+                    if (layerPages) add("emoji" to R.string.close_after_emoji_layer)
+                    if (symbolPagesOn) {
+                        add("symbols" to R.string.close_after_symbols)
+                        add("kaomoji" to R.string.pages_start_kaomoji)
+                    }
+                }
+                FluxCheckTable(
+                    linkId = "flux_emoji.pages_start",
+                    title = stringResource(R.string.pages_start_title),
+                    description = stringResource(R.string.pages_start_description),
+                    columns = layers.map { stringResource(it.second) },
+                    rows = listOf(
+                        "" to layers.map { (layer, _) ->
+                            CheckCell({ SettingsManager.getPagesStartOnRecents(context, layer) }) {
+                                SettingsManager.setPagesStartOnRecents(context, layer, it)
+                            }
+                        }
+                    )
+                )
+            }
             // Profiles fill the emoji layer's own keys: only there without pages
             if (!layerPages) {
                 FluxActionRow(

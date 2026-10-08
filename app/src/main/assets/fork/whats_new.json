@@ -448,6 +448,10 @@
     {
       "text": "The currency key knows more currencies, and each language version uses its own when the phone's region doesn't say.",
       "after": "202610081320"
+    },
+    {
+      "text": "Emoji, symbols and kaomoji open on a default page, Developer's pick of the most used until you change it: the pencil in the bottom-left corner (where the emoji and symbols switch was) maps it, and your recents are one page back on Q. To open on your recents instead, tick them in Start on recents (Emoji layer settings).",
+      "after": "202610081423"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

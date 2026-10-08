@@ -757,3 +757,61 @@ fun SettingsManager.setEmojiLayerRecentsKey(context: Context, keyCode: Int): Boo
     getPreferences(context).edit().putInt(KEY_EMOJI_LAYER_RECENTS_KEY, keyCode).apply()
     return true
 }
+
+/** The kaomoji's default page (Developer's pick until edited): what each key types. */
+fun SettingsManager.getKaomojiHomePage(context: Context): Map<Int, String> {
+    val saved = getPreferences(context).getString(KEY_KAOMOJI_HOME_PAGE, null)
+    if (saved != null) runCatching {
+        val json = org.json.JSONObject(saved)
+        return json.keys().asSequence().mapNotNull { key ->
+            key.toIntOrNull()?.let { it to json.getString(key) }
+        }.toMap()
+    }
+    return KAOMOJI_DEVELOPERS_PICK
+}
+
+fun SettingsManager.saveKaomojiHomePage(context: Context, page: Map<Int, String>) {
+    val json = org.json.JSONObject()
+    page.forEach { (key, text) -> json.put(key.toString(), text) }
+    getPreferences(context).edit().putString(KEY_KAOMOJI_HOME_PAGE, json.toString()).apply()
+}
+
+fun SettingsManager.resetKaomojiHomePage(context: Context) {
+    getPreferences(context).edit().remove(KEY_KAOMOJI_HOME_PAGE).apply()
+}
+
+internal const val KEY_KAOMOJI_HOME_PAGE = "kaomoji_home_page"
+
+/** The most used kaomoji, on every key but Q and P (the arrows), A (search) and L (symbols). */
+val KAOMOJI_DEVELOPERS_PICK: Map<Int, String> = listOf(
+    android.view.KeyEvent.KEYCODE_W to "¯\\_(ツ)_/¯",
+    android.view.KeyEvent.KEYCODE_E to "(╯°□°)╯︵ ┻━┻",
+    android.view.KeyEvent.KEYCODE_R to "( ͡° ͜ʖ ͡°)",
+    android.view.KeyEvent.KEYCODE_T to "(◕‿◕)",
+    android.view.KeyEvent.KEYCODE_Y to "(｡♥‿♥｡)",
+    android.view.KeyEvent.KEYCODE_U to "ʕ•ᴥ•ʔ",
+    android.view.KeyEvent.KEYCODE_I to "(づ｡◕‿‿◕｡)づ",
+    android.view.KeyEvent.KEYCODE_O to "ಠ_ಠ",
+    android.view.KeyEvent.KEYCODE_S to "(ᵔᴥᵔ)",
+    android.view.KeyEvent.KEYCODE_D to "(≧◡≦)",
+    android.view.KeyEvent.KEYCODE_F to "(ノ◕ヮ◕)ノ*:･ﾟ✧",
+    android.view.KeyEvent.KEYCODE_G to "┬─┬ノ( º _ ºノ)",
+    android.view.KeyEvent.KEYCODE_H to "(T_T)",
+    android.view.KeyEvent.KEYCODE_J to "(・_・;)",
+    android.view.KeyEvent.KEYCODE_K to "٩(◕‿◕｡)۶",
+    android.view.KeyEvent.KEYCODE_Z to "(￣ω￣)",
+    android.view.KeyEvent.KEYCODE_X to "(╥﹏╥)",
+    android.view.KeyEvent.KEYCODE_C to "ヽ(°〇°)ﾉ",
+    android.view.KeyEvent.KEYCODE_V to "(⌐■_■)",
+    android.view.KeyEvent.KEYCODE_B to "(っ˘ω˘ς )",
+    android.view.KeyEvent.KEYCODE_N to "(*^▽^*)",
+    android.view.KeyEvent.KEYCODE_M to "( ˘▽˘)っ♨"
+).toMap()
+
+/** A paged layer ("emoji", "symbols" or "kaomoji") opens on its recents rather than its default page. */
+fun SettingsManager.getPagesStartOnRecents(context: Context, layer: String): Boolean =
+    getPreferences(context).getBoolean("pages_start_recents_$layer", false)
+
+fun SettingsManager.setPagesStartOnRecents(context: Context, layer: String, recents: Boolean) {
+    getPreferences(context).edit().putBoolean("pages_start_recents_$layer", recents).apply()
+}

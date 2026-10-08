@@ -288,6 +288,11 @@
     <string name="shizuku_request_old">This Shizuku is too old to ask. Update it from Shizuku\'s GitHub page, then try again.</string>
     <string name="shizuku_request_no_question">Shizuku didn\'t show its question. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
     <string name="adb_not_running">The built-in shell isn\'t running, and neither is Shizuku. Set up the built-in shell above, or start Shizuku, then come back.</string>
+    <string name="pages_start_title">Start on recents</string>
+    <string name="pages_start_description">Ticked, a layer opens on your recents. Unticked, it opens on its default page (Developer\'s pick until you change it with the pencil in its bottom-left corner), with your recents one page back on Q.</string>
+    <string name="pages_start_kaomoji">Kaomoji</string>
+    <string name="sym_edit_kaomoji_page_title">Kaomoji default page</string>
+    <string name="sym_pick_kaomoji_title">Pick a kaomoji</string>
     <string name="shell_title">Built-in shell</string>
     <string name="shell_running">Running. Shizuku and Termux aren\'t needed. After a restart it starts by itself once Wi-Fi connects.</string>
     <string name="shell_paired">Paired, not running yet. It starts by itself once Wi-Fi connects. Tap to start it now.</string>

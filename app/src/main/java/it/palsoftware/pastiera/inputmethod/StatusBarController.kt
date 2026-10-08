@@ -387,6 +387,8 @@ class StatusBarController(
         private val DEFAULT_BACKGROUND = Color.parseColor("#000000")
         private const val TITAN_2_ELITE_CORNER_FALLBACK_RADIUS_DP = 50f
         private const val HARDWARE_SYM_KEY_HEIGHT_DP = 56f
+        /** The mapping editor's page for the kaomoji's default page. */
+        const val KAOMOJI_EDIT_PAGE = 3
     }
 
     data class StatusSnapshot(
@@ -1921,10 +1923,8 @@ class StatusBarController(
             // Third row: a placeholder with the emoji picker button on the left
             // Without an emoji key, the bottom-left slot switches between emoji and symbols;
             // with one, it holds the pencil
-            // A layer shown as pages has nothing to edit, so its corner swaps to the other layer
-            // (symbols from the emoji layer, emoji from the symbols) for touch
-            val swapButtonShown = SettingsManager.getEmojiPickerKey(context) == android.view.KeyEvent.KEYCODE_UNKNOWN ||
-                layerShowsPages(page)
+            // The bottom-left corner edits the layer: its default page when shown as pages
+            val swapButtonShown = false
             // The bottom row: corner keys as wide as the bar's side buttons (less the grid's own
             // edge padding, which they reach across), the seven keys centred between spacers
             val bottomSideWidth = (panelSideButtonWidthPx() - horizontalPadding / 2).coerceAtLeast(fixedKeyWidth / 2)
@@ -2756,15 +2756,8 @@ class StatusBarController(
      * page and the Device SYM page) holding it opens the variations mapping instead.
      */
     private fun bindSymPencil(button: View, page: Int) {
-        // A layer shown as pages has nothing of yours to edit: the symbols' pencil keeps the
-        // variations, the emoji layer's goes
-        if (layerShowsPages(page)) {
-            if (page == 2) {
-                button.contentDescription = context.getString(R.string.sym_symbols_pencil_description)
-                button.setOnClickListener { openVariationsMapping() }
-            } else button.visibility = View.INVISIBLE
-            return
-        }
+        // Tapped: the layer's mapping (its default page, when shown as pages); held on the
+        // symbols: the variations
         button.setOnClickListener { openSymCustomization(page = page, keyCode = null, openPicker = false) }
         if (page != 2 && page != 5) return
         button.contentDescription = context.getString(R.string.sym_symbols_pencil_description)
@@ -2795,8 +2788,12 @@ class StatusBarController(
         (page == 1 && SettingsManager.getEmojiLayerPages(context)) || (page == 2 && SettingsManager.getSymbolsPages(context))
 
     private fun openSymCustomization(page: Int, keyCode: Int?, openPicker: Boolean) {
-        // Pages have no mapping of yours to edit (holding a key there does nothing)
-        if (layerShowsPages(page)) return
+        // On pages, the default page is yours to edit (the kaomoji's own while they show), from
+        // the corner; holding a key there does nothing
+        if (layerShowsPages(page) && keyCode != null) return
+        val editPage = if (page == 2 && layerShowsPages(page) &&
+            it.palsoftware.pastiera.core.SymLayoutController.kaomojiShown
+        ) KAOMOJI_EDIT_PAGE else page
         val prefs = context.getSharedPreferences("pastiera_prefs", Context.MODE_PRIVATE)
         val currentSymPage = prefs.getInt("current_sym_page", 0)
         if (currentSymPage > 0) {
@@ -2813,7 +2810,7 @@ class StatusBarController(
             }
         } else Intent(context, SymCustomizationActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(SymCustomizationActivity.EXTRA_INITIAL_PAGE, page)
+            putExtra(SymCustomizationActivity.EXTRA_INITIAL_PAGE, editPage)
             keyCode?.let { putExtra(SymCustomizationActivity.EXTRA_INITIAL_KEY_CODE, it) }
             putExtra(SymCustomizationActivity.EXTRA_OPEN_PICKER, openPicker)
             putExtra(SymCustomizationActivity.EXTRA_RETURN_AFTER_PICKER, openPicker && keyCode != null)
@@ -3621,9 +3618,18 @@ class StatusBarController(
         val unknown = android.view.KeyEvent.KEYCODE_UNKNOWN
         val labels = it.palsoftware.pastiera.core.SymLayoutController
         // Layers shown as pages keep Q and P for the page arrows
-        if ((page == 1 && SettingsManager.getEmojiLayerPages(context)) || (page == 2 && SettingsManager.getSymbolsPages(context))) {
+        // and A for search, L for GIFs, the kaomoji or back to the symbols (the default pages)
+        if ((page == 1 && SettingsManager.getEmojiLayerPages(context)) ||
+            (page == 2 && SettingsManager.getSymbolsPages(context)) || page == KAOMOJI_EDIT_PAGE
+        ) {
             reserved[labels.PAGE_PREVIOUS_KEY] = labels.KAOMOJI_PREVIOUS_LABEL
             reserved[labels.PAGE_NEXT_KEY] = labels.KAOMOJI_NEXT_LABEL
+            reserved[labels.PAGE_SEARCH_KEY] = labels.SEARCH_KEY_LABEL
+            when {
+                page == KAOMOJI_EDIT_PAGE -> reserved[labels.PAGE_EXTRA_KEY] = labels.SYMBOLS_KEY_LABEL
+                page == 2 -> reserved[labels.PAGE_EXTRA_KEY] = labels.KAOMOJI_KEY_LABEL
+                SettingsManager.gifsAvailable(context) -> reserved[labels.PAGE_EXTRA_KEY] = labels.GIF_KEY_LABEL
+            }
             return reserved
         }
         if (page == 1 || page == 2) {

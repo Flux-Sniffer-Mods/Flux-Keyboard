@@ -45,6 +45,9 @@ import it.palsoftware.pastiera.settings.settingRow
 import it.palsoftware.pastiera.settings.settingsChild
 import it.palsoftware.pastiera.getSymMappings
 import it.palsoftware.pastiera.getSymMappingsPage2
+import it.palsoftware.pastiera.resetKaomojiHomePage
+import it.palsoftware.pastiera.saveKaomojiHomePage
+import it.palsoftware.pastiera.getKaomojiHomePage
 import it.palsoftware.pastiera.getSymPagesConfig
 import it.palsoftware.pastiera.isTitan2LayoutEnabled
 import it.palsoftware.pastiera.personaliseSymbolsDefaults
@@ -138,7 +141,7 @@ fun SymCustomizationScreen(
         mutableStateOf(if (initialPage == 2) 1 else 0)
     }
     var editingLayerPage by remember {
-        mutableStateOf(settingsChild(context, "sym_editor")?.toIntOrNull() ?: initialPage.takeIf { it == 1 || it == 2 })
+        mutableStateOf(settingsChild(context, "sym_editor")?.toIntOrNull() ?: initialPage.takeIf { it in 1..3 })
     }
     val settingHighlight = LocalSettingHighlightId.current
     LaunchedEffect(settingHighlight) {
@@ -209,6 +212,10 @@ fun SymCustomizationScreen(
                 ?: defaultMappingsPage2
         )
     }
+
+    // The kaomoji's default page (Developer's pick until edited)
+    var kaomojiHome by remember { mutableStateOf(SettingsManager.getKaomojiHomePage(context)) }
+    var showKaomojiPicker by remember { mutableStateOf(false) }
 
     // State for picker dialogs
     var showEmojiPicker by remember { mutableStateOf(false) }
@@ -301,6 +308,7 @@ fun SymCustomizationScreen(
                         text = when (editingLayerPage) {
                             1 -> stringResource(R.string.sym_edit_emoji_layer_title)
                             2 -> stringResource(R.string.sym_edit_symbols_layer_title)
+                            3 -> stringResource(R.string.sym_edit_kaomoji_page_title)
                             else -> stringResource(R.string.sym_customize_title)
                         },
                         style = MaterialTheme.typography.headlineSmall,
@@ -537,6 +545,20 @@ fun SymCustomizationScreen(
                     )
                 }
             }
+            3 -> {
+                // The kaomoji's default page
+                key(kaomojiHome, titan2LayoutEnabled) {
+                    AndroidView(
+                        factory = { _ ->
+                            statusBarController.createCustomizableEmojiKeyboard(kaomojiHome, { keyCode, _ ->
+                                selectedKeyCode = keyCode
+                                showKaomojiPicker = true
+                            }, page = it.palsoftware.pastiera.inputmethod.StatusBarController.KAOMOJI_EDIT_PAGE)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
             2 -> {
                 // Characters tab
                 key(symMappingsPage2, titan2LayoutEnabled) {
@@ -647,6 +669,41 @@ fun SymCustomizationScreen(
             )
         }
 
+        // A kaomoji for a key of the kaomoji's default page, from the full list
+        if (showKaomojiPicker && selectedKeyCode != null) {
+            val all = remember { it.palsoftware.pastiera.data.symbols.Kaomoji.all(context) }
+            AlertDialog(
+                onDismissRequest = { showKaomojiPicker = false; selectedKeyCode = null },
+                title = { Text(stringResource(R.string.sym_pick_kaomoji_title)) },
+                text = {
+                    androidx.compose.foundation.lazy.LazyColumn(modifier = Modifier.height(420.dp)) {
+                        items(all.size) { index ->
+                            val kaomoji = all[index]
+                            Text(
+                                kaomoji,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        val keyCode = selectedKeyCode ?: return@clickable
+                                        kaomojiHome = kaomojiHome.toMutableMap().apply { put(keyCode, kaomoji) }
+                                        SettingsManager.saveKaomojiHomePage(context, kaomojiHome)
+                                        showKaomojiPicker = false
+                                        selectedKeyCode = null
+                                    }
+                                    .padding(vertical = 10.dp, horizontal = 4.dp)
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showKaomojiPicker = false; selectedKeyCode = null }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }
+            )
+        }
+
         // Reset confirmation dialog
         if (showResetConfirmDialog) {
             AlertDialog(
@@ -671,6 +728,10 @@ fun SymCustomizationScreen(
                                 2 -> {
                                     symMappingsPage2 = defaultMappingsPage2.toMutableMap()
                                     SettingsManager.resetSymMappingsPage2(context)
+                                }
+                                3 -> {
+                                    kaomojiHome = it.palsoftware.pastiera.KAOMOJI_DEVELOPERS_PICK
+                                    SettingsManager.resetKaomojiHomePage(context)
                                 }
                             }
                             showResetConfirmDialog = false
