@@ -255,9 +255,9 @@
     <string name="phone_trackpad_scroll_assist_tip">Turn Scroll assistant on: the phone only passes keyboard swipes to Flux Keyboard while it\'s on. Leave Swipe mode on scrolling: custom swipe actions take the swipes for themselves.</string>
     <string name="phone_spell_checker_title">The phone\'s spell checker in suggestions</string>
     <string name="phone_spell_checker_description">When Android\'s spell checker is another app\'s (Gboard\'s, say), its corrections for a misspelt word join the suggestion bar.</string>
-    <string name="root_title">Shizuku extras</string>
+    <string name="root_title">Shell access</string>
     <string name="root_row_description">Keyboard light and shortcuts through Shizuku (ADB), no root needed</string>
-    <string name="root_note">These run through Shizuku, as the ADB shell. Flux Keyboard only runs the commands each option needs.</string>
+    <string name="root_note">These run as the ADB shell, through the built-in shell or Shizuku. Flux Keyboard only runs the commands each option needs.</string>
     <string name="root_section_backlight">Keyboard light</string>
     <string name="density_apply">Apply</string>
     <string name="density_in_use">In use</string>

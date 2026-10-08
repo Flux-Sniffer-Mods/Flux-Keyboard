@@ -96,7 +96,7 @@
     <string name="flux_tutorial_typing_bullet_private">Key shortcuts for private mode (Incognito typing and Offline mode together) and for selecting from the cursor: set them in Customize keys.</string>
     <string name="flux_tutorial_extras_shizuku_title">Keyboard light and shortcuts (Shizuku)</string>
     <string name="flux_tutorial_extras_shizuku_text">With Shizuku running, the Titan 2\'s keyboard light follows the screen and its brightness, or flashes for notifications, and shortcuts can force-stop the app in front, toggle Battery Saver or cut an app off the network. No root needed.</string>
-    <string name="flux_tutorial_extras_shizuku_button">Open Shizuku extras</string>
+    <string name="flux_tutorial_extras_shizuku_button">Open Shell access</string>
     <string name="flux_tutorial_personalise_bullet_theme">Keyboard themes: the theme page shows which theme is in use in light and dark mode, and sets it with a tap.</string>
     <string name="trackpad_apps_section">Keyboard swipes per app</string>
     <string name="trackpad_apps_note">Turn Scroll assistant on for every app in the phone\'s settings (select all apps there), then choose here where keyboard swipes may scroll. Flux Keyboard keeps them from the other apps through the accessibility service (Android 14 and later). While you type, they always go to the keyboard.</string>
