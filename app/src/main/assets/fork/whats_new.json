@@ -379,47 +379,75 @@
     },
     {
       "text": "A much smaller app: English comes built in, and other languages' dictionaries download the first time you use them (or from Installed dictionaries), from Flux Keyboard's own releases. Languages you already type in download by themselves after the update.",
-      "after": "202610051915"
+      "after": "202610061618"
     },
     {
       "text": "Minimal mode (Look & sound): no keyboard bar in any app, the LEDs optional, while the keys work as usual and the emoji and symbols pages still open on their keys.",
-      "after": "202610051915"
+      "after": "202610061625"
     },
     {
       "text": "Keyboard swipes through Shizuku: with Shizuku running, swipes on the keys reach the keyboard in every app, whether or not the phone's Scroll assistant scrolls it, so Scroll assistant can be switched off for the apps you want kept still. It's the default for Shizuku users until you pick a source.",
-      "after": "202610051915"
+      "after": "202610061555"
     },
     {
       "text": "Extra keys: Esc, Tab, Ctrl, Alt and arrows in the bar's place, Termux style, from the menu bar, a shortcut or the emoji key in terminal apps (its new default there). While the row is open, Q to P press its keys, and its Ctrl or Alt goes with the next key you press. Text fields get their own set: arrows, Home, End, select all, cut, copy and paste.",
-      "after": "202610051915"
+      "after": "202610061801"
     },
     {
       "text": "Terminals: Nav Mode works in Termux, sending its arrows straight to the terminal, and swipes on the keys move the cursor (Terminal mode > Swipes move the cursor).",
-      "after": "202610051915"
+      "after": "202610061736"
     },
     {
       "text": "The keyboard bar is Solderina, with Minimal mode beside it (Look & sound > Keyboard bar); the older extended bar is retired. The minimal mode shortcut and menu button switch it on the spot.",
-      "after": "202610051915"
+      "after": "202610061745"
     },
     {
       "text": "The menu bar starts with extra keys, undo, redo, the clipboard and settings, with its first and last buttons the same size as the bar's corner buttons, so the LEDs stay clear.",
-      "after": "202610051915"
+      "after": "202610062042"
     },
     {
       "text": "Shizuku at boot through Termux:Boot: the Termux setup command offers to start Shizuku by itself after a restart, waiting for Wi-Fi, pairing Termux with wireless debugging once and finding Shizuku wherever it's installed.",
-      "after": "202610051915"
+      "after": "202610061730"
     },
     {
       "text": "A new tutorial start: allowing restricted settings goes try, allow, try again and ends with the accessibility service on; a page to pick Solderina or minimal mode; and a Shizuku page from download to starting after a restart, with links to Shizuku, Termux and Termux:Boot on GitHub.",
-      "after": "202610051915"
+      "after": "202610061807"
     },
     {
       "text": "Language versions: full releases come as one APK per language, each opening in its translation and its language's usual layout, and updating to the same language's APK.",
-      "after": "202610051915"
+      "after": "202610061642"
     },
     {
       "text": "In minimal mode the LEDs sit right on the screen's edge.",
-      "after": "202610051915"
+      "after": "202610062055"
+    },
+    {
+      "text": "Built-in shell (Shell access): pair once with wireless debugging, typing the code into Flux Keyboard's notification, and Flux Keyboard runs its own developer shell, with no Shizuku or Termux needed. After a restart it starts by itself once Wi-Fi connects, switching wireless debugging on just for that. Shizuku still works when the built-in shell isn't set up.",
+      "after": "202610081339"
+    },
+    {
+      "text": "The keyboard light fades smoothly with the screen: the screen's brightness is read 30 times a second, and once a frame while it's changing.",
+      "after": "202610081346"
+    },
+    {
+      "text": "Clean links covers shops and more sites: Etsy, eBay and Amazon worldwide, AliExpress, Temu, Walmart, Target, Booking, Airbnb, Google search and others.",
+      "after": "202610081319"
+    },
+    {
+      "text": "After a picked suggestion, punctuation goes straight next to the word, and Enter drops the space.",
+      "after": "202610081319"
+    },
+    {
+      "text": "Swipe down to delete a word buzzes like the suggestion swipes (Trackpad settings, on by default).",
+      "after": "202610081319"
+    },
+    {
+      "text": "While Shizuku isn't running yet (no Wi-Fi after a restart), Android's own trackpad swipes stand in until it is (Trackpad settings, on by default).",
+      "after": "202610081319"
+    },
+    {
+      "text": "The currency key knows more currencies, and each language version uses its own when the phone's region doesn't say.",
+      "after": "202610081320"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -500,55 +528,63 @@
   "bugFixes": [
     {
       "text": "Deleting every custom input style now removes them from Android's language switcher too; before, the last ones could stay listed.",
-      "after": "202610051915"
+      "after": "202610060000"
     },
     {
       "text": "One-time codes are found in conversation notifications (texts and chats) on Android 10 as well.",
-      "after": "202610051915"
+      "after": "202610060000"
     },
     {
       "text": "The Clicks Power Keyboard's charging automation keeps following its settings; before, it could stop noticing changes after a while.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "Ctrl+Z undo works only on fields it can read whole, so it never changes the wrong place, and redo keeps its step when the field can't be read.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "Double space types a full stop only after something you typed, not at the start of a field or line.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "Automatic Shift no longer capitalises in the middle of a long field that the app hands over in part.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "Cursor and selection keys (Shift with the arrows, word by word) move to the right place in long fields.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "Links to web pages no longer crash the app on a phone without a browser.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "An imported dictionary is saved exactly as checked, never half-written when copying fails.",
-      "after": "202610051915"
+      "after": "202610061250"
     },
     {
       "text": "Minimal mode no longer leaves a coloured strip at the bottom of apps: with only the LEDs showing, the app keeps the whole screen.",
-      "after": "202610051915"
+      "after": "202610061701"
     },
     {
       "text": "Reinstalling starts fresh, tutorial included: Android no longer brings back an old copy of the settings from its cloud backup (the in-app backup, and moving to a new phone, still carry them).",
-      "after": "202610051915"
+      "after": "202610061701"
     },
     {
       "text": "Allowing Flux Keyboard in Shizuku always says what's happening: when Shizuku isn't running, remembers a refusal or doesn't show its question, Flux Keyboard says where to allow it and opens Shizuku.",
-      "after": "202610051915"
+      "after": "202610062042"
     },
     {
       "text": "The menu bar keeps its shape with more buttons than it started with.",
-      "after": "202610051915"
+      "after": "202610062042"
+    },
+    {
+      "text": "Cursor swipes in terminals need a longer move before the cursor goes, so it no longer jumps at a touch.",
+      "after": "202610081319"
+    },
+    {
+      "text": "A password manager's chip answers a tap anywhere on it, not just on its middle.",
+      "after": "202610081319"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
