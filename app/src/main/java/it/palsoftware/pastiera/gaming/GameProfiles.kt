@@ -111,10 +111,14 @@ object GameProfiles {
     /** Every key a profile can remap: the letters, Space, Enter, Backspace, Shift and Alt. */
     val REMAPPABLE_KEYS: List<Int> = (KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z).toList() + listOf(
         KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DEL,
-        KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_SYM
+        KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_SYM,
+        KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN
     )
 
-    /** WASD the d-pad, O L P K the X Y B A buttons (Nintendo's places), shoulders on Q E Z C. */
+    /**
+     * WASD the d-pad, O L P K the X Y B A buttons (Nintendo's places), shoulders on Q E Z C and
+     * the left ones on the volume keys too (up the shoulder, down the trigger).
+     */
     fun gamepadDefaults(): Map<Int, GameAction> = mapOf(
         KeyEvent.KEYCODE_W to GameAction.DPAD_UP,
         KeyEvent.KEYCODE_A to GameAction.DPAD_LEFT,
@@ -128,6 +132,8 @@ object GameProfiles {
         KeyEvent.KEYCODE_E to GameAction.R1,
         KeyEvent.KEYCODE_Z to GameAction.L2,
         KeyEvent.KEYCODE_C to GameAction.R2,
+        KeyEvent.KEYCODE_VOLUME_UP to GameAction.L1,
+        KeyEvent.KEYCODE_VOLUME_DOWN to GameAction.L2,
         KeyEvent.KEYCODE_ENTER to GameAction.START,
         KeyEvent.KEYCODE_DEL to GameAction.SELECT,
         KeyEvent.KEYCODE_F to GameAction.L3,

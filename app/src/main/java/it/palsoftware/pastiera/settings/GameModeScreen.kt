@@ -2,6 +2,10 @@ package it.palsoftware.pastiera.settings
 
 import android.view.KeyEvent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -174,6 +178,16 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
     val context = LocalContext.current
     var current by remember { mutableStateOf(profile) }
     var addingApp by remember { mutableStateOf(false) }
+    var capturing by remember { mutableStateOf(false) }
+    if (capturing) {
+        KeyCaptureDialog(onKey = { code ->
+            capturing = false
+            if (code !in current.keys) {
+                val action = if (current.style == GameStyle.GAMEPAD) GameAction.R2 else GameAction.MOUSE_LEFT
+                current = current.copy(keys = current.keys + (code to action))
+            }
+        }, onDismiss = { capturing = false })
+    }
     FluxScreenScaffold(current.name, { onDone(current) }, Modifier) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedTextField(
@@ -209,7 +223,8 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
             Text(stringResource(R.string.game_mode_keys), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.game_mode_keys_note), style = MaterialTheme.typography.bodySmall)
             val asIs = stringResource(R.string.game_mode_key_as_is)
-            GameProfiles.REMAPPABLE_KEYS.forEach { key ->
+            // The usual keys, then any other added by pressing it (a phone's own buttons)
+            (GameProfiles.REMAPPABLE_KEYS + current.keys.keys.filterNot { it in GameProfiles.REMAPPABLE_KEYS }).forEach { key ->
                 val name = KeyEvent.keyCodeToString(key).removePrefix("KEYCODE_").replace("_LEFT", "").replace("DEL", "BACKSPACE")
                 ChoiceRow(name, current.keys[key]?.label ?: asIs, listOf(asIs) + GameAction.entries.map { it.label }) { index ->
                     current = current.copy(
@@ -217,6 +232,7 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     )
                 }
             }
+            TextButton(onClick = { capturing = true }) { Text(stringResource(R.string.game_mode_add_key)) }
             Spacer(Modifier.height(8.dp))
             Row {
                 TextButton(onClick = { onDone(current) }) { Text(stringResource(R.string.game_mode_save)) }
@@ -253,4 +269,30 @@ private fun ChoiceRow(title: String, value: String, options: List<String>, onPic
             }
         }
     }
+}
+
+/** Waits for a key: the next one pressed (the phone's own buttons included, where Android passes them on). */
+@Composable
+private fun KeyCaptureDialog(onKey: (Int) -> Unit, onDismiss: () -> Unit) {
+    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.game_mode_add_key)) },
+        text = {
+            Text(
+                stringResource(R.string.game_mode_press_key),
+                modifier = Modifier
+                    .focusRequester(focus)
+                    .focusable()
+                    .onPreviewKeyEvent { event ->
+                        if (event.type == androidx.compose.ui.input.key.KeyEventType.KeyDown) {
+                            onKey(event.nativeKeyEvent.keyCode)
+                        }
+                        true
+                    }
+            )
+            LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
 }
