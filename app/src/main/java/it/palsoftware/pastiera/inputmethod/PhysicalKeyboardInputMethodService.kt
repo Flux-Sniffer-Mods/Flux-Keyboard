@@ -3031,6 +3031,15 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (boundary == '\'' || boundary !in it.palsoftware.pastiera.core.Punctuation.BOUNDARY) {
             return false
         }
+        // Straight after a picked suggestion (Alt or a long press typing it): next to the word,
+        // its space after, as the plain key does
+        if (!SettingsManager.shouldApplyFrenchPunctuationSpacing(this) &&
+            boundary in it.palsoftware.pastiera.core.Punctuation.NEXT_TO_PICKED_WORD &&
+            it.palsoftware.pastiera.core.AutoSpaceTracker.replaceAutoSpaceWithPunctuation(ic, boundary.toString())
+        ) {
+            suggestionController.onContextReset()
+            return true
+        }
         if (DeferredPunctuationSpaceTracker.prepareForTextCommit(this, ic, text)) {
             suggestionController.onContextReset()
         }
@@ -4532,10 +4541,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (!restarting) restoreAppLanguage(info)
         if (!restarting) offerPasteSuggestion()
         if (!restarting) offerOneTimeCode()
-        if (!restarting) {
-            contactChips = emptyList()
-            refreshContactSuggestions()
-        }
+        // A new field: the last one's email or number chips go (emptied first, the refresh would
+        // see nothing changed and leave them on the bar)
+        if (!restarting) refreshContactSuggestions()
         initializeInputContext(restarting)
         suggestionController.onContextReset()
         

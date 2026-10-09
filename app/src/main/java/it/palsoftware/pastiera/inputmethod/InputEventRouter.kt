@@ -1130,7 +1130,7 @@ class InputEventRouter(
         if (
             isPunctuation && typedChar != null && inputConnection != null &&
             !SettingsManager.shouldApplyFrenchPunctuationSpacing(context) &&
-            (typedChar in SettingsManager.getAutoSpacePunctuation(context) || typedChar in ")]}…") &&
+            (typedChar in SettingsManager.getAutoSpacePunctuation(context) || typedChar in it.palsoftware.pastiera.core.Punctuation.NEXT_TO_PICKED_WORD) &&
             AutoSpaceTracker.replaceAutoSpaceWithPunctuation(inputConnection, typedChar.toString())
         ) {
             suggestionController?.onContextReset()

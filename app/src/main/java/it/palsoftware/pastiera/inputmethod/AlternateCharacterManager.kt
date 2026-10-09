@@ -383,7 +383,7 @@ class AlternateCharacterManager(
                 onAltCharInserted?.invoke(altChar[0])
                 return true
             }
-            val punctuationSet = autoSpacePunctuation()
+            val punctuationSet = autoSpacePunctuation() + it.palsoftware.pastiera.core.Punctuation.NEXT_TO_PICKED_WORD
             if (altChar.isNotEmpty() && altChar[0] in punctuationSet) {
                 val applied = AutoSpaceTracker.replaceAutoSpaceWithPunctuation(inputConnection, altChar)
                 if (applied) {
@@ -546,7 +546,7 @@ class AlternateCharacterManager(
                                 return@Runnable
                             }
 
-                            val punctuationSet = autoSpacePunctuation()
+                            val punctuationSet = autoSpacePunctuation() + it.palsoftware.pastiera.core.Punctuation.NEXT_TO_PICKED_WORD
                             if (symChar[0] in punctuationSet) {
                                 val applied = AutoSpaceTracker.replaceAutoSpaceWithPunctuation(inputConnection, symChar)
                                 if (applied) {
@@ -637,7 +637,7 @@ class AlternateCharacterManager(
                                 return@Runnable
                             }
 
-                            val punctuationSet = autoSpacePunctuation()
+                            val punctuationSet = autoSpacePunctuation() + it.palsoftware.pastiera.core.Punctuation.NEXT_TO_PICKED_WORD
                             if (altChar.isNotEmpty() && altChar[0] in punctuationSet) {
                                 val applied = AutoSpaceTracker.replaceAutoSpaceWithPunctuation(inputConnection, altChar)
                                 if (applied) {

@@ -15,6 +15,10 @@ object Punctuation {
     const val DEFAULT_AUTO_SPACE: String = ""
     const val AUTO_SPACE: String = DEFAULT_AUTO_SPACE
 
+    // Goes next to a picked suggestion's word, its space moved after (not ":" or ";", which
+    // start emoticons)
+    const val NEXT_TO_PICKED_WORD: String = ".,!?)]}…"
+
     const val FRENCH_SPACED_PUNCTUATION: String = "?!;:"
     const val COMMA_SPACE_PUNCTUATION: Char = ','
 
