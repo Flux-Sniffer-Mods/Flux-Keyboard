@@ -14,8 +14,17 @@ import it.palsoftware.pastiera.apps.InstalledApp
 object GameLibrary {
     private val LAUNCHER_NAMES = listOf("gamenative", "gamehub")
 
-    /** A game: its name, its launcher and, for a GameNative shortcut, its game ID and store. */
-    data class Game(val name: String, val packageName: String, val gameId: Int? = null, val source: String? = null)
+    /**
+     * A game: its name, its launcher or emulator and, for a GameNative shortcut, its game ID and
+     * store; [launch] (an intent URI) when it's known how to start it already.
+     */
+    data class Game(
+        val name: String,
+        val packageName: String,
+        val gameId: Int? = null,
+        val source: String? = null,
+        val launch: String? = null
+    )
 
     /** The game launchers installed, found by name. */
     fun launchers(context: Context): List<InstalledApp> =
@@ -60,6 +69,7 @@ object GameLibrary {
 
     /** What starts [game] straight away, where its launcher allows it; null to open the launcher. */
     fun launchIntent(game: Game): Intent? {
+        game.launch?.let { return runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
         val id = game.gameId ?: return null
         if (game.packageName != GameNativeBridge.PACKAGE) return null
         return Intent("app.gamenative.LAUNCH_GAME").setPackage(game.packageName)

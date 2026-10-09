@@ -19,7 +19,7 @@ class GameLaunchActivity : Activity() {
         if (profile != null) {
             profile.packages.forEach { GameProfiles.setActive(this, it, profile.id) }
             val game = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
-                ?.takeIf { it.`package` in profile.packages }
+                ?.takeIf { (it.`package` ?: it.component?.packageName) in profile.packages }
             val start = game ?: profile.packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
             start?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
         }

@@ -59,6 +59,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var picking by remember { mutableStateOf(false) }
     var importing by remember { mutableStateOf(false) }
     var gameNativeSetup by remember { mutableStateOf(false) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
     fun refresh() { profiles = GameProfiles.all(context) }
 
     editing?.let { profile ->
@@ -117,6 +118,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) { gameNativeSetup = true }
         FluxActionRow(
             linkId = null,
+            icon = "+",
+            title = stringResource(R.string.game_mode_folders),
+            description = stringResource(R.string.game_mode_folders_description)
+        ) {
+            scope.launch {
+                val made = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameFolders.create() }
+                android.widget.Toast.makeText(
+                    context, if (made) R.string.game_mode_folders_made else R.string.adb_not_running, android.widget.Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        FluxActionRow(
+            linkId = null,
             icon = "⇩",
             title = stringResource(R.string.game_mode_import),
             description = stringResource(R.string.game_mode_import_description)
@@ -127,12 +141,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         AppPickerDialog(
             onAppSelected = { app: InstalledApp ->
                 picking = false
-                val fresh = GameProfiles.newProfile(app.appName, GameStyle.GAMEPAD, setOf(app.packageName))
-                // Dolphin: its on-screen gamepad's spots straight away (they come from its code)
-                editing = if (it.palsoftware.pastiera.gaming.EmulatorLayouts.name(app.packageName).let { it == "Dolphin" || it == "Azahar" || it == "Eden" }) {
-                    it.palsoftware.pastiera.gaming.EmulatorLayouts.layout(context, app.packageName)
-                        ?.let { layout -> it.palsoftware.pastiera.gaming.EmulatorLayouts.apply(fresh, layout) } ?: fresh
-                } else fresh
+                editing = freshProfile(context, app.appName, app.packageName)
             },
             onDismiss = { picking = false }
         )
@@ -140,7 +149,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     if (importing) {
         GameImportDialog(onPicked = { game ->
             importing = false
-            editing = GameProfiles.newProfile(game.name, GameStyle.GAMEPAD, setOf(game.packageName))
+            editing = freshProfile(context, game.name, game.packageName)
                 .copy(
                     launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME),
                     // GameHub turns the screen sideways whatever it's told
@@ -170,6 +179,17 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     }
 }
 
+/**
+ * A new gamepad profile for [pkg]; for an emulator whose on-screen gamepad comes from its code
+ * (Dolphin, Azahar, Eden), its spots straight away.
+ */
+private fun freshProfile(context: android.content.Context, name: String, pkg: String): GameProfile {
+    val fresh = GameProfiles.newProfile(name, GameStyle.GAMEPAD, setOf(pkg))
+    val layouts = it.palsoftware.pastiera.gaming.EmulatorLayouts
+    if (layouts.name(pkg) !in setOf("Dolphin", "Azahar", "Eden")) return fresh
+    return layouts.layout(context, pkg)?.let { layout -> layouts.apply(fresh, layout) } ?: fresh
+}
+
 private fun appLabel(context: android.content.Context, pkg: String): String = runCatching {
     context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString()
 }.getOrDefault(pkg)
@@ -185,6 +205,11 @@ private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onDismiss: ()
                 GameLibrary.games(launcher.packageName) +
                     // The launcher itself, for a profile covering all its games
                     GameLibrary.Game(launcher.appName, launcher.packageName)
+            }.let { fromLaunchers ->
+                // The game folders' games, each started straight into the game
+                val known = fromLaunchers.map { it.name.lowercase() to it.packageName }.toSet()
+                fromLaunchers +
+                    it.palsoftware.pastiera.gaming.GameFolders.games(context).filter { (it.name.lowercase() to it.packageName) !in known }
             }
         }
     }
