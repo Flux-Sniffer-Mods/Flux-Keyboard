@@ -249,6 +249,14 @@
             android:exported="false"
             android:excludeFromRecents="true" />
         <!-- Termux's answer when the quick launcher asks for Termux:Widget's scripts -->
+        <!-- A game's home screen shortcut: its profile on, then the game -->
+        <activity
+            android:name=".gaming.GameLaunchActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay" />
         <!-- Gaming mode's notification: the next profile -->
         <receiver
             android:name=".gaming.GameMode$Receiver"

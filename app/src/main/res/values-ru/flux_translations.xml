@@ -1773,7 +1773,6 @@
     <string name="game_mode_touch_controls_description">GameNative принимает за контроллеры только настоящие контроллеры. Если в GameNative выбран профиль управления Flux Keyboard, кнопки и стики нажимают его невидимое экранное управление, которое GameNative передаёт как контроллер Xbox.</string>
     <string name="game_mode_gamenative_save">Сохранить профиль управления для GameNative</string>
     <string name="game_mode_gamenative_save_description">Сохраняет Flux Keyboard gamepad.icp в «Загрузки/Flux Keyboard». В GameNative импортируйте его в профилях управления и выберите для игры, с включённым экранным управлением (оно невидимо).</string>
-    <string name="game_mode_gamenative_saved">Сохранено в «Загрузки/Flux Keyboard». Импортируйте его в профилях управления GameNative и выберите для игры.</string>
     <string name="game_mode_gamenative_save_failed">Не удалось сохранить.</string>
     <string name="game_mode_place_keys">Разместить клавиши на экране</string>
     <string name="game_mode_place_hint">Перетащите каждую клавишу на кнопку игры, а каждый круг стика на его стик. Добавьте клавишу, затем нажмите её.</string>

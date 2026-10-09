@@ -58,6 +58,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var portrait by remember { mutableStateOf(GameProfiles.keepPortrait(context)) }
     var picking by remember { mutableStateOf(false) }
     var importing by remember { mutableStateOf(false) }
+    var gameNativeSetup by remember { mutableStateOf(false) }
     fun refresh() { profiles = GameProfiles.all(context) }
 
     editing?.let { profile ->
@@ -113,14 +114,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             icon = "\u2913",
             title = stringResource(R.string.game_mode_gamenative_save),
             description = stringResource(R.string.game_mode_gamenative_save_description)
-        ) {
-            val ok = it.palsoftware.pastiera.gaming.GameNativeBridge.save(context)
-            android.widget.Toast.makeText(
-                context,
-                if (ok) R.string.game_mode_gamenative_saved else R.string.game_mode_gamenative_save_failed,
-                android.widget.Toast.LENGTH_LONG
-            ).show()
-        }
+        ) { gameNativeSetup = true }
         FluxActionRow(
             linkId = null,
             icon = "⇩",
@@ -144,10 +138,35 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         )
     }
     if (importing) {
-        GameImportDialog(onPicked = { name, pkg ->
+        GameImportDialog(onPicked = { game ->
             importing = false
-            editing = GameProfiles.newProfile(name, GameStyle.GAMEPAD, setOf(pkg))
+            editing = GameProfiles.newProfile(game.name, GameStyle.GAMEPAD, setOf(game.packageName))
+                .copy(
+                    launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME),
+                    // GameHub turns the screen sideways whatever it's told
+                    sideways = "gamehub" in appLabel(context, game.packageName).lowercase().replace(" ", "")
+                )
+            if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
         }, onDismiss = { importing = false })
+    }
+    if (gameNativeSetup) {
+        AlertDialog(
+            onDismissRequest = { gameNativeSetup = false },
+            title = { Text(stringResource(R.string.game_mode_gamenative_save)) },
+            text = { Text(stringResource(R.string.game_mode_gamenative_steps)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    gameNativeSetup = false
+                    if (it.palsoftware.pastiera.gaming.GameNativeBridge.save(context)) {
+                        context.packageManager.getLaunchIntentForPackage(it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE)
+                            ?.let { launch -> runCatching { context.startActivity(launch.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) } }
+                    } else {
+                        android.widget.Toast.makeText(context, R.string.game_mode_gamenative_save_failed, android.widget.Toast.LENGTH_LONG).show()
+                    }
+                }) { Text(stringResource(R.string.game_mode_gamenative_open)) }
+            },
+            dismissButton = { TextButton(onClick = { gameNativeSetup = false }) { Text(stringResource(R.string.cancel)) } }
+        )
     }
 }
 
@@ -157,15 +176,15 @@ private fun appLabel(context: android.content.Context, pkg: String): String = ru
 
 /** The games of the game launchers installed, one tap making a profile for it. */
 @Composable
-private fun GameImportDialog(onPicked: (String, String) -> Unit, onDismiss: () -> Unit) {
+private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    var games by remember { mutableStateOf<List<Pair<String, String>>?>(null) }
+    var games by remember { mutableStateOf<List<GameLibrary.Game>?>(null) }
     LaunchedEffect(Unit) {
         games = withContext(Dispatchers.IO) {
             GameLibrary.launchers(context).flatMap { launcher ->
-                GameLibrary.games(launcher.packageName).map { it to launcher.packageName } +
+                GameLibrary.games(launcher.packageName) +
                     // The launcher itself, for a profile covering all its games
-                    listOf(launcher.appName to launcher.packageName)
+                    GameLibrary.Game(launcher.appName, launcher.packageName)
             }
         }
     }
@@ -178,10 +197,10 @@ private fun GameImportDialog(onPicked: (String, String) -> Unit, onDismiss: () -
                 when {
                     list == null -> Text(stringResource(R.string.game_mode_import_reading))
                     list.isEmpty() -> Text(stringResource(R.string.game_mode_import_none))
-                    else -> list.forEach { (name, pkg) ->
+                    else -> list.forEach { game ->
                         Text(
-                            "$name  (${appLabel(context, pkg)})",
-                            modifier = Modifier.fillMaxWidth().clickable { onPicked(name, pkg) }.padding(vertical = 10.dp)
+                            "${game.name}  (${appLabel(context, game.packageName)})",
+                            modifier = Modifier.fillMaxWidth().clickable { onPicked(game) }.padding(vertical = 10.dp)
                         )
                     }
                 }
@@ -240,6 +259,17 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     onCheckedChange = { current = current.copy(touchControls = it) }
                 )
             }
+            // A game that only plays sideways: a landscape-shaped screen while the phone stays upright
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.game_mode_sideways))
+                    Text(stringResource(R.string.game_mode_sideways_description), style = MaterialTheme.typography.bodySmall)
+                }
+                androidx.compose.material3.Switch(
+                    checked = current.sideways,
+                    onCheckedChange = { current = current.copy(sideways = it) }
+                )
+            }
             // A known emulator: its on-screen gamepad's spots, read from its code or settings
             val emulator = current.packages.firstNotNullOfOrNull { pkg ->
                 it.palsoftware.pastiera.gaming.EmulatorLayouts.name(pkg)?.let { pkg to it }
@@ -260,6 +290,11 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     }
                 }) { Text(stringResource(R.string.game_mode_use_emulator_controls, emulator.second)) }
             }
+            TextButton(onClick = {
+                if (!it.palsoftware.pastiera.gaming.GameLaunchActivity.pin(context, current.also { profile -> GameProfiles.save(context, profile) })) {
+                    android.widget.Toast.makeText(context, R.string.game_mode_home_screen_failed, android.widget.Toast.LENGTH_LONG).show()
+                }
+            }) { Text(stringResource(R.string.game_mode_home_screen)) }
             Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
             current.packages.forEach { pkg ->
                 Row(verticalAlignment = Alignment.CenterVertically) {

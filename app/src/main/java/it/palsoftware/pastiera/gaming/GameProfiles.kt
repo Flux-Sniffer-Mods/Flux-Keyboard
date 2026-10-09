@@ -68,9 +68,9 @@ enum class TrackpadRole(val label: String) {
 
 enum class GameStyle(val label: String) {
     GAMEPAD("Gamepad"),
-    PC("PC (MMO)"),
+    PC("Keyboard and mouse"),
     /** Movement on D Z X C (W A S D's shape, lower down), so the whole top row is the number row. */
-    PC_DZXC("PC (MMO), moving on D Z X C")
+    PC_DZXC("MMO: moving on D Z X C, full number row")
 }
 
 /**
@@ -90,10 +90,16 @@ data class GameProfile(
     /** Keys placed on the screen: each taps its spot (a share of the screen's width and height). */
     val taps: Map<Int, Pair<Float, Float>> = emptyMap(),
     /** Sticks placed on the screen (0 left, 1 right): centre and reach (a share of the width). */
-    val stickZones: Map<Int, Triple<Float, Float, Float>> = emptyMap()
+    val stickZones: Map<Int, Triple<Float, Float, Float>> = emptyMap(),
+    /** What starts the game itself (an intent URI), for its home screen shortcut. */
+    val launch: String? = null,
+    /** A game that only plays sideways: the screen is made landscape-shaped while it runs. */
+    val sideways: Boolean = false
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
+        launch?.let { put("launch", it) }
+        put("sideways", sideways)
         put("name", name)
         put("style", style.name)
         put("packages", JSONArray(packages.toList()))
@@ -135,7 +141,9 @@ data class GameProfile(
                         val z = zones.optJSONArray(key) ?: return@mapNotNull null
                         key.toIntOrNull()?.let { it to Triple(z.getDouble(0).toFloat(), z.getDouble(1).toFloat(), z.getDouble(2).toFloat()) }
                     }.toMap()
-                }.orEmpty()
+                }.orEmpty(),
+                launch = json.optString("launch").ifEmpty { null },
+                sideways = json.optBoolean("sideways", false)
             )
         }.getOrNull()
     }

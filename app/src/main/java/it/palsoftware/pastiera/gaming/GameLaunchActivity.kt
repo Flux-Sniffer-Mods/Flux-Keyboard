@@ -1,0 +1,56 @@
+package it.palsoftware.pastiera.gaming
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Bundle
+
+/**
+ * A game's home screen shortcut: makes its profile the one gaming mode uses for its launcher,
+ * then starts the game (or, when the launcher can't be told which game, the launcher).
+ */
+class GameLaunchActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val profile = intent.getStringExtra(EXTRA_PROFILE)?.let { id -> GameProfiles.all(this).firstOrNull { it.id == id } }
+        if (profile != null) {
+            profile.packages.forEach { GameProfiles.setActive(this, it, profile.id) }
+            val game = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+                ?.takeIf { it.`package` in profile.packages }
+            val start = game ?: profile.packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
+            start?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
+        }
+        finish()
+    }
+
+    companion object {
+        private const val EXTRA_PROFILE = "profile"
+
+        /** Asks the home screen to add [profile]'s shortcut; false when it can't. */
+        fun pin(context: Context, profile: GameProfile): Boolean {
+            val manager = context.getSystemService(ShortcutManager::class.java) ?: return false
+            if (!manager.isRequestPinShortcutSupported) return false
+            val icon = profile.packages.firstNotNullOfOrNull { pkg ->
+                runCatching { context.packageManager.getApplicationIcon(pkg) }.getOrNull()
+            }?.let { drawable ->
+                val size = (48 * context.resources.displayMetrics.density).toInt()
+                val bitmap = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
+                drawable.setBounds(0, 0, size, size)
+                drawable.draw(android.graphics.Canvas(bitmap))
+                Icon.createWithBitmap(bitmap)
+            } ?: Icon.createWithResource(context, it.palsoftware.pastiera.R.mipmap.ic_launcher)
+            val shortcut = ShortcutInfo.Builder(context, "game_${profile.id}")
+                .setShortLabel(profile.name.ifBlank { "Game" })
+                .setIcon(icon)
+                .setIntent(
+                    Intent(context, GameLaunchActivity::class.java).setAction(Intent.ACTION_VIEW)
+                        .putExtra(EXTRA_PROFILE, profile.id)
+                )
+                .build()
+            return runCatching { manager.requestPinShortcut(shortcut, null) }.getOrDefault(false)
+        }
+    }
+}

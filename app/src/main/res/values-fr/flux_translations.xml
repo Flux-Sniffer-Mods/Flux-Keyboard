@@ -1767,7 +1767,6 @@
     <string name="game_mode_touch_controls_description">GameNative n\'accepte que de vraies manettes comme manettes. Avec le profil de contrôles de Flux Keyboard choisi dans GameNative, les boutons et sticks appuient sur ses contrôles à l\'écran invisibles, que GameNative transmet comme une manette Xbox.</string>
     <string name="game_mode_gamenative_save">Enregistrer le profil de contrôles pour GameNative</string>
     <string name="game_mode_gamenative_save_description">Enregistre Flux Keyboard gamepad.icp dans Téléchargements/Flux Keyboard. Dans GameNative, importez-le depuis ses profils de contrôles et choisissez-le pour le jeu, contrôles à l\'écran affichés (ils sont invisibles).</string>
-    <string name="game_mode_gamenative_saved">Enregistré dans Téléchargements/Flux Keyboard. Importez-le dans les profils de contrôles de GameNative et choisissez-le pour le jeu.</string>
     <string name="game_mode_gamenative_save_failed">Impossible de l\'enregistrer.</string>
     <string name="game_mode_place_keys">Placer les touches à l\'écran</string>
     <string name="game_mode_place_hint">Faites glisser chaque touche sur le bouton du jeu et chaque cercle de stick sur son stick. Ajoutez une touche, puis appuyez dessus.</string>

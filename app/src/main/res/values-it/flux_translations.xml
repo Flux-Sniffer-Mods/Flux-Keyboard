@@ -1272,7 +1272,6 @@
     <string name="game_mode_touch_controls_description">GameNative accetta come controller solo controller veri. Con il profilo di controlli di Flux Keyboard scelto in GameNative, tasti e levette premono i suoi controlli a schermo invisibili, che GameNative passa come controller Xbox.</string>
     <string name="game_mode_gamenative_save">Salva il profilo di controlli per GameNative</string>
     <string name="game_mode_gamenative_save_description">Salva Flux Keyboard gamepad.icp in Download/Flux Keyboard. In GameNative, importalo dai profili di controlli e sceglilo per il gioco, con i controlli a schermo mostrati (sono invisibili).</string>
-    <string name="game_mode_gamenative_saved">Salvato in Download/Flux Keyboard. Importalo nei profili di controlli di GameNative e sceglilo per il gioco.</string>
     <string name="game_mode_gamenative_save_failed">Non è stato possibile salvarlo.</string>
     <string name="game_mode_place_keys">Posiziona i tasti sullo schermo</string>
     <string name="game_mode_place_hint">Trascina ogni tasto sul pulsante del gioco e ogni cerchio della levetta sulla sua levetta. Aggiungi un tasto, poi premilo.</string>

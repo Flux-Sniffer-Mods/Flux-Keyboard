@@ -39,10 +39,22 @@ class GameProfilesTest {
     @Test
     fun gamesAreReadFromTheShortcutList() {
         val dump = """
-            ShortcutInfo {id=1, flags=0x2, packageName=app.gamenative, activity=x, shortLabel=Celeste, resId=0}
+            ShortcutInfo {id=game_570, flags=0x2, packageName=app.gamenative, activity=ComponentInfo{app.gamenative/app.gamenative.MainActivity}, shortLabel=Celeste, resId=0}
             ShortcutInfo {id=2, flags=0x2, packageName=other.app, activity=x, shortLabel=Nope, resId=0}
-            ShortcutInfo {id=3, flags=0x2, packageName=app.gamenative, activity=x, shortLabel=Hades, resId=0}
+            ShortcutInfo {
+                packageName=app.gamenative.extra
+                shortLabel=Nope either
+            }
+            ShortcutInfo {
+                id=game_1145360
+                flags=0x2
+                packageName=app.gamenative
+                activity=ComponentInfo{app.gamenative/app.gamenative.MainActivity}
+                shortLabel=Hades
+            }
         """.trimIndent()
-        assertEquals(listOf("Celeste", "Hades"), GameLibrary.parseGames(dump, "app.gamenative"))
+        val games = GameLibrary.parseGames(dump, "app.gamenative")
+        assertEquals(listOf("Celeste", "Hades"), games.map { it.name })
+        assertEquals(listOf(570, 1145360), games.map { it.gameId })
     }
 }

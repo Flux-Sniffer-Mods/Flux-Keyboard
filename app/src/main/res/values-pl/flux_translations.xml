@@ -1773,7 +1773,6 @@
     <string name="game_mode_touch_controls_description">GameNative uznaje za kontrolery tylko prawdziwe kontrolery. Gdy w GameNative wybrany jest profil sterowania Flux Keyboard, przyciski i gałki naciskają jego niewidoczne sterowanie ekranowe, które GameNative przekazuje jako kontroler Xbox.</string>
     <string name="game_mode_gamenative_save">Zapisz profil sterowania dla GameNative</string>
     <string name="game_mode_gamenative_save_description">Zapisuje Flux Keyboard gamepad.icp w Pobrane/Flux Keyboard. W GameNative zaimportuj go z profili sterowania i wybierz dla gry, z widocznym sterowaniem ekranowym (jest niewidoczne).</string>
-    <string name="game_mode_gamenative_saved">Zapisano w Pobrane/Flux Keyboard. Zaimportuj go w profilach sterowania GameNative i wybierz dla gry.</string>
     <string name="game_mode_gamenative_save_failed">Nie udało się zapisać.</string>
     <string name="game_mode_place_keys">Umieść klawisze na ekranie</string>
     <string name="game_mode_place_hint">Przeciągnij każdy klawisz na przycisk gry, a każde koło gałki na jej gałkę. Dodaj klawisz, a potem go naciśnij.</string>

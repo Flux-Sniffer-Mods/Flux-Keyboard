@@ -1135,7 +1135,6 @@
     <string name="game_mode_touch_controls_description">Το GameNative δέχεται ως χειριστήρια μόνο πραγματικά χειριστήρια. Με το προφίλ χειρισμού του Flux Keyboard επιλεγμένο στο GameNative, τα κουμπιά και οι μοχλοί πατούν τα αόρατα χειριστήρια οθόνης του, που το GameNative περνά ως χειριστήριο Xbox.</string>
     <string name="game_mode_gamenative_save">Αποθήκευση προφίλ χειρισμού για το GameNative</string>
     <string name="game_mode_gamenative_save_description">Αποθηκεύει το Flux Keyboard gamepad.icp στις Λήψεις/Flux Keyboard. Στο GameNative, εισαγάγετέ το από τα προφίλ χειρισμού και επιλέξτε το για το παιχνίδι, με εμφανή τα χειριστήρια οθόνης (είναι αόρατα).</string>
-    <string name="game_mode_gamenative_saved">Αποθηκεύτηκε στις Λήψεις/Flux Keyboard. Εισαγάγετέ το στα προφίλ χειρισμού του GameNative και επιλέξτε το για το παιχνίδι.</string>
     <string name="game_mode_gamenative_save_failed">Δεν ήταν δυνατή η αποθήκευση.</string>
     <string name="game_mode_place_keys">Τοποθέτηση πλήκτρων στην οθόνη</string>
     <string name="game_mode_place_hint">Σύρετε κάθε πλήκτρο πάνω στο κουμπί του παιχνιδιού και κάθε κύκλο μοχλού πάνω στον μοχλό του. Προσθέστε πλήκτρο και μετά πατήστε το.</string>

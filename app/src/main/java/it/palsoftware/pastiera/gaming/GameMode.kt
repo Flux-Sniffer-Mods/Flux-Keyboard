@@ -40,6 +40,8 @@ object GameMode {
     private var trackpad: Process? = null
     private var deviceSent = -1
     private var savedRotation: String? = null
+    /** The size override before a sideways game's (null when none is applied). */
+    private var savedSize: String? = null
     @Volatile private var screenW = 1080f
     @Volatile private var screenH = 1080f
 
@@ -111,6 +113,7 @@ object GameMode {
             if (GameProfiles.keepPortrait(context)) keepUpright()
         }
         profile = next
+        sideways(next.sideways)
         startTrackpad(next)
         notify(context, next)
     }
@@ -123,6 +126,7 @@ object GameMode {
         input = null
         inputProcess?.destroy(); inputProcess = null
         deviceSent = -1
+        sideways(false)
         restoreRotation()
         context.getSystemService(NotificationManager::class.java)?.cancel(NOTIFICATION_ID)
     }
@@ -157,6 +161,31 @@ object GameMode {
             "cmd window set-ignore-orientation-request true; " +
                 "settings put system accelerometer_rotation 0; settings put system user_rotation 0"
         )
+    }
+
+    /**
+     * A sideways-only game (GameHub turns the screen whatever it's told): the screen's size is
+     * swapped, so it's landscape-shaped while the phone stays upright and the game has no need to
+     * turn it. Taps follow the new shape.
+     */
+    private fun sideways(on: Boolean) {
+        if (on == (savedSize != null)) return
+        if (on) {
+            val sizes = AdbShell.run("wm size") ?: return
+            val physical = Regex("Physical size: (\\d+)x(\\d+)").find(sizes) ?: return
+            val (w, h) = physical.destructured.toList().map { it.toInt() }.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) }
+            savedSize = Regex("Override size: (\\d+x\\d+)").find(sizes)?.groupValues?.get(1) ?: ""
+            AdbShell.run("wm size ${h}x$w")
+            screenW = h.toFloat(); screenH = w.toFloat()
+        } else {
+            val saved = savedSize ?: return
+            savedSize = null
+            AdbShell.run(if (saved.isEmpty()) "wm size reset" else "wm size $saved")
+            val (w, h) = Regex("(\\d+)x(\\d+)").find(saved)?.destructured?.toList()?.map { it.toFloat() }
+                ?.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) } ?: (screenH to screenW)
+            screenW = w; screenH = h
+        }
+        send("S ${screenW.toInt()} ${screenH.toInt()}")
     }
 
     private fun restoreRotation() {

@@ -1761,7 +1761,6 @@
     <string name="game_mode_touch_controls_description">GameNative-ը կարգավորիչ է համարում միայն իրական կարգավորիչները։ Երբ GameNative-ում ընտրված է Flux Keyboard-ի կառավարման պրոֆիլը, կոճակներն ու լծակները սեղմում են նրա անտեսանելի էկրանային կառավարումը, որը GameNative-ը փոխանցում է որպես Xbox կարգավորիչ։</string>
     <string name="game_mode_gamenative_save">Պահել կառավարման պրոֆիլը GameNative-ի համար</string>
     <string name="game_mode_gamenative_save_description">Պահում է Flux Keyboard gamepad.icp-ը Ներբեռնումներ/Flux Keyboard-ում։ GameNative-ում ներմուծեք այն կառավարման պրոֆիլներից և ընտրեք խաղի համար՝ էկրանային կառավարումը ցուցադրված (այն անտեսանելի է)։</string>
-    <string name="game_mode_gamenative_saved">Պահված է Ներբեռնումներ/Flux Keyboard-ում։ Ներմուծեք այն GameNative-ի կառավարման պրոֆիլներում և ընտրեք խաղի համար։</string>
     <string name="game_mode_gamenative_save_failed">Չհաջողվեց պահել։</string>
     <string name="game_mode_place_keys">Տեղադրել ստեղները էկրանին</string>
     <string name="game_mode_place_hint">Քաշեք յուրաքանչյուր ստեղն խաղի կոճակի վրա, իսկ լծակի յուրաքանչյուր շրջան՝ իր լծակի վրա։ Ավելացրեք ստեղն, ապա սեղմեք այն։</string>
