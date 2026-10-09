@@ -300,6 +300,10 @@
     <string name="game_mode_folders">Make the game folders</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, with a folder for GameNative, GameHub, Dolphin, PPSSPP, Azahar and Eden. Point GameNative\'s and GameHub Lite\'s Export for frontend at theirs, keep emulator games in theirs (and add the folder in the emulator), and each game can get a profile and a home screen shortcut that starts it. ES-DE\'s ROMs folder is read too.</string>
     <string name="game_mode_folders_made">Made in Download/Flux Keyboard/Games. GameNative: Settings > Interface > Frontend Sync, then pick the GameNative folder there.</string>
+    <string name="game_mode_folder_add">Add a game folder of your own</string>
+    <string name="game_mode_folder_add_description">The folder you set in a launcher or emulator (its Export for frontend or games folder), read for games too.</string>
+    <string name="game_mode_folder_games_of">Its games are for</string>
+    <string name="game_mode_folder_by_names">Found by folder names</string>
     <string name="game_mode_import">Add a game from a game launcher</string>
     <string name="game_mode_import_description">The games GameNative, GameHub or GameHub Lite have on the home screen, in their shortcuts or installed in their Steam folder, each with a profile of its own. Switch between a launcher\'s games from gaming mode\'s notification, or give each its own home screen shortcut.</string>
     <string name="game_mode_import_reading">Reading the games</string>

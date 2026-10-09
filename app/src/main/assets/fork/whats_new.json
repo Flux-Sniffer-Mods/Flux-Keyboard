@@ -500,6 +500,10 @@
     {
       "text": "Gaming mode: Make the game folders sets up Download/Flux Keyboard/Games with a folder for GameNative, GameHub, Dolphin, PPSSPP, Azahar and Eden. GameNative's and GameHub Lite's Export for frontend files and emulator games there (and in ES-DE's ROMs folder) each get a profile and a home screen shortcut that starts straight into the game.",
       "after": "202610092050"
+    },
+    {
+      "text": "Gaming mode: add game folders of your own, the same ones set in a launcher or emulator, each read for one emulator's or launcher's games or by its folders' names.",
+      "after": "202610092120"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

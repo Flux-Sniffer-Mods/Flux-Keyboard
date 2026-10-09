@@ -129,6 +129,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 ).show()
             }
         }
+        CustomGameFolders()
         FluxActionRow(
             linkId = null,
             icon = "⇩",
@@ -177,6 +178,47 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             dismissButton = { TextButton(onClick = { gameNativeSetup = false }) { Text(stringResource(R.string.cancel)) } }
         )
     }
+}
+
+/**
+ * Your own game folders: the ones set in a launcher or emulator (picked with Android's folder
+ * picker), each read for games of the player it's set to, or by its folders' names.
+ */
+@Composable
+private fun CustomGameFolders() {
+    val context = LocalContext.current
+    val folders = it.palsoftware.pastiera.gaming.GameFolders
+    var custom by remember { mutableStateOf(folders.custom(context)) }
+    fun save(list: List<it.palsoftware.pastiera.gaming.GameFolders.Custom>) {
+        custom = list
+        folders.setCustom(context, list)
+    }
+    val picker = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree()
+    ) { tree ->
+        val path = tree?.let { folders.pathOf(it) } ?: return@rememberLauncherForActivityResult
+        if (custom.none { it.path == path }) save(custom + it.palsoftware.pastiera.gaming.GameFolders.Custom(path))
+    }
+    val byNames = stringResource(R.string.game_mode_folder_by_names)
+    custom.forEach { folder ->
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(folder.path.removePrefix("/storage/emulated/0/"), modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                TextButton(onClick = { save(custom - folder) }) { Text(stringResource(R.string.game_mode_remove)) }
+            }
+            ChoiceRow(stringResource(R.string.game_mode_folder_games_of), folder.player ?: byNames, listOf(byNames) + folders.playerNames) { index ->
+                val player = if (index == 0) null else folders.playerNames[index - 1]
+                save(custom.map { if (it == folder) it.copy(player = player) else it })
+            }
+        }
+    }
+    FluxActionRow(
+        linkId = null,
+        icon = "+",
+        title = stringResource(R.string.game_mode_folder_add),
+        description = stringResource(R.string.game_mode_folder_add_description)
+    ) { runCatching { picker.launch(null) } }
 }
 
 /**

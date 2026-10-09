@@ -26,4 +26,19 @@ class GameFoldersTest {
         )
         assertEquals("1145360", found.first().content)
     }
+
+    @Test
+    fun yourOwnFolderSetToAPlayerTakesItsGamesWhateverTheNames() {
+        val custom = listOf(GameFolders.Custom("/storage/emulated/0/Games/Cube", "Dolphin"),
+            GameFolders.Custom("/storage/emulated/0/Exports"))
+        val listing = listOf(
+            "/storage/emulated/0/Games/Cube/Metroid Prime.iso\t",
+            "/storage/emulated/0/Games/Cube/cover.png\t",
+            "/storage/emulated/0/Exports/GameNative/Hades.steam\t1145360"
+        ).joinToString("\n")
+        assertEquals(
+            listOf("Metroid Prime" to GameFolders.Player.DOLPHIN, "Hades" to GameFolders.Player.GAMENATIVE),
+            GameFolders.parse(listing, custom).map { it.name to it.player }
+        )
+    }
 }

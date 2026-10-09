@@ -51,6 +51,38 @@ object GameFolders {
         }
     }
 
+    /** A folder of the user's own (the one set in a launcher or emulator), and who plays it (null: by its names). */
+    data class Custom(val path: String, val player: String? = null)
+
+    private const val KEY_CUSTOM = "game_folders_custom"
+
+    fun custom(context: Context): List<Custom> = runCatching {
+        val array = org.json.JSONArray(it.palsoftware.pastiera.SettingsManager.getPreferences(context).getString(KEY_CUSTOM, "[]"))
+        List(array.length()) { i ->
+            val item = array.getJSONObject(i)
+            Custom(item.getString("path"), item.optString("player").ifEmpty { null })
+        }
+    }.getOrDefault(emptyList())
+
+    fun setCustom(context: Context, folders: List<Custom>) {
+        val array = org.json.JSONArray()
+        folders.forEach { folder -> array.put(org.json.JSONObject().put("path", folder.path).put("player", folder.player ?: "")) }
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putString(KEY_CUSTOM, array.toString()).apply()
+    }
+
+    /** The path of a folder picked with Android's folder picker (on the phone or an SD card). */
+    fun pathOf(tree: Uri): String? {
+        if (tree.authority != EXTERNAL_STORAGE) return null
+        val id = runCatching { DocumentsContract.getTreeDocumentId(tree) }.getOrNull() ?: return null
+        val volume = id.substringBefore(':')
+        val relative = id.substringAfter(':', "").trimEnd('/')
+        val base = if (volume == "primary") "/storage/emulated/0" else "/storage/$volume"
+        return if (relative.isEmpty()) base else "$base/$relative"
+    }
+
+    /** The players a folder can be set to, by name. */
+    val playerNames: List<String> get() = Player.entries.map { it.label }
+
     /** A game found in a folder: what's shown, which player, and its file (and what it holds). */
     internal data class Found(val name: String, val player: Player, val path: String, val content: String)
 
@@ -68,12 +100,17 @@ object GameFolders {
         val players = Player.entries.mapNotNull { player -> player.installed(context)?.let { player to it } }.toMap()
         if (players.isEmpty()) return emptyList()
         // Each file with its first line: an export file holds its game's ID
+        // Flux Keyboard's and ES-DE's folders hold a folder per player; your own may hold the games themselves
+        val custom = custom(context)
+        val ownRoots = custom.joinToString(" ") { "\"${it.path.replace("\"", "")}\"" }
         val listing = AdbShell.run(
-            "for d in \"$ROOT\" \"$ES_DE_ROMS\"; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 2 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done | " +
+            "{ for d in \"$ROOT\" \"$ES_DE_ROMS\"; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 2 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; " +
+                (if (custom.isEmpty()) "" else "for d in $ownRoots; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 1 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; ") +
+                "} | " +
                 "while IFS= read -r f; do s=\$(head -c 64 \"\$f\" 2>/dev/null | head -n 1 | tr -cd '[:alnum:]_-'); printf '%s\\t%s\\n' \"\$f\" \"\$s\"; done; true",
             10_000
         ) ?: return emptyList()
-        return parse(listing).map { found ->
+        return parse(listing, custom).map { found ->
             // Steam games exported where GameNative's go, with only GameHub Lite to start them
             if (found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB in players &&
                 found.path.endsWith(".steam", ignoreCase = true)
@@ -85,14 +122,17 @@ object GameFolders {
     }
 
     /** The games in a listing of "path<tab>first line" lines. */
-    internal fun parse(listing: String): List<Found> = listing.lines().mapNotNull { line ->
+    internal fun parse(listing: String, custom: List<Custom> = emptyList()): List<Found> = listing.lines().mapNotNull { line ->
         val path = line.substringBefore('\t').trim().takeIf { it.isNotEmpty() } ?: return@mapNotNull null
         val content = line.substringAfter('\t', "").trim()
         // The folder it's in, or one above it (games kept in folders of their own)
         val folders = path.split('/').dropLast(1).map { it.lowercase() }.reversed()
         val file = path.substringAfterLast('/')
         val extension = file.substringAfterLast('.', "").lowercase()
-        val player = folders.firstNotNullOfOrNull { folder ->
+        // In a folder of your own set to a player: that player's games, whatever the folders are called
+        val assigned = custom.filter { it.player != null && path.startsWith(it.path.trimEnd('/') + "/") }
+            .maxByOrNull { it.path.length }?.let { folder -> Player.entries.firstOrNull { it.label == folder.player } }
+        val player = assigned?.takeIf { extension in it.extensions } ?: folders.firstNotNullOfOrNull { folder ->
             Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && extension in p.extensions }
         } ?: return@mapNotNull null
         // An export file holds a game ID: without one there's nothing to start
