@@ -564,7 +564,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (призупинити)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (очистити екран)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (пошук в історії)</string>
-    <string name="terminal_emoji_key_alt">Alt (утримувати з іншою клавішею)</string>
+    <string name="terminal_emoji_key_alt">Alt термінала (утримувати з іншою клавішею)</string>
     <string name="alt_key_editor_in_use_title">Шар SYM пристрою, що використовується</string>
     <string name="alt_key_editor_in_use_auto">Автоматично: %1$s (за вашою клавіатурою)</string>
     <string name="alt_key_editor_curated_section">Дібрані профілі</string>
@@ -1487,12 +1487,12 @@
     <string name="root_backlight_screen_title">Вмикається й вимикається з екраном</string>
     <string name="root_backlight_timeout_title">Світиться після натискання клавіші</string>
     <string name="root_backlight_timeout_value">%1$d с</string>
-    <string name="root_backlight_unsupported">Підсвітка клавіатури цього телефона недоступна через Shizuku (у Titan 2 доступна).</string>
+    <string name="root_backlight_unsupported">Підсвічування клавіатури цього телефона недоступне через оболонку (у Titan 2 доступне).</string>
     <string name="root_battery_saver_title">Енергозбереження увімк. або вимк.</string>
     <string name="root_block_network_title">Відключити застосунок на екрані від мережі або повернути</string>
     <string name="root_force_stop_title">Примусово зупинити застосунок на екрані</string>
     <string name="root_note">Це працює як оболонка ADB, через вбудовану оболонку або Shizuku. Flux Keyboard виконує лише команди, потрібні кожній функції.</string>
-    <string name="root_row_description">Підсвітка клавіатури та ярлики через Shizuku (ADB), без root</string>
+    <string name="root_row_description">Підсвічування клавіатури, ярлики та ігровий режим через вбудовану оболонку, без root</string>
     <string name="root_section_backlight">Підсвітка клавіатури</string>
     <string name="root_section_shortcuts">Ярлики</string>
     <string name="root_shortcuts_note">Зупинити застосунок на передньому плані, увімкнути чи вимкнути Енергозбереження та відключити застосунок від мережі (Android 14 і новіше): призначте їх клавішам у Сполученнях клавіш або знайдіть у швидкому запуску.</string>
@@ -1601,7 +1601,7 @@
     <string name="learn_table_words">Слова</string>
     <string name="learn_table_contacts">Пошта й номери</string>
     <string name="termux_setup_title">Налаштувати Termux для клавіатури</string>
-    <string name="termux_setup_description">Копіює команду й відкриває Termux: вставте її туди (довге натискання, Вставити) і натисніть Enter. Вона дозволяє іншим застосункам запускати команди (allow-external-apps, потрібне скриптам швидкого запуску) і прибирає ряд дод. клавіш із текстовим полем, непотрібні телефону з клавіатурою на кшталт Titan 2 Elite. Також вона пропонує запускати Shizuku самостійно після перезавантаження (із застосунком Termux:Boot): встановлює потрібне й один раз проводить через спарювання Termux із налагодженням через Wi-Fi. Повторна вставка нічого не змінює.</string>
+    <string name="termux_setup_description">Копіює команду й відкриває Termux: вставте її туди (довге натискання, Вставити) і натисніть Enter. Вона дозволяє іншим застосункам виконувати команди (allow-external-apps, потрібен скриптам швидкого запуску) і прибирає ряд додаткових клавіш з його полем введення, непотрібні телефону з клавішами на кшталт Titan 2 Elite. Повторна вставка нічого не змінює.</string>
     <string name="termux_setup_button">Скопіювати команду й відкрити Termux</string>
     <string name="termux_setup_copied">Команду скопійовано: вставте її в Termux і натисніть Enter</string>
     <string name="modifier_table_double_tap">Два натискання фіксують</string>
@@ -1611,11 +1611,11 @@
     <string name="recommended_label_alt_enter_layout_switch">Alt + Enter перемикає розкладку</string>
     <string name="terminal_mode_show_leds_title">Показувати індикатори</string>
     <string name="terminal_mode_show_leds_description">Коли клавіатуру приховано, її індикатори стану лишаються на місці, щоб бачити Shift, Alt, Ctrl і SYM.</string>
-    <string name="root_backlight_no_answer">Shizuku не відповів. Переконайтеся, що Shizuku запущено, і перевірте знову.</string>
+    <string name="root_backlight_no_answer">Оболонка не відповіла на перевірку. Переконайтеся, що вбудована оболонка (або Shizuku) працює, і перевірте знову.</string>
     <string name="root_backlight_no_service">У телефоні немає служби підсвітки клавіатури (agui_functional_service).</string>
     <string name="root_backlight_recheck_title">Перевірити знову</string>
     <string name="root_backlight_recheck_description">Знову шукає підсвітку клавіатури й стежить за екраном, якщо знайде.</string>
-    <string name="root_shortcuts_open_description">Призначити ярлики Shizuku клавішам.</string>
+    <string name="root_shortcuts_open_description">Призначте ярлики оболонки на клавіші.</string>
     <string name="shizuku_boot_title">Запускати Shizuku під час увімкнення</string>
     <string name="shizuku_boot_description">Дає Shizuku вмикати бездротове налагодження й запускатися самому після перезавантаження, без root: Flux Keyboard надає потрібний дозвіл (запис захищених налаштувань) і відкриває Shizuku, щоб увімкнути запуск під час завантаження.</string>
     <string name="shizuku_boot_ready">Shizuku може запускатися сам: увімкніть запуск під час завантаження в його налаштуваннях, якщо ще не ввімкнено. Торкніться, щоб відкрити Shizuku.</string>
@@ -1691,7 +1691,7 @@
     <string name="flux_tutorial_shizuku_boot_own_text">Найпростіший. Одне натискання тут дає Shizuku потрібний дозвіл, потім увімкніть запуск під час завантаження в Shizuku. Працює, лише якщо під час увімкнення телефона підключено Wi-Fi.</string>
     <string name="flux_tutorial_shizuku_boot_own_button">Налаштувати запуск під час завантаження</string>
     <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
-    <string name="flux_tutorial_shizuku_boot_termux_text">Чекає на Wi-Fi, потім запускає Shizuku, тож дає раду повільному з\'єднанню. Потрібні Termux і Termux:Boot, обидва з GitHub: Android не дасть Termux:Boot з F-Droid працювати з Termux з GitHub, і навпаки. Відкрийте Termux:Boot один раз після встановлення, потім скопіюйте налаштування Termux із Flux Keyboard, вставте його в Termux і дайте відповідь «так» на запуск Shizuku під час завантаження.</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Чекає на Wi-Fi, потім запускає Shizuku, тож дає раду повільному з\'єднанню. Потрібні Termux і Termux:Boot, обидва з GitHub: Android не дає Termux:Boot з F-Droid працювати з Termux з GitHub, і навпаки. Відкрийте Termux:Boot один раз після встановлення, потім скопіюйте тут команду і вставте її в Termux: вона встановить потрібне й один раз проведе через сполучення Termux з налагодженням по Wi-Fi.</string>
     <string name="flux_tutorial_shizuku_get_termux">Завантажити Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Завантажити Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Скопіювати налаштування Termux</string>
@@ -1716,8 +1716,8 @@
     <string name="game_mode_apps">Застосунки</string>
     <string name="game_mode_delete">Видалити профіль</string>
     <string name="game_mode_import">Додати гру з ігрового лаунчера</string>
-    <string name="game_mode_import_description">Ігри, які GameNative, GameHub або GameHub Lite показують як ярлики, кожна з власним профілем. Перемикатися між іграми лаунчера можна у сповіщенні ігрового режиму.</string>
-    <string name="game_mode_import_none">Ігор із лаунчерів не знайдено. Додайте їхні ігри на головний екран у лаунчері або додайте сам лаунчер як профіль.</string>
+    <string name="game_mode_import_description">Ігри, які GameNative, GameHub або GameHub Lite мають на головному екрані, у своїх ярликах або встановили у свою папку Steam, кожна зі своїм профілем. Перемикайте ігри лаунчера зі сповіщення ігрового режиму або дайте кожній свій ярлик на головному екрані.</string>
+    <string name="game_mode_import_none">Ігор не знайдено. Додайте гру на головний екран у її лаунчері або додайте сам лаунчер як профіль.</string>
     <string name="game_mode_import_reading">Читання ігор</string>
     <string name="game_mode_key_as_is">Як є</string>
     <string name="game_mode_keys">Клавіші</string>
@@ -1771,8 +1771,8 @@
     <string name="game_mode_press_key">Натисніть клавішу або кнопку. Кнопку живлення використати не можна: Android залишає її собі.</string>
     <string name="game_mode_touch_controls">Через екранне керування GameNative</string>
     <string name="game_mode_touch_controls_description">GameNative вважає контролерами лише справжні контролери. Якщо в GameNative вибрано профіль керування Flux Keyboard, кнопки й стіки натискають його невидиме екранне керування, яке GameNative передає як контролер Xbox.</string>
-    <string name="game_mode_gamenative_save">Зберегти профіль керування для GameNative</string>
-    <string name="game_mode_gamenative_save_description">Зберігає Flux Keyboard gamepad.icp у «Завантаження/Flux Keyboard». У GameNative імпортуйте його в профілях керування й виберіть для гри, з увімкненим екранним керуванням (воно невидиме).</string>
+    <string name="game_mode_gamenative_save">Налаштувати GameNative</string>
+    <string name="game_mode_gamenative_save_description">GameNative приймає лише справжні контролери, тож отримує невидиме екранне керування Flux Keyboard, яке натискається замість них. Зберігає його й відкриває GameNative.</string>
     <string name="game_mode_gamenative_save_failed">Не вдалося зберегти.</string>
     <string name="game_mode_place_keys">Розмістити клавіші на екрані</string>
     <string name="game_mode_place_hint">Перетягніть кожну клавішу на кнопку гри, а кожне коло стіка на його стік. Додайте клавішу, потім натисніть її.</string>
@@ -1780,4 +1780,13 @@
     <string name="game_mode_place_clear">Очистити</string>
     <string name="game_mode_left_stick">Лівий стік</string>
     <string name="game_mode_right_stick">Правий стік</string>
+    <string name="game_mode_gamenative_open">Зберегти й відкрити GameNative</string>
+    <string name="game_mode_gamenative_steps">Flux Keyboard зберігає свій профіль керування в Завантаження/Flux Keyboard. Потім у GameNative:\n\n1. У налаштуваннях гри увімкніть портретний режим (Загальні), щоб вона лишалася вертикальною разом із клавіатурою.\n2. Коли гра запущена, відкрийте її меню, потім Керування: імпортуйте Flux Keyboard gamepad.icp з бібліотеки профілів і виберіть його, з показаним екранним керуванням (воно невидиме).\n\nЦе потрібно один раз; далі профіль працює в кожній грі.</string>
+    <string name="game_mode_home_screen">Додати на головний екран</string>
+    <string name="game_mode_home_screen_failed">Головний екран не приймає ярлики.</string>
+    <string name="game_mode_sideways">Гра лише в альбомній орієнтації</string>
+    <string name="game_mode_sideways_description">Для ігор і лаунчерів, що повертають екран, хоч що їм кажи (GameHub): поки вони працюють, екран натомість стає альбомним за формою, і телефон лишається вертикальним. GameNative має власний портретний режим для кожної гри.</string>
+    <string name="game_mode_use_emulator_controls">Використати екранне керування %1$s</string>
+    <string name="game_mode_emulator_applied">Клавіші й стіки призначено на екранне керування емулятора. Підправте їх через «Розмістити клавіші на екрані», якщо щось пересували.</string>
+    <string name="game_mode_emulator_unreadable">Його керування ще невідоме: відкрийте в ньому гру один раз при вертикальному екрані з видимим екранним керуванням, потім спробуйте знову.</string>
 </resources>

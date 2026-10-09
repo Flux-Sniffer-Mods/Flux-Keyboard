@@ -564,7 +564,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (suspendre)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (effacer l’écran)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (rechercher dans l’historique)</string>
-    <string name="terminal_emoji_key_alt">Alt (maintenir avec une autre touche)</string>
+    <string name="terminal_emoji_key_alt">L\'Alt du terminal (maintenir avec une autre touche)</string>
     <string name="alt_key_editor_in_use_title">Couche SYM de l’appareil utilisée</string>
     <string name="alt_key_editor_in_use_auto">Automatique : %1$s (d’après votre clavier)</string>
     <string name="alt_key_editor_curated_section">Profils prédéfinis</string>
@@ -1487,12 +1487,12 @@
     <string name="root_backlight_screen_title">Allumé et éteint avec l\'écran</string>
     <string name="root_backlight_timeout_title">Reste allumé après une touche</string>
     <string name="root_backlight_timeout_value">%1$d s</string>
-    <string name="root_backlight_unsupported">La lumière du clavier de ce téléphone n\'est pas accessible via Shizuku (celle du Titan 2 l\'est).</string>
+    <string name="root_backlight_unsupported">Le rétroéclairage du clavier de ce téléphone n\'est pas accessible par le shell (celui du Titan 2 l\'est).</string>
     <string name="root_battery_saver_title">Économiseur de batterie activé ou désactivé</string>
     <string name="root_block_network_title">Couper l\'appli au premier plan du réseau, ou la reconnecter</string>
     <string name="root_force_stop_title">Forcer l\'arrêt de l\'appli au premier plan</string>
     <string name="root_note">Ces options passent par le shell ADB, avec le shell intégré ou Shizuku. Flux Keyboard n\'exécute que les commandes dont chaque option a besoin.</string>
-    <string name="root_row_description">Lumière du clavier et raccourcis via Shizuku (ADB), sans root</string>
+    <string name="root_row_description">Rétroéclairage du clavier, raccourcis et mode jeu via le shell intégré, sans root</string>
     <string name="root_section_backlight">Lumière du clavier</string>
     <string name="root_section_shortcuts">Raccourcis</string>
     <string name="root_shortcuts_note">Forcer l’arrêt de l’app au premier plan, Économiseur de batterie oui ou non, et couper le réseau de l’app au premier plan (Android 14 et plus) : attribuez-les à des touches dans Raccourcis clavier ou trouvez-les dans le lanceur rapide.</string>
@@ -1595,7 +1595,7 @@
     <string name="learn_table_words">Mots</string>
     <string name="learn_table_contacts">E-mails et numéros</string>
     <string name="termux_setup_title">Configurer Termux pour le clavier</string>
-    <string name="termux_setup_description">Copie une commande et ouvre Termux : collez-la (appui long, Coller) et appuyez sur Entrée. Elle permet aux autres apps de lancer des commandes (allow-external-apps, nécessaire aux scripts du lanceur rapide) et retire la rangée de touches supplémentaires et sa zone de texte, inutiles sur un téléphone à clavier comme le Titan 2 Elite. Elle propose aussi de démarrer Shizuku tout seul après un redémarrage (avec l\'app Termux:Boot) : elle installe ce qu\'il faut et vous guide une fois pour associer Termux au débogage sans fil. La coller à nouveau ne change rien.</string>
+    <string name="termux_setup_description">Copie une commande et ouvre Termux : collez-la (appui long, Coller) et appuyez sur Entrée. Elle permet aux autres apps d\'exécuter des commandes (allow-external-apps, dont les scripts du lanceur rapide ont besoin) et retire la rangée de touches supplémentaires et sa zone de texte, inutiles sur un téléphone à touches comme le Titan 2 Elite. La recoller ne change rien.</string>
     <string name="termux_setup_button">Copier la commande et ouvrir Termux</string>
     <string name="termux_setup_copied">Commande copiée : collez-la dans Termux et appuyez sur Entrée</string>
     <string name="modifier_table_double_tap">Deux appuis le verrouillent</string>
@@ -1605,11 +1605,11 @@
     <string name="recommended_label_alt_enter_layout_switch">Alt + Entrée change de disposition</string>
     <string name="terminal_mode_show_leds_title">Afficher les LED</string>
     <string name="terminal_mode_show_leds_description">Clavier masqué, ses LED d’état restent à leur place pour voir Maj, Alt, Ctrl et SYM.</string>
-    <string name="root_backlight_no_answer">Shizuku n’a pas répondu. Vérifiez que Shizuku tourne, puis cherchez à nouveau.</string>
+    <string name="root_backlight_no_answer">Le shell n\'a pas répondu à la vérification. Vérifiez que le shell intégré (ou Shizuku) tourne, puis regardez à nouveau.</string>
     <string name="root_backlight_no_service">Le téléphone n’a pas de service d’éclairage du clavier (agui_functional_service).</string>
     <string name="root_backlight_recheck_title">Chercher à nouveau</string>
     <string name="root_backlight_recheck_description">Cherche à nouveau l’éclairage du clavier et suit l’écran s’il est trouvé.</string>
-    <string name="root_shortcuts_open_description">Attribuez les raccourcis Shizuku à des touches.</string>
+    <string name="root_shortcuts_open_description">Attribuez les raccourcis du shell à des touches.</string>
     <string name="shizuku_boot_title">Lancer Shizuku au démarrage</string>
     <string name="shizuku_boot_description">Permet à Shizuku d’activer le débogage sans fil et de se lancer seul après un redémarrage, sans root : Flux Keyboard lui accorde l’autorisation nécessaire (écrire les paramètres sécurisés), puis ouvre Shizuku pour activer le démarrage automatique.</string>
     <string name="shizuku_boot_ready">Shizuku peut se lancer seul au démarrage : activez-le dans ses paramètres si ce n’est pas déjà fait. Touchez pour ouvrir Shizuku.</string>
@@ -1685,7 +1685,7 @@
     <string name="flux_tutorial_shizuku_boot_own_text">Le plus simple. Une touche ici donne à Shizuku l\'autorisation nécessaire, puis activez le démarrage au boot dans Shizuku. Cela ne marche que si le Wi-Fi est connecté au démarrage du téléphone.</string>
     <string name="flux_tutorial_shizuku_boot_own_button">Configurer le démarrage au boot</string>
     <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
-    <string name="flux_tutorial_shizuku_boot_termux_text">Attend le Wi-Fi puis démarre Shizuku, et s\'accommode donc d\'une connexion lente. Il faut Termux et Termux:Boot, tous deux depuis GitHub : Android n\'accepte pas un Termux:Boot de F-Droid avec un Termux de GitHub, ni l\'inverse. Ouvrez Termux:Boot une fois après l\'installation, puis copiez la configuration Termux de Flux Keyboard, collez-la dans Termux et répondez oui au démarrage de Shizuku au boot.</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Attend le Wi-Fi puis démarre Shizuku, donc s\'accommode d\'une connexion lente. Nécessite Termux et Termux:Boot, tous deux depuis GitHub : Android ne laisse pas un Termux:Boot de F-Droid fonctionner avec un Termux de GitHub, ni l\'inverse. Ouvrez Termux:Boot une fois après l\'installation, puis copiez la commande ici et collez-la dans Termux : elle installe ce qu\'il faut et vous guide une fois pour associer Termux au débogage sans fil.</string>
     <string name="flux_tutorial_shizuku_get_termux">Télécharger Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Télécharger Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Copier la configuration Termux</string>
@@ -1710,8 +1710,8 @@
     <string name="game_mode_apps">Applis</string>
     <string name="game_mode_delete">Supprimer le profil</string>
     <string name="game_mode_import">Ajouter un jeu d\'un lanceur de jeux</string>
-    <string name="game_mode_import_description">Les jeux que GameNative, GameHub ou GameHub Lite proposent en raccourcis, chacun avec son propre profil. Passez d\'un jeu à l\'autre d\'un lanceur depuis la notification du mode jeu.</string>
-    <string name="game_mode_import_none">Aucun jeu de lanceur trouvé. Ajoutez leurs jeux à l\'écran d\'accueil depuis le lanceur, ou ajoutez le lanceur lui-même comme profil.</string>
+    <string name="game_mode_import_description">Les jeux que GameNative, GameHub ou GameHub Lite ont sur l\'écran d\'accueil, dans leurs raccourcis ou installés dans leur dossier Steam, chacun avec son propre profil. Passez d\'un jeu à l\'autre d\'un lanceur depuis la notification du mode jeu, ou donnez à chacun son raccourci sur l\'écran d\'accueil.</string>
+    <string name="game_mode_import_none">Aucun jeu trouvé. Ajoutez-en un à l\'écran d\'accueil depuis son lanceur, ou ajoutez le lanceur lui-même comme profil.</string>
     <string name="game_mode_import_reading">Lecture des jeux</string>
     <string name="game_mode_key_as_is">Telle quelle</string>
     <string name="game_mode_keys">Touches</string>
@@ -1765,8 +1765,8 @@
     <string name="game_mode_press_key">Appuyez sur la touche ou le bouton. Le bouton marche/arrêt ne peut pas servir : Android le garde pour lui.</string>
     <string name="game_mode_touch_controls">Par les contrôles à l\'écran de GameNative</string>
     <string name="game_mode_touch_controls_description">GameNative n\'accepte que de vraies manettes comme manettes. Avec le profil de contrôles de Flux Keyboard choisi dans GameNative, les boutons et sticks appuient sur ses contrôles à l\'écran invisibles, que GameNative transmet comme une manette Xbox.</string>
-    <string name="game_mode_gamenative_save">Enregistrer le profil de contrôles pour GameNative</string>
-    <string name="game_mode_gamenative_save_description">Enregistre Flux Keyboard gamepad.icp dans Téléchargements/Flux Keyboard. Dans GameNative, importez-le depuis ses profils de contrôles et choisissez-le pour le jeu, contrôles à l\'écran affichés (ils sont invisibles).</string>
+    <string name="game_mode_gamenative_save">Configurer GameNative</string>
+    <string name="game_mode_gamenative_save_description">GameNative n\'accepte que de vraies manettes, il reçoit donc les contrôles à l\'écran invisibles de Flux Keyboard à presser à la place. Les enregistre et ouvre GameNative.</string>
     <string name="game_mode_gamenative_save_failed">Impossible de l\'enregistrer.</string>
     <string name="game_mode_place_keys">Placer les touches à l\'écran</string>
     <string name="game_mode_place_hint">Faites glisser chaque touche sur le bouton du jeu et chaque cercle de stick sur son stick. Ajoutez une touche, puis appuyez dessus.</string>
@@ -1774,4 +1774,13 @@
     <string name="game_mode_place_clear">Effacer</string>
     <string name="game_mode_left_stick">Stick gauche</string>
     <string name="game_mode_right_stick">Stick droit</string>
+    <string name="game_mode_gamenative_open">Enregistrer et ouvrir GameNative</string>
+    <string name="game_mode_gamenative_steps">Flux Keyboard enregistre son profil de contrôles dans Téléchargements/Flux Keyboard. Ensuite, dans GameNative :\n\n1. Dans les réglages du jeu, activez le mode portrait (Général), pour qu\'il reste droit avec le clavier.\n2. Pendant que le jeu tourne, ouvrez son menu puis Contrôles : importez Flux Keyboard gamepad.icp depuis la bibliothèque de profils et choisissez-le, contrôles à l\'écran affichés (ils sont invisibles).\n\nC\'est à faire une fois ; le profil sert ensuite pour tous les jeux.</string>
+    <string name="game_mode_home_screen">Ajouter à l\'écran d\'accueil</string>
+    <string name="game_mode_home_screen_failed">L\'écran d\'accueil n\'accepte pas les raccourcis.</string>
+    <string name="game_mode_sideways">Jeu uniquement en paysage</string>
+    <string name="game_mode_sideways_description">Pour les jeux et lanceurs qui tournent l\'écran quoi qu\'on leur dise (GameHub) : pendant qu\'ils tournent, l\'écran prend plutôt une forme paysage, et le téléphone reste droit. GameNative a son propre mode portrait pour chaque jeu.</string>
+    <string name="game_mode_use_emulator_controls">Utiliser les contrôles à l\'écran de %1$s</string>
+    <string name="game_mode_emulator_applied">Touches et sticks placés sur les contrôles à l\'écran de l\'émulateur. Ajustez-les avec Placer les touches à l\'écran si vous en avez déplacé.</string>
+    <string name="game_mode_emulator_unreadable">Ses contrôles ne sont pas encore connus : ouvrez-y un jeu une fois, écran droit et contrôles à l\'écran affichés, puis réessayez.</string>
 </resources>

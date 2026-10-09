@@ -564,7 +564,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (կասեցնել)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (մաքրել էկրանը)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (որոնել պատմության մեջ)</string>
-    <string name="terminal_emoji_key_alt">Alt (պահել այլ ստեղնի հետ)</string>
+    <string name="terminal_emoji_key_alt">Տերմինալի Alt-ը (պահել այլ ստեղնի հետ)</string>
     <string name="alt_key_editor_in_use_title">Օգտագործվող սարքի SYM շերտ</string>
     <string name="alt_key_editor_in_use_auto">Ինքնաշխատ․ %1$s (ձեր ստեղնաշարից)</string>
     <string name="alt_key_editor_curated_section">Ընտրված պրոֆիլներ</string>
@@ -1487,12 +1487,12 @@
     <string name="root_backlight_screen_title">Միանում և անջատվում է էկրանի հետ</string>
     <string name="root_backlight_timeout_title">Լուսավոր է մնում ստեղնը սեղմելուց հետո</string>
     <string name="root_backlight_timeout_value">%1$d վ</string>
-    <string name="root_backlight_unsupported">Այս հեռախոսի ստեղնաշարի լույսը հասանելի չէ Shizuku-ի միջոցով (Titan 2-ինը հասանելի է)։</string>
+    <string name="root_backlight_unsupported">Այս հեռախոսի ստեղնաշարի լույսը հասանելի չէ shell-ի միջոցով (Titan 2-ինը՝ հասանելի է)։</string>
     <string name="root_battery_saver_title">Մարտկոցի խնայում՝ միացված կամ անջատված</string>
     <string name="root_block_network_title">Առջևում գտնվող հավելվածը կտրել ցանցից կամ վերամիացնել</string>
     <string name="root_force_stop_title">Հարկադրաբար կանգնեցնել առջևում գտնվող հավելվածը</string>
     <string name="root_note">Սրանք աշխատում են որպես ADB shell՝ ներկառուցված shell-ով կամ Shizuku-ով։ Flux Keyboard-ը կատարում է միայն այն հրամանները, որոնք պետք են յուրաքանչյուր տարբերակին։</string>
-    <string name="root_row_description">Ստեղնաշարի լույս և դյուրանցումներ Shizuku-ի (ADB) միջոցով, առանց root-ի</string>
+    <string name="root_row_description">Ստեղնաշարի լույս, դյուրանցումներ և խաղային ռեժիմ ներկառուցված shell-ի միջոցով, առանց root-ի</string>
     <string name="root_section_backlight">Ստեղնաշարի լույս</string>
     <string name="root_section_shortcuts">Դյուրանցումներ</string>
     <string name="root_shortcuts_note">Կանգնեցնել առջևի հավելվածը, Մարտկոցի խնայում միացնել կամ անջատել և առջևի հավելվածը անջատել ցանցից (Android 14 և ավելի նոր)՝ նշանակեք ստեղների Ստեղնային դյուրանցումներում կամ գտեք արագ գործարկիչում։</string>
@@ -1589,7 +1589,7 @@
     <string name="learn_table_words">Բառեր</string>
     <string name="learn_table_contacts">Էլ. հասցեներ և համարներ</string>
     <string name="termux_setup_title">Կարգավորել Termux-ը ստեղնաշարի համար</string>
-    <string name="termux_setup_description">Պատճենում է հրաման և բացում Termux-ը՝ տեղադրեք այն այնտեղ (երկար սեղմում, Տեղադրել) և սեղմեք Enter։ Այն թույլ է տալիս այլ հավելվածներին հրամաններ գործարկել (allow-external-apps, որ պետք է արագ գործարկիչի սկրիպտներին) և հեռացնում է լրացուցիչ ստեղների շարքը և դրա տեքստային դաշտը, որոնք պետք չեն ստեղներով հեռախոսին, ինչպես Titan 2 Elite-ը։ Այն նաև առաջարկում է Shizuku-ն ինքնուրույն գործարկել վերագործարկումից հետո (Termux:Boot հավելվածով)՝ տեղադրում է անհրաժեշտը և մեկ անգամ ուղեկցում Termux-ը անլար վրիպազերծման հետ զուգակցելու համար։ Կրկին տեղադրելը ոչինչ չի փոխում։</string>
+    <string name="termux_setup_description">Պատճենում է հրաման և բացում Termux-ը․ տեղադրեք այն այնտեղ (երկար սեղմում, Տեղադրել) և սեղմեք Enter։ Այն թույլ է տալիս այլ հավելվածներին հրամաններ կատարել (allow-external-apps, որ պետք է արագ գործարկչի սկրիպտներին) և հեռացնում լրացուցիչ ստեղների շարքը և դրա տեքստային դաշտը, որոնք Titan 2 Elite-ի պես ստեղներով հեռախոսին պետք չեն։ Նորից տեղադրելը ոչինչ չի փոխում։</string>
     <string name="termux_setup_button">Պատճենել հրամանը և բացել Termux-ը</string>
     <string name="termux_setup_copied">Հրամանը պատճենվեց. տեղադրեք Termux-ում և սեղմեք Enter</string>
     <string name="modifier_table_double_tap">Երկու հպումը կողպում է</string>
@@ -1599,11 +1599,11 @@
     <string name="recommended_label_alt_enter_layout_switch">Alt + Enter-ը փոխում է դասավորությունը</string>
     <string name="terminal_mode_show_leds_title">Ցույց տալ LED-ները</string>
     <string name="terminal_mode_show_leds_description">Ստեղնաշարը թաքցված լինելիս դրա կարգավիճակի LED-ները մնում են իրենց տեղում, որպեսզի տեսնեք Shift, Alt, Ctrl և SYM։</string>
-    <string name="root_backlight_no_answer">Shizuku-ն չպատասխանեց։ Համոզվեք, որ Shizuku-ն աշխատում է, ապա նորից ստուգեք։</string>
+    <string name="root_backlight_no_answer">Shell-ը չպատասխանեց ստուգմանը։ Համոզվեք, որ ներկառուցված shell-ը (կամ Shizuku-ն) աշխատում է, ապա նորից ստուգեք։</string>
     <string name="root_backlight_no_service">Հեռախոսը չունի ստեղնաշարի լույսի ծառայություն (agui_functional_service)։</string>
     <string name="root_backlight_recheck_title">Կրկին ստուգել</string>
     <string name="root_backlight_recheck_description">Կրկին փնտրում է ստեղնաշարի լույսը և հետևում էկրանին, եթե գտնվի։</string>
-    <string name="root_shortcuts_open_description">Նշանակել Shizuku-ի դյուրանցումները ստեղներին։</string>
+    <string name="root_shortcuts_open_description">Նշանակեք shell-ի դյուրանցումները ստեղներին։</string>
     <string name="shizuku_boot_title">Գործարկել Shizuku-ն միացնելիս</string>
     <string name="shizuku_boot_description">Թույլ է տալիս Shizuku-ին միացնել անլար վրիպազերծումը և ինքն իրեն գործարկել վերագործարկումից հետո՝ առանց root-ի. Flux Keyboard-ը տալիս է անհրաժեշտ թույլտվությունը (անվտանգ կարգավորումների գրում) և բացում Shizuku-ն, որպեսզի միացնեք գործարկումը միացնելիս։</string>
     <string name="shizuku_boot_ready">Shizuku-ն կարող է ինքն իրեն գործարկել. միացրեք այն իր կարգավորումներում, եթե դեռ միացված չէ։ Հպեք՝ Shizuku-ն բացելու համար։</string>
@@ -1679,7 +1679,7 @@
     <string name="flux_tutorial_shizuku_boot_own_text">Ամենապարզը։ Մեկ հպումն այստեղ Shizuku-ին տալիս է անհրաժեշտ թույլտվությունը, ապա Shizuku-ում միացրեք գործարկումը միացման ժամանակ։ Աշխատում է միայն, եթե հեռախոսը միանալիս Wi-Fi-ը միացված է։</string>
     <string name="flux_tutorial_shizuku_boot_own_button">Կարգավորել գործարկումը միացման ժամանակ</string>
     <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
-    <string name="flux_tutorial_shizuku_boot_termux_text">Սպասում է Wi-Fi-ին, ապա գործարկում Shizuku-ն, ուստի դիմանում է դանդաղ կապին։ Անհրաժեշտ են Termux և Termux:Boot, երկուսն էլ GitHub-ից. Android-ը թույլ չի տա F-Droid-ի Termux:Boot-ին աշխատել GitHub-ի Termux-ի հետ, և հակառակը։ Տեղադրելուց հետո մեկ անգամ բացեք Termux:Boot-ը, ապա պատճենեք Flux Keyboard-ի Termux կարգավորումը, տեղադրեք այն Termux-ում և պատասխանեք այո Shizuku-ն միացման ժամանակ գործարկելու հարցին։</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Սպասում է Wi-Fi-ին, ապա գործարկում Shizuku-ն, այնպես որ դիմանում է դանդաղ կապին։ Պետք են Termux և Termux:Boot, երկուսն էլ GitHub-ից․ Android-ը թույլ չի տալիս F-Droid-ի Termux:Boot-ին աշխատել GitHub-ի Termux-ի հետ, ոչ էլ հակառակը։ Տեղադրելուց հետո մեկ անգամ բացեք Termux:Boot-ը, ապա պատճենեք այստեղի հրամանը և տեղադրեք Termux-ում․ այն կտեղադրի անհրաժեշտը և մեկ անգամ կուղեկցի Termux-ի զուգակցմանը անլար վրիպազերծման հետ։</string>
     <string name="flux_tutorial_shizuku_get_termux">Ներբեռնել Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Ներբեռնել Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Պատճենել Termux կարգավորումը</string>
@@ -1704,8 +1704,8 @@
     <string name="game_mode_apps">Հավելվածներ</string>
     <string name="game_mode_delete">Ջնջել պրոֆիլը</string>
     <string name="game_mode_import">Ավելացնել խաղ խաղերի գործարկիչից</string>
-    <string name="game_mode_import_description">Խաղերը, որոնք GameNative-ը, GameHub-ը կամ GameHub Lite-ը ցույց են տալիս որպես դյուրանցումներ, յուրաքանչյուրը իր պրոֆիլով։ Գործարկիչի խաղերի միջև անցեք խաղային ռեժիմի ծանուցումից։</string>
-    <string name="game_mode_import_none">Գործարկիչների խաղեր չեն գտնվել։ Ավելացրեք դրանց խաղերը գլխավոր էկրան գործարկիչից կամ ավելացրեք գործարկիչն ինքը որպես պրոֆիլ։</string>
+    <string name="game_mode_import_description">Այն խաղերը, որոնք GameNative-ը, GameHub-ը կամ GameHub Lite-ը ունեն գլխավոր էկրանին, իրենց դյուրանցումներում կամ տեղադրված են իրենց Steam թղթապանակում, յուրաքանչյուրը իր պրոֆիլով։ Փոխեք գործարկչի խաղերը խաղային ռեժիմի ծանուցումից կամ յուրաքանչյուրին տվեք իր դյուրանցումը գլխավոր էկրանին։</string>
+    <string name="game_mode_import_none">Խաղեր չեն գտնվել։ Ավելացրեք մեկը գլխավոր էկրանին իր գործարկչից կամ ավելացրեք գործարկիչը որպես պրոֆիլ։</string>
     <string name="game_mode_import_reading">Խաղերը կարդացվում են</string>
     <string name="game_mode_key_as_is">Ինչպես կա</string>
     <string name="game_mode_keys">Ստեղներ</string>
@@ -1759,8 +1759,8 @@
     <string name="game_mode_press_key">Սեղմեք ստեղնը կամ կոճակը։ Սնուցման կոճակը հնարավոր չէ օգտագործել․ Android-ը այն պահում է իր համար։</string>
     <string name="game_mode_touch_controls">GameNative-ի էկրանային կառավարման միջոցով</string>
     <string name="game_mode_touch_controls_description">GameNative-ը կարգավորիչ է համարում միայն իրական կարգավորիչները։ Երբ GameNative-ում ընտրված է Flux Keyboard-ի կառավարման պրոֆիլը, կոճակներն ու լծակները սեղմում են նրա անտեսանելի էկրանային կառավարումը, որը GameNative-ը փոխանցում է որպես Xbox կարգավորիչ։</string>
-    <string name="game_mode_gamenative_save">Պահել կառավարման պրոֆիլը GameNative-ի համար</string>
-    <string name="game_mode_gamenative_save_description">Պահում է Flux Keyboard gamepad.icp-ը Ներբեռնումներ/Flux Keyboard-ում։ GameNative-ում ներմուծեք այն կառավարման պրոֆիլներից և ընտրեք խաղի համար՝ էկրանային կառավարումը ցուցադրված (այն անտեսանելի է)։</string>
+    <string name="game_mode_gamenative_save">Կարգավորել GameNative-ը</string>
+    <string name="game_mode_gamenative_save_description">GameNative-ն ընդունում է միայն իրական կարգավորիչներ, ուստի ստանում է Flux Keyboard-ի անտեսանելի էկրանային կառավարումը՝ դրանց փոխարեն սեղմելու համար։ Պահում է այն և բացում GameNative-ը։</string>
     <string name="game_mode_gamenative_save_failed">Չհաջողվեց պահել։</string>
     <string name="game_mode_place_keys">Տեղադրել ստեղները էկրանին</string>
     <string name="game_mode_place_hint">Քաշեք յուրաքանչյուր ստեղն խաղի կոճակի վրա, իսկ լծակի յուրաքանչյուր շրջան՝ իր լծակի վրա։ Ավելացրեք ստեղն, ապա սեղմեք այն։</string>
@@ -1768,4 +1768,13 @@
     <string name="game_mode_place_clear">Մաքրել</string>
     <string name="game_mode_left_stick">Ձախ լծակ</string>
     <string name="game_mode_right_stick">Աջ լծակ</string>
+    <string name="game_mode_gamenative_open">Պահել և բացել GameNative-ը</string>
+    <string name="game_mode_gamenative_steps">Flux Keyboard-ը պահում է իր կառավարման պրոֆիլը Ներբեռնումներ/Flux Keyboard-ում։ Ապա GameNative-ում․\n\n1. Խաղի կարգավորումներում միացրեք ուղղահայաց ռեժիմը (Ընդհանուր), որպեսզի այն ստեղնաշարի հետ ուղիղ մնա։\n2. Խաղի ընթացքում բացեք դրա մենյուն, ապա Կառավարում․ ներմուծեք Flux Keyboard gamepad.icp-ն պրոֆիլների գրադարանից և ընտրեք այն՝ էկրանային կառավարումը ցուցադրված (այն անտեսանելի է)։\n\nՍա պետք է մեկ անգամ․ հետո պրոֆիլը գործում է ամեն խաղում։</string>
+    <string name="game_mode_home_screen">Ավելացնել գլխավոր էկրանին</string>
+    <string name="game_mode_home_screen_failed">Գլխավոր էկրանը դյուրանցումներ չի ընդունում։</string>
+    <string name="game_mode_sideways">Միայն հորիզոնական խաղ</string>
+    <string name="game_mode_sideways_description">Այն խաղերի և գործարկիչների համար, որոնք պտտում են էկրանը՝ ինչ էլ ասես (GameHub)․ մինչ դրանք աշխատում են, էկրանը փոխարենը դառնում է հորիզոնական ձևի, և հեռախոսը մնում է ուղիղ։ GameNative-ն ունի իր ուղղահայաց ռեժիմը յուրաքանչյուր խաղի համար։</string>
+    <string name="game_mode_use_emulator_controls">Օգտագործել %1$s-ի էկրանային կառավարումը</string>
+    <string name="game_mode_emulator_applied">Ստեղներն ու լծակները դրված են էմուլյատորի էկրանային կառավարման վրա։ Ճշգրտեք դրանք «Տեղադրել ստեղները էկրանին»-ով, եթե որևէ մեկը տեղաշարժել եք։</string>
+    <string name="game_mode_emulator_unreadable">Դրա կառավարումը դեռ հայտնի չէ․ մեկ անգամ բացեք դրանում խաղ՝ էկրանը ուղիղ և էկրանային կառավարումը ցուցադրված, ապա նորից փորձեք։</string>
 </resources>

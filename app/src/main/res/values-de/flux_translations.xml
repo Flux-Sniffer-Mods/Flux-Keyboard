@@ -513,7 +513,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (anhalten)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (Bildschirm leeren)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (Verlauf durchsuchen)</string>
-    <string name="terminal_emoji_key_alt">Alt (mit einer anderen Taste halten)</string>
+    <string name="terminal_emoji_key_alt">Alt des Terminals (mit einer anderen Taste halten)</string>
     <string name="alt_key_editor_in_use_title">Verwendete Geräte-SYM-Ebene</string>
     <string name="alt_key_editor_in_use_auto">Automatisch: %1$s (von deiner Tastatur)</string>
     <string name="alt_key_editor_curated_section">Kuratierte Profile</string>
@@ -952,12 +952,12 @@
     <string name="root_backlight_screen_title">An und aus mit dem Bildschirm</string>
     <string name="root_backlight_timeout_title">Leuchtet nach einem Tastendruck</string>
     <string name="root_backlight_timeout_value">%1$d s</string>
-    <string name="root_backlight_unsupported">Das Tastaturlicht dieses Telefons ist über Shizuku nicht erreichbar (das des Titan 2 schon).</string>
+    <string name="root_backlight_unsupported">Die Tastaturbeleuchtung dieses Telefons ist über die Shell nicht erreichbar (die des Titan 2 schon).</string>
     <string name="root_battery_saver_title">Energiesparmodus ein oder aus</string>
     <string name="root_block_network_title">App im Vordergrund vom Netz trennen oder wieder verbinden</string>
     <string name="root_force_stop_title">App im Vordergrund beenden erzwingen</string>
     <string name="root_note">Diese laufen als ADB-Shell, über die eingebaute Shell oder Shizuku. Flux Keyboard führt nur die Befehle aus, die jede Option braucht.</string>
-    <string name="root_row_description">Tastaturlicht und Kurzbefehle über Shizuku (ADB), ohne Root</string>
+    <string name="root_row_description">Tastaturbeleuchtung, Verknüpfungen und Spielmodus über die eingebaute Shell, ohne Root</string>
     <string name="root_section_backlight">Tastaturlicht</string>
     <string name="root_section_shortcuts">Kurzbefehle</string>
     <string name="root_shortcuts_note">App im Vordergrund beenden, Energiesparmodus an oder aus und die App im Vordergrund vom Netz trennen (ab Android 14): unter Tastenkürzel Tasten zuweisen oder im Schnellstarter finden.</string>
@@ -1054,7 +1054,7 @@
     <string name="learn_table_words">Wörter</string>
     <string name="learn_table_contacts">E-Mails &amp; Nummern</string>
     <string name="termux_setup_title">Termux für die Tastatur einrichten</string>
-    <string name="termux_setup_description">Kopiert einen Befehl und öffnet Termux: Füge ihn dort ein (lange drücken, Einfügen) und drücke Enter. Er erlaubt anderen Apps, Befehle auszuführen (allow-external-apps, das die Skripte des Schnellstarters brauchen), und entfernt die Zusatztastenleiste und ihr Textfeld, die ein Telefon mit Tasten wie das Titan 2 Elite nicht braucht. Außerdem bietet er an, Shizuku nach einem Neustart von selbst zu starten (mit der App Termux:Boot): Er installiert, was dafür nötig ist, und führt dich einmal durch das Koppeln von Termux mit dem kabellosen Debugging. Erneutes Einfügen ändert nichts.</string>
+    <string name="termux_setup_description">Kopiert einen Befehl und öffnet Termux: Füge ihn dort ein (lange drücken, Einfügen) und drücke Enter. Er erlaubt anderen Apps, Befehle auszuführen (allow-external-apps, das die Skripte des Schnellstarters brauchen), und entfernt die Zusatztastenleiste und ihr Textfeld, die ein Telefon mit Tasten wie das Titan 2 Elite nicht braucht. Erneutes Einfügen ändert nichts.</string>
     <string name="termux_setup_button">Befehl kopieren und Termux öffnen</string>
     <string name="termux_setup_copied">Befehl kopiert: in Termux einfügen und Enter drücken</string>
     <string name="modifier_table_double_tap">Zweimal tippen sperrt</string>
@@ -1064,11 +1064,11 @@
     <string name="recommended_label_alt_enter_layout_switch">Alt + Enter wechselt das Layout</string>
     <string name="terminal_mode_show_leds_title">LEDs anzeigen</string>
     <string name="terminal_mode_show_leds_description">Bei ausgeblendeter Tastatur bleiben ihre Status-LEDs an ihrem Platz sichtbar, damit du Shift, Alt, Strg und SYM siehst.</string>
-    <string name="root_backlight_no_answer">Shizuku hat nicht geantwortet. Prüfe, ob Shizuku läuft, und suche erneut.</string>
+    <string name="root_backlight_no_answer">Die Shell hat auf die Prüfung nicht geantwortet. Stelle sicher, dass die eingebaute Shell (oder Shizuku) läuft, und prüfe erneut.</string>
     <string name="root_backlight_no_service">Das Telefon hat keinen Tastaturlicht-Dienst (agui_functional_service).</string>
     <string name="root_backlight_recheck_title">Erneut suchen</string>
     <string name="root_backlight_recheck_description">Sucht das Tastaturlicht erneut und folgt dem Bildschirm, wenn es gefunden wird.</string>
-    <string name="root_shortcuts_open_description">Die Shizuku-Kurzbefehle Tasten zuweisen.</string>
+    <string name="root_shortcuts_open_description">Weise die Shell-Verknüpfungen Tasten zu.</string>
     <string name="shizuku_boot_title">Shizuku beim Start starten</string>
     <string name="shizuku_boot_description">Lässt Shizuku nach einem Neustart das kabellose Debugging einschalten und sich selbst starten, ohne Root: Flux Keyboard erteilt ihm die nötige Berechtigung (sichere Einstellungen schreiben) und öffnet Shizuku, damit du dort Beim Start starten einschaltest.</string>
     <string name="shizuku_boot_ready">Shizuku kann sich beim Start selbst starten: schalte in Shizuku Beim Start starten ein, falls noch nicht geschehen. Tippen öffnet Shizuku.</string>
@@ -1144,7 +1144,7 @@
     <string name="flux_tutorial_shizuku_boot_own_text">Der einfachste Weg. Ein Tippen hier gibt Shizuku die nötige Berechtigung, dann schalte in Shizuku Start beim Hochfahren ein. Das funktioniert nur, wenn beim Start des Telefons WLAN verbunden ist.</string>
     <string name="flux_tutorial_shizuku_boot_own_button">Start beim Hochfahren einrichten</string>
     <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
-    <string name="flux_tutorial_shizuku_boot_termux_text">Wartet auf WLAN und startet dann Shizuku, kommt also mit einer langsamen Verbindung zurecht. Braucht Termux und Termux:Boot, beide von GitHub: Android lässt ein Termux:Boot von F-Droid nicht mit einem Termux von GitHub zusammenarbeiten, und umgekehrt. Öffne Termux:Boot nach der Installation einmal, kopiere dann die Termux-Einrichtung von Flux Keyboard, füge sie in Termux ein und antworte mit Ja auf den Start von Shizuku beim Hochfahren.</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Wartet auf WLAN und startet dann Shizuku, kommt also mit einer langsamen Verbindung zurecht. Braucht Termux und Termux:Boot, beide von GitHub: Android lässt ein Termux:Boot von F-Droid nicht mit einem Termux von GitHub zusammenarbeiten und umgekehrt. Öffne Termux:Boot nach der Installation einmal, kopiere dann hier den Befehl und füge ihn in Termux ein: Er installiert, was er braucht, und führt dich einmalig durch das Koppeln von Termux mit kabellosem Debugging.</string>
     <string name="flux_tutorial_shizuku_get_termux">Termux herunterladen</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Termux:Boot herunterladen</string>
     <string name="flux_tutorial_shizuku_copy_setup">Termux-Einrichtung kopieren</string>
@@ -1169,8 +1169,8 @@
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_delete">Profil löschen</string>
     <string name="game_mode_import">Spiel aus einem Spiele-Launcher hinzufügen</string>
-    <string name="game_mode_import_description">Die Spiele, die GameNative, GameHub oder GameHub Lite als Verknüpfungen anbieten, jedes mit eigenem Profil. Zwischen den Spielen eines Launchers wechselst du über die Benachrichtigung des Spielmodus.</string>
-    <string name="game_mode_import_none">Keine Spiele aus Spiele-Launchern gefunden. Füge ihre Spiele im Launcher zum Startbildschirm hinzu, oder lege den Launcher selbst als Profil an.</string>
+    <string name="game_mode_import_description">Die Spiele, die GameNative, GameHub oder GameHub Lite auf dem Startbildschirm, in ihren Verknüpfungen oder in ihrem Steam-Ordner haben, jedes mit eigenem Profil. Wechsle zwischen den Spielen eines Launchers über die Benachrichtigung des Spielmodus oder gib jedem eine eigene Verknüpfung auf dem Startbildschirm.</string>
+    <string name="game_mode_import_none">Keine Spiele gefunden. Füge eines im Launcher zum Startbildschirm hinzu oder lege den Launcher selbst als Profil an.</string>
     <string name="game_mode_import_reading">Spiele werden gelesen</string>
     <string name="game_mode_key_as_is">Unverändert</string>
     <string name="game_mode_keys">Tasten</string>
@@ -1224,8 +1224,8 @@
     <string name="game_mode_press_key">Drücke die Taste. Die Ein/Aus-Taste geht nicht: Android behält sie für sich.</string>
     <string name="game_mode_touch_controls">Über die Bildschirmsteuerung von GameNative</string>
     <string name="game_mode_touch_controls_description">GameNative nimmt nur echte Controller als Controller. Ist das Steuerungsprofil von Flux Keyboard in GameNative gewählt, drücken Tasten und Sticks stattdessen seine unsichtbare Bildschirmsteuerung, die GameNative als Xbox-Controller weitergibt.</string>
-    <string name="game_mode_gamenative_save">Steuerungsprofil für GameNative speichern</string>
-    <string name="game_mode_gamenative_save_description">Speichert Flux Keyboard gamepad.icp unter Downloads/Flux Keyboard. Importiere es in GameNative bei den Steuerungsprofilen und wähle es für das Spiel, mit eingeblendeter Bildschirmsteuerung (sie ist unsichtbar).</string>
+    <string name="game_mode_gamenative_save">GameNative einrichten</string>
+    <string name="game_mode_gamenative_save_description">GameNative nimmt nur echte Controller, daher bekommt es die unsichtbare Bildschirmsteuerung von Flux Keyboard zum Drücken. Speichert sie und öffnet GameNative.</string>
     <string name="game_mode_gamenative_save_failed">Es konnte nicht gespeichert werden.</string>
     <string name="game_mode_place_keys">Tasten auf dem Bildschirm platzieren</string>
     <string name="game_mode_place_hint">Ziehe jede Taste auf die Taste des Spiels und jeden Stick-Kreis auf seinen Stick. Taste hinzufügen, dann drücken.</string>
@@ -1233,4 +1233,13 @@
     <string name="game_mode_place_clear">Leeren</string>
     <string name="game_mode_left_stick">Linker Stick</string>
     <string name="game_mode_right_stick">Rechter Stick</string>
+    <string name="game_mode_gamenative_open">Speichern und GameNative öffnen</string>
+    <string name="game_mode_gamenative_steps">Flux Keyboard speichert sein Steuerungsprofil unter Downloads/Flux Keyboard. Dann in GameNative:\n\n1. Schalte in den Einstellungen des Spiels den Hochformatmodus ein (Allgemein), damit es mit der Tastatur aufrecht bleibt.\n2. Öffne während das Spiel läuft sein Menü, dann Steuerung: Importiere Flux Keyboard gamepad.icp aus der Profilbibliothek und wähle es, mit eingeblendeter Bildschirmsteuerung (sie ist unsichtbar).\n\nDas ist einmal nötig; danach gilt das Profil für jedes Spiel.</string>
+    <string name="game_mode_home_screen">Zum Startbildschirm hinzufügen</string>
+    <string name="game_mode_home_screen_failed">Der Startbildschirm nimmt keine Verknüpfungen an.</string>
+    <string name="game_mode_sideways">Nur-Querformat-Spiel</string>
+    <string name="game_mode_sideways_description">Für Spiele und Launcher, die den Bildschirm drehen, egal was man ihnen sagt (GameHub): Solange sie laufen, wird der Bildschirm stattdessen querformatig gemacht, sodass das Telefon aufrecht bleibt. GameNative hat für jedes Spiel einen eigenen Hochformatmodus.</string>
+    <string name="game_mode_use_emulator_controls">Bildschirmsteuerung von %1$s verwenden</string>
+    <string name="game_mode_emulator_applied">Tasten und Sticks auf die Bildschirmsteuerung des Emulators gesetzt. Mit Tasten auf dem Bildschirm platzieren feinjustieren, falls du welche verschoben hast.</string>
+    <string name="game_mode_emulator_unreadable">Seine Steuerung ist noch nicht bekannt: Öffne darin einmal ein Spiel im Hochformat mit sichtbarer Bildschirmsteuerung und versuche es dann erneut.</string>
 </resources>

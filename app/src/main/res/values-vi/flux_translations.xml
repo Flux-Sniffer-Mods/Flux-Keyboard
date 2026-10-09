@@ -564,7 +564,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (tạm dừng)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (xóa màn hình)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (tìm trong lịch sử)</string>
-    <string name="terminal_emoji_key_alt">Alt (giữ cùng phím khác)</string>
+    <string name="terminal_emoji_key_alt">Alt của terminal (giữ cùng phím khác)</string>
     <string name="alt_key_editor_in_use_title">Lớp SYM thiết bị đang dùng</string>
     <string name="alt_key_editor_in_use_auto">Tự động: %1$s (theo bàn phím của bạn)</string>
     <string name="alt_key_editor_curated_section">Hồ sơ có sẵn</string>
@@ -1487,12 +1487,12 @@
     <string name="root_backlight_screen_title">Bật và tắt cùng màn hình</string>
     <string name="root_backlight_timeout_title">Sáng sau khi nhấn phím</string>
     <string name="root_backlight_timeout_value">%1$d giây</string>
-    <string name="root_backlight_unsupported">Không thể điều khiển đèn bàn phím của điện thoại này qua Shizuku (Titan 2 thì được).</string>
+    <string name="root_backlight_unsupported">Đèn bàn phím của điện thoại này không truy cập được qua shell (của Titan 2 thì được).</string>
     <string name="root_battery_saver_title">Bật hoặc tắt Tiết kiệm pin</string>
     <string name="root_block_network_title">Ngắt mạng ứng dụng đang mở, hoặc kết nối lại</string>
     <string name="root_force_stop_title">Buộc dừng ứng dụng đang mở</string>
     <string name="root_note">Các mục này chạy dưới dạng shell ADB, qua shell tích hợp hoặc Shizuku. Flux Keyboard chỉ chạy các lệnh mà từng tùy chọn cần.</string>
-    <string name="root_row_description">Đèn bàn phím và lối tắt qua Shizuku (ADB), không cần root</string>
+    <string name="root_row_description">Đèn bàn phím, lối tắt và chế độ chơi game qua shell tích hợp, không cần root</string>
     <string name="root_section_backlight">Đèn bàn phím</string>
     <string name="root_section_shortcuts">Lối tắt</string>
     <string name="root_shortcuts_note">Buộc dừng ứng dụng phía trước, bật hoặc tắt Tiết kiệm pin và ngắt mạng ứng dụng phía trước (Android 14 trở lên): gán cho phím trong Phím tắt hoặc tìm trong trình khởi chạy nhanh.</string>
@@ -1583,7 +1583,7 @@
     <string name="learn_table_words">Từ</string>
     <string name="learn_table_contacts">Email &amp; số</string>
     <string name="termux_setup_title">Thiết lập Termux cho bàn phím</string>
-    <string name="termux_setup_description">Sao chép một lệnh và mở Termux: dán vào đó (nhấn giữ, Dán) rồi nhấn Enter. Lệnh cho phép ứng dụng khác chạy lệnh (allow-external-apps, mà các script của trình khởi chạy nhanh cần) và bỏ hàng phím bổ sung cùng ô văn bản của nó, thứ mà điện thoại có phím như Titan 2 Elite không cần. Lệnh cũng đề nghị tự khởi động Shizuku sau khi khởi động lại (với ứng dụng Termux:Boot): cài những gì cần và hướng dẫn bạn ghép nối Termux với gỡ lỗi không dây một lần. Dán lại không thay đổi gì.</string>
+    <string name="termux_setup_description">Sao chép một lệnh và mở Termux: dán vào đó (nhấn giữ, Dán) và nhấn Enter. Nó cho phép ứng dụng khác chạy lệnh (allow-external-apps, mà các script của trình khởi chạy nhanh cần) và bỏ hàng phím phụ cùng ô nhập văn bản của nó, thứ mà điện thoại có phím như Titan 2 Elite không cần. Dán lại không thay đổi gì.</string>
     <string name="termux_setup_button">Sao chép lệnh và mở Termux</string>
     <string name="termux_setup_copied">Đã sao chép lệnh: dán vào Termux rồi nhấn Enter</string>
     <string name="modifier_table_double_tap">Chạm hai lần để khóa</string>
@@ -1593,11 +1593,11 @@
     <string name="recommended_label_alt_enter_layout_switch">Alt + Enter đổi bố cục</string>
     <string name="terminal_mode_show_leds_title">Hiện đèn LED</string>
     <string name="terminal_mode_show_leds_description">Khi bàn phím ẩn, đèn LED trạng thái vẫn hiện ở chỗ cũ để bạn thấy Shift, Alt, Ctrl và SYM.</string>
-    <string name="root_backlight_no_answer">Shizuku không phản hồi. Hãy chắc Shizuku đang chạy rồi kiểm tra lại.</string>
+    <string name="root_backlight_no_answer">Shell không trả lời kiểm tra. Hãy chắc rằng shell tích hợp (hoặc Shizuku) đang chạy, rồi kiểm tra lại.</string>
     <string name="root_backlight_no_service">Điện thoại không có dịch vụ đèn bàn phím (agui_functional_service).</string>
     <string name="root_backlight_recheck_title">Kiểm tra lại</string>
     <string name="root_backlight_recheck_description">Tìm lại đèn bàn phím và theo màn hình nếu tìm thấy.</string>
-    <string name="root_shortcuts_open_description">Gán phím tắt Shizuku cho các phím.</string>
+    <string name="root_shortcuts_open_description">Gán các lối tắt shell cho phím.</string>
     <string name="shizuku_boot_title">Khởi động Shizuku khi bật máy</string>
     <string name="shizuku_boot_description">Cho phép Shizuku bật gỡ lỗi không dây và tự khởi động sau khi khởi động lại, không cần root: Flux Keyboard cấp quyền cần thiết (ghi cài đặt bảo mật) rồi mở Shizuku để bạn bật Khởi động cùng máy.</string>
     <string name="shizuku_boot_ready">Shizuku có thể tự khởi động: bật Khởi động cùng máy trong cài đặt của nó nếu chưa bật. Chạm để mở Shizuku.</string>
@@ -1673,7 +1673,7 @@
     <string name="flux_tutorial_shizuku_boot_own_text">Đơn giản nhất. Một chạm ở đây cấp cho Shizuku quyền nó cần, sau đó bật khởi động cùng máy trong Shizuku. Chỉ hoạt động nếu Wi-Fi đã kết nối khi điện thoại khởi động.</string>
     <string name="flux_tutorial_shizuku_boot_own_button">Thiết lập khởi động cùng máy</string>
     <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
-    <string name="flux_tutorial_shizuku_boot_termux_text">Chờ Wi-Fi rồi khởi động Shizuku, nên chịu được kết nối chậm. Cần Termux và Termux:Boot, cả hai từ GitHub: Android không cho Termux:Boot từ F-Droid chạy với Termux từ GitHub, và ngược lại. Mở Termux:Boot một lần sau khi cài, rồi sao chép thiết lập Termux của Flux Keyboard, dán vào Termux và trả lời có cho việc khởi động Shizuku cùng máy.</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Đợi Wi-Fi rồi khởi động Shizuku, nên chịu được kết nối chậm. Cần Termux và Termux:Boot, cả hai từ GitHub: Android không cho Termux:Boot từ F-Droid chạy với Termux từ GitHub, và ngược lại. Mở Termux:Boot một lần sau khi cài, rồi sao chép lệnh ở đây và dán vào Termux: nó cài những gì cần và hướng dẫn bạn ghép nối Termux với gỡ lỗi không dây, một lần.</string>
     <string name="flux_tutorial_shizuku_get_termux">Tải Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Tải Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Sao chép thiết lập Termux</string>
@@ -1698,8 +1698,8 @@
     <string name="game_mode_apps">Ứng dụng</string>
     <string name="game_mode_delete">Xóa hồ sơ</string>
     <string name="game_mode_import">Thêm trò chơi từ trình khởi chạy trò chơi</string>
-    <string name="game_mode_import_description">Các trò chơi GameNative, GameHub hoặc GameHub Lite đưa ra dưới dạng lối tắt, mỗi trò có hồ sơ riêng. Chuyển giữa các trò của một trình khởi chạy từ thông báo của chế độ chơi game.</string>
-    <string name="game_mode_import_none">Không tìm thấy trò chơi từ trình khởi chạy. Thêm trò chơi của chúng vào màn hình chính từ trình khởi chạy, hoặc thêm chính trình khởi chạy làm hồ sơ.</string>
+    <string name="game_mode_import_description">Các trò chơi mà GameNative, GameHub hoặc GameHub Lite có trên màn hình chính, trong lối tắt của chúng hoặc đã cài trong thư mục Steam của chúng, mỗi trò có hồ sơ riêng. Chuyển giữa các trò của một trình khởi chạy từ thông báo chế độ chơi game, hoặc cho mỗi trò một lối tắt riêng trên màn hình chính.</string>
+    <string name="game_mode_import_none">Không tìm thấy trò chơi. Thêm một trò vào màn hình chính từ trình khởi chạy của nó, hoặc thêm chính trình khởi chạy làm hồ sơ.</string>
     <string name="game_mode_import_reading">Đang đọc trò chơi</string>
     <string name="game_mode_key_as_is">Giữ nguyên</string>
     <string name="game_mode_keys">Phím</string>
@@ -1753,8 +1753,8 @@
     <string name="game_mode_press_key">Nhấn phím hoặc nút. Không dùng được nút nguồn: Android giữ nó cho riêng mình.</string>
     <string name="game_mode_touch_controls">Qua điều khiển trên màn hình của GameNative</string>
     <string name="game_mode_touch_controls_description">GameNative chỉ nhận tay cầm thật là tay cầm. Khi chọn hồ sơ điều khiển của Flux Keyboard trong GameNative, nút và cần sẽ bấm vào điều khiển trên màn hình vô hình của nó, mà GameNative truyền đi như tay cầm Xbox.</string>
-    <string name="game_mode_gamenative_save">Lưu hồ sơ điều khiển cho GameNative</string>
-    <string name="game_mode_gamenative_save_description">Lưu Flux Keyboard gamepad.icp vào Tải xuống/Flux Keyboard. Trong GameNative, nhập nó từ hồ sơ điều khiển và chọn cho trò chơi, với điều khiển trên màn hình được hiển thị (chúng vô hình).</string>
+    <string name="game_mode_gamenative_save">Thiết lập GameNative</string>
+    <string name="game_mode_gamenative_save_description">GameNative chỉ nhận tay cầm thật, nên nó nhận điều khiển trên màn hình vô hình của Flux Keyboard để bấm thay. Lưu chúng và mở GameNative.</string>
     <string name="game_mode_gamenative_save_failed">Không lưu được.</string>
     <string name="game_mode_place_keys">Đặt phím trên màn hình</string>
     <string name="game_mode_place_hint">Kéo từng phím lên nút của trò chơi và từng vòng cần lên cần của nó. Thêm phím, rồi nhấn phím đó.</string>
@@ -1762,4 +1762,13 @@
     <string name="game_mode_place_clear">Xóa</string>
     <string name="game_mode_left_stick">Cần trái</string>
     <string name="game_mode_right_stick">Cần phải</string>
+    <string name="game_mode_gamenative_open">Lưu và mở GameNative</string>
+    <string name="game_mode_gamenative_steps">Flux Keyboard lưu hồ sơ điều khiển của nó vào Tải xuống/Flux Keyboard. Sau đó, trong GameNative:\n\n1. Trong cài đặt của trò chơi, bật chế độ dọc (Chung), để nó giữ thẳng đứng cùng bàn phím.\n2. Khi trò chơi đang chạy, mở menu của nó, rồi Điều khiển: nhập Flux Keyboard gamepad.icp từ thư viện hồ sơ và chọn nó, với điều khiển trên màn hình được hiện (chúng vô hình).\n\nChỉ cần một lần; sau đó hồ sơ dùng được cho mọi trò chơi.</string>
+    <string name="game_mode_home_screen">Thêm vào màn hình chính</string>
+    <string name="game_mode_home_screen_failed">Màn hình chính không nhận lối tắt.</string>
+    <string name="game_mode_sideways">Trò chơi chỉ chơi ngang</string>
+    <string name="game_mode_sideways_description">Cho các trò chơi và trình khởi chạy luôn xoay màn hình dù được bảo gì (GameHub): trong khi chúng chạy, màn hình được làm thành hình ngang thay vào đó, nên điện thoại vẫn đứng thẳng. GameNative có chế độ dọc riêng cho từng trò chơi.</string>
+    <string name="game_mode_use_emulator_controls">Dùng điều khiển trên màn hình của %1$s</string>
+    <string name="game_mode_emulator_applied">Phím và cần đã đặt lên điều khiển trên màn hình của trình giả lập. Tinh chỉnh bằng Đặt phím trên màn hình nếu bạn đã di chuyển cái nào.</string>
+    <string name="game_mode_emulator_unreadable">Chưa biết điều khiển của nó: mở một trò chơi trong đó một lần với màn hình đứng thẳng và điều khiển trên màn hình hiện ra, rồi thử lại.</string>
 </resources>

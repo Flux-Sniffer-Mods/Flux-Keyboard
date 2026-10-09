@@ -564,7 +564,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (αναστολή)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (καθαρισμός οθόνης)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (αναζήτηση στο ιστορικό)</string>
-    <string name="terminal_emoji_key_alt">Alt (κράτημα με άλλο πλήκτρο)</string>
+    <string name="terminal_emoji_key_alt">Το Alt του τερματικού (κράτημα με άλλο πλήκτρο)</string>
     <string name="alt_key_editor_in_use_title">Επίπεδο SYM συσκευής σε χρήση</string>
     <string name="alt_key_editor_in_use_auto">Αυτόματα: %1$s (από το πληκτρολόγιό σας)</string>
     <string name="alt_key_editor_curated_section">Επιμελημένα προφίλ</string>
@@ -861,12 +861,12 @@
     <string name="root_backlight_screen_title">Αναμμένο και σβηστό με την οθόνη</string>
     <string name="root_backlight_timeout_title">Μένει αναμμένο μετά από πάτημα πλήκτρου</string>
     <string name="root_backlight_timeout_value">%1$d δ</string>
-    <string name="root_backlight_unsupported">Ο φωτισμός πληκτρολογίου αυτού του τηλεφώνου δεν είναι προσβάσιμος μέσω Shizuku (του Titan 2 είναι).</string>
+    <string name="root_backlight_unsupported">Ο φωτισμός πληκτρολογίου αυτού του τηλεφώνου δεν είναι προσβάσιμος μέσω του shell (του Titan 2 είναι).</string>
     <string name="root_battery_saver_title">Εξοικονόμηση μπαταρίας ναι ή όχι</string>
     <string name="root_block_network_title">Αποσύνδεση της εφαρμογής στο προσκήνιο από το δίκτυο, ή επανασύνδεση</string>
     <string name="root_force_stop_title">Αναγκαστική διακοπή της εφαρμογής στο προσκήνιο</string>
     <string name="root_note">Αυτά τρέχουν ως shell ADB, μέσω του ενσωματωμένου shell ή του Shizuku. Το Flux Keyboard εκτελεί μόνο τις εντολές που χρειάζεται κάθε επιλογή.</string>
-    <string name="root_row_description">Φωτισμός πληκτρολογίου και συντομεύσεις μέσω Shizuku (ADB), χωρίς root</string>
+    <string name="root_row_description">Φωτισμός πληκτρολογίου, συντομεύσεις και λειτουργία παιχνιδιού μέσω του ενσωματωμένου shell, χωρίς root</string>
     <string name="root_section_backlight">Φωτισμός πληκτρολογίου</string>
     <string name="root_section_shortcuts">Συντομεύσεις</string>
     <string name="root_shortcuts_note">Τερματισμός της εφαρμογής μπροστά, Εξοικονόμηση μπαταρίας ναι ή όχι και αποσύνδεση της εφαρμογής από το δίκτυο (Android 14 και νεότερα): αντιστοιχίστε τα σε πλήκτρα στις Συντομεύσεις πλήκτρων ή βρείτε τα στη γρήγορη εκκίνηση.</string>
@@ -963,7 +963,7 @@
     <string name="learn_table_words">Λέξεις</string>
     <string name="learn_table_contacts">Email &amp; αριθμοί</string>
     <string name="termux_setup_title">Ρύθμιση του Termux για το πληκτρολόγιο</string>
-    <string name="termux_setup_description">Αντιγράφει μια εντολή και ανοίγει το Termux: επικολλήστε την εκεί (παρατεταμένο πάτημα, Επικόλληση) και πατήστε Enter. Επιτρέπει σε άλλες εφαρμογές να εκτελούν εντολές (allow-external-apps, που χρειάζονται τα σενάρια της γρήγορης εκκίνησης) και αφαιρεί τη σειρά επιπλέον πλήκτρων και το πεδίο κειμένου της, που δεν χρειάζεται ένα τηλέφωνο με πλήκτρα όπως το Titan 2 Elite. Προσφέρεται επίσης να ξεκινά το Shizuku μόνο του μετά από επανεκκίνηση (με την εφαρμογή Termux:Boot): εγκαθιστά ό,τι χρειάζεται και σας καθοδηγεί μία φορά στη σύζευξη του Termux με τον ασύρματο εντοπισμό σφαλμάτων. Η επανάληψη της επικόλλησης δεν αλλάζει τίποτα.</string>
+    <string name="termux_setup_description">Αντιγράφει μια εντολή και ανοίγει το Termux: επικολλήστε την εκεί (παρατεταμένο πάτημα, Επικόλληση) και πατήστε Enter. Επιτρέπει σε άλλες εφαρμογές να εκτελούν εντολές (allow-external-apps, που χρειάζονται τα σενάρια της γρήγορης εκκίνησης) και αφαιρεί τη σειρά επιπλέον πλήκτρων και το πεδίο κειμένου της, που ένα τηλέφωνο με πλήκτρα όπως το Titan 2 Elite δεν χρειάζεται. Νέα επικόλληση δεν αλλάζει τίποτα.</string>
     <string name="termux_setup_button">Αντιγραφή εντολής και άνοιγμα Termux</string>
     <string name="termux_setup_copied">Η εντολή αντιγράφηκε: επικολλήστε τη στο Termux και πατήστε Enter</string>
     <string name="modifier_table_double_tap">Δύο πατήματα το κλειδώνουν</string>
@@ -973,11 +973,11 @@
     <string name="recommended_label_alt_enter_layout_switch">Το Alt + Enter αλλάζει διάταξη</string>
     <string name="terminal_mode_show_leds_title">Εμφάνιση των LED</string>
     <string name="terminal_mode_show_leds_description">Με το πληκτρολόγιο κρυμμένο, οι λυχνίες κατάστασης εμφανίζονται στη θέση τους, ώστε να βλέπετε Shift, Alt, Ctrl και SYM.</string>
-    <string name="root_backlight_no_answer">Το Shizuku δεν απάντησε. Βεβαιωθείτε ότι εκτελείται και ελέγξτε ξανά.</string>
+    <string name="root_backlight_no_answer">Το shell δεν απάντησε στον έλεγχο. Βεβαιωθείτε ότι τρέχει το ενσωματωμένο shell (ή το Shizuku) και ελέγξτε ξανά.</string>
     <string name="root_backlight_no_service">Το τηλέφωνο δεν έχει υπηρεσία φωτισμού πληκτρολογίου (agui_functional_service).</string>
     <string name="root_backlight_recheck_title">Νέος έλεγχος</string>
     <string name="root_backlight_recheck_description">Ελέγχει ξανά για τον φωτισμό πληκτρολογίου και ακολουθεί την οθόνη αν βρεθεί.</string>
-    <string name="root_shortcuts_open_description">Αντιστοιχίστε τις συντομεύσεις Shizuku σε πλήκτρα.</string>
+    <string name="root_shortcuts_open_description">Αντιστοιχίστε τις συντομεύσεις του shell σε πλήκτρα.</string>
     <string name="shizuku_boot_title">Εκκίνηση του Shizuku κατά την εκκίνηση</string>
     <string name="shizuku_boot_description">Επιτρέπει στο Shizuku να ενεργοποιεί την ασύρματη αποσφαλμάτωση και να ξεκινά μόνο του μετά από επανεκκίνηση, χωρίς root: το Flux Keyboard του δίνει την άδεια που χρειάζεται (εγγραφή ασφαλών ρυθμίσεων) και ανοίγει το Shizuku για να ενεργοποιήσετε την εκκίνηση κατά την εκκίνηση.</string>
     <string name="shizuku_boot_ready">Το Shizuku μπορεί να ξεκινά μόνο του: ενεργοποιήστε την εκκίνηση κατά την εκκίνηση στις ρυθμίσεις του, αν δεν είναι ήδη. Πατήστε για να ανοίξει.</string>
@@ -1053,7 +1053,7 @@
     <string name="flux_tutorial_shizuku_boot_own_text">Ο απλούστερος. Ένα πάτημα εδώ δίνει στο Shizuku την άδεια που χρειάζεται, μετά ενεργοποιήστε την έναρξη κατά την εκκίνηση στο Shizuku. Δουλεύει μόνο αν υπάρχει σύνδεση Wi-Fi όταν ξεκινά το τηλέφωνο.</string>
     <string name="flux_tutorial_shizuku_boot_own_button">Ρύθμιση έναρξης κατά την εκκίνηση</string>
     <string name="flux_tutorial_shizuku_boot_termux_title">Termux:Boot</string>
-    <string name="flux_tutorial_shizuku_boot_termux_text">Περιμένει το Wi-Fi και μετά ξεκινά το Shizuku, οπότε αντέχει μια αργή σύνδεση. Χρειάζεται Termux και Termux:Boot, και τα δύο από το GitHub: το Android δεν αφήνει ένα Termux:Boot από το F-Droid να δουλέψει με ένα Termux από το GitHub, ούτε το αντίστροφο. Ανοίξτε το Termux:Boot μία φορά μετά την εγκατάσταση, μετά αντιγράψτε τη ρύθμιση Termux του Flux Keyboard, επικολλήστε την στο Termux και απαντήστε ναι στην έναρξη του Shizuku κατά την εκκίνηση.</string>
+    <string name="flux_tutorial_shizuku_boot_termux_text">Περιμένει το Wi-Fi και μετά ξεκινά το Shizuku, οπότε αντέχει μια αργή σύνδεση. Χρειάζεται Termux και Termux:Boot, και τα δύο από το GitHub: το Android δεν αφήνει ένα Termux:Boot από το F-Droid να δουλέψει με ένα Termux από το GitHub, ούτε το αντίστροφο. Ανοίξτε το Termux:Boot μία φορά μετά την εγκατάσταση, μετά αντιγράψτε εδώ την εντολή και επικολλήστε τη στο Termux: εγκαθιστά ό,τι χρειάζεται και σας καθοδηγεί μία φορά στη σύζευξη του Termux με την ασύρματη αποσφαλμάτωση.</string>
     <string name="flux_tutorial_shizuku_get_termux">Λήψη Termux</string>
     <string name="flux_tutorial_shizuku_get_termux_boot">Λήψη Termux:Boot</string>
     <string name="flux_tutorial_shizuku_copy_setup">Αντιγραφή ρύθμισης Termux</string>
@@ -1078,8 +1078,8 @@
     <string name="game_mode_apps">Εφαρμογές</string>
     <string name="game_mode_delete">Διαγραφή προφίλ</string>
     <string name="game_mode_import">Προσθήκη παιχνιδιού από εκκινητή παιχνιδιών</string>
-    <string name="game_mode_import_description">Τα παιχνίδια που δείχνουν ως συντομεύσεις το GameNative, το GameHub ή το GameHub Lite, το καθένα με δικό του προφίλ. Αλλάζετε παιχνίδι ενός εκκινητή από την ειδοποίηση της λειτουργίας παιχνιδιού.</string>
-    <string name="game_mode_import_none">Δεν βρέθηκαν παιχνίδια εκκινητών. Προσθέστε τα παιχνίδια τους στην αρχική οθόνη από τον εκκινητή ή προσθέστε τον ίδιο τον εκκινητή ως προφίλ.</string>
+    <string name="game_mode_import_description">Τα παιχνίδια που έχουν τα GameNative, GameHub ή GameHub Lite στην αρχική οθόνη, στις συντομεύσεις τους ή εγκατεστημένα στον φάκελο Steam τους, το καθένα με δικό του προφίλ. Αλλάξτε παιχνίδι ενός εκκινητή από την ειδοποίηση της λειτουργίας παιχνιδιού ή δώστε στο καθένα δική του συντόμευση στην αρχική οθόνη.</string>
+    <string name="game_mode_import_none">Δεν βρέθηκαν παιχνίδια. Προσθέστε ένα στην αρχική οθόνη από τον εκκινητή του ή προσθέστε τον ίδιο τον εκκινητή ως προφίλ.</string>
     <string name="game_mode_import_reading">Ανάγνωση παιχνιδιών</string>
     <string name="game_mode_key_as_is">Όπως είναι</string>
     <string name="game_mode_keys">Πλήκτρα</string>
@@ -1133,8 +1133,8 @@
     <string name="game_mode_press_key">Πατήστε το πλήκτρο ή το κουμπί. Το κουμπί λειτουργίας δεν μπορεί να χρησιμοποιηθεί: το Android το κρατά για τον εαυτό του.</string>
     <string name="game_mode_touch_controls">Μέσω των χειριστηρίων οθόνης του GameNative</string>
     <string name="game_mode_touch_controls_description">Το GameNative δέχεται ως χειριστήρια μόνο πραγματικά χειριστήρια. Με το προφίλ χειρισμού του Flux Keyboard επιλεγμένο στο GameNative, τα κουμπιά και οι μοχλοί πατούν τα αόρατα χειριστήρια οθόνης του, που το GameNative περνά ως χειριστήριο Xbox.</string>
-    <string name="game_mode_gamenative_save">Αποθήκευση προφίλ χειρισμού για το GameNative</string>
-    <string name="game_mode_gamenative_save_description">Αποθηκεύει το Flux Keyboard gamepad.icp στις Λήψεις/Flux Keyboard. Στο GameNative, εισαγάγετέ το από τα προφίλ χειρισμού και επιλέξτε το για το παιχνίδι, με εμφανή τα χειριστήρια οθόνης (είναι αόρατα).</string>
+    <string name="game_mode_gamenative_save">Ρύθμιση του GameNative</string>
+    <string name="game_mode_gamenative_save_description">Το GameNative δέχεται μόνο πραγματικά χειριστήρια, οπότε παίρνει τα αόρατα χειριστήρια οθόνης του Flux Keyboard για να πατιούνται στη θέση τους. Τα αποθηκεύει και ανοίγει το GameNative.</string>
     <string name="game_mode_gamenative_save_failed">Δεν ήταν δυνατή η αποθήκευση.</string>
     <string name="game_mode_place_keys">Τοποθέτηση πλήκτρων στην οθόνη</string>
     <string name="game_mode_place_hint">Σύρετε κάθε πλήκτρο πάνω στο κουμπί του παιχνιδιού και κάθε κύκλο μοχλού πάνω στον μοχλό του. Προσθέστε πλήκτρο και μετά πατήστε το.</string>
@@ -1142,4 +1142,13 @@
     <string name="game_mode_place_clear">Εκκαθάριση</string>
     <string name="game_mode_left_stick">Αριστερός μοχλός</string>
     <string name="game_mode_right_stick">Δεξιός μοχλός</string>
+    <string name="game_mode_gamenative_open">Αποθήκευση και άνοιγμα του GameNative</string>
+    <string name="game_mode_gamenative_steps">Το Flux Keyboard αποθηκεύει το προφίλ χειρισμού του στις Λήψεις/Flux Keyboard. Μετά, στο GameNative:\n\n1. Στις ρυθμίσεις του παιχνιδιού, ενεργοποιήστε την κατακόρυφη λειτουργία (Γενικά), ώστε να μένει όρθιο με το πληκτρολόγιο.\n2. Ενώ τρέχει το παιχνίδι, ανοίξτε το μενού του, μετά Χειρισμός: εισαγάγετε το Flux Keyboard gamepad.icp από τη βιβλιοθήκη προφίλ και επιλέξτε το, με εμφανή τα χειριστήρια οθόνης (είναι αόρατα).\n\nΧρειάζεται μία φορά· μετά το προφίλ ισχύει για κάθε παιχνίδι.</string>
+    <string name="game_mode_home_screen">Προσθήκη στην αρχική οθόνη</string>
+    <string name="game_mode_home_screen_failed">Η αρχική οθόνη δεν δέχεται συντομεύσεις.</string>
+    <string name="game_mode_sideways">Παιχνίδι μόνο οριζόντια</string>
+    <string name="game_mode_sideways_description">Για παιχνίδια και εκκινητές που γυρίζουν την οθόνη ό,τι κι αν τους πεις (GameHub): όσο τρέχουν, η οθόνη παίρνει αντί γι\' αυτό οριζόντιο σχήμα, ώστε το τηλέφωνο να μένει όρθιο. Το GameNative έχει δική του κατακόρυφη λειτουργία για κάθε παιχνίδι.</string>
+    <string name="game_mode_use_emulator_controls">Χρήση των χειριστηρίων οθόνης του %1$s</string>
+    <string name="game_mode_emulator_applied">Πλήκτρα και μοχλοί ορίστηκαν στα χειριστήρια οθόνης του εξομοιωτή. Ρυθμίστε τα με «Τοποθέτηση πλήκτρων στην οθόνη» αν μετακινήσατε κάποιο.</string>
+    <string name="game_mode_emulator_unreadable">Τα χειριστήριά του δεν είναι ακόμη γνωστά: ανοίξτε ένα παιχνίδι σε αυτόν μία φορά με την οθόνη όρθια και τα χειριστήρια οθόνης εμφανή, μετά δοκιμάστε ξανά.</string>
 </resources>
