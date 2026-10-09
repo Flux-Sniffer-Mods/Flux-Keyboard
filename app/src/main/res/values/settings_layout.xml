@@ -304,6 +304,15 @@
     <string name="game_mode_folder_add_description">The folder you set in a launcher or emulator (its Export for frontend or games folder), read for games too.</string>
     <string name="game_mode_folder_games_of">Its games are for</string>
     <string name="game_mode_folder_by_names">Found by folder names</string>
+    <string name="game_mode_own_game">Add a game yourself</string>
+    <string name="game_mode_own_game_description">A game you added to a launcher or emulator by hand, like GameNative\'s and GameHub\'s custom games: pick which one, then its game file (emulators), or its exported file or game ID (launchers).</string>
+    <string name="game_mode_own_game_added_to">Added to</string>
+    <string name="game_mode_own_game_file">Choose the game file</string>
+    <string name="game_mode_own_game_export_file">Choose its exported file (optional)</string>
+    <string name="game_mode_own_game_id">Game ID (optional)</string>
+    <string name="game_mode_own_game_store">Store</string>
+    <string name="game_mode_own_game_custom_store">Custom game</string>
+    <string name="game_mode_own_game_none">None of the launchers or emulators Flux Keyboard can start games in (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) is installed.</string>
     <string name="game_mode_import">Add a game from a game launcher</string>
     <string name="game_mode_import_description">The games GameNative, GameHub or GameHub Lite have on the home screen, in their shortcuts or installed in their Steam folder, each with a profile of its own. Switch between a launcher\'s games from gaming mode\'s notification, or give each its own home screen shortcut.</string>
     <string name="game_mode_import_reading">Reading the games</string>

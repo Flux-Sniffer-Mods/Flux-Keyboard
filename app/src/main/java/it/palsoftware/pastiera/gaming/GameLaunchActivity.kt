@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Bundle
 
 /**
@@ -21,9 +22,18 @@ class GameLaunchActivity : Activity() {
             val game = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
                 ?.takeIf { (it.`package` ?: it.component?.packageName) in profile.packages }
             val start = game ?: profile.packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
-            start?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
+            start?.let { withGameFile(it) }?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
         }
         finish()
+    }
+
+    /** A game file you picked yourself: the emulator may read it, as Flux Keyboard may. */
+    private fun withGameFile(intent: Intent): Intent {
+        val file = intent.data ?: intent.getStringExtra("AutoStartFile")?.let { Uri.parse(it) } ?: return intent
+        val held = contentResolver.persistedUriPermissions.any { it.uri == file && it.isReadPermission }
+        if (!held) return intent
+        intent.clipData = android.content.ClipData.newRawUri("", file)
+        return intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 
     companion object {

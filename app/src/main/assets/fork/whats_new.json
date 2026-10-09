@@ -504,6 +504,10 @@
     {
       "text": "Gaming mode: add game folders of your own, the same ones set in a launcher or emulator, each read for one emulator's or launcher's games or by its folders' names.",
       "after": "202610092120"
+    },
+    {
+      "text": "Gaming mode: add a game yourself, like GameNative's and GameHub's custom games: pick the launcher or emulator you added it to, then its file, exported file or game ID, and it gets a profile and a home screen shortcut that starts it.",
+      "after": "202610092140"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -59,6 +59,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var picking by remember { mutableStateOf(false) }
     var importing by remember { mutableStateOf(false) }
     var gameNativeSetup by remember { mutableStateOf(false) }
+    var addingOwn by remember { mutableStateOf(false) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     fun refresh() { profiles = GameProfiles.all(context) }
 
@@ -129,6 +130,12 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 ).show()
             }
         }
+        FluxActionRow(
+            linkId = null,
+            icon = "+",
+            title = stringResource(R.string.game_mode_own_game),
+            description = stringResource(R.string.game_mode_own_game_description)
+        ) { addingOwn = true }
         CustomGameFolders()
         FluxActionRow(
             linkId = null,
@@ -147,18 +154,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             onDismiss = { picking = false }
         )
     }
-    if (importing) {
-        GameImportDialog(onPicked = { game ->
-            importing = false
-            editing = freshProfile(context, game.name, game.packageName)
-                .copy(
-                    launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME),
-                    // GameHub turns the screen sideways whatever it's told
-                    sideways = "gamehub" in appLabel(context, game.packageName).lowercase().replace(" ", "")
-                )
-            if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
-        }, onDismiss = { importing = false })
+    val pickGame: (GameLibrary.Game) -> Unit = { game ->
+        importing = false
+        addingOwn = false
+        editing = freshProfile(context, game.name, game.packageName)
+            .copy(
+                launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME),
+                // GameHub turns the screen sideways whatever it's told
+                sideways = "gamehub" in appLabel(context, game.packageName).lowercase().replace(" ", "")
+            )
+        if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
+    if (importing) GameImportDialog(onPicked = pickGame, onDismiss = { importing = false })
+    if (addingOwn) OwnGameDialog(onAdded = pickGame, onDismiss = { addingOwn = false })
     if (gameNativeSetup) {
         AlertDialog(
             onDismissRequest = { gameNativeSetup = false },
@@ -178,6 +186,66 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             dismissButton = { TextButton(onClick = { gameNativeSetup = false }) { Text(stringResource(R.string.cancel)) } }
         )
     }
+}
+
+/**
+ * A game you add yourself, like GameNative's and GameHub's custom games: its name, the launcher
+ * or emulator you added it to, and its file (an emulator's game, a launcher's exported file) or ID.
+ */
+@Composable
+private fun OwnGameDialog(onAdded: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val folders = it.palsoftware.pastiera.gaming.GameFolders
+    val players = remember { folders.installedPlayers(context) }
+    var name by remember { mutableStateOf("") }
+    var player by remember { mutableStateOf(players.firstOrNull()) }
+    var file by remember { mutableStateOf<android.net.Uri?>(null) }
+    var fileName by remember { mutableStateOf<String?>(null) }
+    var id by remember { mutableStateOf("") }
+    val stores = listOf("STEAM" to "Steam", "EPIC" to "Epic", "GOG" to "GOG", "AMAZON" to "Amazon", "CUSTOM_GAME" to stringResource(R.string.game_mode_own_game_custom_store), "LOCAL" to "GameHub")
+    var store by remember { mutableStateOf(stores.first()) }
+    val picker = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        file = uri
+        fileName = context.contentResolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)
+            ?.use { if (it.moveToFirst()) it.getString(0) else null }
+        if (name.isBlank()) name = fileName?.substringBeforeLast('.').orEmpty()
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.game_mode_own_game)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (players.isEmpty()) {
+                    Text(stringResource(R.string.game_mode_own_game_none))
+                    return@Column
+                }
+                OutlinedTextField(value = name, onValueChange = { name = it }, singleLine = true,
+                    label = { Text(stringResource(R.string.game_mode_profile_name)) }, modifier = Modifier.fillMaxWidth())
+                ChoiceRow(stringResource(R.string.game_mode_own_game_added_to), player.orEmpty(), players) { player = players[it] }
+                val launcher = player?.let { folders.isLauncher(it) } == true
+                TextButton(onClick = { runCatching { picker.launch(arrayOf("*/*")) } }) {
+                    Text(fileName ?: stringResource(if (launcher) R.string.game_mode_own_game_export_file else R.string.game_mode_own_game_file))
+                }
+                if (launcher && file == null) {
+                    OutlinedTextField(value = id, onValueChange = { id = it.trim() }, singleLine = true,
+                        label = { Text(stringResource(R.string.game_mode_own_game_id)) }, modifier = Modifier.fillMaxWidth())
+                    ChoiceRow(stringResource(R.string.game_mode_own_game_store), store.second, stores.map { it.second }) { store = stores[it] }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(enabled = player != null && name.isNotBlank(), onClick = {
+                val game = folders.customGame(context, name.trim(), player ?: return@TextButton, file, id, store.first)
+                if (game == null) {
+                    android.widget.Toast.makeText(context, R.string.game_mode_own_game_none, android.widget.Toast.LENGTH_LONG).show()
+                } else onAdded(game)
+            }) { Text(stringResource(R.string.game_mode_save)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
 }
 
 /**

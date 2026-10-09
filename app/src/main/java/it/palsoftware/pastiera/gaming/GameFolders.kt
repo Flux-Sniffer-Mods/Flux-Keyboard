@@ -80,7 +80,13 @@ object GameFolders {
         return if (relative.isEmpty()) base else "$base/$relative"
     }
 
-    /** The players a folder can be set to, by name. */
+    /** The launchers and emulators installed, by name. */
+    fun installedPlayers(context: Context): List<String> = Player.entries.filter { it.installed(context) != null }.map { it.label }
+
+    /** A launcher (it starts games by ID), not an emulator (it starts a game's file). */
+    fun isLauncher(label: String): Boolean = label == Player.GAMENATIVE.label || label == Player.GAMEHUB.label
+
+        /** The players a folder can be set to, by name. */
     val playerNames: List<String> get() = Player.entries.map { it.label }
 
     /** A game found in a folder: what's shown, which player, and its file (and what it holds). */
@@ -154,26 +160,64 @@ object GameFolders {
 
     /** ES-DE's way of starting each (es_systems.xml), straight into the game. */
     private fun launchIntent(game: Found, pkg: String, activity: String): Intent? {
-        val component = ComponentName(pkg, activity)
-        val intent = when (game.player) {
-            Player.GAMENATIVE -> {
-                val id = game.content.toIntOrNull() ?: return null
-                val source = when (game.path.substringAfterLast('.').lowercase()) {
-                    "epic" -> "EPIC"; "gog" -> "GOG"; "amazon" -> "AMAZON"; "pcgame" -> "CUSTOM_GAME"; else -> "STEAM"
-                }
-                Intent("app.gamenative.LAUNCH_GAME").putExtra("app_id", id).putExtra("game_source", source)
-            }
+        val source = when (game.path.substringAfterLast('.').lowercase()) {
+            "epic" -> "EPIC"; "gog" -> "GOG"; "amazon" -> "AMAZON"; "pcgame" -> "CUSTOM_GAME"
+            "local" -> "LOCAL"; else -> "STEAM"
+        }
+        val data = if (game.player == Player.GAMENATIVE || game.player == Player.GAMEHUB) null else documentUri(game.path) ?: return null
+        return intentFor(game.player, pkg, activity, data, game.content, source)
+    }
+
+    /**
+     * Starting [player]'s game: [data], the game's file, for an emulator; [id] and [source] (STEAM,
+     * EPIC, GOG, AMAZON, CUSTOM_GAME; LOCAL for GameHub's own) for a launcher.
+     */
+    internal fun intentFor(player: Player, pkg: String, activity: String, data: Uri?, id: String?, source: String?): Intent? {
+        val intent = when (player) {
+            Player.GAMENATIVE -> Intent("app.gamenative.LAUNCH_GAME")
+                .putExtra("app_id", id?.toIntOrNull() ?: return null).putExtra("game_source", source ?: "STEAM")
             Player.GAMEHUB -> Intent("gamehub.lite.LAUNCH_GAME").putExtra("autoStartGame", true).apply {
-                if (game.path.endsWith(".local", ignoreCase = true)) putExtra("localGameId", game.content)
-                else putExtra("steamAppId", game.content)
+                if (id.isNullOrEmpty()) return null
+                if (source == "LOCAL") putExtra("localGameId", id) else putExtra("steamAppId", id)
             }
             Player.DOLPHIN -> Intent(Intent.ACTION_MAIN).addCategory("android.intent.category.LEANBACK_LAUNCHER")
-                .putExtra("AutoStartFile", documentUri(game.path)?.toString() ?: return null)
-            Player.PPSSPP -> Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_DEFAULT).setData(documentUri(game.path) ?: return null)
-            Player.AZAHAR -> Intent().setData(documentUri(game.path) ?: return null)
+                .putExtra("AutoStartFile", data?.toString() ?: return null)
+            Player.PPSSPP -> Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_DEFAULT).setData(data ?: return null)
+            Player.AZAHAR -> Intent().setData(data ?: return null)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            Player.EDEN -> Intent("android.nfc.action.TECH_DISCOVERED").setData(documentUri(game.path) ?: return null)
+            Player.EDEN -> Intent("android.nfc.action.TECH_DISCOVERED").setData(data ?: return null)
         }
-        return intent.setComponent(component).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        return intent.setComponent(ComponentName(pkg, activity)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    /**
+     * A game you add yourself, as in GameNative's and GameHub's own custom games: its name, the
+     * launcher or emulator you added it to, and its file (an emulator's game, or a launcher's
+     * Export for frontend file) or a launcher's game ID. Null when that app isn't installed.
+     */
+    fun customGame(context: Context, name: String, playerLabel: String, file: Uri?, id: String?, source: String?): GameLibrary.Game? {
+        val player = Player.entries.firstOrNull { it.label == playerLabel } ?: return null
+        val (pkg, activity) = player.installed(context) ?: return null
+        val launcher = player == Player.GAMENATIVE || player == Player.GAMEHUB
+        var gameId = id?.trim()?.takeIf { it.isNotEmpty() }
+        var gameSource = source
+        if (launcher && file != null) {
+            // An exported file holds the game's ID, its extension the store
+            gameId = runCatching {
+                context.contentResolver.openInputStream(file)?.use { it.readBytes().decodeToString().lineSequence().first().trim() }
+            }.getOrNull()?.takeIf { it.isNotEmpty() } ?: gameId
+            val extension = (context.contentResolver.query(file, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)
+                ?.use { if (it.moveToFirst()) it.getString(0) else null } ?: "").substringAfterLast('.', "").lowercase()
+            gameSource = when (extension) {
+                "epic" -> "EPIC"; "gog" -> "GOG"; "amazon" -> "AMAZON"; "pcgame" -> "CUSTOM_GAME"; "local" -> "LOCAL"; "steam" -> "STEAM"
+                else -> gameSource
+            }
+        }
+        // The emulator's file stays readable for it: Flux Keyboard keeps its permission and passes it on
+        if (!launcher && file != null) {
+            runCatching { context.contentResolver.takePersistableUriPermission(file, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+        }
+        val launch = intentFor(player, pkg, activity, if (launcher) null else file, gameId, gameSource)
+        return GameLibrary.Game(name, pkg, launch = launch?.toUri(Intent.URI_INTENT_SCHEME))
     }
 }
