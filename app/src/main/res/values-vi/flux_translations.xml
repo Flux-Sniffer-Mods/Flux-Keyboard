@@ -1778,4 +1778,13 @@
     <string name="game_mode_folder_add_description">Thư mục bạn đặt trong trình khởi chạy hoặc trình giả lập (xuất cho frontend hoặc thư mục trò chơi của nó), cũng được đọc để tìm trò chơi.</string>
     <string name="game_mode_folder_games_of">Trò chơi trong đó dành cho</string>
     <string name="game_mode_folder_by_names">Nhận theo tên thư mục</string>
+    <string name="game_mode_own_game">Tự thêm trò chơi</string>
+    <string name="game_mode_own_game_description">Trò chơi bạn tự thêm vào trình khởi chạy hoặc trình giả lập, như trò chơi tùy chỉnh của GameNative và GameHub: chọn cái nào, rồi tệp trò chơi (trình giả lập) hoặc tệp đã xuất hay ID trò chơi (trình khởi chạy).</string>
+    <string name="game_mode_own_game_added_to">Đã thêm vào</string>
+    <string name="game_mode_own_game_file">Chọn tệp trò chơi</string>
+    <string name="game_mode_own_game_export_file">Chọn tệp đã xuất (tùy chọn)</string>
+    <string name="game_mode_own_game_id">ID trò chơi (tùy chọn)</string>
+    <string name="game_mode_own_game_store">Cửa hàng</string>
+    <string name="game_mode_own_game_custom_store">Trò chơi tùy chỉnh</string>
+    <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
 </resources>

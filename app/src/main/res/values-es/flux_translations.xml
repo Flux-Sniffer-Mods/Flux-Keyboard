@@ -1790,4 +1790,13 @@
     <string name="game_mode_folder_add_description">La carpeta que configuraste en un lanzador o emulador (su exportación para frontends o carpeta de juegos), también se lee en busca de juegos.</string>
     <string name="game_mode_folder_games_of">Sus juegos son para</string>
     <string name="game_mode_folder_by_names">Detectados por nombres de carpeta</string>
+    <string name="game_mode_own_game">Añadir un juego tú mismo</string>
+    <string name="game_mode_own_game_description">Un juego que añadiste a mano a un lanzador o emulador, como los juegos personalizados de GameNative y GameHub: elige cuál y luego su archivo (emuladores), o su archivo exportado o ID de juego (lanzadores).</string>
+    <string name="game_mode_own_game_added_to">Añadido a</string>
+    <string name="game_mode_own_game_file">Elegir el archivo del juego</string>
+    <string name="game_mode_own_game_export_file">Elegir su archivo exportado (opcional)</string>
+    <string name="game_mode_own_game_id">ID del juego (opcional)</string>
+    <string name="game_mode_own_game_store">Tienda</string>
+    <string name="game_mode_own_game_custom_store">Juego personalizado</string>
+    <string name="game_mode_own_game_none">No está instalado ninguno de los lanzadores o emuladores en los que Flux Keyboard puede iniciar juegos (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
 </resources>

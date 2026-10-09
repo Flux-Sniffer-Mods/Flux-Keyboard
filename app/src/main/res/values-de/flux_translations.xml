@@ -1249,4 +1249,13 @@
     <string name="game_mode_folder_add_description">Der Ordner, den du in einem Launcher oder Emulator eingestellt hast (sein Export für Frontends oder Spieleordner), wird auch nach Spielen durchsucht.</string>
     <string name="game_mode_folder_games_of">Seine Spiele sind für</string>
     <string name="game_mode_folder_by_names">Nach Ordnernamen erkannt</string>
+    <string name="game_mode_own_game">Spiel selbst hinzufügen</string>
+    <string name="game_mode_own_game_description">Ein Spiel, das du selbst zu einem Launcher oder Emulator hinzugefügt hast, wie die eigenen Spiele von GameNative und GameHub: Wähle welchen, dann die Spieldatei (Emulatoren) oder die exportierte Datei bzw. Spiel-ID (Launcher).</string>
+    <string name="game_mode_own_game_added_to">Hinzugefügt zu</string>
+    <string name="game_mode_own_game_file">Spieldatei wählen</string>
+    <string name="game_mode_own_game_export_file">Exportierte Datei wählen (optional)</string>
+    <string name="game_mode_own_game_id">Spiel-ID (optional)</string>
+    <string name="game_mode_own_game_store">Store</string>
+    <string name="game_mode_own_game_custom_store">Eigenes Spiel</string>
+    <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
 </resources>

@@ -1796,4 +1796,13 @@
     <string name="game_mode_folder_add_description">Тека, задана в лаунчері чи емуляторі (його експорт для фронтендів або тека ігор), теж переглядається на ігри.</string>
     <string name="game_mode_folder_games_of">Її ігри для</string>
     <string name="game_mode_folder_by_names">Визначаються за назвами тек</string>
+    <string name="game_mode_own_game">Додати гру самому</string>
+    <string name="game_mode_own_game_description">Гра, додана вручну до лаунчера чи емулятора, як власні ігри в GameNative і GameHub: виберіть куди, потім файл гри (емулятори) або експортований файл чи ID гри (лаунчери).</string>
+    <string name="game_mode_own_game_added_to">Додано до</string>
+    <string name="game_mode_own_game_file">Вибрати файл гри</string>
+    <string name="game_mode_own_game_export_file">Вибрати експортований файл (необов\'язково)</string>
+    <string name="game_mode_own_game_id">ID гри (необов\'язково)</string>
+    <string name="game_mode_own_game_store">Магазин</string>
+    <string name="game_mode_own_game_custom_store">Власна гра</string>
+    <string name="game_mode_own_game_none">Не встановлено жодного лаунчера чи емулятора, у яких Flux Keyboard може запускати ігри (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
 </resources>

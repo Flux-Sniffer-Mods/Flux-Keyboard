@@ -1796,4 +1796,13 @@
     <string name="game_mode_folder_add_description">Folder ustawiony w launcherze lub emulatorze (jego eksport dla frontendów lub folder gier), również przeszukiwany pod kątem gier.</string>
     <string name="game_mode_folder_games_of">Jego gry są dla</string>
     <string name="game_mode_folder_by_names">Rozpoznane po nazwach folderów</string>
+    <string name="game_mode_own_game">Dodaj grę samodzielnie</string>
+    <string name="game_mode_own_game_description">Gra dodana ręcznie do launchera lub emulatora, jak własne gry w GameNative i GameHub: wybierz który, potem plik gry (emulatory) albo plik eksportu lub ID gry (launchery).</string>
+    <string name="game_mode_own_game_added_to">Dodana do</string>
+    <string name="game_mode_own_game_file">Wybierz plik gry</string>
+    <string name="game_mode_own_game_export_file">Wybierz plik eksportu (opcjonalnie)</string>
+    <string name="game_mode_own_game_id">ID gry (opcjonalnie)</string>
+    <string name="game_mode_own_game_store">Sklep</string>
+    <string name="game_mode_own_game_custom_store">Własna gra</string>
+    <string name="game_mode_own_game_none">Nie zainstalowano żadnego launchera ani emulatora, w którym Flux Keyboard może uruchamiać gry (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
 </resources>

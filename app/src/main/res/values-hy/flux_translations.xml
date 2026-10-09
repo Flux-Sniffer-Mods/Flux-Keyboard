@@ -1784,4 +1784,13 @@
     <string name="game_mode_folder_add_description">Գործարկչում կամ էմուլյատորում ձեր նշած թղթապանակը (դրա «Export for frontend»-ը կամ խաղերի թղթապանակը) նույնպես կարդացվում է խաղերի համար։</string>
     <string name="game_mode_folder_games_of">Դրա խաղերը նախատեսված են</string>
     <string name="game_mode_folder_by_names">Գտնվում են թղթապանակների անուններով</string>
+    <string name="game_mode_own_game">Ինքներդ ավելացնել խաղ</string>
+    <string name="game_mode_own_game_description">Խաղ, որը ձեռքով ավելացրել եք գործարկչին կամ էմուլյատորին, ինչպես GameNative-ի և GameHub-ի սեփական խաղերը․ ընտրեք որին, ապա խաղի ֆայլը (էմուլյատորներ) կամ արտահանված ֆայլը կամ խաղի ID-ն (գործարկիչներ)։</string>
+    <string name="game_mode_own_game_added_to">Ավելացված է</string>
+    <string name="game_mode_own_game_file">Ընտրել խաղի ֆայլը</string>
+    <string name="game_mode_own_game_export_file">Ընտրել արտահանված ֆայլը (ըստ ցանկության)</string>
+    <string name="game_mode_own_game_id">Խաղի ID (ըստ ցանկության)</string>
+    <string name="game_mode_own_game_store">Խանութ</string>
+    <string name="game_mode_own_game_custom_store">Սեփական խաղ</string>
+    <string name="game_mode_own_game_none">Տեղադրված չէ գործարկիչներից կամ էմուլյատորներից ոչ մեկը, որտեղ Flux Keyboard-ը կարող է խաղեր գործարկել (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden)։</string>
 </resources>

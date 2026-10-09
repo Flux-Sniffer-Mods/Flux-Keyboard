@@ -1158,4 +1158,13 @@
     <string name="game_mode_folder_add_description">Ο φάκελος που ορίσατε σε εκκινητή ή εξομοιωτή (η εξαγωγή του για frontend ή ο φάκελος παιχνιδιών του), διαβάζεται κι αυτός για παιχνίδια.</string>
     <string name="game_mode_folder_games_of">Τα παιχνίδιά του είναι για</string>
     <string name="game_mode_folder_by_names">Εντοπίζονται από τα ονόματα φακέλων</string>
+    <string name="game_mode_own_game">Προσθήκη παιχνιδιού μόνοι σας</string>
+    <string name="game_mode_own_game_description">Ένα παιχνίδι που προσθέσατε χειροκίνητα σε εκκινητή ή εξομοιωτή, όπως τα προσαρμοσμένα παιχνίδια του GameNative και του GameHub: επιλέξτε ποιον, μετά το αρχείο του παιχνιδιού (εξομοιωτές) ή το εξαγόμενο αρχείο ή το ID του (εκκινητές).</string>
+    <string name="game_mode_own_game_added_to">Προστέθηκε σε</string>
+    <string name="game_mode_own_game_file">Επιλογή αρχείου παιχνιδιού</string>
+    <string name="game_mode_own_game_export_file">Επιλογή εξαγόμενου αρχείου (προαιρετικό)</string>
+    <string name="game_mode_own_game_id">ID παιχνιδιού (προαιρετικό)</string>
+    <string name="game_mode_own_game_store">Κατάστημα</string>
+    <string name="game_mode_own_game_custom_store">Προσαρμοσμένο παιχνίδι</string>
+    <string name="game_mode_own_game_none">Δεν είναι εγκατεστημένος κανένας από τους εκκινητές ή εξομοιωτές όπου το Flux Keyboard μπορεί να ξεκινά παιχνίδια (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
 </resources>
