@@ -1780,4 +1780,8 @@
     <string name="game_mode_folders">Ստեղծել խաղերի թղթապանակները</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, թղթապանակով GameNative-ի, GameHub-ի, Dolphin-ի, PPSSPP-ի, Azahar-ի և Eden-ի համար։ GameNative-ի և GameHub Lite-ի «Export for frontend»-ն ուղղեք իրենց թղթապանակին, էմուլյատորների խաղերը պահեք իրենցում (և ավելացրեք թղթապանակը էմուլյատորում), և յուրաքանչյուր խաղ կարող է ունենալ պրոֆիլ և այն գործարկող դյուրանցում։ ES-DE-ի ROMs թղթապանակը նույնպես կարդացվում է։</string>
     <string name="game_mode_folders_made">Ստեղծված է Download/Flux Keyboard/Games-ում։ GameNative․ Կարգավորումներ > Ինտերֆեյս > Frontend Sync, ապա ընտրեք այնտեղ GameNative թղթապանակը։</string>
+    <string name="game_mode_folder_add">Ավելացնել ձեր խաղերի թղթապանակը</string>
+    <string name="game_mode_folder_add_description">Գործարկչում կամ էմուլյատորում ձեր նշած թղթապանակը (դրա «Export for frontend»-ը կամ խաղերի թղթապանակը) նույնպես կարդացվում է խաղերի համար։</string>
+    <string name="game_mode_folder_games_of">Դրա խաղերը նախատեսված են</string>
+    <string name="game_mode_folder_by_names">Գտնվում են թղթապանակների անուններով</string>
 </resources>

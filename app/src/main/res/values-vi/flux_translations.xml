@@ -1774,4 +1774,8 @@
     <string name="game_mode_folders">Tạo thư mục trò chơi</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, với một thư mục cho GameNative, GameHub, Dolphin, PPSSPP, Azahar và Eden. Trỏ xuất cho frontend của GameNative và GameHub Lite vào thư mục của chúng, để trò chơi giả lập trong thư mục của chúng (và thêm thư mục đó trong trình giả lập), mỗi trò chơi có thể có hồ sơ và lối tắt khởi động nó. Thư mục ROMs của ES-DE cũng được đọc.</string>
     <string name="game_mode_folders_made">Đã tạo trong Download/Flux Keyboard/Games. GameNative: Cài đặt > Giao diện > Frontend Sync, rồi chọn thư mục GameNative ở đó.</string>
+    <string name="game_mode_folder_add">Thêm thư mục trò chơi của bạn</string>
+    <string name="game_mode_folder_add_description">Thư mục bạn đặt trong trình khởi chạy hoặc trình giả lập (xuất cho frontend hoặc thư mục trò chơi của nó), cũng được đọc để tìm trò chơi.</string>
+    <string name="game_mode_folder_games_of">Trò chơi trong đó dành cho</string>
+    <string name="game_mode_folder_by_names">Nhận theo tên thư mục</string>
 </resources>

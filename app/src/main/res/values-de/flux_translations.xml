@@ -1245,4 +1245,8 @@
     <string name="game_mode_folders">Spielordner anlegen</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mit einem Ordner für GameNative, GameHub, Dolphin, PPSSPP, Azahar und Eden. Richte den Export für Frontends von GameNative und GameHub Lite auf ihren Ordner, lege Emulator-Spiele in ihren (und füge den Ordner im Emulator hinzu), dann bekommt jedes Spiel ein Profil und eine Startbildschirm-Verknüpfung, die es startet. Der ROMs-Ordner von ES-DE wird auch gelesen.</string>
     <string name="game_mode_folders_made">Angelegt in Download/Flux Keyboard/Games. GameNative: Einstellungen > Oberfläche > Frontend Sync, dann dort den Ordner GameNative wählen.</string>
+    <string name="game_mode_folder_add">Eigenen Spielordner hinzufügen</string>
+    <string name="game_mode_folder_add_description">Der Ordner, den du in einem Launcher oder Emulator eingestellt hast (sein Export für Frontends oder Spieleordner), wird auch nach Spielen durchsucht.</string>
+    <string name="game_mode_folder_games_of">Seine Spiele sind für</string>
+    <string name="game_mode_folder_by_names">Nach Ordnernamen erkannt</string>
 </resources>

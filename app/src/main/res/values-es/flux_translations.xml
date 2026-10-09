@@ -1786,4 +1786,8 @@
     <string name="game_mode_folders">Crear las carpetas de juegos</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, con una carpeta para GameNative, GameHub, Dolphin, PPSSPP, Azahar y Eden. Apunta la exportación para frontends de GameNative y GameHub Lite a la suya, guarda los juegos de emuladores en la suya (y añade la carpeta en el emulador), y cada juego puede tener un perfil y un acceso directo que lo inicia. También se lee la carpeta ROMs de ES-DE.</string>
     <string name="game_mode_folders_made">Creadas en Download/Flux Keyboard/Games. GameNative: Ajustes > Interfaz > Frontend Sync, y elige ahí la carpeta GameNative.</string>
+    <string name="game_mode_folder_add">Añadir una carpeta de juegos propia</string>
+    <string name="game_mode_folder_add_description">La carpeta que configuraste en un lanzador o emulador (su exportación para frontends o carpeta de juegos), también se lee en busca de juegos.</string>
+    <string name="game_mode_folder_games_of">Sus juegos son para</string>
+    <string name="game_mode_folder_by_names">Detectados por nombres de carpeta</string>
 </resources>

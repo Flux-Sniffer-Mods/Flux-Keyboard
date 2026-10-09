@@ -1792,4 +1792,8 @@
     <string name="game_mode_folders">Создать папки игр</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, с папкой для GameNative, GameHub, Dolphin, PPSSPP, Azahar и Eden. Направьте экспорт для фронтендов GameNative и GameHub Lite в их папку, храните игры эмуляторов в их папке (и добавьте её в эмуляторе) — у каждой игры может быть профиль и ярлык, который её запускает. Папка ROMs из ES-DE тоже читается.</string>
     <string name="game_mode_folders_made">Созданы в Download/Flux Keyboard/Games. GameNative: Настройки > Интерфейс > Frontend Sync, затем выберите там папку GameNative.</string>
+    <string name="game_mode_folder_add">Добавить свою папку игр</string>
+    <string name="game_mode_folder_add_description">Папка, заданная в лаунчере или эмуляторе (его экспорт для фронтендов или папка игр), тоже просматривается на игры.</string>
+    <string name="game_mode_folder_games_of">Её игры для</string>
+    <string name="game_mode_folder_by_names">Определяются по именам папок</string>
 </resources>

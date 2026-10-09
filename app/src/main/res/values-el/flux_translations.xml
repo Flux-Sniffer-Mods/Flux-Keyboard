@@ -1154,4 +1154,8 @@
     <string name="game_mode_folders">Δημιουργία φακέλων παιχνιδιών</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, με φάκελο για GameNative, GameHub, Dolphin, PPSSPP, Azahar και Eden. Στρέψτε την εξαγωγή για frontend του GameNative και του GameHub Lite στον δικό τους, κρατήστε τα παιχνίδια των εξομοιωτών στον δικό τους (και προσθέστε τον φάκελο στον εξομοιωτή), και κάθε παιχνίδι μπορεί να έχει προφίλ και συντόμευση που το ξεκινά. Διαβάζεται και ο φάκελος ROMs του ES-DE.</string>
     <string name="game_mode_folders_made">Δημιουργήθηκαν στο Download/Flux Keyboard/Games. GameNative: Ρυθμίσεις > Διεπαφή > Frontend Sync, και επιλέξτε εκεί τον φάκελο GameNative.</string>
+    <string name="game_mode_folder_add">Προσθήκη δικού σας φακέλου παιχνιδιών</string>
+    <string name="game_mode_folder_add_description">Ο φάκελος που ορίσατε σε εκκινητή ή εξομοιωτή (η εξαγωγή του για frontend ή ο φάκελος παιχνιδιών του), διαβάζεται κι αυτός για παιχνίδια.</string>
+    <string name="game_mode_folder_games_of">Τα παιχνίδιά του είναι για</string>
+    <string name="game_mode_folder_by_names">Εντοπίζονται από τα ονόματα φακέλων</string>
 </resources>
