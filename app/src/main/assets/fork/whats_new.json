@@ -508,6 +508,10 @@
     {
       "text": "Gaming mode: add a game yourself, like GameNative's and GameHub's custom games: pick the launcher or emulator you added it to, then its file, exported file or game ID, and it gets a profile and a home screen shortcut that starts it.",
       "after": "202610092140"
+    },
+    {
+      "text": "Gaming mode for games started from inside their launcher or emulator: each profile can be saved in that app's own form (a GameNative controls profile named after the game, a Dolphin controller profile, the game's own PPSSPP controls, or the keys to bind in Azahar and Eden), with how to load it there. Flux Keyboard also switches to the running game's profile by itself where it can tell which game it is (PPSSPP, and games another frontend started).",
+      "after": "202610092230"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -61,9 +61,33 @@ object GameMode {
         val app = context.applicationContext
         if (packageName == app.packageName || packageName == "com.android.systemui") return
         frontPackage = packageName
-        val next = if (GameProfiles.enabled(app)) GameProfiles.active(app, packageName) else null
-        if (next?.id == profile?.id) return
-        worker.execute { if (next != null) start(app, next) else stop(app) }
+        if (!GameProfiles.enabled(app)) {
+            if (profile != null) worker.execute { stop(app) }
+            return
+        }
+        worker.execute { followGame(app, packageName) }
+    }
+
+    private val watcher = java.util.concurrent.Executors.newSingleThreadScheduledExecutor()
+    private var watch: java.util.concurrent.ScheduledFuture<*>? = null
+
+    /**
+     * The app's profile: the running game's, when it was started from inside the app and can be
+     * told (GameDetect), else the one chosen last. While the app has several, it's checked again
+     * every few seconds, for a game started from its own list.
+     */
+    private fun followGame(app: Context, packageName: String) {
+        if (frontPackage != packageName) return
+        val profiles = GameProfiles.forPackage(app, packageName)
+        GameDetect.detect(packageName, profiles)?.let { GameProfiles.setActive(app, packageName, it.id) }
+        val next = GameProfiles.active(app, packageName)
+        if (next?.id != profile?.id) {
+            if (next != null) start(app, next) else stop(app)
+        }
+        watch?.cancel(false)
+        watch = if (next != null && profiles.size > 1) {
+            watcher.schedule({ worker.execute { followGame(app, packageName) } }, 5, java.util.concurrent.TimeUnit.SECONDS)
+        } else null
     }
 
     /** A key, before the app sees it: true when gaming mode took it. */
@@ -79,6 +103,8 @@ object GameMode {
             worker.execute { if (down) send("T d $finger ${tap.first * screenW} ${tap.second * screenH}") else send("T u $finger") }
             return true
         }
+        // The app's own controller profile maps the keys: they reach it as they are
+        if (current.nativeKeys) return false
         val action = current.keys[event.keyCode] ?: return false
         if (event.repeatCount > 0) return true
         val down = event.action == KeyEvent.ACTION_DOWN

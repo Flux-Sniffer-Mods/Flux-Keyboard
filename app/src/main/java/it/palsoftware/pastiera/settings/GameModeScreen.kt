@@ -405,6 +405,42 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     onCheckedChange = { current = current.copy(sideways = it) }
                 )
             }
+            // For starting the game from inside its launcher or emulator: its own form of this profile
+            val nativeApp = it.palsoftware.pastiera.gaming.NativeProfiles.appFor(current)
+            if (nativeApp != null) {
+                var steps by remember { mutableStateOf<String?>(null) }
+                val saveScope = androidx.compose.runtime.rememberCoroutineScope()
+                FluxActionRow(
+                    linkId = null,
+                    icon = "\u2913",
+                    title = stringResource(R.string.native_save, nativeApp),
+                    description = stringResource(R.string.native_save_description, nativeApp)
+                ) {
+                    saveScope.launch {
+                        val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.NativeProfiles.save(context, current) }
+                        if (result.nativeKeys) current = current.copy(nativeKeys = true)
+                        steps = result.steps
+                    }
+                }
+                steps?.let { text ->
+                    AlertDialog(
+                        onDismissRequest = { steps = null },
+                        title = { Text(stringResource(R.string.native_save, nativeApp)) },
+                        text = { Text(text) },
+                        confirmButton = { TextButton(onClick = { steps = null }) { Text(stringResource(android.R.string.ok)) } }
+                    )
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.native_keys))
+                        Text(stringResource(R.string.native_keys_description), style = MaterialTheme.typography.bodySmall)
+                    }
+                    androidx.compose.material3.Switch(
+                        checked = current.nativeKeys,
+                        onCheckedChange = { current = current.copy(nativeKeys = it) }
+                    )
+                }
+            }
             // A known emulator: its on-screen gamepad's spots, read from its code or settings
             val emulator = current.packages.firstNotNullOfOrNull { pkg ->
                 it.palsoftware.pastiera.gaming.EmulatorLayouts.name(pkg)?.let { pkg to it }

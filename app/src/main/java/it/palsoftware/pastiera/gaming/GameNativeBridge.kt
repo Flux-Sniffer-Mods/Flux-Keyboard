@@ -51,7 +51,7 @@ object GameNativeBridge {
     )
 
     /** The controls profile GameNative imports. */
-    fun profileJson(): JSONObject {
+    fun profileJson(name: String = "Flux Keyboard"): JSONObject {
         val elements = JSONArray()
         fun element(type: String, bindings: List<String>, place: Pair<Float, Float>, scale: Float) =
             JSONObject().apply {
@@ -71,22 +71,24 @@ object GameNativeBridge {
         elements.put(element("STICK", listOf("GAMEPAD_LEFT_THUMB_UP", "GAMEPAD_LEFT_THUMB_RIGHT", "GAMEPAD_LEFT_THUMB_DOWN", "GAMEPAD_LEFT_THUMB_LEFT"), LEFT_STICK, STICK_SCALE))
         elements.put(element("STICK", listOf("GAMEPAD_RIGHT_THUMB_UP", "GAMEPAD_RIGHT_THUMB_RIGHT", "GAMEPAD_RIGHT_THUMB_DOWN", "GAMEPAD_RIGHT_THUMB_LEFT"), RIGHT_STICK, STICK_SCALE))
         return JSONObject().apply {
-            put("name", "Flux Keyboard")
+            put("name", name)
             put("cursorSpeed", 1.0)
             put("elements", elements)
         }
     }
 
     /** Saves the profile to Downloads/Flux Keyboard; false when it couldn't. */
-    fun save(context: Context): Boolean = runCatching {
+    fun save(context: Context, game: String? = null): Boolean = runCatching {
         val resolver = context.contentResolver
+        // A game's own copy: named after it, so GameNative can be set to it for that game
         val values = ContentValues().apply {
-            put(MediaStore.Downloads.DISPLAY_NAME, FILE_NAME)
+            put(MediaStore.Downloads.DISPLAY_NAME, game?.let { "$it (Flux Keyboard).icp" } ?: FILE_NAME)
             put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
-            put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Flux Keyboard")
+            put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Flux Keyboard" + if (game != null) "/Profiles/GameNative" else "")
         }
         val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values) ?: return false
-        resolver.openOutputStream(uri, "wt")?.use { it.write(profileJson().toString(2).toByteArray()) } ?: return false
+        val json = profileJson(game?.let { "$it (Flux Keyboard)" } ?: "Flux Keyboard")
+        resolver.openOutputStream(uri, "wt")?.use { it.write(json.toString(2).toByteArray()) } ?: return false
         true
     }.getOrDefault(false)
 }

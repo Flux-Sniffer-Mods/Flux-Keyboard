@@ -94,12 +94,15 @@ data class GameProfile(
     /** What starts the game itself (an intent URI), for its home screen shortcut. */
     val launch: String? = null,
     /** A game that only plays sideways: the screen is made landscape-shaped while it runs. */
-    val sideways: Boolean = false
+    val sideways: Boolean = false,
+    /** The app maps the keys itself (its own controller profile): gaming mode leaves them alone. */
+    val nativeKeys: Boolean = false
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
         launch?.let { put("launch", it) }
         put("sideways", sideways)
+        put("nativeKeys", nativeKeys)
         put("name", name)
         put("style", style.name)
         put("packages", JSONArray(packages.toList()))
@@ -143,7 +146,8 @@ data class GameProfile(
                     }.toMap()
                 }.orEmpty(),
                 launch = json.optString("launch").ifEmpty { null },
-                sideways = json.optBoolean("sideways", false)
+                sideways = json.optBoolean("sideways", false),
+                nativeKeys = json.optBoolean("nativeKeys", false)
             )
         }.getOrNull()
     }
