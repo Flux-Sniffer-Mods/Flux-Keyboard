@@ -54,7 +54,7 @@ internal object TerminalMode {
         Suspend("ctrl_z", KeyEvent.KEYCODE_Z, ctrl = true),
         ClearScreen("ctrl_l", KeyEvent.KEYCODE_L, ctrl = true),
         SearchHistory("ctrl_r", KeyEvent.KEYCODE_R, ctrl = true),
-        // Held, it is Alt itself: the keyboard's Alt layer and terminal Alt combos
+        // Held, the terminal's own Alt (Meta) for the keys pressed with it
         Alt("alt", KeyEvent.KEYCODE_ALT_LEFT);
 
         /** Only the arrow repeats while held; a held Ctrl+C sends one interrupt. */

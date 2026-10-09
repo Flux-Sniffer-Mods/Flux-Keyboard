@@ -210,7 +210,7 @@
     <string name="terminal_emoji_key_ctrl_z">Ctrl+Z (suspend)</string>
     <string name="terminal_emoji_key_ctrl_l">Ctrl+L (clear the screen)</string>
     <string name="terminal_emoji_key_ctrl_r">Ctrl+R (search history)</string>
-    <string name="terminal_emoji_key_alt">Alt (hold with another key)</string>
+    <string name="terminal_emoji_key_alt">The terminal\'s Alt (hold with another key)</string>
     <string name="alt_key_editor_in_use_title">Device SYM layer in use</string>
     <string name="alt_key_editor_in_use_auto">Automatic: %1$s (from your keyboard)</string>
     <string name="alt_key_editor_curated_section">Curated profiles</string>

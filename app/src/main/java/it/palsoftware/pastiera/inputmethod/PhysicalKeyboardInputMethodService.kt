@@ -5491,6 +5491,22 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         )
     }
 
+    /**
+     * While the emoji key is held as Alt, other keys go to the terminal as the terminal's Alt
+     * (Meta: Termux sends Esc first), not through the keyboard's own Alt and its characters.
+     * The emoji key (Right Shift) doesn't count as Shift for them.
+     */
+    private fun sendWithTerminalAlt(event: KeyEvent?): Boolean {
+        if (!terminalEmojiAltHeld || event == null || KeyEvent.isModifierKey(event.keyCode)) return false
+        val connection = currentInputConnection ?: return false
+        connection.sendKeyEvent(KeyEvent(
+            event.downTime, event.eventTime, event.action, event.keyCode, event.repeatCount,
+            dropEmojiKeyShift(event.metaState) or KeyEvent.META_ALT_ON or KeyEvent.META_ALT_LEFT_ON,
+            event.deviceId, event.scanCode, event.flags, event.source
+        ))
+        return true
+    }
+
     /** While the emoji key (Right Shift) is held as Alt, other keys don't count it as Shift. */
     private fun withoutEmojiAltShift(event: KeyEvent?): KeyEvent? {
         if (!terminalEmojiAltHeld || event == null) return null
@@ -5865,7 +5881,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 return true
             }
         }
-        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return onKeyDown(KeyEvent.KEYCODE_ALT_LEFT, it) }
+        // The emoji key as the terminal's Alt: held, not passed on; the keys pressed with it are
+        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return true }
+        if (sendWithTerminalAlt(event_)) return true
         withoutEmojiAltShift(event_)?.let { return onKeyDown(keyCode_, it) }
         if (emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN && keyCode_ != emojiPickerKeyUpPending) {
             emojiPickerKeyChorded = true
@@ -6807,7 +6825,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             returnToApp(pkg)
             return true
         }
-        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return onKeyUp(KeyEvent.KEYCODE_ALT_LEFT, it) }
+        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return true }
+        if (sendWithTerminalAlt(event_)) return true
         withoutEmojiAltShift(event_)?.let { return onKeyUp(keyCode_, it) }
         if (keyboardHiddenForApp) {
             // A release follows its press, so neither side is left with a stuck key
