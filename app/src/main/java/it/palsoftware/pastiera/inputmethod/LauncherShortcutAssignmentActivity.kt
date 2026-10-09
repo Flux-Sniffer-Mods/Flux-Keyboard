@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -88,7 +87,8 @@ class LauncherShortcutAssignmentActivity : LocalizedComponentActivity() {
         
         // Transparent theme so the bottom sheet shows over the launcher
         setContent {
-            MaterialTheme {
+            // The quick launcher's colours: the keyboard's theme
+            MaterialTheme(colorScheme = quickLauncherColors(this)) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -587,13 +587,16 @@ private fun CommandGridItem(
             Spacer(modifier = Modifier.height(8.dp))
             
             // App name (centred, at most 2 lines)
+            // Two lines at most, the same height in every tile
             Text(
                 text = command.label,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Medium,
-                maxLines = 1,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.basicMarquee()
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                minLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
             )
         }
     }

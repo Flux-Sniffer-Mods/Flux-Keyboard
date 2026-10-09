@@ -583,7 +583,7 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 }
 
 /** The quick launcher in the keyboard's theme: its background, keys, text and accent. */
-private fun quickLauncherColors(context: Context): androidx.compose.material3.ColorScheme {
+internal fun quickLauncherColors(context: Context): androidx.compose.material3.ColorScheme {
     val theme = SettingsManager.getEffectiveKeyboardTheme(context, SettingsManager.KeyboardThemeTarget.HARDWARE)
     val background = Color(theme.background).copy(alpha = 1f)
     val text = Color(theme.textAndIcons)
