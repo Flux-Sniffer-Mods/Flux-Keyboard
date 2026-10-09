@@ -1789,4 +1789,7 @@
     <string name="game_mode_use_emulator_controls">Использовать экранное управление %1$s</string>
     <string name="game_mode_emulator_applied">Клавиши и стики назначены на экранное управление эмулятора. Подправьте их через «Разместить клавиши на экране», если что-то двигали.</string>
     <string name="game_mode_emulator_unreadable">Его управление пока неизвестно: откройте в нём игру один раз при вертикальном экране с видимым экранным управлением, затем попробуйте снова.</string>
+    <string name="game_mode_folders">Создать папки игр</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, с папкой для GameNative, GameHub, Dolphin, PPSSPP, Azahar и Eden. Направьте экспорт для фронтендов GameNative и GameHub Lite в их папку, храните игры эмуляторов в их папке (и добавьте её в эмуляторе) — у каждой игры может быть профиль и ярлык, который её запускает. Папка ROMs из ES-DE тоже читается.</string>
+    <string name="game_mode_folders_made">Созданы в Download/Flux Keyboard/Games. GameNative: Настройки > Интерфейс > Frontend Sync, затем выберите там папку GameNative.</string>
 </resources>

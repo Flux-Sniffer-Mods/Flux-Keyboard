@@ -1771,4 +1771,7 @@
     <string name="game_mode_use_emulator_controls">Dùng điều khiển trên màn hình của %1$s</string>
     <string name="game_mode_emulator_applied">Phím và cần đã đặt lên điều khiển trên màn hình của trình giả lập. Tinh chỉnh bằng Đặt phím trên màn hình nếu bạn đã di chuyển cái nào.</string>
     <string name="game_mode_emulator_unreadable">Chưa biết điều khiển của nó: mở một trò chơi trong đó một lần với màn hình đứng thẳng và điều khiển trên màn hình hiện ra, rồi thử lại.</string>
+    <string name="game_mode_folders">Tạo thư mục trò chơi</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, với một thư mục cho GameNative, GameHub, Dolphin, PPSSPP, Azahar và Eden. Trỏ xuất cho frontend của GameNative và GameHub Lite vào thư mục của chúng, để trò chơi giả lập trong thư mục của chúng (và thêm thư mục đó trong trình giả lập), mỗi trò chơi có thể có hồ sơ và lối tắt khởi động nó. Thư mục ROMs của ES-DE cũng được đọc.</string>
+    <string name="game_mode_folders_made">Đã tạo trong Download/Flux Keyboard/Games. GameNative: Cài đặt > Giao diện > Frontend Sync, rồi chọn thư mục GameNative ở đó.</string>
 </resources>

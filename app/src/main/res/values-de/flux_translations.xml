@@ -1242,4 +1242,7 @@
     <string name="game_mode_use_emulator_controls">Bildschirmsteuerung von %1$s verwenden</string>
     <string name="game_mode_emulator_applied">Tasten und Sticks auf die Bildschirmsteuerung des Emulators gesetzt. Mit Tasten auf dem Bildschirm platzieren feinjustieren, falls du welche verschoben hast.</string>
     <string name="game_mode_emulator_unreadable">Seine Steuerung ist noch nicht bekannt: Öffne darin einmal ein Spiel im Hochformat mit sichtbarer Bildschirmsteuerung und versuche es dann erneut.</string>
+    <string name="game_mode_folders">Spielordner anlegen</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mit einem Ordner für GameNative, GameHub, Dolphin, PPSSPP, Azahar und Eden. Richte den Export für Frontends von GameNative und GameHub Lite auf ihren Ordner, lege Emulator-Spiele in ihren (und füge den Ordner im Emulator hinzu), dann bekommt jedes Spiel ein Profil und eine Startbildschirm-Verknüpfung, die es startet. Der ROMs-Ordner von ES-DE wird auch gelesen.</string>
+    <string name="game_mode_folders_made">Angelegt in Download/Flux Keyboard/Games. GameNative: Einstellungen > Oberfläche > Frontend Sync, dann dort den Ordner GameNative wählen.</string>
 </resources>

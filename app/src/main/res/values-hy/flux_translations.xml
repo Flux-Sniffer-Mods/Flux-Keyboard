@@ -1777,4 +1777,7 @@
     <string name="game_mode_use_emulator_controls">Օգտագործել %1$s-ի էկրանային կառավարումը</string>
     <string name="game_mode_emulator_applied">Ստեղներն ու լծակները դրված են էմուլյատորի էկրանային կառավարման վրա։ Ճշգրտեք դրանք «Տեղադրել ստեղները էկրանին»-ով, եթե որևէ մեկը տեղաշարժել եք։</string>
     <string name="game_mode_emulator_unreadable">Դրա կառավարումը դեռ հայտնի չէ․ մեկ անգամ բացեք դրանում խաղ՝ էկրանը ուղիղ և էկրանային կառավարումը ցուցադրված, ապա նորից փորձեք։</string>
+    <string name="game_mode_folders">Ստեղծել խաղերի թղթապանակները</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, թղթապանակով GameNative-ի, GameHub-ի, Dolphin-ի, PPSSPP-ի, Azahar-ի և Eden-ի համար։ GameNative-ի և GameHub Lite-ի «Export for frontend»-ն ուղղեք իրենց թղթապանակին, էմուլյատորների խաղերը պահեք իրենցում (և ավելացրեք թղթապանակը էմուլյատորում), և յուրաքանչյուր խաղ կարող է ունենալ պրոֆիլ և այն գործարկող դյուրանցում։ ES-DE-ի ROMs թղթապանակը նույնպես կարդացվում է։</string>
+    <string name="game_mode_folders_made">Ստեղծված է Download/Flux Keyboard/Games-ում։ GameNative․ Կարգավորումներ > Ինտերֆեյս > Frontend Sync, ապա ընտրեք այնտեղ GameNative թղթապանակը։</string>
 </resources>

@@ -1783,4 +1783,7 @@
     <string name="game_mode_use_emulator_controls">Usar los controles en pantalla de %1$s</string>
     <string name="game_mode_emulator_applied">Teclas y sticks puestos en los controles en pantalla del emulador. Ajústalos con Colocar teclas en pantalla si moviste alguno.</string>
     <string name="game_mode_emulator_unreadable">Sus controles aún no se conocen: abre un juego en él una vez con la pantalla en vertical y sus controles en pantalla visibles, y vuelve a intentarlo.</string>
+    <string name="game_mode_folders">Crear las carpetas de juegos</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, con una carpeta para GameNative, GameHub, Dolphin, PPSSPP, Azahar y Eden. Apunta la exportación para frontends de GameNative y GameHub Lite a la suya, guarda los juegos de emuladores en la suya (y añade la carpeta en el emulador), y cada juego puede tener un perfil y un acceso directo que lo inicia. También se lee la carpeta ROMs de ES-DE.</string>
+    <string name="game_mode_folders_made">Creadas en Download/Flux Keyboard/Games. GameNative: Ajustes > Interfaz > Frontend Sync, y elige ahí la carpeta GameNative.</string>
 </resources>

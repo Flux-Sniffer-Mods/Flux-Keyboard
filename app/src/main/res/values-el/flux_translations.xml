@@ -1151,4 +1151,7 @@
     <string name="game_mode_use_emulator_controls">Χρήση των χειριστηρίων οθόνης του %1$s</string>
     <string name="game_mode_emulator_applied">Πλήκτρα και μοχλοί ορίστηκαν στα χειριστήρια οθόνης του εξομοιωτή. Ρυθμίστε τα με «Τοποθέτηση πλήκτρων στην οθόνη» αν μετακινήσατε κάποιο.</string>
     <string name="game_mode_emulator_unreadable">Τα χειριστήριά του δεν είναι ακόμη γνωστά: ανοίξτε ένα παιχνίδι σε αυτόν μία φορά με την οθόνη όρθια και τα χειριστήρια οθόνης εμφανή, μετά δοκιμάστε ξανά.</string>
+    <string name="game_mode_folders">Δημιουργία φακέλων παιχνιδιών</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, με φάκελο για GameNative, GameHub, Dolphin, PPSSPP, Azahar και Eden. Στρέψτε την εξαγωγή για frontend του GameNative και του GameHub Lite στον δικό τους, κρατήστε τα παιχνίδια των εξομοιωτών στον δικό τους (και προσθέστε τον φάκελο στον εξομοιωτή), και κάθε παιχνίδι μπορεί να έχει προφίλ και συντόμευση που το ξεκινά. Διαβάζεται και ο φάκελος ROMs του ES-DE.</string>
+    <string name="game_mode_folders_made">Δημιουργήθηκαν στο Download/Flux Keyboard/Games. GameNative: Ρυθμίσεις > Διεπαφή > Frontend Sync, και επιλέξτε εκεί τον φάκελο GameNative.</string>
 </resources>
