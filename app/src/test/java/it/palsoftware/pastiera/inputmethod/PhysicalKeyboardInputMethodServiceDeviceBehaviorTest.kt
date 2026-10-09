@@ -562,7 +562,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
-    fun terminalMode_emojiKeyAsAltActsAsAlt() {
+    fun terminalMode_emojiKeyAsAltIsTheTerminalsAlt() {
         val context = RuntimeEnvironment.getApplication()
         SettingsManager.setTerminalModeEnabled(context, true)
         SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_GRAVE)
@@ -574,9 +574,12 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         )
 
         service.onKeyDown(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_000L))
-        assertTrue("Held, the emoji key is Alt", modifierController().altPhysicallyPressed)
-        service.onKeyUp(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_200L))
+        // Held: not the keyboard's Alt, the terminal's: a key pressed with it goes with Alt (Meta)
         assertFalse(modifierController().altPhysicallyPressed)
+        service.onKeyDown(KeyEvent.KEYCODE_B, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_B, 3_050L, 3_050L))
+        service.onKeyUp(KeyEvent.KEYCODE_B, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_B, 3_050L, 3_100L))
+        service.onKeyUp(KeyEvent.KEYCODE_GRAVE, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_GRAVE, 3_000L, 3_200L))
+        assertTrue("B goes with Alt", recorder.sentKeyEvents.any { it.keyCode == KeyEvent.KEYCODE_B && it.isAltPressed })
         assertTrue("Nothing of its own is sent", recorder.sentKeyEvents.none { it.keyCode == KeyEvent.KEYCODE_GRAVE })
     }
 
