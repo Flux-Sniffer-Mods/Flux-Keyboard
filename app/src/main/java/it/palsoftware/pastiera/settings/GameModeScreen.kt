@@ -135,7 +135,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 picking = false
                 val fresh = GameProfiles.newProfile(app.appName, GameStyle.GAMEPAD, setOf(app.packageName))
                 // Dolphin: its on-screen gamepad's spots straight away (they come from its code)
-                editing = if (it.palsoftware.pastiera.gaming.EmulatorLayouts.name(app.packageName) == "Dolphin") {
+                editing = if (it.palsoftware.pastiera.gaming.EmulatorLayouts.name(app.packageName).let { it == "Dolphin" || it == "Azahar" || it == "Eden" }) {
                     it.palsoftware.pastiera.gaming.EmulatorLayouts.layout(context, app.packageName)
                         ?.let { layout -> it.palsoftware.pastiera.gaming.EmulatorLayouts.apply(fresh, layout) } ?: fresh
                 } else fresh

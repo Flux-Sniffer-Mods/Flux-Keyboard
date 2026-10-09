@@ -17,11 +17,18 @@ object EmulatorLayouts {
 
     private val DOLPHIN = setOf("org.dolphinemu.dolphinemu", "org.dolphinemu.mmjr", "org.mm.jr")
     private val PPSSPP = setOf("org.ppsspp.ppsspp", "org.ppsspp.ppssppgold")
+    private val AZAHAR = setOf(
+        "org.azahar_emu.azahar", "io.github.lime3ds.android", "org.citra.citra_emu", "org.citra.citra_emu.canary"
+    )
+
+    private val EDEN = setOf("dev.eden.eden_emulator", "org.yuzu.yuzu_emu", "org.citron.citron_emu", "org.sudachi.sudachi_emu")
 
     /** An emulator whose on-screen gamepad Flux Keyboard knows. */
     fun name(packageName: String): String? = when (packageName) {
         in DOLPHIN -> "Dolphin"
         in PPSSPP -> "PPSSPP"
+        in AZAHAR -> "Azahar"
+        in EDEN -> "Eden"
         else -> null
     }
 
@@ -31,6 +38,8 @@ object EmulatorLayouts {
         return when (packageName) {
             in DOLPHIN -> dolphin(w, h)
             in PPSSPP -> ppsspp(packageName, w, h, context.resources.displayMetrics.density)
+            in AZAHAR -> azahar(w, h)
+            in EDEN -> eden(w, h)
             else -> null
         }
     }
@@ -84,6 +93,78 @@ object EmulatorLayouts {
             sticks = mapOf(
                 0 to Triple(main.first, main.second, 0.275f / 2 * 0.8f),
                 1 to Triple(c.first, c.second, 0.275f / 2 * 0.8f)
+            )
+        )
+    }
+
+    /**
+     * Azahar's (and Lime3DS's and Citra's) portrait layout (integers.xml, InputOverlay.kt), the
+     * same scheme as Dolphin's. The 3DS's buttons go by their places: its B (bottom) is the
+     * Xbox A, its A (right) the Xbox B, its Y (left) the Xbox X, its X (top) the Xbox Y.
+     */
+    private fun azahar(w: Float, h: Float): Layout {
+        fun centre(x: Int, y: Int, scale: Float) = Pair(x / 1000f + scale / 2, y / 1000f + scale / 2 * w / h)
+        val dpad = centre(10, 730, 0.22f)
+        val arm = 0.22f / 3
+        val main = centre(80, 850, 0.275f)
+        val c = centre(800, 720, 0.275f)
+        return Layout(
+            buttons = mapOf(
+                GameAction.BUTTON_A to centre(710, 905, 0.11f),
+                GameAction.BUTTON_B to centre(810, 850, 0.11f),
+                GameAction.BUTTON_X to centre(610, 850, 0.11f),
+                GameAction.BUTTON_Y to centre(710, 795, 0.11f),
+                GameAction.L1 to centre(10, 640, 0.18f),
+                GameAction.L2 to centre(210, 640, 0.18f),
+                GameAction.R1 to centre(810, 640, 0.18f),
+                GameAction.R2 to centre(610, 640, 0.18f),
+                GameAction.START to centre(520, 794, 0.08f),
+                GameAction.SELECT to centre(400, 794, 0.08f),
+                GameAction.HOME to centre(460, 840, 0.08f),
+                GameAction.DPAD_UP to Pair(dpad.first, dpad.second - arm * w / h),
+                GameAction.DPAD_DOWN to Pair(dpad.first, dpad.second + arm * w / h),
+                GameAction.DPAD_LEFT to Pair(dpad.first - arm, dpad.second),
+                GameAction.DPAD_RIGHT to Pair(dpad.first + arm, dpad.second)
+            ),
+            sticks = mapOf(
+                0 to Triple(main.first, main.second, 0.275f / 2 * 0.8f),
+                1 to Triple(c.first, c.second, 0.275f / 2 * 0.8f)
+            )
+        )
+    }
+
+    /**
+     * Eden's (and yuzu's forks') portrait layout (integers.xml, InputOverlay.kt): each control's
+     * centre in thousandths of the width and height. The Switch's buttons go by their places,
+     * as with the 3DS.
+     */
+    private fun eden(w: Float, h: Float): Layout {
+        fun at(x: Int, y: Int) = Pair(x / 1000f, y / 1000f)
+        val dpad = at(240, 840)
+        val arm = 0.25f / 3
+        return Layout(
+            buttons = mapOf(
+                GameAction.BUTTON_A to at(740, 880),
+                GameAction.BUTTON_B to at(840, 840),
+                GameAction.BUTTON_X to at(640, 840),
+                GameAction.BUTTON_Y to at(740, 800),
+                GameAction.L1 to at(140, 260),
+                GameAction.R1 to at(860, 260),
+                GameAction.L2 to at(140, 200),
+                GameAction.R2 to at(860, 200),
+                GameAction.START to at(560, 950),
+                GameAction.SELECT to at(440, 950),
+                GameAction.HOME to at(680, 950),
+                GameAction.L3 to at(730, 510),
+                GameAction.R3 to at(900, 540),
+                GameAction.DPAD_UP to Pair(dpad.first, dpad.second - arm * w / h),
+                GameAction.DPAD_DOWN to Pair(dpad.first, dpad.second + arm * w / h),
+                GameAction.DPAD_LEFT to Pair(dpad.first - arm, dpad.second),
+                GameAction.DPAD_RIGHT to Pair(dpad.first + arm, dpad.second)
+            ),
+            sticks = mapOf(
+                0 to Triple(0.18f, 0.66f, 0.3f / 2 * 0.8f),
+                1 to Triple(0.82f, 0.66f, 0.3f / 2 * 0.8f)
             )
         )
     }
