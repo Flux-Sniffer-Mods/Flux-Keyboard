@@ -87,8 +87,9 @@ object PerAppDensity {
         }
         stopRecentsWatch()
         val perApp = apps(app)
-        // Nothing set per app: leave the screen as it is
-        if (perApp.isEmpty() && applied == null) return
+        val gaming = it.palsoftware.pastiera.gaming.GameProfiles.enabled(app)
+        // Nothing set per app and no gaming mode: leave the screen as it is
+        if (perApp.isEmpty() && applied == null && !gaming) return
         pending?.let { handler.removeCallbacks(it) }
         pending = Runnable {
             Thread {
@@ -98,6 +99,10 @@ object PerAppDensity {
                 // widget's own app, which isn't in front at all
                 val front = resumedPackage() ?: if (needsConfirming) return@Thread else packageName
                 if (front in IGNORED || front in quickstep(app)) return@Thread
+                // Gaming mode follows the same app in front (its upright or sideways screen
+                // mustn't flicker with widgets, floating windows or recents either)
+                it.palsoftware.pastiera.gaming.GameMode.onAppInFront(app, front)
+                if (apps(app).isEmpty() && applied == null) return@Thread
                 val want = apps(app)[front] ?: base(app)
                 appliedFor = front.takeIf { apps(app)[it] != null }
                 if (want == applied) return@Thread

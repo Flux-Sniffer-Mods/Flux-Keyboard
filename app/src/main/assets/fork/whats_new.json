@@ -673,6 +673,18 @@
     {
       "text": "Shell access no longer talks about Shizuku where the built-in shell does the job.",
       "after": "202610091903"
+    },
+    {
+      "text": "In terminals, the emoji key's LED lights while it's held or its extra keys row is open, whatever it's set to.",
+      "after": "202610092010"
+    },
+    {
+      "text": "Gaming mode follows the app in front the same way screen size per app does, so widgets, floating windows and recents no longer flip the screen.",
+      "after": "202610092010"
+    },
+    {
+      "text": "Add a game from a game launcher finds games installed on shared storage (GameNative's own folder, Steam libraries).",
+      "after": "202610092010"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
