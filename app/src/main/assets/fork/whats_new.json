@@ -454,12 +454,12 @@
       "after": "202610081423"
     },
     {
-      "text": "Gaming mode (Shell access > Gaming mode): in apps with a game profile, the keys and trackpad play the game. Gamepad profiles put the d-pad on WASD, an Xbox controller's Y X B A on O K P L in its places and a stick on each trackpad half; PC profiles move on WASD or on D Z X C, make the top row the number row and the trackpad a mouse. Every key is remappable per game, games from GameNative, GameHub and GameHub Lite can each have a profile, and the screen stays upright while you play.",
+      "text": "Gaming mode (Shell access > Gaming mode): in apps with a game profile, the keys and trackpad play the game. Gamepad profiles put the d-pad on WASD, an Xbox controller's Y X B A on O K P L in its places and a stick on each trackpad half; Keyboard and mouse profiles keep WASD and make the trackpad a mouse, and MMO profiles move on D Z X C with the whole top row as the number row. Every key is remappable per game, games from GameNative, GameHub and GameHub Lite can each have a profile, and the screen stays upright while you play.",
       "after": "202610081437"
     },
     {
-      "text": "Gaming mode in GameNative: save Flux Keyboard's controls profile (Gaming mode > Save the controls profile for GameNative), import and pick it in GameNative, and the keys and trackpad play as an Xbox controller.",
-      "after": "202610081509"
+      "text": "Gaming mode in GameNative: Set up GameNative saves Flux Keyboard's controls profile and opens GameNative, with the steps to import and pick it once; the keys and trackpad then play as an Xbox controller.",
+      "after": "202610091903"
     },
     {
       "text": "Gaming mode: for games that only take sticks by touch, place keys and sticks on the game's own on-screen controls from gaming mode's notification. The volume keys are the left shoulder and trigger, and other buttons can be added by pressing them.",
@@ -472,6 +472,30 @@
     {
       "text": "Battery Saver and the brightness keys work without the shell too.",
       "after": "202610081509"
+    },
+    {
+      "text": "Gaming mode with emulators: Dolphin, PPSSPP, Azahar (and Citra, Lime3DS) and Eden (and yuzu's forks) get their on-screen gamepad's spots straight away, read from their own code or settings.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Gaming mode: Add a game from a game launcher also finds GameNative's and GameHub's installed Steam games, and each profile can go on the home screen: its shortcut switches the profile on and starts the game (GameNative's straight away).",
+      "after": "202610091903"
+    },
+    {
+      "text": "Gaming mode: Sideways-only game, for apps like GameHub that turn the screen whatever they're told: while it runs, the screen is made landscape-shaped instead, so the phone stays upright. For GameNative, its own Portrait mode per game does the job.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Layer pages: an arrow leading to a recents page shows the recents icon, and symbols Alt already types come after the others.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Terminal mode: the emoji key held as Alt is the terminal's own Alt (Meta, Esc first in Termux), not the keyboard's Alt characters.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Termux setup only sets Termux up again; starting Shizuku at boot through Termux is its own command, offered on the Shizuku route.",
+      "after": "202610091903"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -617,6 +641,38 @@
     {
       "text": "Screen size per app no longer flickers when another app's floating window (a widget, a picker) opens over an app with its own size.",
       "after": "202610081509"
+    },
+    {
+      "text": "A full stop, comma, ! or ? straight after a picked suggestion goes next to the word, whichever way it's typed (Alt, a long press or the key itself).",
+      "after": "202610091903"
+    },
+    {
+      "text": "An email or phone number chip no longer stays on the bar in other apps once you've left its field.",
+      "after": "202610091903"
+    },
+    {
+      "text": "A password manager's chips sit in the middle of the bar.",
+      "after": "202610091903"
+    },
+    {
+      "text": "With Alt on, a layer's arrows, search and GIF or kaomoji keys keep their jobs instead of typing their labels.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Kaomoji in the kaomoji editor shrink to fit their keys.",
+      "after": "202610091903"
+    },
+    {
+      "text": "The shortcut sheet follows the keyboard's theme, its labels on two lines instead of scrolling.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Bar buttons settings: the extra keys headings are readable, and the header stays below the status bar.",
+      "after": "202610091903"
+    },
+    {
+      "text": "Shell access no longer talks about Shizuku where the built-in shell does the job.",
+      "after": "202610091903"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
