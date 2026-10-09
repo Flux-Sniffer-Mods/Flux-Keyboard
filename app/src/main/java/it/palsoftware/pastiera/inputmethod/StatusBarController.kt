@@ -2864,7 +2864,9 @@ class StatusBarController(
         // Calcola textSize in base all'altezza disponibile (convertendo da pixel a sp)
         val heightInDp = height / context.resources.displayMetrics.density
         val roundedCorners = SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)
-        val contentTextSize = if (page == 2 || roundedCorners) {
+        // The kaomoji editor's keys are drawn like the symbols'
+        val textPage = page == 2 || page == KAOMOJI_EDIT_PAGE
+        val contentTextSize = if (textPage || roundedCorners) {
             // Smaller size for Unicode characters
             (heightInDp * 0.5f)
         } else {
@@ -2888,8 +2890,9 @@ class StatusBarController(
             } // textSize è in sp
             gravity = Gravity.CENTER
             // Kaomoji and other long labels: one line, shrunk to fit the key
-            if (page == 2 && content.codePointCount(0, content.length) > 2 && !recentsSymbol) {
+            if (textPage && content.codePointCount(0, content.length) > 2 && !recentsSymbol) {
                 maxLines = 1
+                setPadding(dpToPx(2f), 0, dpToPx(2f), 0)
                 androidx.core.widget.TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
                     this, 6, contentTextSize.toInt().coerceAtLeast(7), 1, android.util.TypedValue.COMPLEX_UNIT_SP
                 )
@@ -2899,7 +2902,7 @@ class StatusBarController(
             if (recentsSymbol || gifLabel) setTypeface(null, android.graphics.Typeface.BOLD)
             if (roundedCorners) setTextColor(theme.textAndIcons)
             // Per pagina 2 (caratteri), rendi bianco e in grassetto
-            if (page == 2) {
+            if (textPage) {
                 setTextColor(theme.textAndIcons)
                 setTypeface(null, android.graphics.Typeface.BOLD)
             }
