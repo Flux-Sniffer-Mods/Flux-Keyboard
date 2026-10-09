@@ -27,12 +27,19 @@ object GameLibrary {
     /** The games a launcher lists (blocking: reads the shell). */
     fun games(packageName: String): List<Game> {
         val shortcuts = AdbShell.run("dumpsys shortcut", 8_000)?.let { parseGames(it, packageName) }.orEmpty()
-        // The default places Steam games go: its folder in Android/data, on each storage
+        // Where games are installed on shared storage: GameNative's own folder on each storage
+        // (Steam, GOG, Epic, Amazon), the launcher's folder in Android/data, and any Steam
+        // library on the phone's storage. Games kept in a launcher's private storage can't be seen
         val folders = AdbShell.run(
-            "for d in /storage/*/Android/data/$packageName /storage/emulated/0/Android/data/$packageName; do " +
-                "for s in \"\$d\" \"\$d/files\"; do [ -d \"\$s/Steam/steamapps/common\" ] && ls -1 \"\$s/Steam/steamapps/common\"; done; done",
-            5_000
-        )?.lines().orEmpty().map { it.trim() }.filter { it.isNotEmpty() && it != "Steamworks Shared" }
+            "for r in /storage/emulated/0 /storage/*-*; do " +
+                "for b in \"\$r/GameNative\" \"\$r/Android/data/$packageName\" \"\$r/Android/data/$packageName/files\"; do " +
+                "for s in Steam/steamapps/common GOG/games/common Epic/games Amazon/games; do " +
+                "[ -d \"\$b/\$s\" ] && ls -1 \"\$b/\$s\"; done; done; " +
+                "find \"\$r/Android/data/$packageName\" -maxdepth 7 -type d -path '*steamapps/common' -exec ls -1 {} \\; 2>/dev/null; done; " +
+                "find /storage/emulated/0 -maxdepth 5 -path /storage/emulated/0/Android -prune -o -type d -path '*steamapps/common' -exec ls -1 {} \\; 2>/dev/null; true",
+            10_000
+        )?.lines().orEmpty().map { it.trim() }
+            .filter { it.isNotEmpty() && !it.startsWith(".") && it != "Steamworks Shared" }
         val known = shortcuts.map { it.name.lowercase() }.toSet()
         return shortcuts + folders.distinct().filter { it.lowercase() !in known }.map { Game(it, packageName) }
     }

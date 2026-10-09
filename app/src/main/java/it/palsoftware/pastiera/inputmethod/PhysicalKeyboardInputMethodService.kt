@@ -4020,8 +4020,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             symPage = symPage,
             symHeld = symTogglePendingOnKeyUp,
             symSticky = symSticky,
-            emojiHeld = emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN,
-            emojiSticky = emojiSticky,
+            // In a terminal the emoji key's LED follows it whatever it's set to: held (as Alt or
+            // a terminal key), or locked while the extra keys row it opened is up
+            emojiHeld = emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN || terminalEmojiAltHeld ||
+                terminalEmojiKeysDown.isNotEmpty(),
+            emojiSticky = emojiSticky || (terminalModeActive && extraKeysOpen &&
+                TerminalMode.EmojiKeyAction.byId(SettingsManager.getTerminalModeEmojiKeyAction(this)) == TerminalMode.EmojiKeyAction.ExtraKeys),
             symPhysicallyPressed = symPhysicallyPressed,
             clipboardCount = clipboardCount,
             variations = variationSnapshot.variations,
@@ -5548,6 +5552,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         terminalEmojiKeysDown[pressedKeyCode] = action
         sendTerminalActionKey(action, KeyEvent.ACTION_DOWN, 0)
+        updateStatusBarText()
         return true
     }
 
@@ -5882,7 +5887,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         // The emoji key as the terminal's Alt: held, not passed on; the keys pressed with it are
-        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return true }
+        terminalEmojiKeyAsAlt(keyCode_, event_)?.let {
+            if ((event_?.repeatCount ?: 0) == 0) updateStatusBarText()
+            return true
+        }
         if (sendWithTerminalAlt(event_)) return true
         withoutEmojiAltShift(event_)?.let { return onKeyDown(keyCode_, it) }
         if (emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN && keyCode_ != emojiPickerKeyUpPending) {
@@ -6825,7 +6833,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             returnToApp(pkg)
             return true
         }
-        terminalEmojiKeyAsAlt(keyCode_, event_)?.let { return true }
+        terminalEmojiKeyAsAlt(keyCode_, event_)?.let {
+            updateStatusBarText()
+            return true
+        }
         if (sendWithTerminalAlt(event_)) return true
         withoutEmojiAltShift(event_)?.let { return onKeyUp(keyCode_, it) }
         if (keyboardHiddenForApp) {
@@ -6856,6 +6867,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (terminalNavModeKey(keyCode_, event_, down = false)) return true
         terminalEmojiKeysDown.remove(keyCode_)?.let { action ->
             if (action != TerminalMode.EmojiKeyAction.ExtraKeys) sendTerminalActionKey(action, KeyEvent.ACTION_UP, 0)
+            updateStatusBarText()
             return true
         }
         if (terminalCtrlKeysDown.remove(keyCode_)) {
