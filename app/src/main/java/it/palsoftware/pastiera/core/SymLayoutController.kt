@@ -326,7 +326,9 @@ class SymLayoutController(
      * the same way) and every kaomoji, group running into group.
      */
     private fun symbolPages(): List<LayerPage> {
-        val symbols = it.palsoftware.pastiera.data.symbols.SymbolPages.PAGES.flatten()
+        // Symbols Alt already types come after the rest: the pages are for the ones it doesn't
+        val alt = alternateCharacterManager.getAltModifierMappings().values.toSet()
+        val symbols = it.palsoftware.pastiera.data.symbols.SymbolPages.PAGES.flatten().sortedBy { it in alt }
         val recents = symbolRecentsShown
             ?: it.palsoftware.pastiera.data.symbols.SymbolSearch.recentSymbols(context).also { symbolRecentsShown = it }
         val pages = mutableListOf(recentsPage(recents, symbols, PageKind.RECENTS, setOf(PAGE_EXTRA_KEY)))
