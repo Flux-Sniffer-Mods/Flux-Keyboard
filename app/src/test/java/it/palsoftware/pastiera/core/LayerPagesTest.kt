@@ -74,10 +74,11 @@ class LayerPagesTest {
     private fun keys(): Map<Int, String> = controller.currentSymMappings().orEmpty()
 
     @Test
-    fun theLayerAlwaysOpensOnItsRecentsWithArrowsAndSearch() {
+    fun theLayerOpensWithArrowsAndSearch() {
         controller.toggleEmojiKeyPage(layer = true)
         val shown = keys()
-        assertEquals(SymLayoutController.KAOMOJI_PREVIOUS_LABEL, shown[KeyEvent.KEYCODE_Q])
+        // Q leads back to the recents page: it shows the recents icon
+        assertEquals(SymLayoutController.RECENTS_KEY_LABEL, shown[KeyEvent.KEYCODE_Q])
         assertEquals(SymLayoutController.KAOMOJI_NEXT_LABEL, shown[KeyEvent.KEYCODE_P])
         assertEquals(SymLayoutController.SEARCH_KEY_LABEL, shown[KeyEvent.KEYCODE_A])
     }
