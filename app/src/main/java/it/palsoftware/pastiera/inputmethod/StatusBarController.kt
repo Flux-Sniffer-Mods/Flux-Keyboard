@@ -3239,8 +3239,13 @@ class StatusBarController(
         page: Int,
         inputConnection: android.view.inputmethod.InputConnection?
     ) {
+        val labels = it.palsoftware.pastiera.core.SymLayoutController
+        // A paged layer's arrows show the recents icon when they lead to a recents page
+        val paged = (page == 1 && SettingsManager.getEmojiLayerPages(context)) || (page == 2 && SettingsManager.getSymbolsPages(context))
+        val arrowToRecents = paged && content == labels.RECENTS_KEY_LABEL &&
+            (keyCode == labels.PAGE_PREVIOUS_KEY || keyCode == labels.PAGE_NEXT_KEY)
         // Recents: the emoji layer's and the symbols page's (the same key)
-        val recentsKey = (page == 1 || page == 2) && keyCode == SettingsManager.getEmojiLayerRecentsKey(context) &&
+        val recentsKey = !arrowToRecents && (page == 1 || page == 2) && keyCode == SettingsManager.getEmojiLayerRecentsKey(context) &&
             (content == it.palsoftware.pastiera.core.SymLayoutController.RECENTS_KEY_LABEL ||
                 content == it.palsoftware.pastiera.core.SymLayoutController.RECENTS_BACK_LABEL)
         // The GIF key only while it shows GIF (with recent emoji shown it holds one of them)
@@ -3248,11 +3253,12 @@ class StatusBarController(
         // The search key (on A on a paged layer's recents page)
         val searchKey = (page == 1 || page == 2 || page == 5) &&
             content == it.palsoftware.pastiera.core.SymLayoutController.SEARCH_KEY_LABEL
-        val labels = it.palsoftware.pastiera.core.SymLayoutController
         val kaomojiKey = page == 2 && (content == labels.KAOMOJI_KEY_LABEL || (keyCode == labels.PAGE_EXTRA_KEY && content == labels.SYMBOLS_KEY_LABEL))
         // The page arrows: ‹ on Q, › on P (the kaomoji pages, and the layers shown as pages)
-        val kaomojiBackKey = (page == 1 || page == 2) && keyCode == labels.PAGE_PREVIOUS_KEY && content == labels.KAOMOJI_PREVIOUS_LABEL
-        val nextPageKey = (page == 1 || page == 2) && keyCode == labels.PAGE_NEXT_KEY && content == labels.KAOMOJI_NEXT_LABEL
+        val kaomojiBackKey = (page == 1 || page == 2) && keyCode == labels.PAGE_PREVIOUS_KEY &&
+            (content == labels.KAOMOJI_PREVIOUS_LABEL || arrowToRecents)
+        val nextPageKey = (page == 1 || page == 2) && keyCode == labels.PAGE_NEXT_KEY &&
+            (content == labels.KAOMOJI_NEXT_LABEL || arrowToRecents)
         if (searchKey || gifKey || recentsKey || kaomojiKey || kaomojiBackKey || nextPageKey) {
             // Search, GIF and Recents stand apart from the mapped keys: the key colour with a
             // touch of the accent

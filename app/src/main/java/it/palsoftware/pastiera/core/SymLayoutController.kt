@@ -371,8 +371,10 @@ class SymLayoutController(
         if (!emoji) kaomojiShown = page.kind == PageKind.KAOMOJI
         starterKeys = page.starters
         val shown = page.keys.toMutableMap()
-        shown[PAGE_PREVIOUS_KEY] = KAOMOJI_PREVIOUS_LABEL
-        shown[PAGE_NEXT_KEY] = KAOMOJI_NEXT_LABEL
+        // An arrow leading to a recents page shows the recents icon
+        val index = pages.indexOf(page)
+        shown[PAGE_PREVIOUS_KEY] = if (isRecentsPage(pages, pageAfter(pages, index, -1))) RECENTS_KEY_LABEL else KAOMOJI_PREVIOUS_LABEL
+        shown[PAGE_NEXT_KEY] = if (isRecentsPage(pages, pageAfter(pages, index, 1))) RECENTS_KEY_LABEL else KAOMOJI_NEXT_LABEL
         // Search on every page: the emoji's, the symbols' or the kaomoji's
         shown[PAGE_SEARCH_KEY] = SEARCH_KEY_LABEL
         // The kaomoji's first page: L back to the symbols, as the symbols' L goes to the kaomoji
@@ -402,14 +404,27 @@ class SymLayoutController(
         emojiVariants = null
         forgetShownRecents()
         val pages = pagesFor(emoji)
-        val index = pageIndex(emoji, pages)
-        // Symbols and kaomoji each go round on their own: the last symbol page leads back to
-        // the first symbol page (recents), not on into the kaomoji, and the kaomoji the same way
+        setPageIndex(emoji, pageAfter(pages, pageIndex(emoji, pages), by), pages)
+        return true
+    }
+
+    /**
+     * The page [by] pages on from [index]. Symbols and kaomoji each go round on their own: the
+     * last symbol page leads back to the first symbol page (recents), not on into the kaomoji,
+     * and the kaomoji the same way.
+     */
+    private fun pageAfter(pages: List<LayerPage>, index: Int, by: Int): Int {
         val kaomoji = pages[index].kind == PageKind.KAOMOJI
         val group = pages.indices.filter { (pages[it].kind == PageKind.KAOMOJI) == kaomoji }
         val at = group.indexOf(index).coerceAtLeast(0)
-        setPageIndex(emoji, group[(at + by + group.size) % group.size], pages)
-        return true
+        return group[(at + by + group.size) % group.size]
+    }
+
+    /** A recents page: the layer's, or the kaomoji's (their first page, before their default one). */
+    private fun isRecentsPage(pages: List<LayerPage>, index: Int): Boolean {
+        val page = pages[index]
+        return page.kind == PageKind.RECENTS ||
+            (page.kind == PageKind.KAOMOJI && !page.home && pages.indexOfFirst { it.kind == PageKind.KAOMOJI } == index)
     }
 
     /** Q (or its ‹ tapped): back from an emoji's variants, else the page before (round to the last). */
@@ -852,8 +867,10 @@ class SymLayoutController(
         // A layer shown as pages: Q and P turn them, the recents page's buttons, and every other
         // letter types what its key holds on this page (and makes it a recent)
         val pagedEmoji = pagedLayer()
-        if (pagedEmoji != null && event?.isAltPressed != true && event?.isCtrlPressed != true &&
-            !altLatchActive && !ctrlLatchActive && keyCode in SettingsManager.EMOJI_LAYER_KEYS
+        // The page arrows, search and extra key keep their jobs with Alt on (not their labels typed)
+        val pageKey = keyCode == PAGE_PREVIOUS_KEY || keyCode == PAGE_NEXT_KEY || keyCode == PAGE_SEARCH_KEY || keyCode == PAGE_EXTRA_KEY
+        if (pagedEmoji != null && event?.isCtrlPressed != true && !ctrlLatchActive &&
+            (pageKey || (event?.isAltPressed != true && !altLatchActive)) && keyCode in SettingsManager.EMOJI_LAYER_KEYS
         ) {
             val first = (event?.repeatCount ?: 0) == 0
             // Held past a press: the pressed emoji's variants on a page of their own
