@@ -386,7 +386,7 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
                         if (!termuxInstalled) add(stringResource(R.string.flux_tutorial_shizuku_get_termux) to { openLink(context, TERMUX_RELEASES) })
                         if (!termuxBootInstalled) add(stringResource(R.string.flux_tutorial_shizuku_get_termux_boot) to { openLink(context, TERMUX_BOOT_RELEASES) })
                         if (termuxInstalled) add(stringResource(R.string.flux_tutorial_shizuku_copy_setup) to {
-                            it.palsoftware.pastiera.shortcuts.TermuxSetup.copyAndOpen(context)
+                            it.palsoftware.pastiera.shortcuts.TermuxSetup.copyAndOpen(context, shizuku = true)
                         })
                     }
                 )

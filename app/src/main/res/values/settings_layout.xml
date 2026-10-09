@@ -256,7 +256,7 @@
     <string name="phone_spell_checker_title">The phone\'s spell checker in suggestions</string>
     <string name="phone_spell_checker_description">When Android\'s spell checker is another app\'s (Gboard\'s, say), its corrections for a misspelt word join the suggestion bar.</string>
     <string name="root_title">Shell access</string>
-    <string name="root_row_description">Keyboard light and shortcuts through Shizuku (ADB), no root needed</string>
+    <string name="root_row_description">Keyboard light, shortcuts and gaming mode through the built-in shell, no root needed</string>
     <string name="root_note">These run as the ADB shell, through the built-in shell or Shizuku. Flux Keyboard only runs the commands each option needs.</string>
     <string name="root_section_backlight">Keyboard light</string>
     <string name="density_apply">Apply</string>
@@ -266,11 +266,11 @@
     <string name="shizuku_boot_ready">Shizuku can start itself at boot: turn on Start on boot in Shizuku\'s settings if it isn\'t already. Tap to open Shizuku.</string>
     <string name="shizuku_boot_granted">Done: in Shizuku, turn on Start on boot (wireless debugging)</string>
     <string name="shizuku_boot_failed">Shizuku couldn\'t be given the permission. Is Shizuku running?</string>
-    <string name="root_backlight_no_answer">Shizuku didn\'t answer the check. Make sure Shizuku is running, then look again.</string>
+    <string name="root_backlight_no_answer">The shell didn\'t answer the check. Make sure the built-in shell (or Shizuku) is running, then look again.</string>
     <string name="root_backlight_no_service">The phone has no keyboard light service (agui_functional_service).</string>
     <string name="root_backlight_recheck_title">Look again</string>
     <string name="root_backlight_recheck_description">Checks for the keyboard light again, and starts following the screen if it\'s found.</string>
-    <string name="root_backlight_unsupported">This phone\'s keyboard light can\'t be reached through Shizuku (the Titan 2\'s can).</string>
+    <string name="root_backlight_unsupported">This phone\'s keyboard light can\'t be reached through the shell (the Titan 2\'s can).</string>
     <string name="root_backlight_level_title">Brightness</string>
     <string name="root_backlight_timeout_title">Stays lit after a key press</string>
     <string name="root_backlight_timeout_value">%1$d s</string>
@@ -282,7 +282,7 @@
     <string name="root_backlight_flash_description">The keyboard flashes three times for a new notification (needs notification access).</string>
     <string name="root_section_shortcuts">Shortcuts</string>
     <string name="root_shortcuts_note">Force-stop the app in front, Battery Saver on or off, and the app in front off the network (Android 14 and later): assign them to keys in Key shortcuts, or find them in the quick launcher.</string>
-    <string name="root_shortcuts_open_description">Assign the Shizuku shortcuts to keys.</string>
+    <string name="root_shortcuts_open_description">Assign the shell shortcuts to keys.</string>
     <string name="shizuku_request_not_running">Shizuku isn\'t running yet. Start it in Shizuku (Start via Wireless debugging), then come back and try again.</string>
     <string name="shizuku_request_refused_before">Shizuku remembers Flux Keyboard being refused, so it won\'t ask again. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
     <string name="shizuku_request_old">This Shizuku is too old to ask. Update it from Shizuku\'s GitHub page, then try again.</string>
