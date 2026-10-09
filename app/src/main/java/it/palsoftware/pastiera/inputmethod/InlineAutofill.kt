@@ -27,39 +27,47 @@ object InlineAutofill {
     private const val CHIP_MAX_HEIGHT_DP = 64
     private const val CHIP_MIN_WIDTH_DP = 64
     private const val CHIP_MAX_WIDTH_DP = 260
+    private const val TEXT_SP = 15f
 
     /**
      * The chips Android asks the password manager for: see-through, with [textColour] text, so
      * the bar draws the suggestion buttons' own background behind them ([chipColour] there).
      */
-    fun request(context: Context, chipColour: Int? = null, textColour: Int? = null): InlineSuggestionsRequest {
+    fun request(context: Context, chipColour: Int? = null, textColour: Int? = null, heightPx: Int? = null): InlineSuggestionsRequest {
         val density = context.resources.displayMetrics.density
         fun dp(value: Int) = (value * density).toInt()
+        // Android draws the chip's content at the top of its space, as tall as its text: padding
+        // above and below, as much as the bar's height leaves, centres it
+        val height = chipHeight(context, heightPx)
+        val line = android.graphics.Paint().apply {
+            textSize = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_SP, TEXT_SP, context.resources.displayMetrics)
+        }.fontMetricsInt.let { it.bottom - it.top }
+        val vertical = ((height - line) / 2).coerceAtLeast(0)
         val ui = InlineSuggestionUi.newStyleBuilder()
         if (chipColour != null && textColour != null) {
             ui.setChipStyle(
                 androidx.autofill.inline.common.ViewStyle.Builder()
                     .setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    .setPadding(dp(12), 0, dp(12), 0)
+                    .setPadding(dp(12), vertical, dp(12), height - line - vertical)
                     .build()
             )
             ui.setTitleStyle(
                 androidx.autofill.inline.common.TextViewStyle.Builder()
                     .setTextColor(textColour)
-                    .setTextSize(15f)
+                    .setTextSize(TEXT_SP)
                     .build()
             )
             ui.setSubtitleStyle(
                 androidx.autofill.inline.common.TextViewStyle.Builder()
                     .setTextColor((textColour and 0x00FFFFFF) or (0xB3 shl 24))
                     // The title's size, so both sit on one line (smaller, it rode higher)
-                    .setTextSize(15f)
+                    .setTextSize(TEXT_SP)
                     .build()
             )
             ui.setSingleIconChipStyle(
                 androidx.autofill.inline.common.ViewStyle.Builder()
                     .setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    .setPadding(dp(8), 0, dp(8), 0)
+                    .setPadding(dp(8), vertical, dp(8), height - line - vertical)
                     .build()
             )
         }
@@ -74,6 +82,12 @@ object InlineAutofill {
             .build()
     }
 
+    private fun chipHeight(context: Context, heightPx: Int?): Int {
+        val density = context.resources.displayMetrics.density
+        return ((heightPx ?: (BUTTON_HEIGHT_DP * density).toInt()) - (CHIP_INSET_DP * 2 * density).toInt())
+            .coerceIn((CHIP_MIN_HEIGHT_DP * density).toInt(), (CHIP_MAX_HEIGHT_DP * density).toInt())
+    }
+
     /** Inflates every chip, then hands them over in the service's order (pinned ones last). */
     fun inflate(context: Context, suggestions: List<InlineSuggestion>, heightPx: Int? = null, onReady: (List<View>) -> Unit) {
         val ordered = suggestions.take(MAX_CHIPS).sortedBy { it.info.isPinned }
@@ -85,8 +99,7 @@ object InlineAutofill {
         val density = context.resources.displayMetrics.density
         // A little shorter than the bar's suggestion buttons: the bar centres each chip in a
         // button-shaped background of its own
-        val height = ((heightPx ?: (BUTTON_HEIGHT_DP * density).toInt()) - (CHIP_INSET_DP * 2 * density).toInt())
-            .coerceIn((CHIP_MIN_HEIGHT_DP * density).toInt(), (CHIP_MAX_HEIGHT_DP * density).toInt())
+        val height = chipHeight(context, heightPx)
         val share = (context.resources.displayMetrics.widthPixels * 0.7f / ordered.size.coerceAtLeast(1)).toInt()
         val width = share.coerceIn((CHIP_MIN_WIDTH_DP * density).toInt(), (CHIP_MAX_WIDTH_DP * density).toInt())
         val size = Size(width, height)

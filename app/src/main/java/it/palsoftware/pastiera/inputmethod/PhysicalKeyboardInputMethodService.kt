@@ -5348,7 +5348,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         val colours = if (::candidatesBarController.isInitialized) {
             runCatching { candidatesBarController.suggestionChipColours() }.getOrNull()
         } else null
-        return InlineAutofill.request(this, colours?.first, colours?.second)
+        return InlineAutofill.request(this, colours?.first, colours?.second, candidatesBarController.suggestionChipHeight())
     }
 
     @androidx.annotation.RequiresApi(android.os.Build.VERSION_CODES.R)
