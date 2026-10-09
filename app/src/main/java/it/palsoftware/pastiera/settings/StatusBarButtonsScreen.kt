@@ -104,8 +104,7 @@ fun StatusBarButtonsScreen(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
     ) {
         Surface(
             modifier = Modifier
@@ -148,6 +147,8 @@ fun StatusBarButtonsScreen(
                 }
             }
         }
+        // The header stays put; the rest scrolls under it
+        Column(modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())) {
 
         Surface(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -291,6 +292,7 @@ fun StatusBarButtonsScreen(
         ExtraKeysEditor()
 
         Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
 
@@ -843,7 +845,8 @@ private fun ExtraKeysEditor() {
         ) {
             Text(
                 stringResource(if (isTerminal) R.string.extra_keys_terminal_set else R.string.extra_keys_text_set),
-                style = MaterialTheme.typography.titleSmall
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 keys.joinToString("  ") { it.label },
