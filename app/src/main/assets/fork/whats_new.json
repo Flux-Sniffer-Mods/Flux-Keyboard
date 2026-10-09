@@ -701,6 +701,10 @@
     {
       "text": "Add a game from a game launcher finds games installed on shared storage (GameNative's own folder, Steam libraries).",
       "after": "202610092010"
+    },
+    {
+      "text": "A game's home screen shortcut opens that game: emulators start afresh with it (Dolphin and PPSSPP otherwise kept what was open), games from Export for frontend files use their exact store, and an app that can't be told the game is opened instead of nothing happening.",
+      "after": "202610092300"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -256,7 +256,7 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.NoDisplay" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Gaming mode's notification: the next profile -->
         <receiver
             android:name=".gaming.GameMode$Receiver"

@@ -316,10 +316,11 @@ private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onDismiss: ()
                     // The launcher itself, for a profile covering all its games
                     GameLibrary.Game(launcher.appName, launcher.packageName)
             }.let { fromLaunchers ->
-                // The game folders' games, each started straight into the game
-                val known = fromLaunchers.map { it.name.lowercase() to it.packageName }.toSet()
-                fromLaunchers +
-                    it.palsoftware.pastiera.gaming.GameFolders.games(context).filter { (it.name.lowercase() to it.packageName) !in known }
+                // The game folders' games first: an exported file knows the game's store and ID
+                // exactly, where a home screen shortcut only gives its ID
+                val fromFolders = it.palsoftware.pastiera.gaming.GameFolders.games(context)
+                val known = fromFolders.map { it.name.lowercase() to it.packageName }.toSet()
+                fromFolders + fromLaunchers.filter { (it.name.lowercase() to it.packageName) !in known }
             }
         }
     }

@@ -187,6 +187,10 @@ object GameFolders {
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             Player.EDEN -> Intent("android.nfc.action.TECH_DISCOVERED").setData(data ?: return null)
         }
+        // Emulators read the game as their screen is made: a fresh task, not one brought back
+        if (player != Player.GAMENATIVE && player != Player.GAMEHUB) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
         return intent.setComponent(ComponentName(pkg, activity)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
