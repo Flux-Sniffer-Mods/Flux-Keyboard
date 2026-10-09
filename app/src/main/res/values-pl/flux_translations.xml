@@ -1805,4 +1805,16 @@
     <string name="game_mode_own_game_store">Sklep</string>
     <string name="game_mode_own_game_custom_store">Własna gra</string>
     <string name="game_mode_own_game_none">Nie zainstalowano żadnego launchera ani emulatora, w którym Flux Keyboard może uruchamiać gry (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="native_save">Zapisz dla %1$s</string>
+    <string name="native_save_description">Do uruchamiania tej gry z %1$s: ten profil w jego własnym formacie, z instrukcją wczytania.</string>
+    <string name="native_keys">Klawisze przypisane przez samą aplikację</string>
+    <string name="native_keys_description">Własny profil kontrolera aplikacji przypisuje klawisze, więc tryb gry ich nie rusza (gładzik nadal porusza gałkami). Włączane przy zapisie dla emulatora.</string>
+    <string name="native_gamenative_steps">Zapisano jako %1$s w Download/Flux Keyboard/Profiles/GameNative. W GameNative uruchom %2$s, otwórz jej menu, potem Sterowanie: zaimportuj plik z biblioteki profili i wybierz go, z widocznym sterowaniem ekranowym (jest niewidoczne). GameNative zachowa go dla tej gry.</string>
+    <string name="native_gamehub_steps">GameHub nie ma profilu kontrolera do wczytania: tryb gry naciska klawisze umieszczone na jego sterowaniu ekranowym, niezależnie od sposobu uruchomienia gry.</string>
+    <string name="native_dolphin_steps">Zapisano jako profil Dolphin \"%1$s\". W Dolphin przytrzymaj grę, otwórz jej ustawienia gry, potem Wejście GameCube, Port 1, i wczytaj tam profil; jest używany przy każdym uruchomieniu tej gry. Tryb gry zostawia klawisze Dolphinowi; gładzik nadal porusza gałkami.</string>
+    <string name="native_ppsspp_steps">Zapisano w ustawieniach PPSSPP gry %1$s, ostatnio utworzonej konfiguracji gry. Ta gra używa tych klawiszy przy każdym uruchomieniu; tryb gry zostawia je PPSSPP. Jeśli to zła gra, najpierw otwórz w PPSSPP konfigurację właściwej, potem zapisz ponownie.</string>
+    <string name="native_ppsspp_none">PPSSPP trzyma sterowanie dla każdej gry w konfiguracji gry: w PPSSPP przytrzymaj grę, wybierz Utwórz konfigurację gry, potem zapisz tutaj ponownie.</string>
+    <string name="native_bind_steps">%1$s nie wczytuje sterowania z pliku: w jego Ustawieniach, Wejście (Sterowanie), przypisz każdy przycisk, naciskając jego klawisz na prośbę:\n\n%2$s\n\nEden może zapisać je jako profil wejścia dla tej gry. Tryb gry zostawia mu klawisze; gładzik nadal porusza gałkami.</string>
+    <string name="native_none">Ta aplikacja nie ma własnego profilu kontrolera: tryb gry przypisuje klawisze niezależnie od sposobu uruchomienia gry.</string>
+    <string name="native_failed">Nie udało się zapisać. Czy wbudowana powłoka działa?</string>
 </resources>

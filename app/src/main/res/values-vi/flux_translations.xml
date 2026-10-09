@@ -1787,4 +1787,16 @@
     <string name="game_mode_own_game_store">Cửa hàng</string>
     <string name="game_mode_own_game_custom_store">Trò chơi tùy chỉnh</string>
     <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="native_save">Lưu cho %1$s</string>
+    <string name="native_save_description">Để khởi động trò chơi này từ trong %1$s: hồ sơ này ở định dạng riêng của nó, kèm cách tải nó ở đó.</string>
+    <string name="native_keys">Phím do chính ứng dụng gán</string>
+    <string name="native_keys_description">Hồ sơ tay cầm riêng của ứng dụng gán các phím, nên chế độ chơi game không đụng đến chúng (bàn di chuột vẫn di chuyển cần). Bật khi lưu cho trình giả lập.</string>
+    <string name="native_gamenative_steps">Đã lưu thành %1$s trong Download/Flux Keyboard/Profiles/GameNative. Trong GameNative, khởi động %2$s, mở menu của nó, rồi Điều khiển: nhập tệp từ thư viện hồ sơ và chọn nó, với điều khiển trên màn hình được hiện (chúng vô hình). GameNative giữ nó cho trò chơi đó.</string>
+    <string name="native_gamehub_steps">GameHub không có hồ sơ tay cầm để tải: chế độ chơi game bấm các phím bạn đặt trên điều khiển trên màn hình của nó, dù trò chơi được khởi động thế nào.</string>
+    <string name="native_dolphin_steps">Đã lưu thành hồ sơ Dolphin \"%1$s\". Trong Dolphin, nhấn giữ trò chơi, mở cài đặt trò chơi, rồi Đầu vào GameCube, Cổng 1, và tải hồ sơ ở đó; nó được dùng mỗi khi trò chơi đó khởi động. Chế độ chơi game để các phím cho Dolphin; bàn di chuột vẫn di chuyển cần.</string>
+    <string name="native_ppsspp_steps">Đã ghi vào cài đặt PPSSPP của trò chơi %1$s, cấu hình trò chơi tạo gần nhất. Trò chơi đó dùng các phím này mỗi khi khởi động; chế độ chơi game để chúng cho PPSSPP. Nếu sai trò chơi, hãy mở cấu hình của trò đúng trong PPSSPP trước, rồi lưu lại.</string>
+    <string name="native_ppsspp_none">PPSSPP lưu điều khiển theo từng trò trong cấu hình trò chơi: trong PPSSPP, nhấn giữ trò chơi, chọn Tạo cấu hình trò chơi, rồi lưu lại ở đây.</string>
+    <string name="native_bind_steps">%1$s không tải điều khiển từ tệp được: trong Cài đặt của nó, Đầu vào (Điều khiển), gán từng nút bằng cách bấm phím của nó khi được hỏi:\n\n%2$s\n\nEden có thể lưu chúng thành hồ sơ đầu vào cho trò chơi này. Chế độ chơi game để các phím cho nó; bàn di chuột vẫn di chuyển cần.</string>
+    <string name="native_none">Ứng dụng này không có hồ sơ tay cầm riêng: chế độ chơi game gán các phím dù trò chơi được khởi động thế nào.</string>
+    <string name="native_failed">Không lưu được. Shell tích hợp có đang chạy không?</string>
 </resources>

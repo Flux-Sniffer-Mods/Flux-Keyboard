@@ -1304,4 +1304,16 @@
     <string name="game_mode_own_game_store">Negozio</string>
     <string name="game_mode_own_game_custom_store">Gioco personalizzato</string>
     <string name="game_mode_own_game_none">Nessuno dei launcher o emulatori in cui Flux Keyboard può avviare giochi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) è installato.</string>
+    <string name="native_save">Salva per %1$s</string>
+    <string name="native_save_description">Per avviare questo gioco da %1$s: questo profilo nel suo formato, con come caricarlo lì.</string>
+    <string name="native_keys">Tasti assegnati dall\'app stessa</string>
+    <string name="native_keys_description">Il profilo controller dell\'app assegna i tasti, quindi la modalità gioco non li tocca (il trackpad muove ancora le levette). Si attiva salvando per un emulatore.</string>
+    <string name="native_gamenative_steps">Salvato come %1$s in Download/Flux Keyboard/Profiles/GameNative. In GameNative avvia %2$s, apri il suo menu, poi Controlli: importa il file dalla libreria dei profili e sceglilo, con i controlli a schermo mostrati (sono invisibili). GameNative lo tiene per quel gioco.</string>
+    <string name="native_gamehub_steps">GameHub non ha un profilo controller da caricare: la modalità gioco tocca i tasti che hai posizionato sui suoi controlli a schermo, comunque venga avviato il gioco.</string>
+    <string name="native_dolphin_steps">Salvato come profilo Dolphin \"%1$s\". In Dolphin tieni premuto il gioco, apri le sue impostazioni di gioco, poi Input GameCube, Porta 1, e carica lì il profilo; viene usato a ogni avvio di quel gioco. La modalità gioco lascia i tasti a Dolphin; il trackpad muove ancora le levette.</string>
+    <string name="native_ppsspp_steps">Scritto nelle impostazioni PPSSPP del gioco %1$s, l\'ultima configurazione di gioco creata. Quel gioco usa questi tasti a ogni avvio; la modalità gioco li lascia a PPSSPP. Se è il gioco sbagliato, apri prima in PPSSPP la configurazione di quello giusto, poi salva di nuovo.</string>
+    <string name="native_ppsspp_none">PPSSPP tiene i controlli per gioco in una configurazione di gioco: in PPSSPP tieni premuto il gioco, scegli Crea configurazione di gioco, poi salva di nuovo qui.</string>
+    <string name="native_bind_steps">%1$s non può caricare i controlli da un file: nelle sue Impostazioni, Input (Controlli), assegna ogni pulsante premendo il suo tasto quando richiesto:\n\n%2$s\n\nEden può salvarli come profilo di input per questo gioco. La modalità gioco gli lascia i tasti; il trackpad muove ancora le levette.</string>
+    <string name="native_none">Questa app non ha un proprio profilo controller: la modalità gioco assegna i tasti comunque venga avviato il gioco.</string>
+    <string name="native_failed">Non è stato possibile salvare. La shell integrata è in esecuzione?</string>
 </resources>

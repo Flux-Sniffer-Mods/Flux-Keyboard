@@ -1258,4 +1258,16 @@
     <string name="game_mode_own_game_store">Store</string>
     <string name="game_mode_own_game_custom_store">Eigenes Spiel</string>
     <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
+    <string name="native_save">Für %1$s speichern</string>
+    <string name="native_save_description">Zum Starten dieses Spiels aus %1$s heraus: dieses Profil in dessen eigener Form, mit Anleitung zum Laden dort.</string>
+    <string name="native_keys">Tasten von der App selbst belegt</string>
+    <string name="native_keys_description">Das eigene Controller-Profil der App belegt die Tasten, daher lässt der Spielmodus sie in Ruhe (das Trackpad bewegt weiter die Sticks). Wird beim Speichern für einen Emulator eingeschaltet.</string>
+    <string name="native_gamenative_steps">Gespeichert als %1$s unter Download/Flux Keyboard/Profiles/GameNative. Starte in GameNative %2$s, öffne sein Menü, dann Steuerung: Importiere die Datei aus der Profilbibliothek und wähle sie, mit eingeblendeter Bildschirmsteuerung (sie ist unsichtbar). GameNative behält sie für dieses Spiel.</string>
+    <string name="native_gamehub_steps">GameHub hat kein Controller-Profil zum Laden: Der Spielmodus tippt die Tasten, die du auf seiner Bildschirmsteuerung platziert hast, egal wie das Spiel gestartet wurde.</string>
+    <string name="native_dolphin_steps">Als Dolphin-Profil \"%1$s\" gespeichert. Halte in Dolphin das Spiel gedrückt, öffne seine Spieleinstellungen, dann GameCube-Eingabe, Port 1, und lade das Profil dort; es gilt immer, wenn dieses Spiel startet. Der Spielmodus überlässt die Tasten Dolphin; das Trackpad bewegt weiter die Sticks.</string>
+    <string name="native_ppsspp_steps">In die PPSSPP-Einstellungen des Spiels %1$s geschrieben, der zuletzt erstellten Spielkonfiguration. Dieses Spiel nutzt diese Tasten bei jedem Start; der Spielmodus überlässt sie PPSSPP. Falls es das falsche Spiel ist, öffne zuerst die Spielkonfiguration des richtigen in PPSSPP und speichere erneut.</string>
+    <string name="native_ppsspp_none">PPSSPP speichert Steuerung pro Spiel in einer Spielkonfiguration: Halte in PPSSPP das Spiel gedrückt, wähle Spielkonfiguration erstellen und speichere dann hier erneut.</string>
+    <string name="native_bind_steps">%1$s kann Steuerung nicht aus einer Datei laden: Belege in seinen Einstellungen unter Eingabe (Steuerung) jede Taste, indem du sie drückst, wenn gefragt:\n\n%2$s\n\nEden kann sie als Eingabeprofil für dieses Spiel speichern. Der Spielmodus überlässt ihm die Tasten; das Trackpad bewegt weiter die Sticks.</string>
+    <string name="native_none">Diese App hat kein eigenes Controller-Profil: Der Spielmodus belegt die Tasten, egal wie das Spiel gestartet wurde.</string>
+    <string name="native_failed">Es konnte nicht gespeichert werden. Läuft die eingebaute Shell?</string>
 </resources>

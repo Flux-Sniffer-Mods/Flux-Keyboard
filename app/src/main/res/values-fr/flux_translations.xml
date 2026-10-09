@@ -1799,4 +1799,16 @@
     <string name="game_mode_own_game_store">Boutique</string>
     <string name="game_mode_own_game_custom_store">Jeu personnalisé</string>
     <string name="game_mode_own_game_none">Aucun des lanceurs ou émulateurs où Flux Keyboard peut lancer des jeux (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) n\'est installé.</string>
+    <string name="native_save">Enregistrer pour %1$s</string>
+    <string name="native_save_description">Pour lancer ce jeu depuis %1$s : ce profil dans son propre format, avec comment le charger là-bas.</string>
+    <string name="native_keys">Touches attribuées par l\'app elle-même</string>
+    <string name="native_keys_description">Le profil de manette de l\'app attribue les touches, donc le mode jeu ne les touche pas (le trackpad bouge toujours les sticks). Activé en enregistrant pour un émulateur.</string>
+    <string name="native_gamenative_steps">Enregistré sous %1$s dans Download/Flux Keyboard/Profiles/GameNative. Dans GameNative, lancez %2$s, ouvrez son menu puis Contrôles : importez le fichier depuis la bibliothèque de profils et choisissez-le, contrôles à l\'écran affichés (ils sont invisibles). GameNative le garde pour ce jeu.</string>
+    <string name="native_gamehub_steps">GameHub n\'a pas de profil de manette à charger : le mode jeu touche les touches placées sur ses contrôles à l\'écran, quelle que soit la façon dont le jeu est lancé.</string>
+    <string name="native_dolphin_steps">Enregistré comme profil Dolphin « %1$s ». Dans Dolphin, appui long sur le jeu, ouvrez ses réglages de jeu, puis Entrée GameCube, Port 1, et chargez-y le profil ; il sert à chaque lancement de ce jeu. Le mode jeu laisse les touches à Dolphin ; le trackpad bouge toujours les sticks.</string>
+    <string name="native_ppsspp_steps">Écrit dans les réglages PPSSPP du jeu %1$s, la configuration de jeu créée en dernier. Ce jeu utilise ces touches à chaque lancement ; le mode jeu les laisse à PPSSPP. Si ce n\'est pas le bon jeu, ouvrez d\'abord la configuration du bon dans PPSSPP, puis enregistrez à nouveau.</string>
+    <string name="native_ppsspp_none">PPSSPP garde les contrôles par jeu dans une configuration de jeu : dans PPSSPP, appui long sur le jeu, choisissez Créer une config de jeu, puis enregistrez à nouveau ici.</string>
+    <string name="native_bind_steps">%1$s ne peut pas charger de contrôles depuis un fichier : dans ses Réglages, Entrée (Contrôles), attribuez chaque bouton en appuyant sur sa touche quand demandé :\n\n%2$s\n\nEden peut les enregistrer comme profil d\'entrée pour ce jeu. Le mode jeu lui laisse les touches ; le trackpad bouge toujours les sticks.</string>
+    <string name="native_none">Cette app n\'a pas de profil de manette propre : le mode jeu attribue les touches quelle que soit la façon dont le jeu est lancé.</string>
+    <string name="native_failed">Impossible d\'enregistrer. Le shell intégré est-il en marche ?</string>
 </resources>
