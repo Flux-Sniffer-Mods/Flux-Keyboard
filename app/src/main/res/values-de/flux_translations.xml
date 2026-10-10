@@ -1284,4 +1284,7 @@
     <string name="game_mode_screen_sideways_description">Für Apps, die den Bildschirm drehen, egal was man ihnen sagt (GameHub): Der Bildschirm wird stattdessen querformatig, etwas niedriger, damit er die Kamera freilässt, und das Telefon bleibt aufrecht.</string>
     <string name="game_mode_seen_title">%1$s zu einem Profil hinzufügen</string>
     <string name="game_mode_seen_description">Die App, in der zuletzt ein Spiel lief (%1$s), hat kein Profil: Ein Launcher kann Spiele in einem eigenen Teil spielen. Füge sie dem Profil ihres Launchers hinzu, damit der Spielmodus im Spiel an bleibt.</string>
+    <string name="shell_elsewhere_section">Anderswo</string>
+    <string name="shell_elsewhere_trackpad">Auf Shell-Zugriff gestellt, werden die Wischgesten des Trackpads direkt von der Tastatur gelesen.</string>
+    <string name="shell_elsewhere_otp">Mit Shell-Zugriff lassen sich Codes aus Benachrichtigungen lesen, die Android vor Apps verbirgt (Android 15 und neuer).</string>
 </resources>

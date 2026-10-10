@@ -1193,4 +1193,7 @@
     <string name="game_mode_screen_sideways_description">Για εφαρμογές που γυρίζουν την οθόνη ό,τι κι αν τους πεις (GameHub): η οθόνη παίρνει οριζόντιο σχήμα, λίγο πιο χαμηλή για να αφήνει την κάμερα, και το τηλέφωνο μένει όρθιο.</string>
     <string name="game_mode_seen_title">Προσθήκη του %1$s σε προφίλ</string>
     <string name="game_mode_seen_description">Η τελευταία εφαρμογή όπου έτρεξε παιχνίδι (%1$s) δεν έχει προφίλ: ένας εκκινητής μπορεί να τρέχει παιχνίδια σε δικό του μέρος. Προσθέστε τη στο προφίλ του εκκινητή ώστε η λειτουργία παιχνιδιού να μένει ενεργή.</string>
+    <string name="shell_elsewhere_section">Αλλού</string>
+    <string name="shell_elsewhere_trackpad">Με ρύθμιση σε πρόσβαση shell, οι κινήσεις του trackpad διαβάζονται απευθείας από το πληκτρολόγιο.</string>
+    <string name="shell_elsewhere_otp">Η πρόσβαση shell επιτρέπει την ανάγνωση κωδικών από ειδοποιήσεις που το Android κρύβει από τις εφαρμογές (Android 15 και νεότερα).</string>
 </resources>

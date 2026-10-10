@@ -1819,4 +1819,7 @@
     <string name="game_mode_screen_sideways_description">Այն հավելվածների համար, որոնք պտտում են էկրանը՝ ինչ էլ ասես (GameHub)․ էկրանը փոխարենը դառնում է հորիզոնական ձևի, մի փոքր ցածր՝ տեսախցիկը շրջանցելու համար, և հեռախոսը մնում է ուղիղ։</string>
     <string name="game_mode_seen_title">Ավելացնել %1$s-ը պրոֆիլին</string>
     <string name="game_mode_seen_description">Վերջին հավելվածը, որտեղ խաղ էր աշխատում (%1$s), պրոֆիլ չունի․ գործարկիչը կարող է խաղերը գործարկել իր առանձին մասում։ Ավելացրեք այն գործարկչի պրոֆիլին, որ խաղային ռեժիմը միացված մնա խաղում։</string>
+    <string name="shell_elsewhere_section">Այլ տեղերում</string>
+    <string name="shell_elsewhere_trackpad">Shell մուտքի դեպքում թաչփադի սահեցումները կարդացվում են անմիջապես ստեղնաշարից։</string>
+    <string name="shell_elsewhere_otp">Shell մուտքը թույլ է տալիս կոդեր կարդալ ծանուցումներից, որոնք Android-ը թաքցնում է հավելվածներից (Android 15 և ավելի նոր)։</string>
 </resources>

@@ -1825,4 +1825,7 @@
     <string name="game_mode_screen_sideways_description">Para apps que giran la pantalla digas lo que digas (GameHub): la pantalla pasa a tener forma horizontal, algo más baja para dejar libre la cámara, y el teléfono sigue vertical.</string>
     <string name="game_mode_seen_title">Añadir %1$s a un perfil</string>
     <string name="game_mode_seen_description">La última app en la que se ejecutó un juego (%1$s) no tiene perfil: un lanzador puede ejecutar sus juegos en una parte propia. Añádela al perfil de su lanzador para que el modo juego siga activo en el juego.</string>
+    <string name="shell_elsewhere_section">En otros sitios</string>
+    <string name="shell_elsewhere_trackpad">Con el acceso al shell, los deslizamientos del trackpad se leen directamente del teclado.</string>
+    <string name="shell_elsewhere_otp">El acceso al shell permite leer códigos de notificaciones que Android oculta a las apps (Android 15 y posteriores).</string>
 </resources>

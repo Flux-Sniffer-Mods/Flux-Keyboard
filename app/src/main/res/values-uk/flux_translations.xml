@@ -1831,4 +1831,7 @@
     <string name="game_mode_screen_sideways_description">Для застосунків, що повертають екран, хоч що їм кажи (GameHub): екран стає горизонтальним за формою, трохи нижчим, щоб не зачіпати камеру, а телефон лишається вертикальним.</string>
     <string name="game_mode_seen_title">Додати %1$s до профілю</string>
     <string name="game_mode_seen_description">Останній застосунок, де йшла гра (%1$s), без профілю: лаунчер може запускати ігри в окремій частині. Додайте його до профілю лаунчера, щоб ігровий режим працював у грі.</string>
+    <string name="shell_elsewhere_section">В інших розділах</string>
+    <string name="shell_elsewhere_trackpad">З доступом до оболонки жести тачпада зчитуються прямо з клавіатури.</string>
+    <string name="shell_elsewhere_otp">Доступ до оболонки дає змогу читати коди зі сповіщень, які Android приховує від застосунків (Android 15 і новіші).</string>
 </resources>

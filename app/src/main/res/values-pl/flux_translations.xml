@@ -1831,4 +1831,7 @@
     <string name="game_mode_screen_sideways_description">Dla aplikacji, które obracają ekran bez względu na wszystko (GameHub): ekran dostaje poziomy kształt, nieco niższy, by ominąć aparat, a telefon zostaje pionowo.</string>
     <string name="game_mode_seen_title">Dodaj %1$s do profilu</string>
     <string name="game_mode_seen_description">Ostatnia aplikacja, w której działała gra (%1$s), nie ma profilu: launcher może uruchamiać gry we własnej części. Dodaj ją do profilu launchera, by tryb gry działał w grze.</string>
+    <string name="shell_elsewhere_section">Gdzie indziej</string>
+    <string name="shell_elsewhere_trackpad">Przy dostępie do powłoki przesunięcia na gładziku są odczytywane bezpośrednio z klawiatury.</string>
+    <string name="shell_elsewhere_otp">Dostęp do powłoki pozwala odczytywać kody z powiadomień, które Android ukrywa przed aplikacjami (Android 15 i nowsze).</string>
 </resources>

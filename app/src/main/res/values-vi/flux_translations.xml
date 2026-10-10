@@ -1813,4 +1813,7 @@
     <string name="game_mode_screen_sideways_description">Cho các ứng dụng luôn xoay màn hình dù được bảo gì (GameHub): màn hình thành hình ngang thay vào đó, thấp hơn chút để tránh camera, và điện thoại vẫn đứng.</string>
     <string name="game_mode_seen_title">Thêm %1$s vào hồ sơ</string>
     <string name="game_mode_seen_description">Ứng dụng gần nhất có trò chơi chạy (%1$s) chưa có hồ sơ: trình khởi chạy có thể chạy trò chơi trong một phần riêng. Thêm nó vào hồ sơ của trình khởi chạy để chế độ chơi game vẫn bật trong trò chơi.</string>
+    <string name="shell_elsewhere_section">Ở nơi khác</string>
+    <string name="shell_elsewhere_trackpad">Khi đặt là quyền truy cập shell, thao tác vuốt trên bàn di chuột được đọc trực tiếp từ bàn phím.</string>
+    <string name="shell_elsewhere_otp">Quyền truy cập shell cho phép đọc mã từ thông báo mà Android ẩn khỏi ứng dụng (Android 15 trở lên).</string>
 </resources>

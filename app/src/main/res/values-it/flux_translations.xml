@@ -1330,4 +1330,7 @@
     <string name="game_mode_screen_sideways_description">Per app che ruotano lo schermo qualunque cosa gli si dica (GameHub): lo schermo prende forma orizzontale, un po\' più basso per liberare la fotocamera, e il telefono resta dritto.</string>
     <string name="game_mode_seen_title">Aggiungi %1$s a un profilo</string>
     <string name="game_mode_seen_description">L\'ultima app in cui è girato un gioco (%1$s) non ha un profilo: un launcher può far girare i giochi in una parte sua. Aggiungila al profilo del suo launcher perché la modalità gioco resti attiva nel gioco.</string>
+    <string name="shell_elsewhere_section">Altrove</string>
+    <string name="shell_elsewhere_trackpad">Impostati sull\'accesso shell, gli scorrimenti del trackpad vengono letti direttamente dalla tastiera.</string>
+    <string name="shell_elsewhere_otp">L\'accesso shell permette di leggere i codici dalle notifiche che Android nasconde alle app (Android 15 e successivi).</string>
 </resources>

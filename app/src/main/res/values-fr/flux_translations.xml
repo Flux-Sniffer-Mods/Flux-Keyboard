@@ -1825,4 +1825,7 @@
     <string name="game_mode_screen_sideways_description">Pour les apps qui tournent l\'écran quoi qu\'on leur dise (GameHub) : l\'écran prend une forme paysage, un peu moins haute pour dégager la caméra, et le téléphone reste droit.</string>
     <string name="game_mode_seen_title">Ajouter %1$s à un profil</string>
     <string name="game_mode_seen_description">La dernière app où un jeu a tourné (%1$s) n\'a pas de profil : un lanceur peut faire tourner ses jeux dans une partie à lui. Ajoutez-la au profil de son lanceur pour que le mode jeu reste actif en jeu.</string>
+    <string name="shell_elsewhere_section">Ailleurs</string>
+    <string name="shell_elsewhere_trackpad">Réglé sur l\'accès shell, les balayages du pavé tactile sont lus directement depuis le clavier.</string>
+    <string name="shell_elsewhere_otp">L\'accès shell permet de lire les codes des notifications qu\'Android cache aux applis (Android 15 et versions ultérieures).</string>
 </resources>
