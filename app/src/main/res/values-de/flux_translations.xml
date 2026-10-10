@@ -1165,11 +1165,11 @@
     <string name="flux_tutorial_shell_title">Eingebaute Shell (empfohlen)</string>
     <string name="game_mode_add">App hinzufügen</string>
     <string name="game_mode_add_app">App hinzufügen</string>
-    <string name="game_mode_add_description">Ein Launcher oder Emulator: Seine Spiele nutzen seine Einstellungen, das Trackpad beginnt als ihre Sticks.</string>
+    <string name="game_mode_add_description">Ein Launcher oder Emulator: Seine Spiele nutzen seine Einstellungen.</string>
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_delete">Profil löschen</string>
-    <string name="game_mode_import">Spiel aus einem Spiele-Launcher hinzufügen</string>
-    <string name="game_mode_import_description">Die Spiele, die GameNative, GameHub oder GameHub Lite auf dem Startbildschirm, in ihren Verknüpfungen oder in ihrem Steam-Ordner haben, jedes mit eigenem Profil. Wechsle zwischen den Spielen eines Launchers über die Benachrichtigung des Spielmodus oder gib jedem eine eigene Verknüpfung auf dem Startbildschirm.</string>
+    <string name="game_mode_import">Spiel hinzufügen</string>
+    <string name="game_mode_import_description">Aus GameNative, GameHub oder deinen Spielordnern, jedes mit einer Verknüpfung auf dem Startbildschirm. Oder eines, das du einem Launcher oder Emulator selbst hinzugefügt hast.</string>
     <string name="game_mode_import_none">Keine Spiele gefunden. Füge eines im Launcher zum Startbildschirm hinzu oder lege den Launcher selbst als Profil an.</string>
     <string name="game_mode_import_reading">Spiele werden gelesen</string>
     <string name="game_mode_left_half">Trackpad linke Hälfte</string>
@@ -1225,14 +1225,13 @@
     <string name="game_mode_home_screen">Zum Startbildschirm hinzufügen</string>
     <string name="game_mode_home_screen_failed">Der Startbildschirm nimmt keine Verknüpfungen an.</string>
     <string name="game_mode_folders">Spielordner anlegen</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mit einem Ordner für GameNative, GameHub, Dolphin, PPSSPP, Azahar und Eden. Richte den Export für Frontends von GameNative und GameHub Lite auf ihren Ordner, lege Emulator-Spiele in ihren (und füge den Ordner im Emulator hinzu), dann bekommt jedes Spiel ein Profil und eine Startbildschirm-Verknüpfung, die es startet. Der ROMs-Ordner von ES-DE wird auch gelesen.</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mit einem Ordner je Launcher und Emulator. Der ROMs-Ordner von ES-DE wird ebenfalls gelesen.</string>
     <string name="game_mode_folders_made">Angelegt in Download/Flux Keyboard/Games. GameNative: Einstellungen > Oberfläche > Frontend Sync, dann dort den Ordner GameNative wählen.</string>
-    <string name="game_mode_folder_add">Eigenen Spielordner hinzufügen</string>
-    <string name="game_mode_folder_add_description">Der Ordner, den du in einem Launcher oder Emulator eingestellt hast (sein Export für Frontends oder Spieleordner), wird auch nach Spielen durchsucht.</string>
+    <string name="game_mode_folder_add">Eigenen Ordner hinzufügen</string>
+    <string name="game_mode_folder_add_description">Einer, der in einem Launcher oder Emulator eingestellt ist.</string>
     <string name="game_mode_folder_games_of">Seine Spiele sind für</string>
     <string name="game_mode_folder_by_names">Nach Ordnernamen erkannt</string>
-    <string name="game_mode_own_game">Spiel selbst hinzufügen</string>
-    <string name="game_mode_own_game_description">Ein Spiel, das du selbst zu einem Launcher oder Emulator hinzugefügt hast, wie die eigenen Spiele von GameNative und GameHub: Wähle welchen, dann die Spieldatei (Emulatoren) oder die exportierte Datei bzw. Spiel-ID (Launcher).</string>
+    <string name="game_mode_own_game">Selbst hinzufügen</string>
     <string name="game_mode_own_game_added_to">Hinzugefügt zu</string>
     <string name="game_mode_own_game_file">Spieldatei wählen</string>
     <string name="game_mode_own_game_export_file">Exportierte Datei wählen (optional)</string>
@@ -1271,4 +1270,5 @@
     <string name="game_mode_own_settings_off">Spielt mit den Einstellungen von %1$s. Schalte es für ein Spiel ein, dessen Sticks woanders sitzen.</string>
     <string name="game_mode_own_settings_short">Eigene Einstellungen</string>
     <string name="game_mode_app_settings_short">Einstellungen von %1$s</string>
+    <string name="game_mode_folders_section">Spielordner</string>
 </resources>

@@ -1712,11 +1712,11 @@
     <string name="flux_tutorial_shell_title">Встроенная оболочка (рекомендуется)</string>
     <string name="game_mode_add">Добавить приложение</string>
     <string name="game_mode_add_app">Добавить приложение</string>
-    <string name="game_mode_add_description">Лаунчер или эмулятор: его игры используют его настройки, а тачпад сначала работает как их стики.</string>
+    <string name="game_mode_add_description">Лаунчер или эмулятор: его игры используют его настройки.</string>
     <string name="game_mode_apps">Приложения</string>
     <string name="game_mode_delete">Удалить профиль</string>
-    <string name="game_mode_import">Добавить игру из игрового лаунчера</string>
-    <string name="game_mode_import_description">Игры, которые GameNative, GameHub или GameHub Lite держат на главном экране, в своих ярлыках или установили в свою папку Steam, каждая со своим профилем. Переключайте игры лаунчера из уведомления игрового режима или дайте каждой свой ярлык на главном экране.</string>
+    <string name="game_mode_import">Добавить игру</string>
+    <string name="game_mode_import_description">Из GameNative, GameHub или ваших папок с играми, каждая с ярлыком на главном экране. Или игру, добавленную в лаунчер или эмулятор вручную.</string>
     <string name="game_mode_import_none">Игры не найдены. Добавьте игру на главный экран в её лаунчере или добавьте сам лаунчер как профиль.</string>
     <string name="game_mode_import_reading">Чтение игр</string>
     <string name="game_mode_left_half">Левая половина трекпада</string>
@@ -1772,14 +1772,13 @@
     <string name="game_mode_home_screen">Добавить на главный экран</string>
     <string name="game_mode_home_screen_failed">Главный экран не принимает ярлыки.</string>
     <string name="game_mode_folders">Создать папки игр</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, с папкой для GameNative, GameHub, Dolphin, PPSSPP, Azahar и Eden. Направьте экспорт для фронтендов GameNative и GameHub Lite в их папку, храните игры эмуляторов в их папке (и добавьте её в эмуляторе) — у каждой игры может быть профиль и ярлык, который её запускает. Папка ROMs из ES-DE тоже читается.</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, с папкой для каждого лаунчера и эмулятора. Папка ROMs из ES-DE тоже читается.</string>
     <string name="game_mode_folders_made">Созданы в Download/Flux Keyboard/Games. GameNative: Настройки > Интерфейс > Frontend Sync, затем выберите там папку GameNative.</string>
-    <string name="game_mode_folder_add">Добавить свою папку игр</string>
-    <string name="game_mode_folder_add_description">Папка, заданная в лаунчере или эмуляторе (его экспорт для фронтендов или папка игр), тоже просматривается на игры.</string>
+    <string name="game_mode_folder_add">Добавить свою папку</string>
+    <string name="game_mode_folder_add_description">Заданную в лаунчере или эмуляторе.</string>
     <string name="game_mode_folder_games_of">Её игры для</string>
     <string name="game_mode_folder_by_names">Определяются по именам папок</string>
-    <string name="game_mode_own_game">Добавить игру самому</string>
-    <string name="game_mode_own_game_description">Игра, добавленная вручную в лаунчер или эмулятор, как свои игры в GameNative и GameHub: выберите, куда, затем файл игры (эмуляторы) или экспортированный файл либо ID игры (лаунчеры).</string>
+    <string name="game_mode_own_game">Добавить вручную</string>
     <string name="game_mode_own_game_added_to">Добавлена в</string>
     <string name="game_mode_own_game_file">Выбрать файл игры</string>
     <string name="game_mode_own_game_export_file">Выбрать экспортированный файл (необязательно)</string>
@@ -1818,4 +1817,5 @@
     <string name="game_mode_own_settings_off">Играет с настройками %1$s. Включите для игры, у которой стики в другом месте.</string>
     <string name="game_mode_own_settings_short">Свои настройки</string>
     <string name="game_mode_app_settings_short">Настройки %1$s</string>
+    <string name="game_mode_folders_section">Папки игр</string>
 </resources>

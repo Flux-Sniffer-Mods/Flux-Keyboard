@@ -1700,11 +1700,11 @@
     <string name="flux_tutorial_shell_title">Ներկառուցված shell (խորհուրդ է տրվում)</string>
     <string name="game_mode_add">Ավելացնել հավելված</string>
     <string name="game_mode_add_app">Ավելացնել հավելված</string>
-    <string name="game_mode_add_description">Գործարկիչ կամ էմուլյատոր․ դրա խաղերը խաղում են դրա կարգավորումներով, թաչփադը սկսում է որպես դրանց լծակներ։</string>
+    <string name="game_mode_add_description">Գործարկիչ կամ էմուլյատոր․ դրա խաղերը խաղում են դրա կարգավորումներով։</string>
     <string name="game_mode_apps">Հավելվածներ</string>
     <string name="game_mode_delete">Ջնջել պրոֆիլը</string>
-    <string name="game_mode_import">Ավելացնել խաղ խաղերի գործարկիչից</string>
-    <string name="game_mode_import_description">Այն խաղերը, որոնք GameNative-ը, GameHub-ը կամ GameHub Lite-ը ունեն գլխավոր էկրանին, իրենց դյուրանցումներում կամ տեղադրված են իրենց Steam թղթապանակում, յուրաքանչյուրը իր պրոֆիլով։ Փոխեք գործարկչի խաղերը խաղային ռեժիմի ծանուցումից կամ յուրաքանչյուրին տվեք իր դյուրանցումը գլխավոր էկրանին։</string>
+    <string name="game_mode_import">Ավելացնել խաղ</string>
+    <string name="game_mode_import_description">GameNative-ից, GameHub-ից կամ ձեր խաղերի թղթապանակներից՝ յուրաքանչյուրը գլխավոր էկրանի դյուրանցումով։ Կամ մեկը, որը ձեռքով եք ավելացրել գործարկիչին կամ էմուլյատորին։</string>
     <string name="game_mode_import_none">Խաղեր չեն գտնվել։ Ավելացրեք մեկը գլխավոր էկրանին իր գործարկչից կամ ավելացրեք գործարկիչը որպես պրոֆիլ։</string>
     <string name="game_mode_import_reading">Խաղերը կարդացվում են</string>
     <string name="game_mode_left_half">Թաչփեդի ձախ կեսը</string>
@@ -1760,14 +1760,13 @@
     <string name="game_mode_home_screen">Ավելացնել գլխավոր էկրանին</string>
     <string name="game_mode_home_screen_failed">Գլխավոր էկրանը դյուրանցումներ չի ընդունում։</string>
     <string name="game_mode_folders">Ստեղծել խաղերի թղթապանակները</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, թղթապանակով GameNative-ի, GameHub-ի, Dolphin-ի, PPSSPP-ի, Azahar-ի և Eden-ի համար։ GameNative-ի և GameHub Lite-ի «Export for frontend»-ն ուղղեք իրենց թղթապանակին, էմուլյատորների խաղերը պահեք իրենցում (և ավելացրեք թղթապանակը էմուլյատորում), և յուրաքանչյուր խաղ կարող է ունենալ պրոֆիլ և այն գործարկող դյուրանցում։ ES-DE-ի ROMs թղթապանակը նույնպես կարդացվում է։</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games՝ յուրաքանչյուր գործարկիչի և էմուլյատորի համար թղթապանակով։ ES-DE-ի ROMs թղթապանակը նույնպես կարդացվում է։</string>
     <string name="game_mode_folders_made">Ստեղծված է Download/Flux Keyboard/Games-ում։ GameNative․ Կարգավորումներ > Ինտերֆեյս > Frontend Sync, ապա ընտրեք այնտեղ GameNative թղթապանակը։</string>
-    <string name="game_mode_folder_add">Ավելացնել ձեր խաղերի թղթապանակը</string>
-    <string name="game_mode_folder_add_description">Գործարկչում կամ էմուլյատորում ձեր նշած թղթապանակը (դրա «Export for frontend»-ը կամ խաղերի թղթապանակը) նույնպես կարդացվում է խաղերի համար։</string>
+    <string name="game_mode_folder_add">Ավելացնել ձեր թղթապանակը</string>
+    <string name="game_mode_folder_add_description">Գործարկիչում կամ էմուլյատորում նշված թղթապանակ։</string>
     <string name="game_mode_folder_games_of">Դրա խաղերը նախատեսված են</string>
     <string name="game_mode_folder_by_names">Գտնվում են թղթապանակների անուններով</string>
-    <string name="game_mode_own_game">Ինքներդ ավելացնել խաղ</string>
-    <string name="game_mode_own_game_description">Խաղ, որը ձեռքով ավելացրել եք գործարկչին կամ էմուլյատորին, ինչպես GameNative-ի և GameHub-ի սեփական խաղերը․ ընտրեք որին, ապա խաղի ֆայլը (էմուլյատորներ) կամ արտահանված ֆայլը կամ խաղի ID-ն (գործարկիչներ)։</string>
+    <string name="game_mode_own_game">Ավելացնել ձեռքով</string>
     <string name="game_mode_own_game_added_to">Ավելացված է</string>
     <string name="game_mode_own_game_file">Ընտրել խաղի ֆայլը</string>
     <string name="game_mode_own_game_export_file">Ընտրել արտահանված ֆայլը (ըստ ցանկության)</string>
@@ -1806,4 +1805,5 @@
     <string name="game_mode_own_settings_off">Խաղում է %1$s-ի կարգավորումներով։ Միացրեք այն խաղի համար, որի լծակները այլ տեղում են։</string>
     <string name="game_mode_own_settings_short">Սեփական կարգավորումներ</string>
     <string name="game_mode_app_settings_short">%1$s-ի կարգավորումներ</string>
+    <string name="game_mode_folders_section">Խաղերի թղթապանակներ</string>
 </resources>

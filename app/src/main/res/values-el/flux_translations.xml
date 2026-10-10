@@ -1074,11 +1074,11 @@
     <string name="flux_tutorial_shell_title">Ενσωματωμένο shell (συνιστάται)</string>
     <string name="game_mode_add">Προσθήκη εφαρμογής</string>
     <string name="game_mode_add_app">Προσθήκη εφαρμογής</string>
-    <string name="game_mode_add_description">Ένα launcher ή εξομοιωτής: τα παιχνίδια του παίζουν με τις ρυθμίσεις του, με το trackpad αρχικά ως μοχλούς τους.</string>
+    <string name="game_mode_add_description">Ένα launcher ή εξομοιωτής: τα παιχνίδια του παίζουν με τις ρυθμίσεις του.</string>
     <string name="game_mode_apps">Εφαρμογές</string>
     <string name="game_mode_delete">Διαγραφή προφίλ</string>
-    <string name="game_mode_import">Προσθήκη παιχνιδιού από εκκινητή παιχνιδιών</string>
-    <string name="game_mode_import_description">Τα παιχνίδια που έχουν τα GameNative, GameHub ή GameHub Lite στην αρχική οθόνη, στις συντομεύσεις τους ή εγκατεστημένα στον φάκελο Steam τους, το καθένα με δικό του προφίλ. Αλλάξτε παιχνίδι ενός εκκινητή από την ειδοποίηση της λειτουργίας παιχνιδιού ή δώστε στο καθένα δική του συντόμευση στην αρχική οθόνη.</string>
+    <string name="game_mode_import">Προσθήκη παιχνιδιού</string>
+    <string name="game_mode_import_description">Από το GameNative, το GameHub ή τους φακέλους παιχνιδιών σας, το καθένα με συντόμευση στην αρχική οθόνη. Ή ένα που προσθέσατε μόνοι σας σε launcher ή εξομοιωτή.</string>
     <string name="game_mode_import_none">Δεν βρέθηκαν παιχνίδια. Προσθέστε ένα στην αρχική οθόνη από τον εκκινητή του ή προσθέστε τον ίδιο τον εκκινητή ως προφίλ.</string>
     <string name="game_mode_import_reading">Ανάγνωση παιχνιδιών</string>
     <string name="game_mode_left_half">Αριστερό μισό του trackpad</string>
@@ -1134,14 +1134,13 @@
     <string name="game_mode_home_screen">Προσθήκη στην αρχική οθόνη</string>
     <string name="game_mode_home_screen_failed">Η αρχική οθόνη δεν δέχεται συντομεύσεις.</string>
     <string name="game_mode_folders">Δημιουργία φακέλων παιχνιδιών</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, με φάκελο για GameNative, GameHub, Dolphin, PPSSPP, Azahar και Eden. Στρέψτε την εξαγωγή για frontend του GameNative και του GameHub Lite στον δικό τους, κρατήστε τα παιχνίδια των εξομοιωτών στον δικό τους (και προσθέστε τον φάκελο στον εξομοιωτή), και κάθε παιχνίδι μπορεί να έχει προφίλ και συντόμευση που το ξεκινά. Διαβάζεται και ο φάκελος ROMs του ES-DE.</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, με φάκελο για κάθε launcher και εξομοιωτή. Διαβάζεται και ο φάκελος ROMs του ES-DE.</string>
     <string name="game_mode_folders_made">Δημιουργήθηκαν στο Download/Flux Keyboard/Games. GameNative: Ρυθμίσεις > Διεπαφή > Frontend Sync, και επιλέξτε εκεί τον φάκελο GameNative.</string>
-    <string name="game_mode_folder_add">Προσθήκη δικού σας φακέλου παιχνιδιών</string>
-    <string name="game_mode_folder_add_description">Ο φάκελος που ορίσατε σε εκκινητή ή εξομοιωτή (η εξαγωγή του για frontend ή ο φάκελος παιχνιδιών του), διαβάζεται κι αυτός για παιχνίδια.</string>
+    <string name="game_mode_folder_add">Προσθήκη δικού σας φακέλου</string>
+    <string name="game_mode_folder_add_description">Ένας ορισμένος σε launcher ή εξομοιωτή.</string>
     <string name="game_mode_folder_games_of">Τα παιχνίδιά του είναι για</string>
     <string name="game_mode_folder_by_names">Εντοπίζονται από τα ονόματα φακέλων</string>
-    <string name="game_mode_own_game">Προσθήκη παιχνιδιού μόνοι σας</string>
-    <string name="game_mode_own_game_description">Ένα παιχνίδι που προσθέσατε χειροκίνητα σε εκκινητή ή εξομοιωτή, όπως τα προσαρμοσμένα παιχνίδια του GameNative και του GameHub: επιλέξτε ποιον, μετά το αρχείο του παιχνιδιού (εξομοιωτές) ή το εξαγόμενο αρχείο ή το ID του (εκκινητές).</string>
+    <string name="game_mode_own_game">Προσθήκη χειροκίνητα</string>
     <string name="game_mode_own_game_added_to">Προστέθηκε σε</string>
     <string name="game_mode_own_game_file">Επιλογή αρχείου παιχνιδιού</string>
     <string name="game_mode_own_game_export_file">Επιλογή εξαγόμενου αρχείου (προαιρετικό)</string>
@@ -1180,4 +1179,5 @@
     <string name="game_mode_own_settings_off">Παίζει με τις ρυθμίσεις του %1$s. Ενεργοποιήστε το για παιχνίδι με μοχλούς αλλού.</string>
     <string name="game_mode_own_settings_short">Δικές του ρυθμίσεις</string>
     <string name="game_mode_app_settings_short">Ρυθμίσεις του %1$s</string>
+    <string name="game_mode_folders_section">Φάκελοι παιχνιδιών</string>
 </resources>

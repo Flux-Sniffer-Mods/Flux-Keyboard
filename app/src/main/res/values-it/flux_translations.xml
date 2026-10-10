@@ -1211,11 +1211,11 @@
     <string name="flux_tutorial_shell_title">Shell integrata (consigliata)</string>
     <string name="game_mode_add">Aggiungi un\'app</string>
     <string name="game_mode_add_app">Aggiungi un\'app</string>
-    <string name="game_mode_add_description">Un launcher o emulatore: i suoi giochi usano le sue impostazioni, il trackpad all\'inizio come i loro stick.</string>
+    <string name="game_mode_add_description">Un launcher o un emulatore: i suoi giochi usano le sue impostazioni.</string>
     <string name="game_mode_apps">App</string>
     <string name="game_mode_delete">Elimina profilo</string>
-    <string name="game_mode_import">Aggiungi un gioco da un launcher di giochi</string>
-    <string name="game_mode_import_description">I giochi che GameNative, GameHub o GameHub Lite hanno nella schermata Home, nelle loro scorciatoie o installati nella loro cartella Steam, ognuno con il suo profilo. Passa tra i giochi di un launcher dalla notifica della modalità gioco, o dai a ognuno la sua scorciatoia nella Home.</string>
+    <string name="game_mode_import">Aggiungi un gioco</string>
+    <string name="game_mode_import_description">Da GameNative, GameHub o dalle tue cartelle di giochi, ognuno con una scorciatoia nella schermata Home. Oppure uno che hai aggiunto a mano a un launcher o emulatore.</string>
     <string name="game_mode_import_none">Nessun gioco trovato. Aggiungine uno alla schermata Home dal suo launcher, o aggiungi il launcher stesso come profilo.</string>
     <string name="game_mode_import_reading">Lettura dei giochi</string>
     <string name="game_mode_left_half">Metà sinistra del trackpad</string>
@@ -1271,14 +1271,13 @@
     <string name="game_mode_home_screen">Aggiungi alla schermata Home</string>
     <string name="game_mode_home_screen_failed">La schermata Home non accetta scorciatoie.</string>
     <string name="game_mode_folders">Crea le cartelle dei giochi</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, con una cartella per GameNative, GameHub, Dolphin, PPSSPP, Azahar ed Eden. Indirizza l\'esportazione per frontend di GameNative e GameHub Lite alla loro, tieni i giochi degli emulatori nella loro (e aggiungi la cartella nell\'emulatore): ogni gioco può avere un profilo e una scorciatoia che lo avvia. Viene letta anche la cartella ROMs di ES-DE.</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, con una cartella per ogni launcher ed emulatore. Viene letta anche la cartella ROMs di ES-DE.</string>
     <string name="game_mode_folders_made">Create in Download/Flux Keyboard/Games. GameNative: Impostazioni > Interfaccia > Frontend Sync, poi scegli lì la cartella GameNative.</string>
-    <string name="game_mode_folder_add">Aggiungi una tua cartella di giochi</string>
-    <string name="game_mode_folder_add_description">La cartella impostata in un launcher o emulatore (la sua esportazione per frontend o cartella giochi), letta anche per trovare giochi.</string>
+    <string name="game_mode_folder_add">Aggiungi una tua cartella</string>
+    <string name="game_mode_folder_add_description">Una impostata in un launcher o emulatore.</string>
     <string name="game_mode_folder_games_of">I suoi giochi sono per</string>
     <string name="game_mode_folder_by_names">Riconosciuti dai nomi delle cartelle</string>
-    <string name="game_mode_own_game">Aggiungi un gioco tu</string>
-    <string name="game_mode_own_game_description">Un gioco aggiunto a mano a un launcher o emulatore, come i giochi personalizzati di GameNative e GameHub: scegli quale, poi il file del gioco (emulatori), o il file esportato o l\'ID del gioco (launcher).</string>
+    <string name="game_mode_own_game">Aggiungi a mano</string>
     <string name="game_mode_own_game_added_to">Aggiunto a</string>
     <string name="game_mode_own_game_file">Scegli il file del gioco</string>
     <string name="game_mode_own_game_export_file">Scegli il file esportato (facoltativo)</string>
@@ -1317,4 +1316,5 @@
     <string name="game_mode_own_settings_off">Gioca con le impostazioni di %1$s. Attivalo per un gioco con gli stick altrove.</string>
     <string name="game_mode_own_settings_short">Impostazioni proprie</string>
     <string name="game_mode_app_settings_short">Impostazioni di %1$s</string>
+    <string name="game_mode_folders_section">Cartelle dei giochi</string>
 </resources>

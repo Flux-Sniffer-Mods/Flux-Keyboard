@@ -1712,11 +1712,11 @@
     <string name="flux_tutorial_shell_title">Вбудована оболонка (рекомендовано)</string>
     <string name="game_mode_add">Додати застосунок</string>
     <string name="game_mode_add_app">Додати застосунок</string>
-    <string name="game_mode_add_description">Лаунчер або емулятор: його ігри використовують його налаштування, а тачпад спершу працює як їхні стіки.</string>
+    <string name="game_mode_add_description">Лаунчер або емулятор: його ігри використовують його налаштування.</string>
     <string name="game_mode_apps">Застосунки</string>
     <string name="game_mode_delete">Видалити профіль</string>
-    <string name="game_mode_import">Додати гру з ігрового лаунчера</string>
-    <string name="game_mode_import_description">Ігри, які GameNative, GameHub або GameHub Lite мають на головному екрані, у своїх ярликах або встановили у свою папку Steam, кожна зі своїм профілем. Перемикайте ігри лаунчера зі сповіщення ігрового режиму або дайте кожній свій ярлик на головному екрані.</string>
+    <string name="game_mode_import">Додати гру</string>
+    <string name="game_mode_import_description">З GameNative, GameHub або ваших тек з іграми, кожна з ярликом на головному екрані. Або гру, додану до лаунчера чи емулятора вручну.</string>
     <string name="game_mode_import_none">Ігор не знайдено. Додайте гру на головний екран у її лаунчері або додайте сам лаунчер як профіль.</string>
     <string name="game_mode_import_reading">Читання ігор</string>
     <string name="game_mode_left_half">Ліва половина трекпада</string>
@@ -1772,14 +1772,13 @@
     <string name="game_mode_home_screen">Додати на головний екран</string>
     <string name="game_mode_home_screen_failed">Головний екран не приймає ярлики.</string>
     <string name="game_mode_folders">Створити теки ігор</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, з текою для GameNative, GameHub, Dolphin, PPSSPP, Azahar і Eden. Спрямуйте експорт для фронтендів GameNative і GameHub Lite в їхню теку, тримайте ігри емуляторів у їхній (і додайте теку в емуляторі) — кожна гра може мати профіль і ярлик, що її запускає. Тека ROMs з ES-DE теж читається.</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, з текою для кожного лаунчера та емулятора. Тека ROMs з ES-DE теж читається.</string>
     <string name="game_mode_folders_made">Створено в Download/Flux Keyboard/Games. GameNative: Налаштування > Інтерфейс > Frontend Sync, і виберіть там теку GameNative.</string>
-    <string name="game_mode_folder_add">Додати власну теку ігор</string>
-    <string name="game_mode_folder_add_description">Тека, задана в лаунчері чи емуляторі (його експорт для фронтендів або тека ігор), теж переглядається на ігри.</string>
+    <string name="game_mode_folder_add">Додати власну теку</string>
+    <string name="game_mode_folder_add_description">Задану в лаунчері чи емуляторі.</string>
     <string name="game_mode_folder_games_of">Її ігри для</string>
     <string name="game_mode_folder_by_names">Визначаються за назвами тек</string>
-    <string name="game_mode_own_game">Додати гру самому</string>
-    <string name="game_mode_own_game_description">Гра, додана вручну до лаунчера чи емулятора, як власні ігри в GameNative і GameHub: виберіть куди, потім файл гри (емулятори) або експортований файл чи ID гри (лаунчери).</string>
+    <string name="game_mode_own_game">Додати вручну</string>
     <string name="game_mode_own_game_added_to">Додано до</string>
     <string name="game_mode_own_game_file">Вибрати файл гри</string>
     <string name="game_mode_own_game_export_file">Вибрати експортований файл (необов\'язково)</string>
@@ -1818,4 +1817,5 @@
     <string name="game_mode_own_settings_off">Грає з налаштуваннями %1$s. Увімкніть для гри, стіки якої в іншому місці.</string>
     <string name="game_mode_own_settings_short">Власні налаштування</string>
     <string name="game_mode_app_settings_short">Налаштування %1$s</string>
+    <string name="game_mode_folders_section">Теки ігор</string>
 </resources>

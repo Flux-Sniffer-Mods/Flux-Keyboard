@@ -1694,11 +1694,11 @@
     <string name="flux_tutorial_shell_title">Shell tích hợp (khuyên dùng)</string>
     <string name="game_mode_add">Thêm ứng dụng</string>
     <string name="game_mode_add_app">Thêm ứng dụng</string>
-    <string name="game_mode_add_description">Một launcher hoặc trình giả lập: game của nó chơi với cài đặt của nó, bàn di chuột bắt đầu là cần analog của chúng.</string>
+    <string name="game_mode_add_description">Một launcher hoặc trình giả lập: game của nó dùng cài đặt của nó.</string>
     <string name="game_mode_apps">Ứng dụng</string>
     <string name="game_mode_delete">Xóa hồ sơ</string>
-    <string name="game_mode_import">Thêm trò chơi từ trình khởi chạy trò chơi</string>
-    <string name="game_mode_import_description">Các trò chơi mà GameNative, GameHub hoặc GameHub Lite có trên màn hình chính, trong lối tắt của chúng hoặc đã cài trong thư mục Steam của chúng, mỗi trò có hồ sơ riêng. Chuyển giữa các trò của một trình khởi chạy từ thông báo chế độ chơi game, hoặc cho mỗi trò một lối tắt riêng trên màn hình chính.</string>
+    <string name="game_mode_import">Thêm game</string>
+    <string name="game_mode_import_description">Từ GameNative, GameHub hoặc thư mục game của bạn, mỗi game có lối tắt trên màn hình chính. Hoặc game bạn tự thêm vào launcher hay trình giả lập.</string>
     <string name="game_mode_import_none">Không tìm thấy trò chơi. Thêm một trò vào màn hình chính từ trình khởi chạy của nó, hoặc thêm chính trình khởi chạy làm hồ sơ.</string>
     <string name="game_mode_import_reading">Đang đọc trò chơi</string>
     <string name="game_mode_left_half">Nửa trái bàn di chuột</string>
@@ -1753,15 +1753,14 @@
     <string name="game_mode_gamenative_steps">Trong GameNative, một lần cho mỗi game:\n1. Mở game và mở menu của nó (Quay lại).\n2. Bật On-screen Controller, với bố cục mặc định.\n3. Đặt Control Opacity về 0.\n\nKhi đó bàn di chuột di chuyển các cần analog. Phím của bạn đến game như một bàn phím: gán chúng trong điều khiển của chính game.\n\nĐể chơi với điện thoại dựng đứng, bật Portrait Mode trong cài đặt của game, General.</string>
     <string name="game_mode_home_screen">Thêm vào màn hình chính</string>
     <string name="game_mode_home_screen_failed">Màn hình chính không nhận lối tắt.</string>
-    <string name="game_mode_folders">Tạo thư mục trò chơi</string>
-    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, với một thư mục cho GameNative, GameHub, Dolphin, PPSSPP, Azahar và Eden. Trỏ xuất cho frontend của GameNative và GameHub Lite vào thư mục của chúng, để trò chơi giả lập trong thư mục của chúng (và thêm thư mục đó trong trình giả lập), mỗi trò chơi có thể có hồ sơ và lối tắt khởi động nó. Thư mục ROMs của ES-DE cũng được đọc.</string>
+    <string name="game_mode_folders">Tạo thư mục game</string>
+    <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mỗi launcher và trình giả lập một thư mục. Thư mục ROMs của ES-DE cũng được đọc.</string>
     <string name="game_mode_folders_made">Đã tạo trong Download/Flux Keyboard/Games. GameNative: Cài đặt > Giao diện > Frontend Sync, rồi chọn thư mục GameNative ở đó.</string>
-    <string name="game_mode_folder_add">Thêm thư mục trò chơi của bạn</string>
-    <string name="game_mode_folder_add_description">Thư mục bạn đặt trong trình khởi chạy hoặc trình giả lập (xuất cho frontend hoặc thư mục trò chơi của nó), cũng được đọc để tìm trò chơi.</string>
+    <string name="game_mode_folder_add">Thêm thư mục của bạn</string>
+    <string name="game_mode_folder_add_description">Thư mục đã đặt trong launcher hoặc trình giả lập.</string>
     <string name="game_mode_folder_games_of">Trò chơi trong đó dành cho</string>
     <string name="game_mode_folder_by_names">Nhận theo tên thư mục</string>
-    <string name="game_mode_own_game">Tự thêm trò chơi</string>
-    <string name="game_mode_own_game_description">Trò chơi bạn tự thêm vào trình khởi chạy hoặc trình giả lập, như trò chơi tùy chỉnh của GameNative và GameHub: chọn cái nào, rồi tệp trò chơi (trình giả lập) hoặc tệp đã xuất hay ID trò chơi (trình khởi chạy).</string>
+    <string name="game_mode_own_game">Thêm thủ công</string>
     <string name="game_mode_own_game_added_to">Đã thêm vào</string>
     <string name="game_mode_own_game_file">Chọn tệp trò chơi</string>
     <string name="game_mode_own_game_export_file">Chọn tệp đã xuất (tùy chọn)</string>
@@ -1800,4 +1799,5 @@
     <string name="game_mode_own_settings_off">Chơi với cài đặt của %1$s. Bật cho game có cần analog ở chỗ khác.</string>
     <string name="game_mode_own_settings_short">Cài đặt riêng</string>
     <string name="game_mode_app_settings_short">Cài đặt của %1$s</string>
+    <string name="game_mode_folders_section">Thư mục game</string>
 </resources>
