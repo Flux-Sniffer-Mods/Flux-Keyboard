@@ -11,6 +11,12 @@
       Prints release notes listing only what changed since the previous build: for a full
       release the previous full release, for a dev build the previous build of either kind.
 
+  flux_release.py stamp
+      Gives every entry in whats_new.json its "after": the time (UTC) of the commit that added
+      its text, so new entries need no time written by hand and none can be later than the
+      build that brings it. Run in the build before Gradle and the notes; the file is checked
+      too (broken JSON or an entry without text stops the build).
+
 Entries in whats_new.json are either text or {"text", "after": "yyyyMMddHHmm"}: new since the
 build made at "after". Full releases carry no time in their name, so "releases" maps each one
 to the time it was built.
@@ -18,6 +24,7 @@ to the time it was built.
 import datetime
 import json
 import re
+import subprocess
 import sys
 
 WHATS_NEW = "app/src/main/assets/fork/whats_new.json"
@@ -156,10 +163,43 @@ def notes_cmd(version, previous_tag, commit):
     print("\n".join(out))
 
 
+def added_at(text):
+    """yyyyMMddHHmm (UTC) of the first commit whose whats_new.json holds [text], or None."""
+    out = subprocess.run(
+        ["git", "log", "--reverse", "--format=%at", "-S", text, "--", WHATS_NEW],
+        capture_output=True, text=True, check=False
+    ).stdout.split()
+    if not out:
+        return None
+    return datetime.datetime.fromtimestamp(int(out[0]), datetime.timezone.utc).strftime("%Y%m%d%H%M")
+
+
+def stamp_cmd():
+    data = load()
+    for key, _ in SECTIONS:
+        entries = data.get(key, [])
+        for index, entry in enumerate(entries):
+            text = entry.get("text", "") if isinstance(entry, dict) else entry
+            if not isinstance(text, str) or not text.strip():
+                sys.exit(f"whats_new.json: {key}[{index}] has no text")
+            stamp = added_at(text)
+            # Not committed yet (a local build): now; a hand-written time stays only when git
+            # knows nothing, and never later than the commit that brought it
+            if stamp is None:
+                stamp = entry.get("after") if isinstance(entry, dict) and entry.get("after") else \
+                    datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d%H%M")
+            entries[index] = {"text": text, "after": stamp}
+    with open(WHATS_NEW, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+
 if __name__ == "__main__":
     args = sys.argv[1:]
     if args[:1] == ["version"] and len(args) in (2, 3):
         version_cmd(args[1], args[2] if len(args) == 3 else "")
+    elif args == ["stamp"]:
+        stamp_cmd()
     elif args[:1] == ["notes"] and len(args) == 4:
         notes_cmd(args[1], args[2], args[3])
     else:

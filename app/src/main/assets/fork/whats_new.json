@@ -512,6 +512,18 @@
     {
       "text": "Gaming mode for games started from inside their launcher or emulator: each profile can be saved in that app's own form (a GameNative controls profile named after the game, a Dolphin controller profile, the game's own PPSSPP controls, or the keys to bind in Azahar and Eden), with how to load it there. Flux Keyboard also switches to the running game's profile by itself where it can tell which game it is (PPSSPP, and games another frontend started).",
       "after": "202610092230"
+    },
+    {
+      "text": "Gaming mode: one Screen choice per game (as the app wants, kept upright, or a sideways game with the phone upright), switched along with the game; the sideways screen sits clear of the camera cutout."
+    },
+    {
+      "text": "Gaming mode: keys mapped on a drawing of the keyboard (tap a key and pick its action) or of a controller (tap a button and press its key)."
+    },
+    {
+      "text": "Gaming mode: a launcher's game player is covered by the launcher's profile, and an app a game ran in without a profile is offered to add to one."
+    },
+    {
+      "text": "Number fields take a decimal point, minus and the like from their keys, in the separator the phone uses."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -705,6 +717,21 @@
     {
       "text": "A game's home screen shortcut opens that game: emulators start afresh with it (Dolphin and PPSSPP otherwise kept what was open), games from Export for frontend files use their exact store, and an app that can't be told the game is opened instead of nothing happening.",
       "after": "202610092300"
+    },
+    {
+      "text": "An email address or link picked from the suggestions gets its space only once a word follows, so sign-in fields don't reject it."
+    },
+    {
+      "text": "One-time codes: offered only in fields a code goes in and gone on leaving the field, typed box by box as each box takes its digit, and read again on Android 15, which hides them from notification readers."
+    },
+    {
+      "text": "Gaming mode: a game exported twice for frontends is listed once, GameHub's exported games are found, and game covers stay out of the gallery."
+    },
+    {
+      "text": "Gaming mode: a GameNative game no longer starts upside down, and a profile picked from the notification stays until another game starts."
+    },
+    {
+      "text": "What's new and release notes take each entry's time from the commit that added it, so they no longer skip or repeat changes."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
