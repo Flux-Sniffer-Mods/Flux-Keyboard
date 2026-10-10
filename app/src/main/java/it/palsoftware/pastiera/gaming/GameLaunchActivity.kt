@@ -62,10 +62,20 @@ class GameLaunchActivity : Activity() {
         private const val EXTRA_PROFILE = "profile"
 
         /** Asks the home screen to add [profile]'s shortcut; false when it can't. */
-        fun pin(context: Context, profile: GameProfile): Boolean {
+        /** The game's art as a home screen icon: cropped square, filling the icon's shape. */
+        internal fun artIcon(art: android.graphics.Bitmap): Icon {
+            // Adaptive icons are 108 dp, with the middle 72 dp always shown: the art fills it all
+            val size = 432
+            val side = minOf(art.width, art.height)
+            val square = android.graphics.Bitmap.createBitmap(art, (art.width - side) / 2, (art.height - side) / 2, side, side)
+            return Icon.createWithAdaptiveBitmap(android.graphics.Bitmap.createScaledBitmap(square, size, size, true))
+        }
+
+        /** Puts [profile]'s game on the home screen, with its [art] when it has some, else its app's icon. */
+        fun pin(context: Context, profile: GameProfile, art: android.graphics.Bitmap? = null): Boolean {
             val manager = context.getSystemService(ShortcutManager::class.java) ?: return false
             if (!manager.isRequestPinShortcutSupported) return false
-            val icon = profile.packages.firstNotNullOfOrNull { pkg ->
+            val icon = art?.let { runCatching { artIcon(it) }.getOrNull() } ?: profile.packages.firstNotNullOfOrNull { pkg ->
                 runCatching { context.packageManager.getApplicationIcon(pkg) }.getOrNull()
             }?.let { drawable ->
                 val size = (48 * context.resources.displayMetrics.density).toInt()

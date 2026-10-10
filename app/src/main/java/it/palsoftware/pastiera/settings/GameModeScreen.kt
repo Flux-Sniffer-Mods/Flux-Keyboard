@@ -500,9 +500,17 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     }
                 }) { Text(stringResource(R.string.game_mode_use_emulator_controls, emulator.second)) }
             }
+            val pinScope = androidx.compose.runtime.rememberCoroutineScope()
             TextButton(onClick = {
-                if (!it.palsoftware.pastiera.gaming.GameLaunchActivity.pin(context, current.also { profile -> GameProfiles.save(context, profile) })) {
-                    android.widget.Toast.makeText(context, R.string.game_mode_home_screen_failed, android.widget.Toast.LENGTH_LONG).show()
+                val profile = current.also { saved -> GameProfiles.save(context, saved) }
+                pinScope.launch {
+                    // The game's art for its icon, as in the profile list (fetched if need be)
+                    val art = withContext(Dispatchers.IO) {
+                        runCatching { it.palsoftware.pastiera.gaming.GameArt.load(context, profile) }.getOrNull()
+                    }
+                    if (!it.palsoftware.pastiera.gaming.GameLaunchActivity.pin(context, profile, art)) {
+                        android.widget.Toast.makeText(context, R.string.game_mode_home_screen_failed, android.widget.Toast.LENGTH_LONG).show()
+                    }
                 }
             }) { Text(stringResource(R.string.game_mode_home_screen)) }
             Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
