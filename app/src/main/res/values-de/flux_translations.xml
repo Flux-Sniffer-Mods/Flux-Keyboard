@@ -1273,4 +1273,8 @@
     <string name="game_mode_place_keys">Tasten auf dem Bildschirm platzieren</string>
     <string name="game_mode_add_key">Taste hinzufügen</string>
     <string name="game_mode_press_key">Drück die Taste, die du platzieren willst.</string>
+    <string name="game_mode_trackpad_test">Trackpad aufzeichnen</string>
+    <string name="game_mode_trackpad_test_running">Aufnahme… bewege zwei Finger auf dem Trackpad</string>
+    <string name="game_mode_trackpad_test_description">Falls sich beide Sticks nicht zusammen bewegen: tippen, dann %1$d Sekunden lang je einen Finger auf jeder Trackpad-Hälfte bewegen. Gespeichert unter Download/Flux Keyboard/trackpad-test.txt zum Teilen.</string>
+    <string name="game_mode_trackpad_test_result">Höchstens gleichzeitig erkannte Finger: %1$d (%2$s).\n\nGespeichert unter Download/Flux Keyboard/trackpad-test.txt.</string>
 </resources>

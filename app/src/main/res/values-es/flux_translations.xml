@@ -1814,4 +1814,8 @@
     <string name="game_mode_place_keys">Colocar teclas en pantalla</string>
     <string name="game_mode_add_key">Añadir tecla</string>
     <string name="game_mode_press_key">Pulsa la tecla que quieres colocar.</string>
+    <string name="game_mode_trackpad_test">Grabar el trackpad</string>
+    <string name="game_mode_trackpad_test_running">Grabando… mueve dos dedos en el trackpad</string>
+    <string name="game_mode_trackpad_test_description">Para cuando los dos sticks no se mueven a la vez: toca y durante %1$d segundos mueve un dedo en cada mitad del trackpad. Se guarda en Download/Flux Keyboard/trackpad-test.txt para compartir.</string>
+    <string name="game_mode_trackpad_test_result">Máximo de dedos a la vez: %1$d (%2$s).\n\nGuardado en Download/Flux Keyboard/trackpad-test.txt.</string>
 </resources>

@@ -1182,4 +1182,8 @@
     <string name="game_mode_place_keys">Τοποθέτηση πλήκτρων στην οθόνη</string>
     <string name="game_mode_add_key">Προσθήκη πλήκτρου</string>
     <string name="game_mode_press_key">Πατήστε το πλήκτρο που θα τοποθετήσετε.</string>
+    <string name="game_mode_trackpad_test">Καταγραφή του trackpad</string>
+    <string name="game_mode_trackpad_test_running">Καταγραφή… κινήστε δύο δάχτυλα στο trackpad</string>
+    <string name="game_mode_trackpad_test_description">Όταν οι δύο μοχλοί δεν κινούνται μαζί: πατήστε και για %1$d δευτερόλεπτα κινήστε ένα δάχτυλο σε κάθε μισό του trackpad. Αποθηκεύεται στο Download/Flux Keyboard/trackpad-test.txt για κοινοποίηση.</string>
+    <string name="game_mode_trackpad_test_result">Περισσότερα δάχτυλα ταυτόχρονα: %1$d (%2$s).\n\nΑποθηκεύτηκε στο Download/Flux Keyboard/trackpad-test.txt.</string>
 </resources>

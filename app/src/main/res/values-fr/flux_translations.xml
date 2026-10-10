@@ -1814,4 +1814,8 @@
     <string name="game_mode_place_keys">Placer les touches à l\'écran</string>
     <string name="game_mode_add_key">Ajouter une touche</string>
     <string name="game_mode_press_key">Appuyez sur la touche à placer.</string>
+    <string name="game_mode_trackpad_test">Enregistrer le pavé tactile</string>
+    <string name="game_mode_trackpad_test_running">Enregistrement… bougez deux doigts sur le pavé tactile</string>
+    <string name="game_mode_trackpad_test_description">Si les deux sticks ne bougent pas ensemble : touchez, puis pendant %1$d secondes bougez un doigt sur chaque moitié du pavé tactile. Enregistré dans Download/Flux Keyboard/trackpad-test.txt, à partager.</string>
+    <string name="game_mode_trackpad_test_result">Maximum de doigts à la fois : %1$d (%2$s).\n\nEnregistré dans Download/Flux Keyboard/trackpad-test.txt.</string>
 </resources>

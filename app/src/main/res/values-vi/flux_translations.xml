@@ -1802,4 +1802,8 @@
     <string name="game_mode_place_keys">Đặt phím trên màn hình</string>
     <string name="game_mode_add_key">Thêm phím</string>
     <string name="game_mode_press_key">Nhấn phím cần đặt.</string>
+    <string name="game_mode_trackpad_test">Ghi lại bàn di chuột</string>
+    <string name="game_mode_trackpad_test_running">Đang ghi… di chuyển hai ngón trên bàn di chuột</string>
+    <string name="game_mode_trackpad_test_description">Khi hai cần analog không di chuyển cùng lúc: chạm, rồi trong %1$d giây di chuyển mỗi ngón trên mỗi nửa bàn di chuột. Lưu vào Download/Flux Keyboard/trackpad-test.txt để chia sẻ.</string>
+    <string name="game_mode_trackpad_test_result">Số ngón nhiều nhất cùng lúc: %1$d (%2$s).\n\nĐã lưu vào Download/Flux Keyboard/trackpad-test.txt.</string>
 </resources>
