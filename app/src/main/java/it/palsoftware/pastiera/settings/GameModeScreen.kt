@@ -38,17 +38,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.apps.AppPickerDialog
 import it.palsoftware.pastiera.apps.InstalledApp
-import it.palsoftware.pastiera.gaming.GameAction
 import it.palsoftware.pastiera.gaming.GameLibrary
 import it.palsoftware.pastiera.gaming.GameProfile
 import it.palsoftware.pastiera.gaming.GameProfiles
-import it.palsoftware.pastiera.gaming.GameStyle
+import it.palsoftware.pastiera.gaming.GameApps
 import it.palsoftware.pastiera.gaming.TrackpadRole
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,8 +128,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             FluxActionRow(
                 linkId = null,
                 title = profile.name,
-                description = profile.style.label + " · " +
-                    profile.packages.joinToString { pkg -> appLabel(context, pkg) }.ifEmpty { stringResource(R.string.game_mode_no_apps) },
+                description = profile.packages.joinToString { pkg -> appLabel(context, pkg) }.ifEmpty { stringResource(R.string.game_mode_no_apps) },
                 leading = { GameArtIcon(profile) }
             ) { editing = profile }
         }
@@ -179,7 +176,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         AppPickerDialog(
             onAppSelected = { app: InstalledApp ->
                 picking = false
-                editing = freshProfile(context, app.appName, app.packageName)
+                editing = GameProfiles.newProfile(app.appName, setOf(app.packageName))
             },
             onDismiss = { picking = false }
         )
@@ -187,7 +184,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val pickGame: (GameLibrary.Game) -> Unit = { game ->
         importing = false
         addingOwn = false
-        editing = freshProfile(context, game.name, game.packageName)
+        editing = GameProfiles.newProfile(game.name, setOf(game.packageName))
             .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME))
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
@@ -311,17 +308,6 @@ private fun CustomGameFolders() {
     ) { runCatching { picker.launch(null) } }
 }
 
-/**
- * A new gamepad profile for [pkg]; for an emulator whose on-screen gamepad comes from its code
- * (Dolphin, Azahar, Eden), its spots straight away.
- */
-private fun freshProfile(context: android.content.Context, name: String, pkg: String): GameProfile {
-    val fresh = GameProfiles.newProfile(name, GameStyle.GAMEPAD, setOf(pkg))
-    val layouts = it.palsoftware.pastiera.gaming.EmulatorLayouts
-    if (layouts.name(pkg) !in setOf("Dolphin", "Azahar", "Eden")) return fresh
-    return layouts.layout(context, pkg)?.let { layout -> layouts.apply(fresh, layout) } ?: fresh
-}
-
 private fun appLabel(context: android.content.Context, pkg: String): String = runCatching {
     context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString()
 }.getOrDefault(pkg)
@@ -368,22 +354,12 @@ private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onDismiss: ()
     )
 }
 
-/** One profile: its name, style, apps, trackpad halves and every key's action. */
+/** One profile: its name, trackpad halves, screen, home screen shortcut and apps. */
 @Composable
 private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Unit, onDelete: () -> Unit) {
     val context = LocalContext.current
     var current by remember { mutableStateOf(profile) }
     var addingApp by remember { mutableStateOf(false) }
-    var capturing by remember { mutableStateOf(false) }
-    if (capturing) {
-        KeyCaptureDialog(onKey = { code ->
-            capturing = false
-            if (code !in current.keys) {
-                val action = if (current.style == GameStyle.GAMEPAD) GameAction.R2 else GameAction.MOUSE_LEFT
-                current = current.copy(keys = current.keys + (code to action))
-            }
-        }, onDismiss = { capturing = false })
-    }
     FluxScreenScaffold(current.name, { onDone(current) }, Modifier) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedTextField(
@@ -393,13 +369,6 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-            ChoiceRow(stringResource(R.string.game_mode_style), current.style.label, GameStyle.entries.map { it.label }) { index ->
-                val style = GameStyle.entries[index]
-                if (style != current.style) {
-                    val fresh = GameProfiles.newProfile(current.name, style, current.packages)
-                    current = fresh.copy(id = current.id)
-                }
-            }
             ChoiceRow(stringResource(R.string.game_mode_left_half), current.leftHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(leftHalf = TrackpadRole.entries[it])
             }
@@ -426,80 +395,12 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 ),
                 style = MaterialTheme.typography.bodySmall
             )
-            // For starting the game from inside its launcher or emulator: its own form of this profile
-            val nativeApp = it.palsoftware.pastiera.gaming.NativeProfiles.appFor(current)
-            // Dolphin: the controller the game gets, Wii or GameCube found from its file unless picked
-            if (nativeApp == "Dolphin") {
-                val pads = stringArrayResource(R.array.dolphin_pads)
-                val launch = current.launch
-                val detected by androidx.compose.runtime.produceState<String?>(null, launch) {
-                    value = withContext(Dispatchers.IO) {
-                        val file = launch?.let { l -> it.palsoftware.pastiera.gaming.DolphinPads.gameFile(l) }
-                        file?.let { f -> if (it.palsoftware.pastiera.gaming.DolphinPads.isWii(f)) "Wii" else "GameCube" }
-                    }
-                }
-                val autoLabel = detected?.let { found -> stringResource(R.string.dolphin_pad_auto_found, found) } ?: pads[0]
-                ChoiceRow(
-                    stringResource(R.string.dolphin_pad_title),
-                    if (current.dolphinPad == it.palsoftware.pastiera.gaming.DolphinPad.AUTO) autoLabel else pads[current.dolphinPad.ordinal],
-                    listOf(autoLabel) + pads.drop(1)
-                ) { index -> current = current.copy(dolphinPad = it.palsoftware.pastiera.gaming.DolphinPad.entries[index]) }
-                Text(stringResource(R.string.dolphin_pad_description), style = MaterialTheme.typography.bodySmall)
-            }
-            if (nativeApp != null) {
-                var steps by remember { mutableStateOf<String?>(null) }
-                val saveScope = androidx.compose.runtime.rememberCoroutineScope()
-                FluxActionRow(
-                    linkId = null,
-                    icon = "\u2913",
-                    title = stringResource(R.string.native_save, nativeApp),
-                    description = stringResource(R.string.native_save_description, nativeApp)
-                ) {
-                    saveScope.launch {
-                        val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.NativeProfiles.save(context, current) }
-                        if (result.nativeKeys) current = current.copy(nativeKeys = true)
-                        steps = result.steps
-                    }
-                }
-                steps?.let { text ->
-                    AlertDialog(
-                        onDismissRequest = { steps = null },
-                        title = { Text(stringResource(R.string.native_save, nativeApp)) },
-                        text = { Text(text) },
-                        confirmButton = { TextButton(onClick = { steps = null }) { Text(stringResource(android.R.string.ok)) } }
-                    )
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(stringResource(R.string.native_keys))
-                        Text(stringResource(R.string.native_keys_description), style = MaterialTheme.typography.bodySmall)
-                    }
-                    androidx.compose.material3.Switch(
-                        checked = current.nativeKeys,
-                        onCheckedChange = { current = current.copy(nativeKeys = it) }
-                    )
-                }
-            }
-            // A known emulator: its on-screen gamepad's spots, read from its code or settings
-            val emulator = current.packages.firstNotNullOfOrNull { pkg ->
-                it.palsoftware.pastiera.gaming.EmulatorLayouts.name(pkg)?.let { pkg to it }
-            }
-            if (emulator != null) {
-                val scope = androidx.compose.runtime.rememberCoroutineScope()
-                TextButton(onClick = {
-                    scope.launch {
-                        val layout = withContext(Dispatchers.IO) {
-                            it.palsoftware.pastiera.gaming.EmulatorLayouts.layout(context, emulator.first)
-                        }
-                        if (layout != null) {
-                            current = it.palsoftware.pastiera.gaming.EmulatorLayouts.apply(current, layout)
-                            android.widget.Toast.makeText(context, R.string.game_mode_emulator_applied, android.widget.Toast.LENGTH_SHORT).show()
-                        } else {
-                            android.widget.Toast.makeText(context, R.string.game_mode_emulator_unreadable, android.widget.Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }) { Text(stringResource(R.string.game_mode_use_emulator_controls, emulator.second)) }
-            }
+            // Keys reach the game as they are: the app maps them in its own controller settings
+            Text(
+                GameApps.appFor(current)?.let { app -> stringResource(R.string.game_mode_keys_pass_app, app) }
+                    ?: stringResource(R.string.game_mode_keys_pass),
+                style = MaterialTheme.typography.bodySmall
+            )
             val pinScope = androidx.compose.runtime.rememberCoroutineScope()
             TextButton(onClick = {
                 val profile = current.also { saved -> GameProfiles.save(context, saved) }
@@ -523,13 +424,6 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 }
             }
             TextButton(onClick = { addingApp = true }) { Text(stringResource(R.string.game_mode_add_app)) }
-            Text(stringResource(R.string.game_mode_keys), style = MaterialTheme.typography.titleMedium)
-            Text(stringResource(R.string.game_mode_keys_note), style = MaterialTheme.typography.bodySmall)
-            // The keyboard as a grid, or a controller with each button's key
-            GameKeyMapper(current.keys, gamepad = current.style == GameStyle.GAMEPAD) { keys ->
-                current = current.copy(keys = keys)
-            }
-            TextButton(onClick = { capturing = true }) { Text(stringResource(R.string.game_mode_add_key)) }
             Spacer(Modifier.height(8.dp))
             Row {
                 TextButton(onClick = { onDone(current) }) { Text(stringResource(R.string.game_mode_save)) }
@@ -566,32 +460,6 @@ private fun ChoiceRow(title: String, value: String, options: List<String>, onPic
             }
         }
     }
-}
-
-/** Waits for a key: the next one pressed (the phone's own buttons included, where Android passes them on). */
-@Composable
-private fun KeyCaptureDialog(onKey: (Int) -> Unit, onDismiss: () -> Unit) {
-    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.game_mode_add_key)) },
-        text = {
-            Text(
-                stringResource(R.string.game_mode_press_key),
-                modifier = Modifier
-                    .focusRequester(focus)
-                    .focusable()
-                    .onPreviewKeyEvent { event ->
-                        if (event.type == androidx.compose.ui.input.key.KeyEventType.KeyDown) {
-                            onKey(event.nativeKeyEvent.keyCode)
-                        }
-                        true
-                    }
-            )
-            LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
-    )
 }
 
 /** A profile's game art, cropped square; its app's icon while there's none. */

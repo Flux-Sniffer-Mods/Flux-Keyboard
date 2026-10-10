@@ -454,12 +454,7 @@
       "after": "202610081423"
     },
     {
-      "text": "Gaming mode (Shell access > Gaming mode): in apps with a game profile, the keys and trackpad play the game. Gamepad profiles put the d-pad on WASD, an Xbox controller's Y X B A on O K P L in its places and a stick on each trackpad half; Keyboard and mouse profiles keep WASD and make the trackpad a mouse, and MMO profiles move on D Z X C with the whole top row as the number row. Every key is remappable per game, games from GameNative, GameHub and GameHub Lite can each have a profile, and the screen stays upright while you play.",
-      "after": "202610081437"
-    },
-    {
-      "text": "Gaming mode in GameNative: Set up GameNative saves Flux Keyboard's controls profile and opens GameNative, with the steps to import and pick it once; the keys and trackpad then play as an Xbox controller.",
-      "after": "202610091903"
+      "text": "Gaming mode (Shell access > Gaming mode): in apps with a game profile, keys reach the game as they are, mapped once in the emulator's or launcher's own controller settings, and the trackpad plays its sticks: GameNative's and GameHub's on-screen sticks, or the direction keys an emulator maps like any other key."
     },
     {
       "text": "Gaming mode: for games that only take sticks by touch, place keys and sticks on the game's own on-screen controls from gaming mode's notification. The volume keys are the left shoulder and trigger, and other buttons can be added by pressing them.",
@@ -472,10 +467,6 @@
     {
       "text": "Battery Saver and the brightness keys work without the shell too.",
       "after": "202610081509"
-    },
-    {
-      "text": "Gaming mode with emulators: Dolphin, PPSSPP, Azahar (and Citra, Lime3DS) and Eden (and yuzu's forks) get their on-screen gamepad's spots straight away, read from their own code or settings.",
-      "after": "202610091903"
     },
     {
       "text": "Gaming mode: Add a game from a game launcher also finds GameNative's and GameHub's installed Steam games, and each profile can go on the home screen: its shortcut switches the profile on and starts the game (GameNative's straight away).",
@@ -508,10 +499,6 @@
     {
       "text": "Gaming mode: add a game yourself, like GameNative's and GameHub's custom games: pick the launcher or emulator you added it to, then its file, exported file or game ID, and it gets a profile and a home screen shortcut that starts it.",
       "after": "202610092140"
-    },
-    {
-      "text": "Gaming mode for games started from inside their launcher or emulator: each profile can be saved in that app's own form (a GameNative controls profile named after the game, a Dolphin controller profile, the game's own PPSSPP controls, or the keys to bind in Azahar and Eden), with how to load it there. Flux Keyboard also switches to the running game's profile by itself where it can tell which game it is (PPSSPP, and games another frontend started).",
-      "after": "202610092230"
     },
     {
       "text": "Gaming mode: one Screen choice per game (as the app wants, kept upright, or a sideways game with the phone upright), switched along with the game; the sideways screen sits clear of the camera cutout."
@@ -734,16 +721,10 @@
       "text": "What's new and release notes take each entry's time from the commit that added it, so they no longer skip or repeat changes."
     },
     {
-      "text": "Gaming mode in GameHub and GameNative: the keys press their own on-screen controllers, already in place, so nothing needs importing; set the controls' opacity to 0 and they work unseen. In their menus the keys stay a controller."
-    },
-    {
-      "text": "Gaming mode: GameHub's Steam games are listed by name, and the key mapper follows the profile's style without clipped labels."
+      "text": "Gaming mode: GameHub's Steam games are listed by name."
     },
     {
       "text": "Shell access has its own row on the main settings page, with links to every setting elsewhere that uses it."
-    },
-    {
-      "text": "Gaming mode in Dolphin: Save for Dolphin tells a Wii game from a GameCube one by its file and saves a Wii Remote profile (with Nunchuk) or a GameCube controller profile; each game can pick a Classic Controller or a sideways Wii Remote instead."
     },
     {
       "text": "Gaming mode names emulator games by what they are, not their file: Wii, GameCube and 3DS games by their game ID in GameTDB's lists, PSP games by the title they carry."

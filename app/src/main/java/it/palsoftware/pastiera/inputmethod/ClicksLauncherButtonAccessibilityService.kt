@@ -25,8 +25,8 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
     private val mapper = ClicksLauncherAccessibilityKeyMapper()
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
-        // Gaming mode: the key plays the game
-        if (it.palsoftware.pastiera.gaming.GameMode.onKeyEvent(event)) return true
+        // Gaming mode: the key goes to the game as it is
+        if (it.palsoftware.pastiera.gaming.GameMode.passesKeys()) return false
         // Hidden apps: keys for Pastiera's emoji/symbols panels go to Pastiera, not the app
         val taken = HiddenAppKeyObserver.intercept(event)
         HiddenAppKeyObserver.logKey(event, if (taken) "accessibility, to the keyboard" else "accessibility, to the app")

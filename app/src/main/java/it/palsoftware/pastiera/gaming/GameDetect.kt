@@ -13,7 +13,7 @@ object GameDetect {
     /** The running game's profile among [profiles] for [packageName], if it can be told. */
     fun detect(packageName: String, profiles: List<GameProfile>): GameProfile? {
         if (profiles.size < 2) return null
-        val running = listOfNotNull(resumedGameFile(), if (EmulatorLayouts.name(packageName) == "PPSSPP") ppssppRecent(packageName) else null)
+        val running = listOfNotNull(resumedGameFile(), if (GameApps.emulator(packageName) == "PPSSPP") ppssppRecent(packageName) else null)
             .map { key(it) }.filter { it.length >= 3 }
         if (running.isEmpty()) return null
         return running.firstNotNullOfOrNull { game -> profiles.firstOrNull { matches(it, game) } }

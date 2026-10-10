@@ -294,12 +294,12 @@
     <string name="shizuku_request_no_question">Shizuku didn\'t show its question. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
     <string name="adb_not_running">The built-in shell isn\'t running, and neither is Shizuku. Set up the built-in shell above, or start Shizuku, then come back.</string>
     <string name="game_mode_title">Gaming mode</string>
-    <string name="game_mode_switch_description">In apps with a game profile, the keys and trackpad play the game: controller buttons and sticks, or keys and a mouse.</string>
-    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys you don\'t remap reach the game as they are, and typing into a game\'s text field works as usual. The trackpad reads one finger at a time, so one stick moves at once.</string>
+    <string name="game_mode_switch_description">In apps with a game profile, keys reach the game as they are and the trackpad moves its sticks.</string>
+    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. The trackpad reads one finger at a time, so one stick moves at once.</string>
     <string name="game_mode_profiles">Game profiles</string>
     <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add a profile</string>
-    <string name="game_mode_add_description">Pick the app it\'s for; its keys start as a controller.</string>
+    <string name="game_mode_add_description">Pick the app it\'s for; the trackpad starts as its sticks.</string>
     <string name="game_mode_folders">Make the game folders</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, with a folder for GameNative, GameHub, Dolphin, PPSSPP, Azahar and Eden. Point GameNative\'s and GameHub Lite\'s Export for frontend at theirs, keep emulator games in theirs (and add the folder in the emulator), and each game can get a profile and a home screen shortcut that starts it. ES-DE\'s ROMs folder is read too.</string>
     <string name="game_mode_folders_made">Made in Download/Flux Keyboard/Games. GameNative: Settings > Interface > Frontend Sync, then pick the GameNative folder there.</string>
@@ -316,29 +316,6 @@
     <string name="game_mode_own_game_store">Store</string>
     <string name="game_mode_own_game_custom_store">Custom game</string>
     <string name="game_mode_own_game_none">None of the launchers or emulators Flux Keyboard can start games in (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) is installed.</string>
-    <string name="native_save">Save for %1$s</string>
-    <string name="native_save_description">For starting this game from inside %1$s: this profile in its own form, with how to load it there.</string>
-    <string name="native_keys">Keys mapped by the app itself</string>
-    <string name="native_keys_description">The app\'s own controller profile maps the keys, so gaming mode leaves them alone (the trackpad still moves the sticks). Turned on when saving for an emulator.</string>
-    <string name="native_gamenative_steps">Nothing to load: in a game, gaming mode presses GameNative\'s built-in on-screen controller for your keys and moves its sticks with the trackpad. In GameNative\'s own screens the keys work as a controller.\n\nIn the game\'s menu (Back), turn on the On-screen Controller with its default layout, and set Control Opacity to 0: it still takes the presses, unseen.\n\nA button missed (another layout)? In the game, pull down gaming mode\'s notification, tap Place keys on screen, drag the boxes onto the buttons and tap Save.</string>
-    <string name="native_gamehub_steps">Nothing to load: in a game, gaming mode presses GameHub\'s on-screen controls for your keys, already placed where GameHub draws them, and moves its sticks with the trackpad. In GameHub\'s own screens the keys work as a controller.\n\nTurn GameHub\'s on-screen controls on in its in-game menu, and set their opacity to 0: they still take the presses, unseen.\n\nA button missed (another layout)? In the game, pull down gaming mode\'s notification, tap Place keys on screen, drag the boxes onto the buttons and tap Save. Start and Select aren\'t on GameHub\'s controls by default: add them there to use them.</string>
-    <string name="native_dolphin_steps">Saved as the Dolphin profile \"%1$s\".\n\nIn Dolphin, once:\n1. Long-press the game, then Game settings.\n2. GameCube Input, Port 1, Profile.\n3. Load \"%1$s\".\n\nDolphin then reads the keys itself whenever this game starts; the trackpad still moves the sticks through gaming mode.</string>
-    <string name="native_dolphin_wii_steps">Saved as the Dolphin Wii Remote profile \"%1$s\" (%2$s).\n\nIn Dolphin, once:\n1. Long-press the game, then Game settings.\n2. Wii Input, Wii Remote 1, Profile.\n3. Load \"%1$s\".\n\nDolphin then reads the keys itself whenever this game starts; the trackpad still moves the sticks through gaming mode.</string>
-    <string name="dolphin_pad_title">Dolphin controller</string>
-    <string name="dolphin_pad_description">What Save for Dolphin sets up. Automatic reads the game\'s file: a Wii game gets a Wii Remote and Nunchuk, a GameCube game a GameCube controller. Pick another when a game plays better with it.</string>
-    <string name="dolphin_pad_auto_found">Automatic (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Automatic</item>
-        <item>GameCube controller</item>
-        <item>Wii Remote and Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wii Remote sideways</item>
-    </string-array>
-    <string name="native_ppsspp_steps">Written into the PPSSPP settings of game %1$s (the game config made last).\n\nThat game now reads the keys itself whenever it starts; the trackpad still moves the stick through gaming mode.\n\nWrong game? In PPSSPP, long-press the right one, Create game config, then save again here.</string>
-    <string name="native_ppsspp_none">PPSSPP keeps keys per game in a game config. In PPSSPP:\n1. Long-press the game.\n2. Create game config.\nThen save again here.</string>
-    <string name="native_bind_steps">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s\n\nEden can save them as an input profile for this game. Gaming mode leaves the keys to it; the trackpad still moves the sticks.</string>
-    <string name="native_none">This app has no controller profile of its own: gaming mode maps the keys whichever way the game was started.</string>
-    <string name="native_failed">It couldn\'t be saved. Is the built-in shell running?</string>
     <string name="game_mode_screen">Screen</string>
     <string name="game_mode_screen_app">As the app wants</string>
     <string name="game_mode_screen_upright">Kept upright</string>
@@ -348,48 +325,29 @@
     <string name="game_mode_screen_sideways_description">For apps that turn the screen sideways whatever they\'re told (GameHub): the screen is made landscape-shaped instead, a little shorter so it clears the camera, and the phone stays upright.</string>
     <string name="game_mode_seen_title">Add %1$s to a profile</string>
     <string name="game_mode_seen_description">The last app a game ran in (%1$s) has no profile: a launcher can play its games in a part of its own. Add it to its launcher\'s profile so gaming mode stays on in the game.</string>
-    <string name="game_map_keyboard">Keyboard</string>
-    <string name="game_map_controller">Controller</string>
-    <string name="game_map_keyboard_hint">Tap a key to choose what it does in the game. Keys left blank reach the game as they are.</string>
-    <string name="game_map_controller_hint">Tap a button, then press the key it goes on.</string>
-    <string name="game_map_group_controller">Controller</string>
-    <string name="game_map_group_keyboard">Keyboard</string>
-    <string name="game_map_group_mouse">Mouse</string>
-    <string name="game_map_press_for_button">Press the key for this button.</string>
-    <string name="game_map_clear_button">No key</string>
     <string name="game_mode_import">Add a game from a game launcher</string>
     <string name="game_mode_import_description">The games GameNative, GameHub or GameHub Lite have on the home screen, in their shortcuts or installed in their Steam folder, each with a profile of its own. Switch between a launcher\'s games from gaming mode\'s notification, or give each its own home screen shortcut.</string>
     <string name="game_mode_import_reading">Reading the games</string>
     <string name="game_mode_import_none">No games found. Add one to the home screen in its launcher, or add the launcher itself as a profile.</string>
     <string name="game_mode_next_profile">Next profile</string>
     <string name="game_mode_profile_name">Name</string>
-    <string name="game_mode_style">Style</string>
     <string name="game_mode_left_half">Trackpad left half</string>
     <string name="game_mode_right_half">Trackpad right half</string>
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_add_app">Add an app</string>
     <string name="game_mode_remove">Remove</string>
-    <string name="game_mode_keys">Keys</string>
-    <string name="game_mode_keys_note">Changing the style starts the keys again from its defaults.</string>
-    <string name="game_mode_key_as_is">As it is</string>
     <string name="game_mode_save">Save</string>
     <string name="game_mode_gamenative_save">Set up GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative only takes real controllers, so gaming mode presses its own on-screen controller for your keys, unseen.</string>
-    <string name="game_mode_gamenative_steps">In GameNative, once per game:\n1. Start the game and open its menu (Back).\n2. Turn on the On-screen Controller, with its default layout.\n3. Set Control Opacity to 0.\n\nYour keys then press its buttons and the trackpad moves its sticks. In GameNative\'s own screens the keys work as a controller.\n\nTo play with the phone upright, turn on Portrait Mode in the game\'s settings, General.</string>
+    <string name="game_mode_gamenative_save_description">GameNative\'s games take a stick only from a real controller or its on-screen controller, so the trackpad moves the on-screen sticks, unseen.</string>
+    <string name="game_mode_gamenative_steps">In GameNative, once per game:\n1. Start the game and open its menu (Back).\n2. Turn on the On-screen Controller, with its default layout.\n3. Set Control Opacity to 0.\n\nThe trackpad then moves its sticks. Your keys reach the game as a keyboard: map them in the game\'s own controls.\n\nTo play with the phone upright, turn on Portrait Mode in the game\'s settings, General.</string>
     <string name="game_mode_gamenative_open">Open GameNative</string>
     <string name="game_mode_home_screen">Add to the home screen</string>
     <string name="game_mode_home_screen_failed">The home screen doesn\'t take shortcuts.</string>
-    <string name="game_mode_place_keys">Place keys on screen</string>
-    <string name="game_mode_place_hint">Drag each key onto the game\'s own button, and each stick circle onto its stick. Add a key, then press it.</string>
+    <string name="game_mode_place_hint">Drag each stick circle onto the game\'s own stick.</string>
     <string name="game_mode_place_overlay_needed">Allow Flux Keyboard to display over other apps, then try again.</string>
     <string name="game_mode_place_clear">Clear</string>
     <string name="game_mode_left_stick">Left stick</string>
     <string name="game_mode_right_stick">Right stick</string>
-    <string name="game_mode_use_emulator_controls">Use %1$s\'s on-screen controls</string>
-    <string name="game_mode_emulator_applied">Keys and sticks set to the emulator\'s on-screen controls. Fine-tune them with Place keys on screen if you moved any.</string>
-    <string name="game_mode_emulator_unreadable">Its controls aren\'t known yet: open a game in it once with the screen upright and its on-screen controls showing, then try again.</string>
-    <string name="game_mode_add_key">Add a key</string>
-    <string name="game_mode_press_key">Press the key or button. The power button can\'t be used: Android keeps it for itself.</string>
     <string name="game_mode_delete">Delete profile</string>
     <string name="pages_start_title">Start on recents</string>
     <string name="pages_start_description">Ticked, a layer opens on your recents. Unticked, it opens on its default page (Developer\'s pick until you change it with the pencil in its bottom-left corner), with your recents one page back on Q.</string>
@@ -448,4 +406,7 @@
         <item quantity="one">%d of your settings differs from the recommended ones. Applying replaces it, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
         <item quantity="other">%d of your settings differ from the recommended ones. Applying replaces them, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
     </plurals>
+    <string name="game_mode_place_sticks">Place sticks on screen</string>
+    <string name="game_mode_keys_pass">Keys reach the game as they are: map them in the game\'s own controls.</string>
+    <string name="game_mode_keys_pass_app">Keys reach %1$s as they are: map them once in its own controller settings.</string>
 </resources>

@@ -45,7 +45,6 @@ object GameMode {
     @Volatile private var input: Writer? = null
     private var inputProcess: Process? = null
     private var trackpad: Process? = null
-    private var deviceSent = -1
     private var savedRotation: String? = null
     /** The size override before a sideways game's (null when none is applied). */
     private var savedSize: String? = null
@@ -111,7 +110,7 @@ object GameMode {
         }
         // GameHub and GameNative: their own screens take the keys as a controller, their games
         // (run through Wine) only by touch
-        val launcher = next != null && NativeProfiles.appFor(next).let { it == "GameHub" || it == "GameNative" }
+        val launcher = next != null && GameApps.appFor(next).let { it == "GameHub" || it == "GameNative" }
         inMenus = launcher && !wineRunning()
         watch?.cancel(false)
         watch = if (launcher) {
@@ -132,35 +131,11 @@ object GameMode {
         }
     }
 
-    /** A key, before the app sees it: true when gaming mode took it. */
-    fun onKeyEvent(event: KeyEvent): Boolean {
-        val current = profile ?: return false
-        if (typing || GameTouchEditor.open) return false
-        // A key placed on the screen taps its spot, whatever else it's set to
-        val tap = if (inMenus) null else current.taps[event.keyCode]
-        if (tap != null) {
-            if (event.repeatCount > 0) return true
-            val down = event.action == KeyEvent.ACTION_DOWN
-            val finger = 100 + event.keyCode
-            worker.execute { if (down) send("T d $finger ${tap.first * screenW} ${tap.second * screenH}") else send("T u $finger") }
-            return true
-        }
-        // The app's own controller profile maps the keys: they reach it as they are
-        if (current.nativeKeys) return false
-        val action = current.keys[event.keyCode] ?: return false
-        if (event.repeatCount > 0) return true
-        val down = event.action == KeyEvent.ACTION_DOWN
-        val device = event.deviceId
-        worker.execute {
-            if (device != deviceSent) { send("D $device"); deviceSent = device }
-            when {
-                action == GameAction.MOUSE_LEFT -> send("B ${if (down) 1 else 0} 1")
-                action == GameAction.MOUSE_RIGHT -> send("B ${if (down) 1 else 0} 2")
-                else -> send("K ${if (down) 1 else 0} ${action.keyCode} ${if (action.gamepad) "g" else "k"}")
-            }
-        }
-        return true
-    }
+    /**
+     * In a game (a profile on, nothing being typed, the placer shut): keys go to it as they
+     * are, past the keyboard's own handling. Each launcher or emulator maps them itself.
+     */
+    fun passesKeys(): Boolean = profile != null && !typing && !GameTouchEditor.open
 
     private fun send(line: String) {
         val writer = input ?: return
@@ -188,9 +163,14 @@ object GameMode {
         runCatching { input?.close() }
         input = null
         inputProcess?.destroy(); inputProcess = null
-        deviceSent = -1
         screen(context, ScreenMode.APP)
         context.getSystemService(NotificationManager::class.java)?.cancel(NOTIFICATION_ID)
+    }
+
+    /** The phone's own keyboard. */
+    private fun keyboardDevice(): Int? = android.view.InputDevice.getDeviceIds().firstOrNull { id ->
+        val device = android.view.InputDevice.getDevice(id) ?: return@firstOrNull false
+        !device.isVirtual && device.keyboardType == android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC
     }
 
     private fun startInput(context: Context) {
@@ -212,6 +192,8 @@ object GameMode {
             screenW = minOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
             screenH = maxOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
             send("S ${screenW.toInt()} ${screenH.toInt()}")
+            // The sticks come from the keyboard, as a controller's would from the controller
+            keyboardDevice()?.let { send("D $it") }
         }.onFailure { Log.w(TAG, "input helper couldn't start: $it") }
     }
 
@@ -438,19 +420,17 @@ object GameMode {
             .setContentTitle(context.getString(R.string.game_mode_title))
             .setContentText(current.name)
             .setOngoing(true)
-        // Keys and sticks placed on the game's own on-screen controls (analogue sticks a game
-        // only takes by touch), drawn over it
+        // Sticks placed on the game's own on-screen sticks (which a game may only take by touch),
+        // drawn over it
         val place = PendingIntent.getBroadcast(
             context, 1, Intent(context, Receiver::class.java).setAction(ACTION_PLACE),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        // Only where a stick is wanted: other games take the keys as they are
+        // Only where a stick is wanted
         val wantsSticks = listOf(current.leftHalf, current.rightHalf)
             .any { it == TrackpadRole.LEFT_STICK || it == TrackpadRole.RIGHT_STICK }
-        // GameHub and GameNative games take controller input only by touch: placing keys adjusts it
-        val byTouch = NativeProfiles.appFor(current).let { it == "GameHub" || it == "GameNative" } || current.taps.isNotEmpty()
-        if (wantsSticks || byTouch) {
-            builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys), place).build())
+        if (wantsSticks) {
+            builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_sticks), place).build())
         }
         val pkg = frontPackage
         if (pkg != null && GameProfiles.forPackage(context, pkg).size > 1) {

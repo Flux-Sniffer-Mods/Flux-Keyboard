@@ -60,7 +60,7 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 
 ### The rest of the phone, without root
 - **Its own shell, no Shizuku needed**: pair once with wireless debugging and Flux Keyboard starts its own developer shell after every restart, as soon as Wi-Fi connects. Shizuku still works if you use it.
-- **Gaming mode**: the keys and trackpad play games, as a controller (WASD the d-pad, an Xbox controller's Y X B A on O K P L in its places, a stick on each trackpad half) or as a keyboard and mouse (number row on top, the trackpad a mouse, moving on WASD, or on D Z X C for MMOs), with a profile per game, fully remappable, including the games in GameNative, GameHub and GameHub Lite, each with its own home screen shortcut. Dolphin, PPSSPP, Azahar and Eden's on-screen gamepads are mapped straight away. GameNative gets a controller it accepts through its own on-screen controls, and in other games keys and sticks can be placed on the game's on-screen controls. The screen stays upright while you play.
+- **Gaming mode**: in a game, the keys reach it as they are, mapped once in the emulator's or launcher's own controller settings, and the trackpad becomes its sticks: the on-screen sticks of GameNative's and GameHub's games, or the direction keys an emulator maps like any other. A profile per game, including the games in GameNative, GameHub and GameHub Lite and the ones in your emulator folders, named by their game IDs, each with its own home screen shortcut and art. The screen turns the way each game suits, clear of the camera cutout.
 - **Keyboard light that follows the screen**: on and off with it, following its brightness as it changes, or flashing for notifications.
 
 <p align="center">

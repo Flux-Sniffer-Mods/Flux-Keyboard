@@ -50,8 +50,8 @@ object GameArt {
         steamId(launch)?.let { id ->
             return listOf("library_600x900.jpg", "header.jpg").map { "https://cdn.cloudflare.steamstatic.com/steam/apps/$id/$it" }
         }
-        val app = NativeProfiles.appFor(profile) ?: return emptyList()
-        val path = profile.launch?.let { DolphinPads.gameFile(it) } ?: return emptyList()
+        val app = GameApps.appFor(profile) ?: return emptyList()
+        val path = profile.launch?.let { GameFiles.gameFile(it) } ?: return emptyList()
         val urls = mutableListOf<String>()
         val id = GameIds.id(context, app, path)
         if (id != null) when (app) {
@@ -59,7 +59,7 @@ object GameArt {
             "Azahar" -> listOf("US", "EN", "JA").forEach { urls += "https://art.gametdb.com/3ds/box/$it/$id.png" }
         }
         val system = when (app) {
-            "Dolphin" -> if (DolphinPads.isWii(path)) "Nintendo - Wii" else "Nintendo - GameCube"
+            "Dolphin" -> if (GameFiles.isWii(path)) "Nintendo - Wii" else "Nintendo - GameCube"
             "PPSSPP" -> "Sony - PlayStation Portable"
             "Azahar" -> "Nintendo - Nintendo 3DS"
             else -> null
