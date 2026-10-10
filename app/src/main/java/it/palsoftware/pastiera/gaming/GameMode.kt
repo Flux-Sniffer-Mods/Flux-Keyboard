@@ -438,7 +438,9 @@ object GameMode {
         // Only where a stick is wanted: other games take the keys as they are
         val wantsSticks = listOf(current.leftHalf, current.rightHalf)
             .any { it == TrackpadRole.LEFT_STICK || it == TrackpadRole.RIGHT_STICK }
-        if (wantsSticks) {
+        // GameHub's games take controller input only by touch: placing keys is how they're played
+        val byTouch = NativeProfiles.appFor(current) == "GameHub" || current.taps.isNotEmpty()
+        if (wantsSticks || byTouch) {
             builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys), place).build())
         }
         val pkg = frontPackage

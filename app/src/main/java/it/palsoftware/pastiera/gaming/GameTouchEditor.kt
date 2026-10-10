@@ -73,9 +73,20 @@ object GameTouchEditor {
                 setOnTouchListener(dragger(sizePx) { cx, cy -> onMoved(cx / width, cy / height) })
             }
 
-        val keySize = (44 * density).toInt()
+        val keySize = (52 * density).toInt()
         fun addKeyChip(code: Int, at: Pair<Float, Float>) {
-            frame.addView(chip(keyName(code), at.first, at.second, false, keySize) { x, y -> taps[code] = x to y }.also { chips += it })
+            val action = profile.keys[code]?.takeIf { it.gamepad }
+            val label = keyName(code) + (action?.let { "\n" + it.label.take(6) } ?: "")
+            frame.addView(chip(label, at.first, at.second, false, keySize) { x, y -> taps[code] = x to y }.also {
+                it.textSize = 11f
+                chips += it
+            })
+        }
+        // Nothing placed yet: each controller button's key, roughly where games draw that button
+        if (taps.isEmpty() && zones.isEmpty()) {
+            profile.keys.forEach { (code, action) -> START[action]?.let { taps[code] = it } }
+            if (profile.leftHalf == TrackpadRole.LEFT_STICK || profile.rightHalf == TrackpadRole.LEFT_STICK) zones[0] = Triple(0.145f, 0.69f, 0.09f)
+            if (profile.leftHalf == TrackpadRole.RIGHT_STICK || profile.rightHalf == TrackpadRole.RIGHT_STICK) zones[1] = Triple(0.685f, 0.69f, 0.09f)
         }
         taps.forEach { (code, at) -> addKeyChip(code, at) }
         fun addStick(stick: Int) {
@@ -156,6 +167,18 @@ object GameTouchEditor {
         runCatching { windows.addView(frame, params); frame.requestFocus() }
             .onFailure { open = false; root = null }
     }
+
+    /** Where on-screen controls usually put each button (shares of the screen; GameHub's layout). */
+    private val START = mapOf(
+        GameAction.BUTTON_A to (0.87f to 0.83f), GameAction.BUTTON_B to (0.935f to 0.69f),
+        GameAction.BUTTON_X to (0.81f to 0.69f), GameAction.BUTTON_Y to (0.87f to 0.555f),
+        GameAction.DPAD_UP to (0.315f to 0.62f), GameAction.DPAD_DOWN to (0.315f to 0.75f),
+        GameAction.DPAD_LEFT to (0.26f to 0.69f), GameAction.DPAD_RIGHT to (0.37f to 0.69f),
+        GameAction.L1 to (0.08f to 0.28f), GameAction.R1 to (0.92f to 0.28f),
+        GameAction.L2 to (0.08f to 0.115f), GameAction.R2 to (0.92f to 0.115f),
+        GameAction.SELECT to (0.42f to 0.92f), GameAction.HOME to (0.50f to 0.80f), GameAction.START to (0.58f to 0.80f),
+        GameAction.L3 to (0.06f to 0.42f), GameAction.R3 to (0.95f to 0.42f)
+    )
 
     private fun close(windows: WindowManager) {
         root?.let { runCatching { windows.removeView(it) } }
