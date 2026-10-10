@@ -1716,7 +1716,7 @@
     <string name="game_mode_left_half">Moitié gauche du pavé tactile</string>
     <string name="game_mode_next_profile">Profil suivant</string>
     <string name="game_mode_no_apps">aucune appli pour l\'instant</string>
-    <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'aide d\'accessibilité du clavier. Les touches arrivent au jeu telles quelles : attribuez-les dans les réglages de manette de l\'émulateur ou du lanceur. Écrire dans un champ de texte du jeu fonctionne comme d\'habitude. Le pavé tactile lit un doigt à la fois, donc un seul stick bouge à la fois.</string>
+    <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'aide d\'accessibilité du clavier. Les touches arrivent au jeu telles quelles : attribuez-les dans les réglages de manette de l\'émulateur ou du lanceur. Écrire dans un champ de texte du jeu fonctionne comme d\'habitude. Un doigt sur chaque moitié du pavé tactile bouge les deux sticks à la fois.</string>
     <string name="game_mode_profile_name">Nom</string>
     <string name="game_mode_remove">Retirer</string>
     <string name="game_mode_right_half">Moitié droite du pavé tactile</string>

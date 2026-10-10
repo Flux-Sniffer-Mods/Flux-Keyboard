@@ -1716,7 +1716,7 @@
     <string name="game_mode_left_half">Mitad izquierda del trackpad</string>
     <string name="game_mode_next_profile">Siguiente perfil</string>
     <string name="game_mode_no_apps">aún sin apps</string>
-    <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas llegan al juego tal cual: asígnalas en los ajustes de mando del emulador o del lanzador. Escribir en un campo de texto del juego funciona como siempre. El trackpad lee un dedo cada vez, así que se mueve un stick cada vez.</string>
+    <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas llegan al juego tal cual: asígnalas en los ajustes de mando del emulador o del lanzador. Escribir en un campo de texto del juego funciona como siempre. Un dedo en cada mitad del trackpad mueve los dos sticks a la vez.</string>
     <string name="game_mode_profile_name">Nombre</string>
     <string name="game_mode_remove">Quitar</string>
     <string name="game_mode_right_half">Mitad derecha del trackpad</string>

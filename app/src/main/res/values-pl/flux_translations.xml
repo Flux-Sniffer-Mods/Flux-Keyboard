@@ -1722,7 +1722,7 @@
     <string name="game_mode_left_half">Lewa połowa trackpada</string>
     <string name="game_mode_next_profile">Następny profil</string>
     <string name="game_mode_no_apps">jeszcze bez aplikacji</string>
-    <string name="game_mode_note">Tryb gry wymaga wbudowanej powłoki (lub Shizuku) i pomocnika ułatwień dostępu klawiatury. Klawisze trafiają do gry bez zmian: przypisz je w ustawieniach kontrolera emulatora lub launchera. Pisanie w polu tekstowym gry działa jak zwykle. Gładzik czyta jeden palec naraz, więc naraz porusza się jedna gałka.</string>
+    <string name="game_mode_note">Tryb gry wymaga wbudowanej powłoki (lub Shizuku) i pomocnika ułatwień dostępu klawiatury. Klawisze trafiają do gry bez zmian: przypisz je w ustawieniach kontrolera emulatora lub launchera. Pisanie w polu tekstowym gry działa jak zwykle. Palec na każdej połowie gładzika porusza obiema gałkami naraz.</string>
     <string name="game_mode_profile_name">Nazwa</string>
     <string name="game_mode_remove">Usuń</string>
     <string name="game_mode_right_half">Prawa połowa trackpada</string>

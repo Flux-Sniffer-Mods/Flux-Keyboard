@@ -1221,7 +1221,7 @@
     <string name="game_mode_left_half">Metà sinistra del trackpad</string>
     <string name="game_mode_next_profile">Profilo successivo</string>
     <string name="game_mode_no_apps">ancora nessuna app</string>
-    <string name="game_mode_note">La modalità gioco richiede la shell integrata (o Shizuku) e l\'aiuto di accessibilità della tastiera. I tasti arrivano al gioco così come sono: assegnali nelle impostazioni del controller dell\'emulatore o del launcher. Scrivere in un campo di testo del gioco funziona come al solito. Il trackpad legge un dito alla volta, quindi si muove uno stick alla volta.</string>
+    <string name="game_mode_note">La modalità gioco richiede la shell integrata (o Shizuku) e l\'aiuto di accessibilità della tastiera. I tasti arrivano al gioco così come sono: assegnali nelle impostazioni del controller dell\'emulatore o del launcher. Scrivere in un campo di testo del gioco funziona come al solito. Un dito su ogni metà del trackpad muove entrambi gli stick insieme.</string>
     <string name="game_mode_profile_name">Nome</string>
     <string name="game_mode_remove">Rimuovi</string>
     <string name="game_mode_right_half">Metà destra del trackpad</string>

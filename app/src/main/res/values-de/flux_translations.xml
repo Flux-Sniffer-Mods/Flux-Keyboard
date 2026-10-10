@@ -1175,7 +1175,7 @@
     <string name="game_mode_left_half">Trackpad linke Hälfte</string>
     <string name="game_mode_next_profile">Nächstes Profil</string>
     <string name="game_mode_no_apps">noch keine Apps</string>
-    <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Tasten erreichen das Spiel unverändert: Belege sie in den Controller-Einstellungen des Emulators oder Launchers. Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Das Trackpad liest einen Finger auf einmal, daher bewegt sich ein Stick auf einmal.</string>
+    <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Tasten erreichen das Spiel unverändert: Belege sie in den Controller-Einstellungen des Emulators oder Launchers. Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Ein Finger auf jeder Hälfte des Trackpads bewegt beide Sticks zugleich.</string>
     <string name="game_mode_profile_name">Name</string>
     <string name="game_mode_remove">Entfernen</string>
     <string name="game_mode_right_half">Trackpad rechte Hälfte</string>
