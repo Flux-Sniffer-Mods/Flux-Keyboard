@@ -128,7 +128,11 @@ object GameFolders {
             "{ for d in \"$ROOT\" \"$ES_DE_ROMS\"; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 2 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; " +
                 (if (custom.isEmpty()) "" else "for d in $ownRoots; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 1 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; ") +
                 "} | " +
-                "while IFS= read -r f; do s=\$(head -c 64 \"\$f\" 2>/dev/null | head -n 1 | tr -cd '[:alnum:]_-'); printf '%s\\t%s\\n' \"\$f\" \"\$s\"; done; true",
+                "while IFS= read -r f; do case \"\$f\" in " +
+                // A Steam library's manifest: its game's name
+                "*.acf) s=\$(grep -m 1 '\"name\"' \"\$f\" 2>/dev/null | sed 's/.*\"name\"[[:space:]]*\"\\(.*\\)\".*/\\1/' | tr -d '\\t');; " +
+                "*) s=\$(head -c 64 \"\$f\" 2>/dev/null | head -n 1 | tr -cd '[:alnum:]_-');; esac; " +
+                "printf '%s\\t%s\\n' \"\$f\" \"\$s\"; done; true",
             10_000
         ) ?: return emptyList()
         return parse(listing, custom).map { found ->
@@ -159,6 +163,17 @@ object GameFolders {
             .maxByOrNull { it.path.length }?.let { folder -> Player.entries.firstOrNull { it.label == folder.player } }
         // Pictures beside the games (covers, icons) are never games
         if (extension in MEDIA) return@mapNotNull null
+        // A Steam library (a launcher's games installed here): each game's manifest, named by
+        // its Steam ID and holding its name; the rest of the library is the games' own files
+        if ("steamapps" in folders) {
+            val id = Regex("appmanifest_(\\d+)\\.acf", RegexOption.IGNORE_CASE).matchEntire(file)?.groupValues?.get(1)
+            if (id == null || id in STEAM_TOOLS) return@mapNotNull null
+            val player = assigned ?: folders.drop(folders.indexOf("steamapps") + 1).firstNotNullOfOrNull { folder ->
+                Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && "steam" in p.extensions }
+            } ?: (if (top == null) Player.GAMENATIVE else return@mapNotNull null)
+            if (player != Player.GAMENATIVE && player != Player.GAMEHUB) return@mapNotNull null
+            return@mapNotNull Found(content.ifEmpty { id }, player, path.substringBeforeLast('.') + ".steam", id)
+        }
         fun takes(p: Player) = extension in p.extensions || p == Player.GAMEHUB
         val player = assigned?.takeIf { takes(it) } ?: folders.firstNotNullOfOrNull { folder ->
             Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && takes(p) }
@@ -172,6 +187,9 @@ object GameFolders {
         // game): listed once, by the most exact of its files
         .groupBy { it.player to it.name.lowercase() }.values
         .map { same -> same.minBy { EXPORT_ORDER.indexOf(it.path.substringAfterLast('.').lowercase()).let { i -> if (i < 0) EXPORT_ORDER.size else i } } }
+
+    /** Steam's own tools, in a library's manifests but not games. */
+    private val STEAM_TOOLS = setOf("228980", "1070560", "1391110", "1493710", "1628350", "1826330", "2180100", "2348590", "2805730")
 
     private val EXPORT_ORDER = listOf("steam", "epic", "gog", "amazon", "local", "pcgame")
     private val MEDIA = setOf("png", "jpg", "jpeg", "webp", "gif", "bmp", "ico", "txt", "nomedia", "json", "xml", "db")

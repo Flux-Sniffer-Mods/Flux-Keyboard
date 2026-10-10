@@ -67,4 +67,19 @@ class GameFoldersTest {
             found.map { it.name to it.player }
         )
     }
+
+    @Test
+    fun aSteamLibraryIsListedByItsManifests() {
+        val listing = listOf(
+            "$root/GameHub/steamapps/appmanifest_391540.acf\tUndertale",
+            "$root/GameHub/steamapps/appmanifest_253230.acf\tA Hat in Time",
+            "$root/GameHub/steamapps/appmanifest_228980.acf\tSteamworks Common Redistributables",
+            "$root/GameHub/steamapps/libraryfolders.vdf\tlibraryfolders"
+        ).joinToString("\n")
+        val found = GameFolders.parse(listing)
+        assertEquals(
+            listOf(Triple("Undertale", GameFolders.Player.GAMEHUB, "391540"), Triple("A Hat in Time", GameFolders.Player.GAMEHUB, "253230")),
+            found.map { Triple(it.name, it.player, it.content) }
+        )
+    }
 }
