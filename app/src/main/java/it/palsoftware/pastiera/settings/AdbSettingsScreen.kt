@@ -306,6 +306,17 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.key_shortcuts_title),
             description = stringResource(R.string.root_shortcuts_open_description)
         ) { jump(SettingLinkIds.MODIFIERS_SYM_SHORTCUTS) }
+        // The other places a shell shortcut can be put: home screen keys and Nav Mode
+        FluxActionRow(
+            linkId = null,
+            title = stringResource(R.string.launcher_shortcuts_title),
+            description = stringResource(R.string.shell_shortcuts_launcher)
+        ) { jump(SettingLinkIds.MAIN_LAUNCHER_SHORTCUTS) }
+        FluxActionRow(
+            linkId = null,
+            title = stringResource(R.string.nav_mode_title),
+            description = stringResource(R.string.shell_shortcuts_nav)
+        ) { jump(SettingLinkIds.MAIN_NAV_MODE) }
 
         // The rest that uses the shell, kept with what it belongs to: each opened where it is
         SettingsSectionDivider(stringResource(R.string.shell_elsewhere_section))

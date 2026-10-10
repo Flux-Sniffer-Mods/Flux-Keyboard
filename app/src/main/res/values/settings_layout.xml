@@ -283,6 +283,8 @@
     <string name="root_section_shortcuts">Shortcuts</string>
     <string name="root_shortcuts_note">Force-stop the app in front, Battery Saver on or off, and the app in front off the network (Android 14 and later): assign them to keys in Key shortcuts, or find them in the quick launcher.</string>
     <string name="root_shortcuts_open_description">Assign the shell shortcuts to keys.</string>
+    <string name="shell_shortcuts_launcher">Or put them on keys pressed on the home screen.</string>
+    <string name="shell_shortcuts_nav">Or on Ctrl keys in Nav Mode.</string>
     <string name="shell_elsewhere_section">Elsewhere</string>
     <string name="shell_elsewhere_trackpad">Set to shell access, the trackpad\'s swipes are read straight from the keyboard.</string>
     <string name="shell_elsewhere_otp">Shell access lets codes be read from notifications Android hides from apps (Android 15 and later).</string>
