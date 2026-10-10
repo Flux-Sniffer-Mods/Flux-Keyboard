@@ -731,6 +731,12 @@
     },
     {
       "text": "Gaming mode's profiles show their game's art: Steam games' from Steam (GameNative and GameHub), Wii, GameCube and 3DS covers from GameTDB, and other emulator games' box art from libretro's thumbnails."
+    },
+    {
+      "text": "Gaming mode puts the screen's size and turning back as soon as another app is in front, even when it stopped without undoing them."
+    },
+    {
+      "text": "Use root (Shell access): on a rooted phone, shell commands run through su, ready at boot without pairing or Wi-Fi. With it, gaming mode can play as a real controller the game sees as plugged in, and the keyboard light can dim in its LEDs' own fine steps."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

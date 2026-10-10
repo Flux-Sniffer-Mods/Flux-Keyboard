@@ -131,6 +131,27 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 }
             }
         }
+        // Root, on rooted phones: every shell command through su instead
+        var rootOn by remember { mutableStateOf(it.palsoftware.pastiera.adb.RootShell.enabled(context)) }
+        val rootScope = androidx.compose.runtime.rememberCoroutineScope()
+        FluxSwitchRow(
+            linkId = "main.root.use_root",
+            title = stringResource(R.string.root_shell_title),
+            description = stringResource(R.string.root_shell_description),
+            checked = rootOn
+        ) { on ->
+            rootScope.launch {
+                val granted = withContext(Dispatchers.IO) {
+                    it.palsoftware.pastiera.adb.RootShell.setEnabled(context, on)
+                    it.palsoftware.pastiera.adb.RootShell.active
+                }
+                rootOn = on
+                if (on && !granted) {
+                    android.widget.Toast.makeText(context, R.string.root_shell_denied, android.widget.Toast.LENGTH_LONG).show()
+                }
+                refresh()
+            }
+        }
         FluxNote(
             stringResource(
                 when (status) {
@@ -247,6 +268,21 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 KeyboardBacklight.start(context)
             }
         )
+        // With root: the LEDs dimmed in their own steps, finer than the vendor's levels
+        if (rootOn) {
+            var fineDimming by remember { mutableStateOf(prefs.getBoolean(KeyboardBacklight.KEY_FINE_DIMMING, false)) }
+            FluxSwitchRow(
+                linkId = "root.backlight_fine",
+                title = stringResource(R.string.root_backlight_fine_title),
+                description = stringResource(R.string.root_backlight_fine_description),
+                checked = fineDimming,
+                onCheckedChange = { on ->
+                    fineDimming = on
+                    prefs.edit().putBoolean(KeyboardBacklight.KEY_FINE_DIMMING, on).apply()
+                    KeyboardBacklight.start(context)
+                }
+            )
+        }
         FluxSwitchRow(
             linkId = "root.backlight_flash",
             title = stringResource(R.string.root_backlight_flash_title),

@@ -71,6 +71,9 @@ object GameMode {
             GameProfiles.forPackage(app, packageName).isEmpty() && !isHomeApp(app, packageName)
         ) openedFromGame = packageName
         frontPackage = packageName
+        // Another app in front: the screen back to how it was, even if gaming mode stopped
+        // without putting it back (its process ended mid-game)
+        if (GameProfiles.forPackage(app, packageName).isEmpty() && !GameTouchEditor.open) worker.execute { recover(app) }
         if (!GameProfiles.enabled(app)) {
             if (profile != null) worker.execute { stop(app) }
             return
@@ -137,6 +140,44 @@ object GameMode {
      */
     fun passesKeys(): Boolean = profile != null && !typing && !GameTouchEditor.open
 
+    /** The profile plays as a real controller (root): its keys become the controller's buttons. */
+    @Volatile private var pad = false
+
+    /** Which of the controller's buttons each key is (see [VirtualGamepad.button]). */
+    private val PAD_BUTTONS = mapOf(
+        KeyEvent.KEYCODE_L to 0, KeyEvent.KEYCODE_P to 1, KeyEvent.KEYCODE_K to 3, KeyEvent.KEYCODE_O to 4,
+        KeyEvent.KEYCODE_Q to 6, KeyEvent.KEYCODE_E to 7, KeyEvent.KEYCODE_Z to 8, KeyEvent.KEYCODE_C to 9,
+        KeyEvent.KEYCODE_VOLUME_UP to 6, KeyEvent.KEYCODE_VOLUME_DOWN to 8,
+        KeyEvent.KEYCODE_DEL to 10, KeyEvent.KEYCODE_ENTER to 11, KeyEvent.KEYCODE_F to 13, KeyEvent.KEYCODE_J to 14
+    )
+    private val PAD_DPAD = setOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
+    private val dpadHeld = mutableSetOf<Int>()
+
+    /**
+     * A key, before the app sees it: with a real controller, the controller's own keys (W A S D
+     * the d-pad, O K P L its Y X B A, Q E Z C the shoulders and triggers, Enter Start, Backspace
+     * Select, F and J the stick presses) press its buttons; true when it took the key.
+     */
+    fun onKeyEvent(event: KeyEvent): Boolean {
+        if (!pad || !passesKeys()) return false
+        val code = event.keyCode
+        val down = event.action == KeyEvent.ACTION_DOWN
+        val button = PAD_BUTTONS[code]
+        when {
+            button != null -> if (event.repeatCount == 0) worker.execute { send("P $button ${if (down) 1 else 0}") }
+            code in PAD_DPAD -> {
+                val changed = if (down) dpadHeld.add(code) else dpadHeld.remove(code)
+                if (changed) {
+                    fun held(key: Int) = if (key in dpadHeld) 1 else 0
+                    val line = "H ${held(KeyEvent.KEYCODE_W)} ${held(KeyEvent.KEYCODE_S)} ${held(KeyEvent.KEYCODE_A)} ${held(KeyEvent.KEYCODE_D)}"
+                    worker.execute { send(line) }
+                }
+            }
+            else -> return false
+        }
+        return true
+    }
+
     private fun send(line: String) {
         val writer = input ?: return
         runCatching { writer.write(line); writer.write("\n"); writer.flush() }
@@ -148,8 +189,15 @@ object GameMode {
             if (!AdbShell.available()) return
             startInput(context)
         }
-        // GameHub's games: its on-screen buttons pressed for the keys, unless placed by hand
+        // GameHub's and GameNative's games: their on-screen sticks, unless placed by hand
         profile = GameTouchEditor.withDefaults(next)
+        // With root, a profile can play as a real controller, plugged in while it's on
+        val wantsPad = next.controller && it.palsoftware.pastiera.adb.RootShell.active
+        if (wantsPad != pad) {
+            pad = wantsPad
+            dpadHeld.clear()
+            worker.execute { send(if (wantsPad) "G 1" else "G 0") }
+        }
         // Each game's own screen choice, also when switching game mid-way
         screen(context, next.screen)
         startTrackpad(next)
@@ -159,6 +207,7 @@ object GameMode {
     private fun stop(context: Context) {
         if (profile == null) return
         profile = null
+        if (pad) { pad = false; dpadHeld.clear(); send("G 0") }
         trackpad?.destroy(); trackpad = null
         runCatching { input?.close() }
         input = null
@@ -199,6 +248,34 @@ object GameMode {
 
     // ---- The screen stays upright while a game runs ----
 
+    private const val KEY_RESTORE_SIZE = "game_mode_restore_size"
+    private const val KEY_RESTORE_ROTATION = "game_mode_restore_rotation"
+
+    /** What gaming mode changed on the screen, kept until it's put back: it outlives the process. */
+    private fun pending(context: Context) = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
+
+    /**
+     * Puts the screen's size and turning back if gaming mode changed them and no game is playing:
+     * for when it ended without undoing them (blocking: runs the shell).
+     */
+    fun recover(context: Context) {
+        if (profile != null) return
+        val prefs = pending(context)
+        val size = prefs.getString(KEY_RESTORE_SIZE, null)
+        val rotation = prefs.getString(KEY_RESTORE_ROTATION, null)
+        if (size == null && rotation == null) return
+        if (!AdbShell.available()) return
+        if (size != null) AdbShell.run(if (size.isEmpty()) "wm size reset" else "wm size $size")
+        if (rotation != null) AdbShell.run(
+            "cmd window set-ignore-orientation-request false; " +
+                "settings put system accelerometer_rotation ${rotation.takeIf { it == "0" || it == "1" } ?: "1"}"
+        )
+        prefs.edit().remove(KEY_RESTORE_SIZE).remove(KEY_RESTORE_ROTATION).apply()
+        savedSize = null
+        savedRotation = null
+        appliedScreen = ScreenMode.APP
+    }
+
     /** The screen choice applied now (APP: nothing changed). */
     private var appliedScreen = ScreenMode.APP
 
@@ -206,16 +283,17 @@ object GameMode {
     private fun screen(context: Context, mode: ScreenMode) {
         if (mode == appliedScreen) return
         if (appliedScreen == ScreenMode.SIDEWAYS) sideways(context, false)
-        if (appliedScreen != ScreenMode.APP) restoreRotation()
+        if (appliedScreen != ScreenMode.APP) restoreRotation(context)
         appliedScreen = mode
         // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
         // app asking for landscape the other way round would show upside down)
-        if (mode != ScreenMode.APP) keepUpright()
+        if (mode != ScreenMode.APP) keepUpright(context)
         if (mode == ScreenMode.SIDEWAYS) sideways(context, true)
     }
 
-    private fun keepUpright() {
+    private fun keepUpright(context: Context) {
         savedRotation = AdbShell.run("settings get system accelerometer_rotation")?.trim()
+        pending(context).edit().putString(KEY_RESTORE_ROTATION, savedRotation ?: "1").apply()
         AdbShell.run(
             "cmd window set-ignore-orientation-request true; " +
                 "settings put system accelerometer_rotation 0; settings put system user_rotation 0"
@@ -251,6 +329,7 @@ object GameMode {
             val physical = Regex("Physical size: (\\d+)x(\\d+)").find(sizes) ?: return
             val (w, h) = physical.destructured.toList().map { it.toInt() }.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) }
             savedSize = Regex("Override size: (\\d+x\\d+)").find(sizes)?.groupValues?.get(1) ?: ""
+            pending(context).edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
             val (width, height) = sidewaysSize(w, h, cutoutTop(context))
             AdbShell.run("wm size ${width}x$height")
             screenW = width.toFloat(); screenH = height.toFloat()
@@ -258,6 +337,7 @@ object GameMode {
             val saved = savedSize ?: return
             savedSize = null
             AdbShell.run(if (saved.isEmpty()) "wm size reset" else "wm size $saved")
+            pending(context).edit().remove(KEY_RESTORE_SIZE).apply()
             val sizes = AdbShell.run("wm size").orEmpty()
             val (w, h) = Regex("(\\d+)x(\\d+)").find(saved.ifEmpty { sizes })?.destructured?.toList()?.map { it.toFloat() }
                 ?.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) } ?: (screenH to screenW)
@@ -266,9 +346,10 @@ object GameMode {
         send("S ${screenW.toInt()} ${screenH.toInt()}")
     }
 
-    private fun restoreRotation() {
+    private fun restoreRotation(context: Context) {
         val saved = savedRotation ?: return
         savedRotation = null
+        pending(context).edit().remove(KEY_RESTORE_ROTATION).apply()
         AdbShell.run(
             "cmd window set-ignore-orientation-request false; " +
                 "settings put system accelerometer_rotation ${saved.takeIf { it == "0" || it == "1" } ?: "1"}"
@@ -336,7 +417,7 @@ object GameMode {
                     sticks[at] = ((x - originX) / radius).coerceIn(-1f, 1f)
                     sticks[at + 1] = ((y - originY) / radius).coerceIn(-1f, 1f)
                     val current = profile
-                    if (current != null && (!inMenus && current.stickZones.containsKey(at / 2))) dragStick(at) else sendSticks()
+                    if (current != null && (!pad && !inMenus && current.stickZones.containsKey(at / 2))) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys((x - originX) / radius, (y - originY) / radius)
@@ -403,7 +484,8 @@ object GameMode {
         }
 
         private fun sendSticks() {
-            val line = "J ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
+            // The real controller's sticks, with root; else stick events from the keyboard
+            val line = (if (pad) "A" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
             worker.execute { send(line) }
         }
     }

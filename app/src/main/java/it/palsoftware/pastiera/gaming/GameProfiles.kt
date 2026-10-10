@@ -54,12 +54,15 @@ data class GameProfile(
     /** What starts the game itself (an intent URI), for its home screen shortcut. */
     val launch: String? = null,
     /** How the screen turns while it runs. */
-    val screen: ScreenMode = ScreenMode.UPRIGHT
+    val screen: ScreenMode = ScreenMode.UPRIGHT,
+    /** With root: plays as a real controller (its keys its buttons, the trackpad its sticks). */
+    val controller: Boolean = false
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
         launch?.let { put("launch", it) }
         put("screen", screen.name)
+        put("controller", controller)
         put("name", name)
         put("packages", JSONArray(packages.toList()))
         put("left", leftHalf.name)
@@ -89,7 +92,8 @@ data class GameProfile(
                 // Before one screen choice: "sideways", and a keep-upright switch for every game
                 screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }
                     ?: if (json.optBoolean("sideways", false)) ScreenMode.SIDEWAYS
-                    else ScreenMode.defaultFor(json.optJSONArray("packages")?.optString(0))
+                    else ScreenMode.defaultFor(json.optJSONArray("packages")?.optString(0)),
+                controller = json.optBoolean("controller", false)
             )
         }.getOrNull()
     }
@@ -105,16 +109,18 @@ object GameProfiles {
      * games move their on-screen sticks; an emulator's get the direction keys (W A S D on the left,
      * the arrows on the right), which it maps like any other key.
      */
-    fun newProfile(name: String, packages: Set<String>): GameProfile {
+    fun newProfile(name: String, packages: Set<String>, controller: Boolean = false): GameProfile {
         val app = packages.firstOrNull()?.let { GameApps.appFor(it) }
-        val touch = app == "GameHub" || app == "GameNative"
+        // A real controller, or a launcher's on-screen sticks: the trackpad as sticks
+        val touch = controller || app == "GameHub" || app == "GameNative"
         return GameProfile(
             id = java.util.UUID.randomUUID().toString(),
             name = name,
             packages = packages,
             leftHalf = if (touch) TrackpadRole.LEFT_STICK else TrackpadRole.WASD_KEYS,
             rightHalf = if (touch) TrackpadRole.RIGHT_STICK else TrackpadRole.ARROW_KEYS,
-            screen = ScreenMode.defaultFor(packages.firstOrNull())
+            screen = ScreenMode.defaultFor(packages.firstOrNull()),
+            controller = controller
         )
     }
 

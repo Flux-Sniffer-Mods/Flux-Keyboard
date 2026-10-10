@@ -7,15 +7,15 @@ import rikka.shizuku.Shizuku
 import java.util.concurrent.TimeUnit
 
 /**
- * Commands run as the ADB shell (no root needed): the keyboard light, ADB shortcuts. Through
- * Flux Keyboard's own shell helper when it's running, otherwise Shizuku when it's running and
- * has allowed Flux Keyboard.
+ * Commands run as the ADB shell (no root needed): the keyboard light, ADB shortcuts. Through root
+ * when it's switched on and granted, else Flux Keyboard's own shell helper when it's running,
+ * otherwise Shizuku when it's running and has allowed Flux Keyboard.
  */
 object AdbShell {
     private const val TAG = "FluxAdb"
 
     /** The shell helper or Shizuku can run commands. */
-    fun available(): Boolean = BuiltInShell.running() || shizukuAvailable()
+    fun available(): Boolean = RootShell.active || BuiltInShell.running() || shizukuAvailable()
 
     /** Shizuku is running and has allowed Flux Keyboard. */
     fun shizukuAvailable(): Boolean = runCatching {
@@ -24,6 +24,7 @@ object AdbShell {
 
     /** Starts [command] as the ADB shell user, through the shell helper or else Shizuku. */
     fun newProcess(command: Array<String>): Process {
+        if (RootShell.active) return RootShell.newProcess(command)
         BuiltInShell.newProcess(command)?.let { return it }
         val method = Shizuku::class.java.getDeclaredMethod(
             "newProcess",

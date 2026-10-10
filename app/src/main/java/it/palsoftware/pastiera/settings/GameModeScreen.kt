@@ -176,7 +176,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         AppPickerDialog(
             onAppSelected = { app: InstalledApp ->
                 picking = false
-                editing = GameProfiles.newProfile(app.appName, setOf(app.packageName))
+                editing = GameProfiles.newProfile(app.appName, setOf(app.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
             },
             onDismiss = { picking = false }
         )
@@ -184,7 +184,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val pickGame: (GameLibrary.Game) -> Unit = { game ->
         importing = false
         addingOwn = false
-        editing = GameProfiles.newProfile(game.name, setOf(game.packageName))
+        editing = GameProfiles.newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
             .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME))
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
@@ -369,6 +369,28 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+            // With root: a real controller, its keys the controller's buttons
+            if (it.palsoftware.pastiera.adb.RootShell.active || current.controller) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.game_mode_controller))
+                        Text(stringResource(R.string.game_mode_controller_description), style = MaterialTheme.typography.bodySmall)
+                    }
+                    androidx.compose.material3.Switch(
+                        checked = current.controller,
+                        onCheckedChange = { on ->
+                            // The trackpad as the controller's sticks, from direction keys
+                            fun stick(role: TrackpadRole, as_: TrackpadRole) =
+                                if (on && (role == TrackpadRole.WASD_KEYS || role == TrackpadRole.ARROW_KEYS)) as_ else role
+                            current = current.copy(
+                                controller = on,
+                                leftHalf = stick(current.leftHalf, TrackpadRole.LEFT_STICK),
+                                rightHalf = stick(current.rightHalf, TrackpadRole.RIGHT_STICK)
+                            )
+                        }
+                    )
+                }
+            }
             ChoiceRow(stringResource(R.string.game_mode_left_half), current.leftHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(leftHalf = TrackpadRole.entries[it])
             }
@@ -396,7 +418,7 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 style = MaterialTheme.typography.bodySmall
             )
             // Keys reach the game as they are: the app maps them in its own controller settings
-            Text(
+            if (!current.controller) Text(
                 GameApps.appFor(current)?.let { app -> stringResource(R.string.game_mode_keys_pass_app, app) }
                     ?: stringResource(R.string.game_mode_keys_pass),
                 style = MaterialTheme.typography.bodySmall

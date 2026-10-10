@@ -285,6 +285,13 @@
     <string name="root_shortcuts_open_description">Assign the shell shortcuts to keys.</string>
     <string name="shell_shortcuts_launcher">Or put them on keys pressed on the home screen.</string>
     <string name="shell_shortcuts_nav">Or on Ctrl keys in Nav Mode.</string>
+    <string name="root_shell_title">Use root</string>
+    <string name="root_shell_description">On a rooted phone: shell commands run through su instead of the built-in shell or Shizuku, ready at boot without pairing or Wi-Fi, and gaming mode can be a real controller.</string>
+    <string name="root_shell_denied">Root wasn\'t granted: the built-in shell or Shizuku is used instead.</string>
+    <string name="root_backlight_fine_title">Fine dimming</string>
+    <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
+    <string name="game_mode_controller">Real controller</string>
+    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real: W A S D its d-pad, O K P L its Y X B A, Q E Z C its shoulders and triggers (and the volume keys the left ones), Enter Start, Backspace Select, F and J the stick presses, and the trackpad its sticks. Other keys reach the game as they are.</string>
     <string name="shell_elsewhere_section">Elsewhere</string>
     <string name="shell_elsewhere_trackpad">Set to shell access, the trackpad\'s swipes are read straight from the keyboard.</string>
     <string name="shell_elsewhere_otp">Shell access lets codes be read from notifications Android hides from apps (Android 15 and later).</string>

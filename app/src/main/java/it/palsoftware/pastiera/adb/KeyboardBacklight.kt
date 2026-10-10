@@ -39,6 +39,7 @@ object KeyboardBacklight {
     const val KEY_FOLLOW_SCREEN = "root_backlight_follow_screen"
     const val KEY_FOLLOW_BRIGHTNESS = "root_backlight_follow_brightness"
     const val KEY_NOTIFICATION_FLASH = "root_backlight_notification_flash"
+    const val KEY_FINE_DIMMING = "root_backlight_fine_dimming"
     private const val KEY_SAVED_TIMEOUT = "root_backlight_saved_timeout"
 
     private const val SERVICE = "agui_functional_service"
@@ -182,6 +183,55 @@ object KeyboardBacklight {
         }
     }
 
+    // ---- Fine dimming, with root: the keyboard's LEDs set straight through their kernel nodes ----
+
+    /** The keyboard light's LED nodes (path, highest value), found once through root. */
+    @Volatile private var leds: List<Pair<String, Int>>? = null
+
+    private fun leds(): List<Pair<String, Int>> = leds ?: run {
+        if (!RootShell.active) return emptyList()
+        val found = AdbShell.run(
+            "for d in /sys/class/leds/*; do n=\${d##*/}; m=\$(cat \"\$d/device/name\" 2>/dev/null); " +
+                "case \"\$n \$m\" in *kbd*|*keyboard*|*KEYBOARD*|*aw9523*|*AW9523*) " +
+                "echo \"\$d \$(cat \"\$d/max_brightness\" 2>/dev/null)\";; esac; done; true", 3_000
+        )?.lines()?.mapNotNull { line ->
+            val path = line.substringBeforeLast(' ').trim()
+            val max = line.substringAfterLast(' ').trim().toIntOrNull()?.takeIf { it > 0 }
+            if (path.isEmpty() || max == null) null else path to max
+        }.orEmpty()
+        found.also { leds = it }
+    }
+
+    /** Fine dimming is switched on, root is in use and the keyboard's LED nodes were found. */
+    fun fineActive(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_FINE_DIMMING, false) && RootShell.active && leds().isNotEmpty()
+
+    @Volatile private var fine = false
+    @Volatile private var lastPermille = -1
+    private val pendingPermille = java.util.concurrent.atomic.AtomicInteger(-1)
+
+    /**
+     * Sets the light to [share] of its range (0 to 1): in the LEDs' own steps with fine dimming
+     * (as many as the chip has, rather than the vendor's 100), else as a level of 100.
+     */
+    fun setShare(share: Float) {
+        if (!fine) {
+            set(if (share <= 0f) 0 else (share * 100).toInt().coerceIn(1, 100))
+            return
+        }
+        val permille = if (share <= 0f) 0 else (share * 1000).toInt().coerceIn(1, 1000)
+        if (pendingPermille.getAndSet(permille) != -1) return
+        worker.execute {
+            val latest = pendingPermille.getAndSet(-1)
+            if (latest < 0 || latest == lastPermille) return@execute
+            val command = leds().joinToString("; ") { (path, max) ->
+                val value = if (latest == 0) 0 else ((latest.toLong() * max + 500) / 1000).toInt().coerceIn(1, max)
+                "echo $value > \"$path/brightness\""
+            }
+            if (command.isNotEmpty() && AdbShell.send(command)) lastPermille = latest
+        }
+    }
+
     private fun apply(level: Int) {
         if (level == lastLevel) return
         when (route()) {
@@ -195,7 +245,7 @@ object KeyboardBacklight {
     fun setChosen(context: Context, level: Int) {
         prefs(context).edit().putInt("root_backlight_level", level.coerceIn(0, 100)).apply()
         lastLevel = -1
-        set(level)
+        if (fine) setShare(level / 100f) else set(level)
     }
 
     fun chosen(context: Context): Int = prefs(context).getInt("root_backlight_level", -1)
@@ -380,6 +430,13 @@ object KeyboardBacklight {
     private fun startPolling(context: Context) {
         stopPolling()
         if (!followBrightness(context)) return
+        // Fine dimming: the LEDs set in their own steps, from here (the shell's loop sets the vendor's level)
+        worker.execute {
+            fine = fineActive(context)
+            lastPermille = -1
+            if (fine && shownShare(context) == null) pollHandler.post { followSetting(context) }
+        }
+        if (prefs(context).getBoolean(KEY_FINE_DIMMING, false) && RootShell.active && shownShare(context) == null) return
         // First choice: the screen's shown brightness, read here 30 times a second and once a
         // frame while it's changing, so fades stay smooth without a process per read
         if (shownShare(context) != null) {
@@ -420,7 +477,7 @@ object KeyboardBacklight {
                 if (share != null && share != lastShare) {
                     lastShare = share
                     changedAt = now
-                    if (brightnessKept != false) set(levelForScreen(app))
+                    if (brightnessKept != false || fine) setShare(screenShare(app))
                 }
                 // Once a frame for a second after a change (a fade), else 30 times a second
                 pollHandler.postDelayed(this, if (now - changedAt < 1_000L) frameMs else SHOWN_POLL_MS)
@@ -440,7 +497,7 @@ object KeyboardBacklight {
             val share = screenShare(context)
             if (share != lastShare) {
                 lastShare = share
-                set(levelForScreen(context))
+                setShare(screenShare(context))
             }
         }
         val resolver = context.contentResolver

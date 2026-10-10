@@ -27,6 +27,13 @@ class GameProfilesTest {
     }
 
     @Test
+    fun aControllerProfilePlaysTheSticksAndIsKept() {
+        val profile = GameProfiles.newProfile("Wind Waker", setOf("org.dolphinemu.dolphinemu"), controller = true)
+        assertEquals(TrackpadRole.LEFT_STICK, profile.leftHalf)
+        assertEquals(true, GameProfile.fromJson(profile.toJson())?.controller)
+    }
+
+    @Test
     fun anOldProfileWithKeysStillLoads() {
         val old = org.json.JSONObject("""{"id":"x","name":"Old","style":"GAMEPAD","packages":["a.b"],"keys":{"29":"BUTTON_A"},"left":"LEFT_STICK","right":"MOUSE","nativeKeys":true}""")
         val profile = GameProfile.fromJson(old)

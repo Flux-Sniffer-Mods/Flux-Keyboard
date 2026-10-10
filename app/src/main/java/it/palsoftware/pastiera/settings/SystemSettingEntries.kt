@@ -73,6 +73,18 @@ internal fun systemSettingEntries(): List<SettingEntry> = listOf(
         route = SettingRoute(SettingsDestination.Root)
     ),
     SettingEntry(
+        id = "main.root.use_root",
+        titleRes = R.string.root_shell_title,
+        summaryRes = R.string.root_shell_description,
+        route = SettingRoute(SettingsDestination.Root)
+    ),
+    SettingEntry(
+        id = "root.backlight_fine",
+        titleRes = R.string.root_backlight_fine_title,
+        summaryRes = R.string.root_backlight_fine_description,
+        route = SettingRoute(SettingsDestination.Root)
+    ),
+    SettingEntry(
         id = "root.backlight_flash",
         titleRes = R.string.root_backlight_flash_title,
         summaryRes = R.string.root_backlight_flash_description,

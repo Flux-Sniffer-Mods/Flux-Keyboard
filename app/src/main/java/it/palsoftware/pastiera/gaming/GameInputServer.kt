@@ -18,9 +18,13 @@ import android.view.MotionEvent
  * - `M dx dy`: the mouse moved
  * - `B 1|0 1|2`: the left or right mouse button down or up
  * - `T d|m|u id x y`: a finger down, moved or up on the screen (several at once)
+ * - `G 1|0`: a real controller plugged in or out (run as root: see [VirtualGamepad])
+ * - `P index 1|0`: one of its buttons down or up; `H up down left right` (1 or 0): its d-pad;
+ *   `A lx ly rx ry`: its sticks, -1 to 1
  */
 object GameInputServer {
     private var deviceId = 0
+    private var gamepad: VirtualGamepad? = null
     private var width = 1080f
     private var height = 1080f
     private var mouseX = 540f
@@ -52,6 +56,8 @@ object GameInputServer {
             val line = reader.readLine() ?: break
             runCatching { handle(line.trim().split(' ')) }
         }
+        // Gaming mode stopped: the controller unplugged
+        gamepad?.close()
     }
 
     private fun handle(parts: List<String>) {
@@ -82,6 +88,10 @@ object GameInputServer {
                 injector(event)
                 event.recycle()
             }
+            "G" -> if (parts[1] == "1") { if (gamepad == null) gamepad = VirtualGamepad.create() } else { gamepad?.close(); gamepad = null }
+            "P" -> gamepad?.button(parts[1].toInt(), parts[2] == "1")
+            "H" -> gamepad?.dpad(parts[1] == "1", parts[2] == "1", parts[3] == "1", parts[4] == "1")
+            "A" -> gamepad?.sticks(parts[1].toFloat(), parts[2].toFloat(), parts[3].toFloat(), parts[4].toFloat())
             "M" -> {
                 mouseX = (mouseX + parts[1].toFloat()).coerceIn(0f, width - 1)
                 mouseY = (mouseY + parts[2].toFloat()).coerceIn(0f, height - 1)
