@@ -40,7 +40,9 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import it.palsoftware.pastiera.R
@@ -53,7 +55,8 @@ import it.palsoftware.pastiera.gaming.GameAction
  */
 @Composable
 internal fun GameKeyMapper(keys: Map<Int, GameAction>, gamepad: Boolean, onChange: (Map<Int, GameAction>) -> Unit) {
-    var controllerView by remember { mutableStateOf(gamepad) }
+    // Follows the profile's style: a controller profile's keys shown on the controller
+    var controllerView by remember(gamepad) { mutableStateOf(gamepad) }
     var pickingFor by remember { mutableStateOf<Int?>(null) }
     var capturingFor by remember { mutableStateOf<GameAction?>(null) }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -144,34 +147,40 @@ private fun RowScope.KeyCap(code: Int, action: GameAction?, weight: Float, onCli
     Column(
         modifier = Modifier
             .weight(weight)
-            .height(48.dp)
+            .height(52.dp)
             .background(
                 if (mapped) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
                 RoundedCornerShape(6.dp)
             )
             .clickable(onClick = onClick)
-            .padding(2.dp),
+            .padding(horizontal = 1.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(capName(code), fontSize = 10.sp, maxLines = 1, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(capName(code), fontSize = fixedSp(11f), lineHeight = fixedSp(13f), maxLines = 1, softWrap = false,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(
             action?.let { shortAction(it) } ?: "",
-            fontSize = 12.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, textAlign = TextAlign.Center,
+            fontSize = fixedSp(12f), lineHeight = fixedSp(14f), fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false,
+            overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }
 
-/** Each controller button's place on a 100 x 60 drawing. */
+/** Text that keeps its size whatever the phone's font size: the drawings' buttons don't grow with it. */
+@Composable
+private fun fixedSp(size: Float) = (size / LocalDensity.current.fontScale).sp
+
+/** Each controller button's centre on a 100 x 60 drawing (the buttons kept inside it, apart). */
 private val PLACES: List<Pair<GameAction, Pair<Float, Float>>> = listOf(
-    GameAction.L2 to (10f to 2f), GameAction.L1 to (10f to 12f), GameAction.R2 to (90f to 2f), GameAction.R1 to (90f to 12f),
-    GameAction.DPAD_UP to (22f to 30f), GameAction.DPAD_DOWN to (22f to 50f),
-    GameAction.DPAD_LEFT to (12f to 40f), GameAction.DPAD_RIGHT to (32f to 40f),
-    GameAction.BUTTON_Y to (78f to 22f), GameAction.BUTTON_A to (78f to 42f),
-    GameAction.BUTTON_X to (68f to 32f), GameAction.BUTTON_B to (88f to 32f),
-    GameAction.SELECT to (42f to 22f), GameAction.HOME to (50f to 30f), GameAction.START to (58f to 22f),
-    GameAction.L3 to (38f to 50f), GameAction.R3 to (62f to 50f)
+    GameAction.L2 to (8f to 0f), GameAction.L1 to (8f to 15f), GameAction.R2 to (92f to 0f), GameAction.R1 to (92f to 15f),
+    GameAction.DPAD_UP to (22f to 26f), GameAction.DPAD_DOWN to (22f to 54f),
+    GameAction.DPAD_LEFT to (10f to 40f), GameAction.DPAD_RIGHT to (34f to 40f),
+    GameAction.BUTTON_Y to (80f to 24f), GameAction.BUTTON_A to (80f to 50f),
+    GameAction.BUTTON_X to (68f to 37f), GameAction.BUTTON_B to (92f to 37f),
+    GameAction.SELECT to (38f to 22f), GameAction.HOME to (50f to 32f), GameAction.START to (62f to 22f),
+    GameAction.L3 to (40f to 60f), GameAction.R3 to (60f to 60f)
 )
 
 @Composable
@@ -179,17 +188,18 @@ private fun ControllerView(keys: Map<Int, GameAction>, onButton: (GameAction) ->
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp)
+            .height(270.dp)
             .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(28.dp))
     ) {
         val w = maxWidth
         val h = maxHeight
         PLACES.forEach { (action, at) ->
             val bound = keys.filterValues { it == action }.keys
-            val size = 44.dp
+            val size = 48.dp
+            val pad = 6.dp
             Box(
                 modifier = Modifier
-                    .offset(x = w * (at.first / 100f) - size / 2, y = h * (at.second / 60f) + 4.dp)
+                    .offset(x = pad + (w - size - pad * 2) * (at.first / 100f), y = pad + (h - size - pad * 2) * (at.second / 60f))
                     .size(size)
                     .background(
                         if (bound.isEmpty()) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primaryContainer,
@@ -200,8 +210,10 @@ private fun ControllerView(keys: Map<Int, GameAction>, onButton: (GameAction) ->
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(shortAction(action), fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                    Text(bound.joinToString(" ") { capName(it) }.ifEmpty { "–" }, fontSize = 9.sp, maxLines = 1,
+                    Text(shortAction(action), fontSize = fixedSp(12f), lineHeight = fixedSp(14f), fontWeight = FontWeight.SemiBold,
+                        maxLines = 1, softWrap = false, color = MaterialTheme.colorScheme.onSurface)
+                    Text(bound.joinToString(" ") { capName(it) }.ifEmpty { "–" }, fontSize = fixedSp(10f), lineHeight = fixedSp(12f),
+                        maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
