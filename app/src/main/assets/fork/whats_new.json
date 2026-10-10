@@ -740,6 +740,9 @@
     },
     {
       "text": "Gaming mode's settings are per app: a launcher's or emulator's games all play with them (Dolphin has one for GameCube games and one for Wii games, picked by each game's file), and a game only needs its own when its sticks sit elsewhere."
+    },
+    {
+      "text": "Suggestions read as they'll be typed: I, I'm, names and places with their capitals, a capital first letter with Shift on or after a typed capital, and all capitals with Caps Lock."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

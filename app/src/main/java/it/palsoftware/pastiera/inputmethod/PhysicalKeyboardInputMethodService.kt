@@ -1638,32 +1638,41 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun visibleSuggestionStrings(): List<String> {
         if (latestSuggestionResults.isEmpty()) return emptyList()
 
-        val hasWordStartSuggestion = latestSuggestionResults.any {
-            it.kind == SuggestionKind.NEXT_WORD || it.kind == SuggestionKind.STARTER_WORD
-        }
-        val forceWordStartCapital = if (hasWordStartSuggestion) {
-            val modifierSnapshot = modifierStateController.snapshot()
-            modifierSnapshot.capsLockEnabled ||
-                modifierSnapshot.shiftPhysicallyPressed ||
-                modifierSnapshot.shiftOneShot ||
-                shiftLayerLatched
-        } else {
-            false
-        }
+        // Caps Lock: every suggestion in capitals; Shift: a capital first letter
+        val modifierSnapshot = modifierStateController.snapshot()
+        val capsLock = modifierSnapshot.capsLockEnabled
+        val shift = modifierSnapshot.shiftPhysicallyPressed || modifierSnapshot.shiftOneShot || shiftLayerLatched
         val locale = getLocaleFromSubtype()
+        val typed = suggestionController.currentWord()
 
         val words = latestSuggestionResults.map { suggestion ->
-            when (suggestion.kind) {
-                SuggestionKind.NEXT_WORD,
-                SuggestionKind.STARTER_WORD -> recaseWordStartSuggestion(
-                    suggestion.candidate,
-                    forceWordStartCapital,
-                    locale
-                )
-                SuggestionKind.CURRENT_WORD -> suggestion.candidate
-            }
+            caseSuggestion(
+                suggestion.candidate,
+                typed = if (suggestion.kind == SuggestionKind.CURRENT_WORD) typed else "",
+                capsLock = capsLock,
+                shift = shift,
+                locale = locale
+            )
         }
         return withEmojiSuggestion(words)
+    }
+
+    /**
+     * A suggestion as it should read: in capitals with Caps Lock on; with a capital first letter
+     * with Shift on, or after a typed capital; written the dictionary's way when it's only ever
+     * capitalised (I, I'm, names, places); else following the word typed so far, or in lowercase
+     * for a word to come.
+     */
+    private fun caseSuggestion(candidate: String, typed: String, capsLock: Boolean, shift: Boolean, locale: Locale): String {
+        if (candidate.none { it.isLetter() }) return candidate
+        if (capsLock) return candidate.uppercase(locale)
+        val proper = suggestionController.properCasing(candidate)
+        if (shift) return recaseWordStartSuggestion(proper ?: candidate, true, locale)
+        if (proper != null) return proper
+        if (typed.isNotEmpty()) {
+            return it.palsoftware.pastiera.core.suggestions.CasingHelper.applyCasing(candidate, typed, forceLeadingCapital = false)
+        }
+        return recaseWordStartSuggestion(candidate, false, locale)
     }
 
     /**

@@ -105,4 +105,23 @@ class DictionaryRepositoryTest {
         assertEquals(SuggestionSource.MAIN, bestHello?.source)
         assertEquals(150, bestHello?.frequency)
     }
+
+    @Test
+    fun aWordOnlyEverCapitalisedKeepsItsCapitals() {
+        repository.index(
+            listOf(
+                DictionaryEntry("I", 250, SuggestionSource.MAIN),
+                DictionaryEntry("John", 120, SuggestionSource.MAIN),
+                DictionaryEntry("May", 90, SuggestionSource.MAIN),
+                DictionaryEntry("may", 200, SuggestionSource.MAIN),
+                DictionaryEntry("house", 150, SuggestionSource.MAIN)
+            )
+        )
+        assertEquals("I", repository.properCasing("i"))
+        assertEquals("John", repository.properCasing("john"))
+        // Also a common lowercase word: no fixed casing
+        assertEquals(null, repository.properCasing("may"))
+        assertEquals(null, repository.properCasing("house"))
+        assertEquals(null, repository.properCasing("unknown"))
+    }
 }

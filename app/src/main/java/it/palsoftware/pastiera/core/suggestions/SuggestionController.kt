@@ -523,6 +523,15 @@ class SuggestionController(
         }
     }
 
+    /** [word] as the active dictionaries always write it when it's only ever capitalised (I, names); else null. */
+    fun properCasing(word: String): String? {
+        if (word.isBlank()) return null
+        if (dictionaryRepository.isReady) dictionaryRepository.properCasing(word)?.let { return it }
+        return activeExtraSuggestionEngines().firstNotNullOfOrNull { extra ->
+            extra.repository.takeIf { it.isReady }?.properCasing(word)
+        }
+    }
+
     fun currentSuggestions(): List<SuggestionResult> = latestSuggestions.get()
 
     fun userDictionarySnapshot(): List<UserDictionaryStore.UserEntry> = userDictionaryStore.getSnapshot()

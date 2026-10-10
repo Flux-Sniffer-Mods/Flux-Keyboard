@@ -39,6 +39,21 @@ interface DictionaryRepository {
     fun topCommonEntries(limit: Int = 16): List<DictionaryEntry>
     fun isKnownWord(word: String): Boolean
     fun ensureLoadScheduled(background: () -> Unit)
+
+    /**
+     * How the dictionary always writes [word] when it's only ever capitalised (I, I'm, names,
+     * places, days): that form; null for a word also written in lowercase, or an unknown one.
+     */
+    fun properCasing(word: String): String? {
+        if (!isReady) return null
+        val forms = topByNormalized(normalizeForCasing(word), 8).map { it.word }
+            .filter { it.equals(word, ignoreCase = true) }
+        if (forms.isEmpty() || forms.any { form -> form.firstOrNull { it.isLetter() }?.isLowerCase() == true }) return null
+        return forms.first()
+    }
+
+    /** The key [topByNormalized] looks words up by. */
+    fun normalizeForCasing(word: String): String = word
 }
 
 /**
@@ -614,6 +629,8 @@ class AndroidDictionaryRepository(
             engine.addWord(normalized, effectiveFrequency(entry))
         }
     }
+
+    override fun normalizeForCasing(word: String): String = normalize(word)
 
     internal fun normalize(word: String): String {
         return WordNormalization.normalizeForDictionary(word, baseLocale)
