@@ -47,4 +47,22 @@ class TouchSlotsTest {
         )
         assertEquals(listOf("down 0 100 10", "move 0 112 10", "up 0"), events)
     }
+
+    @Test
+    fun anOlderDriverListingFingersIsFollowedByNearness() {
+        feed(
+            "EV_ABS ABS_MT_POSITION_X 00000064", "EV_ABS ABS_MT_POSITION_Y 0000000a", "EV_SYN SYN_MT_REPORT 00000000",
+            "EV_SYN SYN_REPORT 00000000",
+            "EV_ABS ABS_MT_POSITION_X 000004b0", "EV_ABS ABS_MT_POSITION_Y 00000014", "EV_SYN SYN_MT_REPORT 00000000",
+            "EV_ABS ABS_MT_POSITION_X 00000066", "EV_ABS ABS_MT_POSITION_Y 0000000a", "EV_SYN SYN_MT_REPORT 00000000",
+            "EV_SYN SYN_REPORT 00000000",
+            "EV_ABS ABS_MT_POSITION_X 000004b2", "EV_ABS ABS_MT_POSITION_Y 00000014", "EV_SYN SYN_MT_REPORT 00000000",
+            "EV_SYN SYN_REPORT 00000000",
+            "EV_SYN SYN_MT_REPORT 00000000", "EV_SYN SYN_REPORT 00000000"
+        )
+        assertEquals(
+            listOf("down 0 100 10", "move 0 102 10", "down 1 1200 20", "up 0", "move 1 1202 20", "up 1"),
+            events
+        )
+    }
 }

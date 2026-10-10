@@ -139,6 +139,40 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_add),
             description = stringResource(R.string.game_mode_add_description)
         ) { picking = true }
+        // A recording of the trackpad, for when two sticks don't move together
+        var recording by remember { mutableStateOf(false) }
+        var recorded by remember { mutableStateOf<Pair<String?, Int>?>(null) }
+        var recordFailed by remember { mutableStateOf(false) }
+        val recordScope = androidx.compose.runtime.rememberCoroutineScope()
+        FluxActionRow(
+            linkId = null,
+            icon = "\u25CE",
+            title = stringResource(if (recording) R.string.game_mode_trackpad_test_running else R.string.game_mode_trackpad_test),
+            description = stringResource(R.string.game_mode_trackpad_test_description, it.palsoftware.pastiera.gaming.TrackpadTest.SECONDS)
+        ) {
+            if (!recording) {
+                recording = true
+                recordScope.launch {
+                    val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.TrackpadTest.record() }
+                    recording = false
+                    if (result == null) recordFailed = true else recorded = result
+                }
+            }
+        }
+        recorded?.let { (device, fingers) ->
+            AlertDialog(
+                onDismissRequest = { recorded = null },
+                title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
+                text = { Text(stringResource(R.string.game_mode_trackpad_test_result, fingers, device ?: "-")) },
+                confirmButton = { TextButton(onClick = { recorded = null }) { Text(stringResource(android.R.string.ok)) } }
+            )
+        }
+        if (recordFailed) AlertDialog(
+            onDismissRequest = { recordFailed = false },
+            title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
+            text = { Text(stringResource(R.string.adb_not_running)) },
+            confirmButton = { TextButton(onClick = { recordFailed = false }) { Text(stringResource(android.R.string.ok)) } }
+        )
         // The games: home screen shortcuts, art and detection, their app's settings unless their own
         SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
         profiles.filter { it.isGame }.forEach { profile ->
