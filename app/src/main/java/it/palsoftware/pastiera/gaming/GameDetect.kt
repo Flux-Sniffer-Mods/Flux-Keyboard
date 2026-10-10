@@ -10,9 +10,9 @@ import it.palsoftware.pastiera.adb.AdbShell
  * ADB shell; null when it can't tell, and the notification's Next profile still switches.
  */
 object GameDetect {
-    /** The running game's profile among [profiles] for [packageName], if it can be told. */
+    /** The running game among [profiles] (the app's games) for [packageName], if it can be told. */
     fun detect(packageName: String, profiles: List<GameProfile>): GameProfile? {
-        if (profiles.size < 2) return null
+        if (profiles.isEmpty()) return null
         val running = listOfNotNull(resumedGameFile(), if (GameApps.emulator(packageName) == "PPSSPP") ppssppRecent(packageName) else null)
             .map { key(it) }.filter { it.length >= 3 }
         if (running.isEmpty()) return null

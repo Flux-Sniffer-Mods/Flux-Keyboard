@@ -101,14 +101,14 @@ object GameMode {
         val profiles = GameProfiles.forPackage(app, packageName)
         // A game seen starting switches its profile on once: a profile picked by hand from the
         // notification afterwards stays, until another game starts
-        GameDetect.detect(packageName, profiles)?.let { seen ->
+        GameDetect.detect(packageName, profiles.filter { it.isGame })?.let { seen ->
             if (lastDetected[packageName] != seen.id) {
                 lastDetected[packageName] = seen.id
                 GameProfiles.setActive(app, packageName, seen.id)
             }
         }
         val next = GameProfiles.active(app, packageName)
-        if (next?.id != profile?.id) {
+        if (next?.id != activeId) {
             if (next != null) start(app, next) else stop(app)
         }
         // GameHub and GameNative: their own screens take the keys as a controller, their games
@@ -118,7 +118,7 @@ object GameMode {
         watch?.cancel(false)
         watch = if (launcher) {
             watcher.schedule({ worker.execute { followGame(app, packageName) } }, 2, java.util.concurrent.TimeUnit.SECONDS)
-        } else if (next != null && profiles.size > 1) {
+        } else if (next != null && profiles.any { it.isGame }) {
             watcher.schedule({ worker.execute { followGame(app, packageName) } }, 5, java.util.concurrent.TimeUnit.SECONDS)
         } else null
     }
@@ -184,11 +184,17 @@ object GameMode {
             .onFailure { Log.w(TAG, "input helper gone: $it"); input = null }
     }
 
-    private fun start(context: Context, next: GameProfile) {
+    /** The profile chosen for the app in front (a game, or the app's own); [profile] is what it plays with. */
+    @Volatile private var activeId: String? = null
+
+    private fun start(context: Context, chosen: GameProfile) {
         if (profile == null) {
             if (!AdbShell.available()) return
             startInput(context)
         }
+        activeId = chosen.id
+        // A game plays with its app's settings unless it has its own (Dolphin: Wii or GameCube)
+        val next = GameProfiles.effective(context, chosen)
         // GameHub's and GameNative's games: their on-screen sticks, unless placed by hand
         profile = GameTouchEditor.withDefaults(next)
         // With root, a profile can play as a real controller, plugged in while it's on
@@ -207,6 +213,7 @@ object GameMode {
     private fun stop(context: Context) {
         if (profile == null) return
         profile = null
+        activeId = null
         if (pad) { pad = false; dpadHeld.clear(); send("G 0") }
         trackpad?.destroy(); trackpad = null
         runCatching { input?.close() }
@@ -515,7 +522,7 @@ object GameMode {
             builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_sticks), place).build())
         }
         val pkg = frontPackage
-        if (pkg != null && GameProfiles.forPackage(context, pkg).size > 1) {
+        if (pkg != null && GameProfiles.appProfiles(context, pkg).size > 1) {
             val next = PendingIntent.getBroadcast(
                 context, 0, Intent(context, Receiver::class.java).setAction(ACTION_NEXT),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -532,8 +539,9 @@ object GameMode {
                 profile?.let { GameTouchEditor.show(context.applicationContext, it) }
                 return
             }
+            // Next: the app's other settings (Dolphin's GameCube and Wii)
             val pkg = frontPackage ?: return
-            val profiles = GameProfiles.forPackage(context, pkg).takeIf { it.isNotEmpty() } ?: return
+            val profiles = GameProfiles.appProfiles(context, pkg).takeIf { it.size > 1 } ?: return
             val at = profiles.indexOfFirst { it.id == profile?.id }
             val next = profiles[(at + 1) % profiles.size]
             GameProfiles.setActive(context, pkg, next.id)

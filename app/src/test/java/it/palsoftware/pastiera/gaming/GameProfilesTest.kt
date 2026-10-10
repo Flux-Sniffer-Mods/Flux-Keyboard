@@ -34,6 +34,23 @@ class GameProfilesTest {
     }
 
     @Test
+    fun aGamePlaysWithItsAppsSettingsAndDolphinsByController() {
+        val context = org.robolectric.RuntimeEnvironment.getApplication()
+        val apps = GameProfiles.ensureApp(context, "org.dolphinemu.dolphinemu", "Dolphin")
+        assertEquals(listOf(GameProfiles.VARIANT_GAMECUBE, GameProfiles.VARIANT_WII), apps.map { it.variant })
+        // Made once: asked again, the same two
+        assertEquals(apps.map { it.id }, GameProfiles.ensureApp(context, "org.dolphinemu.dolphinemu", "Dolphin").map { it.id })
+        fun game(path: String) = GameProfiles.newProfile("Game", setOf("org.dolphinemu.dolphinemu")).copy(
+            launch = android.content.Intent().putExtra("AutoStartFile", path).toUri(android.content.Intent.URI_INTENT_SCHEME), own = false
+        )
+        assertEquals(GameProfiles.VARIANT_WII, GameProfiles.effective(context, game("/storage/emulated/0/ROMs/wii/Galaxy.rvz")).variant)
+        assertEquals(GameProfiles.VARIANT_GAMECUBE, GameProfiles.effective(context, game("/storage/emulated/0/ROMs/gc/Zelda.gcm")).variant)
+        // A game with settings of its own keeps them
+        val own = game("/storage/emulated/0/ROMs/wii/Galaxy.rvz").copy(own = true)
+        assertEquals(own, GameProfiles.effective(context, own))
+    }
+
+    @Test
     fun anOldProfileWithKeysStillLoads() {
         val old = org.json.JSONObject("""{"id":"x","name":"Old","style":"GAMEPAD","packages":["a.b"],"keys":{"29":"BUTTON_A"},"left":"LEFT_STICK","right":"MOUSE","nativeKeys":true}""")
         val profile = GameProfile.fromJson(old)

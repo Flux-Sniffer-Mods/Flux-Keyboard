@@ -292,6 +292,13 @@
     <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
     <string name="game_mode_controller">Real controller</string>
     <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real: W A S D its d-pad, O K P L its Y X B A, Q E Z C its shoulders and triggers (and the volume keys the left ones), Enter Start, Backspace Select, F and J the stick presses, and the trackpad its sticks. Other keys reach the game as they are.</string>
+    <string name="game_mode_apps_section">Apps</string>
+    <string name="game_mode_games_section">Games</string>
+    <string name="game_mode_own_settings">Own settings</string>
+    <string name="game_mode_own_settings_on">This game has its own trackpad, screen and sticks.</string>
+    <string name="game_mode_own_settings_off">Plays with %1$s\'s settings. Turn on for a game whose sticks sit elsewhere.</string>
+    <string name="game_mode_own_settings_short">Own settings</string>
+    <string name="game_mode_app_settings_short">%1$s\'s settings</string>
     <string name="shell_elsewhere_section">Elsewhere</string>
     <string name="shell_elsewhere_trackpad">Set to shell access, the trackpad\'s swipes are read straight from the keyboard.</string>
     <string name="shell_elsewhere_otp">Shell access lets codes be read from notifications Android hides from apps (Android 15 and later).</string>
@@ -303,10 +310,9 @@
     <string name="game_mode_title">Gaming mode</string>
     <string name="game_mode_switch_description">In apps with a game profile, keys reach the game as they are and the trackpad moves its sticks.</string>
     <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. The trackpad reads one finger at a time, so one stick moves at once.</string>
-    <string name="game_mode_profiles">Game profiles</string>
     <string name="game_mode_no_apps">no apps yet</string>
-    <string name="game_mode_add">Add a profile</string>
-    <string name="game_mode_add_description">Pick the app it\'s for; the trackpad starts as its sticks.</string>
+    <string name="game_mode_add">Add an app</string>
+    <string name="game_mode_add_description">A launcher or emulator: its games play with its settings, the trackpad starting as their sticks.</string>
     <string name="game_mode_folders">Make the game folders</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, with a folder for GameNative, GameHub, Dolphin, PPSSPP, Azahar and Eden. Point GameNative\'s and GameHub Lite\'s Export for frontend at theirs, keep emulator games in theirs (and add the folder in the emulator), and each game can get a profile and a home screen shortcut that starts it. ES-DE\'s ROMs folder is read too.</string>
     <string name="game_mode_folders_made">Made in Download/Flux Keyboard/Games. GameNative: Settings > Interface > Frontend Sync, then pick the GameNative folder there.</string>

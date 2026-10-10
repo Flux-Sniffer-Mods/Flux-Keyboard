@@ -110,7 +110,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     title = { Text(stringResource(R.string.game_mode_seen_title, appLabel(context, seen))) },
                     text = {
                         Column {
-                            profiles.forEach { profile ->
+                            profiles.filter { !it.isGame }.forEach { profile ->
                                 Text(profile.name, modifier = Modifier.fillMaxWidth().clickable {
                                     GameProfiles.save(context, profile.copy(packages = profile.packages + seen))
                                     refresh()
@@ -123,13 +123,14 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 )
             }
         }
-        SettingsSectionDivider(stringResource(R.string.game_mode_profiles))
-        profiles.forEach { profile ->
+        // Each app's settings, which its games play with (Dolphin: one for GameCube, one for Wii)
+        SettingsSectionDivider(stringResource(R.string.game_mode_apps_section))
+        profiles.filter { !it.isGame }.forEach { profile ->
             FluxActionRow(
                 linkId = null,
                 title = profile.name,
-                description = profile.packages.joinToString { pkg -> appLabel(context, pkg) }.ifEmpty { stringResource(R.string.game_mode_no_apps) },
-                leading = { GameArtIcon(profile) }
+                description = profile.leftHalf.label + " · " + profile.rightHalf.label,
+                appPackage = profile.packages.firstOrNull()
             ) { editing = profile }
         }
         FluxActionRow(
@@ -138,6 +139,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_add),
             description = stringResource(R.string.game_mode_add_description)
         ) { picking = true }
+        // The games: home screen shortcuts, art and detection, their app's settings unless their own
+        val games = profiles.filter { it.isGame }
+        if (games.isNotEmpty()) SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
+        games.forEach { profile ->
+            val appName = profile.packages.firstOrNull()?.let { pkg -> appLabel(context, pkg) }.orEmpty()
+            FluxActionRow(
+                linkId = null,
+                title = profile.name,
+                description = if (profile.own) stringResource(R.string.game_mode_own_settings_short)
+                    else stringResource(R.string.game_mode_app_settings_short, appName),
+                leading = { GameArtIcon(profile) }
+            ) { editing = profile }
+        }
         FluxActionRow(
             linkId = null,
             icon = "\u2913",
@@ -176,7 +190,8 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         AppPickerDialog(
             onAppSelected = { app: InstalledApp ->
                 picking = false
-                editing = GameProfiles.newProfile(app.appName, setOf(app.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
+                editing = GameProfiles.ensureApp(context, app.packageName, app.appName).first()
+                refresh()
             },
             onDismiss = { picking = false }
         )
@@ -184,8 +199,11 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val pickGame: (GameLibrary.Game) -> Unit = { game ->
         importing = false
         addingOwn = false
+        // The game plays with its app's settings, made for the app if it has none yet
+        GameProfiles.ensureApp(context, game.packageName, appLabel(context, game.packageName))
+        refresh()
         editing = GameProfiles.newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
-            .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME))
+            .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME), own = false)
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
     if (importing) GameImportDialog(onPicked = pickGame, onDismiss = { importing = false })
@@ -369,6 +387,35 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+            // A game plays with its app's settings, unless it needs its own (sticks elsewhere)
+            if (current.isGame) {
+                val ownScope = androidx.compose.runtime.rememberCoroutineScope()
+                val appName = current.packages.firstOrNull()?.let { pkg -> appLabel(context, pkg) }.orEmpty()
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.game_mode_own_settings))
+                        Text(
+                            stringResource(if (current.own) R.string.game_mode_own_settings_on else R.string.game_mode_own_settings_off, appName),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                    androidx.compose.material3.Switch(
+                        checked = current.own,
+                        onCheckedChange = { on ->
+                            if (!on) current = current.copy(own = false)
+                            // Starting from the app's settings, so only what differs needs changing
+                            else ownScope.launch {
+                                val app = withContext(Dispatchers.IO) { GameProfiles.effective(context, current.copy(own = false)) }
+                                current = current.copy(
+                                    own = true, leftHalf = app.leftHalf, rightHalf = app.rightHalf, stickZones = app.stickZones,
+                                    screen = app.screen, controller = app.controller
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+            if (!current.isGame || current.own) {
             // With root: a real controller, its keys the controller's buttons
             if (it.palsoftware.pastiera.adb.RootShell.active || current.controller) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -423,8 +470,9 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     ?: stringResource(R.string.game_mode_keys_pass),
                 style = MaterialTheme.typography.bodySmall
             )
+            }
             val pinScope = androidx.compose.runtime.rememberCoroutineScope()
-            TextButton(onClick = {
+            if (current.isGame) TextButton(onClick = {
                 val profile = current.also { saved -> GameProfiles.save(context, saved) }
                 pinScope.launch {
                     // The game's art for its icon, as in the profile list (fetched if need be)
@@ -436,8 +484,9 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     }
                 }
             }) { Text(stringResource(R.string.game_mode_home_screen)) }
-            Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
-            current.packages.forEach { pkg ->
+            // An app's own parts that play its games under another name (a launcher's player)
+            if (!current.isGame) Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
+            if (!current.isGame) current.packages.forEach { pkg ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(appLabel(context, pkg), modifier = Modifier.weight(1f))
                     TextButton(onClick = { current = current.copy(packages = current.packages - pkg) }) {
@@ -445,7 +494,7 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     }
                 }
             }
-            TextButton(onClick = { addingApp = true }) { Text(stringResource(R.string.game_mode_add_app)) }
+            if (!current.isGame) TextButton(onClick = { addingApp = true }) { Text(stringResource(R.string.game_mode_add_app)) }
             Spacer(Modifier.height(8.dp))
             Row {
                 TextButton(onClick = { onDone(current) }) { Text(stringResource(R.string.game_mode_save)) }

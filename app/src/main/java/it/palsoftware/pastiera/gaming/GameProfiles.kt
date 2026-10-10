@@ -56,13 +56,25 @@ data class GameProfile(
     /** How the screen turns while it runs. */
     val screen: ScreenMode = ScreenMode.UPRIGHT,
     /** With root: plays as a real controller (its keys its buttons, the trackpad its sticks). */
-    val controller: Boolean = false
+    val controller: Boolean = false,
+    /**
+     * A game's own settings (trackpad, screen, sticks, controller); without, it plays with its
+     * app's. App profiles (no [launch]) always have their own.
+     */
+    val own: Boolean = false,
+    /** Dolphin's two app profiles: "wii" or "gamecube", each game getting the one it is. */
+    val variant: String? = null
 ) {
+    /** A game of its app (it starts one game), rather than the app's own settings. */
+    val isGame: Boolean get() = launch != null
+
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
         launch?.let { put("launch", it) }
         put("screen", screen.name)
         put("controller", controller)
+        put("own", own)
+        variant?.let { put("variant", it) }
         put("name", name)
         put("packages", JSONArray(packages.toList()))
         put("left", leftHalf.name)
@@ -93,7 +105,10 @@ data class GameProfile(
                 screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }
                     ?: if (json.optBoolean("sideways", false)) ScreenMode.SIDEWAYS
                     else ScreenMode.defaultFor(json.optJSONArray("packages")?.optString(0)),
-                controller = json.optBoolean("controller", false)
+                controller = json.optBoolean("controller", false),
+                // Games made before apps had settings of their own keep theirs
+                own = json.optBoolean("own", true),
+                variant = json.optString("variant").ifEmpty { null }
             )
         }.getOrNull()
     }
@@ -162,11 +177,46 @@ object GameProfiles {
     private fun owner(context: Context, packageName: String): String =
         all(context).flatMap { it.packages }.filter { covers(it, packageName) }.maxByOrNull { it.length } ?: packageName
 
-    /** The profile in use for an app: the one picked last there, else its first. */
+    /** The profile in use for an app: the one picked last there, else the app's own, else its first. */
     fun active(context: Context, packageName: String): GameProfile? {
         val profiles = forPackage(context, packageName)
         val chosen = prefs(context).getString(KEY_ACTIVE_PREFIX + owner(context, packageName), null)
-        return profiles.firstOrNull { it.id == chosen } ?: profiles.firstOrNull()
+        return profiles.firstOrNull { it.id == chosen } ?: profiles.firstOrNull { !it.isGame } ?: profiles.firstOrNull()
+    }
+
+    /** An app's own settings: one profile, or Dolphin's two (GameCube and Wii). */
+    fun appProfiles(context: Context, packageName: String): List<GameProfile> =
+        forPackage(context, packageName).filter { !it.isGame }
+
+    /**
+     * The app profiles for [packageName] named [name], made if it has none: Dolphin gets a
+     * GameCube and a Wii one, since each controller wants its own trackpad. Returns them all.
+     */
+    fun ensureApp(context: Context, packageName: String, name: String): List<GameProfile> {
+        appProfiles(context, packageName).takeIf { it.isNotEmpty() }?.let { return it }
+        val controller = it.palsoftware.pastiera.adb.RootShell.active
+        val made = if (GameApps.appFor(packageName) == "Dolphin") listOf(
+            newProfile("$name (GameCube)", setOf(packageName), controller).copy(variant = VARIANT_GAMECUBE),
+            newProfile("$name (Wii)", setOf(packageName), controller).copy(variant = VARIANT_WII)
+        ) else listOf(newProfile(name, setOf(packageName), controller))
+        made.forEach { save(context, it) }
+        return made
+    }
+
+    const val VARIANT_GAMECUBE = "gamecube"
+    const val VARIANT_WII = "wii"
+
+    /**
+     * What [profile] plays with: a game with settings of its own, its own; else its app's (for
+     * Dolphin, the Wii or GameCube one its file is). Blocking: may read the game's file.
+     */
+    fun effective(context: Context, profile: GameProfile): GameProfile {
+        if (!profile.isGame || profile.own) return profile
+        val pkg = profile.packages.firstOrNull() ?: return profile
+        val apps = appProfiles(context, pkg).ifEmpty { return profile }
+        if (apps.size == 1) return apps.first()
+        val wii = profile.launch?.let { GameFiles.gameFile(it) }?.let { GameFiles.isWii(it) } == true
+        return apps.firstOrNull { it.variant == if (wii) VARIANT_WII else VARIANT_GAMECUBE } ?: apps.first()
     }
 
     fun setActive(context: Context, packageName: String, id: String) =
