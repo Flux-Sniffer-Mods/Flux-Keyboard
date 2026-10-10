@@ -504,15 +504,9 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
             TextButton(onClick = { addingApp = true }) { Text(stringResource(R.string.game_mode_add_app)) }
             Text(stringResource(R.string.game_mode_keys), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.game_mode_keys_note), style = MaterialTheme.typography.bodySmall)
-            val asIs = stringResource(R.string.game_mode_key_as_is)
-            // The usual keys, then any other added by pressing it (a phone's own buttons)
-            (GameProfiles.REMAPPABLE_KEYS + current.keys.keys.filterNot { it in GameProfiles.REMAPPABLE_KEYS }).forEach { key ->
-                val name = KeyEvent.keyCodeToString(key).removePrefix("KEYCODE_").replace("_LEFT", "").replace("DEL", "BACKSPACE")
-                ChoiceRow(name, current.keys[key]?.label ?: asIs, listOf(asIs) + GameAction.entries.map { it.label }) { index ->
-                    current = current.copy(
-                        keys = if (index == 0) current.keys - key else current.keys + (key to GameAction.entries[index - 1])
-                    )
-                }
+            // The keyboard as a grid, or a controller with each button's key
+            GameKeyMapper(current.keys, gamepad = current.style == GameStyle.GAMEPAD) { keys ->
+                current = current.copy(keys = keys)
             }
             TextButton(onClick = { capturing = true }) { Text(stringResource(R.string.game_mode_add_key)) }
             Spacer(Modifier.height(8.dp))

@@ -332,6 +332,15 @@
     <string name="game_mode_screen_sideways_description">For apps that turn the screen sideways whatever they\'re told (GameHub): the screen is made landscape-shaped instead, a little shorter so it clears the camera, and the phone stays upright.</string>
     <string name="game_mode_seen_title">Add %1$s to a profile</string>
     <string name="game_mode_seen_description">The last app a game ran in (%1$s) has no profile: a launcher can play its games in a part of its own. Add it to its launcher\'s profile so gaming mode stays on in the game.</string>
+    <string name="game_map_keyboard">Keyboard</string>
+    <string name="game_map_controller">Controller</string>
+    <string name="game_map_keyboard_hint">Tap a key to choose what it does in the game. Keys left blank reach the game as they are.</string>
+    <string name="game_map_controller_hint">Tap a button, then press the key it goes on.</string>
+    <string name="game_map_group_controller">Controller</string>
+    <string name="game_map_group_keyboard">Keyboard</string>
+    <string name="game_map_group_mouse">Mouse</string>
+    <string name="game_map_press_for_button">Press the key for this button.</string>
+    <string name="game_map_clear_button">No key</string>
     <string name="game_mode_import">Add a game from a game launcher</string>
     <string name="game_mode_import_description">The games GameNative, GameHub or GameHub Lite have on the home screen, in their shortcuts or installed in their Steam folder, each with a profile of its own. Switch between a launcher\'s games from gaming mode\'s notification, or give each its own home screen shortcut.</string>
     <string name="game_mode_import_reading">Reading the games</string>
