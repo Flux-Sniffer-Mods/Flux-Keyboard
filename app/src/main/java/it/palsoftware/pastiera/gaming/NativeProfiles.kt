@@ -102,12 +102,30 @@ object NativeProfiles {
         return (listOf("[Profile]", "Device = Android/0/$keyboard") + lines).joinToString("\n") + "\n"
     }
 
+    /** A Wii Remote profile (Config/Profiles/Wiimote/<game>.ini) for [pad]: its buttons, then its extension. */
+    internal fun wiiProfile(profile: GameProfile, keyboard: String, pad: DolphinPad): String {
+        val controls = DolphinPads.wiiControls(pad)
+        val lines = profile.keys.entries.groupBy({ e -> controls[e.value] }, { e -> e.key })
+            .filterKeys { k -> k != null }
+            .map { (control, keys) -> "$control = " + keys.joinToString(" | ") { k -> "`${keyName(k)}`" } }
+            .sorted()
+        return (listOf("[Profile]", "Device = Android/0/$keyboard") + DolphinPads.wiiOptions(pad) + lines).joinToString("\n") + "\n"
+    }
+
     private fun dolphin(context: Context, pkg: String, game: String, profile: GameProfile): Result {
         val keyboard = keyboardName(context) ?: return Result(context.getString(R.string.native_failed), false)
         val dir = AdbShell.run(
             "for d in \"/storage/emulated/0/Android/data/$pkg/files\" /storage/emulated/0/dolphin-emu; do " +
                 "[ -d \"\$d/Config\" ] && { echo \"\$d\"; break; }; done; true", 3_000
         )?.trim()?.ifEmpty { null } ?: "/storage/emulated/0/Android/data/$pkg/files"
+        // A Wii game's Wii Remote, else the GameCube controller
+        val pad = DolphinPads.resolve(profile)
+        if (pad.wii) {
+            val ok = write("$dir/Config/Profiles/Wiimote/$game.ini", wiiProfile(profile, keyboard, pad))
+            val label = context.resources.getStringArray(R.array.dolphin_pads)[pad.ordinal]
+            return if (ok) Result(context.getString(R.string.native_dolphin_wii_steps, game, label), true)
+            else Result(context.getString(R.string.native_failed), false)
+        }
         val ok = write("$dir/Config/Profiles/GCPad/$game.ini", dolphinProfile(profile, keyboard))
         return if (ok) Result(context.getString(R.string.native_dolphin_steps, game), true)
         else Result(context.getString(R.string.native_failed), false)

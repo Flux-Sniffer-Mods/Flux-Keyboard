@@ -741,6 +741,9 @@
     },
     {
       "text": "Shell access has its own row on the main settings page, with links to every setting elsewhere that uses it."
+    },
+    {
+      "text": "Gaming mode in Dolphin: Save for Dolphin tells a Wii game from a GameCube one by its file and saves a Wii Remote profile (with Nunchuk) or a GameCube controller profile; each game can pick a Classic Controller or a sideways Wii Remote instead."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

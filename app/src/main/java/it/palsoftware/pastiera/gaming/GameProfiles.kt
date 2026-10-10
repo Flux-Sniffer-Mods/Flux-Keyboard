@@ -105,7 +105,6 @@ data class GameProfile(
     val keys: Map<Int, GameAction>,
     val leftHalf: TrackpadRole,
     val rightHalf: TrackpadRole,
-    /** Controller buttons and sticks as touches on Flux Keyboard's GameNative controls profile. */
     /** Keys placed on the screen: each taps its spot (a share of the screen's width and height). */
     val taps: Map<Int, Pair<Float, Float>> = emptyMap(),
     /** Sticks placed on the screen (0 left, 1 right): centre and reach (a share of the width). */
@@ -115,13 +114,16 @@ data class GameProfile(
     /** How the screen turns while it runs. */
     val screen: ScreenMode = ScreenMode.UPRIGHT,
     /** The app maps the keys itself (its own controller profile): gaming mode leaves them alone. */
-    val nativeKeys: Boolean = false
+    val nativeKeys: Boolean = false,
+    /** Dolphin: the controller the game gets (Automatic tells Wii from GameCube). */
+    val dolphinPad: DolphinPad = DolphinPad.AUTO
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
         launch?.let { put("launch", it) }
         put("screen", screen.name)
         put("nativeKeys", nativeKeys)
+        put("dolphinPad", dolphinPad.name)
         put("name", name)
         put("style", style.name)
         put("packages", JSONArray(packages.toList()))
@@ -167,7 +169,8 @@ data class GameProfile(
                 screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }
                     ?: if (json.optBoolean("sideways", false)) ScreenMode.SIDEWAYS
                     else ScreenMode.defaultFor(json.optJSONArray("packages")?.optString(0)),
-                nativeKeys = json.optBoolean("nativeKeys", false)
+                nativeKeys = json.optBoolean("nativeKeys", false),
+                dolphinPad = DolphinPad.entries.firstOrNull { it.name == json.optString("dolphinPad") } ?: DolphinPad.AUTO
             )
         }.getOrNull()
     }

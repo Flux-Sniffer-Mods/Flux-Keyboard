@@ -323,6 +323,17 @@
     <string name="native_gamenative_steps">Nothing to load: in a game, gaming mode presses GameNative\'s built-in on-screen controller for your keys and moves its sticks with the trackpad. In GameNative\'s own screens the keys work as a controller.\n\nIn the game\'s menu (Back), turn on the On-screen Controller with its default layout, and set Control Opacity to 0: it still takes the presses, unseen.\n\nA button missed (another layout)? In the game, pull down gaming mode\'s notification, tap Place keys on screen, drag the boxes onto the buttons and tap Save.</string>
     <string name="native_gamehub_steps">Nothing to load: in a game, gaming mode presses GameHub\'s on-screen controls for your keys, already placed where GameHub draws them, and moves its sticks with the trackpad. In GameHub\'s own screens the keys work as a controller.\n\nTurn GameHub\'s on-screen controls on in its in-game menu, and set their opacity to 0: they still take the presses, unseen.\n\nA button missed (another layout)? In the game, pull down gaming mode\'s notification, tap Place keys on screen, drag the boxes onto the buttons and tap Save. Start and Select aren\'t on GameHub\'s controls by default: add them there to use them.</string>
     <string name="native_dolphin_steps">Saved as the Dolphin profile \"%1$s\".\n\nIn Dolphin, once:\n1. Long-press the game, then Game settings.\n2. GameCube Input, Port 1, Profile.\n3. Load \"%1$s\".\n\nDolphin then reads the keys itself whenever this game starts; the trackpad still moves the sticks through gaming mode.</string>
+    <string name="native_dolphin_wii_steps">Saved as the Dolphin Wii Remote profile \"%1$s\" (%2$s).\n\nIn Dolphin, once:\n1. Long-press the game, then Game settings.\n2. Wii Input, Wii Remote 1, Profile.\n3. Load \"%1$s\".\n\nDolphin then reads the keys itself whenever this game starts; the trackpad still moves the sticks through gaming mode.</string>
+    <string name="dolphin_pad_title">Dolphin controller</string>
+    <string name="dolphin_pad_description">What Save for Dolphin sets up. Automatic reads the game\'s file: a Wii game gets a Wii Remote and Nunchuk, a GameCube game a GameCube controller. Pick another when a game plays better with it.</string>
+    <string name="dolphin_pad_auto_found">Automatic (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Automatic</item>
+        <item>GameCube controller</item>
+        <item>Wii Remote and Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wii Remote sideways</item>
+    </string-array>
     <string name="native_ppsspp_steps">Written into the PPSSPP settings of game %1$s (the game config made last).\n\nThat game now reads the keys itself whenever it starts; the trackpad still moves the stick through gaming mode.\n\nWrong game? In PPSSPP, long-press the right one, Create game config, then save again here.</string>
     <string name="native_ppsspp_none">PPSSPP keeps keys per game in a game config. In PPSSPP:\n1. Long-press the game.\n2. Create game config.\nThen save again here.</string>
     <string name="native_bind_steps">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s\n\nEden can save them as an input profile for this game. Gaming mode leaves the keys to it; the trackpad still moves the sticks.</string>
