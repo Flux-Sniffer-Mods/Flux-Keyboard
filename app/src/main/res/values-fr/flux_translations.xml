@@ -1799,4 +1799,11 @@
     <string name="game_mode_place_sticks">Placer les sticks à l\'écran</string>
     <string name="game_mode_keys_pass">Les touches arrivent au jeu telles quelles : attribuez-les dans les commandes du jeu.</string>
     <string name="game_mode_keys_pass_app">Les touches arrivent à %1$s telles quelles : attribuez-les une fois dans ses propres réglages de manette.</string>
+    <string name="root_shell_title">Utiliser le root</string>
+    <string name="root_shell_description">Sur un téléphone rooté : les commandes shell passent par su au lieu du shell intégré ou de Shizuku, prêtes au démarrage sans appairage ni Wi-Fi, et le mode jeu peut être une vraie manette.</string>
+    <string name="root_shell_denied">Le root n\'a pas été accordé : le shell intégré ou Shizuku est utilisé.</string>
+    <string name="root_backlight_fine_title">Gradation fine</string>
+    <string name="root_backlight_fine_description">Avec le root, les LED du clavier sont réglées dans leurs propres pas, bien plus fins que les niveaux habituels de l\'éclairage, pour suivre la luminosité de l\'écran sans paliers visibles.</string>
+    <string name="game_mode_controller">Vraie manette</string>
+    <string name="game_mode_controller_description">Avec le root, le mode jeu branche une manette que le jeu voit comme réelle : W A S D sa croix directionnelle, O K P L ses Y X B A, Q E Z C ses gâchettes et boutons de tranche (et les touches de volume ceux de gauche), Entrée Start, Retour arrière Select, F et J l\'appui des sticks, et le pavé tactile ses sticks. Les autres touches arrivent au jeu telles quelles.</string>
 </resources>

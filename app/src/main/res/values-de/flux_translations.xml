@@ -1258,4 +1258,11 @@
     <string name="game_mode_place_sticks">Sticks auf dem Bildschirm platzieren</string>
     <string name="game_mode_keys_pass">Tasten erreichen das Spiel unverändert: Belege sie in der Steuerung des Spiels.</string>
     <string name="game_mode_keys_pass_app">Tasten erreichen %1$s unverändert: Belege sie einmal in dessen eigenen Controller-Einstellungen.</string>
+    <string name="root_shell_title">Root verwenden</string>
+    <string name="root_shell_description">Auf einem gerooteten Telefon: Shell-Befehle laufen über su statt über die eingebaute Shell oder Shizuku, bereit beim Start ohne Kopplung oder WLAN, und der Spielmodus kann ein echter Controller sein.</string>
+    <string name="root_shell_denied">Root wurde nicht gewährt: Stattdessen wird die eingebaute Shell oder Shizuku verwendet.</string>
+    <string name="root_backlight_fine_title">Feines Dimmen</string>
+    <string name="root_backlight_fine_description">Über Root werden die LEDs der Tastatur in ihren eigenen Stufen gesetzt, viel feiner als die üblichen Stufen der Beleuchtung, sodass das Folgen der Bildschirmhelligkeit keine sichtbaren Sprünge hat.</string>
+    <string name="game_mode_controller">Echter Controller</string>
+    <string name="game_mode_controller_description">Mit Root schließt der Spielmodus einen Controller an, den das Spiel als echt erkennt: W A S D sein Steuerkreuz, O K P L seine Y X B A, Q E Z C seine Schultertasten und Trigger (und die Lautstärketasten die linken), Enter Start, Rücktaste Select, F und J das Drücken der Sticks, und das Trackpad seine Sticks. Andere Tasten erreichen das Spiel unverändert.</string>
 </resources>

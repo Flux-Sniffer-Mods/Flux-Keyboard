@@ -1805,4 +1805,11 @@
     <string name="game_mode_place_sticks">Разместить стики на экране</string>
     <string name="game_mode_keys_pass">Клавиши доходят до игры как есть: назначьте их в управлении игры.</string>
     <string name="game_mode_keys_pass_app">Клавиши доходят до %1$s как есть: назначьте их один раз в его собственных настройках контроллера.</string>
+    <string name="root_shell_title">Использовать root</string>
+    <string name="root_shell_description">На телефоне с root: команды оболочки выполняются через su вместо встроенной оболочки или Shizuku, готовы при запуске без сопряжения и Wi-Fi, а игровой режим может быть настоящим контроллером.</string>
+    <string name="root_shell_denied">Root не предоставлен: используется встроенная оболочка или Shizuku.</string>
+    <string name="root_backlight_fine_title">Точная яркость</string>
+    <string name="root_backlight_fine_description">Через root светодиоды клавиатуры задаются их собственными шагами, гораздо мельче обычных уровней подсветки, поэтому следование за яркостью экрана идёт без видимых ступеней.</string>
+    <string name="game_mode_controller">Настоящий контроллер</string>
+    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий: W A S D — его крестовина, O K P L — его Y X B A, Q E Z C — бамперы и триггеры (а клавиши громкости — левые), Enter — Start, Backspace — Select, F и J — нажатие стиков, а тачпад — его стики. Остальные клавиши доходят до игры как есть.</string>
 </resources>

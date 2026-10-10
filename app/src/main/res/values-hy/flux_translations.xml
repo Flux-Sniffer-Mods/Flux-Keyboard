@@ -1793,4 +1793,11 @@
     <string name="game_mode_place_sticks">Տեղադրել լծակները էկրանին</string>
     <string name="game_mode_keys_pass">Ստեղները հասնում են խաղին այնպես, ինչպես կան․ նշանակեք դրանք խաղի սեփական կառավարներում։</string>
     <string name="game_mode_keys_pass_app">Ստեղները հասնում են %1$s-ին այնպես, ինչպես կան․ նշանակեք դրանք մեկ անգամ նրա սեփական կարգավորիչի կարգավորումներում։</string>
+    <string name="root_shell_title">Օգտագործել root</string>
+    <string name="root_shell_description">Root ունեցող հեռախոսում․ shell հրամանները գործարկվում են su-ի միջոցով՝ ներկառուցված shell-ի կամ Shizuku-ի փոխարեն, պատրաստ են մեկնարկին առանց զուգավորման կամ Wi-Fi-ի, և խաղային ռեժիմը կարող է լինել իրական կարգավորիչ։</string>
+    <string name="root_shell_denied">Root չտրամադրվեց․ օգտագործվում է ներկառուցված shell-ը կամ Shizuku-ն։</string>
+    <string name="root_backlight_fine_title">Նուրբ մթագնում</string>
+    <string name="root_backlight_fine_description">Root-ի միջոցով ստեղնաշարի LED-ները կարգավորվում են իրենց սեփական քայլերով՝ շատ ավելի նուրբ, քան լուսավորության սովորական մակարդակները, ուստի էկրանի պայծառությանը հետևելը տեսանելի աստիճաններ չունի։</string>
+    <string name="game_mode_controller">Իրական կարգավորիչ</string>
+    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական․ W A S D՝ դրա d-pad-ը, O K P L՝ դրա Y X B A-ն, Q E Z C՝ դրա ուսային կոճակներն ու ձգանները (իսկ ձայնի ստեղները՝ ձախերը), Enter՝ Start, Backspace՝ Select, F և J՝ լծակների սեղմումը, իսկ թաչփադը՝ դրա լծակները։ Մյուս ստեղները հասնում են խաղին այնպես, ինչպես կան։</string>
 </resources>

@@ -1799,4 +1799,11 @@
     <string name="game_mode_place_sticks">Colocar sticks en pantalla</string>
     <string name="game_mode_keys_pass">Las teclas llegan al juego tal cual: asígnalas en los controles del propio juego.</string>
     <string name="game_mode_keys_pass_app">Las teclas llegan a %1$s tal cual: asígnalas una vez en sus propios ajustes de mando.</string>
+    <string name="root_shell_title">Usar root</string>
+    <string name="root_shell_description">En un teléfono con root: los comandos de shell se ejecutan con su en lugar del shell integrado o Shizuku, listos al arrancar sin emparejar ni Wi-Fi, y el modo juego puede ser un mando real.</string>
+    <string name="root_shell_denied">No se concedió root: se usa el shell integrado o Shizuku.</string>
+    <string name="root_backlight_fine_title">Atenuación fina</string>
+    <string name="root_backlight_fine_description">Con root, los LED del teclado se ajustan en sus propios pasos, mucho más finos que los niveles habituales de la luz, así que seguir el brillo de la pantalla no tiene saltos visibles.</string>
+    <string name="game_mode_controller">Mando real</string>
+    <string name="game_mode_controller_description">Con root, el modo juego conecta un mando que el juego ve como real: W A S D su cruceta, O K P L sus Y X B A, Q E Z C sus gatillos y botones superiores (y las teclas de volumen los izquierdos), Intro Start, Retroceso Select, F y J la pulsación de los sticks, y el trackpad sus sticks. Las demás teclas llegan al juego tal cual.</string>
 </resources>

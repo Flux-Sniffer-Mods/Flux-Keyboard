@@ -1304,4 +1304,11 @@
     <string name="game_mode_place_sticks">Posiziona gli stick sullo schermo</string>
     <string name="game_mode_keys_pass">I tasti arrivano al gioco così come sono: assegnali nei comandi del gioco.</string>
     <string name="game_mode_keys_pass_app">I tasti arrivano a %1$s così come sono: assegnali una volta nelle sue impostazioni del controller.</string>
+    <string name="root_shell_title">Usa root</string>
+    <string name="root_shell_description">Su un telefono con root: i comandi shell passano da su invece che dalla shell integrata o da Shizuku, pronti all\'avvio senza abbinamento né Wi-Fi, e la modalità gioco può essere un controller vero.</string>
+    <string name="root_shell_denied">Root non concesso: si usa la shell integrata o Shizuku.</string>
+    <string name="root_backlight_fine_title">Regolazione fine</string>
+    <string name="root_backlight_fine_description">Con root, i LED della tastiera vengono impostati nei loro passi, molto più fini dei normali livelli della luce, così seguire la luminosità dello schermo non ha scatti visibili.</string>
+    <string name="game_mode_controller">Controller vero</string>
+    <string name="game_mode_controller_description">Con root, la modalità gioco collega un controller che il gioco vede come vero: W A S D la sua croce direzionale, O K P L i suoi Y X B A, Q E Z C i suoi dorsali e grilletti (e i tasti volume quelli sinistri), Invio Start, Backspace Select, F e J la pressione degli stick, e il trackpad i suoi stick. Gli altri tasti arrivano al gioco così come sono.</string>
 </resources>

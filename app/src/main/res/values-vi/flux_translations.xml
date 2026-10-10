@@ -1787,4 +1787,11 @@
     <string name="game_mode_place_sticks">Đặt cần analog trên màn hình</string>
     <string name="game_mode_keys_pass">Phím đến game nguyên vẹn: gán chúng trong điều khiển của game.</string>
     <string name="game_mode_keys_pass_app">Phím đến %1$s nguyên vẹn: gán chúng một lần trong cài đặt tay cầm của nó.</string>
+    <string name="root_shell_title">Dùng root</string>
+    <string name="root_shell_description">Trên điện thoại đã root: lệnh shell chạy qua su thay vì shell tích hợp hoặc Shizuku, sẵn sàng khi khởi động mà không cần ghép nối hay Wi-Fi, và chế độ chơi game có thể là một tay cầm thật.</string>
+    <string name="root_shell_denied">Không được cấp root: dùng shell tích hợp hoặc Shizuku thay thế.</string>
+    <string name="root_backlight_fine_title">Điều chỉnh độ sáng mịn</string>
+    <string name="root_backlight_fine_description">Qua root, đèn LED bàn phím được đặt theo các bước riêng của chúng, mịn hơn nhiều so với các mức thông thường của đèn, nên khi theo độ sáng màn hình sẽ không có bậc nhảy thấy được.</string>
+    <string name="game_mode_controller">Tay cầm thật</string>
+    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật: W A S D là d-pad, O K P L là Y X B A, Q E Z C là nút vai và cò (phím âm lượng là bên trái), Enter là Start, Backspace là Select, F và J là nhấn cần analog, và bàn di chuột là các cần analog. Các phím khác đến game nguyên vẹn.</string>
 </resources>

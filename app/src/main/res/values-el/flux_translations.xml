@@ -1167,4 +1167,11 @@
     <string name="game_mode_place_sticks">Τοποθέτηση μοχλών στην οθόνη</string>
     <string name="game_mode_keys_pass">Τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι: αντιστοιχίστε τα στα χειριστήρια του παιχνιδιού.</string>
     <string name="game_mode_keys_pass_app">Τα πλήκτρα φτάνουν στο %1$s όπως είναι: αντιστοιχίστε τα μία φορά στις δικές του ρυθμίσεις χειριστηρίου.</string>
+    <string name="root_shell_title">Χρήση root</string>
+    <string name="root_shell_description">Σε τηλέφωνο με root: οι εντολές shell εκτελούνται μέσω su αντί για το ενσωματωμένο shell ή το Shizuku, έτοιμες στην εκκίνηση χωρίς σύζευξη ή Wi-Fi, και η λειτουργία παιχνιδιού μπορεί να είναι πραγματικό χειριστήριο.</string>
+    <string name="root_shell_denied">Δεν δόθηκε root: χρησιμοποιείται το ενσωματωμένο shell ή το Shizuku.</string>
+    <string name="root_backlight_fine_title">Λεπτή ρύθμιση φωτεινότητας</string>
+    <string name="root_backlight_fine_description">Μέσω root, τα LED του πληκτρολογίου ρυθμίζονται στα δικά τους βήματα, πολύ λεπτότερα από τα συνηθισμένα επίπεδα του φωτισμού, ώστε η παρακολούθηση της φωτεινότητας της οθόνης να μην έχει ορατά σκαλοπάτια.</string>
+    <string name="game_mode_controller">Πραγματικό χειριστήριο</string>
+    <string name="game_mode_controller_description">Με root, η λειτουργία παιχνιδιού συνδέει ένα χειριστήριο που το παιχνίδι βλέπει ως πραγματικό: W A S D το d-pad του, O K P L τα Y X B A του, Q E Z C τα shoulder και τις σκανδάλες του (και τα πλήκτρα έντασης τα αριστερά), Enter το Start, Backspace το Select, F και J το πάτημα των μοχλών, και το trackpad τους μοχλούς του. Τα άλλα πλήκτρα φτάνουν στο παιχνίδι όπως είναι.</string>
 </resources>

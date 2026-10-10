@@ -1805,4 +1805,11 @@
     <string name="game_mode_place_sticks">Umieść gałki na ekranie</string>
     <string name="game_mode_keys_pass">Klawisze trafiają do gry bez zmian: przypisz je w sterowaniu gry.</string>
     <string name="game_mode_keys_pass_app">Klawisze trafiają do %1$s bez zmian: przypisz je raz w jego własnych ustawieniach kontrolera.</string>
+    <string name="root_shell_title">Używaj roota</string>
+    <string name="root_shell_description">Na telefonie z rootem: polecenia powłoki działają przez su zamiast wbudowanej powłoki lub Shizuku, gotowe przy starcie bez parowania i Wi-Fi, a tryb gry może być prawdziwym kontrolerem.</string>
+    <string name="root_shell_denied">Nie przyznano roota: używana jest wbudowana powłoka lub Shizuku.</string>
+    <string name="root_backlight_fine_title">Dokładne przyciemnianie</string>
+    <string name="root_backlight_fine_description">Przez roota diody klawiatury są ustawiane w ich własnych krokach, dużo drobniejszych niż zwykłe poziomy podświetlenia, więc podążanie za jasnością ekranu nie ma widocznych skoków.</string>
+    <string name="game_mode_controller">Prawdziwy kontroler</string>
+    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy: W A S D jego krzyżak, O K P L jego Y X B A, Q E Z C jego bumpery i spusty (a klawisze głośności lewe), Enter Start, Backspace Select, F i J wciśnięcie gałek, a gładzik jego gałki. Pozostałe klawisze trafiają do gry bez zmian.</string>
 </resources>
