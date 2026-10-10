@@ -140,9 +140,8 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             description = stringResource(R.string.game_mode_add_description)
         ) { picking = true }
         // The games: home screen shortcuts, art and detection, their app's settings unless their own
-        val games = profiles.filter { it.isGame }
-        if (games.isNotEmpty()) SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
-        games.forEach { profile ->
+        SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
+        profiles.filter { it.isGame }.forEach { profile ->
             val appName = profile.packages.firstOrNull()?.let { pkg -> appLabel(context, pkg) }.orEmpty()
             FluxActionRow(
                 linkId = null,
@@ -152,12 +151,15 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 leading = { GameArtIcon(profile) }
             ) { editing = profile }
         }
+        // One way in for every game: the launchers' and folders' games, or one by hand
         FluxActionRow(
             linkId = null,
-            icon = "\u2913",
-            title = stringResource(R.string.game_mode_gamenative_save),
-            description = stringResource(R.string.game_mode_gamenative_save_description)
-        ) { gameNativeSetup = true }
+            icon = "+",
+            title = stringResource(R.string.game_mode_import),
+            description = stringResource(R.string.game_mode_import_description)
+        ) { importing = true }
+        // Where games are found: Flux Keyboard's folders, ES-DE's, and your own
+        SettingsSectionDivider(stringResource(R.string.game_mode_folders_section))
         FluxActionRow(
             linkId = null,
             icon = "+",
@@ -171,19 +173,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 ).show()
             }
         }
-        FluxActionRow(
-            linkId = null,
-            icon = "+",
-            title = stringResource(R.string.game_mode_own_game),
-            description = stringResource(R.string.game_mode_own_game_description)
-        ) { addingOwn = true }
         CustomGameFolders()
-        FluxActionRow(
-            linkId = null,
-            icon = "⇩",
-            title = stringResource(R.string.game_mode_import),
-            description = stringResource(R.string.game_mode_import_description)
-        ) { importing = true }
     }
 
     if (picking) {
@@ -206,7 +196,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME), own = false)
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
-    if (importing) GameImportDialog(onPicked = pickGame, onDismiss = { importing = false })
+    if (importing) GameImportDialog(onPicked = pickGame, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
     if (addingOwn) OwnGameDialog(onAdded = pickGame, onDismiss = { addingOwn = false })
     if (gameNativeSetup) {
         AlertDialog(
@@ -332,7 +322,7 @@ private fun appLabel(context: android.content.Context, pkg: String): String = ru
 
 /** The games of the game launchers installed, one tap making a profile for it. */
 @Composable
-private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
+private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onByHand: () -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     var games by remember { mutableStateOf<List<GameLibrary.Game>?>(null) }
     LaunchedEffect(Unit) {
@@ -368,7 +358,9 @@ private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onDismiss: ()
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+        // A game added to a launcher or emulator by hand
+        dismissButton = { TextButton(onClick = onByHand) { Text(stringResource(R.string.game_mode_own_game)) } }
     )
 }
 
@@ -484,6 +476,22 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     }
                 }
             }) { Text(stringResource(R.string.game_mode_home_screen)) }
+            // GameNative: its on-screen controller to turn on, for the trackpad's sticks
+            if (!current.isGame && GameApps.appFor(current) == "GameNative") {
+                var steps by remember { mutableStateOf(false) }
+                FluxActionRow(
+                    linkId = null,
+                    icon = "\u2913",
+                    title = stringResource(R.string.game_mode_gamenative_save),
+                    description = stringResource(R.string.game_mode_gamenative_save_description)
+                ) { steps = true }
+                if (steps) AlertDialog(
+                    onDismissRequest = { steps = false },
+                    title = { Text(stringResource(R.string.game_mode_gamenative_save)) },
+                    text = { Text(stringResource(R.string.game_mode_gamenative_steps)) },
+                    confirmButton = { TextButton(onClick = { steps = false }) { Text(stringResource(android.R.string.ok)) } }
+                )
+            }
             // An app's own parts that play its games under another name (a launcher's player)
             if (!current.isGame) Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
             if (!current.isGame) current.packages.forEach { pkg ->
