@@ -310,7 +310,7 @@
     <string name="adb_not_running">The built-in shell isn\'t running, and neither is Shizuku. Set up the built-in shell above, or start Shizuku, then come back.</string>
     <string name="game_mode_title">Gaming mode</string>
     <string name="game_mode_switch_description">In apps with a game profile, keys reach the game as they are or tap its on-screen buttons, and the trackpad moves its sticks.</string>
-    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. The trackpad reads one finger at a time, so one stick moves at once.</string>
+    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. A finger on each half of the trackpad moves both sticks at once.</string>
     <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add an app</string>
     <string name="game_mode_add_description">A launcher or emulator: its games play with its settings.</string>

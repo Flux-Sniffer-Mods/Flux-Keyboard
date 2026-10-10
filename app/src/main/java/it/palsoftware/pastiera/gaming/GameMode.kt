@@ -418,78 +418,72 @@ object GameMode {
 
     private const val DEAD_ZONE = 0.33f
 
+    /**
+     * The trackpad as the game's controls: each finger plays the half it lands on, so a finger on
+     * each half moves both sticks at once. A half already played by one finger ignores another.
+     */
     private class TrackpadReader(private val min: Float, private val max: Float) {
-        private var x = 0; private var y = 0
-        private var down = false; private var started = false
-        private var originX = 0f; private var originY = 0f
-        private var lastX = 0f; private var lastY = 0f
-        private var downAt = 0L; private var moved = 0f
-        private var role = TrackpadRole.NONE
+        private class Finger(val role: TrackpadRole, val originX: Float, val originY: Float, val downAt: Long) {
+            var lastX = originX; var lastY = originY
+            var moved = 0f
+            /** Direction keys held: up, left, down, right. */
+            val held = BooleanArray(4)
+        }
+
+        private val fingers = HashMap<Int, Finger>()
         private val sticks = FloatArray(4)
         private val radius = (max - min) / 8f
+        private val slots = TouchSlots(::begin, ::move, ::up)
 
-        fun line(line: String) {
-            when {
-                line.contains("BTN_TOUCH") && line.contains("DOWN") -> { down = true; started = false }
-                line.contains("BTN_TOUCH") && line.contains("UP") -> { if (started) up(); down = false }
-                line.contains("ABS_MT_POSITION_X") -> value(line)?.let { x = it }
-                line.contains("ABS_MT_POSITION_Y") -> value(line)?.let { y = it }
-                line.contains("SYN_REPORT") && down -> if (started) move() else begin()
-            }
-        }
+        fun line(line: String) = slots.line(line)
 
-        private fun value(line: String): Int? = line.trim().split(Regex("\\s+")).lastOrNull()?.toIntOrNull(16)
-
-        private fun begin() {
-            started = true
+        private fun begin(slot: Int, x: Int, y: Int) {
             val current = profile ?: return
-            role = if (x < (min + max) / 2) current.leftHalf else current.rightHalf
-            originX = x.toFloat(); originY = y.toFloat()
-            lastX = originX; lastY = originY
-            downAt = SystemClock.uptimeMillis(); moved = 0f
+            val role = if (x < (min + max) / 2) current.leftHalf else current.rightHalf
+            if (role == TrackpadRole.NONE || fingers.values.any { it.role == role }) return
+            fingers[slot] = Finger(role, x.toFloat(), y.toFloat(), SystemClock.uptimeMillis())
         }
 
-        private fun move() {
-            val dx = x - lastX; val dy = y - lastY
-            moved += abs(dx) + abs(dy)
-            lastX = x.toFloat(); lastY = y.toFloat()
-            when (role) {
+        private fun move(slot: Int, x: Int, y: Int) {
+            val f = fingers[slot] ?: return
+            val dx = x - f.lastX; val dy = y - f.lastY
+            f.moved += abs(dx) + abs(dy)
+            f.lastX = x.toFloat(); f.lastY = y.toFloat()
+            when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
-                    val at = if (role == TrackpadRole.LEFT_STICK) 0 else 2
-                    sticks[at] = ((x - originX) / radius).coerceIn(-1f, 1f)
-                    sticks[at + 1] = ((y - originY) / radius).coerceIn(-1f, 1f)
+                    val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
+                    sticks[at] = ((x - f.originX) / radius).coerceIn(-1f, 1f)
+                    sticks[at + 1] = ((y - f.originY) / radius).coerceIn(-1f, 1f)
                     val current = profile
                     if (current != null && (!pad && !inMenus && current.stickZones.containsKey(at / 2))) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
-                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys((x - originX) / radius, (y - originY) / radius)
+                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(f, (x - f.originX) / radius, (y - f.originY) / radius)
                 TrackpadRole.NONE -> Unit
             }
         }
 
-        /** Direction keys held: up, left, down, right. */
-        private val held = BooleanArray(4)
-
         /** Each direction's key down once pushed past a third of the way, up when back. */
-        private fun directionKeys(vx: Float, vy: Float) {
-            val keys = if (role == TrackpadRole.WASD_KEYS) {
+        private fun directionKeys(f: Finger, vx: Float, vy: Float) {
+            val keys = if (f.role == TrackpadRole.WASD_KEYS) {
                 intArrayOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
             } else {
                 intArrayOf(KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)
             }
             val want = booleanArrayOf(vy < -DEAD_ZONE, vx < -DEAD_ZONE, vy > DEAD_ZONE, vx > DEAD_ZONE)
             for (i in 0..3) {
-                if (want[i] == held[i]) continue
-                held[i] = want[i]
+                if (want[i] == f.held[i]) continue
+                f.held[i] = want[i]
                 val line = "K ${if (want[i]) 1 else 0} ${keys[i]} k"
                 worker.execute { send(line) }
             }
         }
 
-        private fun up() {
-            when (role) {
+        private fun up(slot: Int) {
+            val f = fingers.remove(slot) ?: return
+            when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
-                    val at = if (role == TrackpadRole.LEFT_STICK) 0 else 2
+                    val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
                     sticks[at] = 0f; sticks[at + 1] = 0f
                     if (stickHeld[at / 2]) {
                         val finger = 1 + at / 2
@@ -498,10 +492,10 @@ object GameMode {
                     } else sendSticks()
                 }
                 // A tap clicks
-                TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - downAt < 200 && moved < radius / 4) {
+                TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - f.downAt < 200 && f.moved < radius / 4) {
                     worker.execute { send("B 1 1"); send("B 0 1") }
                 }
-                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(0f, 0f)
+                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(f, 0f, 0f)
                 TrackpadRole.NONE -> Unit
             }
         }
