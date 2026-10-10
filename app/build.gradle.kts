@@ -125,6 +125,9 @@ android {
     val nightlyVersionNameSuffix = providers.gradleProperty("PASTIERA_NIGHTLY_VERSION_SUFFIX").orNull ?: "-nightly"
     val isFdroidBuild = gradleBooleanProperty("PASTIERA_FDROID_BUILD")
     val isUnsignedReleaseBuild = gradleBooleanProperty("PASTIERA_UNSIGNED_RELEASE_BUILD")
+    // SteamGridDB key for gaming mode's game art: likewise from a CI secret, empty without one
+    val steamGridDbKey = (providers.environmentVariable("STEAMGRIDDB_API_KEY").orNull ?: "").trim()
+        .takeIf { key -> key.matches(Regex("[A-Za-z0-9]+")) } ?: ""
     // Built-in KLIPY key for GIF search: from the build environment (a CI secret), never the source
     val klipyApiKey = (providers.environmentVariable("KLIPY_API_KEY").orNull
         ?: providers.gradleProperty("KLIPY_API_KEY").orNull ?: "").trim().let { key ->
@@ -163,6 +166,7 @@ android {
         buildConfigField("String", "SUCCESSOR_GITHUB_REPOSITORY", "\"$successorGithubRepository\"")
         buildConfigField("String", "FORK_GITHUB_REPOSITORY", "\"$forkGithubRepository\"")
         buildConfigField("String", "KLIPY_API_KEY", "\"$klipyApiKey\"")
+        buildConfigField("String", "STEAMGRIDDB_API_KEY", "\"$steamGridDbKey\"")
     }
 
     signingConfigs {

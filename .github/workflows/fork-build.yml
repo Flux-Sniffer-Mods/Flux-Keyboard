@@ -79,6 +79,8 @@ jobs:
       GRADLE_ARGS: --build-cache -PPASTIERA_VERSION_CODE=${{ needs.version.outputs.code }} -PPASTIERA_VERSION_NAME=${{ needs.version.outputs.name }}
       # Built-in KLIPY key for GIF search (empty when the secret isn't set)
       KLIPY_API_KEY: ${{ secrets.KLIPY_API_KEY }}
+      # SteamGridDB key for gaming mode's game art (empty when the secret isn't set)
+      STEAMGRIDDB_API_KEY: ${{ secrets.STEAMGRIDDB_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

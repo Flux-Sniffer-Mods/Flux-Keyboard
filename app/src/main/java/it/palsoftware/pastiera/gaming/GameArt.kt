@@ -19,11 +19,12 @@ object GameArt {
 
     /** The art for [profile], fetched if need be (blocking); null when there's none. */
     fun load(context: Context, profile: GameProfile): Bitmap? {
-        val file = File(dir(context), profile.id + ".img")
+        // Kept apart with SteamGridDB's key, so art not found without it is looked for again
+        val file = File(dir(context), profile.id + (if (key.isEmpty()) "" else "-sgdb") + ".img")
         // An empty file: looked for before and nothing found
         if (file.exists()) return if (file.length() > 0) BitmapFactory.decodeFile(file.path) else null
         if (SettingsManager.isOfflineMode(context)) return null
-        val urls = urls(context, profile)
+        val urls = steamGridDb(profile) + urls(context, profile)
         if (urls.isEmpty()) return null
         dir(context).mkdirs()
         for (url in urls) {
@@ -39,6 +40,7 @@ object GameArt {
     /** Forgets [profile]'s art, so it's looked for again. */
     fun forget(context: Context, profile: GameProfile) {
         File(dir(context), profile.id + ".img").delete()
+        File(dir(context), profile.id + "-sgdb.img").delete()
     }
 
     /** Where [profile]'s game art may be, best first. */
@@ -65,6 +67,40 @@ object GameArt {
         if (system != null) urls += libretro(system, path.substringAfterLast('/').substringBeforeLast('.'))
         return urls
     }
+
+    // ---- SteamGridDB (with the key the build was given) ----
+
+    private val key get() = it.palsoftware.pastiera.BuildConfig.STEAMGRIDDB_API_KEY
+
+    /** SteamGridDB's square icon, else its grid art, for [profile]'s game: by Steam ID, else by name. */
+    internal fun steamGridDb(profile: GameProfile): List<String> {
+        if (key.isEmpty()) return emptyList()
+        val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+        val game = launch?.let { steamId(it) }?.let { id -> api("games/steam/$id")?.optJSONObject("data")?.optInt("id") }
+            ?: api("search/autocomplete/" + java.net.URLEncoder.encode(profile.name, "UTF-8").replace("+", "%20"))
+                ?.optJSONArray("data")?.optJSONObject(0)?.optInt("id")
+            ?: return emptyList()
+        if (game <= 0) return emptyList()
+        fun first(path: String) = api(path)?.optJSONArray("data")?.optJSONObject(0)?.let { it.optString("thumb").ifEmpty { it.optString("url") } }
+        return listOfNotNull(
+            first("icons/game/$game"),
+            first("grids/game/$game?dimensions=512x512,1024x1024"),
+            first("grids/game/$game")
+        ).filter { it.startsWith("https://") && !it.endsWith(".ico") }
+    }
+
+    private fun api(path: String): org.json.JSONObject? = runCatching {
+        val connection = java.net.URL("https://www.steamgriddb.com/api/v2/$path").openConnection() as java.net.HttpURLConnection
+        connection.connectTimeout = 6_000
+        connection.readTimeout = 10_000
+        connection.setRequestProperty("Authorization", "Bearer $key")
+        try {
+            if (connection.responseCode != 200) null
+            else org.json.JSONObject(connection.inputStream.use { it.readBytes().decodeToString() }).takeIf { it.optBoolean("success") }
+        } finally {
+            connection.disconnect()
+        }
+    }.getOrNull()
 
     /** A Steam game's ID: GameNative's app_id with its Steam source, or GameHub's steamAppId. */
     internal fun steamId(launch: Intent): String? {

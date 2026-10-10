@@ -266,7 +266,8 @@ Elite with a hidden bar and a build tuned for one language. Thank you to jlo-aug
 Gaming mode names Wii, GameCube and 3DS games from [GameTDB](https://www.gametdb.com)'s
 lists of game titles, fetched when a game folder is first read, and shows their covers from
 GameTDB too, or box art from [libretro-thumbnails](https://github.com/libretro-thumbnails)
-for other emulator games.
+for other emulator games. Builds given a SteamGridDB API key (the `STEAMGRIDDB_API_KEY` Actions
+secret) look on [SteamGridDB](https://www.steamgriddb.com) first.
 
 If you enjoy Flux Keyboard, you can [support me on Ko-fi](https://ko-fi.com/fluxsniffermods),
 and the people it's built on:

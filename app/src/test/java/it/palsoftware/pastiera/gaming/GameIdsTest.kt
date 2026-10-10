@@ -52,4 +52,16 @@ class GameIdsTest {
         assertEquals("Lumines", found?.title)
         assertEquals("ULUS10041", found?.id)
     }
+
+    @Test
+    fun anIdInTheFilesNameIsUsed() {
+        assertEquals("GZLE01", GameIds.fromName("Dolphin", "Zelda Wind Waker [GZLE01]")?.id)
+        assertEquals("Zelda Wind Waker", GameIds.fromName("Dolphin", "Zelda Wind Waker [GZLE01]")?.title)
+        assertNull(GameIds.fromName("Dolphin", "Zelda Wind Waker (USA)"))
+        val switch = GameIds.fromName("Eden", "Super Mario Odyssey [0100000000010000][v0]")
+        assertEquals("0100000000010000", switch?.id)
+        assertEquals("Super Mario Odyssey", switch?.title)
+        assertEquals("ULUS10041", GameIds.fromName("PPSSPP", "Lumines ULUS-10041")?.id)
+        assertEquals("AREE", GameIds.fromName("Azahar", "Animal Crossing CTR-P-AREE")?.id)
+    }
 }

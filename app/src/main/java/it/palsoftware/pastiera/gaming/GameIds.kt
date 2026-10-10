@@ -21,11 +21,20 @@ object GameIds {
     fun title(context: Context, player: String, path: String): String? {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         prefs.getString(path, null)?.let { return it.ifEmpty { null } }
-        val found = when (player) {
+        val file = path.substringAfterLast('/').substringBeforeLast('.')
+        val read = when (player) {
             "Dolphin" -> disc(path)
             "Azahar" -> cartridge(path)
             "PPSSPP" -> psp(path)
             else -> null
+        }
+        // The game's own ID first, else one written in the file's name ("Zelda [GZLE01]"),
+        // and the file's name without its tags ("[0100F2C0115B6000][v0]") as its title
+        val named = fromName(player, file)
+        val found = when {
+            read?.id != null -> read
+            named != null -> Found(named.id, read?.title ?: named.title)
+            else -> read
         }
         val database = when (player) { "Dolphin" -> "wiitdb"; "Azahar" -> "3dstdb"; else -> null }
         found?.id?.let { prefs.edit().putString("id:$path", it).apply() }
@@ -44,6 +53,24 @@ object GameIds {
         if (prefs.contains(path)) return null
         title(context, player, path)
         return prefs.getString("id:$path", null)
+    }
+
+    /**
+     * An ID in a game file's name: a Wii or GameCube ID ("[GZLE01]"), a 3DS product code
+     * ("CTR-P-AREE"), a PSP disc ID ("ULUS10041") or a Switch title ID ("0100F2C0115B6000"),
+     * with the name left once its tags are gone. Null when the name holds none.
+     */
+    internal fun fromName(player: String, file: String): Found? {
+        val id = when (player) {
+            "Dolphin" -> Regex("[\\[(]([A-Z0-9]{6})[\\])]").findAll(file).map { it.groupValues[1] }.firstOrNull { it.any(Char::isDigit) && it.any(Char::isLetter) }
+            "Azahar" -> Regex("CTR-[A-Z]-([A-Z0-9]{4})").find(file)?.groupValues?.get(1)
+            "PPSSPP" -> Regex("\\b([A-Z]{4})-?(\\d{5})\\b").find(file)?.let { it.groupValues[1] + it.groupValues[2] }
+            "Eden" -> Regex("\\b(01[0-9A-Fa-f]{14})\\b").find(file)?.groupValues?.get(1)?.uppercase()
+            else -> null
+        } ?: return null
+        val title = file.replace(Regex("\\[[^\\]]*\\]"), " ").replace(id, " ").replace(Regex("[_]+"), " ")
+            .replace(Regex("\\s+"), " ").trim(' ', '-').ifEmpty { null }
+        return Found(id, title)
     }
 
     // ---- Reading the game ----
