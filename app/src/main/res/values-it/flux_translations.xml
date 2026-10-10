@@ -1209,9 +1209,9 @@
     <string name="flux_tutorial_shell_paired">Accoppiata</string>
     <string name="flux_tutorial_shell_text">Accoppiala una volta con il debug wireless: tocca Configura, poi in Debug wireless tocca Accoppia dispositivo con codice di accoppiamento e scrivi il codice nella notifica di Flux Keyboard. Da lì si avvia da sola dopo ogni riavvio, appena il Wi-Fi si connette. Niente Shizuku né Termux.</string>
     <string name="flux_tutorial_shell_title">Shell integrata (consigliata)</string>
-    <string name="game_mode_add">Aggiungi un profilo</string>
+    <string name="game_mode_add">Aggiungi un\'app</string>
     <string name="game_mode_add_app">Aggiungi un\'app</string>
-    <string name="game_mode_add_description">Scegli l\'app; il trackpad parte come i suoi stick.</string>
+    <string name="game_mode_add_description">Un launcher o emulatore: i suoi giochi usano le sue impostazioni, il trackpad all\'inizio come i loro stick.</string>
     <string name="game_mode_apps">App</string>
     <string name="game_mode_delete">Elimina profilo</string>
     <string name="game_mode_import">Aggiungi un gioco da un launcher di giochi</string>
@@ -1223,7 +1223,6 @@
     <string name="game_mode_no_apps">ancora nessuna app</string>
     <string name="game_mode_note">La modalità gioco richiede la shell integrata (o Shizuku) e l\'aiuto di accessibilità della tastiera. I tasti arrivano al gioco così come sono: assegnali nelle impostazioni del controller dell\'emulatore o del launcher. Scrivere in un campo di testo del gioco funziona come al solito. Il trackpad legge un dito alla volta, quindi si muove uno stick alla volta.</string>
     <string name="game_mode_profile_name">Nome</string>
-    <string name="game_mode_profiles">Profili di gioco</string>
     <string name="game_mode_remove">Rimuovi</string>
     <string name="game_mode_right_half">Metà destra del trackpad</string>
     <string name="game_mode_save">Salva</string>
@@ -1311,4 +1310,11 @@
     <string name="root_backlight_fine_description">Con root, i LED della tastiera vengono impostati nei loro passi, molto più fini dei normali livelli della luce, così seguire la luminosità dello schermo non ha scatti visibili.</string>
     <string name="game_mode_controller">Controller vero</string>
     <string name="game_mode_controller_description">Con root, la modalità gioco collega un controller che il gioco vede come vero: W A S D la sua croce direzionale, O K P L i suoi Y X B A, Q E Z C i suoi dorsali e grilletti (e i tasti volume quelli sinistri), Invio Start, Backspace Select, F e J la pressione degli stick, e il trackpad i suoi stick. Gli altri tasti arrivano al gioco così come sono.</string>
+    <string name="game_mode_apps_section">App</string>
+    <string name="game_mode_games_section">Giochi</string>
+    <string name="game_mode_own_settings">Impostazioni proprie</string>
+    <string name="game_mode_own_settings_on">Questo gioco ha trackpad, schermo e stick propri.</string>
+    <string name="game_mode_own_settings_off">Gioca con le impostazioni di %1$s. Attivalo per un gioco con gli stick altrove.</string>
+    <string name="game_mode_own_settings_short">Impostazioni proprie</string>
+    <string name="game_mode_app_settings_short">Impostazioni di %1$s</string>
 </resources>

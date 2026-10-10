@@ -1163,9 +1163,9 @@
     <string name="flux_tutorial_shell_paired">Gekoppelt</string>
     <string name="flux_tutorial_shell_text">Einmal mit Debugging über WLAN koppeln: Tippe auf Einrichten, dann in Debugging über WLAN auf Gerät mit einem Kopplungscode koppeln und gib den Code in die Benachrichtigung von Flux Keyboard ein. Danach startet sie nach jedem Neustart von selbst, sobald das WLAN verbunden ist. Kein Shizuku oder Termux nötig.</string>
     <string name="flux_tutorial_shell_title">Eingebaute Shell (empfohlen)</string>
-    <string name="game_mode_add">Profil hinzufügen</string>
+    <string name="game_mode_add">App hinzufügen</string>
     <string name="game_mode_add_app">App hinzufügen</string>
-    <string name="game_mode_add_description">Wähle die App dafür; das Trackpad beginnt als ihre Sticks.</string>
+    <string name="game_mode_add_description">Ein Launcher oder Emulator: Seine Spiele nutzen seine Einstellungen, das Trackpad beginnt als ihre Sticks.</string>
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_delete">Profil löschen</string>
     <string name="game_mode_import">Spiel aus einem Spiele-Launcher hinzufügen</string>
@@ -1177,7 +1177,6 @@
     <string name="game_mode_no_apps">noch keine Apps</string>
     <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Tasten erreichen das Spiel unverändert: Belege sie in den Controller-Einstellungen des Emulators oder Launchers. Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Das Trackpad liest einen Finger auf einmal, daher bewegt sich ein Stick auf einmal.</string>
     <string name="game_mode_profile_name">Name</string>
-    <string name="game_mode_profiles">Spielprofile</string>
     <string name="game_mode_remove">Entfernen</string>
     <string name="game_mode_right_half">Trackpad rechte Hälfte</string>
     <string name="game_mode_save">Speichern</string>
@@ -1265,4 +1264,11 @@
     <string name="root_backlight_fine_description">Über Root werden die LEDs der Tastatur in ihren eigenen Stufen gesetzt, viel feiner als die üblichen Stufen der Beleuchtung, sodass das Folgen der Bildschirmhelligkeit keine sichtbaren Sprünge hat.</string>
     <string name="game_mode_controller">Echter Controller</string>
     <string name="game_mode_controller_description">Mit Root schließt der Spielmodus einen Controller an, den das Spiel als echt erkennt: W A S D sein Steuerkreuz, O K P L seine Y X B A, Q E Z C seine Schultertasten und Trigger (und die Lautstärketasten die linken), Enter Start, Rücktaste Select, F und J das Drücken der Sticks, und das Trackpad seine Sticks. Andere Tasten erreichen das Spiel unverändert.</string>
+    <string name="game_mode_apps_section">Apps</string>
+    <string name="game_mode_games_section">Spiele</string>
+    <string name="game_mode_own_settings">Eigene Einstellungen</string>
+    <string name="game_mode_own_settings_on">Dieses Spiel hat sein eigenes Trackpad, seinen eigenen Bildschirm und eigene Sticks.</string>
+    <string name="game_mode_own_settings_off">Spielt mit den Einstellungen von %1$s. Schalte es für ein Spiel ein, dessen Sticks woanders sitzen.</string>
+    <string name="game_mode_own_settings_short">Eigene Einstellungen</string>
+    <string name="game_mode_app_settings_short">Einstellungen von %1$s</string>
 </resources>

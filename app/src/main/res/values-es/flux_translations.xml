@@ -1704,9 +1704,9 @@
     <string name="flux_tutorial_shell_paired">Vinculado</string>
     <string name="flux_tutorial_shell_text">Vincúlalo una vez con la depuración inalámbrica: toca Configurar, luego en Depuración inalámbrica toca Vincular dispositivo con código de vinculación y escribe el código en la notificación de Flux Keyboard. Después se inicia solo tras cada reinicio, en cuanto se conecta el Wi-Fi. Sin Shizuku ni Termux.</string>
     <string name="flux_tutorial_shell_title">Shell integrado (recomendado)</string>
-    <string name="game_mode_add">Añadir un perfil</string>
+    <string name="game_mode_add">Añadir una app</string>
     <string name="game_mode_add_app">Añadir una app</string>
-    <string name="game_mode_add_description">Elige la app; el trackpad empieza como sus sticks.</string>
+    <string name="game_mode_add_description">Un lanzador o emulador: sus juegos usan sus ajustes, con el trackpad como sus sticks al empezar.</string>
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_delete">Eliminar perfil</string>
     <string name="game_mode_import">Añadir un juego de un lanzador de juegos</string>
@@ -1718,7 +1718,6 @@
     <string name="game_mode_no_apps">aún sin apps</string>
     <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas llegan al juego tal cual: asígnalas en los ajustes de mando del emulador o del lanzador. Escribir en un campo de texto del juego funciona como siempre. El trackpad lee un dedo cada vez, así que se mueve un stick cada vez.</string>
     <string name="game_mode_profile_name">Nombre</string>
-    <string name="game_mode_profiles">Perfiles de juego</string>
     <string name="game_mode_remove">Quitar</string>
     <string name="game_mode_right_half">Mitad derecha del trackpad</string>
     <string name="game_mode_save">Guardar</string>
@@ -1806,4 +1805,11 @@
     <string name="root_backlight_fine_description">Con root, los LED del teclado se ajustan en sus propios pasos, mucho más finos que los niveles habituales de la luz, así que seguir el brillo de la pantalla no tiene saltos visibles.</string>
     <string name="game_mode_controller">Mando real</string>
     <string name="game_mode_controller_description">Con root, el modo juego conecta un mando que el juego ve como real: W A S D su cruceta, O K P L sus Y X B A, Q E Z C sus gatillos y botones superiores (y las teclas de volumen los izquierdos), Intro Start, Retroceso Select, F y J la pulsación de los sticks, y el trackpad sus sticks. Las demás teclas llegan al juego tal cual.</string>
+    <string name="game_mode_apps_section">Apps</string>
+    <string name="game_mode_games_section">Juegos</string>
+    <string name="game_mode_own_settings">Ajustes propios</string>
+    <string name="game_mode_own_settings_on">Este juego tiene su propio trackpad, pantalla y sticks.</string>
+    <string name="game_mode_own_settings_off">Juega con los ajustes de %1$s. Actívalo para un juego con los sticks en otro sitio.</string>
+    <string name="game_mode_own_settings_short">Ajustes propios</string>
+    <string name="game_mode_app_settings_short">Ajustes de %1$s</string>
 </resources>

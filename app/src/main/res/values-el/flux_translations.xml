@@ -1072,9 +1072,9 @@
     <string name="flux_tutorial_shell_paired">Σε σύζευξη</string>
     <string name="flux_tutorial_shell_text">Κάντε σύζευξη μία φορά με τον ασύρματο εντοπισμό σφαλμάτων: πατήστε Ρύθμιση, μετά στο «Ασύρματος εντοπισμός σφαλμάτων» πατήστε «Σύζευξη συσκευής με κωδικό σύζευξης» και πληκτρολογήστε τον κωδικό στην ειδοποίηση του Flux Keyboard. Από εκεί και πέρα ξεκινά μόνο του μετά από κάθε επανεκκίνηση, μόλις συνδεθεί το Wi-Fi. Χωρίς Shizuku ή Termux.</string>
     <string name="flux_tutorial_shell_title">Ενσωματωμένο shell (συνιστάται)</string>
-    <string name="game_mode_add">Προσθήκη προφίλ</string>
+    <string name="game_mode_add">Προσθήκη εφαρμογής</string>
     <string name="game_mode_add_app">Προσθήκη εφαρμογής</string>
-    <string name="game_mode_add_description">Επιλέξτε την εφαρμογή· το trackpad ξεκινά ως οι μοχλοί της.</string>
+    <string name="game_mode_add_description">Ένα launcher ή εξομοιωτής: τα παιχνίδια του παίζουν με τις ρυθμίσεις του, με το trackpad αρχικά ως μοχλούς τους.</string>
     <string name="game_mode_apps">Εφαρμογές</string>
     <string name="game_mode_delete">Διαγραφή προφίλ</string>
     <string name="game_mode_import">Προσθήκη παιχνιδιού από εκκινητή παιχνιδιών</string>
@@ -1086,7 +1086,6 @@
     <string name="game_mode_no_apps">δεν υπάρχουν ακόμη εφαρμογές</string>
     <string name="game_mode_note">Η λειτουργία παιχνιδιού χρειάζεται το ενσωματωμένο shell (ή το Shizuku) και τη βοήθεια προσβασιμότητας του πληκτρολογίου. Τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι: αντιστοιχίστε τα στις ρυθμίσεις χειριστηρίου του εξομοιωτή ή του launcher. Η πληκτρολόγηση σε πεδίο κειμένου του παιχνιδιού λειτουργεί κανονικά. Το trackpad διαβάζει ένα δάχτυλο τη φορά, οπότε κινείται ένας μοχλός τη φορά.</string>
     <string name="game_mode_profile_name">Όνομα</string>
-    <string name="game_mode_profiles">Προφίλ παιχνιδιών</string>
     <string name="game_mode_remove">Αφαίρεση</string>
     <string name="game_mode_right_half">Δεξί μισό του trackpad</string>
     <string name="game_mode_save">Αποθήκευση</string>
@@ -1174,4 +1173,11 @@
     <string name="root_backlight_fine_description">Μέσω root, τα LED του πληκτρολογίου ρυθμίζονται στα δικά τους βήματα, πολύ λεπτότερα από τα συνηθισμένα επίπεδα του φωτισμού, ώστε η παρακολούθηση της φωτεινότητας της οθόνης να μην έχει ορατά σκαλοπάτια.</string>
     <string name="game_mode_controller">Πραγματικό χειριστήριο</string>
     <string name="game_mode_controller_description">Με root, η λειτουργία παιχνιδιού συνδέει ένα χειριστήριο που το παιχνίδι βλέπει ως πραγματικό: W A S D το d-pad του, O K P L τα Y X B A του, Q E Z C τα shoulder και τις σκανδάλες του (και τα πλήκτρα έντασης τα αριστερά), Enter το Start, Backspace το Select, F και J το πάτημα των μοχλών, και το trackpad τους μοχλούς του. Τα άλλα πλήκτρα φτάνουν στο παιχνίδι όπως είναι.</string>
+    <string name="game_mode_apps_section">Εφαρμογές</string>
+    <string name="game_mode_games_section">Παιχνίδια</string>
+    <string name="game_mode_own_settings">Δικές του ρυθμίσεις</string>
+    <string name="game_mode_own_settings_on">Αυτό το παιχνίδι έχει δικό του trackpad, οθόνη και μοχλούς.</string>
+    <string name="game_mode_own_settings_off">Παίζει με τις ρυθμίσεις του %1$s. Ενεργοποιήστε το για παιχνίδι με μοχλούς αλλού.</string>
+    <string name="game_mode_own_settings_short">Δικές του ρυθμίσεις</string>
+    <string name="game_mode_app_settings_short">Ρυθμίσεις του %1$s</string>
 </resources>

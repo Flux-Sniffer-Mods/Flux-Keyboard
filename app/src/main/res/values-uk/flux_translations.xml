@@ -1710,9 +1710,9 @@
     <string name="flux_tutorial_shell_paired">Підключено</string>
     <string name="flux_tutorial_shell_text">Підключіть її один раз через налагодження через Wi-Fi: натисніть «Налаштувати», потім у розділі «Налагодження через Wi-Fi» натисніть «Підключити пристрій за допомогою коду» і введіть код у сповіщенні Flux Keyboard. Після цього вона запускається сама після кожного перезапуску, щойно підключиться Wi-Fi. Без Shizuku і Termux.</string>
     <string name="flux_tutorial_shell_title">Вбудована оболонка (рекомендовано)</string>
-    <string name="game_mode_add">Додати профіль</string>
+    <string name="game_mode_add">Додати застосунок</string>
     <string name="game_mode_add_app">Додати застосунок</string>
-    <string name="game_mode_add_description">Виберіть застосунок; тачпад спершу працює як його стіки.</string>
+    <string name="game_mode_add_description">Лаунчер або емулятор: його ігри використовують його налаштування, а тачпад спершу працює як їхні стіки.</string>
     <string name="game_mode_apps">Застосунки</string>
     <string name="game_mode_delete">Видалити профіль</string>
     <string name="game_mode_import">Додати гру з ігрового лаунчера</string>
@@ -1724,7 +1724,6 @@
     <string name="game_mode_no_apps">ще немає застосунків</string>
     <string name="game_mode_note">Ігровому режиму потрібна вбудована оболонка (або Shizuku) і помічник спеціальних можливостей клавіатури. Клавіші доходять до гри як є: призначте їх у налаштуваннях контролера емулятора чи лаунчера. Введення в текстове поле гри працює як зазвичай. Тачпад читає один палець за раз, тож за раз рухається один стік.</string>
     <string name="game_mode_profile_name">Назва</string>
-    <string name="game_mode_profiles">Ігрові профілі</string>
     <string name="game_mode_remove">Прибрати</string>
     <string name="game_mode_right_half">Права половина трекпада</string>
     <string name="game_mode_save">Зберегти</string>
@@ -1812,4 +1811,11 @@
     <string name="root_backlight_fine_description">Через root світлодіоди клавіатури задаються їхніми власними кроками, набагато дрібнішими за звичайні рівні підсвічування, тож стеження за яскравістю екрана йде без видимих сходинок.</string>
     <string name="game_mode_controller">Справжній контролер</string>
     <string name="game_mode_controller_description">З root ігровий режим під\'єднує контролер, який гра бачить як справжній: W A S D — його хрестовина, O K P L — його Y X B A, Q E Z C — бампери й тригери (а клавіші гучності — ліві), Enter — Start, Backspace — Select, F і J — натискання стіків, а тачпад — його стіки. Інші клавіші доходять до гри як є.</string>
+    <string name="game_mode_apps_section">Застосунки</string>
+    <string name="game_mode_games_section">Ігри</string>
+    <string name="game_mode_own_settings">Власні налаштування</string>
+    <string name="game_mode_own_settings_on">Ця гра має власні тачпад, екран і стіки.</string>
+    <string name="game_mode_own_settings_off">Грає з налаштуваннями %1$s. Увімкніть для гри, стіки якої в іншому місці.</string>
+    <string name="game_mode_own_settings_short">Власні налаштування</string>
+    <string name="game_mode_app_settings_short">Налаштування %1$s</string>
 </resources>

@@ -1710,9 +1710,9 @@
     <string name="flux_tutorial_shell_paired">Sparowano</string>
     <string name="flux_tutorial_shell_text">Sparuj ją raz z debugowaniem bezprzewodowym: dotknij Skonfiguruj, potem w Debugowanie bezprzewodowe dotknij Sparuj urządzenie za pomocą kodu parowania i wpisz kod w powiadomieniu Flux Keyboard. Potem uruchamia się sama po każdym restarcie, gdy tylko połączy się Wi-Fi. Bez Shizuku i Termuksa.</string>
     <string name="flux_tutorial_shell_title">Wbudowana powłoka (zalecane)</string>
-    <string name="game_mode_add">Dodaj profil</string>
+    <string name="game_mode_add">Dodaj aplikację</string>
     <string name="game_mode_add_app">Dodaj aplikację</string>
-    <string name="game_mode_add_description">Wybierz aplikację; gładzik zaczyna jako jej gałki.</string>
+    <string name="game_mode_add_description">Launcher lub emulator: jego gry używają jego ustawień, a gładzik zaczyna jako ich gałki.</string>
     <string name="game_mode_apps">Aplikacje</string>
     <string name="game_mode_delete">Usuń profil</string>
     <string name="game_mode_import">Dodaj grę z launchera gier</string>
@@ -1724,7 +1724,6 @@
     <string name="game_mode_no_apps">jeszcze bez aplikacji</string>
     <string name="game_mode_note">Tryb gry wymaga wbudowanej powłoki (lub Shizuku) i pomocnika ułatwień dostępu klawiatury. Klawisze trafiają do gry bez zmian: przypisz je w ustawieniach kontrolera emulatora lub launchera. Pisanie w polu tekstowym gry działa jak zwykle. Gładzik czyta jeden palec naraz, więc naraz porusza się jedna gałka.</string>
     <string name="game_mode_profile_name">Nazwa</string>
-    <string name="game_mode_profiles">Profile gier</string>
     <string name="game_mode_remove">Usuń</string>
     <string name="game_mode_right_half">Prawa połowa trackpada</string>
     <string name="game_mode_save">Zapisz</string>
@@ -1812,4 +1811,11 @@
     <string name="root_backlight_fine_description">Przez roota diody klawiatury są ustawiane w ich własnych krokach, dużo drobniejszych niż zwykłe poziomy podświetlenia, więc podążanie za jasnością ekranu nie ma widocznych skoków.</string>
     <string name="game_mode_controller">Prawdziwy kontroler</string>
     <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy: W A S D jego krzyżak, O K P L jego Y X B A, Q E Z C jego bumpery i spusty (a klawisze głośności lewe), Enter Start, Backspace Select, F i J wciśnięcie gałek, a gładzik jego gałki. Pozostałe klawisze trafiają do gry bez zmian.</string>
+    <string name="game_mode_apps_section">Aplikacje</string>
+    <string name="game_mode_games_section">Gry</string>
+    <string name="game_mode_own_settings">Własne ustawienia</string>
+    <string name="game_mode_own_settings_on">Ta gra ma własny gładzik, ekran i gałki.</string>
+    <string name="game_mode_own_settings_off">Gra z ustawieniami %1$s. Włącz dla gry, której gałki są gdzie indziej.</string>
+    <string name="game_mode_own_settings_short">Własne ustawienia</string>
+    <string name="game_mode_app_settings_short">Ustawienia %1$s</string>
 </resources>

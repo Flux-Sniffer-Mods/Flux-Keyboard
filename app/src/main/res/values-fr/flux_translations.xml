@@ -1704,9 +1704,9 @@
     <string name="flux_tutorial_shell_paired">Associé</string>
     <string name="flux_tutorial_shell_text">Associez-le une fois au débogage sans fil : touchez Configurer, puis dans Débogage sans fil touchez Associer l\'appareil avec un code d\'association et saisissez le code dans la notification de Flux Keyboard. Ensuite, il démarre tout seul après chaque redémarrage, dès que le Wi-Fi est connecté. Ni Shizuku ni Termux.</string>
     <string name="flux_tutorial_shell_title">Shell intégré (recommandé)</string>
-    <string name="game_mode_add">Ajouter un profil</string>
+    <string name="game_mode_add">Ajouter une appli</string>
     <string name="game_mode_add_app">Ajouter une appli</string>
-    <string name="game_mode_add_description">Choisissez l\'appli concernée ; le pavé tactile commence comme ses sticks.</string>
+    <string name="game_mode_add_description">Un lanceur ou un émulateur : ses jeux utilisent ses réglages, le pavé tactile commençant comme leurs sticks.</string>
     <string name="game_mode_apps">Applis</string>
     <string name="game_mode_delete">Supprimer le profil</string>
     <string name="game_mode_import">Ajouter un jeu d\'un lanceur de jeux</string>
@@ -1718,7 +1718,6 @@
     <string name="game_mode_no_apps">aucune appli pour l\'instant</string>
     <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'aide d\'accessibilité du clavier. Les touches arrivent au jeu telles quelles : attribuez-les dans les réglages de manette de l\'émulateur ou du lanceur. Écrire dans un champ de texte du jeu fonctionne comme d\'habitude. Le pavé tactile lit un doigt à la fois, donc un seul stick bouge à la fois.</string>
     <string name="game_mode_profile_name">Nom</string>
-    <string name="game_mode_profiles">Profils de jeu</string>
     <string name="game_mode_remove">Retirer</string>
     <string name="game_mode_right_half">Moitié droite du pavé tactile</string>
     <string name="game_mode_save">Enregistrer</string>
@@ -1806,4 +1805,11 @@
     <string name="root_backlight_fine_description">Avec le root, les LED du clavier sont réglées dans leurs propres pas, bien plus fins que les niveaux habituels de l\'éclairage, pour suivre la luminosité de l\'écran sans paliers visibles.</string>
     <string name="game_mode_controller">Vraie manette</string>
     <string name="game_mode_controller_description">Avec le root, le mode jeu branche une manette que le jeu voit comme réelle : W A S D sa croix directionnelle, O K P L ses Y X B A, Q E Z C ses gâchettes et boutons de tranche (et les touches de volume ceux de gauche), Entrée Start, Retour arrière Select, F et J l\'appui des sticks, et le pavé tactile ses sticks. Les autres touches arrivent au jeu telles quelles.</string>
+    <string name="game_mode_apps_section">Applis</string>
+    <string name="game_mode_games_section">Jeux</string>
+    <string name="game_mode_own_settings">Réglages propres</string>
+    <string name="game_mode_own_settings_on">Ce jeu a son propre pavé tactile, écran et sticks.</string>
+    <string name="game_mode_own_settings_off">Joue avec les réglages de %1$s. Activez-le pour un jeu dont les sticks sont ailleurs.</string>
+    <string name="game_mode_own_settings_short">Réglages propres</string>
+    <string name="game_mode_app_settings_short">Réglages de %1$s</string>
 </resources>

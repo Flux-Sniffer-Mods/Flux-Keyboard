@@ -1698,9 +1698,9 @@
     <string name="flux_tutorial_shell_paired">Զուգակցված է</string>
     <string name="flux_tutorial_shell_text">Մեկ անգամ զուգակցեք անլար վրիպազերծմամբ․ հպեք Կարգավորել, ապա «Անլար վրիպազերծում»-ում հպեք «Զուգակցել սարքը զուգակցման կոդով» և մուտքագրեք կոդը Flux Keyboard-ի ծանուցման մեջ։ Դրանից հետո այն ինքն է միանում ամեն վերագործարկումից հետո, հենց Wi-Fi-ը միանա։ Առանց Shizuku-ի կամ Termux-ի։</string>
     <string name="flux_tutorial_shell_title">Ներկառուցված shell (խորհուրդ է տրվում)</string>
-    <string name="game_mode_add">Ավելացնել պրոֆիլ</string>
+    <string name="game_mode_add">Ավելացնել հավելված</string>
     <string name="game_mode_add_app">Ավելացնել հավելված</string>
-    <string name="game_mode_add_description">Ընտրեք հավելվածը․ թաչփադը սկսում է որպես դրա լծակներ։</string>
+    <string name="game_mode_add_description">Գործարկիչ կամ էմուլյատոր․ դրա խաղերը խաղում են դրա կարգավորումներով, թաչփադը սկսում է որպես դրանց լծակներ։</string>
     <string name="game_mode_apps">Հավելվածներ</string>
     <string name="game_mode_delete">Ջնջել պրոֆիլը</string>
     <string name="game_mode_import">Ավելացնել խաղ խաղերի գործարկիչից</string>
@@ -1712,7 +1712,6 @@
     <string name="game_mode_no_apps">դեռ հավելվածներ չկան</string>
     <string name="game_mode_note">Խաղային ռեժիմին պետք է ներկառուցված shell-ը (կամ Shizuku-ն) և ստեղնաշարի մատչելիության օգնականը։ Ստեղները հասնում են խաղին այնպես, ինչպես կան․ նշանակեք դրանք էմուլյատորի կամ գործարկիչի կարգավորիչի կարգավորումներում։ Խաղի տեքստային դաշտում մուտքագրումն աշխատում է ինչպես սովորաբար։ Թաչփադը կարդում է մեկ մատ միաժամանակ, ուստի միաժամանակ շարժվում է մեկ լծակ։</string>
     <string name="game_mode_profile_name">Անուն</string>
-    <string name="game_mode_profiles">Խաղային պրոֆիլներ</string>
     <string name="game_mode_remove">Հեռացնել</string>
     <string name="game_mode_right_half">Թաչփեդի աջ կեսը</string>
     <string name="game_mode_save">Պահել</string>
@@ -1800,4 +1799,11 @@
     <string name="root_backlight_fine_description">Root-ի միջոցով ստեղնաշարի LED-ները կարգավորվում են իրենց սեփական քայլերով՝ շատ ավելի նուրբ, քան լուսավորության սովորական մակարդակները, ուստի էկրանի պայծառությանը հետևելը տեսանելի աստիճաններ չունի։</string>
     <string name="game_mode_controller">Իրական կարգավորիչ</string>
     <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական․ W A S D՝ դրա d-pad-ը, O K P L՝ դրա Y X B A-ն, Q E Z C՝ դրա ուսային կոճակներն ու ձգանները (իսկ ձայնի ստեղները՝ ձախերը), Enter՝ Start, Backspace՝ Select, F և J՝ լծակների սեղմումը, իսկ թաչփադը՝ դրա լծակները։ Մյուս ստեղները հասնում են խաղին այնպես, ինչպես կան։</string>
+    <string name="game_mode_apps_section">Հավելվածներ</string>
+    <string name="game_mode_games_section">Խաղեր</string>
+    <string name="game_mode_own_settings">Սեփական կարգավորումներ</string>
+    <string name="game_mode_own_settings_on">Այս խաղն ունի սեփական թաչփադ, էկրան և լծակներ։</string>
+    <string name="game_mode_own_settings_off">Խաղում է %1$s-ի կարգավորումներով։ Միացրեք այն խաղի համար, որի լծակները այլ տեղում են։</string>
+    <string name="game_mode_own_settings_short">Սեփական կարգավորումներ</string>
+    <string name="game_mode_app_settings_short">%1$s-ի կարգավորումներ</string>
 </resources>

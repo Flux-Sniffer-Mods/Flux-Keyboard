@@ -1692,9 +1692,9 @@
     <string name="flux_tutorial_shell_paired">Đã ghép nối</string>
     <string name="flux_tutorial_shell_text">Ghép nối một lần bằng gỡ lỗi không dây: chạm Thiết lập, rồi trong Gỡ lỗi không dây chạm Ghép nối thiết bị bằng mã ghép nối và nhập mã vào thông báo của Flux Keyboard. Sau đó nó tự khởi động sau mỗi lần khởi động lại, ngay khi Wi-Fi kết nối. Không cần Shizuku hay Termux.</string>
     <string name="flux_tutorial_shell_title">Shell tích hợp (khuyên dùng)</string>
-    <string name="game_mode_add">Thêm hồ sơ</string>
+    <string name="game_mode_add">Thêm ứng dụng</string>
     <string name="game_mode_add_app">Thêm ứng dụng</string>
-    <string name="game_mode_add_description">Chọn ứng dụng; bàn di chuột bắt đầu là các cần analog của nó.</string>
+    <string name="game_mode_add_description">Một launcher hoặc trình giả lập: game của nó chơi với cài đặt của nó, bàn di chuột bắt đầu là cần analog của chúng.</string>
     <string name="game_mode_apps">Ứng dụng</string>
     <string name="game_mode_delete">Xóa hồ sơ</string>
     <string name="game_mode_import">Thêm trò chơi từ trình khởi chạy trò chơi</string>
@@ -1706,7 +1706,6 @@
     <string name="game_mode_no_apps">chưa có ứng dụng</string>
     <string name="game_mode_note">Chế độ chơi game cần shell tích hợp (hoặc Shizuku) và trợ năng của bàn phím. Phím đến game nguyên vẹn: gán chúng trong cài đặt tay cầm của trình giả lập hoặc launcher. Gõ vào ô văn bản của game vẫn như thường. Bàn di chuột đọc một ngón mỗi lần, nên mỗi lần chỉ một cần analog di chuyển.</string>
     <string name="game_mode_profile_name">Tên</string>
-    <string name="game_mode_profiles">Hồ sơ trò chơi</string>
     <string name="game_mode_remove">Bỏ</string>
     <string name="game_mode_right_half">Nửa phải bàn di chuột</string>
     <string name="game_mode_save">Lưu</string>
@@ -1794,4 +1793,11 @@
     <string name="root_backlight_fine_description">Qua root, đèn LED bàn phím được đặt theo các bước riêng của chúng, mịn hơn nhiều so với các mức thông thường của đèn, nên khi theo độ sáng màn hình sẽ không có bậc nhảy thấy được.</string>
     <string name="game_mode_controller">Tay cầm thật</string>
     <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật: W A S D là d-pad, O K P L là Y X B A, Q E Z C là nút vai và cò (phím âm lượng là bên trái), Enter là Start, Backspace là Select, F và J là nhấn cần analog, và bàn di chuột là các cần analog. Các phím khác đến game nguyên vẹn.</string>
+    <string name="game_mode_apps_section">Ứng dụng</string>
+    <string name="game_mode_games_section">Game</string>
+    <string name="game_mode_own_settings">Cài đặt riêng</string>
+    <string name="game_mode_own_settings_on">Game này có bàn di chuột, màn hình và cần analog riêng.</string>
+    <string name="game_mode_own_settings_off">Chơi với cài đặt của %1$s. Bật cho game có cần analog ở chỗ khác.</string>
+    <string name="game_mode_own_settings_short">Cài đặt riêng</string>
+    <string name="game_mode_app_settings_short">Cài đặt của %1$s</string>
 </resources>
