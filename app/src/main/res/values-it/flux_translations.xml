@@ -1333,4 +1333,6 @@
     <string name="shell_elsewhere_section">Altrove</string>
     <string name="shell_elsewhere_trackpad">Impostati sull\'accesso shell, gli scorrimenti del trackpad vengono letti direttamente dalla tastiera.</string>
     <string name="shell_elsewhere_otp">L\'accesso shell permette di leggere i codici dalle notifiche che Android nasconde alle app (Android 15 e successivi).</string>
+    <string name="shell_shortcuts_launcher">Oppure mettili su tasti premuti nella schermata Home.</string>
+    <string name="shell_shortcuts_nav">Oppure su tasti Ctrl in modalità navigazione.</string>
 </resources>

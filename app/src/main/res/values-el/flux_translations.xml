@@ -1196,4 +1196,6 @@
     <string name="shell_elsewhere_section">Αλλού</string>
     <string name="shell_elsewhere_trackpad">Με ρύθμιση σε πρόσβαση shell, οι κινήσεις του trackpad διαβάζονται απευθείας από το πληκτρολόγιο.</string>
     <string name="shell_elsewhere_otp">Η πρόσβαση shell επιτρέπει την ανάγνωση κωδικών από ειδοποιήσεις που το Android κρύβει από τις εφαρμογές (Android 15 και νεότερα).</string>
+    <string name="shell_shortcuts_launcher">Ή βάλτε τις σε πλήκτρα που πατιούνται στην αρχική οθόνη.</string>
+    <string name="shell_shortcuts_nav">Ή σε πλήκτρα Ctrl στη λειτουργία πλοήγησης.</string>
 </resources>

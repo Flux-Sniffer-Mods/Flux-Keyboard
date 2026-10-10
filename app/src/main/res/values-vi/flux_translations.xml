@@ -1816,4 +1816,6 @@
     <string name="shell_elsewhere_section">Ở nơi khác</string>
     <string name="shell_elsewhere_trackpad">Khi đặt là quyền truy cập shell, thao tác vuốt trên bàn di chuột được đọc trực tiếp từ bàn phím.</string>
     <string name="shell_elsewhere_otp">Quyền truy cập shell cho phép đọc mã từ thông báo mà Android ẩn khỏi ứng dụng (Android 15 trở lên).</string>
+    <string name="shell_shortcuts_launcher">Hoặc gán chúng cho phím nhấn trên màn hình chính.</string>
+    <string name="shell_shortcuts_nav">Hoặc cho phím Ctrl trong chế độ điều hướng.</string>
 </resources>

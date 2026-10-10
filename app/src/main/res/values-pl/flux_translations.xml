@@ -1834,4 +1834,6 @@
     <string name="shell_elsewhere_section">Gdzie indziej</string>
     <string name="shell_elsewhere_trackpad">Przy dostępie do powłoki przesunięcia na gładziku są odczytywane bezpośrednio z klawiatury.</string>
     <string name="shell_elsewhere_otp">Dostęp do powłoki pozwala odczytywać kody z powiadomień, które Android ukrywa przed aplikacjami (Android 15 i nowsze).</string>
+    <string name="shell_shortcuts_launcher">Albo przypisz je do klawiszy naciskanych na ekranie głównym.</string>
+    <string name="shell_shortcuts_nav">Albo do klawiszy Ctrl w trybie nawigacji.</string>
 </resources>

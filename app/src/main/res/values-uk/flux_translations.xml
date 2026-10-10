@@ -1834,4 +1834,6 @@
     <string name="shell_elsewhere_section">В інших розділах</string>
     <string name="shell_elsewhere_trackpad">З доступом до оболонки жести тачпада зчитуються прямо з клавіатури.</string>
     <string name="shell_elsewhere_otp">Доступ до оболонки дає змогу читати коди зі сповіщень, які Android приховує від застосунків (Android 15 і новіші).</string>
+    <string name="shell_shortcuts_launcher">Або призначте їх клавішам на головному екрані.</string>
+    <string name="shell_shortcuts_nav">Або клавішам Ctrl у режимі навігації.</string>
 </resources>

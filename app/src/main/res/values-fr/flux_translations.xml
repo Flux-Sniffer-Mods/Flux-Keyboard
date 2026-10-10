@@ -1828,4 +1828,6 @@
     <string name="shell_elsewhere_section">Ailleurs</string>
     <string name="shell_elsewhere_trackpad">Réglé sur l\'accès shell, les balayages du pavé tactile sont lus directement depuis le clavier.</string>
     <string name="shell_elsewhere_otp">L\'accès shell permet de lire les codes des notifications qu\'Android cache aux applis (Android 15 et versions ultérieures).</string>
+    <string name="shell_shortcuts_launcher">Ou placez-les sur des touches pressées sur l\'écran d\'accueil.</string>
+    <string name="shell_shortcuts_nav">Ou sur des touches Ctrl en mode navigation.</string>
 </resources>

@@ -1828,4 +1828,6 @@
     <string name="shell_elsewhere_section">En otros sitios</string>
     <string name="shell_elsewhere_trackpad">Con el acceso al shell, los deslizamientos del trackpad se leen directamente del teclado.</string>
     <string name="shell_elsewhere_otp">El acceso al shell permite leer códigos de notificaciones que Android oculta a las apps (Android 15 y posteriores).</string>
+    <string name="shell_shortcuts_launcher">O ponlos en teclas pulsadas en la pantalla de inicio.</string>
+    <string name="shell_shortcuts_nav">O en teclas Ctrl en el modo navegación.</string>
 </resources>

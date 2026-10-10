@@ -1287,4 +1287,6 @@
     <string name="shell_elsewhere_section">Anderswo</string>
     <string name="shell_elsewhere_trackpad">Auf Shell-Zugriff gestellt, werden die Wischgesten des Trackpads direkt von der Tastatur gelesen.</string>
     <string name="shell_elsewhere_otp">Mit Shell-Zugriff lassen sich Codes aus Benachrichtigungen lesen, die Android vor Apps verbirgt (Android 15 und neuer).</string>
+    <string name="shell_shortcuts_launcher">Oder lege sie auf Tasten, die auf dem Startbildschirm gedrückt werden.</string>
+    <string name="shell_shortcuts_nav">Oder auf Strg-Tasten im Nav-Modus.</string>
 </resources>

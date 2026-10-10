@@ -1822,4 +1822,6 @@
     <string name="shell_elsewhere_section">Այլ տեղերում</string>
     <string name="shell_elsewhere_trackpad">Shell մուտքի դեպքում թաչփադի սահեցումները կարդացվում են անմիջապես ստեղնաշարից։</string>
     <string name="shell_elsewhere_otp">Shell մուտքը թույլ է տալիս կոդեր կարդալ ծանուցումներից, որոնք Android-ը թաքցնում է հավելվածներից (Android 15 և ավելի նոր)։</string>
+    <string name="shell_shortcuts_launcher">Կամ դրեք դրանք գլխավոր էկրանին սեղմվող ստեղների վրա։</string>
+    <string name="shell_shortcuts_nav">Կամ Ctrl ստեղների վրա Նավիգացիոն ռեժիմում։</string>
 </resources>
