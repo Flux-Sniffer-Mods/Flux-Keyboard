@@ -1727,7 +1727,7 @@
     <string name="game_mode_remove">Убрать</string>
     <string name="game_mode_right_half">Правая половина трекпада</string>
     <string name="game_mode_save">Сохранить</string>
-    <string name="game_mode_switch_description">В приложениях с игровым профилем клавиши доходят до игры как есть, а тачпад двигает её стики.</string>
+    <string name="game_mode_switch_description">В приложениях с игровым профилем клавиши попадают в игру как есть или нажимают её экранные кнопки, а трекпад двигает её стики.</string>
     <string name="game_mode_title">Игровой режим</string>
     <string name="pages_start_description">Отмечено: слой открывается на недавних. Не отмечено: на своей стандартной странице (выбор разработчика, пока вы не измените её карандашом в левом нижнем углу), а недавние на странице назад, на Q.</string>
     <string name="pages_start_kaomoji">Каомодзи</string>
@@ -1762,7 +1762,7 @@
     <string name="sym_start_most_popular">Начать с самых популярных</string>
     <string name="game_mode_gamenative_save">Настроить GameNative</string>
     <string name="game_mode_gamenative_save_description">Игры GameNative принимают стик только от настоящего контроллера или его экранного контроллера, поэтому тачпад двигает экранные стики, невидимо.</string>
-    <string name="game_mode_place_hint">Перетащите каждый круг стика на стик игры.</string>
+    <string name="game_mode_place_hint">Перетащите каждую клавишу на кнопку игры, а каждый круг стика — на его стик. Добавьте клавишу, затем нажмите её.</string>
     <string name="game_mode_place_overlay_needed">Разрешите Flux Keyboard показываться поверх других приложений и попробуйте снова.</string>
     <string name="game_mode_place_clear">Очистить</string>
     <string name="game_mode_left_stick">Левый стик</string>
@@ -1800,9 +1800,8 @@
     <string name="shell_elsewhere_otp">Доступ к оболочке позволяет читать коды из уведомлений, которые Android скрывает от приложений (Android 15 и новее).</string>
     <string name="shell_shortcuts_launcher">Или назначьте их клавишам на главном экране.</string>
     <string name="shell_shortcuts_nav">Или клавишам Ctrl в режиме навигации.</string>
-    <string name="game_mode_place_sticks">Разместить стики на экране</string>
-    <string name="game_mode_keys_pass">Клавиши доходят до игры как есть: назначьте их в управлении игры.</string>
-    <string name="game_mode_keys_pass_app">Клавиши доходят до %1$s как есть: назначьте их один раз в его собственных настройках контроллера.</string>
+    <string name="game_mode_keys_pass">Клавиши попадают в игру как есть: назначьте их в управлении игры. Игра только с сенсорным управлением: разместите клавиши на её кнопках из уведомления игрового режима.</string>
+    <string name="game_mode_keys_pass_app">Клавиши попадают в %1$s как есть: назначьте их один раз в его настройках контроллера. Клавиши, размещённые на экране из уведомления игрового режима, нажимают туда.</string>
     <string name="root_shell_title">Использовать root</string>
     <string name="root_shell_description">На телефоне с root: команды оболочки выполняются через su вместо встроенной оболочки или Shizuku, готовы при запуске без сопряжения и Wi-Fi, а игровой режим может быть настоящим контроллером.</string>
     <string name="root_shell_denied">Root не предоставлен: используется встроенная оболочка или Shizuku.</string>
@@ -1818,4 +1817,7 @@
     <string name="game_mode_own_settings_short">Свои настройки</string>
     <string name="game_mode_app_settings_short">Настройки %1$s</string>
     <string name="game_mode_folders_section">Папки игр</string>
+    <string name="game_mode_place_keys">Разместить клавиши на экране</string>
+    <string name="game_mode_add_key">Добавить клавишу</string>
+    <string name="game_mode_press_key">Нажмите клавишу, которую нужно разместить.</string>
 </resources>

@@ -1721,7 +1721,7 @@
     <string name="game_mode_remove">Retirer</string>
     <string name="game_mode_right_half">Moitié droite du pavé tactile</string>
     <string name="game_mode_save">Enregistrer</string>
-    <string name="game_mode_switch_description">Dans les applis avec un profil de jeu, les touches arrivent au jeu telles quelles et le pavé tactile déplace ses sticks.</string>
+    <string name="game_mode_switch_description">Dans les apps avec un profil de jeu, les touches arrivent au jeu telles quelles ou appuient sur ses boutons à l\'écran, et le pavé tactile bouge ses sticks.</string>
     <string name="game_mode_title">Mode jeu</string>
     <string name="pages_start_description">Cochée, une couche s\'ouvre sur vos récents. Décochée, elle s\'ouvre sur sa page par défaut (la sélection du développeur, jusqu\'à ce que vous la changiez avec le crayon en bas à gauche), vos récents une page avant, sur Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1756,7 +1756,7 @@
     <string name="sym_start_most_popular">Commencer par les plus populaires</string>
     <string name="game_mode_gamenative_save">Configurer GameNative</string>
     <string name="game_mode_gamenative_save_description">Les jeux de GameNative ne prennent un stick que d\'une vraie manette ou de sa manette à l\'écran, donc le pavé tactile déplace les sticks à l\'écran, invisibles.</string>
-    <string name="game_mode_place_hint">Faites glisser chaque cercle de stick sur le stick du jeu.</string>
+    <string name="game_mode_place_hint">Faites glisser chaque touche sur le bouton du jeu, et chaque cercle de stick sur son stick. Ajoutez une touche, puis appuyez dessus.</string>
     <string name="game_mode_place_overlay_needed">Autorisez Flux Keyboard à s\'afficher par-dessus les autres applis, puis réessayez.</string>
     <string name="game_mode_place_clear">Effacer</string>
     <string name="game_mode_left_stick">Stick gauche</string>
@@ -1794,9 +1794,8 @@
     <string name="shell_elsewhere_otp">L\'accès shell permet de lire les codes des notifications qu\'Android cache aux applis (Android 15 et versions ultérieures).</string>
     <string name="shell_shortcuts_launcher">Ou placez-les sur des touches pressées sur l\'écran d\'accueil.</string>
     <string name="shell_shortcuts_nav">Ou sur des touches Ctrl en mode navigation.</string>
-    <string name="game_mode_place_sticks">Placer les sticks à l\'écran</string>
-    <string name="game_mode_keys_pass">Les touches arrivent au jeu telles quelles : attribuez-les dans les commandes du jeu.</string>
-    <string name="game_mode_keys_pass_app">Les touches arrivent à %1$s telles quelles : attribuez-les une fois dans ses propres réglages de manette.</string>
+    <string name="game_mode_keys_pass">Les touches arrivent au jeu telles quelles : associez-les dans les commandes du jeu. Un jeu uniquement tactile : placez des touches sur ses boutons depuis la notification du mode jeu.</string>
+    <string name="game_mode_keys_pass_app">Les touches arrivent à %1$s telles quelles : associez-les une fois dans ses réglages de manette. Les touches placées à l\'écran depuis la notification du mode jeu y appuient à la place.</string>
     <string name="root_shell_title">Utiliser le root</string>
     <string name="root_shell_description">Sur un téléphone rooté : les commandes shell passent par su au lieu du shell intégré ou de Shizuku, prêtes au démarrage sans appairage ni Wi-Fi, et le mode jeu peut être une vraie manette.</string>
     <string name="root_shell_denied">Le root n\'a pas été accordé : le shell intégré ou Shizuku est utilisé.</string>
@@ -1812,4 +1811,7 @@
     <string name="game_mode_own_settings_short">Réglages propres</string>
     <string name="game_mode_app_settings_short">Réglages de %1$s</string>
     <string name="game_mode_folders_section">Dossiers de jeux</string>
+    <string name="game_mode_place_keys">Placer les touches à l\'écran</string>
+    <string name="game_mode_add_key">Ajouter une touche</string>
+    <string name="game_mode_press_key">Appuyez sur la touche à placer.</string>
 </resources>

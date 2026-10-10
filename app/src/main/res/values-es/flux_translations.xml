@@ -1721,7 +1721,7 @@
     <string name="game_mode_remove">Quitar</string>
     <string name="game_mode_right_half">Mitad derecha del trackpad</string>
     <string name="game_mode_save">Guardar</string>
-    <string name="game_mode_switch_description">En las apps con un perfil de juego, las teclas llegan al juego tal cual y el trackpad mueve sus sticks.</string>
+    <string name="game_mode_switch_description">En apps con perfil de juego, las teclas llegan al juego tal cual o tocan sus botones en pantalla, y el trackpad mueve sus sticks.</string>
     <string name="game_mode_title">Modo juego</string>
     <string name="pages_start_description">Marcada, una capa se abre en tus recientes. Sin marcar, se abre en su página predeterminada (selección del desarrollador hasta que la cambies con el lápiz de la esquina inferior izquierda), con tus recientes una página atrás en Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1756,7 +1756,7 @@
     <string name="sym_start_most_popular">Empezar con los más populares</string>
     <string name="game_mode_gamenative_save">Configurar GameNative</string>
     <string name="game_mode_gamenative_save_description">Los juegos de GameNative solo aceptan un stick de un mando real o de su mando en pantalla, así que el trackpad mueve los sticks en pantalla, sin que se vean.</string>
-    <string name="game_mode_place_hint">Arrastra cada círculo de stick sobre el stick del juego.</string>
+    <string name="game_mode_place_hint">Arrastra cada tecla sobre el botón del juego y cada círculo de stick sobre su stick. Añade una tecla y púlsala.</string>
     <string name="game_mode_place_overlay_needed">Permite que Flux Keyboard se muestre sobre otras apps y vuelve a intentarlo.</string>
     <string name="game_mode_place_clear">Borrar</string>
     <string name="game_mode_left_stick">Stick izquierdo</string>
@@ -1794,9 +1794,8 @@
     <string name="shell_elsewhere_otp">El acceso al shell permite leer códigos de notificaciones que Android oculta a las apps (Android 15 y posteriores).</string>
     <string name="shell_shortcuts_launcher">O ponlos en teclas pulsadas en la pantalla de inicio.</string>
     <string name="shell_shortcuts_nav">O en teclas Ctrl en el modo navegación.</string>
-    <string name="game_mode_place_sticks">Colocar sticks en pantalla</string>
-    <string name="game_mode_keys_pass">Las teclas llegan al juego tal cual: asígnalas en los controles del propio juego.</string>
-    <string name="game_mode_keys_pass_app">Las teclas llegan a %1$s tal cual: asígnalas una vez en sus propios ajustes de mando.</string>
+    <string name="game_mode_keys_pass">Las teclas llegan al juego tal cual: asígnalas en los controles del juego. Si un juego solo tiene controles táctiles, coloca teclas sobre sus botones desde la notificación del modo juego.</string>
+    <string name="game_mode_keys_pass_app">Las teclas llegan a %1$s tal cual: asígnalas una vez en sus ajustes de mando. Las teclas colocadas en pantalla desde la notificación del modo juego tocan allí.</string>
     <string name="root_shell_title">Usar root</string>
     <string name="root_shell_description">En un teléfono con root: los comandos de shell se ejecutan con su en lugar del shell integrado o Shizuku, listos al arrancar sin emparejar ni Wi-Fi, y el modo juego puede ser un mando real.</string>
     <string name="root_shell_denied">No se concedió root: se usa el shell integrado o Shizuku.</string>
@@ -1812,4 +1811,7 @@
     <string name="game_mode_own_settings_short">Ajustes propios</string>
     <string name="game_mode_app_settings_short">Ajustes de %1$s</string>
     <string name="game_mode_folders_section">Carpetas de juegos</string>
+    <string name="game_mode_place_keys">Colocar teclas en pantalla</string>
+    <string name="game_mode_add_key">Añadir tecla</string>
+    <string name="game_mode_press_key">Pulsa la tecla que quieres colocar.</string>
 </resources>

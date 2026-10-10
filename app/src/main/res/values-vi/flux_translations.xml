@@ -1709,7 +1709,7 @@
     <string name="game_mode_remove">Bỏ</string>
     <string name="game_mode_right_half">Nửa phải bàn di chuột</string>
     <string name="game_mode_save">Lưu</string>
-    <string name="game_mode_switch_description">Trong các ứng dụng có hồ sơ game, phím đến game nguyên vẹn và bàn di chuột di chuyển cần analog.</string>
+    <string name="game_mode_switch_description">Trong ứng dụng có hồ sơ game, phím đến game nguyên trạng hoặc chạm vào nút trên màn hình của nó, và trackpad di chuyển cần analog.</string>
     <string name="game_mode_title">Chế độ chơi game</string>
     <string name="pages_start_description">Khi đánh dấu, một lớp mở ở mục gần đây. Khi bỏ đánh dấu, lớp mở ở trang mặc định (lựa chọn của nhà phát triển, cho đến khi bạn đổi bằng bút chì ở góc dưới bên trái), mục gần đây ở trang trước, trên Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1744,7 +1744,7 @@
     <string name="sym_start_most_popular">Bắt đầu với những mục phổ biến nhất</string>
     <string name="game_mode_gamenative_save">Thiết lập GameNative</string>
     <string name="game_mode_gamenative_save_description">Game của GameNative chỉ nhận cần analog từ tay cầm thật hoặc tay cầm trên màn hình của nó, nên bàn di chuột di chuyển các cần trên màn hình, không hiện ra.</string>
-    <string name="game_mode_place_hint">Kéo mỗi vòng tròn cần analog lên cần analog của game.</string>
+    <string name="game_mode_place_hint">Kéo mỗi phím lên nút của game, và mỗi vòng tròn cần analog lên cần analog của nó. Thêm phím rồi nhấn phím đó.</string>
     <string name="game_mode_place_overlay_needed">Hãy cho phép Flux Keyboard hiển thị trên ứng dụng khác rồi thử lại.</string>
     <string name="game_mode_place_clear">Xóa</string>
     <string name="game_mode_left_stick">Cần trái</string>
@@ -1782,9 +1782,8 @@
     <string name="shell_elsewhere_otp">Quyền truy cập shell cho phép đọc mã từ thông báo mà Android ẩn khỏi ứng dụng (Android 15 trở lên).</string>
     <string name="shell_shortcuts_launcher">Hoặc gán chúng cho phím nhấn trên màn hình chính.</string>
     <string name="shell_shortcuts_nav">Hoặc cho phím Ctrl trong chế độ điều hướng.</string>
-    <string name="game_mode_place_sticks">Đặt cần analog trên màn hình</string>
-    <string name="game_mode_keys_pass">Phím đến game nguyên vẹn: gán chúng trong điều khiển của game.</string>
-    <string name="game_mode_keys_pass_app">Phím đến %1$s nguyên vẹn: gán chúng một lần trong cài đặt tay cầm của nó.</string>
+    <string name="game_mode_keys_pass">Phím đến game nguyên trạng: gán chúng trong phần điều khiển của game. Game chỉ có điều khiển cảm ứng: đặt phím lên các nút của nó từ thông báo của chế độ chơi game.</string>
+    <string name="game_mode_keys_pass_app">Phím đến %1$s nguyên trạng: gán chúng một lần trong cài đặt tay cầm của nó. Phím đặt trên màn hình từ thông báo của chế độ chơi game sẽ chạm vào đó.</string>
     <string name="root_shell_title">Dùng root</string>
     <string name="root_shell_description">Trên điện thoại đã root: lệnh shell chạy qua su thay vì shell tích hợp hoặc Shizuku, sẵn sàng khi khởi động mà không cần ghép nối hay Wi-Fi, và chế độ chơi game có thể là một tay cầm thật.</string>
     <string name="root_shell_denied">Không được cấp root: dùng shell tích hợp hoặc Shizuku thay thế.</string>
@@ -1800,4 +1799,7 @@
     <string name="game_mode_own_settings_short">Cài đặt riêng</string>
     <string name="game_mode_app_settings_short">Cài đặt của %1$s</string>
     <string name="game_mode_folders_section">Thư mục game</string>
+    <string name="game_mode_place_keys">Đặt phím trên màn hình</string>
+    <string name="game_mode_add_key">Thêm phím</string>
+    <string name="game_mode_press_key">Nhấn phím cần đặt.</string>
 </resources>

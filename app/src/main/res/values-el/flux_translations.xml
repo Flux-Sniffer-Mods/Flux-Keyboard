@@ -1089,7 +1089,7 @@
     <string name="game_mode_remove">Αφαίρεση</string>
     <string name="game_mode_right_half">Δεξί μισό του trackpad</string>
     <string name="game_mode_save">Αποθήκευση</string>
-    <string name="game_mode_switch_description">Σε εφαρμογές με προφίλ παιχνιδιού, τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι και το trackpad κινεί τους μοχλούς του.</string>
+    <string name="game_mode_switch_description">Σε εφαρμογές με προφίλ παιχνιδιού, τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι ή πατούν τα κουμπιά οθόνης του, και το trackpad κινεί τους μοχλούς του.</string>
     <string name="game_mode_title">Λειτουργία παιχνιδιού</string>
     <string name="pages_start_description">Επιλεγμένο: ένα επίπεδο ανοίγει στα πρόσφατα. Χωρίς επιλογή: ανοίγει στην προεπιλεγμένη σελίδα του (η επιλογή του προγραμματιστή, μέχρι να την αλλάξετε με το μολύβι κάτω αριστερά), με τα πρόσφατα μία σελίδα πίσω, στο Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1124,7 +1124,7 @@
     <string name="sym_start_most_popular">Έναρξη από τα πιο δημοφιλή</string>
     <string name="game_mode_gamenative_save">Ρύθμιση του GameNative</string>
     <string name="game_mode_gamenative_save_description">Τα παιχνίδια του GameNative δέχονται μοχλό μόνο από πραγματικό χειριστήριο ή από το χειριστήριο οθόνης του, οπότε το trackpad κινεί τους μοχλούς της οθόνης, αόρατα.</string>
-    <string name="game_mode_place_hint">Σύρετε κάθε κύκλο μοχλού πάνω στον μοχλό του παιχνιδιού.</string>
+    <string name="game_mode_place_hint">Σύρετε κάθε πλήκτρο πάνω στο κουμπί του παιχνιδιού και κάθε κύκλο μοχλού πάνω στον μοχλό του. Προσθέστε πλήκτρο και μετά πατήστε το.</string>
     <string name="game_mode_place_overlay_needed">Επιτρέψτε στο Flux Keyboard να εμφανίζεται πάνω από άλλες εφαρμογές και δοκιμάστε ξανά.</string>
     <string name="game_mode_place_clear">Εκκαθάριση</string>
     <string name="game_mode_left_stick">Αριστερός μοχλός</string>
@@ -1162,9 +1162,8 @@
     <string name="shell_elsewhere_otp">Η πρόσβαση shell επιτρέπει την ανάγνωση κωδικών από ειδοποιήσεις που το Android κρύβει από τις εφαρμογές (Android 15 και νεότερα).</string>
     <string name="shell_shortcuts_launcher">Ή βάλτε τις σε πλήκτρα που πατιούνται στην αρχική οθόνη.</string>
     <string name="shell_shortcuts_nav">Ή σε πλήκτρα Ctrl στη λειτουργία πλοήγησης.</string>
-    <string name="game_mode_place_sticks">Τοποθέτηση μοχλών στην οθόνη</string>
-    <string name="game_mode_keys_pass">Τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι: αντιστοιχίστε τα στα χειριστήρια του παιχνιδιού.</string>
-    <string name="game_mode_keys_pass_app">Τα πλήκτρα φτάνουν στο %1$s όπως είναι: αντιστοιχίστε τα μία φορά στις δικές του ρυθμίσεις χειριστηρίου.</string>
+    <string name="game_mode_keys_pass">Τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι: αντιστοιχίστε τα στα χειριστήρια του παιχνιδιού. Παιχνίδι μόνο με χειριστήρια αφής: τοποθετήστε πλήκτρα στα κουμπιά του από την ειδοποίηση της λειτουργίας παιχνιδιού.</string>
+    <string name="game_mode_keys_pass_app">Τα πλήκτρα φτάνουν στο %1$s όπως είναι: αντιστοιχίστε τα μία φορά στις ρυθμίσεις χειριστηρίου του. Πλήκτρα που τοποθετήθηκαν στην οθόνη από την ειδοποίηση πατούν εκεί.</string>
     <string name="root_shell_title">Χρήση root</string>
     <string name="root_shell_description">Σε τηλέφωνο με root: οι εντολές shell εκτελούνται μέσω su αντί για το ενσωματωμένο shell ή το Shizuku, έτοιμες στην εκκίνηση χωρίς σύζευξη ή Wi-Fi, και η λειτουργία παιχνιδιού μπορεί να είναι πραγματικό χειριστήριο.</string>
     <string name="root_shell_denied">Δεν δόθηκε root: χρησιμοποιείται το ενσωματωμένο shell ή το Shizuku.</string>
@@ -1180,4 +1179,7 @@
     <string name="game_mode_own_settings_short">Δικές του ρυθμίσεις</string>
     <string name="game_mode_app_settings_short">Ρυθμίσεις του %1$s</string>
     <string name="game_mode_folders_section">Φάκελοι παιχνιδιών</string>
+    <string name="game_mode_place_keys">Τοποθέτηση πλήκτρων στην οθόνη</string>
+    <string name="game_mode_add_key">Προσθήκη πλήκτρου</string>
+    <string name="game_mode_press_key">Πατήστε το πλήκτρο που θα τοποθετήσετε.</string>
 </resources>

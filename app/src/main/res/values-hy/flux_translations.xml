@@ -1715,7 +1715,7 @@
     <string name="game_mode_remove">Հեռացնել</string>
     <string name="game_mode_right_half">Թաչփեդի աջ կեսը</string>
     <string name="game_mode_save">Պահել</string>
-    <string name="game_mode_switch_description">Խաղի պրոֆիլ ունեցող հավելվածներում ստեղները հասնում են խաղին այնպես, ինչպես կան, իսկ թաչփադը շարժում է դրա լծակները։</string>
+    <string name="game_mode_switch_description">Խաղի պրոֆիլ ունեցող հավելվածներում ստեղները խաղին հասնում են այնպես, ինչպես կան կամ հպում են նրա էկրանային կոճակներին, իսկ թաչփադը շարժում է լծակները։</string>
     <string name="game_mode_title">Խաղային ռեժիմ</string>
     <string name="pages_start_description">Նշված՝ շերտը բացվում է վերջինների վրա։ Չնշված՝ բացվում է իր լռելյայն էջում (մշակողի ընտրությունը, մինչև այն փոխեք ներքևի ձախ անկյան մատիտով), իսկ վերջինները մեկ էջ ետ են՝ Q-ի վրա։</string>
     <string name="pages_start_kaomoji">Կաոմոջի</string>
@@ -1750,7 +1750,7 @@
     <string name="sym_start_most_popular">Սկսել ամենահայտնիներից</string>
     <string name="game_mode_gamenative_save">Կարգավորել GameNative-ը</string>
     <string name="game_mode_gamenative_save_description">GameNative-ի խաղերը լծակ են ընդունում միայն իրական կարգավորիչից կամ դրա էկրանային կարգավորիչից, ուստի թաչփադը շարժում է էկրանային լծակները՝ անտեսանելի։</string>
-    <string name="game_mode_place_hint">Քաշեք լծակի յուրաքանչյուր շրջանակը խաղի լծակի վրա։</string>
+    <string name="game_mode_place_hint">Քաշեք յուրաքանչյուր ստեղն խաղի կոճակի վրա, և լծակի յուրաքանչյուր շրջանակը՝ իր լծակի վրա։ Ավելացրեք ստեղն, ապա սեղմեք այն։</string>
     <string name="game_mode_place_overlay_needed">Թույլատրեք Flux Keyboard-ին ցուցադրվել այլ հավելվածների վրա և նորից փորձեք։</string>
     <string name="game_mode_place_clear">Մաքրել</string>
     <string name="game_mode_left_stick">Ձախ լծակ</string>
@@ -1788,9 +1788,8 @@
     <string name="shell_elsewhere_otp">Shell մուտքը թույլ է տալիս կոդեր կարդալ ծանուցումներից, որոնք Android-ը թաքցնում է հավելվածներից (Android 15 և ավելի նոր)։</string>
     <string name="shell_shortcuts_launcher">Կամ դրեք դրանք գլխավոր էկրանին սեղմվող ստեղների վրա։</string>
     <string name="shell_shortcuts_nav">Կամ Ctrl ստեղների վրա Նավիգացիոն ռեժիմում։</string>
-    <string name="game_mode_place_sticks">Տեղադրել լծակները էկրանին</string>
-    <string name="game_mode_keys_pass">Ստեղները հասնում են խաղին այնպես, ինչպես կան․ նշանակեք դրանք խաղի սեփական կառավարներում։</string>
-    <string name="game_mode_keys_pass_app">Ստեղները հասնում են %1$s-ին այնպես, ինչպես կան․ նշանակեք դրանք մեկ անգամ նրա սեփական կարգավորիչի կարգավորումներում։</string>
+    <string name="game_mode_keys_pass">Ստեղները խաղին հասնում են այնպես, ինչպես կան. կարգավորեք դրանք խաղի կառավարման մեջ։ Միայն հպումային կառավարմամբ խաղի համար ստեղները տեղադրեք նրա կոճակների վրա խաղային ռեժիմի ծանուցումից։</string>
+    <string name="game_mode_keys_pass_app">Ստեղները %1$s-ին հասնում են այնպես, ինչպես կան. մեկ անգամ կարգավորեք դրանք նրա կարգավորիչի կարգավորումներում։ Խաղային ռեժիմի ծանուցումից էկրանին տեղադրված ստեղները հպում են այնտեղ։</string>
     <string name="root_shell_title">Օգտագործել root</string>
     <string name="root_shell_description">Root ունեցող հեռախոսում․ shell հրամանները գործարկվում են su-ի միջոցով՝ ներկառուցված shell-ի կամ Shizuku-ի փոխարեն, պատրաստ են մեկնարկին առանց զուգավորման կամ Wi-Fi-ի, և խաղային ռեժիմը կարող է լինել իրական կարգավորիչ։</string>
     <string name="root_shell_denied">Root չտրամադրվեց․ օգտագործվում է ներկառուցված shell-ը կամ Shizuku-ն։</string>
@@ -1806,4 +1805,7 @@
     <string name="game_mode_own_settings_short">Սեփական կարգավորումներ</string>
     <string name="game_mode_app_settings_short">%1$s-ի կարգավորումներ</string>
     <string name="game_mode_folders_section">Խաղերի թղթապանակներ</string>
+    <string name="game_mode_place_keys">Տեղադրել ստեղները էկրանին</string>
+    <string name="game_mode_add_key">Ավելացնել ստեղն</string>
+    <string name="game_mode_press_key">Սեղմեք տեղադրվող ստեղնը։</string>
 </resources>

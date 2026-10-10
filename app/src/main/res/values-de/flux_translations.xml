@@ -1180,7 +1180,7 @@
     <string name="game_mode_remove">Entfernen</string>
     <string name="game_mode_right_half">Trackpad rechte Hälfte</string>
     <string name="game_mode_save">Speichern</string>
-    <string name="game_mode_switch_description">In Apps mit einem Spielprofil erreichen Tasten das Spiel unverändert, und das Trackpad bewegt seine Sticks.</string>
+    <string name="game_mode_switch_description">In Apps mit Spielprofil erreichen Tasten das Spiel unverändert oder tippen auf seine Bildschirmtasten, und das Trackpad bewegt seine Sticks.</string>
     <string name="game_mode_title">Spielmodus</string>
     <string name="pages_start_description">Angehakt öffnet eine Ebene mit deinen zuletzt verwendeten. Ohne Haken öffnet sie auf ihrer Standardseite (Auswahl des Entwicklers, bis du sie mit dem Stift unten links änderst), die zuletzt verwendeten eine Seite zurück auf Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1215,7 +1215,7 @@
     <string name="sym_start_most_popular">Mit den beliebtesten beginnen</string>
     <string name="game_mode_gamenative_save">GameNative einrichten</string>
     <string name="game_mode_gamenative_save_description">GameNatives Spiele nehmen einen Stick nur von einem echten Controller oder seinem Bildschirm-Controller an, daher bewegt das Trackpad die Bildschirm-Sticks, unsichtbar.</string>
-    <string name="game_mode_place_hint">Zieh jeden Stick-Kreis auf den Stick des Spiels.</string>
+    <string name="game_mode_place_hint">Zieh jede Taste auf die Schaltfläche des Spiels und jeden Stick-Kreis auf seinen Stick. Taste hinzufügen, dann drücken.</string>
     <string name="game_mode_place_overlay_needed">Erlaube Flux Keyboard, über anderen Apps einzublenden, und versuche es erneut.</string>
     <string name="game_mode_place_clear">Leeren</string>
     <string name="game_mode_left_stick">Linker Stick</string>
@@ -1253,9 +1253,8 @@
     <string name="shell_elsewhere_otp">Mit Shell-Zugriff lassen sich Codes aus Benachrichtigungen lesen, die Android vor Apps verbirgt (Android 15 und neuer).</string>
     <string name="shell_shortcuts_launcher">Oder lege sie auf Tasten, die auf dem Startbildschirm gedrückt werden.</string>
     <string name="shell_shortcuts_nav">Oder auf Strg-Tasten im Nav-Modus.</string>
-    <string name="game_mode_place_sticks">Sticks auf dem Bildschirm platzieren</string>
-    <string name="game_mode_keys_pass">Tasten erreichen das Spiel unverändert: Belege sie in der Steuerung des Spiels.</string>
-    <string name="game_mode_keys_pass_app">Tasten erreichen %1$s unverändert: Belege sie einmal in dessen eigenen Controller-Einstellungen.</string>
+    <string name="game_mode_keys_pass">Tasten erreichen das Spiel unverändert: Belege sie in der Steuerung des Spiels. Hat ein Spiel nur Touch-Steuerung, platziere Tasten über die Benachrichtigung des Spielmodus auf seinen Schaltflächen.</string>
+    <string name="game_mode_keys_pass_app">Tasten erreichen %1$s unverändert: Belege sie einmal in dessen Controller-Einstellungen. Über die Benachrichtigung des Spielmodus platzierte Tasten tippen stattdessen dort.</string>
     <string name="root_shell_title">Root verwenden</string>
     <string name="root_shell_description">Auf einem gerooteten Telefon: Shell-Befehle laufen über su statt über die eingebaute Shell oder Shizuku, bereit beim Start ohne Kopplung oder WLAN, und der Spielmodus kann ein echter Controller sein.</string>
     <string name="root_shell_denied">Root wurde nicht gewährt: Stattdessen wird die eingebaute Shell oder Shizuku verwendet.</string>
@@ -1271,4 +1270,7 @@
     <string name="game_mode_own_settings_short">Eigene Einstellungen</string>
     <string name="game_mode_app_settings_short">Einstellungen von %1$s</string>
     <string name="game_mode_folders_section">Spielordner</string>
+    <string name="game_mode_place_keys">Tasten auf dem Bildschirm platzieren</string>
+    <string name="game_mode_add_key">Taste hinzufügen</string>
+    <string name="game_mode_press_key">Drück die Taste, die du platzieren willst.</string>
 </resources>
