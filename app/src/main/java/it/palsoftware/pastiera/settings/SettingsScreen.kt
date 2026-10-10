@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Shield
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.*
@@ -558,6 +559,14 @@ private fun SettingsMainScreen(
                         },
                         linkId = SettingLinkIds.MAIN_ADVANCED,
                         onClick = { onNavigate(SettingsDestination.Advanced) }
+                    )
+                    // The built-in shell (or Shizuku): many features need it, so it has a row of its own
+                    SettingsCategoryRow(
+                        icon = Icons.Filled.Code,
+                        title = stringResource(R.string.root_title),
+                        description = stringResource(R.string.root_row_description),
+                        linkId = "main.root",
+                        onClick = { onNavigate(SettingsDestination.Root) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
