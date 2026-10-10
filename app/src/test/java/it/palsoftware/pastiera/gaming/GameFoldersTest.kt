@@ -53,4 +53,18 @@ class GameFoldersTest {
         val found = GameFolders.parse(listing)
         assertEquals(listOf("Stray" to "steam", "Hades" to "ghl"), found.map { it.name to it.path.substringAfterLast('.') })
     }
+
+    @Test
+    fun gameHubsGamesAreItsOwnInFoldersOfTheirOwnAndWithoutAnId() {
+        val listing = listOf(
+            "$root/GameHub/steam/Hollow Knight.steam\t367520",
+            "$root/GameHub/Celeste.local\t",
+            "$root/GameNative/Empty.steam\t"
+        ).joinToString("\n")
+        val found = GameFolders.parse(listing)
+        assertEquals(
+            listOf("Hollow Knight" to GameFolders.Player.GAMEHUB, "Celeste" to GameFolders.Player.GAMEHUB),
+            found.map { it.name to it.player }
+        )
+    }
 }

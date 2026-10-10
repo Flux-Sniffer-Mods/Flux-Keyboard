@@ -45,9 +45,20 @@ object GameFolders {
             setOf("nsp", "xci", "nca", "nro", "nso"),
             listOf("dev.eden.eden_emulator", "dev.legacy.eden_emulator").map { it to "org.yuzu.yuzu_emu.activities.EmulationActivity" });
 
-        /** The installed app that plays these, if any. */
-        fun installed(context: Context): Pair<String, String>? = activities.firstOrNull { (pkg, _) ->
-            runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
+        /**
+         * The installed app that plays these, if any. A launcher installed under a package of its
+         * own (a fork or another build) is found by its name, as the launchers list finds it.
+         */
+        fun installed(context: Context): Pair<String, String>? {
+            val pm = context.packageManager
+            activities.firstOrNull { (pkg, _) -> runCatching { pm.getPackageInfo(pkg, 0) }.isSuccess }?.let { return it }
+            if (this != GAMENATIVE && this != GAMEHUB) return null
+            val key = label.lowercase()
+            val app = GameLibrary.launchers(context).firstOrNull { it.appName.lowercase().replace(" ", "").contains(key) } ?: return null
+            val activity = activities.map { it.second }.firstOrNull { name ->
+                runCatching { pm.getActivityInfo(ComponentName(app.packageName, name), 0) }.isSuccess
+            } ?: pm.getLaunchIntentForPackage(app.packageName)?.component?.className ?: return null
+            return app.packageName to activity
         }
     }
 
@@ -135,8 +146,12 @@ object GameFolders {
     internal fun parse(listing: String, custom: List<Custom> = emptyList()): List<Found> = listing.lines().mapNotNull { line ->
         val path = line.substringBefore('\t').trim().takeIf { it.isNotEmpty() } ?: return@mapNotNull null
         val content = line.substringAfter('\t', "").trim()
-        // The folder it's in, or one above it (games kept in folders of their own)
-        val folders = path.split('/').dropLast(1).map { it.lowercase() }.reversed()
+        // In Flux Keyboard's and ES-DE's folders, the folder right under them (an export may make
+        // folders of its own inside, such as "steam" in GameHub's); elsewhere the folder it's in,
+        // or one above it (games kept in folders of their own)
+        val top = listOf(ROOT, ES_DE_ROMS).firstOrNull { path.startsWith("$it/") }
+            ?.let { root -> path.removePrefix("$root/").substringBefore('/').lowercase() }
+        val folders = listOfNotNull(top) + path.split('/').dropLast(1).map { it.lowercase() }.reversed()
         val file = path.substringAfterLast('/')
         val extension = file.substringAfterLast('.', "").lowercase()
         // In a folder of your own set to a player: that player's games, whatever the folders are called
@@ -148,8 +163,9 @@ object GameFolders {
         val player = assigned?.takeIf { takes(it) } ?: folders.firstNotNullOfOrNull { folder ->
             Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && takes(p) }
         } ?: return@mapNotNull null
-        // An export file holds a game ID: without one there's nothing to start
-        if ((player == Player.GAMENATIVE || player == Player.GAMEHUB) && content.isEmpty()) return@mapNotNull null
+        // An export file holds a game ID: without one GameNative has nothing to start (GameHub's
+        // games are still listed, and open GameHub)
+        if (player == Player.GAMENATIVE && content.isEmpty()) return@mapNotNull null
         Found(file.substringBeforeLast('.'), player, path, content)
     }.distinctBy { it.path }
         // A game exported more than once (GameNative writes a .steam and a .pcgame for the same
