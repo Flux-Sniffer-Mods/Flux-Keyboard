@@ -1706,27 +1706,23 @@
     <string name="flux_tutorial_shell_title">Shell integrado (recomendado)</string>
     <string name="game_mode_add">Añadir un perfil</string>
     <string name="game_mode_add_app">Añadir una app</string>
-    <string name="game_mode_add_description">Elige la app para la que es; sus teclas empiezan como un mando.</string>
+    <string name="game_mode_add_description">Elige la app; el trackpad empieza como sus sticks.</string>
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_delete">Eliminar perfil</string>
     <string name="game_mode_import">Añadir un juego de un lanzador de juegos</string>
     <string name="game_mode_import_description">Los juegos que GameNative, GameHub o GameHub Lite tienen en la pantalla de inicio, en sus accesos directos o instalados en su carpeta de Steam, cada uno con su propio perfil. Cambia entre los juegos de un lanzador desde la notificación del modo juego, o dale a cada uno su propio acceso directo.</string>
     <string name="game_mode_import_none">No se encontraron juegos. Añade uno a la pantalla de inicio desde su lanzador, o añade el propio lanzador como perfil.</string>
     <string name="game_mode_import_reading">Leyendo los juegos</string>
-    <string name="game_mode_key_as_is">Tal cual</string>
-    <string name="game_mode_keys">Teclas</string>
-    <string name="game_mode_keys_note">Cambiar el estilo devuelve las teclas a sus valores predeterminados.</string>
     <string name="game_mode_left_half">Mitad izquierda del trackpad</string>
     <string name="game_mode_next_profile">Siguiente perfil</string>
     <string name="game_mode_no_apps">aún sin apps</string>
-    <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas que no reasignes llegan al juego tal cual, y escribir en un campo de texto del juego funciona como siempre. El trackpad lee un dedo a la vez, así que se mueve un stick cada vez.</string>
+    <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas llegan al juego tal cual: asígnalas en los ajustes de mando del emulador o del lanzador. Escribir en un campo de texto del juego funciona como siempre. El trackpad lee un dedo cada vez, así que se mueve un stick cada vez.</string>
     <string name="game_mode_profile_name">Nombre</string>
     <string name="game_mode_profiles">Perfiles de juego</string>
     <string name="game_mode_remove">Quitar</string>
     <string name="game_mode_right_half">Mitad derecha del trackpad</string>
     <string name="game_mode_save">Guardar</string>
-    <string name="game_mode_style">Estilo</string>
-    <string name="game_mode_switch_description">En las apps con un perfil de juego, las teclas y el trackpad juegan: botones y sticks de mando, o teclas y un ratón.</string>
+    <string name="game_mode_switch_description">En las apps con un perfil de juego, las teclas llegan al juego tal cual y el trackpad mueve sus sticks.</string>
     <string name="game_mode_title">Modo juego</string>
     <string name="pages_start_description">Marcada, una capa se abre en tus recientes. Sin marcar, se abre en su página predeterminada (selección del desarrollador hasta que la cambies con el lápiz de la esquina inferior izquierda), con tus recientes una página atrás en Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1759,23 +1755,17 @@
     <string name="trackpad_shizuku_fallback_title">Deslizamientos de Android mientras Shizuku está apagado</string>
     <string name="sym_start_from_recents">Empezar con mis recientes</string>
     <string name="sym_start_most_popular">Empezar con los más populares</string>
-    <string name="game_mode_add_key">Añadir una tecla</string>
-    <string name="game_mode_press_key">Pulsa la tecla o el botón. El botón de encendido no sirve: Android lo reserva para sí.</string>
     <string name="game_mode_gamenative_save">Configurar GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative solo acepta mandos reales, así que el modo juego pulsa su propio mando en pantalla por tus teclas, sin que se vea.</string>
-    <string name="game_mode_place_keys">Colocar teclas en pantalla</string>
-    <string name="game_mode_place_hint">Arrastra cada tecla sobre el botón del juego y cada círculo de stick sobre su stick. Añade una tecla y luego púlsala.</string>
+    <string name="game_mode_gamenative_save_description">Los juegos de GameNative solo aceptan un stick de un mando real o de su mando en pantalla, así que el trackpad mueve los sticks en pantalla, sin que se vean.</string>
+    <string name="game_mode_place_hint">Arrastra cada círculo de stick sobre el stick del juego.</string>
     <string name="game_mode_place_overlay_needed">Permite que Flux Keyboard se muestre sobre otras apps y vuelve a intentarlo.</string>
     <string name="game_mode_place_clear">Borrar</string>
     <string name="game_mode_left_stick">Stick izquierdo</string>
     <string name="game_mode_right_stick">Stick derecho</string>
     <string name="game_mode_gamenative_open">Abrir GameNative</string>
-    <string name="game_mode_gamenative_steps">En GameNative, una vez por juego:\n1. Inicia el juego y abre su menú (Atrás).\n2. Activa el On-screen Controller, con su diseño predeterminado.\n3. Pon Control Opacity en 0.\n\nTus teclas pulsan entonces sus botones y el trackpad mueve sus sticks. En las pantallas propias de GameNative las teclas funcionan como un mando.\n\nPara jugar con el teléfono en vertical, activa Portrait Mode en los ajustes del juego, General.</string>
+    <string name="game_mode_gamenative_steps">En GameNative, una vez por juego:\n1. Inicia el juego y abre su menú (Atrás).\n2. Activa el On-screen Controller, con su diseño predeterminado.\n3. Pon Control Opacity en 0.\n\nEl trackpad mueve entonces sus sticks. Tus teclas llegan al juego como un teclado: asígnalas en los controles del propio juego.\n\nPara jugar con el teléfono en vertical, activa Portrait Mode en los ajustes del juego, General.</string>
     <string name="game_mode_home_screen">Añadir a la pantalla de inicio</string>
     <string name="game_mode_home_screen_failed">La pantalla de inicio no acepta accesos directos.</string>
-    <string name="game_mode_use_emulator_controls">Usar los controles en pantalla de %1$s</string>
-    <string name="game_mode_emulator_applied">Teclas y sticks puestos en los controles en pantalla del emulador. Ajústalos con Colocar teclas en pantalla si moviste alguno.</string>
-    <string name="game_mode_emulator_unreadable">Sus controles aún no se conocen: abre un juego en él una vez con la pantalla en vertical y sus controles en pantalla visibles, y vuelve a intentarlo.</string>
     <string name="game_mode_folders">Crear las carpetas de juegos</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, con una carpeta para GameNative, GameHub, Dolphin, PPSSPP, Azahar y Eden. Apunta la exportación para frontends de GameNative y GameHub Lite a la suya, guarda los juegos de emuladores en la suya (y añade la carpeta en el emulador), y cada juego puede tener un perfil y un acceso directo que lo inicia. También se lee la carpeta ROMs de ES-DE.</string>
     <string name="game_mode_folders_made">Creadas en Download/Flux Keyboard/Games. GameNative: Ajustes > Interfaz > Frontend Sync, y elige ahí la carpeta GameNative.</string>
@@ -1792,27 +1782,6 @@
     <string name="game_mode_own_game_store">Tienda</string>
     <string name="game_mode_own_game_custom_store">Juego personalizado</string>
     <string name="game_mode_own_game_none">No está instalado ninguno de los lanzadores o emuladores en los que Flux Keyboard puede iniciar juegos (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
-    <string name="native_save">Guardar para %1$s</string>
-    <string name="native_save_description">Para iniciar este juego desde %1$s: este perfil en su propio formato, con cómo cargarlo allí.</string>
-    <string name="native_keys">Teclas asignadas por la propia app</string>
-    <string name="native_keys_description">El perfil de mando de la app asigna las teclas, así que el modo juego no las toca (el trackpad sigue moviendo los sticks). Se activa al guardar para un emulador.</string>
-    <string name="native_gamenative_steps">Nada que cargar: en un juego, el modo juego pulsa el mando en pantalla integrado de GameNative por tus teclas y mueve sus sticks con el trackpad. En las pantallas propias de GameNative las teclas funcionan como un mando.\n\nEn el menú del juego (Atrás), activa el On-screen Controller con su diseño predeterminado y pon Control Opacity en 0: sigue recibiendo las pulsaciones, sin verse.\n\n¿Falla un botón (otro diseño)? En el juego, baja la notificación del modo juego, toca Colocar teclas en pantalla, arrastra los recuadros sobre los botones y toca Guardar.</string>
-    <string name="native_gamehub_steps">Nada que cargar: en un juego, el modo juego pulsa los controles en pantalla de GameHub por tus teclas, ya colocados donde GameHub los dibuja, y mueve sus sticks con el trackpad. En las pantallas propias de GameHub las teclas funcionan como un mando.\n\nActiva los controles en pantalla de GameHub en su menú del juego y pon su opacidad en 0: siguen recibiendo las pulsaciones, sin verse.\n\n¿Falla un botón (otro diseño)? En el juego, baja la notificación del modo juego, toca Colocar teclas en pantalla, arrastra los recuadros sobre los botones y toca Guardar. Start y Select no están en los controles de GameHub por defecto: añádelos allí para usarlos.</string>
-    <string name="native_dolphin_steps">Guardado como el perfil de Dolphin \"%1$s\".\n\nEn Dolphin, una vez:\n1. Mantén pulsado el juego y luego Ajustes del juego.\n2. Entrada de GameCube, Puerto 1, Perfil.\n3. Carga \"%1$s\".\n\nDolphin leerá las teclas por sí mismo cada vez que se inicie este juego; el trackpad sigue moviendo los sticks con el modo juego.</string>
-    <string name="native_ppsspp_steps">Escrito en los ajustes de PPSSPP del juego %1$s (la configuración de juego creada la última).\n\nEse juego ahora lee las teclas por sí mismo al iniciarse; el trackpad sigue moviendo el stick con el modo juego.\n\n¿Juego equivocado? En PPSSPP, mantén pulsado el correcto, Crear configuración de juego, y vuelve a guardar aquí.</string>
-    <string name="native_ppsspp_none">PPSSPP guarda las teclas por juego en una configuración de juego. En PPSSPP:\n1. Mantén pulsado el juego.\n2. Crear configuración de juego.\nLuego vuelve a guardar aquí.</string>
-    <string name="native_bind_steps">%1$s no puede cargar controles desde un archivo: en sus Ajustes, Entrada (Controles), asigna cada botón pulsando su tecla cuando lo pida:\n\n%2$s\n\nEden puede guardarlos como perfil de entrada para este juego. El modo juego le deja las teclas; el trackpad sigue moviendo los sticks.</string>
-    <string name="native_none">Esta app no tiene perfil de mando propio: el modo juego asigna las teclas se inicie como se inicie el juego.</string>
-    <string name="native_failed">No se pudo guardar. ¿Está en marcha el shell integrado?</string>
-    <string name="game_map_keyboard">Teclado</string>
-    <string name="game_map_controller">Mando</string>
-    <string name="game_map_keyboard_hint">Toca una tecla para elegir qué hace en el juego. Las teclas en blanco llegan al juego tal cual.</string>
-    <string name="game_map_controller_hint">Toca un botón y luego pulsa la tecla que lo activa.</string>
-    <string name="game_map_group_controller">Mando</string>
-    <string name="game_map_group_keyboard">Teclado</string>
-    <string name="game_map_group_mouse">Ratón</string>
-    <string name="game_map_press_for_button">Pulsa la tecla para este botón.</string>
-    <string name="game_map_clear_button">Sin tecla</string>
     <string name="game_mode_screen">Pantalla</string>
     <string name="game_mode_screen_app">Como quiera la app</string>
     <string name="game_mode_screen_upright">Siempre vertical</string>
@@ -1827,15 +1796,7 @@
     <string name="shell_elsewhere_otp">El acceso al shell permite leer códigos de notificaciones que Android oculta a las apps (Android 15 y posteriores).</string>
     <string name="shell_shortcuts_launcher">O ponlos en teclas pulsadas en la pantalla de inicio.</string>
     <string name="shell_shortcuts_nav">O en teclas Ctrl en el modo navegación.</string>
-    <string name="native_dolphin_wii_steps">Guardado como perfil de Wiimote de Dolphin \"%1$s\" (%2$s).\n\nEn Dolphin, una vez:\n1. Mantén pulsado el juego y luego Ajustes del juego.\n2. Entrada de Wii, Wiimote 1, Perfil.\n3. Carga \"%1$s\".\n\nDolphin lee entonces las teclas por sí mismo cada vez que empieza este juego; el trackpad sigue moviendo los sticks con el modo juego.</string>
-    <string name="dolphin_pad_title">Mando de Dolphin</string>
-    <string name="dolphin_pad_description">Lo que prepara Guardar para Dolphin. Automático lee el archivo del juego: un juego de Wii recibe un Wiimote con Nunchuk y uno de GameCube un mando de GameCube. Elige otro cuando un juego se juegue mejor con él.</string>
-    <string name="dolphin_pad_auto_found">Automático (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Automático</item>
-        <item>Mando de GameCube</item>
-        <item>Wiimote y Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wiimote en horizontal</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Colocar sticks en pantalla</string>
+    <string name="game_mode_keys_pass">Las teclas llegan al juego tal cual: asígnalas en los controles del propio juego.</string>
+    <string name="game_mode_keys_pass_app">Las teclas llegan a %1$s tal cual: asígnalas una vez en sus propios ajustes de mando.</string>
 </resources>

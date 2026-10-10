@@ -1165,27 +1165,23 @@
     <string name="flux_tutorial_shell_title">Eingebaute Shell (empfohlen)</string>
     <string name="game_mode_add">Profil hinzufügen</string>
     <string name="game_mode_add_app">App hinzufügen</string>
-    <string name="game_mode_add_description">Wähle die App, für die es ist; die Tasten beginnen als Controller.</string>
+    <string name="game_mode_add_description">Wähle die App dafür; das Trackpad beginnt als ihre Sticks.</string>
     <string name="game_mode_apps">Apps</string>
     <string name="game_mode_delete">Profil löschen</string>
     <string name="game_mode_import">Spiel aus einem Spiele-Launcher hinzufügen</string>
     <string name="game_mode_import_description">Die Spiele, die GameNative, GameHub oder GameHub Lite auf dem Startbildschirm, in ihren Verknüpfungen oder in ihrem Steam-Ordner haben, jedes mit eigenem Profil. Wechsle zwischen den Spielen eines Launchers über die Benachrichtigung des Spielmodus oder gib jedem eine eigene Verknüpfung auf dem Startbildschirm.</string>
     <string name="game_mode_import_none">Keine Spiele gefunden. Füge eines im Launcher zum Startbildschirm hinzu oder lege den Launcher selbst als Profil an.</string>
     <string name="game_mode_import_reading">Spiele werden gelesen</string>
-    <string name="game_mode_key_as_is">Unverändert</string>
-    <string name="game_mode_keys">Tasten</string>
-    <string name="game_mode_keys_note">Ein anderer Stil setzt die Tasten auf seine Standardbelegung zurück.</string>
     <string name="game_mode_left_half">Trackpad linke Hälfte</string>
     <string name="game_mode_next_profile">Nächstes Profil</string>
     <string name="game_mode_no_apps">noch keine Apps</string>
-    <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und den Bedienungshilfen-Helfer der Tastatur. Nicht umbelegte Tasten erreichen das Spiel unverändert, und Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Das Trackpad liest einen Finger zur Zeit, daher bewegt sich immer ein Stick.</string>
+    <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Tasten erreichen das Spiel unverändert: Belege sie in den Controller-Einstellungen des Emulators oder Launchers. Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Das Trackpad liest einen Finger auf einmal, daher bewegt sich ein Stick auf einmal.</string>
     <string name="game_mode_profile_name">Name</string>
     <string name="game_mode_profiles">Spielprofile</string>
     <string name="game_mode_remove">Entfernen</string>
     <string name="game_mode_right_half">Trackpad rechte Hälfte</string>
     <string name="game_mode_save">Speichern</string>
-    <string name="game_mode_style">Stil</string>
-    <string name="game_mode_switch_description">In Apps mit einem Spielprofil spielen Tasten und Trackpad das Spiel: Controller-Tasten und Sticks, oder Tasten und eine Maus.</string>
+    <string name="game_mode_switch_description">In Apps mit einem Spielprofil erreichen Tasten das Spiel unverändert, und das Trackpad bewegt seine Sticks.</string>
     <string name="game_mode_title">Spielmodus</string>
     <string name="pages_start_description">Angehakt öffnet eine Ebene mit deinen zuletzt verwendeten. Ohne Haken öffnet sie auf ihrer Standardseite (Auswahl des Entwicklers, bis du sie mit dem Stift unten links änderst), die zuletzt verwendeten eine Seite zurück auf Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1218,23 +1214,17 @@
     <string name="trackpad_shizuku_fallback_title">Android-Wischgesten, solange Shizuku aus ist</string>
     <string name="sym_start_from_recents">Mit meinen zuletzt verwendeten beginnen</string>
     <string name="sym_start_most_popular">Mit den beliebtesten beginnen</string>
-    <string name="game_mode_add_key">Taste hinzufügen</string>
-    <string name="game_mode_press_key">Drücke die Taste. Die Ein/Aus-Taste geht nicht: Android behält sie für sich.</string>
     <string name="game_mode_gamenative_save">GameNative einrichten</string>
-    <string name="game_mode_gamenative_save_description">GameNative nimmt nur echte Controller an, daher drückt der Spielmodus für deine Tasten seinen eigenen Bildschirm-Controller, unsichtbar.</string>
-    <string name="game_mode_place_keys">Tasten auf dem Bildschirm platzieren</string>
-    <string name="game_mode_place_hint">Ziehe jede Taste auf die Taste des Spiels und jeden Stick-Kreis auf seinen Stick. Taste hinzufügen, dann drücken.</string>
+    <string name="game_mode_gamenative_save_description">GameNatives Spiele nehmen einen Stick nur von einem echten Controller oder seinem Bildschirm-Controller an, daher bewegt das Trackpad die Bildschirm-Sticks, unsichtbar.</string>
+    <string name="game_mode_place_hint">Zieh jeden Stick-Kreis auf den Stick des Spiels.</string>
     <string name="game_mode_place_overlay_needed">Erlaube Flux Keyboard, über anderen Apps einzublenden, und versuche es erneut.</string>
     <string name="game_mode_place_clear">Leeren</string>
     <string name="game_mode_left_stick">Linker Stick</string>
     <string name="game_mode_right_stick">Rechter Stick</string>
     <string name="game_mode_gamenative_open">GameNative öffnen</string>
-    <string name="game_mode_gamenative_steps">In GameNative, einmal pro Spiel:\n1. Starte das Spiel und öffne sein Menü (Zurück).\n2. Schalte den On-screen Controller ein, mit seinem Standardlayout.\n3. Setze Control Opacity auf 0.\n\nDeine Tasten drücken dann seine Knöpfe, und das Trackpad bewegt seine Sticks. In GameNatives eigenen Bildschirmen wirken die Tasten als Controller.\n\nUm mit aufrecht gehaltenem Telefon zu spielen, schalte in den Einstellungen des Spiels unter General den Portrait Mode ein.</string>
+    <string name="game_mode_gamenative_steps">In GameNative, einmal pro Spiel:\n1. Starte das Spiel und öffne sein Menü (Zurück).\n2. Schalte den On-screen Controller ein, mit seinem Standardlayout.\n3. Setze Control Opacity auf 0.\n\nDas Trackpad bewegt dann seine Sticks. Deine Tasten erreichen das Spiel als Tastatur: Belege sie in den Steuerungseinstellungen des Spiels.\n\nUm mit aufrecht gehaltenem Telefon zu spielen, schalte in den Einstellungen des Spiels unter General den Portrait Mode ein.</string>
     <string name="game_mode_home_screen">Zum Startbildschirm hinzufügen</string>
     <string name="game_mode_home_screen_failed">Der Startbildschirm nimmt keine Verknüpfungen an.</string>
-    <string name="game_mode_use_emulator_controls">Bildschirmsteuerung von %1$s verwenden</string>
-    <string name="game_mode_emulator_applied">Tasten und Sticks auf die Bildschirmsteuerung des Emulators gesetzt. Mit Tasten auf dem Bildschirm platzieren feinjustieren, falls du welche verschoben hast.</string>
-    <string name="game_mode_emulator_unreadable">Seine Steuerung ist noch nicht bekannt: Öffne darin einmal ein Spiel im Hochformat mit sichtbarer Bildschirmsteuerung und versuche es dann erneut.</string>
     <string name="game_mode_folders">Spielordner anlegen</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mit einem Ordner für GameNative, GameHub, Dolphin, PPSSPP, Azahar und Eden. Richte den Export für Frontends von GameNative und GameHub Lite auf ihren Ordner, lege Emulator-Spiele in ihren (und füge den Ordner im Emulator hinzu), dann bekommt jedes Spiel ein Profil und eine Startbildschirm-Verknüpfung, die es startet. Der ROMs-Ordner von ES-DE wird auch gelesen.</string>
     <string name="game_mode_folders_made">Angelegt in Download/Flux Keyboard/Games. GameNative: Einstellungen > Oberfläche > Frontend Sync, dann dort den Ordner GameNative wählen.</string>
@@ -1251,27 +1241,6 @@
     <string name="game_mode_own_game_store">Store</string>
     <string name="game_mode_own_game_custom_store">Eigenes Spiel</string>
     <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
-    <string name="native_save">Für %1$s speichern</string>
-    <string name="native_save_description">Zum Starten dieses Spiels aus %1$s heraus: dieses Profil in dessen eigener Form, mit Anleitung zum Laden dort.</string>
-    <string name="native_keys">Tasten von der App selbst belegt</string>
-    <string name="native_keys_description">Das eigene Controller-Profil der App belegt die Tasten, daher lässt der Spielmodus sie in Ruhe (das Trackpad bewegt weiter die Sticks). Wird beim Speichern für einen Emulator eingeschaltet.</string>
-    <string name="native_gamenative_steps">Nichts zu laden: Im Spiel drückt der Spielmodus für deine Tasten GameNatives eingebauten Bildschirm-Controller und bewegt seine Sticks mit dem Trackpad. In GameNatives eigenen Bildschirmen wirken die Tasten als Controller.\n\nSchalte im Menü des Spiels (Zurück) den On-screen Controller mit seinem Standardlayout ein und setze Control Opacity auf 0: Er nimmt die Eingaben trotzdem an, unsichtbar.\n\nEin Knopf verfehlt (anderes Layout)? Zieh im Spiel die Benachrichtigung des Spielmodus herunter, tippe auf Tasten auf dem Bildschirm platzieren, zieh die Kästchen auf die Knöpfe und tippe auf Speichern.</string>
-    <string name="native_gamehub_steps">Nichts zu laden: Im Spiel drückt der Spielmodus für deine Tasten GameHubs Bildschirmsteuerung, schon dort platziert, wo GameHub sie zeichnet, und bewegt seine Sticks mit dem Trackpad. In GameHubs eigenen Bildschirmen wirken die Tasten als Controller.\n\nSchalte GameHubs Bildschirmsteuerung in seinem Spielmenü ein und setze ihre Deckkraft auf 0: Sie nimmt die Eingaben trotzdem an, unsichtbar.\n\nEin Knopf verfehlt (anderes Layout)? Zieh im Spiel die Benachrichtigung des Spielmodus herunter, tippe auf Tasten auf dem Bildschirm platzieren, zieh die Kästchen auf die Knöpfe und tippe auf Speichern. Start und Select sind standardmäßig nicht auf GameHubs Steuerung: Füge sie dort hinzu, um sie zu nutzen.</string>
-    <string name="native_dolphin_steps">Als Dolphin-Profil \"%1$s\" gespeichert.\n\nIn Dolphin, einmalig:\n1. Halte das Spiel gedrückt, dann Spieleinstellungen.\n2. GameCube-Eingabe, Port 1, Profil.\n3. Lade \"%1$s\".\n\nDolphin liest die Tasten dann bei jedem Start dieses Spiels selbst; das Trackpad bewegt die Sticks weiter über den Spielmodus.</string>
-    <string name="native_ppsspp_steps">In die PPSSPP-Einstellungen des Spiels %1$s geschrieben (die zuletzt erstellte Spielkonfiguration).\n\nDieses Spiel liest die Tasten nun bei jedem Start selbst; das Trackpad bewegt den Stick weiter über den Spielmodus.\n\nFalsches Spiel? Halte in PPSSPP das richtige gedrückt, Spielkonfiguration erstellen, dann hier erneut speichern.</string>
-    <string name="native_ppsspp_none">PPSSPP speichert Tasten pro Spiel in einer Spielkonfiguration. In PPSSPP:\n1. Halte das Spiel gedrückt.\n2. Spielkonfiguration erstellen.\nDann hier erneut speichern.</string>
-    <string name="native_bind_steps">%1$s kann Steuerung nicht aus einer Datei laden: Belege in seinen Einstellungen unter Eingabe (Steuerung) jede Taste, indem du sie drückst, wenn gefragt:\n\n%2$s\n\nEden kann sie als Eingabeprofil für dieses Spiel speichern. Der Spielmodus überlässt ihm die Tasten; das Trackpad bewegt weiter die Sticks.</string>
-    <string name="native_none">Diese App hat kein eigenes Controller-Profil: Der Spielmodus belegt die Tasten, egal wie das Spiel gestartet wurde.</string>
-    <string name="native_failed">Es konnte nicht gespeichert werden. Läuft die eingebaute Shell?</string>
-    <string name="game_map_keyboard">Tastatur</string>
-    <string name="game_map_controller">Controller</string>
-    <string name="game_map_keyboard_hint">Tippe auf eine Taste, um zu wählen, was sie im Spiel tut. Leere Tasten erreichen das Spiel unverändert.</string>
-    <string name="game_map_controller_hint">Tippe auf eine Taste des Controllers und drücke dann die Taste, die sie auslösen soll.</string>
-    <string name="game_map_group_controller">Controller</string>
-    <string name="game_map_group_keyboard">Tastatur</string>
-    <string name="game_map_group_mouse">Maus</string>
-    <string name="game_map_press_for_button">Drücke die Taste für diese Controller-Taste.</string>
-    <string name="game_map_clear_button">Keine Taste</string>
     <string name="game_mode_screen">Bildschirm</string>
     <string name="game_mode_screen_app">Wie die App will</string>
     <string name="game_mode_screen_upright">Aufrecht gehalten</string>
@@ -1286,15 +1255,7 @@
     <string name="shell_elsewhere_otp">Mit Shell-Zugriff lassen sich Codes aus Benachrichtigungen lesen, die Android vor Apps verbirgt (Android 15 und neuer).</string>
     <string name="shell_shortcuts_launcher">Oder lege sie auf Tasten, die auf dem Startbildschirm gedrückt werden.</string>
     <string name="shell_shortcuts_nav">Oder auf Strg-Tasten im Nav-Modus.</string>
-    <string name="native_dolphin_wii_steps">Gespeichert als Dolphin-Profil für die Wii-Fernbedienung \"%1$s\" (%2$s).\n\nIn Dolphin, einmal:\n1. Halte das Spiel gedrückt, dann Spieleinstellungen.\n2. Wii-Eingabe, Wii-Fernbedienung 1, Profil.\n3. Lade \"%1$s\".\n\nDolphin liest die Tasten dann selbst, sobald dieses Spiel startet; das Trackpad bewegt die Sticks weiter über den Spielmodus.</string>
-    <string name="dolphin_pad_title">Dolphin-Controller</string>
-    <string name="dolphin_pad_description">Was Für Dolphin speichern einrichtet. Automatisch liest die Datei des Spiels: Ein Wii-Spiel bekommt eine Wii-Fernbedienung mit Nunchuk, ein GameCube-Spiel einen GameCube-Controller. Wähle einen anderen, wenn ein Spiel damit besser läuft.</string>
-    <string name="dolphin_pad_auto_found">Automatisch (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Automatisch</item>
-        <item>GameCube-Controller</item>
-        <item>Wii-Fernbedienung und Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wii-Fernbedienung quer</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Sticks auf dem Bildschirm platzieren</string>
+    <string name="game_mode_keys_pass">Tasten erreichen das Spiel unverändert: Belege sie in der Steuerung des Spiels.</string>
+    <string name="game_mode_keys_pass_app">Tasten erreichen %1$s unverändert: Belege sie einmal in dessen eigenen Controller-Einstellungen.</string>
 </resources>

@@ -1712,27 +1712,23 @@
     <string name="flux_tutorial_shell_title">Встроенная оболочка (рекомендуется)</string>
     <string name="game_mode_add">Добавить профиль</string>
     <string name="game_mode_add_app">Добавить приложение</string>
-    <string name="game_mode_add_description">Выберите приложение; клавиши сначала работают как контроллер.</string>
+    <string name="game_mode_add_description">Выберите приложение; тачпад сначала работает как его стики.</string>
     <string name="game_mode_apps">Приложения</string>
     <string name="game_mode_delete">Удалить профиль</string>
     <string name="game_mode_import">Добавить игру из игрового лаунчера</string>
     <string name="game_mode_import_description">Игры, которые GameNative, GameHub или GameHub Lite держат на главном экране, в своих ярлыках или установили в свою папку Steam, каждая со своим профилем. Переключайте игры лаунчера из уведомления игрового режима или дайте каждой свой ярлык на главном экране.</string>
     <string name="game_mode_import_none">Игры не найдены. Добавьте игру на главный экран в её лаунчере или добавьте сам лаунчер как профиль.</string>
     <string name="game_mode_import_reading">Чтение игр</string>
-    <string name="game_mode_key_as_is">Как есть</string>
-    <string name="game_mode_keys">Клавиши</string>
-    <string name="game_mode_keys_note">Смена стиля возвращает клавиши к его стандартным назначениям.</string>
     <string name="game_mode_left_half">Левая половина трекпада</string>
     <string name="game_mode_next_profile">Следующий профиль</string>
     <string name="game_mode_no_apps">пока нет приложений</string>
-    <string name="game_mode_note">Игровому режиму нужны встроенная оболочка (или Shizuku) и помощник специальных возможностей клавиатуры. Неназначенные клавиши доходят до игры как есть, а ввод в текстовое поле игры работает как обычно. Трекпад читает один палец за раз, поэтому двигается один стик.</string>
+    <string name="game_mode_note">Игровому режиму нужна встроенная оболочка (или Shizuku) и помощник специальных возможностей клавиатуры. Клавиши доходят до игры как есть: назначьте их в настройках контроллера эмулятора или лаунчера. Ввод в текстовое поле игры работает как обычно. Тачпад читает один палец за раз, поэтому за раз двигается один стик.</string>
     <string name="game_mode_profile_name">Название</string>
     <string name="game_mode_profiles">Игровые профили</string>
     <string name="game_mode_remove">Убрать</string>
     <string name="game_mode_right_half">Правая половина трекпада</string>
     <string name="game_mode_save">Сохранить</string>
-    <string name="game_mode_style">Стиль</string>
-    <string name="game_mode_switch_description">В приложениях с игровым профилем клавиши и трекпад управляют игрой: кнопки и стики контроллера или клавиши и мышь.</string>
+    <string name="game_mode_switch_description">В приложениях с игровым профилем клавиши доходят до игры как есть, а тачпад двигает её стики.</string>
     <string name="game_mode_title">Игровой режим</string>
     <string name="pages_start_description">Отмечено: слой открывается на недавних. Не отмечено: на своей стандартной странице (выбор разработчика, пока вы не измените её карандашом в левом нижнем углу), а недавние на странице назад, на Q.</string>
     <string name="pages_start_kaomoji">Каомодзи</string>
@@ -1765,23 +1761,17 @@
     <string name="trackpad_shizuku_fallback_title">Свайпы Android, пока Shizuku выключен</string>
     <string name="sym_start_from_recents">Начать с моих недавних</string>
     <string name="sym_start_most_popular">Начать с самых популярных</string>
-    <string name="game_mode_add_key">Добавить клавишу</string>
-    <string name="game_mode_press_key">Нажмите клавишу или кнопку. Кнопку питания использовать нельзя: Android оставляет её себе.</string>
     <string name="game_mode_gamenative_save">Настроить GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative принимает только настоящие контроллеры, поэтому игровой режим нажимает за ваши клавиши его собственный экранный контроллер, незаметно.</string>
-    <string name="game_mode_place_keys">Разместить клавиши на экране</string>
-    <string name="game_mode_place_hint">Перетащите каждую клавишу на кнопку игры, а каждый круг стика на его стик. Добавьте клавишу, затем нажмите её.</string>
+    <string name="game_mode_gamenative_save_description">Игры GameNative принимают стик только от настоящего контроллера или его экранного контроллера, поэтому тачпад двигает экранные стики, невидимо.</string>
+    <string name="game_mode_place_hint">Перетащите каждый круг стика на стик игры.</string>
     <string name="game_mode_place_overlay_needed">Разрешите Flux Keyboard показываться поверх других приложений и попробуйте снова.</string>
     <string name="game_mode_place_clear">Очистить</string>
     <string name="game_mode_left_stick">Левый стик</string>
     <string name="game_mode_right_stick">Правый стик</string>
     <string name="game_mode_gamenative_open">Открыть GameNative</string>
-    <string name="game_mode_gamenative_steps">В GameNative, один раз для каждой игры:\n1. Запустите игру и откройте её меню (Назад).\n2. Включите On-screen Controller с раскладкой по умолчанию.\n3. Установите Control Opacity на 0.\n\nТогда ваши клавиши нажимают его кнопки, а тачпад двигает его стики. На собственных экранах GameNative клавиши работают как контроллер.\n\nЧтобы играть, держа телефон вертикально, включите Portrait Mode в настройках игры, General.</string>
+    <string name="game_mode_gamenative_steps">В GameNative, один раз для каждой игры:\n1. Запустите игру и откройте её меню (Назад).\n2. Включите On-screen Controller с раскладкой по умолчанию.\n3. Установите Control Opacity на 0.\n\nТогда тачпад двигает его стики. Ваши клавиши доходят до игры как клавиатура: назначьте их в управлении самой игры.\n\nЧтобы играть, держа телефон вертикально, включите Portrait Mode в настройках игры, General.</string>
     <string name="game_mode_home_screen">Добавить на главный экран</string>
     <string name="game_mode_home_screen_failed">Главный экран не принимает ярлыки.</string>
-    <string name="game_mode_use_emulator_controls">Использовать экранное управление %1$s</string>
-    <string name="game_mode_emulator_applied">Клавиши и стики назначены на экранное управление эмулятора. Подправьте их через «Разместить клавиши на экране», если что-то двигали.</string>
-    <string name="game_mode_emulator_unreadable">Его управление пока неизвестно: откройте в нём игру один раз при вертикальном экране с видимым экранным управлением, затем попробуйте снова.</string>
     <string name="game_mode_folders">Создать папки игр</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, с папкой для GameNative, GameHub, Dolphin, PPSSPP, Azahar и Eden. Направьте экспорт для фронтендов GameNative и GameHub Lite в их папку, храните игры эмуляторов в их папке (и добавьте её в эмуляторе) — у каждой игры может быть профиль и ярлык, который её запускает. Папка ROMs из ES-DE тоже читается.</string>
     <string name="game_mode_folders_made">Созданы в Download/Flux Keyboard/Games. GameNative: Настройки > Интерфейс > Frontend Sync, затем выберите там папку GameNative.</string>
@@ -1798,27 +1788,6 @@
     <string name="game_mode_own_game_store">Магазин</string>
     <string name="game_mode_own_game_custom_store">Своя игра</string>
     <string name="game_mode_own_game_none">Не установлен ни один лаунчер или эмулятор, в которых Flux Keyboard может запускать игры (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
-    <string name="native_save">Сохранить для %1$s</string>
-    <string name="native_save_description">Для запуска этой игры из %1$s: этот профиль в его собственном формате, с тем, как загрузить его там.</string>
-    <string name="native_keys">Клавиши назначает само приложение</string>
-    <string name="native_keys_description">Собственный профиль контроллера приложения назначает клавиши, поэтому игровой режим их не трогает (трекпад по-прежнему двигает стики). Включается при сохранении для эмулятора.</string>
-    <string name="native_gamenative_steps">Загружать ничего не нужно: в игре игровой режим нажимает за ваши клавиши встроенный экранный контроллер GameNative и двигает его стики тачпадом. На собственных экранах GameNative клавиши работают как контроллер.\n\nВ меню игры (Назад) включите On-screen Controller с раскладкой по умолчанию и установите Control Opacity на 0: он по-прежнему принимает нажатия, невидимо.\n\nКнопка промахивается (другая раскладка)? В игре потяните вниз уведомление игрового режима, нажмите «Разместить клавиши на экране», перетащите поля на кнопки и нажмите «Сохранить».</string>
-    <string name="native_gamehub_steps">Загружать ничего не нужно: в игре игровой режим нажимает за ваши клавиши экранное управление GameHub, уже размещённое там, где GameHub его рисует, и двигает его стики тачпадом. На собственных экранах GameHub клавиши работают как контроллер.\n\nВключите экранное управление GameHub в его игровом меню и установите его непрозрачность на 0: оно по-прежнему принимает нажатия, невидимо.\n\nКнопка промахивается (другая раскладка)? В игре потяните вниз уведомление игрового режима, нажмите «Разместить клавиши на экране», перетащите поля на кнопки и нажмите «Сохранить». Start и Select по умолчанию нет в управлении GameHub: добавьте их туда, чтобы пользоваться ими.</string>
-    <string name="native_dolphin_steps">Сохранено как профиль Dolphin «%1$s».\n\nВ Dolphin, один раз:\n1. Удерживайте игру, затем Настройки игры.\n2. Ввод GameCube, Порт 1, Профиль.\n3. Загрузите «%1$s».\n\nDolphin будет сам читать клавиши при каждом запуске этой игры; трекпад по-прежнему двигает стики через игровой режим.</string>
-    <string name="native_ppsspp_steps">Записано в настройки PPSSPP игры %1$s (последняя созданная конфигурация игры).\n\nЭта игра теперь сама читает клавиши при каждом запуске; трекпад по-прежнему двигает стик через игровой режим.\n\nНе та игра? В PPSSPP удерживайте нужную, Создать конфигурацию игры, затем сохраните здесь снова.</string>
-    <string name="native_ppsspp_none">PPSSPP хранит клавиши для каждой игры в конфигурации игры. В PPSSPP:\n1. Удерживайте игру.\n2. Создать конфигурацию игры.\nЗатем сохраните здесь снова.</string>
-    <string name="native_bind_steps">%1$s не загружает управление из файла: в его Настройках, Ввод (Управление), назначьте каждую кнопку, нажимая её клавишу по запросу:\n\n%2$s\n\nEden может сохранить их как профиль ввода для этой игры. Игровой режим оставляет ему клавиши; трекпад по-прежнему двигает стики.</string>
-    <string name="native_none">У этого приложения нет своего профиля контроллера: игровой режим назначает клавиши, как бы ни была запущена игра.</string>
-    <string name="native_failed">Не удалось сохранить. Запущена ли встроенная оболочка?</string>
-    <string name="game_map_keyboard">Клавиатура</string>
-    <string name="game_map_controller">Контроллер</string>
-    <string name="game_map_keyboard_hint">Нажмите клавишу, чтобы выбрать, что она делает в игре. Пустые клавиши доходят до игры как есть.</string>
-    <string name="game_map_controller_hint">Нажмите кнопку, затем нажмите клавишу для неё.</string>
-    <string name="game_map_group_controller">Контроллер</string>
-    <string name="game_map_group_keyboard">Клавиатура</string>
-    <string name="game_map_group_mouse">Мышь</string>
-    <string name="game_map_press_for_button">Нажмите клавишу для этой кнопки.</string>
-    <string name="game_map_clear_button">Без клавиши</string>
     <string name="game_mode_screen">Экран</string>
     <string name="game_mode_screen_app">Как хочет приложение</string>
     <string name="game_mode_screen_upright">Всегда вертикально</string>
@@ -1833,15 +1802,7 @@
     <string name="shell_elsewhere_otp">Доступ к оболочке позволяет читать коды из уведомлений, которые Android скрывает от приложений (Android 15 и новее).</string>
     <string name="shell_shortcuts_launcher">Или назначьте их клавишам на главном экране.</string>
     <string name="shell_shortcuts_nav">Или клавишам Ctrl в режиме навигации.</string>
-    <string name="native_dolphin_wii_steps">Сохранено как профиль Wii Remote в Dolphin «%1$s» (%2$s).\n\nВ Dolphin, один раз:\n1. Долго нажмите игру, затем «Настройки игры».\n2. Ввод Wii, Wii Remote 1, Профиль.\n3. Загрузите «%1$s».\n\nDolphin затем сам читает клавиши при каждом запуске этой игры; тачпад по-прежнему двигает стики через игровой режим.</string>
-    <string name="dolphin_pad_title">Контроллер Dolphin</string>
-    <string name="dolphin_pad_description">Что настраивает «Сохранить для Dolphin». «Автоматически» читает файл игры: игра для Wii получает Wii Remote с Nunchuk, игра для GameCube — контроллер GameCube. Выберите другой, если с ним игра идёт лучше.</string>
-    <string name="dolphin_pad_auto_found">Автоматически (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Автоматически</item>
-        <item>Контроллер GameCube</item>
-        <item>Wii Remote и Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wii Remote горизонтально</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Разместить стики на экране</string>
+    <string name="game_mode_keys_pass">Клавиши доходят до игры как есть: назначьте их в управлении игры.</string>
+    <string name="game_mode_keys_pass_app">Клавиши доходят до %1$s как есть: назначьте их один раз в его собственных настройках контроллера.</string>
 </resources>

@@ -1706,27 +1706,23 @@
     <string name="flux_tutorial_shell_title">Shell intégré (recommandé)</string>
     <string name="game_mode_add">Ajouter un profil</string>
     <string name="game_mode_add_app">Ajouter une appli</string>
-    <string name="game_mode_add_description">Choisissez l\'appli concernée ; ses touches commencent comme une manette.</string>
+    <string name="game_mode_add_description">Choisissez l\'appli concernée ; le pavé tactile commence comme ses sticks.</string>
     <string name="game_mode_apps">Applis</string>
     <string name="game_mode_delete">Supprimer le profil</string>
     <string name="game_mode_import">Ajouter un jeu d\'un lanceur de jeux</string>
     <string name="game_mode_import_description">Les jeux que GameNative, GameHub ou GameHub Lite ont sur l\'écran d\'accueil, dans leurs raccourcis ou installés dans leur dossier Steam, chacun avec son propre profil. Passez d\'un jeu à l\'autre d\'un lanceur depuis la notification du mode jeu, ou donnez à chacun son raccourci sur l\'écran d\'accueil.</string>
     <string name="game_mode_import_none">Aucun jeu trouvé. Ajoutez-en un à l\'écran d\'accueil depuis son lanceur, ou ajoutez le lanceur lui-même comme profil.</string>
     <string name="game_mode_import_reading">Lecture des jeux</string>
-    <string name="game_mode_key_as_is">Telle quelle</string>
-    <string name="game_mode_keys">Touches</string>
-    <string name="game_mode_keys_note">Changer de style remet les touches à ses valeurs par défaut.</string>
     <string name="game_mode_left_half">Moitié gauche du pavé tactile</string>
     <string name="game_mode_next_profile">Profil suivant</string>
     <string name="game_mode_no_apps">aucune appli pour l\'instant</string>
-    <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'assistant d\'accessibilité du clavier. Les touches non réaffectées arrivent au jeu telles quelles, et la saisie dans un champ de texte du jeu fonctionne comme d\'habitude. Le pavé tactile lit un doigt à la fois, donc un seul stick bouge à la fois.</string>
+    <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'aide d\'accessibilité du clavier. Les touches arrivent au jeu telles quelles : attribuez-les dans les réglages de manette de l\'émulateur ou du lanceur. Écrire dans un champ de texte du jeu fonctionne comme d\'habitude. Le pavé tactile lit un doigt à la fois, donc un seul stick bouge à la fois.</string>
     <string name="game_mode_profile_name">Nom</string>
     <string name="game_mode_profiles">Profils de jeu</string>
     <string name="game_mode_remove">Retirer</string>
     <string name="game_mode_right_half">Moitié droite du pavé tactile</string>
     <string name="game_mode_save">Enregistrer</string>
-    <string name="game_mode_style">Style</string>
-    <string name="game_mode_switch_description">Dans les applis avec un profil de jeu, les touches et le pavé tactile jouent : boutons et sticks de manette, ou touches et souris.</string>
+    <string name="game_mode_switch_description">Dans les applis avec un profil de jeu, les touches arrivent au jeu telles quelles et le pavé tactile déplace ses sticks.</string>
     <string name="game_mode_title">Mode jeu</string>
     <string name="pages_start_description">Cochée, une couche s\'ouvre sur vos récents. Décochée, elle s\'ouvre sur sa page par défaut (la sélection du développeur, jusqu\'à ce que vous la changiez avec le crayon en bas à gauche), vos récents une page avant, sur Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1759,23 +1755,17 @@
     <string name="trackpad_shizuku_fallback_title">Balayages d\'Android tant que Shizuku est arrêté</string>
     <string name="sym_start_from_recents">Commencer par mes récents</string>
     <string name="sym_start_most_popular">Commencer par les plus populaires</string>
-    <string name="game_mode_add_key">Ajouter une touche</string>
-    <string name="game_mode_press_key">Appuyez sur la touche ou le bouton. Le bouton marche/arrêt ne peut pas servir : Android le garde pour lui.</string>
     <string name="game_mode_gamenative_save">Configurer GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative n\'accepte que de vraies manettes, donc le mode jeu appuie sur sa propre manette à l\'écran pour vos touches, sans qu\'on la voie.</string>
-    <string name="game_mode_place_keys">Placer les touches à l\'écran</string>
-    <string name="game_mode_place_hint">Faites glisser chaque touche sur le bouton du jeu et chaque cercle de stick sur son stick. Ajoutez une touche, puis appuyez dessus.</string>
+    <string name="game_mode_gamenative_save_description">Les jeux de GameNative ne prennent un stick que d\'une vraie manette ou de sa manette à l\'écran, donc le pavé tactile déplace les sticks à l\'écran, invisibles.</string>
+    <string name="game_mode_place_hint">Faites glisser chaque cercle de stick sur le stick du jeu.</string>
     <string name="game_mode_place_overlay_needed">Autorisez Flux Keyboard à s\'afficher par-dessus les autres applis, puis réessayez.</string>
     <string name="game_mode_place_clear">Effacer</string>
     <string name="game_mode_left_stick">Stick gauche</string>
     <string name="game_mode_right_stick">Stick droit</string>
     <string name="game_mode_gamenative_open">Ouvrir GameNative</string>
-    <string name="game_mode_gamenative_steps">Dans GameNative, une fois par jeu :\n1. Lancez le jeu et ouvrez son menu (Retour).\n2. Activez On-screen Controller, avec sa disposition par défaut.\n3. Réglez Control Opacity sur 0.\n\nVos touches appuient alors sur ses boutons et le pavé tactile déplace ses sticks. Dans les écrans de GameNative, les touches servent de manette.\n\nPour jouer avec le téléphone à la verticale, activez Portrait Mode dans les réglages du jeu, General.</string>
+    <string name="game_mode_gamenative_steps">Dans GameNative, une fois par jeu :\n1. Lancez le jeu et ouvrez son menu (Retour).\n2. Activez On-screen Controller, avec sa disposition par défaut.\n3. Réglez Control Opacity sur 0.\n\nLe pavé tactile déplace alors ses sticks. Vos touches arrivent au jeu comme un clavier : attribuez-les dans les commandes du jeu lui-même.\n\nPour jouer avec le téléphone à la verticale, activez Portrait Mode dans les réglages du jeu, General.</string>
     <string name="game_mode_home_screen">Ajouter à l\'écran d\'accueil</string>
     <string name="game_mode_home_screen_failed">L\'écran d\'accueil n\'accepte pas les raccourcis.</string>
-    <string name="game_mode_use_emulator_controls">Utiliser les contrôles à l\'écran de %1$s</string>
-    <string name="game_mode_emulator_applied">Touches et sticks placés sur les contrôles à l\'écran de l\'émulateur. Ajustez-les avec Placer les touches à l\'écran si vous en avez déplacé.</string>
-    <string name="game_mode_emulator_unreadable">Ses contrôles ne sont pas encore connus : ouvrez-y un jeu une fois, écran droit et contrôles à l\'écran affichés, puis réessayez.</string>
     <string name="game_mode_folders">Créer les dossiers de jeux</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, avec un dossier pour GameNative, GameHub, Dolphin, PPSSPP, Azahar et Eden. Dirigez l\'export pour frontend de GameNative et GameHub Lite vers le leur, rangez les jeux d\'émulateur dans le leur (et ajoutez le dossier dans l\'émulateur) : chaque jeu peut avoir un profil et un raccourci qui le lance. Le dossier ROMs d\'ES-DE est lu aussi.</string>
     <string name="game_mode_folders_made">Créés dans Download/Flux Keyboard/Games. GameNative : Paramètres > Interface > Frontend Sync, puis choisissez-y le dossier GameNative.</string>
@@ -1792,27 +1782,6 @@
     <string name="game_mode_own_game_store">Boutique</string>
     <string name="game_mode_own_game_custom_store">Jeu personnalisé</string>
     <string name="game_mode_own_game_none">Aucun des lanceurs ou émulateurs où Flux Keyboard peut lancer des jeux (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) n\'est installé.</string>
-    <string name="native_save">Enregistrer pour %1$s</string>
-    <string name="native_save_description">Pour lancer ce jeu depuis %1$s : ce profil dans son propre format, avec comment le charger là-bas.</string>
-    <string name="native_keys">Touches attribuées par l\'app elle-même</string>
-    <string name="native_keys_description">Le profil de manette de l\'app attribue les touches, donc le mode jeu ne les touche pas (le trackpad bouge toujours les sticks). Activé en enregistrant pour un émulateur.</string>
-    <string name="native_gamenative_steps">Rien à charger : dans un jeu, le mode jeu appuie sur la manette à l\'écran intégrée de GameNative pour vos touches et déplace ses sticks avec le pavé tactile. Dans les écrans de GameNative, les touches servent de manette.\n\nDans le menu du jeu (Retour), activez On-screen Controller avec sa disposition par défaut et réglez Control Opacity sur 0 : elle reçoit toujours les appuis, invisible.\n\nUn bouton manqué (autre disposition) ? Dans le jeu, déroulez la notification du mode jeu, touchez Placer les touches à l\'écran, faites glisser les cases sur les boutons et touchez Enregistrer.</string>
-    <string name="native_gamehub_steps">Rien à charger : dans un jeu, le mode jeu appuie sur les commandes à l\'écran de GameHub pour vos touches, déjà placées là où GameHub les dessine, et déplace ses sticks avec le pavé tactile. Dans les écrans de GameHub, les touches servent de manette.\n\nActivez les commandes à l\'écran de GameHub dans son menu en jeu et réglez leur opacité sur 0 : elles reçoivent toujours les appuis, invisibles.\n\nUn bouton manqué (autre disposition) ? Dans le jeu, déroulez la notification du mode jeu, touchez Placer les touches à l\'écran, faites glisser les cases sur les boutons et touchez Enregistrer. Start et Select ne sont pas sur les commandes de GameHub par défaut : ajoutez-les-y pour les utiliser.</string>
-    <string name="native_dolphin_steps">Enregistré comme profil Dolphin « %1$s ».\n\nDans Dolphin, une fois :\n1. Appui long sur le jeu, puis Réglages du jeu.\n2. Entrée GameCube, Port 1, Profil.\n3. Chargez « %1$s ».\n\nDolphin lit ensuite les touches lui-même à chaque lancement de ce jeu ; le trackpad bouge toujours les sticks via le mode jeu.</string>
-    <string name="native_ppsspp_steps">Écrit dans les réglages PPSSPP du jeu %1$s (la configuration de jeu créée en dernier).\n\nCe jeu lit maintenant les touches lui-même à chaque lancement ; le trackpad bouge toujours le stick via le mode jeu.\n\nMauvais jeu ? Dans PPSSPP, appui long sur le bon, Créer une config de jeu, puis enregistrez à nouveau ici.</string>
-    <string name="native_ppsspp_none">PPSSPP garde les touches par jeu dans une config de jeu. Dans PPSSPP :\n1. Appui long sur le jeu.\n2. Créer une config de jeu.\nPuis enregistrez à nouveau ici.</string>
-    <string name="native_bind_steps">%1$s ne peut pas charger de contrôles depuis un fichier : dans ses Réglages, Entrée (Contrôles), attribuez chaque bouton en appuyant sur sa touche quand demandé :\n\n%2$s\n\nEden peut les enregistrer comme profil d\'entrée pour ce jeu. Le mode jeu lui laisse les touches ; le trackpad bouge toujours les sticks.</string>
-    <string name="native_none">Cette app n\'a pas de profil de manette propre : le mode jeu attribue les touches quelle que soit la façon dont le jeu est lancé.</string>
-    <string name="native_failed">Impossible d\'enregistrer. Le shell intégré est-il en marche ?</string>
-    <string name="game_map_keyboard">Clavier</string>
-    <string name="game_map_controller">Manette</string>
-    <string name="game_map_keyboard_hint">Touchez une touche pour choisir ce qu\'elle fait dans le jeu. Les touches vides arrivent au jeu telles quelles.</string>
-    <string name="game_map_controller_hint">Touchez un bouton, puis appuyez sur la touche qui le déclenche.</string>
-    <string name="game_map_group_controller">Manette</string>
-    <string name="game_map_group_keyboard">Clavier</string>
-    <string name="game_map_group_mouse">Souris</string>
-    <string name="game_map_press_for_button">Appuyez sur la touche de ce bouton.</string>
-    <string name="game_map_clear_button">Aucune touche</string>
     <string name="game_mode_screen">Écran</string>
     <string name="game_mode_screen_app">Comme l\'app le veut</string>
     <string name="game_mode_screen_upright">Gardé droit</string>
@@ -1827,15 +1796,7 @@
     <string name="shell_elsewhere_otp">L\'accès shell permet de lire les codes des notifications qu\'Android cache aux applis (Android 15 et versions ultérieures).</string>
     <string name="shell_shortcuts_launcher">Ou placez-les sur des touches pressées sur l\'écran d\'accueil.</string>
     <string name="shell_shortcuts_nav">Ou sur des touches Ctrl en mode navigation.</string>
-    <string name="native_dolphin_wii_steps">Enregistré comme profil Wiimote Dolphin « %1$s » (%2$s).\n\nDans Dolphin, une fois :\n1. Appui long sur le jeu, puis Paramètres du jeu.\n2. Entrée Wii, Wiimote 1, Profil.\n3. Chargez « %1$s ».\n\nDolphin lit alors les touches lui-même à chaque lancement de ce jeu ; le pavé tactile déplace toujours les sticks via le mode jeu.</string>
-    <string name="dolphin_pad_title">Manette Dolphin</string>
-    <string name="dolphin_pad_description">Ce que prépare Enregistrer pour Dolphin. Automatique lit le fichier du jeu : un jeu Wii reçoit une Wiimote avec Nunchuk, un jeu GameCube une manette GameCube. Choisissez-en une autre quand un jeu se joue mieux avec.</string>
-    <string name="dolphin_pad_auto_found">Automatique (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Automatique</item>
-        <item>Manette GameCube</item>
-        <item>Wiimote et Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wiimote à l\'horizontale</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Placer les sticks à l\'écran</string>
+    <string name="game_mode_keys_pass">Les touches arrivent au jeu telles quelles : attribuez-les dans les commandes du jeu.</string>
+    <string name="game_mode_keys_pass_app">Les touches arrivent à %1$s telles quelles : attribuez-les une fois dans ses propres réglages de manette.</string>
 </resources>

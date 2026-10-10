@@ -1074,27 +1074,23 @@
     <string name="flux_tutorial_shell_title">Ενσωματωμένο shell (συνιστάται)</string>
     <string name="game_mode_add">Προσθήκη προφίλ</string>
     <string name="game_mode_add_app">Προσθήκη εφαρμογής</string>
-    <string name="game_mode_add_description">Επιλέξτε την εφαρμογή για την οποία είναι· τα πλήκτρα ξεκινούν ως χειριστήριο.</string>
+    <string name="game_mode_add_description">Επιλέξτε την εφαρμογή· το trackpad ξεκινά ως οι μοχλοί της.</string>
     <string name="game_mode_apps">Εφαρμογές</string>
     <string name="game_mode_delete">Διαγραφή προφίλ</string>
     <string name="game_mode_import">Προσθήκη παιχνιδιού από εκκινητή παιχνιδιών</string>
     <string name="game_mode_import_description">Τα παιχνίδια που έχουν τα GameNative, GameHub ή GameHub Lite στην αρχική οθόνη, στις συντομεύσεις τους ή εγκατεστημένα στον φάκελο Steam τους, το καθένα με δικό του προφίλ. Αλλάξτε παιχνίδι ενός εκκινητή από την ειδοποίηση της λειτουργίας παιχνιδιού ή δώστε στο καθένα δική του συντόμευση στην αρχική οθόνη.</string>
     <string name="game_mode_import_none">Δεν βρέθηκαν παιχνίδια. Προσθέστε ένα στην αρχική οθόνη από τον εκκινητή του ή προσθέστε τον ίδιο τον εκκινητή ως προφίλ.</string>
     <string name="game_mode_import_reading">Ανάγνωση παιχνιδιών</string>
-    <string name="game_mode_key_as_is">Όπως είναι</string>
-    <string name="game_mode_keys">Πλήκτρα</string>
-    <string name="game_mode_keys_note">Η αλλαγή στυλ επαναφέρει τα πλήκτρα στις προεπιλογές του.</string>
     <string name="game_mode_left_half">Αριστερό μισό του trackpad</string>
     <string name="game_mode_next_profile">Επόμενο προφίλ</string>
     <string name="game_mode_no_apps">δεν υπάρχουν ακόμη εφαρμογές</string>
-    <string name="game_mode_note">Η λειτουργία παιχνιδιού χρειάζεται το ενσωματωμένο shell (ή το Shizuku) και τον βοηθό προσβασιμότητας του πληκτρολογίου. Τα πλήκτρα που δεν αλλάζετε φτάνουν στο παιχνίδι όπως είναι, και η πληκτρολόγηση σε πεδίο κειμένου του παιχνιδιού λειτουργεί κανονικά. Το trackpad διαβάζει ένα δάχτυλο τη φορά, οπότε κινείται ένας μοχλός τη φορά.</string>
+    <string name="game_mode_note">Η λειτουργία παιχνιδιού χρειάζεται το ενσωματωμένο shell (ή το Shizuku) και τη βοήθεια προσβασιμότητας του πληκτρολογίου. Τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι: αντιστοιχίστε τα στις ρυθμίσεις χειριστηρίου του εξομοιωτή ή του launcher. Η πληκτρολόγηση σε πεδίο κειμένου του παιχνιδιού λειτουργεί κανονικά. Το trackpad διαβάζει ένα δάχτυλο τη φορά, οπότε κινείται ένας μοχλός τη φορά.</string>
     <string name="game_mode_profile_name">Όνομα</string>
     <string name="game_mode_profiles">Προφίλ παιχνιδιών</string>
     <string name="game_mode_remove">Αφαίρεση</string>
     <string name="game_mode_right_half">Δεξί μισό του trackpad</string>
     <string name="game_mode_save">Αποθήκευση</string>
-    <string name="game_mode_style">Στυλ</string>
-    <string name="game_mode_switch_description">Σε εφαρμογές με προφίλ παιχνιδιού, τα πλήκτρα και το trackpad παίζουν το παιχνίδι: κουμπιά και μοχλοί χειριστηρίου ή πλήκτρα και ποντίκι.</string>
+    <string name="game_mode_switch_description">Σε εφαρμογές με προφίλ παιχνιδιού, τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι και το trackpad κινεί τους μοχλούς του.</string>
     <string name="game_mode_title">Λειτουργία παιχνιδιού</string>
     <string name="pages_start_description">Επιλεγμένο: ένα επίπεδο ανοίγει στα πρόσφατα. Χωρίς επιλογή: ανοίγει στην προεπιλεγμένη σελίδα του (η επιλογή του προγραμματιστή, μέχρι να την αλλάξετε με το μολύβι κάτω αριστερά), με τα πρόσφατα μία σελίδα πίσω, στο Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1127,23 +1123,17 @@
     <string name="trackpad_shizuku_fallback_title">Συρσίματα του Android όσο το Shizuku είναι κλειστό</string>
     <string name="sym_start_from_recents">Έναρξη από τα πρόσφατά μου</string>
     <string name="sym_start_most_popular">Έναρξη από τα πιο δημοφιλή</string>
-    <string name="game_mode_add_key">Προσθήκη πλήκτρου</string>
-    <string name="game_mode_press_key">Πατήστε το πλήκτρο ή το κουμπί. Το κουμπί λειτουργίας δεν μπορεί να χρησιμοποιηθεί: το Android το κρατά για τον εαυτό του.</string>
     <string name="game_mode_gamenative_save">Ρύθμιση του GameNative</string>
-    <string name="game_mode_gamenative_save_description">Το GameNative δέχεται μόνο πραγματικά χειριστήρια, οπότε η λειτουργία παιχνιδιού πατά το δικό του χειριστήριο οθόνης για τα πλήκτρα σας, αόρατα.</string>
-    <string name="game_mode_place_keys">Τοποθέτηση πλήκτρων στην οθόνη</string>
-    <string name="game_mode_place_hint">Σύρετε κάθε πλήκτρο πάνω στο κουμπί του παιχνιδιού και κάθε κύκλο μοχλού πάνω στον μοχλό του. Προσθέστε πλήκτρο και μετά πατήστε το.</string>
+    <string name="game_mode_gamenative_save_description">Τα παιχνίδια του GameNative δέχονται μοχλό μόνο από πραγματικό χειριστήριο ή από το χειριστήριο οθόνης του, οπότε το trackpad κινεί τους μοχλούς της οθόνης, αόρατα.</string>
+    <string name="game_mode_place_hint">Σύρετε κάθε κύκλο μοχλού πάνω στον μοχλό του παιχνιδιού.</string>
     <string name="game_mode_place_overlay_needed">Επιτρέψτε στο Flux Keyboard να εμφανίζεται πάνω από άλλες εφαρμογές και δοκιμάστε ξανά.</string>
     <string name="game_mode_place_clear">Εκκαθάριση</string>
     <string name="game_mode_left_stick">Αριστερός μοχλός</string>
     <string name="game_mode_right_stick">Δεξιός μοχλός</string>
     <string name="game_mode_gamenative_open">Άνοιγμα GameNative</string>
-    <string name="game_mode_gamenative_steps">Στο GameNative, μία φορά ανά παιχνίδι:\n1. Ξεκινήστε το παιχνίδι και ανοίξτε το μενού του (Πίσω).\n2. Ενεργοποιήστε το On-screen Controller, με την προεπιλεγμένη διάταξή του.\n3. Ορίστε το Control Opacity στο 0.\n\nΤα πλήκτρα σας πατούν τότε τα κουμπιά του και το trackpad κινεί τους μοχλούς του. Στις οθόνες του ίδιου του GameNative τα πλήκτρα λειτουργούν ως χειριστήριο.\n\nΓια να παίζετε με το τηλέφωνο όρθιο, ενεργοποιήστε το Portrait Mode στις ρυθμίσεις του παιχνιδιού, General.</string>
+    <string name="game_mode_gamenative_steps">Στο GameNative, μία φορά ανά παιχνίδι:\n1. Ξεκινήστε το παιχνίδι και ανοίξτε το μενού του (Πίσω).\n2. Ενεργοποιήστε το On-screen Controller, με την προεπιλεγμένη διάταξή του.\n3. Ορίστε το Control Opacity στο 0.\n\nΤο trackpad κινεί τότε τους μοχλούς του. Τα πλήκτρα σας φτάνουν στο παιχνίδι ως πληκτρολόγιο: αντιστοιχίστε τα στα χειριστήρια του ίδιου του παιχνιδιού.\n\nΓια να παίζετε με το τηλέφωνο όρθιο, ενεργοποιήστε το Portrait Mode στις ρυθμίσεις του παιχνιδιού, General.</string>
     <string name="game_mode_home_screen">Προσθήκη στην αρχική οθόνη</string>
     <string name="game_mode_home_screen_failed">Η αρχική οθόνη δεν δέχεται συντομεύσεις.</string>
-    <string name="game_mode_use_emulator_controls">Χρήση των χειριστηρίων οθόνης του %1$s</string>
-    <string name="game_mode_emulator_applied">Πλήκτρα και μοχλοί ορίστηκαν στα χειριστήρια οθόνης του εξομοιωτή. Ρυθμίστε τα με «Τοποθέτηση πλήκτρων στην οθόνη» αν μετακινήσατε κάποιο.</string>
-    <string name="game_mode_emulator_unreadable">Τα χειριστήριά του δεν είναι ακόμη γνωστά: ανοίξτε ένα παιχνίδι σε αυτόν μία φορά με την οθόνη όρθια και τα χειριστήρια οθόνης εμφανή, μετά δοκιμάστε ξανά.</string>
     <string name="game_mode_folders">Δημιουργία φακέλων παιχνιδιών</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, με φάκελο για GameNative, GameHub, Dolphin, PPSSPP, Azahar και Eden. Στρέψτε την εξαγωγή για frontend του GameNative και του GameHub Lite στον δικό τους, κρατήστε τα παιχνίδια των εξομοιωτών στον δικό τους (και προσθέστε τον φάκελο στον εξομοιωτή), και κάθε παιχνίδι μπορεί να έχει προφίλ και συντόμευση που το ξεκινά. Διαβάζεται και ο φάκελος ROMs του ES-DE.</string>
     <string name="game_mode_folders_made">Δημιουργήθηκαν στο Download/Flux Keyboard/Games. GameNative: Ρυθμίσεις > Διεπαφή > Frontend Sync, και επιλέξτε εκεί τον φάκελο GameNative.</string>
@@ -1160,27 +1150,6 @@
     <string name="game_mode_own_game_store">Κατάστημα</string>
     <string name="game_mode_own_game_custom_store">Προσαρμοσμένο παιχνίδι</string>
     <string name="game_mode_own_game_none">Δεν είναι εγκατεστημένος κανένας από τους εκκινητές ή εξομοιωτές όπου το Flux Keyboard μπορεί να ξεκινά παιχνίδια (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
-    <string name="native_save">Αποθήκευση για %1$s</string>
-    <string name="native_save_description">Για εκκίνηση αυτού του παιχνιδιού μέσα από το %1$s: αυτό το προφίλ στη δική του μορφή, με το πώς φορτώνεται εκεί.</string>
-    <string name="native_keys">Πλήκτρα από την ίδια την εφαρμογή</string>
-    <string name="native_keys_description">Το δικό της προφίλ χειριστηρίου ορίζει τα πλήκτρα, οπότε η λειτουργία παιχνιδιού δεν τα αγγίζει (η επιφάνεια αφής κινεί ακόμα τους μοχλούς). Ενεργοποιείται με την αποθήκευση για εξομοιωτή.</string>
-    <string name="native_gamenative_steps">Τίποτα για φόρτωση: σε παιχνίδι, η λειτουργία παιχνιδιού πατά το ενσωματωμένο χειριστήριο οθόνης του GameNative για τα πλήκτρα σας και κινεί τους μοχλούς του με το trackpad. Στις οθόνες του ίδιου του GameNative τα πλήκτρα λειτουργούν ως χειριστήριο.\n\nΣτο μενού του παιχνιδιού (Πίσω), ενεργοποιήστε το On-screen Controller με την προεπιλεγμένη διάταξή του και ορίστε το Control Opacity στο 0: δέχεται τα πατήματα, αόρατο.\n\nΈνα κουμπί αστόχησε (άλλη διάταξη); Στο παιχνίδι, τραβήξτε προς τα κάτω την ειδοποίηση της λειτουργίας παιχνιδιού, πατήστε Τοποθέτηση πλήκτρων στην οθόνη, σύρετε τα πλαίσια πάνω στα κουμπιά και πατήστε Αποθήκευση.</string>
-    <string name="native_gamehub_steps">Τίποτα για φόρτωση: σε παιχνίδι, η λειτουργία παιχνιδιού πατά τα χειριστήρια οθόνης του GameHub για τα πλήκτρα σας, ήδη τοποθετημένα εκεί που τα σχεδιάζει το GameHub, και κινεί τους μοχλούς του με το trackpad. Στις οθόνες του ίδιου του GameHub τα πλήκτρα λειτουργούν ως χειριστήριο.\n\nΕνεργοποιήστε τα χειριστήρια οθόνης του GameHub στο μενού του παιχνιδιού και ορίστε την αδιαφάνειά τους στο 0: δέχονται τα πατήματα, αόρατα.\n\nΈνα κουμπί αστόχησε (άλλη διάταξη); Στο παιχνίδι, τραβήξτε προς τα κάτω την ειδοποίηση της λειτουργίας παιχνιδιού, πατήστε Τοποθέτηση πλήκτρων στην οθόνη, σύρετε τα πλαίσια πάνω στα κουμπιά και πατήστε Αποθήκευση. Τα Start και Select δεν υπάρχουν από προεπιλογή στα χειριστήρια του GameHub: προσθέστε τα εκεί για να τα χρησιμοποιήσετε.</string>
-    <string name="native_dolphin_steps">Αποθηκεύτηκε ως προφίλ Dolphin «%1$s».\n\nΣτο Dolphin, μία φορά:\n1. Πατήστε παρατεταμένα το παιχνίδι, μετά Ρυθμίσεις παιχνιδιού.\n2. Είσοδος GameCube, Θύρα 1, Προφίλ.\n3. Φορτώστε το «%1$s».\n\nΤο Dolphin θα διαβάζει μόνο του τα πλήκτρα σε κάθε εκκίνηση του παιχνιδιού· η επιφάνεια αφής κινεί ακόμα τους μοχλούς μέσω της λειτουργίας παιχνιδιού.</string>
-    <string name="native_ppsspp_steps">Γράφτηκε στις ρυθμίσεις PPSSPP του παιχνιδιού %1$s (η τελευταία ρύθμιση παιχνιδιού που δημιουργήθηκε).\n\nΑυτό το παιχνίδι διαβάζει πλέον μόνο του τα πλήκτρα σε κάθε εκκίνηση· η επιφάνεια αφής κινεί ακόμα τον μοχλό μέσω της λειτουργίας παιχνιδιού.\n\nΛάθος παιχνίδι; Στο PPSSPP πατήστε παρατεταμένα το σωστό, Δημιουργία ρύθμισης παιχνιδιού, μετά αποθηκεύστε ξανά εδώ.</string>
-    <string name="native_ppsspp_none">Το PPSSPP κρατά τα πλήκτρα ανά παιχνίδι σε ρύθμιση παιχνιδιού. Στο PPSSPP:\n1. Πατήστε παρατεταμένα το παιχνίδι.\n2. Δημιουργία ρύθμισης παιχνιδιού.\nΜετά αποθηκεύστε ξανά εδώ.</string>
-    <string name="native_bind_steps">Το %1$s δεν φορτώνει χειρισμό από αρχείο: στις Ρυθμίσεις του, Είσοδος (Χειρισμός), ορίστε κάθε κουμπί πατώντας το πλήκτρο του όταν ζητηθεί:\n\n%2$s\n\nΤο Eden μπορεί να τα αποθηκεύσει ως προφίλ εισόδου για αυτό το παιχνίδι. Η λειτουργία παιχνιδιού του αφήνει τα πλήκτρα· η επιφάνεια αφής κινεί ακόμα τους μοχλούς.</string>
-    <string name="native_none">Αυτή η εφαρμογή δεν έχει δικό της προφίλ χειριστηρίου: η λειτουργία παιχνιδιού ορίζει τα πλήκτρα όπως κι αν ξεκίνησε το παιχνίδι.</string>
-    <string name="native_failed">Δεν αποθηκεύτηκε. Τρέχει το ενσωματωμένο shell;</string>
-    <string name="game_map_keyboard">Πληκτρολόγιο</string>
-    <string name="game_map_controller">Χειριστήριο</string>
-    <string name="game_map_keyboard_hint">Πατήστε ένα πλήκτρο για να επιλέξετε τι κάνει στο παιχνίδι. Τα κενά πλήκτρα φτάνουν στο παιχνίδι ως έχουν.</string>
-    <string name="game_map_controller_hint">Πατήστε ένα κουμπί, μετά πατήστε το πλήκτρο του.</string>
-    <string name="game_map_group_controller">Χειριστήριο</string>
-    <string name="game_map_group_keyboard">Πληκτρολόγιο</string>
-    <string name="game_map_group_mouse">Ποντίκι</string>
-    <string name="game_map_press_for_button">Πατήστε το πλήκτρο για αυτό το κουμπί.</string>
-    <string name="game_map_clear_button">Χωρίς πλήκτρο</string>
     <string name="game_mode_screen">Οθόνη</string>
     <string name="game_mode_screen_app">Όπως θέλει η εφαρμογή</string>
     <string name="game_mode_screen_upright">Πάντα όρθια</string>
@@ -1195,15 +1164,7 @@
     <string name="shell_elsewhere_otp">Η πρόσβαση shell επιτρέπει την ανάγνωση κωδικών από ειδοποιήσεις που το Android κρύβει από τις εφαρμογές (Android 15 και νεότερα).</string>
     <string name="shell_shortcuts_launcher">Ή βάλτε τις σε πλήκτρα που πατιούνται στην αρχική οθόνη.</string>
     <string name="shell_shortcuts_nav">Ή σε πλήκτρα Ctrl στη λειτουργία πλοήγησης.</string>
-    <string name="native_dolphin_wii_steps">Αποθηκεύτηκε ως προφίλ Wii Remote του Dolphin \"%1$s\" (%2$s).\n\nΣτο Dolphin, μία φορά:\n1. Πατήστε παρατεταμένα το παιχνίδι, μετά Ρυθμίσεις παιχνιδιού.\n2. Είσοδος Wii, Wii Remote 1, Προφίλ.\n3. Φορτώστε το \"%1$s\".\n\nΤο Dolphin διαβάζει τότε τα πλήκτρα μόνο του κάθε φορά που ξεκινά αυτό το παιχνίδι· το trackpad κινεί ακόμη τους μοχλούς μέσω της λειτουργίας παιχνιδιού.</string>
-    <string name="dolphin_pad_title">Χειριστήριο Dolphin</string>
-    <string name="dolphin_pad_description">Τι ρυθμίζει η Αποθήκευση για Dolphin. Το Αυτόματο διαβάζει το αρχείο του παιχνιδιού: ένα παιχνίδι Wii παίρνει Wii Remote με Nunchuk, ένα παιχνίδι GameCube χειριστήριο GameCube. Επιλέξτε άλλο όταν ένα παιχνίδι παίζεται καλύτερα με αυτό.</string>
-    <string name="dolphin_pad_auto_found">Αυτόματο (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Αυτόματο</item>
-        <item>Χειριστήριο GameCube</item>
-        <item>Wii Remote και Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wii Remote πλάγια</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Τοποθέτηση μοχλών στην οθόνη</string>
+    <string name="game_mode_keys_pass">Τα πλήκτρα φτάνουν στο παιχνίδι όπως είναι: αντιστοιχίστε τα στα χειριστήρια του παιχνιδιού.</string>
+    <string name="game_mode_keys_pass_app">Τα πλήκτρα φτάνουν στο %1$s όπως είναι: αντιστοιχίστε τα μία φορά στις δικές του ρυθμίσεις χειριστηρίου.</string>
 </resources>

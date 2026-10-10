@@ -1694,27 +1694,23 @@
     <string name="flux_tutorial_shell_title">Shell tích hợp (khuyên dùng)</string>
     <string name="game_mode_add">Thêm hồ sơ</string>
     <string name="game_mode_add_app">Thêm ứng dụng</string>
-    <string name="game_mode_add_description">Chọn ứng dụng áp dụng; các phím bắt đầu như một tay cầm.</string>
+    <string name="game_mode_add_description">Chọn ứng dụng; bàn di chuột bắt đầu là các cần analog của nó.</string>
     <string name="game_mode_apps">Ứng dụng</string>
     <string name="game_mode_delete">Xóa hồ sơ</string>
     <string name="game_mode_import">Thêm trò chơi từ trình khởi chạy trò chơi</string>
     <string name="game_mode_import_description">Các trò chơi mà GameNative, GameHub hoặc GameHub Lite có trên màn hình chính, trong lối tắt của chúng hoặc đã cài trong thư mục Steam của chúng, mỗi trò có hồ sơ riêng. Chuyển giữa các trò của một trình khởi chạy từ thông báo chế độ chơi game, hoặc cho mỗi trò một lối tắt riêng trên màn hình chính.</string>
     <string name="game_mode_import_none">Không tìm thấy trò chơi. Thêm một trò vào màn hình chính từ trình khởi chạy của nó, hoặc thêm chính trình khởi chạy làm hồ sơ.</string>
     <string name="game_mode_import_reading">Đang đọc trò chơi</string>
-    <string name="game_mode_key_as_is">Giữ nguyên</string>
-    <string name="game_mode_keys">Phím</string>
-    <string name="game_mode_keys_note">Đổi kiểu sẽ đặt lại các phím về mặc định của kiểu đó.</string>
     <string name="game_mode_left_half">Nửa trái bàn di chuột</string>
     <string name="game_mode_next_profile">Hồ sơ tiếp theo</string>
     <string name="game_mode_no_apps">chưa có ứng dụng</string>
-    <string name="game_mode_note">Chế độ chơi game cần shell tích hợp (hoặc Shizuku) và trình trợ giúp hỗ trợ tiếp cận của bàn phím. Phím không gán lại đến trò chơi như cũ, và gõ vào ô văn bản trong trò chơi vẫn hoạt động bình thường. Bàn di chuột đọc một ngón tay mỗi lúc, nên mỗi lúc chỉ một cần điều khiển di chuyển.</string>
+    <string name="game_mode_note">Chế độ chơi game cần shell tích hợp (hoặc Shizuku) và trợ năng của bàn phím. Phím đến game nguyên vẹn: gán chúng trong cài đặt tay cầm của trình giả lập hoặc launcher. Gõ vào ô văn bản của game vẫn như thường. Bàn di chuột đọc một ngón mỗi lần, nên mỗi lần chỉ một cần analog di chuyển.</string>
     <string name="game_mode_profile_name">Tên</string>
     <string name="game_mode_profiles">Hồ sơ trò chơi</string>
     <string name="game_mode_remove">Bỏ</string>
     <string name="game_mode_right_half">Nửa phải bàn di chuột</string>
     <string name="game_mode_save">Lưu</string>
-    <string name="game_mode_style">Kiểu</string>
-    <string name="game_mode_switch_description">Trong ứng dụng có hồ sơ trò chơi, phím và bàn di chuột điều khiển trò chơi: nút và cần của tay cầm, hoặc phím và chuột.</string>
+    <string name="game_mode_switch_description">Trong các ứng dụng có hồ sơ game, phím đến game nguyên vẹn và bàn di chuột di chuyển cần analog.</string>
     <string name="game_mode_title">Chế độ chơi game</string>
     <string name="pages_start_description">Khi đánh dấu, một lớp mở ở mục gần đây. Khi bỏ đánh dấu, lớp mở ở trang mặc định (lựa chọn của nhà phát triển, cho đến khi bạn đổi bằng bút chì ở góc dưới bên trái), mục gần đây ở trang trước, trên Q.</string>
     <string name="pages_start_kaomoji">Kaomoji</string>
@@ -1747,23 +1743,17 @@
     <string name="trackpad_shizuku_fallback_title">Vuốt của Android khi Shizuku tắt</string>
     <string name="sym_start_from_recents">Bắt đầu từ mục gần đây của tôi</string>
     <string name="sym_start_most_popular">Bắt đầu với những mục phổ biến nhất</string>
-    <string name="game_mode_add_key">Thêm phím</string>
-    <string name="game_mode_press_key">Nhấn phím hoặc nút. Không dùng được nút nguồn: Android giữ nó cho riêng mình.</string>
     <string name="game_mode_gamenative_save">Thiết lập GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative chỉ nhận tay cầm thật, nên chế độ chơi game bấm tay cầm trên màn hình của chính nó thay cho phím của bạn, không hiện ra.</string>
-    <string name="game_mode_place_keys">Đặt phím trên màn hình</string>
-    <string name="game_mode_place_hint">Kéo từng phím lên nút của trò chơi và từng vòng cần lên cần của nó. Thêm phím, rồi nhấn phím đó.</string>
+    <string name="game_mode_gamenative_save_description">Game của GameNative chỉ nhận cần analog từ tay cầm thật hoặc tay cầm trên màn hình của nó, nên bàn di chuột di chuyển các cần trên màn hình, không hiện ra.</string>
+    <string name="game_mode_place_hint">Kéo mỗi vòng tròn cần analog lên cần analog của game.</string>
     <string name="game_mode_place_overlay_needed">Hãy cho phép Flux Keyboard hiển thị trên ứng dụng khác rồi thử lại.</string>
     <string name="game_mode_place_clear">Xóa</string>
     <string name="game_mode_left_stick">Cần trái</string>
     <string name="game_mode_right_stick">Cần phải</string>
     <string name="game_mode_gamenative_open">Mở GameNative</string>
-    <string name="game_mode_gamenative_steps">Trong GameNative, một lần cho mỗi game:\n1. Mở game và mở menu của nó (Quay lại).\n2. Bật On-screen Controller, với bố cục mặc định.\n3. Đặt Control Opacity về 0.\n\nKhi đó phím của bạn bấm các nút của nó và bàn di chuột di chuyển cần analog. Trong các màn hình riêng của GameNative, phím hoạt động như tay cầm.\n\nĐể chơi với điện thoại dựng đứng, bật Portrait Mode trong cài đặt của game, General.</string>
+    <string name="game_mode_gamenative_steps">Trong GameNative, một lần cho mỗi game:\n1. Mở game và mở menu của nó (Quay lại).\n2. Bật On-screen Controller, với bố cục mặc định.\n3. Đặt Control Opacity về 0.\n\nKhi đó bàn di chuột di chuyển các cần analog. Phím của bạn đến game như một bàn phím: gán chúng trong điều khiển của chính game.\n\nĐể chơi với điện thoại dựng đứng, bật Portrait Mode trong cài đặt của game, General.</string>
     <string name="game_mode_home_screen">Thêm vào màn hình chính</string>
     <string name="game_mode_home_screen_failed">Màn hình chính không nhận lối tắt.</string>
-    <string name="game_mode_use_emulator_controls">Dùng điều khiển trên màn hình của %1$s</string>
-    <string name="game_mode_emulator_applied">Phím và cần đã đặt lên điều khiển trên màn hình của trình giả lập. Tinh chỉnh bằng Đặt phím trên màn hình nếu bạn đã di chuyển cái nào.</string>
-    <string name="game_mode_emulator_unreadable">Chưa biết điều khiển của nó: mở một trò chơi trong đó một lần với màn hình đứng thẳng và điều khiển trên màn hình hiện ra, rồi thử lại.</string>
     <string name="game_mode_folders">Tạo thư mục trò chơi</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, với một thư mục cho GameNative, GameHub, Dolphin, PPSSPP, Azahar và Eden. Trỏ xuất cho frontend của GameNative và GameHub Lite vào thư mục của chúng, để trò chơi giả lập trong thư mục của chúng (và thêm thư mục đó trong trình giả lập), mỗi trò chơi có thể có hồ sơ và lối tắt khởi động nó. Thư mục ROMs của ES-DE cũng được đọc.</string>
     <string name="game_mode_folders_made">Đã tạo trong Download/Flux Keyboard/Games. GameNative: Cài đặt > Giao diện > Frontend Sync, rồi chọn thư mục GameNative ở đó.</string>
@@ -1780,27 +1770,6 @@
     <string name="game_mode_own_game_store">Cửa hàng</string>
     <string name="game_mode_own_game_custom_store">Trò chơi tùy chỉnh</string>
     <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
-    <string name="native_save">Lưu cho %1$s</string>
-    <string name="native_save_description">Để khởi động trò chơi này từ trong %1$s: hồ sơ này ở định dạng riêng của nó, kèm cách tải nó ở đó.</string>
-    <string name="native_keys">Phím do chính ứng dụng gán</string>
-    <string name="native_keys_description">Hồ sơ tay cầm riêng của ứng dụng gán các phím, nên chế độ chơi game không đụng đến chúng (bàn di chuột vẫn di chuyển cần). Bật khi lưu cho trình giả lập.</string>
-    <string name="native_gamenative_steps">Không cần tải gì: trong game, chế độ chơi game bấm tay cầm trên màn hình có sẵn của GameNative thay cho phím của bạn và di chuyển cần analog bằng bàn di chuột. Trong các màn hình riêng của GameNative, phím hoạt động như tay cầm.\n\nTrong menu của game (Quay lại), bật On-screen Controller với bố cục mặc định và đặt Control Opacity về 0: nó vẫn nhận lần bấm, không hiện ra.\n\nMột nút bị trượt (bố cục khác)? Trong game, kéo thông báo của chế độ chơi game xuống, chạm Đặt phím trên màn hình, kéo các ô lên các nút và chạm Lưu.</string>
-    <string name="native_gamehub_steps">Không cần tải gì: trong game, chế độ chơi game bấm các điều khiển trên màn hình của GameHub thay cho phím của bạn, đã đặt sẵn ở nơi GameHub vẽ chúng, và di chuyển cần analog bằng bàn di chuột. Trong các màn hình riêng của GameHub, phím hoạt động như tay cầm.\n\nBật điều khiển trên màn hình của GameHub trong menu trong game và đặt độ mờ của chúng về 0: chúng vẫn nhận lần bấm, không hiện ra.\n\nMột nút bị trượt (bố cục khác)? Trong game, kéo thông báo của chế độ chơi game xuống, chạm Đặt phím trên màn hình, kéo các ô lên các nút và chạm Lưu. Start và Select mặc định không có trên điều khiển của GameHub: thêm chúng vào đó để dùng.</string>
-    <string name="native_dolphin_steps">Đã lưu thành hồ sơ Dolphin \"%1$s\".\n\nTrong Dolphin, một lần:\n1. Nhấn giữ trò chơi, rồi Cài đặt trò chơi.\n2. Đầu vào GameCube, Cổng 1, Hồ sơ.\n3. Tải \"%1$s\".\n\nDolphin sẽ tự đọc phím mỗi khi trò chơi này khởi động; bàn di chuột vẫn di chuyển cần qua chế độ chơi game.</string>
-    <string name="native_ppsspp_steps">Đã ghi vào cài đặt PPSSPP của trò chơi %1$s (cấu hình trò chơi tạo gần nhất).\n\nTrò chơi đó giờ tự đọc phím mỗi khi khởi động; bàn di chuột vẫn di chuyển cần qua chế độ chơi game.\n\nSai trò chơi? Trong PPSSPP, nhấn giữ trò đúng, Tạo cấu hình trò chơi, rồi lưu lại ở đây.</string>
-    <string name="native_ppsspp_none">PPSSPP lưu phím theo từng trò trong cấu hình trò chơi. Trong PPSSPP:\n1. Nhấn giữ trò chơi.\n2. Tạo cấu hình trò chơi.\nRồi lưu lại ở đây.</string>
-    <string name="native_bind_steps">%1$s không tải điều khiển từ tệp được: trong Cài đặt của nó, Đầu vào (Điều khiển), gán từng nút bằng cách bấm phím của nó khi được hỏi:\n\n%2$s\n\nEden có thể lưu chúng thành hồ sơ đầu vào cho trò chơi này. Chế độ chơi game để các phím cho nó; bàn di chuột vẫn di chuyển cần.</string>
-    <string name="native_none">Ứng dụng này không có hồ sơ tay cầm riêng: chế độ chơi game gán các phím dù trò chơi được khởi động thế nào.</string>
-    <string name="native_failed">Không lưu được. Shell tích hợp có đang chạy không?</string>
-    <string name="game_map_keyboard">Bàn phím</string>
-    <string name="game_map_controller">Tay cầm</string>
-    <string name="game_map_keyboard_hint">Chạm vào một phím để chọn việc nó làm trong trò chơi. Phím để trống đến trò chơi như nguyên bản.</string>
-    <string name="game_map_controller_hint">Chạm vào một nút, rồi bấm phím cho nút đó.</string>
-    <string name="game_map_group_controller">Tay cầm</string>
-    <string name="game_map_group_keyboard">Bàn phím</string>
-    <string name="game_map_group_mouse">Chuột</string>
-    <string name="game_map_press_for_button">Bấm phím cho nút này.</string>
-    <string name="game_map_clear_button">Không có phím</string>
     <string name="game_mode_screen">Màn hình</string>
     <string name="game_mode_screen_app">Theo ứng dụng</string>
     <string name="game_mode_screen_upright">Luôn đứng thẳng</string>
@@ -1815,15 +1784,7 @@
     <string name="shell_elsewhere_otp">Quyền truy cập shell cho phép đọc mã từ thông báo mà Android ẩn khỏi ứng dụng (Android 15 trở lên).</string>
     <string name="shell_shortcuts_launcher">Hoặc gán chúng cho phím nhấn trên màn hình chính.</string>
     <string name="shell_shortcuts_nav">Hoặc cho phím Ctrl trong chế độ điều hướng.</string>
-    <string name="native_dolphin_wii_steps">Đã lưu thành hồ sơ Wii Remote của Dolphin \"%1$s\" (%2$s).\n\nTrong Dolphin, một lần:\n1. Nhấn giữ game, rồi Cài đặt game.\n2. Đầu vào Wii, Wii Remote 1, Hồ sơ.\n3. Tải \"%1$s\".\n\nSau đó Dolphin tự đọc phím mỗi khi game này bắt đầu; bàn di chuột vẫn di chuyển cần analog qua chế độ chơi game.</string>
-    <string name="dolphin_pad_title">Tay cầm Dolphin</string>
-    <string name="dolphin_pad_description">Những gì Lưu cho Dolphin thiết lập. Tự động đọc tệp của game: game Wii nhận Wii Remote và Nunchuk, game GameCube nhận tay cầm GameCube. Chọn loại khác khi game chơi tốt hơn với nó.</string>
-    <string name="dolphin_pad_auto_found">Tự động (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Tự động</item>
-        <item>Tay cầm GameCube</item>
-        <item>Wii Remote và Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wii Remote cầm ngang</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Đặt cần analog trên màn hình</string>
+    <string name="game_mode_keys_pass">Phím đến game nguyên vẹn: gán chúng trong điều khiển của game.</string>
+    <string name="game_mode_keys_pass_app">Phím đến %1$s nguyên vẹn: gán chúng một lần trong cài đặt tay cầm của nó.</string>
 </resources>

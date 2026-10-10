@@ -1712,27 +1712,23 @@
     <string name="flux_tutorial_shell_title">Вбудована оболонка (рекомендовано)</string>
     <string name="game_mode_add">Додати профіль</string>
     <string name="game_mode_add_app">Додати застосунок</string>
-    <string name="game_mode_add_description">Виберіть застосунок; клавіші спершу працюють як контролер.</string>
+    <string name="game_mode_add_description">Виберіть застосунок; тачпад спершу працює як його стіки.</string>
     <string name="game_mode_apps">Застосунки</string>
     <string name="game_mode_delete">Видалити профіль</string>
     <string name="game_mode_import">Додати гру з ігрового лаунчера</string>
     <string name="game_mode_import_description">Ігри, які GameNative, GameHub або GameHub Lite мають на головному екрані, у своїх ярликах або встановили у свою папку Steam, кожна зі своїм профілем. Перемикайте ігри лаунчера зі сповіщення ігрового режиму або дайте кожній свій ярлик на головному екрані.</string>
     <string name="game_mode_import_none">Ігор не знайдено. Додайте гру на головний екран у її лаунчері або додайте сам лаунчер як профіль.</string>
     <string name="game_mode_import_reading">Читання ігор</string>
-    <string name="game_mode_key_as_is">Як є</string>
-    <string name="game_mode_keys">Клавіші</string>
-    <string name="game_mode_keys_note">Зміна стилю повертає клавішам його стандартні призначення.</string>
     <string name="game_mode_left_half">Ліва половина трекпада</string>
     <string name="game_mode_next_profile">Наступний профіль</string>
     <string name="game_mode_no_apps">ще немає застосунків</string>
-    <string name="game_mode_note">Ігровому режиму потрібні вбудована оболонка (або Shizuku) і помічник спеціальних можливостей клавіатури. Непризначені клавіші доходять до гри як є, а введення в текстове поле гри працює як звичайно. Трекпад читає один палець за раз, тож рухається один стік.</string>
+    <string name="game_mode_note">Ігровому режиму потрібна вбудована оболонка (або Shizuku) і помічник спеціальних можливостей клавіатури. Клавіші доходять до гри як є: призначте їх у налаштуваннях контролера емулятора чи лаунчера. Введення в текстове поле гри працює як зазвичай. Тачпад читає один палець за раз, тож за раз рухається один стік.</string>
     <string name="game_mode_profile_name">Назва</string>
     <string name="game_mode_profiles">Ігрові профілі</string>
     <string name="game_mode_remove">Прибрати</string>
     <string name="game_mode_right_half">Права половина трекпада</string>
     <string name="game_mode_save">Зберегти</string>
-    <string name="game_mode_style">Стиль</string>
-    <string name="game_mode_switch_description">У застосунках з ігровим профілем клавіші та трекпад керують грою: кнопки й стіки контролера або клавіші та миша.</string>
+    <string name="game_mode_switch_description">У застосунках з ігровим профілем клавіші доходять до гри як є, а тачпад рухає її стіки.</string>
     <string name="game_mode_title">Ігровий режим</string>
     <string name="pages_start_description">Позначено: шар відкривається на нещодавніх. Не позначено: на своїй стандартній сторінці (вибір розробника, доки ви не зміните її олівцем у лівому нижньому куті), а нещодавні на сторінку назад, на Q.</string>
     <string name="pages_start_kaomoji">Каомодзі</string>
@@ -1765,23 +1761,17 @@
     <string name="trackpad_shizuku_fallback_title">Свайпи Android, поки Shizuku вимкнено</string>
     <string name="sym_start_from_recents">Почати з моїх нещодавніх</string>
     <string name="sym_start_most_popular">Почати з найпопулярніших</string>
-    <string name="game_mode_add_key">Додати клавішу</string>
-    <string name="game_mode_press_key">Натисніть клавішу або кнопку. Кнопку живлення використати не можна: Android залишає її собі.</string>
     <string name="game_mode_gamenative_save">Налаштувати GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative приймає лише справжні контролери, тож ігровий режим натискає за ваші клавіші його власний екранний контролер, непомітно.</string>
-    <string name="game_mode_place_keys">Розмістити клавіші на екрані</string>
-    <string name="game_mode_place_hint">Перетягніть кожну клавішу на кнопку гри, а кожне коло стіка на його стік. Додайте клавішу, потім натисніть її.</string>
+    <string name="game_mode_gamenative_save_description">Ігри GameNative приймають стік лише від справжнього контролера або його екранного контролера, тож тачпад рухає екранні стіки, невидимо.</string>
+    <string name="game_mode_place_hint">Перетягніть кожне коло стіка на стік гри.</string>
     <string name="game_mode_place_overlay_needed">Дозвольте Flux Keyboard показуватися поверх інших застосунків і спробуйте знову.</string>
     <string name="game_mode_place_clear">Очистити</string>
     <string name="game_mode_left_stick">Лівий стік</string>
     <string name="game_mode_right_stick">Правий стік</string>
     <string name="game_mode_gamenative_open">Відкрити GameNative</string>
-    <string name="game_mode_gamenative_steps">У GameNative, один раз для кожної гри:\n1. Запустіть гру й відкрийте її меню (Назад).\n2. Увімкніть On-screen Controller зі стандартним розташуванням.\n3. Встановіть Control Opacity на 0.\n\nТоді ваші клавіші натискають його кнопки, а тачпад рухає його стіки. На власних екранах GameNative клавіші працюють як контролер.\n\nЩоб грати, тримаючи телефон вертикально, увімкніть Portrait Mode у налаштуваннях гри, General.</string>
+    <string name="game_mode_gamenative_steps">У GameNative, один раз для кожної гри:\n1. Запустіть гру й відкрийте її меню (Назад).\n2. Увімкніть On-screen Controller зі стандартним розташуванням.\n3. Встановіть Control Opacity на 0.\n\nТоді тачпад рухає його стіки. Ваші клавіші доходять до гри як клавіатура: призначте їх у керуванні самої гри.\n\nЩоб грати, тримаючи телефон вертикально, увімкніть Portrait Mode у налаштуваннях гри, General.</string>
     <string name="game_mode_home_screen">Додати на головний екран</string>
     <string name="game_mode_home_screen_failed">Головний екран не приймає ярлики.</string>
-    <string name="game_mode_use_emulator_controls">Використати екранне керування %1$s</string>
-    <string name="game_mode_emulator_applied">Клавіші й стіки призначено на екранне керування емулятора. Підправте їх через «Розмістити клавіші на екрані», якщо щось пересували.</string>
-    <string name="game_mode_emulator_unreadable">Його керування ще невідоме: відкрийте в ньому гру один раз при вертикальному екрані з видимим екранним керуванням, потім спробуйте знову.</string>
     <string name="game_mode_folders">Створити теки ігор</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, з текою для GameNative, GameHub, Dolphin, PPSSPP, Azahar і Eden. Спрямуйте експорт для фронтендів GameNative і GameHub Lite в їхню теку, тримайте ігри емуляторів у їхній (і додайте теку в емуляторі) — кожна гра може мати профіль і ярлик, що її запускає. Тека ROMs з ES-DE теж читається.</string>
     <string name="game_mode_folders_made">Створено в Download/Flux Keyboard/Games. GameNative: Налаштування > Інтерфейс > Frontend Sync, і виберіть там теку GameNative.</string>
@@ -1798,27 +1788,6 @@
     <string name="game_mode_own_game_store">Магазин</string>
     <string name="game_mode_own_game_custom_store">Власна гра</string>
     <string name="game_mode_own_game_none">Не встановлено жодного лаунчера чи емулятора, у яких Flux Keyboard може запускати ігри (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
-    <string name="native_save">Зберегти для %1$s</string>
-    <string name="native_save_description">Для запуску цієї гри з %1$s: цей профіль у його власному форматі, з тим, як завантажити його там.</string>
-    <string name="native_keys">Клавіші призначає сам застосунок</string>
-    <string name="native_keys_description">Власний профіль контролера застосунку призначає клавіші, тож ігровий режим їх не чіпає (тачпад і далі рухає стіки). Вмикається під час збереження для емулятора.</string>
-    <string name="native_gamenative_steps">Нічого завантажувати: у грі ігровий режим натискає за ваші клавіші вбудований екранний контролер GameNative і рухає його стіки тачпадом. На власних екранах GameNative клавіші працюють як контролер.\n\nУ меню гри (Назад) увімкніть On-screen Controller зі стандартним розташуванням і встановіть Control Opacity на 0: він і далі приймає натискання, невидимо.\n\nКнопка схибила (інше розташування)? У грі потягніть донизу сповіщення ігрового режиму, торкніться «Розмістити клавіші на екрані», перетягніть поля на кнопки й торкніться «Зберегти».</string>
-    <string name="native_gamehub_steps">Нічого завантажувати: у грі ігровий режим натискає за ваші клавіші екранне керування GameHub, уже розміщене там, де GameHub його малює, і рухає його стіки тачпадом. На власних екранах GameHub клавіші працюють як контролер.\n\nУвімкніть екранне керування GameHub в його ігровому меню й встановіть його непрозорість на 0: воно й далі приймає натискання, невидимо.\n\nКнопка схибила (інше розташування)? У грі потягніть донизу сповіщення ігрового режиму, торкніться «Розмістити клавіші на екрані», перетягніть поля на кнопки й торкніться «Зберегти». Start і Select типово немає в керуванні GameHub: додайте їх туди, щоб ними користуватися.</string>
-    <string name="native_dolphin_steps">Збережено як профіль Dolphin «%1$s».\n\nУ Dolphin, один раз:\n1. Утримуйте гру, потім Налаштування гри.\n2. Введення GameCube, Порт 1, Профіль.\n3. Завантажте «%1$s».\n\nDolphin сам читатиме клавіші під час кожного запуску цієї гри; тачпад і далі рухає стіки через ігровий режим.</string>
-    <string name="native_ppsspp_steps">Записано в налаштування PPSSPP гри %1$s (остання створена конфігурація гри).\n\nЦя гра тепер сама читає клавіші під час кожного запуску; тачпад і далі рухає стік через ігровий режим.\n\nНе та гра? У PPSSPP утримуйте потрібну, Створити конфігурацію гри, потім збережіть тут знову.</string>
-    <string name="native_ppsspp_none">PPSSPP зберігає клавіші для кожної гри в конфігурації гри. У PPSSPP:\n1. Утримуйте гру.\n2. Створити конфігурацію гри.\nПотім збережіть тут знову.</string>
-    <string name="native_bind_steps">%1$s не завантажує керування з файлу: у його Налаштуваннях, Введення (Керування), призначте кожну кнопку, натискаючи її клавішу на запит:\n\n%2$s\n\nEden може зберегти їх як профіль введення для цієї гри. Ігровий режим лишає йому клавіші; тачпад і далі рухає стіки.</string>
-    <string name="native_none">Цей застосунок не має власного профілю контролера: ігровий режим призначає клавіші, хоч як було запущено гру.</string>
-    <string name="native_failed">Не вдалося зберегти. Чи працює вбудована оболонка?</string>
-    <string name="game_map_keyboard">Клавіатура</string>
-    <string name="game_map_controller">Контролер</string>
-    <string name="game_map_keyboard_hint">Торкніться клавіші, щоб вибрати, що вона робить у грі. Порожні клавіші доходять до гри як є.</string>
-    <string name="game_map_controller_hint">Торкніться кнопки, потім натисніть клавішу для неї.</string>
-    <string name="game_map_group_controller">Контролер</string>
-    <string name="game_map_group_keyboard">Клавіатура</string>
-    <string name="game_map_group_mouse">Миша</string>
-    <string name="game_map_press_for_button">Натисніть клавішу для цієї кнопки.</string>
-    <string name="game_map_clear_button">Без клавіші</string>
     <string name="game_mode_screen">Екран</string>
     <string name="game_mode_screen_app">Як хоче застосунок</string>
     <string name="game_mode_screen_upright">Завжди вертикально</string>
@@ -1833,15 +1802,7 @@
     <string name="shell_elsewhere_otp">Доступ до оболонки дає змогу читати коди зі сповіщень, які Android приховує від застосунків (Android 15 і новіші).</string>
     <string name="shell_shortcuts_launcher">Або призначте їх клавішам на головному екрані.</string>
     <string name="shell_shortcuts_nav">Або клавішам Ctrl у режимі навігації.</string>
-    <string name="native_dolphin_wii_steps">Збережено як профіль Wii Remote у Dolphin «%1$s» (%2$s).\n\nУ Dolphin, один раз:\n1. Довго натисніть гру, потім «Налаштування гри».\n2. Введення Wii, Wii Remote 1, Профіль.\n3. Завантажте «%1$s».\n\nDolphin потім сам читає клавіші під час кожного запуску цієї гри; тачпад і далі рухає стіки через ігровий режим.</string>
-    <string name="dolphin_pad_title">Контролер Dolphin</string>
-    <string name="dolphin_pad_description">Що налаштовує «Зберегти для Dolphin». «Автоматично» читає файл гри: гра для Wii отримує Wii Remote з Nunchuk, гра для GameCube — контролер GameCube. Виберіть інший, якщо з ним гра йде краще.</string>
-    <string name="dolphin_pad_auto_found">Автоматично (%1$s)</string>
-    <string-array name="dolphin_pads">
-        <item>Автоматично</item>
-        <item>Контролер GameCube</item>
-        <item>Wii Remote і Nunchuk</item>
-        <item>Wii Classic Controller</item>
-        <item>Wii Remote горизонтально</item>
-    </string-array>
+    <string name="game_mode_place_sticks">Розмістити стіки на екрані</string>
+    <string name="game_mode_keys_pass">Клавіші доходять до гри як є: призначте їх у керуванні гри.</string>
+    <string name="game_mode_keys_pass_app">Клавіші доходять до %1$s як є: призначте їх один раз у його власних налаштуваннях контролера.</string>
 </resources>
