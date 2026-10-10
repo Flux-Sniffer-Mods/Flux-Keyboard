@@ -1,5 +1,13 @@
 package it.palsoftware.pastiera.settings
 
+import androidx.compose.foundation.layout.Box
+
+import androidx.compose.foundation.layout.size
+
+import androidx.compose.ui.draw.clip
+
+import androidx.compose.ui.graphics.asImageBitmap
+
 import android.view.KeyEvent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -69,7 +77,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             editing = null
             refresh()
         }, onDelete = {
-            GameProfiles.delete(context, profile.id)
+            GameProfiles.delete(context, profile.id); it.palsoftware.pastiera.gaming.GameArt.forget(context, profile)
             editing = null
             refresh()
         })
@@ -123,7 +131,8 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 linkId = null,
                 title = profile.name,
                 description = profile.style.label + " · " +
-                    profile.packages.joinToString { pkg -> appLabel(context, pkg) }.ifEmpty { stringResource(R.string.game_mode_no_apps) }
+                    profile.packages.joinToString { pkg -> appLabel(context, pkg) }.ifEmpty { stringResource(R.string.game_mode_no_apps) },
+                leading = { GameArtIcon(profile) }
             ) { editing = profile }
         }
         FluxActionRow(
@@ -575,4 +584,29 @@ private fun KeyCaptureDialog(onKey: (Int) -> Unit, onDismiss: () -> Unit) {
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
+}
+
+/** A profile's game art, cropped square; its app's icon while there's none. */
+@Composable
+private fun GameArtIcon(profile: GameProfile) {
+    val context = LocalContext.current
+    val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, profile.id, profile.launch) {
+        value = withContext(Dispatchers.IO) {
+            runCatching { it.palsoftware.pastiera.gaming.GameArt.load(context, profile)?.asImageBitmap() }.getOrNull()
+        }
+    }
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+    val image = art
+    if (image != null) {
+        androidx.compose.foundation.Image(
+            bitmap = image,
+            contentDescription = null,
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            modifier = Modifier.size(40.dp).clip(shape)
+        )
+    } else {
+        Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+            profile.packages.firstOrNull()?.let { pkg -> FluxAppIcon(pkg) }
+        }
+    }
 }

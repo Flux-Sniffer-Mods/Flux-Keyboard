@@ -28,12 +28,22 @@ object GameIds {
             else -> null
         }
         val database = when (player) { "Dolphin" -> "wiitdb"; "Azahar" -> "3dstdb"; else -> null }
+        found?.id?.let { prefs.edit().putString("id:$path", it).apply() }
         val name = found?.id?.let { id -> database?.let { lookup(context, it, id) } } ?: found?.title?.let { tidy(it) }
         // Not known yet (no list to look in): asked again next time
         if (name != null || found == null || database == null || listFile(context, database).exists()) {
             prefs.edit().putString(path, name ?: "").apply()
         }
         return name
+    }
+
+    /** The game ID read from [path] (a disc's GZLE01, a cartridge's AREE), if it has one. */
+    fun id(context: Context, player: String, path: String): String? {
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        prefs.getString("id:$path", null)?.let { return it }
+        if (prefs.contains(path)) return null
+        title(context, player, path)
+        return prefs.getString("id:$path", null)
     }
 
     // ---- Reading the game ----

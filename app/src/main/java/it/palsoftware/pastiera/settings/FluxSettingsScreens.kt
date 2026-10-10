@@ -354,6 +354,7 @@ internal fun FluxActionRow(
     description: String,
     icon: String? = null,
     appPackage: String? = null,
+    leading: (@Composable () -> Unit)? = null,
     onClick: () -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxWidth().settingRow(linkId, onClick)) {
@@ -362,7 +363,11 @@ internal fun FluxActionRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            if (appPackage != null) FluxAppIcon(appPackage) else FluxRowIcon(icon ?: fluxRowIcons[linkId])
+            when {
+                leading != null -> leading()
+                appPackage != null -> FluxAppIcon(appPackage)
+                else -> FluxRowIcon(icon ?: fluxRowIcons[linkId])
+            }
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium)
                 Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

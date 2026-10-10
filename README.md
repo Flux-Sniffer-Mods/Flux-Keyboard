@@ -264,7 +264,9 @@ Minimal mode and the single-language versions were inspired by
 Elite with a hidden bar and a build tuned for one language. Thank you to jlo-aug.
 
 Gaming mode names Wii, GameCube and 3DS games from [GameTDB](https://www.gametdb.com)'s
-lists of game titles, fetched when a game folder is first read.
+lists of game titles, fetched when a game folder is first read, and shows their covers from
+GameTDB too, or box art from [libretro-thumbnails](https://github.com/libretro-thumbnails)
+for other emulator games.
 
 If you enjoy Flux Keyboard, you can [support me on Ko-fi](https://ko-fi.com/fluxsniffermods),
 and the people it's built on:

@@ -747,6 +747,9 @@
     },
     {
       "text": "Gaming mode names emulator games by what they are, not their file: Wii, GameCube and 3DS games by their game ID in GameTDB's lists, PSP games by the title they carry."
+    },
+    {
+      "text": "Gaming mode's profiles show their game's art: Steam games' from Steam (GameNative and GameHub), Wii, GameCube and 3DS covers from GameTDB, and other emulator games' box art from libretro's thumbnails."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
