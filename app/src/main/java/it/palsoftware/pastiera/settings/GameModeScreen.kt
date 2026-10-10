@@ -191,12 +191,8 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             confirmButton = {
                 TextButton(onClick = {
                     gameNativeSetup = false
-                    if (it.palsoftware.pastiera.gaming.GameNativeBridge.save(context)) {
-                        context.packageManager.getLaunchIntentForPackage(it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE)
-                            ?.let { launch -> runCatching { context.startActivity(launch.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) } }
-                    } else {
-                        android.widget.Toast.makeText(context, R.string.game_mode_gamenative_save_failed, android.widget.Toast.LENGTH_LONG).show()
-                    }
+                    context.packageManager.getLaunchIntentForPackage(it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE)
+                        ?.let { launch -> runCatching { context.startActivity(launch.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) } }
                 }) { Text(stringResource(R.string.game_mode_gamenative_open)) }
             },
             dismissButton = { TextButton(onClick = { gameNativeSetup = false }) { Text(stringResource(R.string.cancel)) } }
@@ -399,17 +395,6 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
             }
             ChoiceRow(stringResource(R.string.game_mode_right_half), current.rightHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(rightHalf = TrackpadRole.entries[it])
-            }
-            // GameNative: buttons and sticks through its on-screen controls (Flux Keyboard's profile)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.game_mode_touch_controls))
-                    Text(stringResource(R.string.game_mode_touch_controls_description), style = MaterialTheme.typography.bodySmall)
-                }
-                androidx.compose.material3.Switch(
-                    checked = current.touchControls,
-                    onCheckedChange = { current = current.copy(touchControls = it) }
-                )
             }
             // One screen choice per game, its app's suited one to start with
             val screens = it.palsoftware.pastiera.gaming.ScreenMode.entries

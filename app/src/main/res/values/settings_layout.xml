@@ -320,7 +320,7 @@
     <string name="native_save_description">For starting this game from inside %1$s: this profile in its own form, with how to load it there.</string>
     <string name="native_keys">Keys mapped by the app itself</string>
     <string name="native_keys_description">The app\'s own controller profile maps the keys, so gaming mode leaves them alone (the trackpad still moves the sticks). Turned on when saving for an emulator.</string>
-    <string name="native_gamenative_steps">Saved: Download/Flux Keyboard/Profiles/GameNative/%1$s\n\nIn GameNative, once:\n1. Start %2$s.\n2. Open its menu (Back), then Controls.\n3. Profile library, Import, and pick the file.\n4. Choose it as this game\'s profile, with on-screen controls shown (they\'re invisible).\n\nGameNative then uses it whenever this game starts.</string>
+    <string name="native_gamenative_steps">Nothing to load: in a game, gaming mode presses GameNative\'s built-in on-screen controller for your keys and moves its sticks with the trackpad. In GameNative\'s own screens the keys work as a controller.\n\nIn the game\'s menu (Back), turn on the On-screen Controller with its default layout, and set Control Opacity to 0: it still takes the presses, unseen.\n\nA button missed (another layout)? In the game, pull down gaming mode\'s notification, tap Place keys on screen, drag the boxes onto the buttons and tap Save.</string>
     <string name="native_gamehub_steps">Nothing to load: in a game, gaming mode presses GameHub\'s on-screen controls for your keys, already placed where GameHub draws them, and moves its sticks with the trackpad. In GameHub\'s own screens the keys work as a controller.\n\nTurn GameHub\'s on-screen controls on in its in-game menu, and set their opacity to 0: they still take the presses, unseen.\n\nA button missed (another layout)? In the game, pull down gaming mode\'s notification, tap Place keys on screen, drag the boxes onto the buttons and tap Save. Start and Select aren\'t on GameHub\'s controls by default: add them there to use them.</string>
     <string name="native_dolphin_steps">Saved as the Dolphin profile \"%1$s\".\n\nIn Dolphin, once:\n1. Long-press the game, then Game settings.\n2. GameCube Input, Port 1, Profile.\n3. Load \"%1$s\".\n\nDolphin then reads the keys itself whenever this game starts; the trackpad still moves the sticks through gaming mode.</string>
     <string name="native_ppsspp_steps">Written into the PPSSPP settings of game %1$s (the game config made last).\n\nThat game now reads the keys itself whenever it starts; the trackpad still moves the stick through gaming mode.\n\nWrong game? In PPSSPP, long-press the right one, Create game config, then save again here.</string>
@@ -362,15 +362,12 @@
     <string name="game_mode_keys_note">Changing the style starts the keys again from its defaults.</string>
     <string name="game_mode_key_as_is">As it is</string>
     <string name="game_mode_save">Save</string>
-    <string name="game_mode_touch_controls">Through GameNative\'s on-screen controls</string>
-    <string name="game_mode_touch_controls_description">GameNative only takes real controllers as controllers. With Flux Keyboard\'s controls profile picked in GameNative, the buttons and sticks press its invisible on-screen controls instead, which GameNative passes on as an Xbox controller.</string>
     <string name="game_mode_gamenative_save">Set up GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative only takes real controllers, so it gets Flux Keyboard\'s invisible on-screen controls to press instead. Saves them and opens GameNative.</string>
-    <string name="game_mode_gamenative_steps">Flux Keyboard saves its controls profile to Download/Flux Keyboard. Then, in GameNative, once:\n\n1. Open the game\'s settings, General: turn on Portrait mode to play with the phone upright.\n2. Start the game, open its menu (Back), then Controls.\n3. Profile library, Import: pick Flux Keyboard gamepad.icp.\n4. Choose it, with on-screen controls shown (they\'re invisible).\n\nThe profile then works for every game.</string>
-    <string name="game_mode_gamenative_open">Save and open GameNative</string>
+    <string name="game_mode_gamenative_save_description">GameNative only takes real controllers, so gaming mode presses its own on-screen controller for your keys, unseen.</string>
+    <string name="game_mode_gamenative_steps">In GameNative, once per game:\n1. Start the game and open its menu (Back).\n2. Turn on the On-screen Controller, with its default layout.\n3. Set Control Opacity to 0.\n\nYour keys then press its buttons and the trackpad moves its sticks. In GameNative\'s own screens the keys work as a controller.\n\nTo play with the phone upright, turn on Portrait Mode in the game\'s settings, General.</string>
+    <string name="game_mode_gamenative_open">Open GameNative</string>
     <string name="game_mode_home_screen">Add to the home screen</string>
     <string name="game_mode_home_screen_failed">The home screen doesn\'t take shortcuts.</string>
-    <string name="game_mode_gamenative_save_failed">It couldn\'t be saved.</string>
     <string name="game_mode_place_keys">Place keys on screen</string>
     <string name="game_mode_place_hint">Drag each key onto the game\'s own button, and each stick circle onto its stick. Add a key, then press it.</string>
     <string name="game_mode_place_overlay_needed">Allow Flux Keyboard to display over other apps, then try again.</string>

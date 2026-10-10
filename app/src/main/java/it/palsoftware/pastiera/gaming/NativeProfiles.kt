@@ -30,9 +30,7 @@ object NativeProfiles {
         val pkg = profile.packages.firstOrNull() ?: return Result(context.getString(R.string.native_failed), false)
         val game = profile.name.ifBlank { "Game" }.replace(Regex("[\\\\/:*?\"<>|]"), " ").trim()
         return when (appFor(profile)) {
-            "GameNative" -> if (GameNativeBridge.save(context, game)) {
-                Result(context.getString(R.string.native_gamenative_steps, "$game (Flux Keyboard).icp", profile.name), false)
-            } else Result(context.getString(R.string.native_failed), false)
+            "GameNative" -> Result(context.getString(R.string.native_gamenative_steps), false)
             "GameHub" -> Result(context.getString(R.string.native_gamehub_steps), false)
             "Dolphin" -> dolphin(context, pkg, game, profile)
             "PPSSPP" -> ppsspp(context, pkg, profile)

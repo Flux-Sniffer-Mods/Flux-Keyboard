@@ -109,27 +109,27 @@ object GameMode {
         if (next?.id != profile?.id) {
             if (next != null) start(app, next) else stop(app)
         }
-        // GameHub: its own menus take the keys as a controller, its games only by touch
-        val gameHub = next != null && NativeProfiles.appFor(next) == "GameHub"
-        inMenus = gameHub && gameHubMenus()
+        // GameHub and GameNative: their own screens take the keys as a controller, their games
+        // (run through Wine) only by touch
+        val launcher = next != null && NativeProfiles.appFor(next).let { it == "GameHub" || it == "GameNative" }
+        inMenus = launcher && !wineRunning()
         watch?.cancel(false)
-        watch = if (gameHub) {
+        watch = if (launcher) {
             watcher.schedule({ worker.execute { followGame(app, packageName) } }, 2, java.util.concurrent.TimeUnit.SECONDS)
         } else if (next != null && profiles.size > 1) {
             watcher.schedule({ worker.execute { followGame(app, packageName) } }, 5, java.util.concurrent.TimeUnit.SECONDS)
         } else null
     }
 
-    /** In GameHub's own screens (its library, a game's page), not a game. */
+    /** In a launcher's own screens (its library, a game's page), not a game. */
     @Volatile private var inMenus = false
 
-    private fun gameHubMenus(): Boolean {
-        val dump = AdbShell.run("dumpsys activity activities | grep -m 1 -E 'topResumedActivity|mResumedActivity'", 3_000) ?: return false
-        val activity = Regex("ActivityRecord\\{\\w+ \\w+ ([\\w.]+)/([\\w.$]+)").find(dump)?.groupValues ?: return false
-        val name = if (activity[2].startsWith(".")) activity[1] + activity[2] else activity[2]
-        // Its launcher's screens; a game runs in a screen of its own (Wine's display)
-        return name.startsWith("com.xj.landscape.launcher.ui.") &&
-            listOf("winemu", "xserver", "display", "play").none { name.contains(it, ignoreCase = true) }
+    /** A game running: Wine's server, or the emulator it runs under. */
+    private fun wineRunning(): Boolean {
+        val names = AdbShell.run("ps -A -o NAME; true", 3_000) ?: return true
+        return names.lineSequence().any { name ->
+            name.contains("wineserver") || name.contains("box64") || name.endsWith(".exe", ignoreCase = true)
+        }
     }
 
     /** A key, before the app sees it: true when gaming mode took it. */
@@ -153,13 +153,7 @@ object GameMode {
         val device = event.deviceId
         worker.execute {
             if (device != deviceSent) { send("D $device"); deviceSent = device }
-            // GameNative: the button's place on Flux Keyboard's on-screen controls, touched
-            val place = if (current.touchControls) GameNativeBridge.BUTTONS[action] else null
             when {
-                place != null -> {
-                    val finger = 10 + action.ordinal
-                    if (down) send("T d $finger ${place.first * screenW} ${place.second * screenH}") else send("T u $finger")
-                }
                 action == GameAction.MOUSE_LEFT -> send("B ${if (down) 1 else 0} 1")
                 action == GameAction.MOUSE_RIGHT -> send("B ${if (down) 1 else 0} 2")
                 else -> send("K ${if (down) 1 else 0} ${action.keyCode} ${if (action.gamepad) "g" else "k"}")
@@ -360,7 +354,7 @@ object GameMode {
                     sticks[at] = ((x - originX) / radius).coerceIn(-1f, 1f)
                     sticks[at + 1] = ((y - originY) / radius).coerceIn(-1f, 1f)
                     val current = profile
-                    if (current != null && (!inMenus && (current.stickZones.containsKey(at / 2) || current.touchControls))) dragStick(at) else sendSticks()
+                    if (current != null && (!inMenus && current.stickZones.containsKey(at / 2))) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys((x - originX) / radius, (y - originY) / radius)
@@ -409,15 +403,12 @@ object GameMode {
 
         private val stickHeld = BooleanArray(2)
 
-        /** GameNative: a finger on the stick's place, pushed as far as the stick goes. */
+        /** An on-screen stick: a finger on its place, pushed as far as the stick goes. */
         private fun dragStick(at: Int) {
-            // A stick placed on the screen, else Flux Keyboard's GameNative controls
-            val zone = profile?.stickZones?.get(at / 2)
-            val centre = zone?.let { it.first to it.second }
-                ?: if (at == 0) GameNativeBridge.LEFT_STICK else GameNativeBridge.RIGHT_STICK
-            val cx = centre.first * screenW
-            val cy = centre.second * screenH
-            val reach = (zone?.third ?: GameNativeBridge.STICK_REACH) * screenW
+            val zone = profile?.stickZones?.get(at / 2) ?: return
+            val cx = zone.first * screenW
+            val cy = zone.second * screenH
+            val reach = zone.third * screenW
             val finger = 1 + at / 2
             val first = !stickHeld[at / 2]
             stickHeld[at / 2] = true
@@ -456,8 +447,8 @@ object GameMode {
         // Only where a stick is wanted: other games take the keys as they are
         val wantsSticks = listOf(current.leftHalf, current.rightHalf)
             .any { it == TrackpadRole.LEFT_STICK || it == TrackpadRole.RIGHT_STICK }
-        // GameHub's games take controller input only by touch: placing keys is how they're played
-        val byTouch = NativeProfiles.appFor(current) == "GameHub" || current.taps.isNotEmpty()
+        // GameHub and GameNative games take controller input only by touch: placing keys adjusts it
+        val byTouch = NativeProfiles.appFor(current).let { it == "GameHub" || it == "GameNative" } || current.taps.isNotEmpty()
         if (wantsSticks || byTouch) {
             builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys), place).build())
         }

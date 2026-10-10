@@ -732,6 +732,15 @@
     },
     {
       "text": "What's new and release notes take each entry's time from the commit that added it, so they no longer skip or repeat changes."
+    },
+    {
+      "text": "Gaming mode in GameHub and GameNative: the keys press their own on-screen controllers, already in place, so nothing needs importing; set the controls' opacity to 0 and they work unseen. In their menus the keys stay a controller."
+    },
+    {
+      "text": "Gaming mode: GameHub's Steam games are listed by name, and the key mapper follows the profile's style without clipped labels."
+    },
+    {
+      "text": "Shell access has its own row on the main settings page, with links to every setting elsewhere that uses it."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

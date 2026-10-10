@@ -106,7 +106,6 @@ data class GameProfile(
     val leftHalf: TrackpadRole,
     val rightHalf: TrackpadRole,
     /** Controller buttons and sticks as touches on Flux Keyboard's GameNative controls profile. */
-    val touchControls: Boolean = false,
     /** Keys placed on the screen: each taps its spot (a share of the screen's width and height). */
     val taps: Map<Int, Pair<Float, Float>> = emptyMap(),
     /** Sticks placed on the screen (0 left, 1 right): centre and reach (a share of the width). */
@@ -129,7 +128,6 @@ data class GameProfile(
         put("keys", JSONObject().apply { keys.forEach { (key, action) -> put(key.toString(), action.name) } })
         put("left", leftHalf.name)
         put("right", rightHalf.name)
-        put("touchControls", touchControls)
         put("taps", JSONObject().apply { taps.forEach { (key, at) -> put(key.toString(), JSONArray(listOf(at.first.toDouble(), at.second.toDouble()))) } })
         put("stickZones", JSONObject().apply {
             stickZones.forEach { (stick, zone) ->
@@ -152,7 +150,6 @@ data class GameProfile(
                 }?.toMap().orEmpty(),
                 leftHalf = TrackpadRole.valueOf(json.optString("left", TrackpadRole.NONE.name)),
                 rightHalf = TrackpadRole.valueOf(json.optString("right", TrackpadRole.NONE.name)),
-                touchControls = json.optBoolean("touchControls", false),
                 taps = json.optJSONObject("taps")?.let { taps ->
                     taps.keys().asSequence().mapNotNull { key ->
                         val at = taps.optJSONArray(key) ?: return@mapNotNull null
@@ -259,7 +256,6 @@ object GameProfiles {
         leftHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.LEFT_STICK else TrackpadRole.NONE,
         rightHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.RIGHT_STICK else TrackpadRole.MOUSE,
         // GameNative only takes real controllers: its on-screen controls stand in
-        touchControls = style == GameStyle.GAMEPAD && GameNativeBridge.PACKAGE in packages,
         screen = ScreenMode.defaultFor(packages.firstOrNull())
     )
 

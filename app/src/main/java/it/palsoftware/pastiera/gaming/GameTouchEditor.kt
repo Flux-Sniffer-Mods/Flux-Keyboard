@@ -167,35 +167,63 @@ object GameTouchEditor {
             .onFailure { open = false; root = null }
     }
 
-    /**
-     * Where GameHub's on-screen controls are, as shares of the screen (its own layout, sideways):
-     * the face buttons, d-pad, bumpers, triggers and stick clicks. Its Start and Select sit in
-     * its menu, so they're left to the keys.
-     */
-    private val START = mapOf(
-        GameAction.BUTTON_A to (0.873f to 0.831f), GameAction.BUTTON_B to (0.935f to 0.693f),
-        GameAction.BUTTON_X to (0.810f to 0.693f), GameAction.BUTTON_Y to (0.873f to 0.555f),
-        GameAction.DPAD_UP to (0.315f to 0.629f), GameAction.DPAD_DOWN to (0.315f to 0.748f),
-        GameAction.DPAD_LEFT to (0.265f to 0.688f), GameAction.DPAD_RIGHT to (0.367f to 0.688f),
-        GameAction.L1 to (0.079f to 0.281f), GameAction.R1 to (0.918f to 0.281f),
-        GameAction.L2 to (0.081f to 0.116f), GameAction.R2 to (0.917f to 0.116f),
-        GameAction.L3 to (0.058f to 0.419f), GameAction.R3 to (0.962f to 0.419f)
-    )
-    private val LEFT_STICK = Triple(0.146f, 0.692f, 0.0875f)
-    private val RIGHT_STICK = Triple(0.683f, 0.692f, 0.0875f)
+    /** An app's on-screen controls: each button's centre and the sticks (x, y, reach), shares of the screen. */
+    private class Layout(val buttons: Map<GameAction, Pair<Float, Float>>, val left: Triple<Float, Float, Float>, val right: Triple<Float, Float, Float>)
 
     /**
-     * [profile] with GameHub's buttons pressed for its keys and its sticks moved by the trackpad,
-     * when nothing has been placed by hand: for a GameHub profile, or [always] (the placer's start).
+     * GameHub's own layout, sideways: face buttons, d-pad, bumpers, triggers and stick clicks.
+     * Its Start and Select sit in its menu, so they're left to the keys.
+     */
+    private val GAMEHUB = Layout(
+        mapOf(
+            GameAction.BUTTON_A to (0.873f to 0.831f), GameAction.BUTTON_B to (0.935f to 0.693f),
+            GameAction.BUTTON_X to (0.810f to 0.693f), GameAction.BUTTON_Y to (0.873f to 0.555f),
+            GameAction.DPAD_UP to (0.315f to 0.629f), GameAction.DPAD_DOWN to (0.315f to 0.748f),
+            GameAction.DPAD_LEFT to (0.265f to 0.688f), GameAction.DPAD_RIGHT to (0.367f to 0.688f),
+            GameAction.L1 to (0.079f to 0.281f), GameAction.R1 to (0.918f to 0.281f),
+            GameAction.L2 to (0.081f to 0.116f), GameAction.R2 to (0.917f to 0.116f),
+            GameAction.L3 to (0.058f to 0.419f), GameAction.R3 to (0.962f to 0.419f)
+        ),
+        Triple(0.146f, 0.692f, 0.0875f), Triple(0.683f, 0.692f, 0.0875f)
+    )
+
+    /**
+     * GameNative's built-in on-screen controller (its default controls profile), placed as
+     * shares of the screen. Its d-pad is one control: each direction is pressed on its arm.
+     */
+    private val GAMENATIVE = Layout(
+        mapOf(
+            GameAction.BUTTON_A to (0.872f to 0.533f), GameAction.BUTTON_B to (0.931f to 0.4f),
+            GameAction.BUTTON_X to (0.813f to 0.4f), GameAction.BUTTON_Y to (0.872f to 0.267f),
+            GameAction.DPAD_UP to (0.108f to 0.359f), GameAction.DPAD_DOWN to (0.108f to 0.441f),
+            GameAction.DPAD_LEFT to (0.072f to 0.4f), GameAction.DPAD_RIGHT to (0.144f to 0.4f),
+            GameAction.L1 to (0.03f to 0.222f), GameAction.R1 to (0.97f to 0.222f),
+            GameAction.L2 to (0.07f to 0.07f), GameAction.R2 to (0.93f to 0.07f),
+            GameAction.START to (0.539f to 0.911f), GameAction.SELECT to (0.461f to 0.911f),
+            GameAction.L3 to (0.05f to 0.733f), GameAction.R3 to (0.95f to 0.733f)
+        ),
+        Triple(0.216f, 0.733f, 0.054f), Triple(0.784f, 0.733f, 0.054f)
+    )
+
+    private fun layoutFor(profile: GameProfile): Layout? = when (NativeProfiles.appFor(profile)) {
+        "GameHub" -> GAMEHUB
+        "GameNative" -> GAMENATIVE
+        else -> null
+    }
+
+    /**
+     * [profile] with its launcher's on-screen buttons pressed for its keys and its sticks moved by
+     * the trackpad, when nothing has been placed by hand: for GameHub and GameNative, or [always]
+     * (the placer's start, GameHub's layout for other apps).
      */
     fun withDefaults(profile: GameProfile, always: Boolean = false): GameProfile {
         if (profile.taps.isNotEmpty() || profile.stickZones.isNotEmpty()) return profile
-        if (!always && NativeProfiles.appFor(profile) != "GameHub") return profile
-        val taps = profile.keys.mapNotNull { (code, action) -> START[action]?.let { code to it } }.toMap()
+        val layout = layoutFor(profile) ?: if (always) GAMEHUB else return profile
+        val taps = profile.keys.mapNotNull { (code, action) -> layout.buttons[action]?.let { code to it } }.toMap()
         val halves = listOf(profile.leftHalf, profile.rightHalf)
         val zones = buildMap {
-            if (TrackpadRole.LEFT_STICK in halves) put(0, LEFT_STICK)
-            if (TrackpadRole.RIGHT_STICK in halves) put(1, RIGHT_STICK)
+            if (TrackpadRole.LEFT_STICK in halves) put(0, layout.left)
+            if (TrackpadRole.RIGHT_STICK in halves) put(1, layout.right)
         }
         return profile.copy(taps = taps, stickZones = zones)
     }
