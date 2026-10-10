@@ -62,6 +62,23 @@ object GameMode {
         if (profile?.id == updated.id) profile = GameTouchEditor.withDefaults(updated)
     }
 
+    /**
+     * Profiles were deleted, or gaming mode was switched off, from Flux Keyboard's own settings
+     * (an app gaming mode doesn't follow): the one in use gone, the app's next one takes over, or
+     * gaming mode stops, rather than staying on everywhere until another app comes to the front.
+     */
+    fun profilesChanged(context: Context) {
+        val app = context.applicationContext
+        val id = activeId ?: return
+        worker.execute {
+            if (activeId != id) return@execute
+            val stillThere = GameProfiles.all(app).any { it.id == id }
+            if (stillThere && GameProfiles.enabled(app)) return@execute
+            val next = frontPackage?.takeIf { GameProfiles.enabled(app) }?.let { GameProfiles.active(app, it) }
+            if (next != null) start(app, next) else stop(app)
+        }
+    }
+
     /** The app in front changed (from the accessibility helper). */
     fun onAppInFront(context: Context, packageName: String) {
         val app = context.applicationContext
@@ -214,6 +231,7 @@ object GameMode {
         if (profile == null) return
         profile = null
         activeId = null
+        trackpadRun++
         if (pad) { pad = false; dpadHeld.clear(); send("G 0") }
         trackpad?.destroy(); trackpad = null
         runCatching { input?.close() }
@@ -365,14 +383,21 @@ object GameMode {
 
     // ---- The trackpad: sticks or a mouse ----
 
+    /** Which trackpad reading is current: one started before gaming mode stopped or switched ends itself. */
+    @Volatile private var trackpadRun = 0
+
     private fun startTrackpad(current: GameProfile) {
+        val run = ++trackpadRun
         trackpad?.destroy(); trackpad = null
         if (current.leftHalf == TrackpadRole.NONE && current.rightHalf == TrackpadRole.NONE) return
         Thread {
             runCatching {
                 val device = TrackpadInputDeviceDiscovery.selectAutomatic(ShizukuTrackpadDeviceDiscovery.discoverBlocking())
                     ?: return@Thread
+                // Stopped (or restarted) while the trackpad was being found
+                if (run != trackpadRun || profile == null) return@Thread
                 val process = AdbShell.newProcess(arrayOf("getevent", "-l", device.path))
+                if (run != trackpadRun || profile == null) { process.destroy(); return@Thread }
                 trackpad = process
                 val span = device.xRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 1440f)
                 val reader = TrackpadReader(span.first, span.second)

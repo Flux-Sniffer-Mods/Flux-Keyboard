@@ -142,7 +142,10 @@ object GameProfiles {
     private fun prefs(context: Context) = SettingsManager.getPreferences(context)
 
     fun enabled(context: Context): Boolean = prefs(context).getBoolean(KEY_ENABLED, false)
-    fun setEnabled(context: Context, on: Boolean) = prefs(context).edit().putBoolean(KEY_ENABLED, on).apply()
+    fun setEnabled(context: Context, on: Boolean) {
+        prefs(context).edit().putBoolean(KEY_ENABLED, on).apply()
+        if (!on) GameMode.profilesChanged(context)
+    }
 
 
     fun all(context: Context): List<GameProfile> = runCatching {
@@ -161,7 +164,11 @@ object GameProfiles {
         saveAll(context, profiles)
     }
 
-    fun delete(context: Context, id: String) = saveAll(context, all(context).filterNot { it.id == id })
+    fun delete(context: Context, id: String) {
+        saveAll(context, all(context).filterNot { it.id == id })
+        // The one in use deleted: gaming mode moves on rather than keep it
+        GameMode.profilesChanged(context)
+    }
 
     /** The profiles for an app; several when it launches several games. */
     fun forPackage(context: Context, packageName: String): List<GameProfile> =
