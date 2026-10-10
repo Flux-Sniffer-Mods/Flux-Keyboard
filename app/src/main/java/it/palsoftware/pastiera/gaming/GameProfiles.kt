@@ -289,15 +289,25 @@ object GameProfiles {
 
     /** The profiles for an app; several when it launches several games. */
     fun forPackage(context: Context, packageName: String): List<GameProfile> =
-        all(context).filter { packageName in it.packages }
+        all(context).filter { profile -> profile.packages.any { covers(it, packageName) } }
+
+    /**
+     * A profile's app covers [front] when it's that app, or one of its own parts that runs a game
+     * in front under a longer name (a launcher's game player, "launcher.package.player").
+     */
+    fun covers(app: String, front: String): Boolean = front == app || front.startsWith("$app.")
+
+    /** The app a choice is kept for: the profile's own app, whichever of its parts is in front. */
+    private fun owner(context: Context, packageName: String): String =
+        all(context).flatMap { it.packages }.filter { covers(it, packageName) }.maxByOrNull { it.length } ?: packageName
 
     /** The profile in use for an app: the one picked last there, else its first. */
     fun active(context: Context, packageName: String): GameProfile? {
         val profiles = forPackage(context, packageName)
-        val chosen = prefs(context).getString(KEY_ACTIVE_PREFIX + packageName, null)
+        val chosen = prefs(context).getString(KEY_ACTIVE_PREFIX + owner(context, packageName), null)
         return profiles.firstOrNull { it.id == chosen } ?: profiles.firstOrNull()
     }
 
     fun setActive(context: Context, packageName: String, id: String) =
-        prefs(context).edit().putString(KEY_ACTIVE_PREFIX + packageName, id).apply()
+        prefs(context).edit().putString(KEY_ACTIVE_PREFIX + owner(context, packageName), id).apply()
 }

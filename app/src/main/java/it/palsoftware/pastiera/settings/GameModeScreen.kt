@@ -86,6 +86,36 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             enabled = it
             GameProfiles.setEnabled(context, it)
         }
+        // The app a game last ran in: a launcher may play its games in a part of its own, which a
+        // profile then needs as one of its apps
+        val seen = remember { it.palsoftware.pastiera.gaming.GameMode.lastApp() }
+        if (seen != null && profiles.isNotEmpty() && profiles.none { p -> p.packages.any { GameProfiles.covers(it, seen) } }) {
+            var addingSeen by remember { mutableStateOf(false) }
+            FluxActionRow(
+                linkId = null,
+                icon = "+",
+                title = stringResource(R.string.game_mode_seen_title, appLabel(context, seen)),
+                description = stringResource(R.string.game_mode_seen_description, seen)
+            ) { addingSeen = true }
+            if (addingSeen) {
+                AlertDialog(
+                    onDismissRequest = { addingSeen = false },
+                    title = { Text(stringResource(R.string.game_mode_seen_title, appLabel(context, seen))) },
+                    text = {
+                        Column {
+                            profiles.forEach { profile ->
+                                Text(profile.name, modifier = Modifier.fillMaxWidth().clickable {
+                                    GameProfiles.save(context, profile.copy(packages = profile.packages + seen))
+                                    refresh()
+                                    addingSeen = false
+                                }.padding(vertical = 10.dp))
+                            }
+                        }
+                    },
+                    confirmButton = { TextButton(onClick = { addingSeen = false }) { Text(stringResource(R.string.cancel)) } }
+                )
+            }
+        }
         SettingsSectionDivider(stringResource(R.string.game_mode_profiles))
         profiles.forEach { profile ->
             FluxActionRow(

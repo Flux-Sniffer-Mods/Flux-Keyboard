@@ -41,4 +41,16 @@ class GameFoldersTest {
             GameFolders.parse(listing, custom).map { it.name to it.player }
         )
     }
+
+    @Test
+    fun aGameExportedTwiceIsListedOnceByItsStoreFile() {
+        val listing = listOf(
+            "$root/GameNative/Stray.pcgame\t1332010",
+            "$root/GameNative/Stray.steam\t1332010",
+            "$root/GameNative/Stray.png\t",
+            "$root/GameHub/Hades.ghl\tabc123"
+        ).joinToString("\n")
+        val found = GameFolders.parse(listing)
+        assertEquals(listOf("Stray" to "steam", "Hades" to "ghl"), found.map { it.name to it.path.substringAfterLast('.') })
+    }
 }

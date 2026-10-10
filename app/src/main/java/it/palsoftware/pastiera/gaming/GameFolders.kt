@@ -98,7 +98,9 @@ object GameFolders {
         val note = "Flux Keyboard's game folders: gaming mode lists the games here and can put each on the home screen, " +
             "its profile on. GameNative and GameHub Lite: set Export for frontend (GameNative: Settings > Interface > " +
             "Frontend Sync) to their folder here. Emulators: keep your games in their folder and add the folder in the emulator too."
-        return AdbShell.run("mkdir -p $dirs && printf '%s\\n' '${note.replace("'", "")}' > \"$ROOT/About these folders.txt\"", 5_000) != null
+        // .nomedia: the launchers' covers and icons there stay out of the gallery
+        val noMedia = (listOf(ROOT) + Player.entries.map { "$ROOT/${it.folders.first()}" }).joinToString(" ") { "\"$it/.nomedia\"" }
+        return AdbShell.run("mkdir -p $dirs && touch $noMedia && printf '%s\\n' '${note.replace("'", "")}' > \"$ROOT/About these folders.txt\"", 5_000) != null
     }
 
     /** Every game in the folders whose player is installed (blocking: reads the shell). */
@@ -109,6 +111,8 @@ object GameFolders {
         // Flux Keyboard's and ES-DE's folders hold a folder per player; your own may hold the games themselves
         val custom = custom(context)
         val ownRoots = custom.joinToString(" ") { "\"${it.path.replace("\"", "")}\"" }
+        // Folders made before .nomedia was: their covers and icons out of the gallery too
+        AdbShell.run("[ -d \"$ROOT\" ] && for d in \"$ROOT\" \"$ROOT\"/*/; do [ -f \"\${d%/}/.nomedia\" ] || touch \"\${d%/}/.nomedia\"; done; true", 3_000)
         val listing = AdbShell.run(
             "{ for d in \"$ROOT\" \"$ES_DE_ROMS\"; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 2 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; " +
                 (if (custom.isEmpty()) "" else "for d in $ownRoots; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 1 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; ") +
@@ -138,13 +142,23 @@ object GameFolders {
         // In a folder of your own set to a player: that player's games, whatever the folders are called
         val assigned = custom.filter { it.player != null && path.startsWith(it.path.trimEnd('/') + "/") }
             .maxByOrNull { it.path.length }?.let { folder -> Player.entries.firstOrNull { it.label == folder.player } }
-        val player = assigned?.takeIf { extension in it.extensions } ?: folders.firstNotNullOfOrNull { folder ->
-            Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && extension in p.extensions }
+        // Pictures beside the games (covers, icons) are never games
+        if (extension in MEDIA) return@mapNotNull null
+        fun takes(p: Player) = extension in p.extensions || p == Player.GAMEHUB
+        val player = assigned?.takeIf { takes(it) } ?: folders.firstNotNullOfOrNull { folder ->
+            Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && takes(p) }
         } ?: return@mapNotNull null
         // An export file holds a game ID: without one there's nothing to start
         if ((player == Player.GAMENATIVE || player == Player.GAMEHUB) && content.isEmpty()) return@mapNotNull null
         Found(file.substringBeforeLast('.'), player, path, content)
     }.distinctBy { it.path }
+        // A game exported more than once (GameNative writes a .steam and a .pcgame for the same
+        // game): listed once, by the most exact of its files
+        .groupBy { it.player to it.name.lowercase() }.values
+        .map { same -> same.minBy { EXPORT_ORDER.indexOf(it.path.substringAfterLast('.').lowercase()).let { i -> if (i < 0) EXPORT_ORDER.size else i } } }
+
+    private val EXPORT_ORDER = listOf("steam", "epic", "gog", "amazon", "local", "pcgame")
+    private val MEDIA = setOf("png", "jpg", "jpeg", "webp", "gif", "bmp", "ico", "txt", "nomedia", "json", "xml", "db")
 
     /** The game's storage document, as the emulator was given its folder: Android's own form. */
     private fun documentUri(path: String): Uri? {
@@ -162,7 +176,9 @@ object GameFolders {
     private fun launchIntent(game: Found, pkg: String, activity: String): Intent? {
         val source = when (game.path.substringAfterLast('.').lowercase()) {
             "epic" -> "EPIC"; "gog" -> "GOG"; "amazon" -> "AMAZON"; "pcgame" -> "CUSTOM_GAME"
-            "local" -> "LOCAL"; else -> "STEAM"
+            "local" -> "LOCAL"
+            // GameHub's own games have IDs of their own; a Steam game's is a number
+            else -> if (game.player == Player.GAMEHUB && game.content.any { !it.isDigit() }) "LOCAL" else "STEAM"
         }
         val data = if (game.player == Player.GAMENATIVE || game.player == Player.GAMEHUB) null else documentUri(game.path) ?: return null
         return intentFor(game.player, pkg, activity, data, game.content, source)

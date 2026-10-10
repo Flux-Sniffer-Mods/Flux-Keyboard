@@ -35,6 +35,13 @@ object GameMode {
 
     @Volatile private var profile: GameProfile? = null
     @Volatile private var frontPackage: String? = null
+
+    /**
+     * An app opened straight from one with a profile that has none itself: likely the game
+     * player of a launcher (it may have a name of its own), offered to add to its profile.
+     */
+    @Volatile private var openedFromGame: String? = null
+    fun lastApp(): String? = openedFromGame
     @Volatile private var input: Writer? = null
     private var inputProcess: Process? = null
     private var trackpad: Process? = null
@@ -60,6 +67,10 @@ object GameMode {
     fun onAppInFront(context: Context, packageName: String) {
         val app = context.applicationContext
         if (packageName == app.packageName || packageName == "com.android.systemui") return
+        val previous = frontPackage
+        if (previous != null && previous != packageName && GameProfiles.forPackage(app, previous).isNotEmpty() &&
+            GameProfiles.forPackage(app, packageName).isEmpty() && !isHomeApp(app, packageName)
+        ) openedFromGame = packageName
         frontPackage = packageName
         if (!GameProfiles.enabled(app)) {
             if (profile != null) worker.execute { stop(app) }
@@ -68,6 +79,13 @@ object GameMode {
         worker.execute { followGame(app, packageName) }
     }
 
+    /** A home screen app (going home from a game isn't opening its player). */
+    private fun isHomeApp(context: Context, packageName: String): Boolean = runCatching {
+        context.packageManager.queryIntentActivities(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME), 0)
+            .any { it.activityInfo.packageName == packageName }
+    }.getOrDefault(false)
+
+    private val lastDetected = java.util.concurrent.ConcurrentHashMap<String, String>()
     private val watcher = java.util.concurrent.Executors.newSingleThreadScheduledExecutor()
     private var watch: java.util.concurrent.ScheduledFuture<*>? = null
 
@@ -79,7 +97,14 @@ object GameMode {
     private fun followGame(app: Context, packageName: String) {
         if (frontPackage != packageName) return
         val profiles = GameProfiles.forPackage(app, packageName)
-        GameDetect.detect(packageName, profiles)?.let { GameProfiles.setActive(app, packageName, it.id) }
+        // A game seen starting switches its profile on once: a profile picked by hand from the
+        // notification afterwards stays, until another game starts
+        GameDetect.detect(packageName, profiles)?.let { seen ->
+            if (lastDetected[packageName] != seen.id) {
+                lastDetected[packageName] = seen.id
+                GameProfiles.setActive(app, packageName, seen.id)
+            }
+        }
         val next = GameProfiles.active(app, packageName)
         if (next?.id != profile?.id) {
             if (next != null) start(app, next) else stop(app)
