@@ -1833,4 +1833,15 @@
     <string name="shell_elsewhere_otp">Dostęp do powłoki pozwala odczytywać kody z powiadomień, które Android ukrywa przed aplikacjami (Android 15 i nowsze).</string>
     <string name="shell_shortcuts_launcher">Albo przypisz je do klawiszy naciskanych na ekranie głównym.</string>
     <string name="shell_shortcuts_nav">Albo do klawiszy Ctrl w trybie nawigacji.</string>
+    <string name="native_dolphin_wii_steps">Zapisano jako profil Wiilota Dolphin \"%1$s\" (%2$s).\n\nW Dolphin, raz:\n1. Przytrzymaj grę, potem Ustawienia gry.\n2. Wejście Wii, Wiilot 1, Profil.\n3. Wczytaj \"%1$s\".\n\nDolphin czyta wtedy klawisze sam przy każdym uruchomieniu tej gry; gładzik nadal porusza gałkami przez tryb gry.</string>
+    <string name="dolphin_pad_title">Kontroler Dolphin</string>
+    <string name="dolphin_pad_description">Co ustawia Zapisz dla Dolphin. Automatycznie odczytuje plik gry: gra na Wii dostaje Wiilota z Nunchukiem, gra na GameCube kontroler GameCube. Wybierz inny, gdy gra działa z nim lepiej.</string>
+    <string name="dolphin_pad_auto_found">Automatycznie (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Automatycznie</item>
+        <item>Kontroler GameCube</item>
+        <item>Wiilot i Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wiilot poziomo</item>
+    </string-array>
 </resources>

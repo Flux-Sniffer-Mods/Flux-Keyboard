@@ -1286,4 +1286,15 @@
     <string name="shell_elsewhere_otp">Mit Shell-Zugriff lassen sich Codes aus Benachrichtigungen lesen, die Android vor Apps verbirgt (Android 15 und neuer).</string>
     <string name="shell_shortcuts_launcher">Oder lege sie auf Tasten, die auf dem Startbildschirm gedrückt werden.</string>
     <string name="shell_shortcuts_nav">Oder auf Strg-Tasten im Nav-Modus.</string>
+    <string name="native_dolphin_wii_steps">Gespeichert als Dolphin-Profil für die Wii-Fernbedienung \"%1$s\" (%2$s).\n\nIn Dolphin, einmal:\n1. Halte das Spiel gedrückt, dann Spieleinstellungen.\n2. Wii-Eingabe, Wii-Fernbedienung 1, Profil.\n3. Lade \"%1$s\".\n\nDolphin liest die Tasten dann selbst, sobald dieses Spiel startet; das Trackpad bewegt die Sticks weiter über den Spielmodus.</string>
+    <string name="dolphin_pad_title">Dolphin-Controller</string>
+    <string name="dolphin_pad_description">Was Für Dolphin speichern einrichtet. Automatisch liest die Datei des Spiels: Ein Wii-Spiel bekommt eine Wii-Fernbedienung mit Nunchuk, ein GameCube-Spiel einen GameCube-Controller. Wähle einen anderen, wenn ein Spiel damit besser läuft.</string>
+    <string name="dolphin_pad_auto_found">Automatisch (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Automatisch</item>
+        <item>GameCube-Controller</item>
+        <item>Wii-Fernbedienung und Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wii-Fernbedienung quer</item>
+    </string-array>
 </resources>

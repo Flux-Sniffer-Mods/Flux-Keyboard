@@ -1195,4 +1195,15 @@
     <string name="shell_elsewhere_otp">Η πρόσβαση shell επιτρέπει την ανάγνωση κωδικών από ειδοποιήσεις που το Android κρύβει από τις εφαρμογές (Android 15 και νεότερα).</string>
     <string name="shell_shortcuts_launcher">Ή βάλτε τις σε πλήκτρα που πατιούνται στην αρχική οθόνη.</string>
     <string name="shell_shortcuts_nav">Ή σε πλήκτρα Ctrl στη λειτουργία πλοήγησης.</string>
+    <string name="native_dolphin_wii_steps">Αποθηκεύτηκε ως προφίλ Wii Remote του Dolphin \"%1$s\" (%2$s).\n\nΣτο Dolphin, μία φορά:\n1. Πατήστε παρατεταμένα το παιχνίδι, μετά Ρυθμίσεις παιχνιδιού.\n2. Είσοδος Wii, Wii Remote 1, Προφίλ.\n3. Φορτώστε το \"%1$s\".\n\nΤο Dolphin διαβάζει τότε τα πλήκτρα μόνο του κάθε φορά που ξεκινά αυτό το παιχνίδι· το trackpad κινεί ακόμη τους μοχλούς μέσω της λειτουργίας παιχνιδιού.</string>
+    <string name="dolphin_pad_title">Χειριστήριο Dolphin</string>
+    <string name="dolphin_pad_description">Τι ρυθμίζει η Αποθήκευση για Dolphin. Το Αυτόματο διαβάζει το αρχείο του παιχνιδιού: ένα παιχνίδι Wii παίρνει Wii Remote με Nunchuk, ένα παιχνίδι GameCube χειριστήριο GameCube. Επιλέξτε άλλο όταν ένα παιχνίδι παίζεται καλύτερα με αυτό.</string>
+    <string name="dolphin_pad_auto_found">Αυτόματο (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Αυτόματο</item>
+        <item>Χειριστήριο GameCube</item>
+        <item>Wii Remote και Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wii Remote πλάγια</item>
+    </string-array>
 </resources>

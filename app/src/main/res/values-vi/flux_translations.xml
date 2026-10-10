@@ -1815,4 +1815,15 @@
     <string name="shell_elsewhere_otp">Quyền truy cập shell cho phép đọc mã từ thông báo mà Android ẩn khỏi ứng dụng (Android 15 trở lên).</string>
     <string name="shell_shortcuts_launcher">Hoặc gán chúng cho phím nhấn trên màn hình chính.</string>
     <string name="shell_shortcuts_nav">Hoặc cho phím Ctrl trong chế độ điều hướng.</string>
+    <string name="native_dolphin_wii_steps">Đã lưu thành hồ sơ Wii Remote của Dolphin \"%1$s\" (%2$s).\n\nTrong Dolphin, một lần:\n1. Nhấn giữ game, rồi Cài đặt game.\n2. Đầu vào Wii, Wii Remote 1, Hồ sơ.\n3. Tải \"%1$s\".\n\nSau đó Dolphin tự đọc phím mỗi khi game này bắt đầu; bàn di chuột vẫn di chuyển cần analog qua chế độ chơi game.</string>
+    <string name="dolphin_pad_title">Tay cầm Dolphin</string>
+    <string name="dolphin_pad_description">Những gì Lưu cho Dolphin thiết lập. Tự động đọc tệp của game: game Wii nhận Wii Remote và Nunchuk, game GameCube nhận tay cầm GameCube. Chọn loại khác khi game chơi tốt hơn với nó.</string>
+    <string name="dolphin_pad_auto_found">Tự động (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Tự động</item>
+        <item>Tay cầm GameCube</item>
+        <item>Wii Remote và Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wii Remote cầm ngang</item>
+    </string-array>
 </resources>

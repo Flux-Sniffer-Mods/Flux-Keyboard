@@ -1833,4 +1833,15 @@
     <string name="shell_elsewhere_otp">Доступ к оболочке позволяет читать коды из уведомлений, которые Android скрывает от приложений (Android 15 и новее).</string>
     <string name="shell_shortcuts_launcher">Или назначьте их клавишам на главном экране.</string>
     <string name="shell_shortcuts_nav">Или клавишам Ctrl в режиме навигации.</string>
+    <string name="native_dolphin_wii_steps">Сохранено как профиль Wii Remote в Dolphin «%1$s» (%2$s).\n\nВ Dolphin, один раз:\n1. Долго нажмите игру, затем «Настройки игры».\n2. Ввод Wii, Wii Remote 1, Профиль.\n3. Загрузите «%1$s».\n\nDolphin затем сам читает клавиши при каждом запуске этой игры; тачпад по-прежнему двигает стики через игровой режим.</string>
+    <string name="dolphin_pad_title">Контроллер Dolphin</string>
+    <string name="dolphin_pad_description">Что настраивает «Сохранить для Dolphin». «Автоматически» читает файл игры: игра для Wii получает Wii Remote с Nunchuk, игра для GameCube — контроллер GameCube. Выберите другой, если с ним игра идёт лучше.</string>
+    <string name="dolphin_pad_auto_found">Автоматически (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Автоматически</item>
+        <item>Контроллер GameCube</item>
+        <item>Wii Remote и Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wii Remote горизонтально</item>
+    </string-array>
 </resources>

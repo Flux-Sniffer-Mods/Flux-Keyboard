@@ -1332,4 +1332,15 @@
     <string name="shell_elsewhere_otp">L\'accesso shell permette di leggere i codici dalle notifiche che Android nasconde alle app (Android 15 e successivi).</string>
     <string name="shell_shortcuts_launcher">Oppure mettili su tasti premuti nella schermata Home.</string>
     <string name="shell_shortcuts_nav">Oppure su tasti Ctrl in modalità navigazione.</string>
+    <string name="native_dolphin_wii_steps">Salvato come profilo Wiimote di Dolphin \"%1$s\" (%2$s).\n\nIn Dolphin, una volta:\n1. Tieni premuto il gioco, poi Impostazioni del gioco.\n2. Input Wii, Wiimote 1, Profilo.\n3. Carica \"%1$s\".\n\nDolphin legge poi i tasti da solo ogni volta che si avvia questo gioco; il trackpad muove ancora gli stick tramite la modalità gioco.</string>
+    <string name="dolphin_pad_title">Controller di Dolphin</string>
+    <string name="dolphin_pad_description">Ciò che prepara Salva per Dolphin. Automatico legge il file del gioco: un gioco Wii riceve un Wiimote con Nunchuk, un gioco GameCube un controller GameCube. Scegline un altro quando un gioco si gioca meglio così.</string>
+    <string name="dolphin_pad_auto_found">Automatico (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Automatico</item>
+        <item>Controller GameCube</item>
+        <item>Wiimote e Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wiimote in orizzontale</item>
+    </string-array>
 </resources>

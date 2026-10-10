@@ -1821,4 +1821,15 @@
     <string name="shell_elsewhere_otp">Shell մուտքը թույլ է տալիս կոդեր կարդալ ծանուցումներից, որոնք Android-ը թաքցնում է հավելվածներից (Android 15 և ավելի նոր)։</string>
     <string name="shell_shortcuts_launcher">Կամ դրեք դրանք գլխավոր էկրանին սեղմվող ստեղների վրա։</string>
     <string name="shell_shortcuts_nav">Կամ Ctrl ստեղների վրա Նավիգացիոն ռեժիմում։</string>
+    <string name="native_dolphin_wii_steps">Պահվել է որպես Dolphin-ի Wii Remote պրոֆիլ «%1$s» (%2$s)։\n\nDolphin-ում, մեկ անգամ․\n1. Երկար սեղմեք խաղը, ապա Խաղի կարգավորումներ։\n2. Wii մուտք, Wii Remote 1, Պրոֆիլ։\n3. Բեռնեք «%1$s»-ը։\n\nԱյնուհետև Dolphin-ն ինքն է կարդում ստեղները, երբ այս խաղը սկսվում է․ թաչփադը դեռ շարժում է լծակները խաղային ռեժիմի միջոցով։</string>
+    <string name="dolphin_pad_title">Dolphin-ի կարգավորիչ</string>
+    <string name="dolphin_pad_description">Ինչ է կարգավորում «Պահել Dolphin-ի համար»-ը։ Ավտոմատը կարդում է խաղի ֆայլը․ Wii խաղը ստանում է Wii Remote և Nunchuk, GameCube խաղը՝ GameCube կարգավորիչ։ Ընտրեք այլը, երբ խաղն ավելի լավ է խաղացվում դրանով։</string>
+    <string name="dolphin_pad_auto_found">Ավտոմատ (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Ավտոմատ</item>
+        <item>GameCube կարգավորիչ</item>
+        <item>Wii Remote և Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wii Remote կողքից</item>
+    </string-array>
 </resources>

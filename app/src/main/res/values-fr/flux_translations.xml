@@ -1827,4 +1827,15 @@
     <string name="shell_elsewhere_otp">L\'accès shell permet de lire les codes des notifications qu\'Android cache aux applis (Android 15 et versions ultérieures).</string>
     <string name="shell_shortcuts_launcher">Ou placez-les sur des touches pressées sur l\'écran d\'accueil.</string>
     <string name="shell_shortcuts_nav">Ou sur des touches Ctrl en mode navigation.</string>
+    <string name="native_dolphin_wii_steps">Enregistré comme profil Wiimote Dolphin « %1$s » (%2$s).\n\nDans Dolphin, une fois :\n1. Appui long sur le jeu, puis Paramètres du jeu.\n2. Entrée Wii, Wiimote 1, Profil.\n3. Chargez « %1$s ».\n\nDolphin lit alors les touches lui-même à chaque lancement de ce jeu ; le pavé tactile déplace toujours les sticks via le mode jeu.</string>
+    <string name="dolphin_pad_title">Manette Dolphin</string>
+    <string name="dolphin_pad_description">Ce que prépare Enregistrer pour Dolphin. Automatique lit le fichier du jeu : un jeu Wii reçoit une Wiimote avec Nunchuk, un jeu GameCube une manette GameCube. Choisissez-en une autre quand un jeu se joue mieux avec.</string>
+    <string name="dolphin_pad_auto_found">Automatique (%1$s)</string>
+    <string-array name="dolphin_pads">
+        <item>Automatique</item>
+        <item>Manette GameCube</item>
+        <item>Wiimote et Nunchuk</item>
+        <item>Wii Classic Controller</item>
+        <item>Wiimote à l\'horizontale</item>
+    </string-array>
 </resources>
