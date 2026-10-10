@@ -82,11 +82,10 @@ object GameTouchEditor {
                 chips += it
             })
         }
-        // Nothing placed yet: each controller button's key, roughly where games draw that button
+        // Nothing placed yet: each controller button's key where GameHub draws that button
         if (taps.isEmpty() && zones.isEmpty()) {
-            profile.keys.forEach { (code, action) -> START[action]?.let { taps[code] = it } }
-            if (profile.leftHalf == TrackpadRole.LEFT_STICK || profile.rightHalf == TrackpadRole.LEFT_STICK) zones[0] = Triple(0.145f, 0.69f, 0.09f)
-            if (profile.leftHalf == TrackpadRole.RIGHT_STICK || profile.rightHalf == TrackpadRole.RIGHT_STICK) zones[1] = Triple(0.685f, 0.69f, 0.09f)
+            val laid = withDefaults(profile, always = true)
+            taps.putAll(laid.taps); zones.putAll(laid.stickZones)
         }
         taps.forEach { (code, at) -> addKeyChip(code, at) }
         fun addStick(stick: Int) {
@@ -168,17 +167,38 @@ object GameTouchEditor {
             .onFailure { open = false; root = null }
     }
 
-    /** Where on-screen controls usually put each button (shares of the screen; GameHub's layout). */
+    /**
+     * Where GameHub's on-screen controls are, as shares of the screen (its own layout, sideways):
+     * the face buttons, d-pad, bumpers, triggers and stick clicks. Its Start and Select sit in
+     * its menu, so they're left to the keys.
+     */
     private val START = mapOf(
-        GameAction.BUTTON_A to (0.87f to 0.83f), GameAction.BUTTON_B to (0.935f to 0.69f),
-        GameAction.BUTTON_X to (0.81f to 0.69f), GameAction.BUTTON_Y to (0.87f to 0.555f),
-        GameAction.DPAD_UP to (0.315f to 0.62f), GameAction.DPAD_DOWN to (0.315f to 0.75f),
-        GameAction.DPAD_LEFT to (0.26f to 0.69f), GameAction.DPAD_RIGHT to (0.37f to 0.69f),
-        GameAction.L1 to (0.08f to 0.28f), GameAction.R1 to (0.92f to 0.28f),
-        GameAction.L2 to (0.08f to 0.115f), GameAction.R2 to (0.92f to 0.115f),
-        GameAction.SELECT to (0.42f to 0.92f), GameAction.HOME to (0.50f to 0.80f), GameAction.START to (0.58f to 0.80f),
-        GameAction.L3 to (0.06f to 0.42f), GameAction.R3 to (0.95f to 0.42f)
+        GameAction.BUTTON_A to (0.873f to 0.831f), GameAction.BUTTON_B to (0.935f to 0.693f),
+        GameAction.BUTTON_X to (0.810f to 0.693f), GameAction.BUTTON_Y to (0.873f to 0.555f),
+        GameAction.DPAD_UP to (0.315f to 0.629f), GameAction.DPAD_DOWN to (0.315f to 0.748f),
+        GameAction.DPAD_LEFT to (0.265f to 0.688f), GameAction.DPAD_RIGHT to (0.367f to 0.688f),
+        GameAction.L1 to (0.079f to 0.281f), GameAction.R1 to (0.918f to 0.281f),
+        GameAction.L2 to (0.081f to 0.116f), GameAction.R2 to (0.917f to 0.116f),
+        GameAction.L3 to (0.058f to 0.419f), GameAction.R3 to (0.962f to 0.419f)
     )
+    private val LEFT_STICK = Triple(0.146f, 0.692f, 0.0875f)
+    private val RIGHT_STICK = Triple(0.683f, 0.692f, 0.0875f)
+
+    /**
+     * [profile] with GameHub's buttons pressed for its keys and its sticks moved by the trackpad,
+     * when nothing has been placed by hand: for a GameHub profile, or [always] (the placer's start).
+     */
+    fun withDefaults(profile: GameProfile, always: Boolean = false): GameProfile {
+        if (profile.taps.isNotEmpty() || profile.stickZones.isNotEmpty()) return profile
+        if (!always && NativeProfiles.appFor(profile) != "GameHub") return profile
+        val taps = profile.keys.mapNotNull { (code, action) -> START[action]?.let { code to it } }.toMap()
+        val halves = listOf(profile.leftHalf, profile.rightHalf)
+        val zones = buildMap {
+            if (TrackpadRole.LEFT_STICK in halves) put(0, LEFT_STICK)
+            if (TrackpadRole.RIGHT_STICK in halves) put(1, RIGHT_STICK)
+        }
+        return profile.copy(taps = taps, stickZones = zones)
+    }
 
     private fun close(windows: WindowManager) {
         root?.let { runCatching { windows.removeView(it) } }

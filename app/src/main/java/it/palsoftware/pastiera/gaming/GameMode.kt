@@ -60,7 +60,7 @@ object GameMode {
     /** The placer saved new spots: play with them from now on. */
     internal fun placed(context: Context, updated: GameProfile) {
         GameProfiles.save(context, updated)
-        if (profile?.id == updated.id) profile = updated
+        if (profile?.id == updated.id) profile = GameTouchEditor.withDefaults(updated)
     }
 
     /** The app in front changed (from the accessibility helper). */
@@ -109,10 +109,27 @@ object GameMode {
         if (next?.id != profile?.id) {
             if (next != null) start(app, next) else stop(app)
         }
+        // GameHub: its own menus take the keys as a controller, its games only by touch
+        val gameHub = next != null && NativeProfiles.appFor(next) == "GameHub"
+        inMenus = gameHub && gameHubMenus()
         watch?.cancel(false)
-        watch = if (next != null && profiles.size > 1) {
+        watch = if (gameHub) {
+            watcher.schedule({ worker.execute { followGame(app, packageName) } }, 2, java.util.concurrent.TimeUnit.SECONDS)
+        } else if (next != null && profiles.size > 1) {
             watcher.schedule({ worker.execute { followGame(app, packageName) } }, 5, java.util.concurrent.TimeUnit.SECONDS)
         } else null
+    }
+
+    /** In GameHub's own screens (its library, a game's page), not a game. */
+    @Volatile private var inMenus = false
+
+    private fun gameHubMenus(): Boolean {
+        val dump = AdbShell.run("dumpsys activity activities | grep -m 1 -E 'topResumedActivity|mResumedActivity'", 3_000) ?: return false
+        val activity = Regex("ActivityRecord\\{\\w+ \\w+ ([\\w.]+)/([\\w.$]+)").find(dump)?.groupValues ?: return false
+        val name = if (activity[2].startsWith(".")) activity[1] + activity[2] else activity[2]
+        // Its launcher's screens; a game runs in a screen of its own (Wine's display)
+        return name.startsWith("com.xj.landscape.launcher.ui.") &&
+            listOf("winemu", "xserver", "display", "play").none { name.contains(it, ignoreCase = true) }
     }
 
     /** A key, before the app sees it: true when gaming mode took it. */
@@ -120,7 +137,7 @@ object GameMode {
         val current = profile ?: return false
         if (typing || GameTouchEditor.open) return false
         // A key placed on the screen taps its spot, whatever else it's set to
-        val tap = current.taps[event.keyCode]
+        val tap = if (inMenus) null else current.taps[event.keyCode]
         if (tap != null) {
             if (event.repeatCount > 0) return true
             val down = event.action == KeyEvent.ACTION_DOWN
@@ -162,7 +179,8 @@ object GameMode {
             if (!AdbShell.available()) return
             startInput(context)
         }
-        profile = next
+        // GameHub's games: its on-screen buttons pressed for the keys, unless placed by hand
+        profile = GameTouchEditor.withDefaults(next)
         // Each game's own screen choice, also when switching game mid-way
         screen(context, next.screen)
         startTrackpad(next)
@@ -342,7 +360,7 @@ object GameMode {
                     sticks[at] = ((x - originX) / radius).coerceIn(-1f, 1f)
                     sticks[at + 1] = ((y - originY) / radius).coerceIn(-1f, 1f)
                     val current = profile
-                    if (current != null && (current.stickZones.containsKey(at / 2) || current.touchControls)) dragStick(at) else sendSticks()
+                    if (current != null && (!inMenus && (current.stickZones.containsKey(at / 2) || current.touchControls))) dragStick(at) else sendSticks()
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys((x - originX) / radius, (y - originY) / radius)
