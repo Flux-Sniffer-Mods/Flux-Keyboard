@@ -309,7 +309,7 @@
     <string name="shizuku_request_no_question">Shizuku didn\'t show its question. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
     <string name="adb_not_running">The built-in shell isn\'t running, and neither is Shizuku. Set up the built-in shell above, or start Shizuku, then come back.</string>
     <string name="game_mode_title">Gaming mode</string>
-    <string name="game_mode_switch_description">In apps with a game profile, keys reach the game as they are and the trackpad moves its sticks.</string>
+    <string name="game_mode_switch_description">In apps with a game profile, keys reach the game as they are or tap its on-screen buttons, and the trackpad moves its sticks.</string>
     <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. The trackpad reads one finger at a time, so one stick moves at once.</string>
     <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add an app</string>
@@ -356,7 +356,7 @@
     <string name="game_mode_gamenative_open">Open GameNative</string>
     <string name="game_mode_home_screen">Add to the home screen</string>
     <string name="game_mode_home_screen_failed">The home screen doesn\'t take shortcuts.</string>
-    <string name="game_mode_place_hint">Drag each stick circle onto the game\'s own stick.</string>
+    <string name="game_mode_place_hint">Drag each key onto the game\'s own button, and each stick circle onto its stick. Add a key, then press it.</string>
     <string name="game_mode_place_overlay_needed">Allow Flux Keyboard to display over other apps, then try again.</string>
     <string name="game_mode_place_clear">Clear</string>
     <string name="game_mode_left_stick">Left stick</string>
@@ -419,7 +419,9 @@
         <item quantity="one">%d of your settings differs from the recommended ones. Applying replaces it, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
         <item quantity="other">%d of your settings differ from the recommended ones. Applying replaces them, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
     </plurals>
-    <string name="game_mode_place_sticks">Place sticks on screen</string>
-    <string name="game_mode_keys_pass">Keys reach the game as they are: map them in the game\'s own controls.</string>
-    <string name="game_mode_keys_pass_app">Keys reach %1$s as they are: map them once in its own controller settings.</string>
+    <string name="game_mode_keys_pass">Keys reach the game as they are: map them in the game\'s own controls. A game with only touch controls: place keys on its buttons from gaming mode\'s notification.</string>
+    <string name="game_mode_keys_pass_app">Keys reach %1$s as they are: map them once in its own controller settings. Keys placed on screen from gaming mode\'s notification tap there instead.</string>
+    <string name="game_mode_place_keys">Place keys on screen</string>
+    <string name="game_mode_add_key">Add a key</string>
+    <string name="game_mode_press_key">Press the key to place.</string>
 </resources>

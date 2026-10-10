@@ -20,9 +20,10 @@ import android.widget.Toast
 import it.palsoftware.pastiera.R
 
 /**
- * Placing the trackpad's sticks on a game's own on-screen sticks (GameHub's and GameNative's
- * games, which take a stick only by touch): drawn over the game, a circle for each stick to drag
- * where the game draws it. Gaming mode then drags there as the trackpad moves.
+ * Placing keys and the trackpad's sticks on a game's own on-screen controls (games that only take
+ * touch, and GameHub's and GameNative's sticks): drawn over the game, a box for each key and a
+ * circle for each stick, to drag where the game draws them. Gaming mode then taps there for the
+ * keys and drags there as the trackpad moves.
  */
 object GameTouchEditor {
     @Volatile var open = false
@@ -49,6 +50,7 @@ object GameTouchEditor {
         val density = metrics.density
         val chips = mutableListOf<View>()
         val zones = profile.stickZones.toMutableMap()
+        val taps = profile.taps.toMutableMap()
         val frame = FrameLayout(context).apply { setBackgroundColor(0x55000000) }
         root = frame
         open = true
@@ -72,7 +74,7 @@ object GameTouchEditor {
             }
 
         // Nothing placed yet: the sticks where the launcher draws them
-        if (zones.isEmpty()) zones.putAll(withDefaults(profile, always = true).stickZones)
+        if (zones.isEmpty() && taps.isEmpty()) zones.putAll(withDefaults(profile, always = true).stickZones)
         fun addStick(stick: Int) {
             val zone = zones[stick] ?: Triple(if (stick == 0) 0.25f else 0.75f, 0.7f, 0.12f)
             zones[stick] = zone
@@ -81,13 +83,19 @@ object GameTouchEditor {
                 zone.first, zone.second, true, size) { x, y -> zones[stick] = Triple(x, y, zone.third) }.also { chips += it })
         }
         zones.keys.toList().forEach { addStick(it) }
+        val keySize = (52 * density).toInt()
+        fun addKey(code: Int, at: Pair<Float, Float>) {
+            frame.addView(chip(keyName(code), at.first, at.second, false, keySize) { x, y -> taps[code] = x to y }.also { chips += it })
+        }
+        taps.forEach { (code, at) -> addKey(code, at) }
 
-        // The bar: a stick, clear, save or cancel
+        // The bar: a key, a stick, clear, save or cancel
         val hint = TextView(context).apply {
             setTextColor(Color.WHITE)
             textSize = 13f
             text = context.getString(R.string.game_mode_place_hint)
         }
+        var waitingForKey = false
         fun button(label: Int, onClick: () -> Unit) = TextView(context).apply {
             text = context.getString(label)
             setTextColor(Color.WHITE)
@@ -101,15 +109,19 @@ object GameTouchEditor {
             setPadding((8 * density).toInt(), (8 * density).toInt(), (8 * density).toInt(), (8 * density).toInt())
             addView(hint)
             addView(LinearLayout(context).apply {
+                addView(button(R.string.game_mode_add_key) {
+                    waitingForKey = true
+                    hint.text = context.getString(R.string.game_mode_press_key)
+                })
                 addView(button(R.string.game_mode_left_stick) { if (0 !in zones) addStick(0) })
                 addView(button(R.string.game_mode_right_stick) { if (1 !in zones) addStick(1) })
                 addView(button(R.string.game_mode_place_clear) {
-                    zones.clear()
+                    zones.clear(); taps.clear()
                     chips.forEach { frame.removeView(it) }
                     chips.clear()
                 })
                 addView(button(R.string.game_mode_save) {
-                    GameMode.placed(context, profile.copy(stickZones = zones.toMap()))
+                    GameMode.placed(context, profile.copy(stickZones = zones.toMap(), taps = taps.toMap()))
                     close(windows)
                 })
                 addView(button(R.string.cancel) { close(windows) })
@@ -120,10 +132,20 @@ object GameTouchEditor {
         }
         frame.addView(bar)
 
-        // Back closes it, as Cancel does
+        // Back closes it, as Cancel does; the key pressed after Add a key gets a box in the
+        // middle, to drag into place
         frame.isFocusableInTouchMode = true
         frame.setOnKeyListener { _, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) close(windows)
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener true
+            if (keyCode == KeyEvent.KEYCODE_BACK) { close(windows); return@setOnKeyListener true }
+            if (waitingForKey) {
+                waitingForKey = false
+                hint.text = context.getString(R.string.game_mode_place_hint)
+                if (keyCode !in taps) {
+                    taps[keyCode] = 0.5f to 0.5f
+                    addKey(keyCode, 0.5f to 0.5f)
+                }
+            }
             true
         }
 
@@ -162,6 +184,10 @@ object GameTouchEditor {
         }
         return profile.copy(stickZones = zones)
     }
+
+    private fun keyName(code: Int): String =
+        KeyEvent.keyCodeToString(code).removePrefix("KEYCODE_").replace("_LEFT", "").replace("DEL", "BKSP")
+            .replace("VOLUME", "VOL").take(6)
 
     private fun close(windows: WindowManager) {
         root?.let { runCatching { windows.removeView(it) } }

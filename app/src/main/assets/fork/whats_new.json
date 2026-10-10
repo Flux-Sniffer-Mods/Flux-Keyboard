@@ -457,8 +457,7 @@
       "text": "Gaming mode (Shell access > Gaming mode): in apps with a game profile, keys reach the game as they are, mapped once in the emulator's or launcher's own controller settings, and the trackpad plays its sticks: GameNative's and GameHub's on-screen sticks, or the direction keys an emulator maps like any other key."
     },
     {
-      "text": "Gaming mode: for games that only take sticks by touch, place keys and sticks on the game's own on-screen controls from gaming mode's notification. The volume keys are the left shoulder and trigger, and other buttons can be added by pressing them.",
-      "after": "202610081509"
+      "text": "Gaming mode: for games with only touch controls, Place keys on screen (gaming mode's notification) puts a key on each of the game's buttons: holding the key holds the button. Sticks are placed the same way."
     },
     {
       "text": "Layer editor: start the default page from your recents, or with the most popular.",

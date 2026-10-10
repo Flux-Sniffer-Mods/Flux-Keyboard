@@ -40,8 +40,8 @@ enum class ScreenMode {
 
 /**
  * One game's (or app's) setup: the apps it's for, what each trackpad half does, how the screen
- * turns and how its game starts. Keys always reach the game as they are: each launcher or
- * emulator maps them in its own settings.
+ * turns and how its game starts. Keys reach the game as they are (each launcher or emulator maps
+ * them in its own settings), except keys placed on the screen, which tap there.
  */
 data class GameProfile(
     val id: String,
@@ -51,6 +51,11 @@ data class GameProfile(
     val rightHalf: TrackpadRole,
     /** Sticks placed on the screen (0 left, 1 right): centre and reach (a share of the width). */
     val stickZones: Map<Int, Triple<Float, Float, Float>> = emptyMap(),
+    /**
+     * Keys placed on the screen, for games with only touch controls: each taps its spot (a share
+     * of the screen's width and height) while held.
+     */
+    val taps: Map<Int, Pair<Float, Float>> = emptyMap(),
     /** What starts the game itself (an intent URI), for its home screen shortcut. */
     val launch: String? = null,
     /** How the screen turns while it runs. */
@@ -84,6 +89,9 @@ data class GameProfile(
                 put(stick.toString(), JSONArray(listOf(zone.first.toDouble(), zone.second.toDouble(), zone.third.toDouble())))
             }
         })
+        put("taps", JSONObject().apply {
+            taps.forEach { (key, at) -> put(key.toString(), JSONArray(listOf(at.first.toDouble(), at.second.toDouble()))) }
+        })
     }
 
     companion object {
@@ -98,6 +106,12 @@ data class GameProfile(
                     zones.keys().asSequence().mapNotNull { key ->
                         val z = zones.optJSONArray(key) ?: return@mapNotNull null
                         key.toIntOrNull()?.let { it to Triple(z.getDouble(0).toFloat(), z.getDouble(1).toFloat(), z.getDouble(2).toFloat()) }
+                    }.toMap()
+                }.orEmpty(),
+                taps = json.optJSONObject("taps")?.let { taps ->
+                    taps.keys().asSequence().mapNotNull { key ->
+                        val at = taps.optJSONArray(key) ?: return@mapNotNull null
+                        key.toIntOrNull()?.let { it to Pair(at.getDouble(0).toFloat(), at.getDouble(1).toFloat()) }
                     }.toMap()
                 }.orEmpty(),
                 launch = json.optString("launch").ifEmpty { null },

@@ -16,6 +16,14 @@ class GameProfilesTest {
     }
 
     @Test
+    fun keysPlacedOnScreenAreKept() {
+        val profile = GameProfiles.newProfile("Touch game", setOf("com.example.game")).copy(
+            taps = mapOf(android.view.KeyEvent.KEYCODE_SPACE to (0.8f to 0.7f))
+        )
+        assertEquals(profile.taps, GameProfile.fromJson(profile.toJson())?.taps)
+    }
+
+    @Test
     fun theTrackpadStartsAsTheGamesSticks() {
         // Launchers' games: their on-screen sticks; emulators: direction keys they map themselves
         val launcher = GameProfiles.newProfile("Stray", setOf("app.gamenative"))

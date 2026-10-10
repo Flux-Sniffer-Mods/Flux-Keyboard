@@ -171,14 +171,24 @@ object GameMode {
     private val dpadHeld = mutableSetOf<Int>()
 
     /**
-     * A key, before the app sees it: with a real controller, the controller's own keys (W A S D
+     * A key, before the app sees it: a key placed on the screen taps there; with a real controller, the controller's own keys (W A S D
      * the d-pad, O K P L its Y X B A, Q E Z C the shoulders and triggers, Enter Start, Backspace
      * Select, F and J the stick presses) press its buttons; true when it took the key.
      */
     fun onKeyEvent(event: KeyEvent): Boolean {
-        if (!pad || !passesKeys()) return false
+        if (!passesKeys()) return false
         val code = event.keyCode
         val down = event.action == KeyEvent.ACTION_DOWN
+        // A key placed on the screen touches its spot while held, whatever else it is
+        val tap = if (inMenus) null else profile?.taps?.get(code)
+        if (tap != null) {
+            if (event.repeatCount == 0) {
+                val finger = 100 + code
+                worker.execute { if (down) send("T d $finger ${tap.first * screenW} ${tap.second * screenH}") else send("T u $finger") }
+            }
+            return true
+        }
+        if (!pad) return false
         val button = PAD_BUTTONS[code]
         when {
             button != null -> if (event.repeatCount == 0) worker.execute { send("P $button ${if (down) 1 else 0}") }
@@ -534,18 +544,13 @@ object GameMode {
             .setContentTitle(context.getString(R.string.game_mode_title))
             .setContentText(current.name)
             .setOngoing(true)
-        // Sticks placed on the game's own on-screen sticks (which a game may only take by touch),
-        // drawn over it
+        // Keys and sticks placed on the game's own on-screen controls (for games that only take
+        // touch), drawn over it
         val place = PendingIntent.getBroadcast(
             context, 1, Intent(context, Receiver::class.java).setAction(ACTION_PLACE),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        // Only where a stick is wanted
-        val wantsSticks = listOf(current.leftHalf, current.rightHalf)
-            .any { it == TrackpadRole.LEFT_STICK || it == TrackpadRole.RIGHT_STICK }
-        if (wantsSticks) {
-            builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_sticks), place).build())
-        }
+        builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys), place).build())
         val pkg = frontPackage
         if (pkg != null && GameProfiles.appProfiles(context, pkg).size > 1) {
             val next = PendingIntent.getBroadcast(

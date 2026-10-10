@@ -399,7 +399,7 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                             else ownScope.launch {
                                 val app = withContext(Dispatchers.IO) { GameProfiles.effective(context, current.copy(own = false)) }
                                 current = current.copy(
-                                    own = true, leftHalf = app.leftHalf, rightHalf = app.rightHalf, stickZones = app.stickZones,
+                                    own = true, leftHalf = app.leftHalf, rightHalf = app.rightHalf, stickZones = app.stickZones, taps = app.taps,
                                     screen = app.screen, controller = app.controller
                                 )
                             }
