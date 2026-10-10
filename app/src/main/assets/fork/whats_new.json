@@ -744,6 +744,9 @@
     },
     {
       "text": "Gaming mode in Dolphin: Save for Dolphin tells a Wii game from a GameCube one by its file and saves a Wii Remote profile (with Nunchuk) or a GameCube controller profile; each game can pick a Classic Controller or a sideways Wii Remote instead."
+    },
+    {
+      "text": "Gaming mode names emulator games by what they are, not their file: Wii, GameCube and 3DS games by their game ID in GameTDB's lists, PSP games by the title they carry."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

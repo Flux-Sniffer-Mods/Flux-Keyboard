@@ -263,6 +263,9 @@ Minimal mode and the single-language versions were inspired by
 [Numen](https://github.com/jlo-aug/numen) by jlo-aug, a Pastiera-based keyboard for the Titan 2
 Elite with a hidden bar and a build tuned for one language. Thank you to jlo-aug.
 
+Gaming mode names Wii, GameCube and 3DS games from [GameTDB](https://www.gametdb.com)'s
+lists of game titles, fetched when a game folder is first read.
+
 If you enjoy Flux Keyboard, you can [support me on Ko-fi](https://ko-fi.com/fluxsniffermods),
 and the people it's built on:
 [Pastiera on Open Collective](https://pastiera.eu/donate) and

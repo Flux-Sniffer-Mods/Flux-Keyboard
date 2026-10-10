@@ -142,7 +142,9 @@ object GameFolders {
             ) found.copy(player = Player.GAMEHUB) else found
         }.filter { it.player in players }.mapNotNull { found ->
             val (pkg, activity) = players[found.player] ?: return@mapNotNull null
-            GameLibrary.Game(found.name, pkg, launch = launchIntent(found, pkg, activity)?.toUri(Intent.URI_INTENT_SCHEME))
+            // An emulator's game by its real name (its ID looked up, or the name it carries), not its file's
+            val name = if (isLauncher(found.player.label)) found.name else GameIds.title(context, found.player.label, found.path) ?: found.name
+            GameLibrary.Game(name, pkg, launch = launchIntent(found, pkg, activity)?.toUri(Intent.URI_INTENT_SCHEME))
         }
     }
 
