@@ -159,5 +159,15 @@ object DeferredPunctuationSpaceTracker {
         }
     }
 
+    /**
+     * A space only once a word follows (an email address or link picked from the suggestions:
+     * sign-in fields take a trailing space as part of it). Never in fields where spaces don't belong.
+     */
+    fun deferSpace() {
+        if (!enabled) return
+        pending = true
+        pendingAfter = null
+    }
+
     internal fun isPending(): Boolean = pending
 }

@@ -2064,6 +2064,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // A code arriving while typing is offered straight away
         // A newer code replaces the chip too when the bar shows one already
         it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = { if (isInputViewShown || isInputViewActive || pasteSuggestionShown) offerOneTimeCode() }
+        // One-time codes: Android 15 hides them from the listener unless allowed through the shell
+        it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(this)
+        it.palsoftware.pastiera.adb.shell.BuiltInShell.addStartListener {
+            it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(this)
+        }
         EmojiCompatSupport.ensureLoaded(this)
         lastSystemLocalesSignature = resources.configuration.locales.toLanguageTags()
         prefs = getSharedPreferences("pastiera_prefs", Context.MODE_PRIVATE)
@@ -4543,6 +4548,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         traceImeVisibility("onStartInputView restarting=$restarting")
         if (!restarting) holdBarInAutoFocusedSearch(info)
         if (!restarting) restoreAppLanguage(info)
+        // A new field: chips offered for the last one (a code, something to paste) go first
+        if (!restarting) clearPasteSuggestion()
         if (!restarting) offerPasteSuggestion()
         if (!restarting) offerOneTimeCode()
         // A new field: the last one's email or number chips go (emptied first, the refresh would
@@ -5177,6 +5184,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     // Paste suggestion: the chip offering what was just copied, while it is shown
     private var pasteSuggestionShown = false
+    // A one-time code's pace: checked every step, a short settle after focus moves, at most a wait per character
+    private val OTP_STEP_MS = 30L
+    private val OTP_SETTLE_MS = 60L
+    private val OTP_WAIT_MS = 450L
 
     // Remember emails and phone numbers (ContactDetails): keys typed in this field, so only what
     // was typed by hand is kept, and the saved ones for this field's chips
@@ -5313,20 +5324,69 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
      * next box as each fills) fill every box. Digits go as key presses, which those boxes listen
      * for; letters as text.
      */
+    /**
+     * Types a code one character at a time, each once the last has landed: in a field of its
+     * own per digit, once the app has moved on to the next box (a fixed pace sent a digit to a
+     * box that was already full, and it was lost).
+     */
     private fun typeOneTimeCode(code: CharSequence) {
-        code.forEachIndexed { index, char ->
-            uiHandler.postDelayed({
-                val ic = currentInputConnection ?: return@postDelayed
-                if (char in '0'..'9') {
-                    val keyCode = KeyEvent.KEYCODE_0 + (char - '0')
-                    val now = SystemClock.uptimeMillis()
-                    ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0))
-                    ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0))
-                } else {
-                    ic.commitText(char.toString(), 1)
+        val chars = code.toList()
+        var index = 0
+        fun sendNext() {
+            if (index >= chars.size) return
+            val ic = currentInputConnection ?: return
+            val field = currentInputEditorInfo?.fieldId
+            val char = chars[index++]
+            if (char in '0'..'9') {
+                val keyCode = KeyEvent.KEYCODE_0 + (char - '0')
+                val now = SystemClock.uptimeMillis()
+                ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0))
+                ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0))
+            } else {
+                ic.commitText(char.toString(), 1)
+            }
+            if (index >= chars.size) return
+            var waited = 0L
+            val check = object : Runnable {
+                override fun run() {
+                    waited += OTP_STEP_MS
+                    val now = currentInputConnection
+                    val moved = now !== ic || currentInputEditorInfo?.fieldId != field
+                    // A box holding one character is full: the next goes once focus moves on
+                    val text = runCatching {
+                        (now?.getTextBeforeCursor(16, 0)?.length ?: 0) + (now?.getTextAfterCursor(16, 0)?.length ?: 0)
+                    }.getOrDefault(0)
+                    val perDigitBox = !moved && text == 1
+                    when {
+                        moved -> uiHandler.postDelayed({ sendNext() }, OTP_SETTLE_MS)
+                        text > 0 && !perDigitBox -> uiHandler.postDelayed({ sendNext() }, OTP_STEP_MS)
+                        waited >= OTP_WAIT_MS -> sendNext()
+                        else -> uiHandler.postDelayed(this, OTP_STEP_MS)
+                    }
                 }
-            }, index * 70L)
+            }
+            uiHandler.postDelayed(check, OTP_STEP_MS)
         }
+        sendNext()
+    }
+
+    /** A field a one-time code goes in: a number field, or one whose hint or name says code. */
+    private fun oneTimeCodeField(): Boolean {
+        val info = currentInputEditorInfo ?: return false
+        val type = info.inputType
+        val cls = type and android.text.InputType.TYPE_MASK_CLASS
+        if (cls == android.text.InputType.TYPE_CLASS_NUMBER || cls == android.text.InputType.TYPE_CLASS_PHONE) return true
+        if (cls != android.text.InputType.TYPE_CLASS_TEXT) return false
+        val variation = type and android.text.InputType.TYPE_MASK_VARIATION
+        if (variation in setOf(
+                android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS,
+                android.text.InputType.TYPE_TEXT_VARIATION_URI, android.text.InputType.TYPE_TEXT_VARIATION_PERSON_NAME,
+                android.text.InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS
+            )
+        ) return false
+        val words = (info.hintText?.toString().orEmpty() + " " + info.fieldName.orEmpty() + " " +
+            (info.label?.toString().orEmpty()) + " " + info.privateImeOptions.orEmpty()).lowercase()
+        return Regex("code|otp|one.?time|verif|2fa|pin|token|passcode|sms|codice|código|kod|код|mã").containsMatchIn(words)
     }
 
     private fun offerOneTimeCode() {
@@ -5334,6 +5394,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         val state = inputContextState
         if (!state.isReallyEditable || terminalModeActive || keyboardHiddenForApp) return
         val code = it.palsoftware.pastiera.otp.OneTimeCodes.current() ?: return
+        // Only where a code goes: an email, name or message field isn't offered one
+        if (!oneTimeCodeField()) return
         pasteSuggestionShown = true
         candidatesBarController.showExpansionSuggestions(listOf(getString(R.string.one_time_code_chip, code))) { _ ->
             clearPasteSuggestion()
@@ -7722,11 +7784,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             val replacement = it.palsoftware.pastiera.core.suggestions.CasingHelper.applyCasing(
                 suggestion, currentWord, forceLeadingCapital
             )
-            val shouldAppendSpace = !replacement.endsWith("'")
+            // An email address or link: its space waits for a word after it
+            val addressLike = '@' in replacement || "://" in replacement || replacement.startsWith("www.", ignoreCase = true)
+            val shouldAppendSpace = !replacement.endsWith("'") && !addressLike
 
             ic.deleteSurroundingText(deleteBefore, deleteAfter)
             val textToCommit = if (shouldAppendSpace) "$replacement " else replacement
             ic.commitText(textToCommit, 1)
+            if (addressLike) DeferredPunctuationSpaceTracker.deferSpace()
             if (shiftOneShot) {
                 modifierStateController.consumeShiftOneShot()
             }

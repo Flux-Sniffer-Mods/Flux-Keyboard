@@ -1252,10 +1252,18 @@ class InputEventRouter(
                 val altChar = (altMappingsOverride ?: alternateCharacterManager.getAltModifierMappings())[keyCode]
                 if (altChar != null) {
                     val dpadKeyCode = deviceLayerDpadKeyCode(altChar)
-                    if (dpadKeyCode != null) {
-                        sendModifiedKeyEvent(ic, dpadKeyCode, ctrl = false, shift = false)
-                    } else {
-                        ic.commitText(altChar, 1)
+                    val numberKey = numberFieldKeyCode(altChar)
+                    when {
+                        dpadKeyCode != null -> sendModifiedKeyEvent(ic, dpadKeyCode, ctrl = false, shift = false)
+                        // A decimal point, minus or the like goes as its key, which number
+                        // fields take even where typed text is refused, in the separator the
+                        // field expects
+                        numberKey != null -> {
+                            val now = android.os.SystemClock.uptimeMillis()
+                            ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, numberKey, 0))
+                            ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, numberKey, 0))
+                        }
+                        else -> ic.commitText(altChar, 1)
                     }
                     Handler(Looper.getMainLooper()).postDelayed({
                         updateStatusBar()
@@ -1287,6 +1295,21 @@ class InputEventRouter(
         }
 
         return false
+    }
+
+    /** A number field's own key for a typed [char] ("." "," "-" "+"), with "." and "," as the phone's decimal separator. */
+    private fun numberFieldKeyCode(char: String): Int? {
+        val separator = java.text.DecimalFormatSymbols.getInstance().decimalSeparator
+        return when (char) {
+            ".", "," -> if (separator == ',') KeyEvent.KEYCODE_COMMA else KeyEvent.KEYCODE_PERIOD
+            "-" -> KeyEvent.KEYCODE_MINUS
+            "+" -> KeyEvent.KEYCODE_PLUS
+            "*" -> KeyEvent.KEYCODE_STAR
+            "#" -> KeyEvent.KEYCODE_POUND
+            "/" -> KeyEvent.KEYCODE_SLASH
+            "=" -> KeyEvent.KEYCODE_EQUALS
+            else -> null
+        }
     }
 
     /**

@@ -12,6 +12,23 @@ import it.palsoftware.pastiera.SettingsManager
  * notification access is granted to the app. Only the code itself is kept (see [OneTimeCodes]).
  */
 class OneTimeCodeListener : NotificationListenerService() {
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        allowSensitive(this)
+    }
+
+    companion object {
+        /**
+         * Android 15 hides one-time codes from notification listeners ("Sensitive notification
+         * content hidden"). Through the shell, the app is let to read them again.
+         */
+        fun allowSensitive(context: android.content.Context) {
+            if (Build.VERSION.SDK_INT < 35 || !SettingsManager.getOneTimeCodesEnabled(context)) return
+            if (!it.palsoftware.pastiera.adb.AdbShell.available()) return
+            it.palsoftware.pastiera.adb.AdbShell.runAsync("appops set ${context.packageName} RECEIVE_SENSITIVE_NOTIFICATIONS allow")
+        }
+    }
+
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         val notification = sbn?.notification ?: return
         // Root: the keyboard's backlight flashes for a notification (the Root page)

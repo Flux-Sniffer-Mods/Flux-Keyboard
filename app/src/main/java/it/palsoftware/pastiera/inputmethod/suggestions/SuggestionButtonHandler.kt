@@ -124,8 +124,11 @@ object SuggestionButtonHandler {
         val nextChar = after.getOrNull(end)
         val normalizedNextChar = nextChar?.let { Punctuation.normalizeApostrophe(it) }
         val nextIsWhitespace = normalizedNextChar?.isWhitespace() == true
+        // An email address or link: its space waits for a word after it (a sign-in field would
+        // keep a trailing space as part of the address)
+        val addressLike = '@' in replacement || "://" in replacement || replacement.startsWith("www.", ignoreCase = true)
         val shouldAppendSpace = !replacement.endsWith("'") &&
-            !nextIsWhitespace
+            !nextIsWhitespace && !addressLike
 
         val deleted = inputConnection.deleteSurroundingText(deleteBefore, deleteAfter)
         if (deleted) {
@@ -149,6 +152,9 @@ object SuggestionButtonHandler {
             } else {
                 Log.w(TAG, "Suggestion space could not be enforced")
             }
+        }
+        if (committed && addressLike && !nextIsWhitespace) {
+            it.palsoftware.pastiera.core.DeferredPunctuationSpaceTracker.deferSpace()
         }
         val textToCommit = if (shouldAppendSpace) "$replacement " else replacement
         Log.d(TAG, "Suggestion inserted as '$textToCommit' (committed=$committed)")
