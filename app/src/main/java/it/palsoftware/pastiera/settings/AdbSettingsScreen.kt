@@ -297,17 +297,28 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         SettingsSectionDivider(stringResource(R.string.root_section_shortcuts))
         FluxNote(stringResource(R.string.root_shortcuts_note))
         // Where they're assigned: Key shortcuts (Modifiers & SYM), opened as a setting link
+        fun jump(id: String) = context.startActivity(
+            android.content.Intent(context, SettingsActivity::class.java).setData(android.net.Uri.parse("fluxkeyboard://setting/$id"))
+        )
         FluxActionRow(
             linkId = null,
             icon = "\u2318",
             title = stringResource(R.string.key_shortcuts_title),
             description = stringResource(R.string.root_shortcuts_open_description)
-        ) {
-            context.startActivity(
-                android.content.Intent(context, SettingsActivity::class.java)
-                    .setData(android.net.Uri.parse("fluxkeyboard://setting/${SettingLinkIds.MODIFIERS_SYM_SHORTCUTS}"))
-            )
-        }
+        ) { jump(SettingLinkIds.MODIFIERS_SYM_SHORTCUTS) }
+
+        // The rest that uses the shell, kept with what it belongs to: each opened where it is
+        SettingsSectionDivider(stringResource(R.string.shell_elsewhere_section))
+        FluxActionRow(
+            linkId = null,
+            title = stringResource(R.string.trackpad_provider_title),
+            description = stringResource(R.string.shell_elsewhere_trackpad)
+        ) { jump(SettingLinkIds.TRACKPAD_PROVIDER) }
+        FluxActionRow(
+            linkId = null,
+            title = stringResource(R.string.one_time_codes_title),
+            description = stringResource(R.string.shell_elsewhere_otp)
+        ) { jump(SettingLinkIds.PRIVACY_ONE_TIME_CODES) }
     }
 }
 
