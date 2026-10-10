@@ -1134,9 +1134,10 @@ class StatusBarController(
                         android.view.Gravity.CENTER
                     ))
                 }
-                // The background exactly the chip's size: where it shows is where a tap lands
+                // The background a suggestion button's height, the chip (as tall as its text)
+                // centred in it
                 row.addView(button, android.widget.LinearLayout.LayoutParams(
-                    width, made?.height?.takeIf { it > 0 } ?: ViewGroup.LayoutParams.MATCH_PARENT
+                    width, suggestionChipHeight() ?: made?.height?.takeIf { it > 0 } ?: ViewGroup.LayoutParams.MATCH_PARENT
                 ).apply { marginStart = gap; marginEnd = gap; gravity = android.view.Gravity.CENTER_VERTICAL })
             }
         }

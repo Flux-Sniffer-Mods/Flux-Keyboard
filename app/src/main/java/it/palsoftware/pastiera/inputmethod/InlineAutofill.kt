@@ -23,7 +23,7 @@ object InlineAutofill {
     private const val BUTTON_HEIGHT_DP = 36
     // The chip fills its button: its whole background answers a tap
     private const val CHIP_INSET_DP = 0
-    private const val CHIP_MIN_HEIGHT_DP = 24
+    private const val CHIP_MIN_HEIGHT_DP = 16
     private const val CHIP_MAX_HEIGHT_DP = 64
     private const val CHIP_MIN_WIDTH_DP = 64
     private const val CHIP_MAX_WIDTH_DP = 260
@@ -36,19 +36,14 @@ object InlineAutofill {
     fun request(context: Context, chipColour: Int? = null, textColour: Int? = null, heightPx: Int? = null): InlineSuggestionsRequest {
         val density = context.resources.displayMetrics.density
         fun dp(value: Int) = (value * density).toInt()
-        // Android draws the chip's content at the top of its space, as tall as its text: padding
-        // above and below, as much as the bar's height leaves, centres it
-        val height = chipHeight(context, heightPx)
-        val line = android.graphics.Paint().apply {
-            textSize = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_SP, TEXT_SP, context.resources.displayMetrics)
-        }.fontMetricsInt.let { it.bottom - it.top }
-        val vertical = ((height - line) / 2).coerceAtLeast(0)
+        // Android draws the chip's content at the top of its space whatever its padding: the chip
+        // is made as tall as its text, and the bar centres it in a button of its own height
         val ui = InlineSuggestionUi.newStyleBuilder()
         if (chipColour != null && textColour != null) {
             ui.setChipStyle(
                 androidx.autofill.inline.common.ViewStyle.Builder()
                     .setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    .setPadding(dp(12), vertical, dp(12), height - line - vertical)
+                    .setPadding(dp(12), 0, dp(12), 0)
                     .build()
             )
             ui.setTitleStyle(
@@ -67,7 +62,7 @@ object InlineAutofill {
             ui.setSingleIconChipStyle(
                 androidx.autofill.inline.common.ViewStyle.Builder()
                     .setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    .setPadding(dp(8), vertical, dp(8), height - line - vertical)
+                    .setPadding(dp(8), 0, dp(8), 0)
                     .build()
             )
         }
@@ -81,6 +76,12 @@ object InlineAutofill {
             .setMaxSuggestionCount(MAX_CHIPS)
             .build()
     }
+
+    /** The chip's height: one line of its text, the most it draws. */
+    private fun textHeight(context: Context): Int = android.graphics.Paint().apply {
+        textSize = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_SP, TEXT_SP, context.resources.displayMetrics)
+    }.fontMetricsInt.let { it.bottom - it.top }
+        .coerceIn((CHIP_MIN_HEIGHT_DP * context.resources.displayMetrics.density).toInt(), (CHIP_MAX_HEIGHT_DP * context.resources.displayMetrics.density).toInt())
 
     private fun chipHeight(context: Context, heightPx: Int?): Int {
         val density = context.resources.displayMetrics.density
@@ -97,9 +98,9 @@ object InlineAutofill {
         // 0 px wide on the Titan 2 Elite, there but invisible. Wide enough for a login's name,
         // sharing the bar when there are several
         val density = context.resources.displayMetrics.density
-        // A little shorter than the bar's suggestion buttons: the bar centres each chip in a
-        // button-shaped background of its own
-        val height = chipHeight(context, heightPx)
+        // As tall as its text: the bar centres each chip in a button-shaped background of the
+        // bar's height
+        val height = minOf(textHeight(context), chipHeight(context, heightPx))
         val share = (context.resources.displayMetrics.widthPixels * 0.7f / ordered.size.coerceAtLeast(1)).toInt()
         val width = share.coerceIn((CHIP_MIN_WIDTH_DP * density).toInt(), (CHIP_MAX_WIDTH_DP * density).toInt())
         val size = Size(width, height)
