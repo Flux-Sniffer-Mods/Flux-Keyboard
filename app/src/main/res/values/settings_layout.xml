@@ -291,8 +291,6 @@
     <string name="game_mode_title">Gaming mode</string>
     <string name="game_mode_switch_description">In apps with a game profile, the keys and trackpad play the game: controller buttons and sticks, or keys and a mouse.</string>
     <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys you don\'t remap reach the game as they are, and typing into a game\'s text field works as usual. The trackpad reads one finger at a time, so one stick moves at once.</string>
-    <string name="game_mode_portrait_title">Keep the screen upright</string>
-    <string name="game_mode_portrait_description">Game apps turn the screen sideways; this keeps it in portrait while a game runs, and puts rotation back after.</string>
     <string name="game_mode_profiles">Game profiles</string>
     <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add a profile</string>
@@ -325,6 +323,13 @@
     <string name="native_bind_steps">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s\n\nEden can save them as an input profile for this game. Gaming mode leaves the keys to it; the trackpad still moves the sticks.</string>
     <string name="native_none">This app has no controller profile of its own: gaming mode maps the keys whichever way the game was started.</string>
     <string name="native_failed">It couldn\'t be saved. Is the built-in shell running?</string>
+    <string name="game_mode_screen">Screen</string>
+    <string name="game_mode_screen_app">As the app wants</string>
+    <string name="game_mode_screen_upright">Kept upright</string>
+    <string name="game_mode_screen_sideways">Sideways game, phone upright</string>
+    <string name="game_mode_screen_app_description">The app turns the screen as it likes. For GameNative, turn on its Portrait mode in the game\'s settings (General) to play with the phone upright.</string>
+    <string name="game_mode_screen_upright_description">The screen stays upright, whatever the app asks: for emulators and games that draw an upright layout.</string>
+    <string name="game_mode_screen_sideways_description">For apps that turn the screen sideways whatever they\'re told (GameHub): the screen is made landscape-shaped instead, a little shorter so it clears the camera, and the phone stays upright.</string>
     <string name="game_mode_import">Add a game from a game launcher</string>
     <string name="game_mode_import_description">The games GameNative, GameHub or GameHub Lite have on the home screen, in their shortcuts or installed in their Steam folder, each with a profile of its own. Switch between a launcher\'s games from gaming mode\'s notification, or give each its own home screen shortcut.</string>
     <string name="game_mode_import_reading">Reading the games</string>
@@ -347,8 +352,6 @@
     <string name="game_mode_gamenative_save_description">GameNative only takes real controllers, so it gets Flux Keyboard\'s invisible on-screen controls to press instead. Saves them and opens GameNative.</string>
     <string name="game_mode_gamenative_steps">Flux Keyboard saves its controls profile to Downloads/Flux Keyboard. Then, in GameNative:\n\n1. In the game\'s settings, turn on Portrait mode (General), so it stays upright with the keyboard.\n2. While the game runs, open its menu, then Controls: import Flux Keyboard gamepad.icp from the profile library and pick it, with on-screen controls shown (they\'re invisible).\n\nThis is needed once; the profile then works for every game.</string>
     <string name="game_mode_gamenative_open">Save and open GameNative</string>
-    <string name="game_mode_sideways">Sideways-only game</string>
-    <string name="game_mode_sideways_description">For games and launchers that turn the screen sideways whatever they\'re told (GameHub): while it runs, the screen is made landscape-shaped instead, so the phone stays upright. GameNative has its own Portrait mode for each game.</string>
     <string name="game_mode_home_screen">Add to the home screen</string>
     <string name="game_mode_home_screen_failed">The home screen doesn\'t take shortcuts.</string>
     <string name="game_mode_gamenative_save_failed">It couldn\'t be saved.</string>

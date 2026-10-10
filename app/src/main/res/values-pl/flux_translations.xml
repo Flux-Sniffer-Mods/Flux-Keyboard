@@ -1726,8 +1726,6 @@
     <string name="game_mode_next_profile">Następny profil</string>
     <string name="game_mode_no_apps">jeszcze bez aplikacji</string>
     <string name="game_mode_note">Tryb gry potrzebuje wbudowanej powłoki (lub Shizuku) i pomocnika ułatwień dostępu klawiatury. Klawisze bez zmian trafiają do gry takie, jakie są, a pisanie w polu tekstowym gry działa jak zwykle. Trackpad czyta jeden palec naraz, więc naraz rusza się jedna gałka.</string>
-    <string name="game_mode_portrait_description">Aplikacje z grami obracają ekran poziomo; to trzyma go pionowo podczas gry, a potem przywraca obracanie.</string>
-    <string name="game_mode_portrait_title">Ekran w pionie</string>
     <string name="game_mode_profile_name">Nazwa</string>
     <string name="game_mode_profiles">Profile gier</string>
     <string name="game_mode_remove">Usuń</string>
@@ -1784,8 +1782,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard zapisuje swój profil sterowania w Pobrane/Flux Keyboard. Potem w GameNative:\n\n1. W ustawieniach gry włącz tryb pionowy (Ogólne), aby została pionowo razem z klawiaturą.\n2. Gdy gra działa, otwórz jej menu, potem Sterowanie: zaimportuj Flux Keyboard gamepad.icp z biblioteki profili i wybierz go, z widocznym sterowaniem ekranowym (jest niewidoczne).\n\nTrzeba to zrobić raz; potem profil działa w każdej grze.</string>
     <string name="game_mode_home_screen">Dodaj do ekranu głównego</string>
     <string name="game_mode_home_screen_failed">Ekran główny nie przyjmuje skrótów.</string>
-    <string name="game_mode_sideways">Gra tylko poziomo</string>
-    <string name="game_mode_sideways_description">Dla gier i launcherów, które obracają ekran bez względu na wszystko (GameHub): gdy działają, ekran dostaje zamiast tego poziomy kształt, więc telefon zostaje pionowo. GameNative ma własny tryb pionowy dla każdej gry.</string>
     <string name="game_mode_use_emulator_controls">Użyj sterowania ekranowego %1$s</string>
     <string name="game_mode_emulator_applied">Klawisze i gałki ustawione na sterowaniu ekranowym emulatora. Dopracuj je przez Umieść klawisze na ekranie, jeśli coś przesunąłeś.</string>
     <string name="game_mode_emulator_unreadable">Jego sterowanie nie jest jeszcze znane: otwórz w nim raz grę przy pionowym ekranie z widocznym sterowaniem ekranowym i spróbuj ponownie.</string>

@@ -1714,8 +1714,6 @@
     <string name="game_mode_next_profile">Հաջորդ պրոֆիլը</string>
     <string name="game_mode_no_apps">դեռ հավելվածներ չկան</string>
     <string name="game_mode_note">Խաղային ռեժիմին պետք են ներկառուցված shell-ը (կամ Shizuku-ն) և ստեղնաշարի մատչելիության օգնականը։ Չփոխված ստեղները հասնում են խաղին ինչպես կան, իսկ խաղի տեքստային դաշտում մուտքագրելը աշխատում է սովորականի պես։ Թաչփեդը կարդում է մեկ մատ միաժամանակ, ուստի միաժամանակ շարժվում է մեկ լծակ։</string>
-    <string name="game_mode_portrait_description">Խաղային հավելվածները էկրանը պտտում են հորիզոնական․ սա այն պահում է ուղղահայաց խաղի ընթացքում, ապա վերականգնում է պտտումը։</string>
-    <string name="game_mode_portrait_title">Պահել էկրանը ուղղահայաց</string>
     <string name="game_mode_profile_name">Անուն</string>
     <string name="game_mode_profiles">Խաղային պրոֆիլներ</string>
     <string name="game_mode_remove">Հեռացնել</string>
@@ -1772,8 +1770,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard-ը պահում է իր կառավարման պրոֆիլը Ներբեռնումներ/Flux Keyboard-ում։ Ապա GameNative-ում․\n\n1. Խաղի կարգավորումներում միացրեք ուղղահայաց ռեժիմը (Ընդհանուր), որպեսզի այն ստեղնաշարի հետ ուղիղ մնա։\n2. Խաղի ընթացքում բացեք դրա մենյուն, ապա Կառավարում․ ներմուծեք Flux Keyboard gamepad.icp-ն պրոֆիլների գրադարանից և ընտրեք այն՝ էկրանային կառավարումը ցուցադրված (այն անտեսանելի է)։\n\nՍա պետք է մեկ անգամ․ հետո պրոֆիլը գործում է ամեն խաղում։</string>
     <string name="game_mode_home_screen">Ավելացնել գլխավոր էկրանին</string>
     <string name="game_mode_home_screen_failed">Գլխավոր էկրանը դյուրանցումներ չի ընդունում։</string>
-    <string name="game_mode_sideways">Միայն հորիզոնական խաղ</string>
-    <string name="game_mode_sideways_description">Այն խաղերի և գործարկիչների համար, որոնք պտտում են էկրանը՝ ինչ էլ ասես (GameHub)․ մինչ դրանք աշխատում են, էկրանը փոխարենը դառնում է հորիզոնական ձևի, և հեռախոսը մնում է ուղիղ։ GameNative-ն ունի իր ուղղահայաց ռեժիմը յուրաքանչյուր խաղի համար։</string>
     <string name="game_mode_use_emulator_controls">Օգտագործել %1$s-ի էկրանային կառավարումը</string>
     <string name="game_mode_emulator_applied">Ստեղներն ու լծակները դրված են էմուլյատորի էկրանային կառավարման վրա։ Ճշգրտեք դրանք «Տեղադրել ստեղները էկրանին»-ով, եթե որևէ մեկը տեղաշարժել եք։</string>
     <string name="game_mode_emulator_unreadable">Դրա կառավարումը դեռ հայտնի չէ․ մեկ անգամ բացեք դրանում խաղ՝ էկրանը ուղիղ և էկրանային կառավարումը ցուցադրված, ապա նորից փորձեք։</string>

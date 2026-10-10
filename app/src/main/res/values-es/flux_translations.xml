@@ -1720,8 +1720,6 @@
     <string name="game_mode_next_profile">Siguiente perfil</string>
     <string name="game_mode_no_apps">aún sin apps</string>
     <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas que no reasignes llegan al juego tal cual, y escribir en un campo de texto del juego funciona como siempre. El trackpad lee un dedo a la vez, así que se mueve un stick cada vez.</string>
-    <string name="game_mode_portrait_description">Las apps de juegos ponen la pantalla en horizontal; esto la mantiene en vertical mientras juegas y luego restaura la rotación.</string>
-    <string name="game_mode_portrait_title">Mantener la pantalla en vertical</string>
     <string name="game_mode_profile_name">Nombre</string>
     <string name="game_mode_profiles">Perfiles de juego</string>
     <string name="game_mode_remove">Quitar</string>
@@ -1778,8 +1776,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard guarda su perfil de controles en Descargas/Flux Keyboard. Luego, en GameNative:\n\n1. En los ajustes del juego, activa el modo vertical (General), para que siga en vertical con el teclado.\n2. Con el juego en marcha, abre su menú y luego Controles: importa Flux Keyboard gamepad.icp desde la biblioteca de perfiles y elígelo, con los controles en pantalla visibles (son invisibles).\n\nSolo hace falta una vez; después el perfil sirve para todos los juegos.</string>
     <string name="game_mode_home_screen">Añadir a la pantalla de inicio</string>
     <string name="game_mode_home_screen_failed">La pantalla de inicio no acepta accesos directos.</string>
-    <string name="game_mode_sideways">Juego solo en horizontal</string>
-    <string name="game_mode_sideways_description">Para juegos y lanzadores que giran la pantalla digas lo que digas (GameHub): mientras se ejecutan, la pantalla pasa a tener forma horizontal, así el teléfono sigue en vertical. GameNative tiene su propio modo vertical para cada juego.</string>
     <string name="game_mode_use_emulator_controls">Usar los controles en pantalla de %1$s</string>
     <string name="game_mode_emulator_applied">Teclas y sticks puestos en los controles en pantalla del emulador. Ajústalos con Colocar teclas en pantalla si moviste alguno.</string>
     <string name="game_mode_emulator_unreadable">Sus controles aún no se conocen: abre un juego en él una vez con la pantalla en vertical y sus controles en pantalla visibles, y vuelve a intentarlo.</string>

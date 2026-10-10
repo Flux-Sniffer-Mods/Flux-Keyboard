@@ -1179,8 +1179,6 @@
     <string name="game_mode_next_profile">Nächstes Profil</string>
     <string name="game_mode_no_apps">noch keine Apps</string>
     <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und den Bedienungshilfen-Helfer der Tastatur. Nicht umbelegte Tasten erreichen das Spiel unverändert, und Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Das Trackpad liest einen Finger zur Zeit, daher bewegt sich immer ein Stick.</string>
-    <string name="game_mode_portrait_description">Spiele-Apps drehen den Bildschirm ins Querformat; das hält ihn während des Spiels im Hochformat und stellt die Drehung danach wieder her.</string>
-    <string name="game_mode_portrait_title">Bildschirm aufrecht halten</string>
     <string name="game_mode_profile_name">Name</string>
     <string name="game_mode_profiles">Spielprofile</string>
     <string name="game_mode_remove">Entfernen</string>
@@ -1237,8 +1235,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard speichert sein Steuerungsprofil unter Downloads/Flux Keyboard. Dann in GameNative:\n\n1. Schalte in den Einstellungen des Spiels den Hochformatmodus ein (Allgemein), damit es mit der Tastatur aufrecht bleibt.\n2. Öffne während das Spiel läuft sein Menü, dann Steuerung: Importiere Flux Keyboard gamepad.icp aus der Profilbibliothek und wähle es, mit eingeblendeter Bildschirmsteuerung (sie ist unsichtbar).\n\nDas ist einmal nötig; danach gilt das Profil für jedes Spiel.</string>
     <string name="game_mode_home_screen">Zum Startbildschirm hinzufügen</string>
     <string name="game_mode_home_screen_failed">Der Startbildschirm nimmt keine Verknüpfungen an.</string>
-    <string name="game_mode_sideways">Nur-Querformat-Spiel</string>
-    <string name="game_mode_sideways_description">Für Spiele und Launcher, die den Bildschirm drehen, egal was man ihnen sagt (GameHub): Solange sie laufen, wird der Bildschirm stattdessen querformatig gemacht, sodass das Telefon aufrecht bleibt. GameNative hat für jedes Spiel einen eigenen Hochformatmodus.</string>
     <string name="game_mode_use_emulator_controls">Bildschirmsteuerung von %1$s verwenden</string>
     <string name="game_mode_emulator_applied">Tasten und Sticks auf die Bildschirmsteuerung des Emulators gesetzt. Mit Tasten auf dem Bildschirm platzieren feinjustieren, falls du welche verschoben hast.</string>
     <string name="game_mode_emulator_unreadable">Seine Steuerung ist noch nicht bekannt: Öffne darin einmal ein Spiel im Hochformat mit sichtbarer Bildschirmsteuerung und versuche es dann erneut.</string>

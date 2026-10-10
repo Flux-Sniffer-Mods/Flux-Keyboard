@@ -136,10 +136,10 @@ object GameMode {
         if (profile == null) {
             if (!AdbShell.available()) return
             startInput(context)
-            if (GameProfiles.keepPortrait(context)) keepUpright()
         }
         profile = next
-        sideways(next.sideways)
+        // Each game's own screen choice, also when switching game mid-way
+        screen(context, next.screen)
         startTrackpad(next)
         notify(context, next)
     }
@@ -152,8 +152,7 @@ object GameMode {
         input = null
         inputProcess?.destroy(); inputProcess = null
         deviceSent = -1
-        sideways(false)
-        restoreRotation()
+        screen(context, ScreenMode.APP)
         context.getSystemService(NotificationManager::class.java)?.cancel(NOTIFICATION_ID)
     }
 
@@ -181,6 +180,21 @@ object GameMode {
 
     // ---- The screen stays upright while a game runs ----
 
+    /** The screen choice applied now (APP: nothing changed). */
+    private var appliedScreen = ScreenMode.APP
+
+    /** Moves the screen from the choice applied to [mode]: undoes the old one, then does the new. */
+    private fun screen(context: Context, mode: ScreenMode) {
+        if (mode == appliedScreen) return
+        if (appliedScreen == ScreenMode.SIDEWAYS) sideways(context, false)
+        if (appliedScreen != ScreenMode.APP) restoreRotation()
+        appliedScreen = mode
+        // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
+        // app asking for landscape the other way round would show upside down)
+        if (mode != ScreenMode.APP) keepUpright()
+        if (mode == ScreenMode.SIDEWAYS) sideways(context, true)
+    }
+
     private fun keepUpright() {
         savedRotation = AdbShell.run("settings get system accelerometer_rotation")?.trim()
         AdbShell.run(
@@ -189,25 +203,44 @@ object GameMode {
         )
     }
 
+    /** The camera cutout's depth at the top of the upright screen, in pixels (0 without one). */
+    private fun cutoutTop(context: Context): Int = runCatching {
+        val display = context.getSystemService(android.hardware.display.DisplayManager::class.java)
+            ?.getDisplay(android.view.Display.DEFAULT_DISPLAY)
+        display?.cutout?.let { maxOf(it.safeInsetTop, it.safeInsetBottom, it.safeInsetLeft, it.safeInsetRight) } ?: 0
+    }.getOrDefault(0)
+
+    /** The landscape-shaped size for an upright [w] x [h] screen, short enough to sit clear of a [cutout] above and below. */
+    internal fun sidewaysSize(w: Int, h: Int, cutout: Int): Pair<Int, Int> {
+        // Shown at the screen's width, centred: its height scales by w/h, the rest is a band
+        // above and below, each wider than the cutout
+        val clear = ((h - 2 * cutout - 8).toLong() * h / w).toInt()
+        val height = minOf(w, clear).coerceAtLeast(w / 2) and 1.inv()
+        return h to height
+    }
+
     /**
      * A sideways-only game (GameHub turns the screen whatever it's told): the screen's size is
      * swapped, so it's landscape-shaped while the phone stays upright and the game has no need to
-     * turn it. Taps follow the new shape.
+     * turn it, a little shorter than the screen's width so it sits clear of the camera cutout.
+     * Taps follow the new shape.
      */
-    private fun sideways(on: Boolean) {
+    private fun sideways(context: Context, on: Boolean) {
         if (on == (savedSize != null)) return
         if (on) {
             val sizes = AdbShell.run("wm size") ?: return
             val physical = Regex("Physical size: (\\d+)x(\\d+)").find(sizes) ?: return
             val (w, h) = physical.destructured.toList().map { it.toInt() }.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) }
             savedSize = Regex("Override size: (\\d+x\\d+)").find(sizes)?.groupValues?.get(1) ?: ""
-            AdbShell.run("wm size ${h}x$w")
-            screenW = h.toFloat(); screenH = w.toFloat()
+            val (width, height) = sidewaysSize(w, h, cutoutTop(context))
+            AdbShell.run("wm size ${width}x$height")
+            screenW = width.toFloat(); screenH = height.toFloat()
         } else {
             val saved = savedSize ?: return
             savedSize = null
             AdbShell.run(if (saved.isEmpty()) "wm size reset" else "wm size $saved")
-            val (w, h) = Regex("(\\d+)x(\\d+)").find(saved)?.destructured?.toList()?.map { it.toFloat() }
+            val sizes = AdbShell.run("wm size").orEmpty()
+            val (w, h) = Regex("(\\d+)x(\\d+)").find(saved.ifEmpty { sizes })?.destructured?.toList()?.map { it.toFloat() }
                 ?.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) } ?: (screenH to screenW)
             screenW = w; screenH = h
         }

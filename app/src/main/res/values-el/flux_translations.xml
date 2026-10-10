@@ -1088,8 +1088,6 @@
     <string name="game_mode_next_profile">Επόμενο προφίλ</string>
     <string name="game_mode_no_apps">δεν υπάρχουν ακόμη εφαρμογές</string>
     <string name="game_mode_note">Η λειτουργία παιχνιδιού χρειάζεται το ενσωματωμένο shell (ή το Shizuku) και τον βοηθό προσβασιμότητας του πληκτρολογίου. Τα πλήκτρα που δεν αλλάζετε φτάνουν στο παιχνίδι όπως είναι, και η πληκτρολόγηση σε πεδίο κειμένου του παιχνιδιού λειτουργεί κανονικά. Το trackpad διαβάζει ένα δάχτυλο τη φορά, οπότε κινείται ένας μοχλός τη φορά.</string>
-    <string name="game_mode_portrait_description">Οι εφαρμογές παιχνιδιών γυρίζουν την οθόνη οριζόντια· αυτό την κρατά κατακόρυφη όσο παίζετε και μετά επαναφέρει την περιστροφή.</string>
-    <string name="game_mode_portrait_title">Κατακόρυφη οθόνη</string>
     <string name="game_mode_profile_name">Όνομα</string>
     <string name="game_mode_profiles">Προφίλ παιχνιδιών</string>
     <string name="game_mode_remove">Αφαίρεση</string>
@@ -1146,8 +1144,6 @@
     <string name="game_mode_gamenative_steps">Το Flux Keyboard αποθηκεύει το προφίλ χειρισμού του στις Λήψεις/Flux Keyboard. Μετά, στο GameNative:\n\n1. Στις ρυθμίσεις του παιχνιδιού, ενεργοποιήστε την κατακόρυφη λειτουργία (Γενικά), ώστε να μένει όρθιο με το πληκτρολόγιο.\n2. Ενώ τρέχει το παιχνίδι, ανοίξτε το μενού του, μετά Χειρισμός: εισαγάγετε το Flux Keyboard gamepad.icp από τη βιβλιοθήκη προφίλ και επιλέξτε το, με εμφανή τα χειριστήρια οθόνης (είναι αόρατα).\n\nΧρειάζεται μία φορά· μετά το προφίλ ισχύει για κάθε παιχνίδι.</string>
     <string name="game_mode_home_screen">Προσθήκη στην αρχική οθόνη</string>
     <string name="game_mode_home_screen_failed">Η αρχική οθόνη δεν δέχεται συντομεύσεις.</string>
-    <string name="game_mode_sideways">Παιχνίδι μόνο οριζόντια</string>
-    <string name="game_mode_sideways_description">Για παιχνίδια και εκκινητές που γυρίζουν την οθόνη ό,τι κι αν τους πεις (GameHub): όσο τρέχουν, η οθόνη παίρνει αντί γι\' αυτό οριζόντιο σχήμα, ώστε το τηλέφωνο να μένει όρθιο. Το GameNative έχει δική του κατακόρυφη λειτουργία για κάθε παιχνίδι.</string>
     <string name="game_mode_use_emulator_controls">Χρήση των χειριστηρίων οθόνης του %1$s</string>
     <string name="game_mode_emulator_applied">Πλήκτρα και μοχλοί ορίστηκαν στα χειριστήρια οθόνης του εξομοιωτή. Ρυθμίστε τα με «Τοποθέτηση πλήκτρων στην οθόνη» αν μετακινήσατε κάποιο.</string>
     <string name="game_mode_emulator_unreadable">Τα χειριστήριά του δεν είναι ακόμη γνωστά: ανοίξτε ένα παιχνίδι σε αυτόν μία φορά με την οθόνη όρθια και τα χειριστήρια οθόνης εμφανή, μετά δοκιμάστε ξανά.</string>

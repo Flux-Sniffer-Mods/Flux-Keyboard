@@ -66,6 +66,26 @@ enum class TrackpadRole(val label: String) {
     ARROW_KEYS("Direction keys: arrows")
 }
 
+/** How the screen turns while a game runs: one choice per game, fitting its app. */
+enum class ScreenMode {
+    /** As the app asks (GameNative: its own Portrait mode per game keeps it upright). */
+    APP,
+    /** Held upright: apps asking for landscape are told no (emulators draw upright gamepads). */
+    UPRIGHT,
+    /** The app turns sideways whatever it's told (GameHub): a landscape-shaped screen instead, the phone upright. */
+    SIDEWAYS;
+
+    companion object {
+        /** What suits [packageName] when nothing's been chosen. */
+        fun defaultFor(packageName: String?): ScreenMode = when {
+            packageName == null -> UPRIGHT
+            packageName == GameNativeBridge.PACKAGE -> APP
+            packageName.contains("gamehub", true) || packageName == "com.xiaoji.egggame" -> SIDEWAYS
+            else -> UPRIGHT
+        }
+    }
+}
+
 enum class GameStyle(val label: String) {
     GAMEPAD("Gamepad"),
     PC("Keyboard and mouse"),
@@ -93,15 +113,15 @@ data class GameProfile(
     val stickZones: Map<Int, Triple<Float, Float, Float>> = emptyMap(),
     /** What starts the game itself (an intent URI), for its home screen shortcut. */
     val launch: String? = null,
-    /** A game that only plays sideways: the screen is made landscape-shaped while it runs. */
-    val sideways: Boolean = false,
+    /** How the screen turns while it runs. */
+    val screen: ScreenMode = ScreenMode.UPRIGHT,
     /** The app maps the keys itself (its own controller profile): gaming mode leaves them alone. */
     val nativeKeys: Boolean = false
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
         launch?.let { put("launch", it) }
-        put("sideways", sideways)
+        put("screen", screen.name)
         put("nativeKeys", nativeKeys)
         put("name", name)
         put("style", style.name)
@@ -146,7 +166,10 @@ data class GameProfile(
                     }.toMap()
                 }.orEmpty(),
                 launch = json.optString("launch").ifEmpty { null },
-                sideways = json.optBoolean("sideways", false),
+                // Before one screen choice: "sideways", and a keep-upright switch for every game
+                screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }
+                    ?: if (json.optBoolean("sideways", false)) ScreenMode.SIDEWAYS
+                    else ScreenMode.defaultFor(json.optJSONArray("packages")?.optString(0)),
                 nativeKeys = json.optBoolean("nativeKeys", false)
             )
         }.getOrNull()
@@ -156,7 +179,6 @@ data class GameProfile(
 object GameProfiles {
     private const val KEY_PROFILES = "game_profiles"
     private const val KEY_ENABLED = "game_mode_enabled"
-    private const val KEY_PORTRAIT = "game_mode_portrait"
     private const val KEY_ACTIVE_PREFIX = "game_mode_active_"
 
     /** Every key a profile can remap: the letters, Space, Enter, Backspace, Shift and Alt. */
@@ -237,7 +259,8 @@ object GameProfiles {
         leftHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.LEFT_STICK else TrackpadRole.NONE,
         rightHalf = if (style == GameStyle.GAMEPAD) TrackpadRole.RIGHT_STICK else TrackpadRole.MOUSE,
         // GameNative only takes real controllers: its on-screen controls stand in
-        touchControls = style == GameStyle.GAMEPAD && GameNativeBridge.PACKAGE in packages
+        touchControls = style == GameStyle.GAMEPAD && GameNativeBridge.PACKAGE in packages,
+        screen = ScreenMode.defaultFor(packages.firstOrNull())
     )
 
     private fun prefs(context: Context) = SettingsManager.getPreferences(context)
@@ -245,9 +268,6 @@ object GameProfiles {
     fun enabled(context: Context): Boolean = prefs(context).getBoolean(KEY_ENABLED, false)
     fun setEnabled(context: Context, on: Boolean) = prefs(context).edit().putBoolean(KEY_ENABLED, on).apply()
 
-    /** Keep the screen upright while a game runs (game apps turn it sideways). */
-    fun keepPortrait(context: Context): Boolean = prefs(context).getBoolean(KEY_PORTRAIT, true)
-    fun setKeepPortrait(context: Context, on: Boolean) = prefs(context).edit().putBoolean(KEY_PORTRAIT, on).apply()
 
     fun all(context: Context): List<GameProfile> = runCatching {
         val array = JSONArray(prefs(context).getString(KEY_PROFILES, "[]"))

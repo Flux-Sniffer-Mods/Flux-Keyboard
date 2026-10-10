@@ -1720,8 +1720,6 @@
     <string name="game_mode_next_profile">Profil suivant</string>
     <string name="game_mode_no_apps">aucune appli pour l\'instant</string>
     <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'assistant d\'accessibilité du clavier. Les touches non réaffectées arrivent au jeu telles quelles, et la saisie dans un champ de texte du jeu fonctionne comme d\'habitude. Le pavé tactile lit un doigt à la fois, donc un seul stick bouge à la fois.</string>
-    <string name="game_mode_portrait_description">Les applis de jeux mettent l\'écran à l\'horizontale ; ceci le garde en portrait pendant le jeu, puis rétablit la rotation.</string>
-    <string name="game_mode_portrait_title">Garder l\'écran droit</string>
     <string name="game_mode_profile_name">Nom</string>
     <string name="game_mode_profiles">Profils de jeu</string>
     <string name="game_mode_remove">Retirer</string>
@@ -1778,8 +1776,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard enregistre son profil de contrôles dans Téléchargements/Flux Keyboard. Ensuite, dans GameNative :\n\n1. Dans les réglages du jeu, activez le mode portrait (Général), pour qu\'il reste droit avec le clavier.\n2. Pendant que le jeu tourne, ouvrez son menu puis Contrôles : importez Flux Keyboard gamepad.icp depuis la bibliothèque de profils et choisissez-le, contrôles à l\'écran affichés (ils sont invisibles).\n\nC\'est à faire une fois ; le profil sert ensuite pour tous les jeux.</string>
     <string name="game_mode_home_screen">Ajouter à l\'écran d\'accueil</string>
     <string name="game_mode_home_screen_failed">L\'écran d\'accueil n\'accepte pas les raccourcis.</string>
-    <string name="game_mode_sideways">Jeu uniquement en paysage</string>
-    <string name="game_mode_sideways_description">Pour les jeux et lanceurs qui tournent l\'écran quoi qu\'on leur dise (GameHub) : pendant qu\'ils tournent, l\'écran prend plutôt une forme paysage, et le téléphone reste droit. GameNative a son propre mode portrait pour chaque jeu.</string>
     <string name="game_mode_use_emulator_controls">Utiliser les contrôles à l\'écran de %1$s</string>
     <string name="game_mode_emulator_applied">Touches et sticks placés sur les contrôles à l\'écran de l\'émulateur. Ajustez-les avec Placer les touches à l\'écran si vous en avez déplacé.</string>
     <string name="game_mode_emulator_unreadable">Ses contrôles ne sont pas encore connus : ouvrez-y un jeu une fois, écran droit et contrôles à l\'écran affichés, puis réessayez.</string>

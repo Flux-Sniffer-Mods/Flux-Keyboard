@@ -1726,8 +1726,6 @@
     <string name="game_mode_next_profile">Следующий профиль</string>
     <string name="game_mode_no_apps">пока нет приложений</string>
     <string name="game_mode_note">Игровому режиму нужны встроенная оболочка (или Shizuku) и помощник специальных возможностей клавиатуры. Неназначенные клавиши доходят до игры как есть, а ввод в текстовое поле игры работает как обычно. Трекпад читает один палец за раз, поэтому двигается один стик.</string>
-    <string name="game_mode_portrait_description">Игровые приложения поворачивают экран горизонтально; эта настройка держит его вертикально во время игры, а потом возвращает поворот.</string>
-    <string name="game_mode_portrait_title">Держать экран вертикально</string>
     <string name="game_mode_profile_name">Название</string>
     <string name="game_mode_profiles">Игровые профили</string>
     <string name="game_mode_remove">Убрать</string>
@@ -1784,8 +1782,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard сохраняет свой профиль управления в Загрузки/Flux Keyboard. Затем в GameNative:\n\n1. В настройках игры включите портретный режим (Общие), чтобы она оставалась вертикальной вместе с клавиатурой.\n2. Когда игра запущена, откройте её меню, затем Управление: импортируйте Flux Keyboard gamepad.icp из библиотеки профилей и выберите его, с показанным экранным управлением (оно невидимо).\n\nЭто нужно один раз; дальше профиль работает в каждой игре.</string>
     <string name="game_mode_home_screen">Добавить на главный экран</string>
     <string name="game_mode_home_screen_failed">Главный экран не принимает ярлыки.</string>
-    <string name="game_mode_sideways">Игра только в альбомной ориентации</string>
-    <string name="game_mode_sideways_description">Для игр и лаунчеров, которые поворачивают экран, что бы им ни говорили (GameHub): пока они работают, экран вместо этого становится альбомным по форме, и телефон остаётся вертикальным. У GameNative есть свой портретный режим для каждой игры.</string>
     <string name="game_mode_use_emulator_controls">Использовать экранное управление %1$s</string>
     <string name="game_mode_emulator_applied">Клавиши и стики назначены на экранное управление эмулятора. Подправьте их через «Разместить клавиши на экране», если что-то двигали.</string>
     <string name="game_mode_emulator_unreadable">Его управление пока неизвестно: откройте в нём игру один раз при вертикальном экране с видимым экранным управлением, затем попробуйте снова.</string>

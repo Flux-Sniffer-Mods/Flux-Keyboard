@@ -1708,8 +1708,6 @@
     <string name="game_mode_next_profile">Hồ sơ tiếp theo</string>
     <string name="game_mode_no_apps">chưa có ứng dụng</string>
     <string name="game_mode_note">Chế độ chơi game cần shell tích hợp (hoặc Shizuku) và trình trợ giúp hỗ trợ tiếp cận của bàn phím. Phím không gán lại đến trò chơi như cũ, và gõ vào ô văn bản trong trò chơi vẫn hoạt động bình thường. Bàn di chuột đọc một ngón tay mỗi lúc, nên mỗi lúc chỉ một cần điều khiển di chuyển.</string>
-    <string name="game_mode_portrait_description">Ứng dụng trò chơi xoay màn hình nằm ngang; tùy chọn này giữ màn hình dọc khi chơi, rồi trả lại chế độ xoay.</string>
-    <string name="game_mode_portrait_title">Giữ màn hình dọc</string>
     <string name="game_mode_profile_name">Tên</string>
     <string name="game_mode_profiles">Hồ sơ trò chơi</string>
     <string name="game_mode_remove">Bỏ</string>
@@ -1766,8 +1764,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard lưu hồ sơ điều khiển của nó vào Tải xuống/Flux Keyboard. Sau đó, trong GameNative:\n\n1. Trong cài đặt của trò chơi, bật chế độ dọc (Chung), để nó giữ thẳng đứng cùng bàn phím.\n2. Khi trò chơi đang chạy, mở menu của nó, rồi Điều khiển: nhập Flux Keyboard gamepad.icp từ thư viện hồ sơ và chọn nó, với điều khiển trên màn hình được hiện (chúng vô hình).\n\nChỉ cần một lần; sau đó hồ sơ dùng được cho mọi trò chơi.</string>
     <string name="game_mode_home_screen">Thêm vào màn hình chính</string>
     <string name="game_mode_home_screen_failed">Màn hình chính không nhận lối tắt.</string>
-    <string name="game_mode_sideways">Trò chơi chỉ chơi ngang</string>
-    <string name="game_mode_sideways_description">Cho các trò chơi và trình khởi chạy luôn xoay màn hình dù được bảo gì (GameHub): trong khi chúng chạy, màn hình được làm thành hình ngang thay vào đó, nên điện thoại vẫn đứng thẳng. GameNative có chế độ dọc riêng cho từng trò chơi.</string>
     <string name="game_mode_use_emulator_controls">Dùng điều khiển trên màn hình của %1$s</string>
     <string name="game_mode_emulator_applied">Phím và cần đã đặt lên điều khiển trên màn hình của trình giả lập. Tinh chỉnh bằng Đặt phím trên màn hình nếu bạn đã di chuyển cái nào.</string>
     <string name="game_mode_emulator_unreadable">Chưa biết điều khiển của nó: mở một trò chơi trong đó một lần với màn hình đứng thẳng và điều khiển trên màn hình hiện ra, rồi thử lại.</string>

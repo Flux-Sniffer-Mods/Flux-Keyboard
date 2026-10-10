@@ -55,7 +55,6 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var profiles by remember { mutableStateOf(GameProfiles.all(context)) }
     var editing by remember { mutableStateOf<GameProfile?>(null) }
     var enabled by remember { mutableStateOf(GameProfiles.enabled(context)) }
-    var portrait by remember { mutableStateOf(GameProfiles.keepPortrait(context)) }
     var picking by remember { mutableStateOf(false) }
     var importing by remember { mutableStateOf(false) }
     var gameNativeSetup by remember { mutableStateOf(false) }
@@ -86,15 +85,6 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) {
             enabled = it
             GameProfiles.setEnabled(context, it)
-        }
-        FluxSwitchRow(
-            linkId = null,
-            title = stringResource(R.string.game_mode_portrait_title),
-            description = stringResource(R.string.game_mode_portrait_description),
-            checked = portrait
-        ) {
-            portrait = it
-            GameProfiles.setKeepPortrait(context, it)
         }
         SettingsSectionDivider(stringResource(R.string.game_mode_profiles))
         profiles.forEach { profile ->
@@ -158,11 +148,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         importing = false
         addingOwn = false
         editing = freshProfile(context, game.name, game.packageName)
-            .copy(
-                launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME),
-                // GameHub turns the screen sideways whatever it's told
-                sideways = "gamehub" in appLabel(context, game.packageName).lowercase().replace(" ", "")
-            )
+            .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME))
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
     if (importing) GameImportDialog(onPicked = pickGame, onDismiss = { importing = false })
@@ -395,17 +381,26 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     onCheckedChange = { current = current.copy(touchControls = it) }
                 )
             }
-            // A game that only plays sideways: a landscape-shaped screen while the phone stays upright
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.game_mode_sideways))
-                    Text(stringResource(R.string.game_mode_sideways_description), style = MaterialTheme.typography.bodySmall)
-                }
-                androidx.compose.material3.Switch(
-                    checked = current.sideways,
-                    onCheckedChange = { current = current.copy(sideways = it) }
-                )
+            // One screen choice per game, its app's suited one to start with
+            val screens = it.palsoftware.pastiera.gaming.ScreenMode.entries
+            val screenNames = listOf(
+                stringResource(R.string.game_mode_screen_app),
+                stringResource(R.string.game_mode_screen_upright),
+                stringResource(R.string.game_mode_screen_sideways)
+            )
+            ChoiceRow(stringResource(R.string.game_mode_screen), screenNames[current.screen.ordinal], screenNames) { index ->
+                current = current.copy(screen = screens[index])
             }
+            Text(
+                stringResource(
+                    when (current.screen) {
+                        it.palsoftware.pastiera.gaming.ScreenMode.APP -> R.string.game_mode_screen_app_description
+                        it.palsoftware.pastiera.gaming.ScreenMode.UPRIGHT -> R.string.game_mode_screen_upright_description
+                        it.palsoftware.pastiera.gaming.ScreenMode.SIDEWAYS -> R.string.game_mode_screen_sideways_description
+                    }
+                ),
+                style = MaterialTheme.typography.bodySmall
+            )
             // For starting the game from inside its launcher or emulator: its own form of this profile
             val nativeApp = it.palsoftware.pastiera.gaming.NativeProfiles.appFor(current)
             if (nativeApp != null) {

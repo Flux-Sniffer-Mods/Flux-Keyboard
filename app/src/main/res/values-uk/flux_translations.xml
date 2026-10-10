@@ -1726,8 +1726,6 @@
     <string name="game_mode_next_profile">Наступний профіль</string>
     <string name="game_mode_no_apps">ще немає застосунків</string>
     <string name="game_mode_note">Ігровому режиму потрібні вбудована оболонка (або Shizuku) і помічник спеціальних можливостей клавіатури. Непризначені клавіші доходять до гри як є, а введення в текстове поле гри працює як звичайно. Трекпад читає один палець за раз, тож рухається один стік.</string>
-    <string name="game_mode_portrait_description">Ігрові застосунки повертають екран горизонтально; це тримає його вертикально під час гри, а потім повертає обертання.</string>
-    <string name="game_mode_portrait_title">Тримати екран вертикально</string>
     <string name="game_mode_profile_name">Назва</string>
     <string name="game_mode_profiles">Ігрові профілі</string>
     <string name="game_mode_remove">Прибрати</string>
@@ -1784,8 +1782,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard зберігає свій профіль керування в Завантаження/Flux Keyboard. Потім у GameNative:\n\n1. У налаштуваннях гри увімкніть портретний режим (Загальні), щоб вона лишалася вертикальною разом із клавіатурою.\n2. Коли гра запущена, відкрийте її меню, потім Керування: імпортуйте Flux Keyboard gamepad.icp з бібліотеки профілів і виберіть його, з показаним екранним керуванням (воно невидиме).\n\nЦе потрібно один раз; далі профіль працює в кожній грі.</string>
     <string name="game_mode_home_screen">Додати на головний екран</string>
     <string name="game_mode_home_screen_failed">Головний екран не приймає ярлики.</string>
-    <string name="game_mode_sideways">Гра лише в альбомній орієнтації</string>
-    <string name="game_mode_sideways_description">Для ігор і лаунчерів, що повертають екран, хоч що їм кажи (GameHub): поки вони працюють, екран натомість стає альбомним за формою, і телефон лишається вертикальним. GameNative має власний портретний режим для кожної гри.</string>
     <string name="game_mode_use_emulator_controls">Використати екранне керування %1$s</string>
     <string name="game_mode_emulator_applied">Клавіші й стіки призначено на екранне керування емулятора. Підправте їх через «Розмістити клавіші на екрані», якщо щось пересували.</string>
     <string name="game_mode_emulator_unreadable">Його керування ще невідоме: відкрийте в ньому гру один раз при вертикальному екрані з видимим екранним керуванням, потім спробуйте знову.</string>

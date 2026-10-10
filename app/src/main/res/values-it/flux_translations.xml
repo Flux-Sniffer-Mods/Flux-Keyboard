@@ -1225,8 +1225,6 @@
     <string name="game_mode_next_profile">Profilo successivo</string>
     <string name="game_mode_no_apps">ancora nessuna app</string>
     <string name="game_mode_note">La modalità gioco richiede la shell integrata (o Shizuku) e l\'aiuto di accessibilità della tastiera. I tasti non rimappati arrivano al gioco così come sono, e scrivere in un campo di testo del gioco funziona come sempre. Il trackpad legge un dito alla volta, quindi si muove una levetta per volta.</string>
-    <string name="game_mode_portrait_description">Le app di giochi ruotano lo schermo in orizzontale; così resta verticale mentre giochi e poi la rotazione torna com\'era.</string>
-    <string name="game_mode_portrait_title">Tieni lo schermo verticale</string>
     <string name="game_mode_profile_name">Nome</string>
     <string name="game_mode_profiles">Profili di gioco</string>
     <string name="game_mode_remove">Rimuovi</string>
@@ -1283,8 +1281,6 @@
     <string name="game_mode_gamenative_steps">Flux Keyboard salva il suo profilo di controlli in Download/Flux Keyboard. Poi, in GameNative:\n\n1. Nelle impostazioni del gioco attiva la modalità verticale (Generale), così resta dritto con la tastiera.\n2. Mentre il gioco è in corso apri il suo menu, poi Controlli: importa Flux Keyboard gamepad.icp dalla libreria dei profili e sceglilo, con i controlli a schermo mostrati (sono invisibili).\n\nServe una volta; poi il profilo vale per ogni gioco.</string>
     <string name="game_mode_home_screen">Aggiungi alla schermata Home</string>
     <string name="game_mode_home_screen_failed">La schermata Home non accetta scorciatoie.</string>
-    <string name="game_mode_sideways">Gioco solo orizzontale</string>
-    <string name="game_mode_sideways_description">Per giochi e launcher che ruotano lo schermo qualunque cosa gli si dica (GameHub): mentre sono in esecuzione, lo schermo prende invece forma orizzontale, così il telefono resta dritto. GameNative ha la sua modalità verticale per ogni gioco.</string>
     <string name="game_mode_use_emulator_controls">Usa i controlli a schermo di %1$s</string>
     <string name="game_mode_emulator_applied">Tasti e levette impostati sui controlli a schermo dell\'emulatore. Rifiniscili con Posiziona i tasti sullo schermo se ne hai spostato qualcuno.</string>
     <string name="game_mode_emulator_unreadable">I suoi controlli non sono ancora noti: aprici un gioco una volta con lo schermo dritto e i controlli a schermo visibili, poi riprova.</string>
