@@ -582,6 +582,9 @@
     },
     {
       "text": "Games app: launchers and emulators get upright tiles like the games, the Xbox cloud tile shows Game Pass art, and games from the Play Store stay on the games page instead of also being listed as launchers."
+    },
+    {
+      "text": "Xbox Cloud Gaming: hold Space for the Xbox button; a tap is still Start."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

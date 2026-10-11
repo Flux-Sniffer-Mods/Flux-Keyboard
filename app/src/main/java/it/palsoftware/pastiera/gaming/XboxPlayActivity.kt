@@ -180,6 +180,7 @@ class XboxPlayActivity : Activity() {
         // Back leaves the page's screen, then the player; other keys the page doesn't know reach it as they are
         if (control == null) return super.dispatchKeyEvent(event)
         if (event.repeatCount > 0) return true
+        if (code == KeyEvent.KEYCODE_SPACE) { space(down); return true }
         if (down) held += code else held -= code
         val index = BUTTON_INDEX[control]
         if (index != null) {
@@ -193,6 +194,37 @@ class XboxPlayActivity : Activity() {
         }
         push()
         return true
+    }
+
+    /** Space held long enough to be the Xbox button rather than Start. */
+    private var spaceHeld = false
+    private val spaceLong = Runnable {
+        spaceHeld = true
+        buttons[XBOX_BUTTON] = 1f
+        push()
+    }
+
+    /**
+     * Space: a tap is Start (pressed briefly as it's let go), held it's the Xbox button, for as
+     * long as it's held.
+     */
+    private fun space(down: Boolean) {
+        if (down) {
+            spaceHeld = false
+            web.postDelayed(spaceLong, SPACE_HOLD_MS)
+            return
+        }
+        web.removeCallbacks(spaceLong)
+        val start = BUTTON_INDEX[FluxLayout.Control.START] ?: return
+        if (spaceHeld) {
+            spaceHeld = false
+            buttons[XBOX_BUTTON] = 0f
+            push()
+        } else {
+            buttons[start] = 1f
+            push()
+            web.postDelayed({ buttons[start] = 0f; push() }, 100)
+        }
     }
 
     /** A state sent this frame already: the trackpad moves far faster than the screen draws. */
@@ -266,6 +298,11 @@ class XboxPlayActivity : Activity() {
 })();"""
 
         /** Each control's button in the web's standard gamepad. */
+        /** The Xbox button, in the page's controller. */
+        private const val XBOX_BUTTON = 16
+        /** How long Space is held to be the Xbox button. */
+        private const val SPACE_HOLD_MS = 450L
+
         private val BUTTON_INDEX = mapOf(
             FluxLayout.Control.A to 0, FluxLayout.Control.B to 1, FluxLayout.Control.X to 2, FluxLayout.Control.Y to 3,
             FluxLayout.Control.L1 to 4, FluxLayout.Control.R1 to 5, FluxLayout.Control.L2 to 6, FluxLayout.Control.R2 to 7,
