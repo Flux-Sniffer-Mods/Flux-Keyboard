@@ -15,7 +15,7 @@ import java.io.Writer
 /**
  * Moonlight's keyboard, mouse and controllers, played on the phone through gaming mode's input
  * helper (run by the shell): keys as keys, the mouse as a mouse on the screen as it shows on the
- * TV, controllers as a real controller with root, else as controller buttons and sticks.
+ * Moonlight client, controllers as a real controller with root, else as controller buttons and sticks.
  */
 internal class StreamInput(private val context: Context, private val streamWidth: Int, private val streamHeight: Int) {
     private var process: Process? = null
@@ -78,7 +78,7 @@ internal class StreamInput(private val context: Context, private val streamWidth
         return size.x.coerceAtLeast(1) to size.y.coerceAtLeast(1)
     }
 
-    /** A point on the TV, on the phone's screen: the screen is fitted in the middle of the stream. */
+    /** A point on the Moonlight client, on the phone's screen: the screen is fitted in the middle of the stream. */
     private fun position(event: Input.MousePosition) {
         val (w, h) = screen()
         send("S $w $h")

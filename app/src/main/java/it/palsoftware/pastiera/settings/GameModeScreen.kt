@@ -194,7 +194,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) { runCatching { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) } }
         // The phone's own game mode, which can take over as the home screen
         PhoneGameModeRow()
-        // Streaming games to a TV or another device running Moonlight
+        // Streaming games to a Moonlight client
         SettingsSectionDivider(stringResource(R.string.stream_section))
         var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(context)) }
         var paired by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHost.pairedCount(context)) }
@@ -207,7 +207,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             streaming = on
             it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
         }
-        // The game's size on the TV: the phone's screen takes the TV's shape while streaming
+        // The game's size for the Moonlight client: the phone's screen takes its shape while streaming
         if (streaming) {
             val resolutions = it.palsoftware.pastiera.streaming.StreamHostService.RESOLUTIONS
             val names = listOf(

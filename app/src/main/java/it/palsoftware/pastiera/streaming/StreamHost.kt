@@ -34,7 +34,7 @@ import javax.net.ssl.X509TrustManager
  * The phone as a game streaming host Moonlight can find, pair with and list games from (the
  * GameStream protocol, as Sunshine speaks it): announced on the network, a plain web server for
  * finding and pairing, and an encrypted one for paired clients. Games are the games list's,
- * cloud games left out: those stream from the cloud to the TV's own Xbox app or browser
+ * cloud games left out: those stream from the cloud to the Moonlight client's own Xbox app or browser
  * directly, not through the phone. Launching one starts a [StreamSession]: the game opens on the
  * phone, its screen and sound go to Moonlight, Moonlight's controls come back.
  */
@@ -45,6 +45,9 @@ object StreamHost {
     private const val SERVICE_TYPE = "_nvstream._tcp"
     private const val KEY_ID = "stream_host_id"
     private const val PIN_WAIT_SECONDS = 120L
+    private const val CONFIRM_WAIT_SECONDS = 60L
+    private const val KEY_NAME = "stream_client_name_"
+    private const val KEY_TRUSTED = "stream_client_trusted_"
 
     @Volatile var running = false
         private set
@@ -162,7 +165,7 @@ object StreamHost {
             "/unpair" -> { if (client != null) unpair(client); xml(out, root("")) }
             "/applist" -> xml(out, if (paired) appList() else root("", 401, "The device isn't paired"))
             "/appasset" -> if (paired) asset(out, query["appid"]) else xml(out, root("", 401, "The device isn't paired"))
-            "/launch", "/resume" -> xml(out, if (paired) launch(query, socket.inetAddress, path == "/resume") else root("", 401, "The device isn't paired"))
+            "/launch", "/resume" -> xml(out, if (paired && client != null) launch(query, socket.inetAddress, client, path == "/resume") else root("", 401, "The device isn't paired"))
             "/cancel" -> { if (paired) { session?.end(); currentGame = 0 }; xml(out, root("<cancel>1</cancel>")) }
             else -> xml(out, root("", 404, "Not found"))
         }
@@ -214,7 +217,7 @@ object StreamHost {
     /** The game to open once the screen can be captured (once). */
     fun takeLaunch(): android.content.Intent? = pendingLaunch.also { pendingLaunch = null }
 
-    private fun launch(query: Map<String, String>, client: java.net.InetAddress, resume: Boolean): String {
+    private fun launch(query: Map<String, String>, client: java.net.InetAddress, cert: X509Certificate, resume: Boolean): String {
         val key = query["rikey"]?.let { runCatching { StreamPairing.unhex(it) }.getOrNull() }?.takeIf { it.size == 16 }
             ?: return root("", 400, "No key")
         val keyId = query["rikeyid"]?.toLongOrNull()?.toInt() ?: 0
@@ -225,6 +228,10 @@ object StreamHost {
         val appId = if (resume) currentGame else query["appid"]?.toIntOrNull() ?: 0
         val game = games().firstOrNull { it.first == appId }?.second
         if (!resume && game == null) return root("", 404, "That game isn't in the games list")
+        // Asked on the phone first, unless this Moonlight client is trusted to start by itself
+        if (!trusted(cert) && !confirm(cert, nameOf(cert) ?: client.hostAddress.orEmpty(), game?.name)) {
+            return root("", 403, "Not allowed on the phone")
+        }
         session?.end()
         val started = StreamSession(app, client, appId, width, height, fps, key, keyId) { ended ->
             if (session === ended) {
@@ -240,7 +247,7 @@ object StreamHost {
         }
         session = started
         currentGame = appId
-        // The game drawn at the TV's shape and the chosen size, ahead of gaming mode's own choice
+        // The game drawn at the Moonlight client's shape and the chosen size, ahead of gaming mode's own choice
         it.palsoftware.pastiera.gaming.GameMode.streaming(app,
             StreamHostService.phoneSize(StreamHostService.resolution(app), width, height))
         // A resumed game is already open; a new one opens once the screen can be captured
@@ -296,9 +303,10 @@ object StreamHost {
             query.containsKey("clientpairingsecret") -> {
                 val session = pairing ?: return fail
                 val ok = runCatching { session.clientPairingSecret(StreamPairing.unhex(query.getValue("clientpairingsecret"))) }.getOrDefault(false)
+                val name = pairingDevice
                 pairing = null
                 pairingDevice = null
-                if (ok) { remember(session.client); root("<paired>1</paired>") } else fail
+                if (ok) { remember(session.client); name?.let { rename(session.client, it) }; root("<paired>1</paired>") } else fail
             }
             query["phrase"] == "pairchallenge" && secure -> root("<paired>1</paired>")
             else -> fail
@@ -325,7 +333,49 @@ object StreamHost {
         clientsFile().appendText(StreamCert.pem(cert.encoded))
     }
 
+    // ---- Each Moonlight client's name, and whether it may start a stream without asking ----
+
+    private fun fingerprint(cert: X509Certificate) = StreamPairing.hex(StreamPairing.sha256(cert.encoded))
+
+    private fun rename(cert: X509Certificate, name: String) =
+        SettingsManager.getPreferences(app).edit().putString(KEY_NAME + fingerprint(cert), name).apply()
+
+    private fun nameOf(cert: X509Certificate): String? = SettingsManager.getPreferences(app).getString(KEY_NAME + fingerprint(cert), null)
+
+    private fun trusted(cert: X509Certificate) = SettingsManager.getPreferences(app).getBoolean(KEY_TRUSTED + fingerprint(cert), false)
+
+    @Volatile private var answer: CompletableFuture<Boolean>? = null
+    @Volatile private var asking: X509Certificate? = null
+    /** What the phone is asked: who wants to stream, and which game. */
+    @Volatile var askingDevice: String? = null
+        private set
+    @Volatile var askingGame: String? = null
+        private set
+
+    /** Asks on the phone whether [device] may stream [game]: yes, no, or no answer in time. */
+    private fun confirm(cert: X509Certificate, device: String, game: String?): Boolean {
+        val waiting = CompletableFuture<Boolean>()
+        answer?.cancel(true)
+        answer = waiting
+        asking = cert
+        askingDevice = device
+        askingGame = game
+        StreamConfirm.ask(app)
+        val allowed = runCatching { waiting.get(CONFIRM_WAIT_SECONDS, TimeUnit.SECONDS) }.getOrDefault(false)
+        StreamConfirm.done(app)
+        if (answer === waiting) { answer = null; asking = null; askingDevice = null; askingGame = null }
+        return allowed
+    }
+
+    /** The phone's answer; [always] trusts this Moonlight client from now on. */
+    fun answer(allowed: Boolean, always: Boolean) {
+        val cert = asking
+        if (allowed && always && cert != null) SettingsManager.getPreferences(app).edit().putBoolean(KEY_TRUSTED + fingerprint(cert), true).apply()
+        answer?.complete(allowed)
+    }
+
     @Synchronized private fun unpair(cert: X509Certificate) {
+        SettingsManager.getPreferences(app).edit().remove(KEY_TRUSTED + fingerprint(cert)).remove(KEY_NAME + fingerprint(cert)).apply()
         clientsFile().writeText(clients().filterNot { it.encoded.contentEquals(cert.encoded) }.joinToString("") { StreamCert.pem(it.encoded) })
     }
 
@@ -339,11 +389,15 @@ object StreamHost {
     fun unpairAll(context: Context) {
         if (!::app.isInitialized) app = context.applicationContext
         clientsFile().delete()
+        val prefs = SettingsManager.getPreferences(app)
+        prefs.edit().apply {
+            prefs.all.keys.filter { it.startsWith(KEY_NAME) || it.startsWith(KEY_TRUSTED) }.forEach { key -> remove(key) }
+        }.apply()
     }
 
     // ---- Games ----
 
-    /** The games streamed: the games list's, cloud games left out (they stream to the TV directly). */
+    /** The games streamed: the games list's, cloud games left out (they stream to the Moonlight client's device directly). */
     internal fun games(): List<Pair<Int, GameProfile>> = GamesActivity.games(app).map { it.first }
         .filter { profile -> profile.packages.none { it == app.packageName || GameApps.appFor(it) == GameApps.XBOX_NAME } }
         .map { appId(it) to it }

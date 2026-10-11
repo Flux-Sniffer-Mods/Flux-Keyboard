@@ -277,6 +277,13 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- A Moonlight client asking to stream, confirmed on the phone (started by the shell too: nothing without a request) -->
+        <activity
+            android:name=".streaming.StreamConfirm"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Started by the shell when Moonlight launches a game: does nothing without a session -->
         <activity
             android:name=".streaming.StreamCapture"

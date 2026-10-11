@@ -80,7 +80,7 @@ internal class StreamVideo(
             setInteger(MediaFormat.KEY_FRAME_RATE, fps)
             // Keyframes only when asked for: they're big, and Moonlight asks when it needs one
             setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 3600)
-            // A still screen keeps sending, so the TV doesn't think the stream stopped
+            // A still screen keeps sending, so the Moonlight client doesn't think the stream stopped
             setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1_000_000L / fps)
             setInteger(MediaFormat.KEY_PRIORITY, 0)
             if (android.os.Build.VERSION.SDK_INT >= 30) setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
