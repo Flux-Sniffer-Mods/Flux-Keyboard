@@ -1398,4 +1398,6 @@
     <string name="stream_screen_to_separate">Eigener Bildschirm</string>
     <string name="stream_screen_to_mirror">Handy spiegeln</string>
     <string name="extra_screen_title">Spielbildschirm</string>
+    <string name="stream_pass_through">Tastaturen, Mäuse und Controller zum Spiel</string>
+    <string name="stream_pass_through_description">Am Handy angeschlossene oder per Bluetooth gekoppelte Tastaturen, Mäuse und Controller gehen beim Streamen direkt an den eigenen Bildschirm des Spiels, nicht ans Handy. Nach dem Stream gehören sie wieder dem Handy.</string>
 </resources>

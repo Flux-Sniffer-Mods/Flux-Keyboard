@@ -1444,4 +1444,6 @@
     <string name="stream_screen_to_separate">Schermo separato</string>
     <string name="stream_screen_to_mirror">Duplica il telefono</string>
     <string name="extra_screen_title">Schermo del gioco</string>
+    <string name="stream_pass_through">Tastiere, mouse e controller al gioco</string>
+    <string name="stream_pass_through_description">Tastiere, mouse e controller collegati al telefono o associati via Bluetooth vanno dritti allo schermo del gioco durante lo streaming, non al telefono. Tornano al telefono a fine streaming.</string>
 </resources>

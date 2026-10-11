@@ -1307,4 +1307,6 @@
     <string name="stream_screen_to_separate">Ξεχωριστή οθόνη</string>
     <string name="stream_screen_to_mirror">Καθρέφτης τηλεφώνου</string>
     <string name="extra_screen_title">Οθόνη παιχνιδιού</string>
+    <string name="stream_pass_through">Πληκτρολόγια, ποντίκια και χειριστήρια στο παιχνίδι</string>
+    <string name="stream_pass_through_description">Πληκτρολόγια, ποντίκια και χειριστήρια συνδεδεμένα στο τηλέφωνο ή μέσω Bluetooth πηγαίνουν κατευθείαν στη δική του οθόνη του παιχνιδιού κατά τη μετάδοση, όχι στο τηλέφωνο. Επιστρέφουν στο τηλέφωνο όταν τελειώσει η μετάδοση.</string>
 </resources>

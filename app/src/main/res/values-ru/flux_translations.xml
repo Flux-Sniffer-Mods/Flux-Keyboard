@@ -1945,4 +1945,6 @@
     <string name="stream_screen_to_separate">Отдельный экран</string>
     <string name="stream_screen_to_mirror">Дублировать телефон</string>
     <string name="extra_screen_title">Экран игры</string>
+    <string name="stream_pass_through">Клавиатуры, мыши и контроллеры — в игру</string>
+    <string name="stream_pass_through_description">Клавиатуры, мыши и контроллеры, подключённые к телефону или по Bluetooth, во время трансляции идут прямо на собственный экран игры, а не на телефон. Когда трансляция заканчивается, они снова работают с телефоном.</string>
 </resources>

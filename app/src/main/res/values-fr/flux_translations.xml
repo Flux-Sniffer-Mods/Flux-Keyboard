@@ -1939,4 +1939,6 @@
     <string name="stream_screen_to_separate">Écran séparé</string>
     <string name="stream_screen_to_mirror">Dupliquer le téléphone</string>
     <string name="extra_screen_title">Écran du jeu</string>
+    <string name="stream_pass_through">Claviers, souris et manettes vers le jeu</string>
+    <string name="stream_pass_through_description">Les claviers, souris et manettes branchés au téléphone ou appairés en Bluetooth vont directement à l\'écran du jeu pendant le stream, pas au téléphone. Ils reviennent au téléphone à la fin du stream.</string>
 </resources>

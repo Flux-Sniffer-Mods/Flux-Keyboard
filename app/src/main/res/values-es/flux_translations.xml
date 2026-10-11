@@ -1939,4 +1939,6 @@
     <string name="stream_screen_to_separate">Pantalla aparte</string>
     <string name="stream_screen_to_mirror">Reflejar móvil</string>
     <string name="extra_screen_title">Pantalla del juego</string>
+    <string name="stream_pass_through">Teclados, ratones y mandos al juego</string>
+    <string name="stream_pass_through_description">Los teclados, ratones y mandos conectados al móvil o emparejados por Bluetooth van directos a la pantalla propia del juego mientras se transmite, no al móvil. Vuelven al móvil al terminar la transmisión.</string>
 </resources>

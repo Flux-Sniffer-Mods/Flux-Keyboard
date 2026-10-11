@@ -1945,4 +1945,6 @@
     <string name="stream_screen_to_separate">Osobny ekran</string>
     <string name="stream_screen_to_mirror">Odbij telefon</string>
     <string name="extra_screen_title">Ekran gry</string>
+    <string name="stream_pass_through">Klawiatury, myszy i kontrolery do gry</string>
+    <string name="stream_pass_through_description">Klawiatury, myszy i kontrolery podłączone do telefonu lub sparowane przez Bluetooth trafiają podczas streamu prosto na własny ekran gry, nie do telefonu. Po zakończeniu streamu wracają do telefonu.</string>
 </resources>

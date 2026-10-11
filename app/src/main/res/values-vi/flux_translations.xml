@@ -1927,4 +1927,6 @@
     <string name="stream_screen_to_separate">Màn hình riêng</string>
     <string name="stream_screen_to_mirror">Phản chiếu điện thoại</string>
     <string name="extra_screen_title">Màn hình trò chơi</string>
+    <string name="stream_pass_through">Bàn phím, chuột và tay cầm cho trò chơi</string>
+    <string name="stream_pass_through_description">Bàn phím, chuột và tay cầm cắm vào điện thoại hoặc ghép qua Bluetooth đi thẳng tới màn hình riêng của trò chơi khi phát trực tuyến, không tới điện thoại. Chúng trở lại với điện thoại khi kết thúc phát.</string>
 </resources>
