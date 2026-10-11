@@ -348,8 +348,16 @@ object StreamHost {
         .filter { profile -> profile.packages.none { it == app.packageName || GameApps.appFor(it) == GameApps.XBOX_NAME } }
         .map { appId(it) to it }
 
-    /** A game's number for Moonlight: stable for as long as the game is listed. */
-    internal fun appId(profile: GameProfile): Int = (profile.id.hashCode() and 0x7FFFFFFF).coerceAtLeast(1)
+    /**
+     * A game's number for Moonlight: stable while the game and its art stay the same. Moonlight
+     * keeps a game's art by its number and never asks again, so new art (upright art, or a
+     * picture of your own) gets a new number.
+     */
+    internal fun appId(profile: GameProfile): Int =
+        ("${profile.id}|$ART_GENERATION|${GameArt.version(app, profile)}".hashCode() and 0x7FFFFFFF).coerceAtLeast(1)
+
+    /** Raised when the art Moonlight is sent changes for every game. */
+    private const val ART_GENERATION = 2
 
     private fun appList(): String = root(games().joinToString("") { (id, profile) ->
         "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"

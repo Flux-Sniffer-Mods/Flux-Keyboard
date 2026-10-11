@@ -211,8 +211,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         if (streaming) {
             val resolutions = it.palsoftware.pastiera.streaming.StreamHostService.RESOLUTIONS
             val names = listOf(
-                stringResource(R.string.stream_resolution_auto), "720p", "1080p", "1440p",
-                stringResource(R.string.stream_resolution_client)
+                stringResource(R.string.stream_resolution_client), "720p", "1080p", "1440p"
             )
             var resolution by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.resolution(context)) }
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {

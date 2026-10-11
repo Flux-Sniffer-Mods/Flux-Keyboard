@@ -189,12 +189,11 @@ class StreamProtocolTest {
 
     @Test
     fun thePhoneTakesTheTvsShapeAtTheChosenSize() {
-        assertEquals(1920 to 1080, StreamHostService.phoneSize("auto", 3840, 2160))
-        assertEquals(1920 to 1080, StreamHostService.phoneSize("auto", 1280, 720))
-        // Not 16:9: what Moonlight asks for
+        // Automatic: what Moonlight asks for
+        assertEquals(3840 to 2160, StreamHostService.phoneSize("auto", 3840, 2160))
         assertEquals(2560 to 1080, StreamHostService.phoneSize("auto", 2560, 1080))
         assertEquals(1280 to 720, StreamHostService.phoneSize("720", 1920, 1080))
-        assertEquals(3840 to 2160, StreamHostService.phoneSize("client", 3840, 2160))
+        assertEquals(1920 to 1080, StreamHostService.phoneSize("1080", 3840, 2160))
         assertEquals(1728 to 1080, StreamHostService.phoneSize("1080", 1920, 1200))
     }
 }
