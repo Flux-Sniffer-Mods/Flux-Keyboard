@@ -62,39 +62,64 @@ object GameArt {
         return load(context, profile)?.let(::portrait)
     }
 
-    /** What SteamGridDB lists the known launchers and emulators as (their names alone find games). */
-    private val APP_NAMES = mapOf(
-        "app.gamenative" to listOf("GameNative", "Winlator"),
-        "gamehub.lite" to listOf("GameHub"), "emuready.gamehub.lite" to listOf("GameHub"), "com.xiaoji.egggame" to listOf("GameHub"),
-        "org.dolphinemu.dolphinemu" to listOf("Dolphin Emulator"), "org.dolphinemu.mmjr" to listOf("Dolphin Emulator"),
-        "org.ppsspp.ppsspp" to listOf("PPSSPP"), "org.ppsspp.ppssppgold" to listOf("PPSSPP"),
-        "org.azahar_emu.azahar" to listOf("Azahar", "Citra"), "io.github.lime3ds.android" to listOf("Lime3DS", "Citra"),
-        "org.citra.citra_emu" to listOf("Citra"),
-        "dev.eden.eden_emulator" to listOf("Eden Emulator", "Yuzu"), "dev.legacy.eden_emulator" to listOf("Eden Emulator", "Yuzu"),
-        "com.retroarch" to listOf("RetroArch"), "com.retroarch.aarch64" to listOf("RetroArch"),
-        "org.es_de.frontend" to listOf("ES-DE", "EmulationStation"), "xyz.aethersx2.android" to listOf("AetherSX2"),
-        "com.github.stenzek.duckstation" to listOf("DuckStation")
-    )
+    /**
+     * What SteamGridDB may list the known launchers and emulators as (several names each: the
+     * emulator's own, a longer one, or a family member's), best first.
+     */
+    private val APP_NAMES: Map<String, List<String>> = run {
+        val dolphin = listOf("Dolphin Emulator", "Dolphin")
+        val gamehub = listOf("GameHub", "GameSir GameHub", "GameHub Lite")
+        val citra = listOf("Azahar", "Citra", "Lime3DS")
+        val eden = listOf("Eden", "Eden Emulator", "Yuzu", "Suyu")
+        val ps2 = listOf("AetherSX2", "NetherSX2", "PCSX2")
+        mapOf(
+            "app.gamenative" to listOf("GameNative", "Winlator"),
+            "gamehub.lite" to gamehub, "emuready.gamehub.lite" to gamehub, "com.xiaoji.egggame" to gamehub,
+            "org.dolphinemu.dolphinemu" to dolphin, "org.dolphinemu.mmjr" to listOf("Dolphin MMJR") + dolphin,
+            "org.ppsspp.ppsspp" to listOf("PPSSPP"), "org.ppsspp.ppssppgold" to listOf("PPSSPP Gold", "PPSSPP"),
+            "org.azahar_emu.azahar" to citra, "io.github.lime3ds.android" to listOf("Lime3DS", "Citra"),
+            "org.citra.citra_emu" to listOf("Citra"), "org.citra.emu" to listOf("Citra"),
+            "dev.eden.eden_emulator" to eden, "dev.legacy.eden_emulator" to eden,
+            "com.retroarch" to listOf("RetroArch"), "com.retroarch.aarch64" to listOf("RetroArch"),
+            "org.es_de.frontend" to listOf("ES-DE", "EmulationStation Desktop Edition", "EmulationStation"),
+            "xyz.aethersx2.android" to ps2, "xyz.nethersx2.android" to ps2,
+            "com.github.stenzek.duckstation" to listOf("DuckStation"),
+            "me.magnum.melonds" to listOf("melonDS"), "org.vita3k.emulator" to listOf("Vita3K"),
+            "com.swordfish.lemuroid" to listOf("Lemuroid"), "org.mupen64plusae.v3.fzurita" to listOf("Mupen64Plus FZ", "Mupen64Plus"),
+            "info.cemu.cemu" to listOf("Cemu"), "org.flycast.emulator" to listOf("Flycast"),
+            "com.explusalpha.Snes9xPlus" to listOf("Snes9x EX+", "Snes9x"), "com.winlator" to listOf("Winlator"),
+            "org.ryujinx.android" to listOf("Ryujinx")
+        )
+    }
+
+    /** A name as compared: lower case, without "emulator", brackets or punctuation. */
+    internal fun plainName(name: String): String = name.lowercase()
+        .replace(Regex("\\(.*?\\)"), " ").replace(Regex("\\bemulator\\b"), " ")
+        .replace(Regex("[^a-z0-9]+"), " ").trim()
 
     /**
      * SteamGridDB's entry for an app (a launcher or emulator) named any of [names]: only one
-     * whose name starts with the name asked for, so an emulator never gets a game's art.
+     * whose name is that name (give or take "Emulator" and punctuation), one calling itself an
+     * emulator first, so an emulator never gets a game's art.
      */
     private fun sgdbApp(names: List<String>): Int? {
         if (key.isEmpty()) return null
         for (name in names) {
             val found = api("search/autocomplete/" + java.net.URLEncoder.encode(name, "UTF-8").replace("+", "%20"))
                 ?.optJSONArray("data") ?: continue
-            (0 until found.length()).map { found.optJSONObject(it) }
-                .firstOrNull { it?.optString("name").orEmpty().startsWith(name, ignoreCase = true) }
-                ?.optInt("id")?.takeIf { it > 0 }?.let { return it }
+            val wanted = plainName(name)
+            val matches = (0 until found.length()).mapNotNull { found.optJSONObject(it) }
+                .filter { plainName(it.optString("name")) == wanted && it.optInt("id") > 0 }
+            (matches.firstOrNull { it.optString("name").contains("emulator", ignoreCase = true) } ?: matches.firstOrNull())
+                ?.let { return it.optInt("id") }
         }
         return null
     }
 
     /** The names an app is looked up by: its known names, else its own. */
     private fun appNames(profile: GameProfile, packageName: String?): List<String> =
-        packageName?.let { APP_NAMES[it] } ?: profile.packages.firstNotNullOfOrNull { APP_NAMES[it] } ?: listOf(profile.name)
+        ((packageName?.let { APP_NAMES[it] } ?: profile.packages.firstNotNullOfOrNull { APP_NAMES[it] }).orEmpty() + profile.name)
+            .filter { it.isNotBlank() }.distinctBy { plainName(it) }
 
     /** SteamGridDB's upright grids for an entry, best first. */
     private fun sgdbUpright(id: Int): List<String> = api("grids/game/$id?dimensions=600x900")?.optJSONArray("data")?.let { data ->
@@ -131,7 +156,7 @@ object GameArt {
     fun appPortrait(context: Context, profile: GameProfile, packageName: String): Bitmap? {
         uprightFile(context, profile).takeIf { it.length() > 0 }?.let { file -> BitmapFactory.decodeFile(file.path)?.let { return it } }
         custom(context, profile)?.let { return portrait(it) }
-        val file = File(dir(context), "app-" + packageName + (if (key.isEmpty()) "" else "-sgdb") + ".img")
+        val file = File(dir(context), "app2-" + packageName + (if (key.isEmpty()) "" else "-sgdb") + ".img")
         if (file.exists() && file.length() > 0) BitmapFactory.decodeFile(file.path)?.let { return it }
         if (!file.exists() && !SettingsManager.isOfflineMode(context)) {
             dir(context).mkdirs()

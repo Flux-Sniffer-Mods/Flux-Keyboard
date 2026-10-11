@@ -35,4 +35,12 @@ class GameArtTest {
             assertEquals(900, art.height)
         }
     }
+
+    @Test
+    fun emulatorNamesCompareWithoutEmulator() {
+        org.junit.Assert.assertEquals("dolphin", GameArt.plainName("Dolphin Emulator"))
+        org.junit.Assert.assertEquals("dolphin", GameArt.plainName("Dolphin (emulator)"))
+        org.junit.Assert.assertEquals("es de", GameArt.plainName("ES-DE"))
+        org.junit.Assert.assertNotEquals(GameArt.plainName("Dolphin"), GameArt.plainName("Dolphin Olympics 2"))
+    }
 }
