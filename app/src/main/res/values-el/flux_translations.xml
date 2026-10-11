@@ -1262,8 +1262,7 @@
     <string name="game_mode_advice_driver_system">System (ο Turnip είναι μόνο για Adreno)</string>
     <string name="game_mode_advice_game">Στις ρυθμίσεις του παιχνιδιού: ποιότητα γραφικών Μέτρια ή Χαμηλή, όριο 60 fps μόνο αν μένει σταθερό (αλλιώς 30), και κλίμακα απόδοσης ή ανάλυση κάτω από 100% αν υπάρχει.</string>
     <string name="stream_resolution">Ανάλυση στην τηλεόραση</string>
-    <string name="stream_resolution_auto">Αυτόματα</string>
     <string name="stream_resolution_client">Όπως ζητά το Moonlight</string>
-    <string name="stream_resolution_description">Κατά τη μετάδοση, η οθόνη του τηλεφώνου παίρνει το σχήμα της τηλεόρασης σε αυτό το μέγεθος, πριν από την επιλογή οθόνης της λειτουργίας gaming. Το Αυτόματα είναι 1080p για οθόνες 16:9, αλλιώς ό,τι ζητά το Moonlight.</string>
+    <string name="stream_resolution_description">Κατά τη μετάδοση, η οθόνη του τηλεφώνου παίρνει το σχήμα της τηλεόρασης σε αυτό το μέγεθος, πριν από την επιλογή οθόνης της λειτουργίας gaming. Αρχικά ό,τι ζητά το Moonlight (ορίζεται στις ρυθμίσεις του)· ένα μικρότερο μέγεθος εδώ κάνει τα παιχνίδια πιο ομαλά.</string>
     <string name="games_app_settings">Ρυθμίσεις gaming</string>
 </resources>
