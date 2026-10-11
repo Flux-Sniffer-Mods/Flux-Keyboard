@@ -9,13 +9,15 @@ import java.io.File
 /**
  * A game's real name from the game itself, whatever its file is called: the ID on a Wii or
  * GameCube disc or a 3DS cartridge, looked up in GameTDB's list of titles (fetched once, kept),
- * else the name the game carries (a disc's own title, a PSP game's PARAM.SFO). Files are read
- * through the shell; what's found is remembered per file.
+ * else the name the game carries (a disc's own title, a PSP game's PARAM.SFO). Failing those, a
+ * best guess from the file's name: tidied of its tags, and matched loosely against GameTDB's
+ * titles where there's a list. Files are read through the shell; what's found is remembered per
+ * file.
  */
 object GameIds {
     data class Found(val id: String?, val title: String?)
 
-    private const val PREFS = "game_titles"
+    private const val PREFS = "game_titles_2"
 
     /** The name to show for [path], played in [player]; null to keep the file's name. */
     fun title(context: Context, player: String, path: String): String? {
@@ -31,16 +33,19 @@ object GameIds {
         // The game's own ID first, else one written in the file's name ("Zelda [GZLE01]"),
         // and the file's name without its tags ("[0100F2C0115B6000][v0]") as its title
         val named = fromName(player, file)
+        val database = when (player) { "Dolphin" -> "wiitdb"; "Azahar" -> "3dstdb"; else -> null }
         val found = when {
             read?.id != null -> read
             named != null -> Found(named.id, read?.title ?: named.title)
-            else -> read
+            read != null -> read
+            // Nothing in the game or its name: the closest title in the list, by the file's name
+            else -> database?.let { guess(titles(context, it), cleanName(file)) }
         }
-        val database = when (player) { "Dolphin" -> "wiitdb"; "Azahar" -> "3dstdb"; else -> null }
         found?.id?.let { prefs.edit().putString("id:$path", it).apply() }
-        val name = found?.id?.let { id -> database?.let { lookup(context, it, id) } } ?: found?.title?.let { tidy(it) }
+        val name = found?.id?.let { id -> database?.let { lookup(context, it, id) } } ?: found?.title?.let { cleanName(it) }
+            ?: cleanName(file).takeIf { it.isNotEmpty() && it != file }
         // Not known yet (no list to look in): asked again next time
-        if (name != null || found == null || database == null || listFile(context, database).exists()) {
+        if (database == null || listFile(context, database).exists()) {
             prefs.edit().putString(path, name ?: "").apply()
         }
         return name
@@ -71,6 +76,60 @@ object GameIds {
         val title = file.replace(Regex("\\[[^\\]]*\\]"), " ").replace(id, " ").replace(Regex("[_]+"), " ")
             .replace(Regex("\\s+"), " ").trim(' ', '-').ifEmpty { null }
         return Found(id, title)
+    }
+
+    // ---- Guessing from the file's name ----
+
+    /**
+     * A game file's name as a title: its tags ("(USA)", "[!]", "(Rev 1)"), versions and dump
+     * marks gone, _ and . as spaces, and "Legend of Zelda, The" turned round.
+     */
+    internal fun cleanName(file: String): String {
+        var name = file.replace(Regex("[\\[({][^\\])}]*[\\])}]"), " ")
+        name = name.replace(Regex("(?i)\\bv\\d+(\\.\\d+)*\\b"), " ").trim()
+        if (!name.contains(' ')) name = name.replace('.', ' ')
+        name = name.replace('_', ' ')
+            .replace(Regex("(?i)\\b(ntsc(-[uj])?|pal|usa|eur|jpn|multi\\d*|nkit|rvz|wbfs|iso)\\b"), " ")
+            .replace(Regex("\\s+"), " ").trim(' ', '-', '.')
+        Regex("^(.*), (The|A|An)( - .*|: .*)?$").matchEntire(name)?.let { m ->
+            name = m.groupValues[2] + " " + m.groupValues[1] + m.groupValues[3]
+        }
+        // All in one case: words capitalised
+        return if (name.none(Char::isUpperCase)) tidy(name.uppercase()) else tidy(name)
+    }
+
+    /** [text] for comparing: lower case, words only, "&" as "and", roman numerals as numbers. */
+    internal fun normalize(text: String): List<String> = text.lowercase().replace("&", " and ")
+        .replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim().split(' ')
+        .filter { it.isNotEmpty() && it != "the" }
+        .map { ROMAN[it] ?: it }
+
+    private val ROMAN = mapOf("ii" to "2", "iii" to "3", "iv" to "4", "v" to "5", "vi" to "6", "vii" to "7", "viii" to "8", "ix" to "9", "x" to "10")
+
+    /** How alike two titles are, 0 to 1: their letter pairs in common, or all of [query]'s words in [title]. */
+    internal fun similarity(query: List<String>, title: List<String>): Double {
+        if (query.isEmpty() || title.isEmpty()) return 0.0
+        fun pairs(words: List<String>) = words.joinToString("").windowed(2).groupingBy { it }.eachCount()
+        val a = pairs(query)
+        val b = pairs(title)
+        val common = a.entries.sumOf { (pair, count) -> minOf(count, b[pair] ?: 0) }
+        val dice = 2.0 * common / (a.values.sum() + b.values.sum()).coerceAtLeast(1)
+        // "Zelda Wind Waker" within "Legend of Zelda: The Wind Waker"
+        val words = if (query.size >= 2 && title.containsAll(query)) 0.8 + 0.2 * query.size / title.size else 0.0
+        return maxOf(dice, words)
+    }
+
+    /** The title in [titles] (ID to title) closest to [name], if close enough; US releases first. */
+    internal fun guess(titles: Map<String, String>, name: String): Found? {
+        val query = normalize(name)
+        if (query.isEmpty()) return null
+        val region = "EPJ"
+        return titles.entries.asSequence()
+            .map { (id, title) -> Triple(id, title, similarity(query, normalize(title))) }
+            .filter { it.third >= 0.8 }
+            .maxWithOrNull(compareBy<Triple<String, String, Double>> { it.third }
+                .thenBy { -(region.indexOf(it.first.getOrElse(3) { ' ' }).let { i -> if (i < 0) 9 else i }) })
+            ?.let { Found(it.first, it.second) }
     }
 
     // ---- Reading the game ----
@@ -193,9 +252,12 @@ object GameIds {
     /** [id]'s title in GameTDB's [database] (wiitdb: Wii and GameCube; 3dstdb: 3DS). */
     @Synchronized
     fun lookup(context: Context, database: String, id: String): String? {
-        val titles = lists.getOrPut(database) { load(context, database) }
+        val titles = titles(context, database)
         return titles[id] ?: titles[id.take(4)]
     }
+
+    @Synchronized
+    private fun titles(context: Context, database: String): Map<String, String> = lists.getOrPut(database) { load(context, database) }
 
     private fun load(context: Context, database: String): Map<String, String> {
         val file = listFile(context, database)

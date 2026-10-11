@@ -64,4 +64,28 @@ class GameIdsTest {
         assertEquals("ULUS10041", GameIds.fromName("PPSSPP", "Lumines ULUS-10041")?.id)
         assertEquals("AREE", GameIds.fromName("Azahar", "Animal Crossing CTR-P-AREE")?.id)
     }
+
+    @Test
+    fun aFilesNameIsTidiedIntoATitle() {
+        assertEquals("Super Mario Galaxy", GameIds.cleanName("Super Mario Galaxy (USA) (En,Fr,Es) [!]"))
+        assertEquals("The Legend of Zelda - Twilight Princess", GameIds.cleanName("Legend of Zelda, The - Twilight Princess (Europe) (Rev 1)"))
+        assertEquals("Metroid Prime", GameIds.cleanName("metroid_prime_NTSC"))
+        assertEquals("Super Smash Bros Brawl", GameIds.cleanName("Super.Smash.Bros.Brawl.v1.01"))
+    }
+
+    @Test
+    fun aTitleIsGuessedLooselyFromTheName() {
+        val titles = mapOf(
+            "GZLE01" to "The Legend of Zelda: The Wind Waker",
+            "GZLP01" to "The Legend of Zelda: The Wind Waker",
+            "RMCE01" to "Mario Kart Wii",
+            "RSBE01" to "Super Smash Bros. Brawl",
+            "SB4E01" to "Super Mario Galaxy 2"
+        )
+        assertEquals("GZLE01", GameIds.guess(titles, "Zelda Wind Waker")?.id)
+        assertEquals("RMCE01", GameIds.guess(titles, "Mario Kart Wii")?.id)
+        assertEquals("RSBE01", GameIds.guess(titles, "Super Smash Bros Brawl")?.id)
+        assertEquals("SB4E01", GameIds.guess(titles, "Super Mario Galaxy II")?.id)
+        assertNull(GameIds.guess(titles, "Animal Crossing"))
+    }
 }
