@@ -25,9 +25,14 @@ object XboxCloud {
 
     private fun file(context: Context) = File(context.filesDir, "xbox_cloud.json")
 
-    /** The Xbox app installed that plays cloud games, if any. */
-    fun app(context: Context): String? = listOf("com.gamepass", "com.gamepass.beta", "com.microsoft.xboxone.smartglass", "com.microsoft.xboxone.smartglass.beta")
-        .firstOrNull { runCatching { context.packageManager.getPackageInfo(it, 0) }.isSuccess }
+    /**
+     * What plays cloud games: Flux Keyboard's own player (the Xbox apps from the Play Store
+     * don't stream on phones).
+     */
+    fun app(context: Context): String = context.packageName
+
+    /** Xbox Cloud Gaming itself, every game (its home page), as an entry of its own. */
+    val HOME = CloudGame("", "Xbox Cloud Gaming", null)
 
     /** Every cloud game, A to Z (blocking: fetched when the copy kept is a week old). */
     fun games(context: Context): List<CloudGame> {
@@ -72,11 +77,12 @@ object XboxCloud {
         }
     }
 
-    /** What starts [game]: its play link, opened by the Xbox app [pkg]. */
+    /** What starts [game]: its play link, in Flux Keyboard's player ([pkg]). */
     fun launchFor(game: CloudGame, pkg: String): String {
         val slug = game.name.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-').ifEmpty { "game" }
-        return Intent(Intent.ACTION_VIEW, Uri.parse("https://www.xbox.com/play/launch/$slug/${game.id}"))
-            .setPackage(pkg).toUri(Intent.URI_INTENT_SCHEME)
+        val url = if (game.id.isEmpty()) XboxPlayActivity.HOME else "https://www.xbox.com/play/launch/$slug/${game.id}"
+        return Intent(Intent.ACTION_VIEW, Uri.parse(url)).setClassName(pkg, XboxPlayActivity::class.java.name)
+            .toUri(Intent.URI_INTENT_SCHEME)
     }
 
     /** The cloud game a launch starts, by its play link's product ID. */

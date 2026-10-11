@@ -141,6 +141,40 @@ object GameMode {
         return null
     }
 
+    // ---- Flux Keyboard's own player (Xbox Cloud Gaming in a web page) ----
+
+    /** The player in front, taking the sticks (left x y, right x y) as they move. */
+    @Volatile private var stickSink: ((FloatArray) -> Unit)? = null
+
+    /**
+     * The player in front: the trackpad's left half its left stick, given to [sink], and the
+     * screen as [screenMode]. Keys reach the player itself.
+     */
+    fun attachPlayer(context: Context, screenMode: ScreenMode, sink: (FloatArray) -> Unit) {
+        val app = context.applicationContext
+        worker.execute {
+            stickSink = sink
+            val player = GameProfile(
+                id = "player", name = "player", packages = setOf(app.packageName),
+                leftHalf = TrackpadRole.LEFT_STICK, rightHalf = TrackpadRole.NONE, screen = screenMode
+            )
+            profile = player
+            activeId = null
+            screen(app, screenMode)
+            startTrackpad(player)
+        }
+    }
+
+    /** The player gone from the front: the trackpad let go, the screen put back. */
+    fun detachPlayer(context: Context) {
+        val app = context.applicationContext
+        worker.execute {
+            if (stickSink == null) return@execute
+            stickSink = null
+            stop(app)
+        }
+    }
+
     /** The app gaming mode is playing a game in, if it is. */
     fun playing(): String? = frontPackage.takeIf { profile != null }
 
@@ -528,6 +562,8 @@ object GameMode {
     }
 
     private fun sendSticks() {
+        // Flux Keyboard's own player (Xbox Cloud Gaming) takes them itself
+        stickSink?.let { sink -> val now = sticks.copyOf(); sink(now); return }
         // The real controller's sticks, with root; else stick events from the keyboard
         val line = (if (pad) "A" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
         worker.execute { send(line) }
@@ -636,7 +672,7 @@ object GameMode {
         }
 
         /** A stick with nowhere to go (no real controller, no on-screen stick): its keys instead. */
-        private fun byKeys(at: Int): Boolean = !pad && profile?.stickZones?.containsKey(at / 2) != true
+        private fun byKeys(at: Int): Boolean = stickSink == null && !pad && profile?.stickZones?.containsKey(at / 2) != true
 
         private fun move(slot: Int, x: Int, y: Int) {
             val f = fingers[slot] ?: return

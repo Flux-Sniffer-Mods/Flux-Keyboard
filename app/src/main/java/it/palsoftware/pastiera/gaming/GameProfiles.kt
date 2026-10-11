@@ -277,7 +277,8 @@ object GameProfiles {
 
     /** A found game set up (or played as it is): no longer asked about, its app's settings made. */
     fun confirm(context: Context, profile: GameProfile): GameProfile {
-        val pkg = profile.packages.firstOrNull()
+        // (Flux Keyboard's own player has no app settings of its own)
+        val pkg = profile.packages.firstOrNull()?.takeIf { it != context.packageName }
         if (pkg != null) {
             val label = runCatching { context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
             ensureApp(context, pkg, label)

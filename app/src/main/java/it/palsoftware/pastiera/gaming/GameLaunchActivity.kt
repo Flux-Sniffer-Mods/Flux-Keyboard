@@ -40,7 +40,8 @@ class GameLaunchActivity : Activity() {
         val app = packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
         val emulatorGame = game != null && (game.data != null || game.hasExtra("AutoStartFile"))
         val pkg = game?.`package` ?: game?.component?.packageName
-        if (emulatorGame && pkg != null && it.palsoftware.pastiera.adb.AdbShell.available()) {
+        // (Flux Keyboard's own player isn't one: never stopped)
+        if (emulatorGame && pkg != null && pkg != packageName && it.palsoftware.pastiera.adb.AdbShell.available()) {
             // An emulator only opens the game it's given when it starts afresh (Dolphin reads it
             // as its screen is made, PPSSPP ignores a new one while running): stopped first
             Thread {

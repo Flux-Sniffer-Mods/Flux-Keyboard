@@ -257,6 +257,15 @@
             android:noHistory="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Xbox Cloud Gaming in Flux Keyboard's own player (sizes change while it plays: kept) -->
+        <activity
+            android:name=".gaming.XboxPlayActivity"
+            android:exported="false"
+            android:taskAffinity="it.palsoftware.pastiera.xbox"
+            android:label="Xbox Cloud Gaming"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|keyboard|keyboardHidden|navigation|uiMode"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <!-- One game's or app's gaming mode settings, on their own -->
         <activity
             android:name=".gaming.GameEditActivity"

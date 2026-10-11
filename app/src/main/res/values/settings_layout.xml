@@ -456,9 +456,9 @@
     <string name="game_detect_title">%1$s looks like a game</string>
     <string name="game_detect_text">Set up gaming mode for it: controller, screen and sticks.</string>
     <string name="game_detect_not_game">Not now</string>
-    <string name="game_mode_xbox_note">Xbox Cloud Gaming takes a controller or its touch controls, not keys: with root, turn on Real controller; without, place keys and sticks on its touch controls from gaming mode\'s notification.</string>
+    <string name="game_mode_xbox_note">Plays in Flux Keyboard\'s own player: sign in once, then the keys and trackpad play every game as a controller, in Flux Keyboard\'s layout.</string>
     <string name="game_mode_xbox_add">Add an Xbox cloud game</string>
-    <string name="game_mode_xbox_add_description">Every game Xbox Cloud Gaming streams, from its catalogue: each gets its own settings and starts straight into the game.</string>
+    <string name="game_mode_xbox_add_description">Xbox Cloud Gaming in Flux Keyboard\'s own player (xbox.com/play; the Xbox apps don\'t stream on phones), or any of its games, from its catalogue: each gets its own settings and starts straight into the game.</string>
     <string name="game_mode_xbox_search">Search</string>
     <string name="game_mode_xbox_none">The catalogue couldn\'t be read. Is the phone online, with offline mode off?</string>
 </resources>

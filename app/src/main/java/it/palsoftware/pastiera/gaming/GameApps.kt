@@ -20,7 +20,7 @@ object GameApps {
     fun appFor(packageName: String): String? = when {
         packageName == GameNativeBridge.PACKAGE -> "GameNative"
         packageName.contains("gamehub", true) || packageName == "com.xiaoji.egggame" -> "GameHub"
-        packageName in XBOX -> XBOX_NAME
+        packageName in XBOX || packageName == it.palsoftware.pastiera.BuildConfig.APPLICATION_ID -> XBOX_NAME
         else -> emulator(packageName)
     }
 

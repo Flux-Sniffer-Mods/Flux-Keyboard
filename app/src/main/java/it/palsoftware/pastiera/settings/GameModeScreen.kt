@@ -70,7 +70,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var gameNativeSetup by remember { mutableStateOf(false) }
     var addingOwn by remember { mutableStateOf(false) }
     var addingXbox by remember { mutableStateOf(false) }
-    val xboxApp = remember { it.palsoftware.pastiera.gaming.XboxCloud.app(context) }
+    val xboxApp: String? = remember { it.palsoftware.pastiera.gaming.XboxCloud.app(context) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     fun refresh() { profiles = GameProfiles.all(context) }
     // The game folders read again (games found join the list, not set up yet), and games named
@@ -242,8 +242,9 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val pickGame: (GameLibrary.Game) -> Unit = { game ->
         importing = false
         addingOwn = false
-        // The game plays with its app's settings, made for the app if it has none yet
-        GameProfiles.ensureApp(context, game.packageName, appLabel(context, game.packageName))
+        // The game plays with its app's settings, made for the app if it has none yet (Flux
+        // Keyboard's own player has none)
+        if (game.packageName != context.packageName) GameProfiles.ensureApp(context, game.packageName, appLabel(context, game.packageName))
         refresh()
         // Already found by itself: that one, set up now
         val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME)
@@ -684,7 +685,9 @@ private fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, o
                     list == null -> Text(stringResource(R.string.game_mode_import_reading), modifier = Modifier.padding(top = 8.dp))
                     list.isEmpty() -> Text(stringResource(R.string.game_mode_xbox_none), modifier = Modifier.padding(top = 8.dp))
                     else -> androidx.compose.foundation.lazy.LazyColumn(modifier = Modifier.height(360.dp)) {
-                        val shown = list.filter { query.isBlank() || it.name.contains(query.trim(), ignoreCase = true) }.take(80)
+                        // Xbox Cloud Gaming itself first, for every game
+                        val shown = (listOf(it.palsoftware.pastiera.gaming.XboxCloud.HOME) + list)
+                            .filter { game -> query.isBlank() || game.name.contains(query.trim(), ignoreCase = true) }.take(80)
                         items(shown.size) { i ->
                             val game = shown[i]
                             Text(game.name, modifier = Modifier.fillMaxWidth().clickable {
