@@ -480,6 +480,7 @@ fun DeveloperOptionsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         return
     }
     FluxScreenScaffold(stringResource(R.string.developer_options_title), onBack, modifier) {
+        CrashLogRow()
         TrackpadRecordRow()
         FluxNote(stringResource(R.string.developer_options_note))
         if (it.palsoftware.pastiera.update.forkUpdatesEnabled()) ForkUpdateChannelRow(context)

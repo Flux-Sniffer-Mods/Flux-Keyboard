@@ -52,6 +52,7 @@ class GamesActivity : ComponentActivity() {
 
     private data class Entry(val name: String, val profile: GameProfile, val intent: Intent)
 
+    @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
     @Composable
     private fun GamesList(editId: String?) {
         var entries by remember { mutableStateOf<List<Entry>?>(null) }
@@ -90,12 +91,15 @@ class GamesActivity : ComponentActivity() {
                     Text(stringResource(R.string.games_app_title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(vertical = 16.dp))
                 }
                 item {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    androidx.compose.foundation.layout.FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         androidx.compose.material3.OutlinedButton(onClick = { importing = true }) { Text(stringResource(R.string.game_mode_import)) }
                         androidx.compose.material3.OutlinedButton(onClick = { addingXbox = true }) { Text(stringResource(R.string.games_app_xbox)) }
-                    }
-                    androidx.compose.material3.TextButton(onClick = { startActivity(XboxPlayActivity.signIn(this@GamesActivity)) }) {
-                        Text(stringResource(R.string.game_mode_xbox_sign_in))
+                        androidx.compose.material3.OutlinedButton(onClick = {
+                            runCatching { startActivity(XboxPlayActivity.signIn(this@GamesActivity)) }
+                        }) { Text(stringResource(R.string.game_mode_xbox_sign_in)) }
                     }
                 }
                 if (list != null && list.isEmpty()) item { Text(stringResource(R.string.games_app_empty)) }

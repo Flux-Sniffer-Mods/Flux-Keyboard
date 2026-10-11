@@ -190,7 +190,9 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             icon = "\u2192",
             title = stringResource(R.string.game_mode_xbox_sign_in),
             description = stringResource(R.string.game_mode_xbox_sign_in_description)
-        ) { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) }
+        ) { runCatching { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) } }
+        // The phone's own game mode, which can take over as the home screen
+        PhoneGameModeRow()
         // Streaming games to a TV or another device running Moonlight
         SettingsSectionDivider(stringResource(R.string.stream_section))
         var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(context)) }
@@ -695,6 +697,23 @@ internal fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, 
     val context = LocalContext.current
     var games by remember { mutableStateOf<List<it.palsoftware.pastiera.gaming.XboxCloud.CloudGame>?>(null) }
     var query by remember { mutableStateOf("") }
+    // Signed in first: the games only play once Xbox knows who's playing
+    val signedIn = remember { it.palsoftware.pastiera.gaming.XboxCloud.signedIn() }
+    if (!signedIn) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(stringResource(R.string.game_mode_xbox_add)) },
+            text = { Text(stringResource(R.string.game_mode_xbox_sign_in_first)) },
+            confirmButton = {
+                androidx.compose.material3.Button(onClick = {
+                    runCatching { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) }
+                    onDismiss()
+                }) { Text(stringResource(R.string.game_mode_xbox_sign_in)) }
+            },
+            dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+        )
+        return
+    }
     LaunchedEffect(Unit) { games = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.XboxCloud.games(context) } }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -805,5 +824,90 @@ internal fun TrackpadRecordRow() {
         title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
         text = { Text(stringResource(R.string.adb_not_running)) },
         confirmButton = { TextButton(onClick = { recordFailed = false }) { Text(stringResource(android.R.string.ok)) } }
+    )
+}
+
+/** Android's record of the last crashes (Flux Keyboard's and its web pages'), saved to share. */
+@Composable
+internal fun CrashLogRow() {
+    val context = LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    FluxActionRow(
+        linkId = null,
+        icon = "\u26A0",
+        title = stringResource(R.string.crash_log),
+        description = stringResource(R.string.crash_log_description)
+    ) {
+        scope.launch {
+            val saved = withContext(Dispatchers.IO) {
+                val file = "/storage/emulated/0/Download/Flux Keyboard/crash-log.txt"
+                val app = it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
+                it.palsoftware.pastiera.adb.AdbShell.run(
+                    "f='$file'; mkdir -p \"\${f%/*}\"; { echo '== crashes =='; logcat -d -b crash -t 400; " +
+                        "echo '== errors =='; logcat -d -t 3000 '*:E' | grep -i -E '$app|AndroidRuntime|chromium|webview' | tail -n 400; } > \"\$f\" 2>&1; echo ok",
+                    15_000
+                )?.contains("ok") == true
+            }
+            android.widget.Toast.makeText(
+                context, if (saved) R.string.crash_log_saved else R.string.adb_not_running, android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+}
+
+/**
+ * The phone's own game mode (Unihertz's game space, and the like): it can take over as the home
+ * screen, at odds with gaming mode. Its apps are listed, each turned off or back on (through
+ * the shell: they're system apps).
+ */
+@Composable
+internal fun PhoneGameModeRow() {
+    val context = LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var apps by remember { mutableStateOf<List<Pair<String, Boolean>>?>(null) }
+    var open by remember { mutableStateOf(false) }
+    fun load() = scope.launch {
+        apps = withContext(Dispatchers.IO) {
+            val shell = it.palsoftware.pastiera.adb.AdbShell
+            val all = shell.run("pm list packages -s | grep -i -E 'game' ; true", 5_000).orEmpty()
+            val disabled = shell.run("pm list packages -d ; true", 5_000).orEmpty()
+            all.lines().map { line -> line.removePrefix("package:").trim() }.filter { it.isNotEmpty() }
+                .map { pkg -> pkg to !disabled.lines().any { it.trim() == "package:$pkg" } }
+        }
+    }
+    FluxActionRow(
+        linkId = null,
+        icon = "\u2699",
+        title = stringResource(R.string.phone_game_mode),
+        description = stringResource(R.string.phone_game_mode_description)
+    ) { open = true; load() }
+    if (open) AlertDialog(
+        onDismissRequest = { open = false },
+        title = { Text(stringResource(R.string.phone_game_mode)) },
+        text = {
+            Column {
+                val list = apps
+                when {
+                    list == null -> Text(stringResource(R.string.game_mode_import_reading))
+                    list.isEmpty() -> Text(stringResource(R.string.phone_game_mode_none))
+                    else -> list.forEach { (pkg, on) ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(appLabel(context, pkg) + "\n" + pkg, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                            androidx.compose.material3.Switch(checked = on, onCheckedChange = { want ->
+                                scope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        it.palsoftware.pastiera.adb.AdbShell.run(
+                                            if (want) "pm enable $pkg" else "pm disable-user --user 0 $pkg", 5_000
+                                        )
+                                    }
+                                    load()
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(android.R.string.ok)) } }
     )
 }

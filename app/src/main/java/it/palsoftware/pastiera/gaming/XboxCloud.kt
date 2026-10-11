@@ -31,6 +31,14 @@ object XboxCloud {
      */
     fun app(context: Context): String = context.packageName
 
+    /**
+     * Signed in to Xbox in Flux Keyboard's player: xbox.com keeps its sign-in tokens as cookies
+     * named XBXXtk… once a Microsoft account has signed in.
+     */
+    fun signedIn(): Boolean = runCatching {
+        android.webkit.CookieManager.getInstance().getCookie("https://www.xbox.com")?.contains("XBXXtk") == true
+    }.getOrDefault(false)
+
     /** Xbox Cloud Gaming itself, every game (its home page), as an entry of its own. */
     val HOME = CloudGame("", "Xbox Cloud Gaming", null)
 
