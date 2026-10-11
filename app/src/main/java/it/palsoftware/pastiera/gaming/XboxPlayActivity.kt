@@ -115,7 +115,14 @@ class XboxPlayActivity : Activity() {
         if (signingIn) return
         // The cloud game this page plays: by its game ID, in the profile's link and the page's
         val id = intent.dataString?.let { XboxCloud.idOf(it) }
-        val playing = id?.let { GameProfiles.all(this).firstOrNull { p -> p.launch?.let { l -> XboxCloud.idOf(l) }.equals(it, ignoreCase = true) } }
+        var playing = id?.let { GameProfiles.all(this).firstOrNull { p -> p.launch?.let { l -> XboxCloud.idOf(l) }.equals(it, ignoreCase = true) } }
+        // A cloud game opened from the catalogue and played: added to the games (the Games app
+        // and Moonlight), to remove from there if it's not wanted
+        if (playing == null && id != null) XboxCloud.kept(this, id)?.let { cloud ->
+            val profile = GameProfiles.profileFor(this, XboxCloud.asGame(cloud, XboxCloud.app(this)))
+            GameProfiles.save(this, profile)
+            playing = profile
+        }
         // Played here once: listed in Moonlight from now on
         playing?.let { markPlayed(this, it) }
         val screen = playing?.screen ?: ScreenMode.SIDEWAYS

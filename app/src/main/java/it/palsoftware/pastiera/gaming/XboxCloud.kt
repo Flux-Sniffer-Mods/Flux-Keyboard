@@ -71,6 +71,13 @@ object XboxCloud {
         }.getOrDefault(emptyList()).sortedBy { it.name.lowercase() }
     }
 
+    /** A cloud game by its ID, from the copy kept (not fetched). */
+    fun kept(context: Context, id: String): CloudGame? = runCatching {
+        val list = JSONArray(file(context).readText())
+        (0 until list.length()).map { list.getJSONObject(it) }.firstOrNull { it.getString("id").equals(id, ignoreCase = true) }
+            ?.let { CloudGame(it.getString("id"), it.getString("name"), it.optString("art").ifEmpty { null }) }
+    }.getOrNull()
+
     private fun fetch(): List<CloudGame>? = runCatching {
         val ids = parseIds(get(CLOUD_LIST) ?: return null)
         ids.chunked(50).flatMap { chunk -> parseProducts(get(PRODUCTS + chunk.joinToString(",")) ?: return@flatMap emptyList()) }

@@ -21,8 +21,10 @@ class GameCommandSource : CommandSource {
         val games = GamesActivity.games(context).map { (profile, intent) ->
             Triple(profile.name, profile.packages.firstOrNull().orEmpty(), intent)
         }
-        return games.map { (name, pkg, intent) ->
-            val appName = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
+        return entries(context) + games.map { (name, pkg, intent) ->
+            // An Xbox cloud game plays in Flux Keyboard's player: XCloud Games, not Flux Keyboard
+            val appName = if (pkg == context.packageName) context.getString(it.palsoftware.pastiera.R.string.games_app_xbox)
+                else runCatching { pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
             CommandTarget(
                 id = "game:$pkg:$name",
                 source = id,
@@ -40,6 +42,38 @@ class GameCommandSource : CommandSource {
                 searchTokens = listOf(name, appName, "game $name", "game")
             )
         }
+    }
+
+    /** The Games app, XCloud Games and streaming's settings, as commands of their own. */
+    private fun entries(context: Context): List<CommandTarget> {
+        val games = context.getString(it.palsoftware.pastiera.R.string.games_app_title)
+        val icon = CommandIcon.DrawableIcon(runCatching { context.packageManager.getApplicationIcon(context.packageName) }.getOrNull())
+        fun entry(key: String, label: String, subtitle: String, intent: Intent, tokens: List<String>) = CommandTarget(
+            id = "game:flux:$key",
+            source = id,
+            kind = CommandKind.Shortcut,
+            label = label,
+            subtitle = subtitle,
+            icon = icon,
+            launch = CommandLaunchSpec.IntentUri(
+                action = UserShortcuts.LAUNCH_ACTION,
+                packageName = context.packageName,
+                intentUri = intent.toUri(Intent.URI_INTENT_SCHEME)
+            ),
+            capabilities = setOf(CommandCapability.SendsIntent),
+            defaultSurfaces = setOf(CommandSurface.QuickLauncher, CommandSurface.AssignedKey),
+            searchTokens = tokens
+        )
+        val xcloud = Intent(context, it.palsoftware.pastiera.gaming.XboxPlayActivity::class.java)
+            .setData(android.net.Uri.parse(it.palsoftware.pastiera.gaming.XboxPlayActivity.HOME))
+        return listOf(
+            entry("games", context.getString(it.palsoftware.pastiera.R.string.stream_flux_games), games,
+                Intent(context, GamesActivity::class.java), listOf("Flux Games", "Games", "launcher")),
+            entry("xcloud", context.getString(it.palsoftware.pastiera.R.string.games_app_xbox), "Xbox Cloud Gaming",
+                xcloud, listOf("XCloud", "Xbox", "Cloud", "Game Pass")),
+            entry("stream", context.getString(it.palsoftware.pastiera.R.string.stream_section), "Moonlight",
+                GamesActivity.streamSettings(context), listOf("Stream", "Moonlight", "Streaming", "TV"))
+        )
     }
 
     companion object {

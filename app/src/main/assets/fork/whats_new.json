@@ -648,6 +648,15 @@
     },
     {
       "text": "Xbox Cloud Gaming's own entry (in the XCloud catalogue, the Games app and Moonlight) shows the XCloud Games tile's art."
+    },
+    {
+      "text": "XCloud Games: a game you open and play is added to the Games app and Moonlight by itself; long-press it in the catalogue to remove it."
+    },
+    {
+      "text": "Games app: the gear sits on the right beside Stream, a long title scrolls sideways, and streaming's settings open as a page of their own."
+    },
+    {
+      "text": "Quick launcher: Flux Games, XCloud Games and streaming's settings are commands of their own, and XCloud games show as XCloud Games."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

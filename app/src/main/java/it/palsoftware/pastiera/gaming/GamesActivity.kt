@@ -14,6 +14,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.border
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.focusable
 import androidx.compose.ui.focus.focusRequester
@@ -118,17 +119,24 @@ class GamesActivity : ComponentActivity() {
         }
         var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(this)) }
         // Streaming's settings, from a long-press on Stream
-        var streamSettings by remember { mutableStateOf(false) }
-        if (streamSettings) androidx.compose.material3.AlertDialog(
+        var streamSettings by remember { mutableStateOf(intent.getBooleanExtra(EXTRA_STREAM_SETTINGS, false)) }
+        // A page of its own, like the other settings pages (not settings squeezed into a dialog)
+        if (streamSettings) androidx.compose.ui.window.Dialog(
             onDismissRequest = { streamSettings = false },
-            title = { Text(stringResource(R.string.stream_section)) },
-            text = {
-                androidx.compose.foundation.layout.Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
-                    it.palsoftware.pastiera.settings.StreamingSettings(onStreamingChanged = { on -> streaming = on })
+            properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            androidx.compose.material3.Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                androidx.compose.foundation.layout.Column(Modifier.fillMaxSize().windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.safeDrawing)) {
+                    Row(Modifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.material3.IconButton(onClick = { streamSettings = false }) { Text("\u2190", style = MaterialTheme.typography.titleLarge) }
+                        Text(stringResource(R.string.stream_section), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 4.dp))
+                    }
+                    androidx.compose.foundation.layout.Column(Modifier.fillMaxSize().verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                        it.palsoftware.pastiera.settings.StreamingSettings(onStreamingChanged = { on -> streaming = on })
+                    }
                 }
-            },
-            confirmButton = { androidx.compose.material3.TextButton(onClick = { streamSettings = false }) { Text(stringResource(R.string.close)) } }
-        )
+            }
+        }
         if (importing) it.palsoftware.pastiera.settings.GameImportDialog(onPicked = pick, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
         if (addingOwn) it.palsoftware.pastiera.settings.OwnGameDialog(onAdded = pick, onDismiss = { addingOwn = false })
         if (addingXbox) it.palsoftware.pastiera.settings.XboxCloudDialog(XboxCloud.app(this), onPicked = pick, onDismiss = { addingXbox = false },
@@ -183,12 +191,13 @@ class GamesActivity : ComponentActivity() {
                         .padding(horizontal = 8.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Back from the launchers' page; else gaming mode's settings
+                    // Back from the launchers' page
                     if (page == Page.APPS) androidx.compose.material3.IconButton(onClick = { page = Page.GAMES }) { Text("\u2190", style = MaterialTheme.typography.titleLarge) }
-                    else androidx.compose.material3.IconButton(onClick = { settings = true }) { Text("\u2699", style = MaterialTheme.typography.titleLarge) }
+                    // The page's title, scrolling sideways when it doesn't fit
                     Text(
                         stringResource(if (page == Page.APPS) R.string.games_app_launchers else R.string.games_app_title),
-                        style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).padding(start = 4.dp)
+                        style = MaterialTheme.typography.titleLarge, maxLines = 1,
+                        modifier = Modifier.weight(1f).padding(start = if (page == Page.APPS) 4.dp else 12.dp).basicMarquee()
                     )
                     // A game on a screen of its own: its page, which gives it the phone's keys and touch
                     var screenOpen by remember { mutableStateOf(it.palsoftware.pastiera.display.ExtraScreen.current != null) }
@@ -202,6 +211,8 @@ class GamesActivity : ComponentActivity() {
                         label = { Text(stringResource(R.string.extra_screen_title)) },
                         modifier = Modifier.padding(end = 8.dp)
                     )
+                    // Gaming settings, on the right with streaming, apart from the title
+                    androidx.compose.material3.IconButton(onClick = { settings = true }) { Text("\u2699", style = MaterialTheme.typography.titleLarge) }
                     // Streaming to Moonlight: on or off at a tap, its settings on a long-press
                     androidx.compose.material3.Surface(
                         shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
@@ -463,6 +474,12 @@ class GamesActivity : ComponentActivity() {
                 .distinctBy { it.first.name.lowercase() to it.first.packages }
                 .sortedBy { it.first.name.lowercase() }
         }
+
+        private const val EXTRA_STREAM_SETTINGS = "stream_settings"
+
+        /** The Games app opened at streaming's settings. */
+        fun streamSettings(context: Context): Intent =
+            Intent(context, GamesActivity::class.java).putExtra(EXTRA_STREAM_SETTINGS, true)
 
         private const val KEY_CONTROLLER_KEYS = "games_app_controller_keys"
         @Volatile private var inFront = false

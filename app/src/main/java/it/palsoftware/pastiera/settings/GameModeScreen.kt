@@ -756,6 +756,11 @@ internal fun XboxCloudDialog(
             title = { Text(cloud.name) },
             text = { Text(stringResource(if (added) R.string.game_mode_xbox_in_games else R.string.game_mode_xbox_add_to_games_description)) },
             confirmButton = {
+                if (added) TextButton(onClick = {
+                    GameProfiles.delete(context, profile.id)
+                    menuFor = null
+                    onAdded()
+                }) { Text(stringResource(R.string.game_mode_xbox_remove_from_games)) }
                 if (!added) androidx.compose.material3.Button(onClick = {
                     GameProfiles.save(context, profile)
                     android.widget.Toast.makeText(context, context.getString(R.string.game_mode_xbox_added, cloud.name), android.widget.Toast.LENGTH_SHORT).show()
