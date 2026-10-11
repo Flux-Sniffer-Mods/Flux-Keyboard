@@ -1879,4 +1879,6 @@
     <string name="game_mode_artwork_choose">Choisir une image</string>
     <string name="game_mode_artwork_reset">Utiliser la jaquette trouvée</string>
     <string name="game_mode_artwork_failed">Impossible de lire cette image</string>
+    <string name="stream_capture_title">Moonlight veut jouer</string>
+    <string name="stream_capture_text">Touche pour lui laisser voir l\'écran.</string>
 </resources>

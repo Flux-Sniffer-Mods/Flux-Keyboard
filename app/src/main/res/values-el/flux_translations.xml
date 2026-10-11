@@ -1247,4 +1247,6 @@
     <string name="game_mode_artwork_choose">Επιλογή εικόνας</string>
     <string name="game_mode_artwork_reset">Χρήση της εικόνας που βρέθηκε</string>
     <string name="game_mode_artwork_failed">Η εικόνα δεν μπόρεσε να διαβαστεί</string>
+    <string name="stream_capture_title">Το Moonlight θέλει να παίξει</string>
+    <string name="stream_capture_text">Πάτησε για να δει την οθόνη.</string>
 </resources>

@@ -1885,4 +1885,6 @@
     <string name="game_mode_artwork_choose">Выбрать изображение</string>
     <string name="game_mode_artwork_reset">Использовать найденную обложку</string>
     <string name="game_mode_artwork_failed">Не удалось прочитать изображение</string>
+    <string name="stream_capture_title">Moonlight хочет играть</string>
+    <string name="stream_capture_text">Нажмите, чтобы показать ему экран.</string>
 </resources>

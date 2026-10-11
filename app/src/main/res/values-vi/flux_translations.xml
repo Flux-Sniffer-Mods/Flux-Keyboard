@@ -1867,4 +1867,6 @@
     <string name="game_mode_artwork_choose">Chọn ảnh</string>
     <string name="game_mode_artwork_reset">Dùng ảnh tìm được</string>
     <string name="game_mode_artwork_failed">Không đọc được ảnh</string>
+    <string name="stream_capture_title">Moonlight muốn chơi</string>
+    <string name="stream_capture_text">Chạm để cho phép xem màn hình.</string>
 </resources>

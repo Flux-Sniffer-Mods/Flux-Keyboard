@@ -1873,4 +1873,6 @@
     <string name="game_mode_artwork_choose">Ընտրել պատկեր</string>
     <string name="game_mode_artwork_reset">Օգտագործել գտնված պատկերը</string>
     <string name="game_mode_artwork_failed">Չհաջողվեց կարդալ պատկերը</string>
+    <string name="stream_capture_title">Moonlight-ը ուզում է խաղալ</string>
+    <string name="stream_capture_text">Հպիր՝ էկրանը տեսնելու թույլտվության համար։</string>
 </resources>

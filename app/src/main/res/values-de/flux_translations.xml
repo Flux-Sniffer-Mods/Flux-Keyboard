@@ -1338,4 +1338,6 @@
     <string name="game_mode_artwork_choose">Bild wählen</string>
     <string name="game_mode_artwork_reset">Gefundenes Bild nutzen</string>
     <string name="game_mode_artwork_failed">Das Bild konnte nicht gelesen werden</string>
+    <string name="stream_capture_title">Moonlight möchte spielen</string>
+    <string name="stream_capture_text">Tippen, um den Bildschirm freizugeben.</string>
 </resources>

@@ -1885,4 +1885,6 @@
     <string name="game_mode_artwork_choose">Wybierz obraz</string>
     <string name="game_mode_artwork_reset">Użyj znalezionej okładki</string>
     <string name="game_mode_artwork_failed">Nie udało się odczytać obrazu</string>
+    <string name="stream_capture_title">Moonlight chce grać</string>
+    <string name="stream_capture_text">Dotknij, aby udostępnić ekran.</string>
 </resources>
