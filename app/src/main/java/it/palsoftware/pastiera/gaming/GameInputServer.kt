@@ -137,7 +137,19 @@ object GameInputServer {
         }
     }
 
-    private fun touch(kind: String, id: Int, x: Float, y: Float, now: Long) {
+    /**
+     * Fingers as Android numbers them: 0 to 31 (it drops a touch with a higher number), each
+     * finger asked for (a placed key's, a stick's) given the lowest free one while it's down.
+     */
+    private val pointerIds = HashMap<Int, Int>()
+
+    private fun pointerId(finger: Int): Int = pointerIds.getOrPut(finger) {
+        (0..31).first { it !in pointerIds.values }
+    }
+
+    private fun touch(kind: String, finger: Int, x: Float, y: Float, now: Long) {
+        if (kind == "d" && finger !in pointerIds && pointerIds.size >= 32) return
+        val id = if (kind == "d") pointerId(finger) else pointerIds[finger] ?: return
         when (kind) {
             "d" -> {
                 if (id in fingers) return
@@ -153,11 +165,12 @@ object GameInputServer {
                 sendTouch(MotionEvent.ACTION_MOVE, now)
             }
             "u" -> {
-                if (id !in fingers) return
+                if (id !in fingers) { pointerIds.remove(finger); return }
                 val index = fingers.keys.indexOf(id)
                 sendTouch(if (fingers.size == 1) MotionEvent.ACTION_UP
                     else MotionEvent.ACTION_POINTER_UP or (index shl MotionEvent.ACTION_POINTER_INDEX_SHIFT), now)
                 fingers.remove(id)
+                pointerIds.remove(finger)
             }
         }
     }

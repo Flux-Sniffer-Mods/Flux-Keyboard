@@ -934,6 +934,9 @@
     },
     {
       "text": "Keyboard swipes' settings say Shell access, which they use, not Shizuku; artwork settings say covers show in the Games app as well as Moonlight."
+    },
+    {
+      "text": "Placed keys tap in touch-only games again: their touches were numbered beyond what Android accepts (0 to 31), so it dropped them. The Game screen page's touches had the same fault."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
