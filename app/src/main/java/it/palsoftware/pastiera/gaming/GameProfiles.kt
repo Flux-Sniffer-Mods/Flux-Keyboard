@@ -70,6 +70,8 @@ data class GameProfile(
     val own: Boolean = false,
     /** Found by itself (the game folders), not set up yet: asked about the first time it starts. */
     val pending: Boolean = false,
+    /** A game's own screen choice, kept even while it plays with its app's other settings. */
+    val ownScreen: Boolean = false,
     /** A Dolphin Wii game's controller ([FluxLayout.WiiPad]'s name; null: Wii Remote and Nunchuk). */
     val wiiPad: String? = null,
     /** Dolphin's two app profiles: "wii" or "gamecube", each game getting the one it is. */
@@ -88,6 +90,7 @@ data class GameProfile(
         variant?.let { put("variant", it) }
         wiiPad?.let { put("wiiPad", it) }
         if (pending) put("pending", true)
+        if (ownScreen) put("ownScreen", true)
         put("name", name)
         put("packages", JSONArray(packages.toList()))
         put("left", leftHalf.name)
@@ -133,7 +136,8 @@ data class GameProfile(
                 own = json.optBoolean("own", true),
                 variant = json.optString("variant").ifEmpty { null },
                 wiiPad = json.optString("wiiPad").ifEmpty { null },
-                pending = json.optBoolean("pending", false)
+                pending = json.optBoolean("pending", false),
+                ownScreen = json.optBoolean("ownScreen", false)
             )
         }.getOrNull()
     }
@@ -250,6 +254,11 @@ object GameProfiles {
      */
     fun effective(context: Context, profile: GameProfile): GameProfile {
         if (!profile.isGame || profile.own) return profile
+        // The game's own screen choice, whatever else comes from its app
+        return appSettings(context, profile).let { app -> if (profile.ownScreen) app.copy(screen = profile.screen) else app }
+    }
+
+    private fun appSettings(context: Context, profile: GameProfile): GameProfile {
         val pkg = profile.packages.firstOrNull() ?: return profile
         val apps = appProfiles(context, pkg).ifEmpty { return profile }
         if (apps.size == 1) return apps.first()

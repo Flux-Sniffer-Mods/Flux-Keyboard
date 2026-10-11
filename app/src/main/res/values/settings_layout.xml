@@ -529,4 +529,5 @@
     <string name="game_mode_reset_emulator">Reset %1$s\'s settings</string>
     <string name="game_mode_reset_emulator_confirm">Everything Flux Keyboard set in %1$s (controls, graphics, each game\'s controller) goes back to how it was before. Settings changed by an older version of Flux Keyboard can\'t be put back.</string>
     <string name="game_mode_reset_emulator_done">%1$s\'s settings are back to how they were before Flux Keyboard changed them.</string>
+    <string name="game_mode_screen_follow">As its app\'s settings</string>
 </resources>

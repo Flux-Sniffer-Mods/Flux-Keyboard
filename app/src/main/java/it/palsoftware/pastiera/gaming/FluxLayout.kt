@@ -127,26 +127,8 @@ object FluxLayout {
         GAMECUBE("Flux Keyboard")
     }
 
-    /**
-     * The trackpad's sticks in Dolphin: a device of their own (with root), named in each binding
-     * so one profile takes keys from the keyboard and sticks from the trackpad. Android's axes:
-     * X 0 and Y 1 the left stick, Z 11 and Rz 14 the right; up is negative.
-     */
-    private val TRACKPAD_DEVICE = "Android/0/${VirtualGamepad.TRACKPAD}"
-    private val STICK_AXES = mapOf(
-        Control.LS_UP to "Axis 1-", Control.LS_DOWN to "Axis 1+", Control.LS_LEFT to "Axis 0-", Control.LS_RIGHT to "Axis 0+",
-        Control.RS_UP to "Axis 14-", Control.RS_DOWN to "Axis 14+", Control.RS_LEFT to "Axis 11-", Control.RS_RIGHT to "Axis 11+"
-    )
-
-    /** The stick direction [keys] are bound to, if they're a stick's. */
-    private fun stickOf(keys: List<Int>): Control? = STICK_AXES.keys.firstOrNull { control -> keys(control) == keys }
-
     private fun dolphinLines(controls: List<Pair<String, List<Int>>>) =
-        controls.map { (control, keys) ->
-            val bindings = keys.map { "`${keyName(it)}`" } +
-                listOfNotNull(stickOf(keys)?.let { STICK_AXES.getValue(it) }?.let { "`$TRACKPAD_DEVICE:$it`" })
-            "$control = " + bindings.joinToString(" | ")
-        }
+        controls.map { (control, keys) -> "$control = " + keys.joinToString(" | ") { "`${keyName(it)}`" } }
 
     internal fun dolphinGameCube(keyboard: String): List<String> = listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE)
 

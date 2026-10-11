@@ -493,6 +493,11 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+            // A game's art and screen: its own, whatever its controls follow
+            if (current.isGame) {
+                GameArtworkRow(current)
+                ScreenChoice(current) { current = it }
+            }
             // A Dolphin Wii game: the Wii controller that suits it, set in its own Dolphin settings
             if (current.isGame) DolphinWiiPadRow(current) { pad -> current = current.copy(wiiPad = pad) }
             // A game plays with its app's settings, unless it needs its own (sticks elsewhere)
@@ -563,24 +568,8 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                     onCheckedChange = { on -> current = current.copy(rightStickKeys = on) }
                 )
             }
-            // One screen choice per game, its app's suited one to start with
-            val screens = it.palsoftware.pastiera.gaming.ScreenMode.entries
-            val screenNames = listOf(
-                stringResource(R.string.game_mode_screen_app),
-                stringResource(R.string.game_mode_screen_sideways)
-            )
-            ChoiceRow(stringResource(R.string.game_mode_screen), screenNames[current.screen.ordinal], screenNames) { index ->
-                current = current.copy(screen = screens[index])
-            }
-            Text(
-                stringResource(
-                    when (current.screen) {
-                        it.palsoftware.pastiera.gaming.ScreenMode.APP -> R.string.game_mode_screen_app_description
-                        it.palsoftware.pastiera.gaming.ScreenMode.SIDEWAYS -> R.string.game_mode_screen_sideways_description
-                    }
-                ),
-                style = MaterialTheme.typography.bodySmall
-            )
+            // An app's screen choice (a game's sits with its art, below its name)
+            if (!current.isGame) ScreenChoice(current) { current = it }
             // An emulator: Flux Keyboard's layout written into its own controller settings; other
             // apps map the keys themselves
             val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
@@ -649,7 +638,6 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 }
             }
             }
-            if (current.isGame) GameArtworkRow(current)
             // Apps whose graphics settings can't be written: what suits this phone, to set by hand
             val advice = remember(current.packages) {
                 val app = GameApps.appFor(current)
@@ -842,6 +830,41 @@ private fun ChoiceRow(title: String, value: String, options: List<String>, onPic
                 DropdownMenuItem(text = { Text(option) }, onClick = { open = false; onPick(index) })
             }
         }
+    }
+}
+
+/**
+ * How the screen turns while it plays: as the app wants, or kept upright (a landscape-shaped
+ * screen). A game can also follow its app's choice, unless it has all its own settings.
+ */
+@Composable
+private fun ScreenChoice(profile: GameProfile, onChange: (GameProfile) -> Unit) {
+    val screens = it.palsoftware.pastiera.gaming.ScreenMode.entries
+    val follows = profile.isGame && !profile.own
+    val names = listOfNotNull(
+        if (follows) stringResource(R.string.game_mode_screen_follow) else null,
+        stringResource(R.string.game_mode_screen_app),
+        stringResource(R.string.game_mode_screen_sideways)
+    )
+    val chosen = if (follows && !profile.ownScreen) 0 else profile.screen.ordinal + if (follows) 1 else 0
+    Column {
+        ChoiceRow(stringResource(R.string.game_mode_screen), names[chosen], names) { index ->
+            onChange(
+                when {
+                    follows && index == 0 -> profile.copy(ownScreen = false)
+                    else -> profile.copy(ownScreen = profile.isGame, screen = screens[index - if (follows) 1 else 0])
+                }
+            )
+        }
+        if (!(follows && !profile.ownScreen)) Text(
+            stringResource(
+                when (profile.screen) {
+                    it.palsoftware.pastiera.gaming.ScreenMode.APP -> R.string.game_mode_screen_app_description
+                    it.palsoftware.pastiera.gaming.ScreenMode.SIDEWAYS -> R.string.game_mode_screen_sideways_description
+                }
+            ),
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
 

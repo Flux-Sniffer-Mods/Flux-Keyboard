@@ -18,9 +18,8 @@ class FluxLayoutTest {
         val lines = FluxLayout.dolphinGameCube("TitanKey")
         assertEquals("Device = Android/0/TitanKey", lines.first())
         assertTrue("Buttons/Start = `Space`" in lines)
-        // Sticks: their keys, and the trackpad's own device in the same profile
-        assertTrue("Main Stick/Up = `Up` | `Android/0/Flux Keyboard trackpad:Axis 1-`" in lines)
-        assertTrue("C-Stick/Left = `B` | `Android/0/Flux Keyboard trackpad:Axis 11-`" in lines)
+        assertTrue("Main Stick/Up = `Up`" in lines)
+        assertTrue("C-Stick/Left = `B`" in lines)
         assertTrue("Triggers/L = `Volume Up` | `Q`" in lines)
         assertTrue("Buttons/Z = `Z` | `C`" in lines)
     }
@@ -43,7 +42,7 @@ class FluxLayoutTest {
     fun eachWiiControllerHasItsOwnSetUp() {
         val classic = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.CLASSIC)
         assertTrue("Extension = Classic" in classic)
-        assertTrue("Classic/Right Stick/Up = `J` | `Android/0/Flux Keyboard trackpad:Axis 14-`" in classic)
+        assertTrue("Classic/Right Stick/Up = `J`" in classic)
         val sideways = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.SIDEWAYS)
         assertTrue("Options/Sideways Wiimote = True" in sideways)
         assertTrue("Buttons/2 = `L`" in sideways)

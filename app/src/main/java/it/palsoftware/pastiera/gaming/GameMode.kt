@@ -252,10 +252,6 @@ object GameMode {
     /** The profile plays as a real controller (root): its keys become the controller's buttons. */
     @Volatile private var pad = false
 
-    /** The trackpad's sticks plugged in as a controller of their own (root, no full controller). */
-    @Volatile private var trackpadPad = false
-    private val STICKS = setOf(TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK)
-
     /** Which of the controller's buttons each key is (see [VirtualGamepad.button]). */
     private val PAD_BUTTONS = FluxLayout.PAD_BUTTONS
     private val PAD_DPAD = setOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
@@ -332,14 +328,6 @@ object GameMode {
             worker.execute { send(if (wantsPad) "G 1" else "G 0") }
             if (wantsPad) startSideKey() else stopSideKey()
         }
-        // With root and no controller of its own, the trackpad's sticks are a device apart from
-        // the keys: an emulator binds their axes (Dolphin's profiles do), not just arrow keys
-        val sticksAsDevice = !wantsPad && it.palsoftware.pastiera.adb.RootShell.active &&
-            (next.leftHalf in STICKS || next.rightHalf in STICKS)
-        if (sticksAsDevice != trackpadPad) {
-            trackpadPad = sticksAsDevice
-            worker.execute { send(if (sticksAsDevice) "TP 1" else "TP 0") }
-        }
         // Each game's own screen choice, also when switching game mid-way
         screen(context, next.screen)
         startTrackpad(next)
@@ -353,7 +341,6 @@ object GameMode {
         trackpadRun++
         sticks.fill(0f); stickHeld.fill(false); rightKeysHeld.clear()
         if (pad) { pad = false; dpadHeld.clear(); send("G 0"); stopSideKey() }
-        if (trackpadPad) { trackpadPad = false; send("TP 0") }
         trackpad?.destroy(); trackpad = null; trackpadReader = null
         runCatching { input?.close() }
         input = null
@@ -601,7 +588,7 @@ object GameMode {
         // Flux Keyboard's own player (Xbox Cloud Gaming) takes them itself
         stickSink?.let { sink -> val now = sticks.copyOf(); sink(now); return }
         // The real controller's sticks, with root; else stick events from the keyboard
-        val line = (if (pad) "A" else if (trackpadPad) "TA" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
+        val line = (if (pad) "A" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
         worker.execute { send(line) }
     }
 
