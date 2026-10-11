@@ -1951,8 +1951,8 @@
     <string name="games_app_controller_keys_description">Переміщуйтеся застосунком «Ігри» тими самими клавішами, що й в іграх: W A S D — рух, L — відкрити, K — налаштування гри, P — назад, Q або E — перемикання між іграми та лаунчерами, Пробіл — ігрові налаштування. Контролер теж працює.</string>
     <string name="stream_phone_screen_art">Дублювати екран телефона</string>
     <string name="game_mode_xbox_add_to_games">Додати до «Ігор»</string>
-    <string name="game_mode_xbox_add_to_games_description">Додає її до застосунку «Ігри» та до списку Moonlight, не запускаючи перед цим.</string>
-    <string name="game_mode_xbox_in_games">Уже у ваших іграх.</string>
+    <string name="game_mode_xbox_add_to_games_description">Додає її до застосунку «Ігри» та до списку Moonlight, не запускаючи. Ігри, у які ви граєте, додаються самі.</string>
+    <string name="game_mode_xbox_in_games">У ваших іграх: у застосунку «Ігри» та в Moonlight.</string>
     <string name="game_mode_xbox_added">%1$s додано до «Ігор»</string>
     <string name="games_app_settings_short">Налаштування</string>
     <string name="stream_desktop_restart">Віконний режим робочого столу ввімкнено. Якщо робочий стіл не з\'явиться, перезапустіть телефон один раз.</string>
@@ -1965,4 +1965,5 @@
     <string name="stream_flux_games">Flux Games</string>
     <string name="trackpad_gestures_shizuku_connected">Доступ до оболонки під\'єднано</string>
     <string name="trackpad_gestures_shizuku_not_connected">Доступ до оболонки не запущено</string>
+    <string name="game_mode_xbox_remove_from_games">Прибрати з «Ігор»</string>
 </resources>

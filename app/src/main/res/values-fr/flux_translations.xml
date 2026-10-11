@@ -1945,8 +1945,8 @@
     <string name="games_app_controller_keys_description">Parcourez l\'app Jeux avec les mêmes touches qu\'en jeu : W A S D pour se déplacer, L pour ouvrir, K pour les réglages d\'un jeu, P pour revenir, Q ou E pour passer des jeux aux lanceurs, Espace pour les réglages de jeu. Une manette fonctionne aussi.</string>
     <string name="stream_phone_screen_art">Dupliquer l\'écran du téléphone</string>
     <string name="game_mode_xbox_add_to_games">Ajouter aux Jeux</string>
-    <string name="game_mode_xbox_add_to_games_description">L\'ajoute à l\'app Jeux et à la liste de Moonlight, sans y jouer d\'abord.</string>
-    <string name="game_mode_xbox_in_games">Déjà dans vos jeux.</string>
+    <string name="game_mode_xbox_add_to_games_description">L\'ajoute à l\'app Jeux et à la liste de Moonlight sans y jouer. Les jeux auxquels vous jouez s\'ajoutent d\'eux-mêmes.</string>
+    <string name="game_mode_xbox_in_games">Dans vos jeux : dans l\'app Jeux et dans Moonlight.</string>
     <string name="game_mode_xbox_added">%1$s ajouté aux Jeux</string>
     <string name="games_app_settings_short">Réglages</string>
     <string name="stream_desktop_restart">Le fenêtrage du bureau est activé. Si le bureau n\'apparaît pas, redémarrez le téléphone une fois.</string>
@@ -1959,4 +1959,5 @@
     <string name="stream_flux_games">Flux Games</string>
     <string name="trackpad_gestures_shizuku_connected">Accès shell connecté</string>
     <string name="trackpad_gestures_shizuku_not_connected">L\'accès shell n\'est pas actif</string>
+    <string name="game_mode_xbox_remove_from_games">Retirer des Jeux</string>
 </resources>

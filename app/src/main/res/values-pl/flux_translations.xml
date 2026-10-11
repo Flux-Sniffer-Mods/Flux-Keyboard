@@ -1951,8 +1951,8 @@
     <string name="games_app_controller_keys_description">Poruszaj się po aplikacji Gry tymi samymi klawiszami co w grach: W A S D do ruchu, L aby otworzyć, K dla ustawień gry, P aby wrócić, Q lub E aby przełączać między grami a launcherami, Spacja dla ustawień grania. Kontroler też działa.</string>
     <string name="stream_phone_screen_art">Odbij ekran telefonu</string>
     <string name="game_mode_xbox_add_to_games">Dodaj do Gier</string>
-    <string name="game_mode_xbox_add_to_games_description">Dodaje ją do aplikacji Gry i listy w Moonlight bez wcześniejszego grania.</string>
-    <string name="game_mode_xbox_in_games">Już jest w twoich grach.</string>
+    <string name="game_mode_xbox_add_to_games_description">Dodaje ją do aplikacji Gry i listy w Moonlight bez grania. Gry, w które grasz, dodają się same.</string>
+    <string name="game_mode_xbox_in_games">W twoich grach: w aplikacji Gry i w Moonlight.</string>
     <string name="game_mode_xbox_added">Dodano %1$s do Gier</string>
     <string name="games_app_settings_short">Ustawienia</string>
     <string name="stream_desktop_restart">Okna pulpitu są włączone. Jeśli pulpit się nie pojawi, uruchom telefon ponownie raz.</string>
@@ -1965,4 +1965,5 @@
     <string name="stream_flux_games">Flux Games</string>
     <string name="trackpad_gestures_shizuku_connected">Dostęp do powłoki połączony</string>
     <string name="trackpad_gestures_shizuku_not_connected">Dostęp do powłoki nie działa</string>
+    <string name="game_mode_xbox_remove_from_games">Usuń z Gier</string>
 </resources>

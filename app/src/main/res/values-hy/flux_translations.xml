@@ -1939,8 +1939,8 @@
     <string name="games_app_controller_keys_description">Շարժվիր Խաղեր հավելվածում նույն ստեղներով, ինչ խաղերում․ W A S D՝ շարժվելու, L՝ բացելու, K՝ խաղի կարգավորումների, P՝ հետ գնալու, Q կամ E՝ խաղերի և գործարկիչների միջև անցնելու, Space՝ խաղային կարգավորումների համար։ Կարգավարն էլ է աշխատում։</string>
     <string name="stream_phone_screen_art">Արտացոլել հեռախոսի էկրանը</string>
     <string name="game_mode_xbox_add_to_games">Ավելացնել Խաղերին</string>
-    <string name="game_mode_xbox_add_to_games_description">Ավելացնում է այն Խաղեր հավելվածին և Moonlight-ի ցանկին՝ առանց նախապես խաղալու։</string>
-    <string name="game_mode_xbox_in_games">Արդեն քո խաղերում է։</string>
+    <string name="game_mode_xbox_add_to_games_description">Ավելացնում է այն Խաղեր հավելվածին և Moonlight-ի ցանկին առանց խաղալու։ Քո խաղացած խաղերն ավելանում են ինքնուրույն։</string>
+    <string name="game_mode_xbox_in_games">Քո խաղերում է՝ Խաղեր հավելվածում և Moonlight-ում։</string>
     <string name="game_mode_xbox_added">%1$s-ը ավելացվեց Խաղերին</string>
     <string name="games_app_settings_short">Կարգավորումներ</string>
     <string name="stream_desktop_restart">Աշխատասեղանի պատուհաններն այժմ միացված են։ Եթե աշխատասեղանը չի երևում, մեկ անգամ վերագործարկիր հեռախոսը։</string>
@@ -1953,4 +1953,5 @@
     <string name="stream_flux_games">Flux Games</string>
     <string name="trackpad_gestures_shizuku_connected">Shell մուտքը միացված է</string>
     <string name="trackpad_gestures_shizuku_not_connected">Shell մուտքը չի աշխատում</string>
+    <string name="game_mode_xbox_remove_from_games">Հեռացնել Խաղերից</string>
 </resources>

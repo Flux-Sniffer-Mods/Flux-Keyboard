@@ -1933,8 +1933,8 @@
     <string name="games_app_controller_keys_description">Di chuyển trong ứng dụng Trò chơi bằng cùng các phím như trong trò chơi: W A S D để di chuyển, L để mở, K cho cài đặt của trò chơi, P để quay lại, Q hoặc E để chuyển giữa trò chơi và trình khởi chạy, Space cho cài đặt chơi game. Tay cầm cũng dùng được.</string>
     <string name="stream_phone_screen_art">Phản chiếu màn hình điện thoại</string>
     <string name="game_mode_xbox_add_to_games">Thêm vào Trò chơi</string>
-    <string name="game_mode_xbox_add_to_games_description">Thêm vào ứng dụng Trò chơi và danh sách của Moonlight mà không cần chơi trước.</string>
-    <string name="game_mode_xbox_in_games">Đã có trong trò chơi của bạn.</string>
+    <string name="game_mode_xbox_add_to_games_description">Thêm vào ứng dụng Trò chơi và danh sách của Moonlight mà không cần chơi. Trò chơi bạn chơi sẽ tự được thêm.</string>
+    <string name="game_mode_xbox_in_games">Có trong trò chơi của bạn: trong ứng dụng Trò chơi và Moonlight.</string>
     <string name="game_mode_xbox_added">Đã thêm %1$s vào Trò chơi</string>
     <string name="games_app_settings_short">Cài đặt</string>
     <string name="stream_desktop_restart">Cửa sổ màn hình nền đã được bật. Nếu màn hình nền không hiện, hãy khởi động lại điện thoại một lần.</string>
@@ -1947,4 +1947,5 @@
     <string name="stream_flux_games">Flux Games</string>
     <string name="trackpad_gestures_shizuku_connected">Đã kết nối quyền truy cập shell</string>
     <string name="trackpad_gestures_shizuku_not_connected">Quyền truy cập shell không chạy</string>
+    <string name="game_mode_xbox_remove_from_games">Xóa khỏi Trò chơi</string>
 </resources>

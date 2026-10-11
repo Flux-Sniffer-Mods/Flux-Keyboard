@@ -1450,8 +1450,8 @@
     <string name="games_app_controller_keys_description">Muoviti nell\'app Giochi con gli stessi tasti dei giochi: W A S D per muoverti, L per aprire, K per le impostazioni di un gioco, P per tornare indietro, Q o E per passare tra giochi e launcher, Spazio per le impostazioni di gioco. Funziona anche un controller.</string>
     <string name="stream_phone_screen_art">Duplica lo schermo del telefono</string>
     <string name="game_mode_xbox_add_to_games">Aggiungi a Giochi</string>
-    <string name="game_mode_xbox_add_to_games_description">Lo aggiunge all\'app Giochi e alla lista di Moonlight, senza giocarci prima.</string>
-    <string name="game_mode_xbox_in_games">Già nei tuoi giochi.</string>
+    <string name="game_mode_xbox_add_to_games_description">Lo aggiunge all\'app Giochi e alla lista di Moonlight senza giocarci. I giochi a cui giochi si aggiungono da soli.</string>
+    <string name="game_mode_xbox_in_games">Nei tuoi giochi: nell\'app Giochi e in Moonlight.</string>
     <string name="game_mode_xbox_added">%1$s aggiunto a Giochi</string>
     <string name="games_app_settings_short">Impostazioni</string>
     <string name="stream_desktop_restart">Le finestre desktop sono attive. Se il desktop non compare, riavvia il telefono una volta.</string>
@@ -1464,4 +1464,5 @@
     <string name="stream_flux_games">Flux Games</string>
     <string name="trackpad_gestures_shizuku_connected">Accesso shell connesso</string>
     <string name="trackpad_gestures_shizuku_not_connected">Accesso shell non attivo</string>
+    <string name="game_mode_xbox_remove_from_games">Rimuovi da Giochi</string>
 </resources>
