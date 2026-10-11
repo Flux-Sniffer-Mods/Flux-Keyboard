@@ -1836,4 +1836,10 @@
     <string name="games_app_switch_description">Una app Juegos en la lista de apps de la pantalla de inicio (también en Niagara), con todos los juegos. Mantén pulsado para ver los juegos.</string>
     <string name="games_pin_all">Añadir todos los juegos a la pantalla de inicio</string>
     <string name="games_pin_all_description">Un acceso directo con su imagen para cada juego con perfil. La pantalla de inicio pregunta por cada uno.</string>
+    <string name="game_first_start_title">¿Configurar %1$s?</string>
+    <string name="game_first_start_message">Encontrado entre tus juegos. Configura ahora su mando, pantalla y sticks, o juégalo con los ajustes de %1$s.</string>
+    <string name="game_first_start_set_up">Configurar</string>
+    <string name="game_first_start_play">Jugar</string>
+    <string name="games_app_new">Nuevo: sin configurar</string>
+    <string name="game_mode_found_short">Encontrado: usa los ajustes de %1$s hasta configurarlo</string>
 </resources>

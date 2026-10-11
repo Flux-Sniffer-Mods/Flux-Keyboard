@@ -1842,4 +1842,10 @@
     <string name="games_app_switch_description">Aplikacja Gry na liście aplikacji ekranu głównego (także w Niagara), ze wszystkimi grami. Przytrzymaj, by zobaczyć same gry.</string>
     <string name="games_pin_all">Dodaj wszystkie gry do ekranu głównego</string>
     <string name="games_pin_all_description">Skrót z obrazem dla każdej gry z profilem. Ekran główny zapyta o każdy.</string>
+    <string name="game_first_start_title">Skonfigurować %1$s?</string>
+    <string name="game_first_start_message">Znaleziono wśród twoich gier. Skonfiguruj teraz kontroler, ekran i gałki albo graj z ustawieniami %1$s.</string>
+    <string name="game_first_start_set_up">Skonfiguruj</string>
+    <string name="game_first_start_play">Graj</string>
+    <string name="games_app_new">Nowa: jeszcze nieskonfigurowana</string>
+    <string name="game_mode_found_short">Znaleziona: używa ustawień %1$s, dopóki jej nie skonfigurujesz</string>
 </resources>

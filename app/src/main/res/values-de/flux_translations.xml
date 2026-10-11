@@ -1295,4 +1295,10 @@
     <string name="games_app_switch_description">Eine Spiele-App in der App-Liste des Startbildschirms (auch in Niagara), mit allen Spielen darin. Lange drücken für die Spiele selbst.</string>
     <string name="games_pin_all">Alle Spiele zum Startbildschirm hinzufügen</string>
     <string name="games_pin_all_description">Eine Verknüpfung mit Bild für jedes Spiel mit Profil. Der Startbildschirm fragt bei jeder nach.</string>
+    <string name="game_first_start_title">%1$s einrichten?</string>
+    <string name="game_first_start_message">Unter deinen Spielen gefunden. Richte jetzt Controller, Bildschirm und Sticks ein oder spiele mit den Einstellungen von %1$s.</string>
+    <string name="game_first_start_set_up">Einrichten</string>
+    <string name="game_first_start_play">Spielen</string>
+    <string name="games_app_new">Neu: noch nicht eingerichtet</string>
+    <string name="game_mode_found_short">Gefunden: spielt mit den Einstellungen von %1$s, bis es eingerichtet ist</string>
 </resources>

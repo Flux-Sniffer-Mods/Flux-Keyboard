@@ -1842,4 +1842,10 @@
     <string name="games_app_switch_description">Приложение «Игры» в списке приложений главного экрана (и в Niagara) со всеми играми. Долгое нажатие покажет сами игры.</string>
     <string name="games_pin_all">Добавить все игры на главный экран</string>
     <string name="games_pin_all_description">Ярлык с картинкой для каждой игры с профилем. Главный экран спросит про каждый.</string>
+    <string name="game_first_start_title">Настроить %1$s?</string>
+    <string name="game_first_start_message">Найдено среди ваших игр. Настройте контроллер, экран и стики сейчас или играйте с настройками %1$s.</string>
+    <string name="game_first_start_set_up">Настроить</string>
+    <string name="game_first_start_play">Играть</string>
+    <string name="games_app_new">Новая: ещё не настроена</string>
+    <string name="game_mode_found_short">Найдена: использует настройки %1$s, пока не настроена</string>
 </resources>

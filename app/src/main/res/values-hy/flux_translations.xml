@@ -1830,4 +1830,10 @@
     <string name="games_app_switch_description">Խաղեր հավելված գլխավոր էկրանի հավելվածների ցանկում (նաև Niagara-ում)՝ բոլոր խաղերով։ Երկար սեղմեք՝ խաղերի համար։</string>
     <string name="games_pin_all">Ավելացնել բոլոր խաղերը գլխավոր էկրանին</string>
     <string name="games_pin_all_description">Նկարով դյուրանցում պրոֆիլ ունեցող յուրաքանչյուր խաղի համար։ Գլխավոր էկրանը հարցնում է յուրաքանչյուրի համար։</string>
+    <string name="game_first_start_title">Կարգավորե՞լ %1$s-ը</string>
+    <string name="game_first_start_message">Գտնվել է ձեր խաղերի մեջ։ Կարգավորեք դրա կարգավորիչը, էկրանն ու լծակները հիմա, կամ խաղացեք %1$s-ի կարգավորումներով։</string>
+    <string name="game_first_start_set_up">Կարգավորել</string>
+    <string name="game_first_start_play">Խաղալ</string>
+    <string name="games_app_new">Նոր. դեռ կարգավորված չէ</string>
+    <string name="game_mode_found_short">Գտնված. խաղում է %1$s-ի կարգավորումներով, մինչև կարգավորվի</string>
 </resources>

@@ -1824,4 +1824,10 @@
     <string name="games_app_switch_description">Một ứng dụng Game trong danh sách ứng dụng của màn hình chính (cả Niagara), chứa mọi game. Nhấn giữ để xem các game.</string>
     <string name="games_pin_all">Thêm mọi game vào màn hình chính</string>
     <string name="games_pin_all_description">Một lối tắt kèm ảnh cho mỗi game có hồ sơ. Màn hình chính sẽ hỏi cho từng cái.</string>
+    <string name="game_first_start_title">Thiết lập %1$s?</string>
+    <string name="game_first_start_message">Tìm thấy trong các game của bạn. Thiết lập tay cầm, màn hình và cần analog ngay, hoặc chơi với cài đặt của %1$s.</string>
+    <string name="game_first_start_set_up">Thiết lập</string>
+    <string name="game_first_start_play">Chơi</string>
+    <string name="games_app_new">Mới: chưa thiết lập</string>
+    <string name="game_mode_found_short">Tìm thấy: dùng cài đặt của %1$s cho đến khi thiết lập</string>
 </resources>

@@ -1842,4 +1842,10 @@
     <string name="games_app_switch_description">Застосунок «Ігри» у списку застосунків головного екрана (і в Niagara) з усіма іграми. Довге натискання покаже самі ігри.</string>
     <string name="games_pin_all">Додати всі ігри на головний екран</string>
     <string name="games_pin_all_description">Ярлик із зображенням для кожної гри з профілем. Головний екран спитає про кожен.</string>
+    <string name="game_first_start_title">Налаштувати %1$s?</string>
+    <string name="game_first_start_message">Знайдено серед ваших ігор. Налаштуйте контролер, екран і стіки зараз або грайте з налаштуваннями %1$s.</string>
+    <string name="game_first_start_set_up">Налаштувати</string>
+    <string name="game_first_start_play">Грати</string>
+    <string name="games_app_new">Нова: ще не налаштована</string>
+    <string name="game_mode_found_short">Знайдена: використовує налаштування %1$s, доки не налаштована</string>
 </resources>

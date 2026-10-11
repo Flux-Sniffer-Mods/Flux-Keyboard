@@ -1836,4 +1836,10 @@
     <string name="games_app_switch_description">Une appli Jeux dans la liste des applis de l\'écran d\'accueil (celle de Niagara aussi), avec tous les jeux. Appui long pour les jeux eux-mêmes.</string>
     <string name="games_pin_all">Ajouter tous les jeux à l\'écran d\'accueil</string>
     <string name="games_pin_all_description">Un raccourci avec son image pour chaque jeu qui a un profil. L\'écran d\'accueil demande pour chacun.</string>
+    <string name="game_first_start_title">Configurer %1$s ?</string>
+    <string name="game_first_start_message">Trouvé parmi vos jeux. Configurez maintenant sa manette, son écran et ses sticks, ou jouez avec les réglages de %1$s.</string>
+    <string name="game_first_start_set_up">Configurer</string>
+    <string name="game_first_start_play">Jouer</string>
+    <string name="games_app_new">Nouveau : pas encore configuré</string>
+    <string name="game_mode_found_short">Trouvé : utilise les réglages de %1$s jusqu\'à sa configuration</string>
 </resources>

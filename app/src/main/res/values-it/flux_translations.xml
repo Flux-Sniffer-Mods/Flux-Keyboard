@@ -1341,4 +1341,10 @@
     <string name="games_app_switch_description">Un\'app Giochi nell\'elenco app della schermata Home (anche in Niagara), con tutti i giochi. Tieni premuto per i giochi stessi.</string>
     <string name="games_pin_all">Aggiungi tutti i giochi alla schermata Home</string>
     <string name="games_pin_all_description">Una scorciatoia con la sua immagine per ogni gioco con un profilo. La schermata Home chiede per ciascuna.</string>
+    <string name="game_first_start_title">Configurare %1$s?</string>
+    <string name="game_first_start_message">Trovato tra i tuoi giochi. Configura ora controller, schermo e stick, o giocalo con le impostazioni di %1$s.</string>
+    <string name="game_first_start_set_up">Configura</string>
+    <string name="game_first_start_play">Gioca</string>
+    <string name="games_app_new">Nuovo: non ancora configurato</string>
+    <string name="game_mode_found_short">Trovato: usa le impostazioni di %1$s finché non lo configuri</string>
 </resources>

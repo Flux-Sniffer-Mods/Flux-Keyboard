@@ -1204,4 +1204,10 @@
     <string name="games_app_switch_description">Μια εφαρμογή Παιχνίδια στη λίστα εφαρμογών της αρχικής οθόνης (και του Niagara), με όλα τα παιχνίδια. Πατήστε παρατεταμένα για τα ίδια τα παιχνίδια.</string>
     <string name="games_pin_all">Προσθήκη όλων των παιχνιδιών στην αρχική οθόνη</string>
     <string name="games_pin_all_description">Μια συντόμευση με εικόνα για κάθε παιχνίδι με προφίλ. Η αρχική οθόνη ρωτά για καθεμία.</string>
+    <string name="game_first_start_title">Ρύθμιση του %1$s;</string>
+    <string name="game_first_start_message">Βρέθηκε στα παιχνίδια σας. Ρυθμίστε τώρα χειριστήριο, οθόνη και μοχλούς, ή παίξτε με τις ρυθμίσεις του %1$s.</string>
+    <string name="game_first_start_set_up">Ρύθμιση</string>
+    <string name="game_first_start_play">Παιχνίδι</string>
+    <string name="games_app_new">Νέο: δεν έχει ρυθμιστεί</string>
+    <string name="game_mode_found_short">Βρέθηκε: παίζει με τις ρυθμίσεις του %1$s μέχρι να ρυθμιστεί</string>
 </resources>
