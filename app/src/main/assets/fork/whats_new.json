@@ -585,6 +585,12 @@
     },
     {
       "text": "Xbox Cloud Gaming: hold Space for the Xbox button; a tap is still Start."
+    },
+    {
+      "text": "Xbox Cloud Gaming: a game opened from the Games app goes back there when you quit it, instead of leaving you in Xbox's library."
+    },
+    {
+      "text": "Clearer wording throughout gaming and streaming settings, such as Choose artwork from the internet in place of Found art."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

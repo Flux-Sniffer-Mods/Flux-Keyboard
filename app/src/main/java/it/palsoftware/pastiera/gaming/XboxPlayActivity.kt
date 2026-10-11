@@ -70,6 +70,15 @@ class XboxPlayActivity : Activity() {
 
             // The page's renderer died (out of memory, or a crash): only the player starts again,
             // not the whole app with the keyboard in it
+            // The page moves between its screens without loading a new page: a game opened
+            // straight from the Games app ends when the page leaves the game's screen
+            override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
+                if (signingIn || !startedInGame || url == null) return
+                val inGame = isGameUrl(url)
+                if (inGame) { reachedGame = true; return }
+                if (reachedGame && Regex("^https://www\\.xbox\\.com/").containsMatchIn(url) && url.contains("/play")) leaveToGames()
+            }
+
             override fun onRenderProcessGone(view: WebView, detail: android.webkit.RenderProcessGoneDetail): Boolean {
                 android.util.Log.w("XboxPlay", "renderer gone (crashed: ${detail.didCrash()})")
                 (view.parent as? android.view.ViewGroup)?.removeView(view)
@@ -196,6 +205,20 @@ class XboxPlayActivity : Activity() {
         return true
     }
 
+    /** Opened straight into a game (not the library): leaving the game leaves the player. */
+    private val startedInGame by lazy { intent.dataString?.let(::isGameUrl) == true }
+    /** The page has been on the game's own screen. */
+    private var reachedGame = false
+
+    /** The game ended (back to Xbox's library): back to the Games app, as a console would go home. */
+    private fun leaveToGames() {
+        if (isFinishing) return
+        if (GamesActivity.enabled(this)) runCatching {
+            startActivity(android.content.Intent(this, GamesActivity::class.java).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
+        finish()
+    }
+
     /** Space held long enough to be the Xbox button rather than Start. */
     private var spaceHeld = false
     private val spaceLong = Runnable {
@@ -298,6 +321,9 @@ class XboxPlayActivity : Activity() {
 })();"""
 
         /** Each control's button in the web's standard gamepad. */
+        /** A game's own screen on xbox.com/play (its launch page, any language). */
+        internal fun isGameUrl(url: String) = Regex("xbox\\.com/([a-z]{2}-[a-z]{2}/)?play/launch/", RegexOption.IGNORE_CASE).containsMatchIn(url)
+
         /** The Xbox button, in the page's controller. */
         private const val XBOX_BUTTON = 16
         /** How long Space is held to be the Xbox button. */
