@@ -1934,7 +1934,7 @@
     <string name="game_mode_artwork_found">Вибрати зображення з інтернету</string>
     <string name="game_mode_artwork_icons">Квадратні зображення (список ігор і ярлики)</string>
     <string name="game_mode_artwork_upright">Обкладинки (Moonlight)</string>
-    <string name="game_mode_artwork_none">Зображення в інтернеті не знайдено. Спробуйте назвати гру її точною назвою.</string>
+    <string name="game_mode_artwork_none">Зображення в інтернеті не знайдено. Спробуйте знайти його назву вище.</string>
     <string name="games_app_launchers">Лаунчери та емулятори</string>
     <string name="games_app_stream">Трансляція</string>
     <string name="stream_screen">Гра йде на</string>
@@ -1956,4 +1956,5 @@
     <string name="game_mode_xbox_added">%1$s додано до «Ігор»</string>
     <string name="games_app_settings_short">Налаштування</string>
     <string name="stream_desktop_restart">Віконний режим робочого столу ввімкнено. Якщо робочий стіл не з\'явиться, перезапустіть телефон один раз.</string>
+    <string name="game_mode_artwork_search">Шукати за назвою</string>
 </resources>

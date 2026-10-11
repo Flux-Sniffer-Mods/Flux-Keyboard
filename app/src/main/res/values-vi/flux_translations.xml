@@ -1916,7 +1916,7 @@
     <string name="game_mode_artwork_found">Chọn ảnh từ internet</string>
     <string name="game_mode_artwork_icons">Ảnh vuông (danh sách trò chơi và lối tắt)</string>
     <string name="game_mode_artwork_upright">Ảnh bìa (Moonlight)</string>
-    <string name="game_mode_artwork_none">Không tìm thấy ảnh trên mạng. Hãy thử đổi tên trò chơi đúng với tên gốc.</string>
+    <string name="game_mode_artwork_none">Không tìm thấy ảnh trên mạng. Hãy thử tìm tên của nó ở trên.</string>
     <string name="games_app_launchers">Trình khởi chạy và giả lập</string>
     <string name="games_app_stream">Phát</string>
     <string name="stream_screen">Trò chơi chạy trên</string>
@@ -1938,4 +1938,5 @@
     <string name="game_mode_xbox_added">Đã thêm %1$s vào Trò chơi</string>
     <string name="games_app_settings_short">Cài đặt</string>
     <string name="stream_desktop_restart">Cửa sổ màn hình nền đã được bật. Nếu màn hình nền không hiện, hãy khởi động lại điện thoại một lần.</string>
+    <string name="game_mode_artwork_search">Tìm theo tên</string>
 </resources>

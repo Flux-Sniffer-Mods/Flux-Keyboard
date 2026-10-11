@@ -1928,7 +1928,7 @@
     <string name="game_mode_artwork_found">Elegir imagen de internet</string>
     <string name="game_mode_artwork_icons">Imágenes cuadradas (lista de juegos y accesos directos)</string>
     <string name="game_mode_artwork_upright">Portadas (Moonlight)</string>
-    <string name="game_mode_artwork_none">No se encontró imagen en internet. Prueba a renombrar el juego con su título exacto.</string>
+    <string name="game_mode_artwork_none">No se encontró imagen en internet. Prueba a buscar su título arriba.</string>
     <string name="games_app_launchers">Lanzadores y emuladores</string>
     <string name="games_app_stream">Transmitir</string>
     <string name="stream_screen">El juego se ve en</string>
@@ -1950,4 +1950,5 @@
     <string name="game_mode_xbox_added">%1$s añadido a Juegos</string>
     <string name="games_app_settings_short">Ajustes</string>
     <string name="stream_desktop_restart">Las ventanas de escritorio ya están activadas. Si no aparece el escritorio, reinicia el móvil una vez.</string>
+    <string name="game_mode_artwork_search">Buscar un título</string>
 </resources>

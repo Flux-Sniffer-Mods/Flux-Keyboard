@@ -1387,7 +1387,7 @@
     <string name="game_mode_artwork_found">Bild aus dem Internet wählen</string>
     <string name="game_mode_artwork_icons">Quadratische Bilder (Spieleliste und Verknüpfungen)</string>
     <string name="game_mode_artwork_upright">Cover (Moonlight)</string>
-    <string name="game_mode_artwork_none">Kein Bild online gefunden. Benenne das Spiel nach seinem genauen Titel.</string>
+    <string name="game_mode_artwork_none">Kein Bild online gefunden. Suche oben nach seinem Titel.</string>
     <string name="games_app_launchers">Launcher und Emulatoren</string>
     <string name="games_app_stream">Streamen</string>
     <string name="stream_screen">Spiel läuft auf</string>
@@ -1409,4 +1409,5 @@
     <string name="game_mode_xbox_added">%1$s zu Spielen hinzugefügt</string>
     <string name="games_app_settings_short">Einstellungen</string>
     <string name="stream_desktop_restart">Desktop-Fenster sind jetzt an. Falls der Desktop nicht erscheint, starte das Handy einmal neu.</string>
+    <string name="game_mode_artwork_search">Nach einem Titel suchen</string>
 </resources>

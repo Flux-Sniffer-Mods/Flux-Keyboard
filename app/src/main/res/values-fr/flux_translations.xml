@@ -1928,7 +1928,7 @@
     <string name="game_mode_artwork_found">Choisir une image sur internet</string>
     <string name="game_mode_artwork_icons">Images carrées (liste des jeux et raccourcis)</string>
     <string name="game_mode_artwork_upright">Jaquettes (Moonlight)</string>
-    <string name="game_mode_artwork_none">Aucune image trouvée en ligne. Essayez de renommer le jeu avec son titre exact.</string>
+    <string name="game_mode_artwork_none">Aucune image trouvée en ligne. Essayez de rechercher son titre ci-dessus.</string>
     <string name="games_app_launchers">Lanceurs et émulateurs</string>
     <string name="games_app_stream">Diffuser</string>
     <string name="stream_screen">Le jeu s\'affiche sur</string>
@@ -1950,4 +1950,5 @@
     <string name="game_mode_xbox_added">%1$s ajouté aux Jeux</string>
     <string name="games_app_settings_short">Réglages</string>
     <string name="stream_desktop_restart">Le fenêtrage du bureau est activé. Si le bureau n\'apparaît pas, redémarrez le téléphone une fois.</string>
+    <string name="game_mode_artwork_search">Rechercher un titre</string>
 </resources>

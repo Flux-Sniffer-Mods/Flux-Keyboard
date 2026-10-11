@@ -1433,7 +1433,7 @@
     <string name="game_mode_artwork_found">Scegli un\'immagine da internet</string>
     <string name="game_mode_artwork_icons">Immagini quadrate (lista giochi e scorciatoie)</string>
     <string name="game_mode_artwork_upright">Copertine (Moonlight)</string>
-    <string name="game_mode_artwork_none">Nessuna immagine trovata online. Prova a rinominare il gioco con il titolo esatto.</string>
+    <string name="game_mode_artwork_none">Nessuna immagine trovata online. Prova a cercarne il titolo qui sopra.</string>
     <string name="games_app_launchers">Launcher ed emulatori</string>
     <string name="games_app_stream">Streaming</string>
     <string name="stream_screen">Il gioco va su</string>
@@ -1455,4 +1455,5 @@
     <string name="game_mode_xbox_added">%1$s aggiunto a Giochi</string>
     <string name="games_app_settings_short">Impostazioni</string>
     <string name="stream_desktop_restart">Le finestre desktop sono attive. Se il desktop non compare, riavvia il telefono una volta.</string>
+    <string name="game_mode_artwork_search">Cerca un titolo</string>
 </resources>

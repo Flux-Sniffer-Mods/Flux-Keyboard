@@ -1934,7 +1934,7 @@
     <string name="game_mode_artwork_found">Wybierz obraz z internetu</string>
     <string name="game_mode_artwork_icons">Kwadratowe obrazy (lista gier i skróty)</string>
     <string name="game_mode_artwork_upright">Okładki (Moonlight)</string>
-    <string name="game_mode_artwork_none">Nie znaleziono obrazu w internecie. Spróbuj nazwać grę jej dokładnym tytułem.</string>
+    <string name="game_mode_artwork_none">Nie znaleziono obrazu w internecie. Spróbuj wyszukać jego tytuł powyżej.</string>
     <string name="games_app_launchers">Launchery i emulatory</string>
     <string name="games_app_stream">Stream</string>
     <string name="stream_screen">Gra działa na</string>
@@ -1956,4 +1956,5 @@
     <string name="game_mode_xbox_added">Dodano %1$s do Gier</string>
     <string name="games_app_settings_short">Ustawienia</string>
     <string name="stream_desktop_restart">Okna pulpitu są włączone. Jeśli pulpit się nie pojawi, uruchom telefon ponownie raz.</string>
+    <string name="game_mode_artwork_search">Szukaj tytułu</string>
 </resources>

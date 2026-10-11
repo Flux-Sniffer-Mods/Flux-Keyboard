@@ -1296,7 +1296,7 @@
     <string name="game_mode_artwork_found">Επιλογή εικόνας από το διαδίκτυο</string>
     <string name="game_mode_artwork_icons">Τετράγωνες εικόνες (λίστα παιχνιδιών και συντομεύσεις)</string>
     <string name="game_mode_artwork_upright">Εξώφυλλα (Moonlight)</string>
-    <string name="game_mode_artwork_none">Δεν βρέθηκε εικόνα στο διαδίκτυο. Δοκίμασε να μετονομάσεις το παιχνίδι με τον ακριβή τίτλο του.</string>
+    <string name="game_mode_artwork_none">Δεν βρέθηκε εικόνα στο διαδίκτυο. Δοκίμασε να αναζητήσεις τον τίτλο του παραπάνω.</string>
     <string name="games_app_launchers">Launchers και εξομοιωτές</string>
     <string name="games_app_stream">Μετάδοση</string>
     <string name="stream_screen">Το παιχνίδι παίζει σε</string>
@@ -1318,4 +1318,5 @@
     <string name="game_mode_xbox_added">Το %1$s προστέθηκε στα Παιχνίδια</string>
     <string name="games_app_settings_short">Ρυθμίσεις</string>
     <string name="stream_desktop_restart">Τα παράθυρα επιφάνειας εργασίας είναι πλέον ενεργά. Αν δεν εμφανιστεί η επιφάνεια εργασίας, κάνε μία επανεκκίνηση στο τηλέφωνο.</string>
+    <string name="game_mode_artwork_search">Αναζήτηση τίτλου</string>
 </resources>

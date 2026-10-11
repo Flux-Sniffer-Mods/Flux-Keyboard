@@ -1922,7 +1922,7 @@
     <string name="game_mode_artwork_found">Ընտրել պատկեր համացանցից</string>
     <string name="game_mode_artwork_icons">Քառակուսի պատկերներ (խաղերի ցանկ և դյուրանցումներ)</string>
     <string name="game_mode_artwork_upright">Շապիկներ (Moonlight)</string>
-    <string name="game_mode_artwork_none">Համացանցում պատկեր չգտնվեց։ Փորձիր խաղը վերանվանել իր ճշգրիտ անունով։</string>
+    <string name="game_mode_artwork_none">Համացանցում պատկեր չգտնվեց։ Փորձիր վերևում որոնել դրա անունը։</string>
     <string name="games_app_launchers">Գործարկիչներ և էմուլյատորներ</string>
     <string name="games_app_stream">Հեռարձակել</string>
     <string name="stream_screen">Խաղը ցուցադրվում է</string>
@@ -1944,4 +1944,5 @@
     <string name="game_mode_xbox_added">%1$s-ը ավելացվեց Խաղերին</string>
     <string name="games_app_settings_short">Կարգավորումներ</string>
     <string name="stream_desktop_restart">Աշխատասեղանի պատուհաններն այժմ միացված են։ Եթե աշխատասեղանը չի երևում, մեկ անգամ վերագործարկիր հեռախոսը։</string>
+    <string name="game_mode_artwork_search">Որոնել անուն</string>
 </resources>
