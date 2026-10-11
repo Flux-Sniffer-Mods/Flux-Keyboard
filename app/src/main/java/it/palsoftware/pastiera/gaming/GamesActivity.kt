@@ -11,6 +11,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,60 +98,151 @@ class GamesActivity : ComponentActivity() {
             })
             return
         }
-        Scaffold { inner ->
-            val list = entries
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 16.dp)) {
-                item {
-                    Text(stringResource(R.string.games_app_title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(vertical = 16.dp))
+        var page by remember { mutableStateOf(Page.GAMES) }
+        if (page == Page.APPS) androidx.activity.compose.BackHandler { page = Page.GAMES }
+        val xbox = it.palsoftware.pastiera.settings.rememberXboxAccount()
+        var xboxMenu by remember { mutableStateOf(false) }
+        if (xboxMenu) androidx.compose.material3.AlertDialog(
+            onDismissRequest = { xboxMenu = false },
+            title = { Text(stringResource(R.string.games_app_xbox)) },
+            text = { Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out_description else R.string.game_mode_xbox_sign_in_description)) },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = { xboxMenu = false; xbox.click() }) {
+                    Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out else R.string.game_mode_xbox_sign_in))
                 }
-                item {
-                    androidx.compose.foundation.layout.FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        androidx.compose.material3.OutlinedButton(onClick = { importing = true }) { Text(stringResource(R.string.game_mode_import)) }
-                        androidx.compose.material3.OutlinedButton(onClick = { addingXbox = true }) { Text(stringResource(R.string.games_app_xbox)) }
-                        val xbox = it.palsoftware.pastiera.settings.rememberXboxAccount()
-                        androidx.compose.material3.OutlinedButton(onClick = { xbox.click() }) {
-                            Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out else R.string.game_mode_xbox_sign_in))
-                        }
-                        // Streaming to Moonlight, on or off at a tap
-                        androidx.compose.material3.FilterChip(
-                            selected = streaming,
-                            onClick = {
-                                streaming = !streaming
-                                it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(this@GamesActivity, streaming)
-                            },
-                            label = { Text(stringResource(R.string.stream_switch)) },
-                            leadingIcon = if (streaming) { { Text("\u2713") } } else null
-                        )
-                        androidx.compose.material3.OutlinedButton(onClick = { settings = true }) { Text(stringResource(R.string.games_app_settings)) }
-                    }
-                }
-                if (list != null && list.isEmpty()) item { Text(stringResource(R.string.games_app_empty)) }
-                items(list.orEmpty(), key = { it.name + it.profile.packages }) { entry ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().clickable {
-                            runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
-                        }.padding(vertical = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        GameArtIcon(entry.profile)
-                        androidx.compose.foundation.layout.Column(modifier = Modifier.weight(1f)) {
-                            Text(entry.name, style = MaterialTheme.typography.titleMedium)
-                            if (entry.profile.pending) Text(
-                                stringResource(R.string.games_app_new), style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        // Its own settings, where it has a profile
-                        if (!entry.profile.id.startsWith("found:")) androidx.compose.material3.TextButton(onClick = { editing = entry.profile }) {
-                            Text("\u2699")
-                        }
-                    }
+            },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = { xboxMenu = false }) { Text(stringResource(R.string.cancel)) } }
+        )
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Back from the launchers' page; else gaming mode's settings
+                    if (page == Page.APPS) androidx.compose.material3.IconButton(onClick = { page = Page.GAMES }) { Text("\u2190", style = MaterialTheme.typography.titleLarge) }
+                    else androidx.compose.material3.IconButton(onClick = { settings = true }) { Text("\u2699", style = MaterialTheme.typography.titleLarge) }
+                    Text(
+                        stringResource(if (page == Page.APPS) R.string.games_app_launchers else R.string.games_app_title),
+                        style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).padding(start = 4.dp)
+                    )
+                    // Streaming to Moonlight, on or off at a tap
+                    androidx.compose.material3.FilterChip(
+                        selected = streaming,
+                        onClick = {
+                            streaming = !streaming
+                            it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(this@GamesActivity, streaming)
+                        },
+                        label = { Text(stringResource(R.string.games_app_stream)) },
+                        leadingIcon = if (streaming) { { Text("\u2713") } } else null
+                    )
                 }
             }
+        ) { inner ->
+            val list = entries
+            androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+                columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(104.dp),
+                modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                if (page == Page.GAMES) {
+                    items(list.orEmpty().size, key = { list!![it].profile.id }) { index ->
+                        val entry = list!![index]
+                        Tile(
+                            name = entry.name,
+                            sub = if (entry.profile.pending) stringResource(R.string.games_app_new) else null,
+                            art = { GameCover(entry.profile) },
+                            onClick = { runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } },
+                            onLongClick = { editing = entry.profile }
+                        )
+                    }
+                    item(key = "add") { Tile(stringResource(R.string.game_mode_import), null, { Symbol("+") }, { importing = true }, { importing = true }) }
+                    // Xbox cloud games: signed in first, then picked; long-press to sign out
+                    item(key = "xbox") {
+                        Tile(stringResource(R.string.games_app_xbox), null, { Symbol("\u2601") },
+                            onClick = { if (xbox.signedIn) addingXbox = true else xbox.click() },
+                            onLongClick = { xboxMenu = true })
+                    }
+                    item(key = "apps") { Tile(stringResource(R.string.games_app_launchers), null, { Symbol("\u25A6") }, { page = Page.APPS }, { page = Page.APPS }) }
+                } else {
+                    val apps = launchers()
+                    items(apps.size, key = { apps[it].first }) { index ->
+                        val (pkg, profile) = apps[index]
+                        Tile(
+                            name = profile?.name ?: it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg),
+                            sub = null,
+                            art = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { it.palsoftware.pastiera.settings.FluxAppIcon(pkg, 64.dp) } },
+                            onClick = { packageManager.getLaunchIntentForPackage(pkg)?.let { launch -> runCatching { startActivity(launch) } } },
+                            onLongClick = {
+                                editing = profile ?: GameProfiles.newProfile(it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg), setOf(pkg))
+                            }
+                        )
+                    }
+                }
+                if (page == Page.GAMES && list != null && list.isEmpty()) item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(maxLineSpan) }) {
+                    Text(stringResource(R.string.games_app_empty))
+                }
+            }
+        }
+    }
+
+    private enum class Page { GAMES, APPS }
+
+    /** Launchers and emulators: those with gaming mode settings, then the known ones installed. */
+    private fun launchers(): List<Pair<String, GameProfile?>> {
+        val profiles = GameProfiles.all(this).filter { !it.isGame }
+        val withProfile = profiles.mapNotNull { profile -> profile.packages.firstOrNull()?.let { it to profile } }.distinctBy { it.first }
+        val known = GameFolders.Player.entries.flatMap { player -> player.activities.map { it.first } } +
+            listOf("org.dolphinemu.dolphinemu", "org.ppsspp.ppsspp", "org.ppsspp.ppssppgold")
+        val installed = known.distinct().filter { pkg -> withProfile.none { it.first == pkg } && packageManager.getLaunchIntentForPackage(pkg) != null }
+        return withProfile + installed.map { it to null }
+    }
+
+    /** One tile: an upright picture, its name beneath; long-press for its settings. */
+    @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+    @Composable
+    private fun Tile(name: String, sub: String?, art: @Composable () -> Unit, onClick: () -> Unit, onLongClick: () -> Unit) {
+        val shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
+        androidx.compose.foundation.layout.Column(
+            modifier = Modifier.fillMaxWidth().combinedClickable(onClick = onClick, onLongClick = onLongClick),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(shape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) { art() }
+            Text(
+                name, style = MaterialTheme.typography.bodyMedium, maxLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.padding(top = 6.dp)
+            )
+            if (sub != null) Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+        }
+    }
+
+    @Composable
+    private fun Symbol(text: String) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text, style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+
+    /** A game's upright art, the same Moonlight shows; its app's icon while there's none. */
+    @Composable
+    private fun GameCover(profile: GameProfile) {
+        val version = GameArt.version(this, profile)
+        val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, profile.id, profile.launch, version) {
+            value = withContext(Dispatchers.IO) {
+                runCatching { GameArt.loadPortrait(this@GamesActivity, profile)?.asImageBitmap() }.getOrNull()
+            }
+        }
+        val image = art
+        if (image != null) androidx.compose.foundation.Image(
+            bitmap = image, contentDescription = null,
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.fillMaxSize()
+        ) else Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            profile.packages.firstOrNull()?.let { pkg -> it.palsoftware.pastiera.settings.FluxAppIcon(pkg, 48.dp) }
         }
     }
 

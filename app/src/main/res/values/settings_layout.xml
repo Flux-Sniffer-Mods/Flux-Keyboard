@@ -539,4 +539,6 @@
     <string name="game_mode_artwork_icons">Icons (the game list and shortcuts)</string>
     <string name="game_mode_artwork_upright">Upright covers (Moonlight)</string>
     <string name="game_mode_artwork_none">No art found for this game. Its name may need to match the game\'s real title.</string>
+    <string name="games_app_launchers">Launchers and emulators</string>
+    <string name="games_app_stream">Stream</string>
 </resources>

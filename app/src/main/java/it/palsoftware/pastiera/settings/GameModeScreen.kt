@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.settings
 
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.border
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Box
@@ -432,7 +434,7 @@ private fun CustomGameFolders() {
     ) { runCatching { picker.launch(null) } }
 }
 
-private fun appLabel(context: android.content.Context, pkg: String): String = runCatching {
+internal fun appLabel(context: android.content.Context, pkg: String): String = runCatching {
     context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString()
 }.getOrDefault(pkg)
 
@@ -788,35 +790,70 @@ internal fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, 
         return
     }
     LaunchedEffect(Unit) { games = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.XboxCloud.games(context) } }
-    AlertDialog(
+    // A grid of the games' covers, a search above: nothing else
+    androidx.compose.ui.window.Dialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.game_mode_xbox_add)) },
-        text = {
-            Column {
+        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        androidx.compose.material3.Surface(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(12.dp)) {
                 OutlinedTextField(
                     value = query, onValueChange = { query = it }, singleLine = true,
                     label = { Text(stringResource(R.string.game_mode_xbox_search)) }, modifier = Modifier.fillMaxWidth()
                 )
                 val list = games
                 when {
-                    list == null -> Text(stringResource(R.string.game_mode_import_reading), modifier = Modifier.padding(top = 8.dp))
-                    list.isEmpty() -> Text(stringResource(R.string.game_mode_xbox_none), modifier = Modifier.padding(top = 8.dp))
-                    else -> androidx.compose.foundation.lazy.LazyColumn(modifier = Modifier.height(360.dp)) {
+                    list == null -> Text(stringResource(R.string.game_mode_import_reading), modifier = Modifier.padding(top = 12.dp))
+                    list.isEmpty() -> Text(stringResource(R.string.game_mode_xbox_none), modifier = Modifier.padding(top = 12.dp))
+                    else -> {
                         // Xbox Cloud Gaming itself first, for every game
                         val shown = (listOf(it.palsoftware.pastiera.gaming.XboxCloud.HOME) + list)
-                            .filter { game -> query.isBlank() || game.name.contains(query.trim(), ignoreCase = true) }.take(80)
-                        items(shown.size) { i ->
-                            val game = shown[i]
-                            Text(game.name, modifier = Modifier.fillMaxWidth().clickable {
-                                onPicked(it.palsoftware.pastiera.gaming.XboxCloud.asGame(game, pkg))
-                            }.padding(vertical = 10.dp))
+                            .filter { game -> query.isBlank() || game.name.contains(query.trim(), ignoreCase = true) }
+                        androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+                            columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(96.dp),
+                            modifier = Modifier.fillMaxSize().padding(top = 12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            items(shown.size, key = { shown[it].id.ifEmpty { "home" } }) { i ->
+                                val game = shown[i]
+                                CloudGameTile(game) { onPicked(it.palsoftware.pastiera.gaming.XboxCloud.asGame(game, pkg)) }
+                            }
                         }
                     }
                 }
             }
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
-    )
+        }
+    }
+}
+
+/** A cloud game's cover and name. */
+@Composable
+private fun CloudGameTile(game: it.palsoftware.pastiera.gaming.XboxCloud.CloudGame, onClick: () -> Unit) {
+    val image by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, game.art) {
+        value = game.art?.takeIf { it.isNotEmpty() }?.let { url ->
+            withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameArt.thumbnail(url)?.asImageBitmap() }
+        }
+    }
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
+    Column(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(shape)
+                .then(Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape)),
+            contentAlignment = Alignment.Center
+        ) {
+            image?.let {
+                androidx.compose.foundation.Image(bitmap = it, contentDescription = null,
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.matchParentSize())
+            } ?: Text("\u2601", style = MaterialTheme.typography.headlineMedium)
+        }
+        Text(game.name, style = MaterialTheme.typography.bodySmall, maxLines = 2,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.padding(top = 4.dp))
+    }
 }
 
 @Composable
