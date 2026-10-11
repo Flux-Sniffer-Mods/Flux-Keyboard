@@ -1903,4 +1903,8 @@
     <string name="game_mode_xbox_sign_out">Đăng xuất Xbox</string>
     <string name="game_mode_xbox_sign_out_description">Đã đăng nhập Xbox trong trình phát của Flux Keyboard.</string>
     <string name="game_mode_xbox_sign_out_confirm">Game đám mây sẽ không chạy trong trình phát của Flux Keyboard cho đến khi bạn đăng nhập lại.</string>
+    <string name="game_mode_reset">Đặt lại</string>
+    <string name="game_mode_reset_emulator">Đặt lại cài đặt của %1$s</string>
+    <string name="game_mode_reset_emulator_confirm">Mọi thứ Flux Keyboard đã đặt trong %1$s (điều khiển, đồ họa, tay cầm từng game) sẽ trở lại như trước. Cài đặt do phiên bản Flux Keyboard cũ thay đổi thì không khôi phục được.</string>
+    <string name="game_mode_reset_emulator_done">Cài đặt của %1$s đã trở lại như trước khi Flux Keyboard thay đổi.</string>
 </resources>

@@ -1921,4 +1921,8 @@
     <string name="game_mode_xbox_sign_out">Вийти з Xbox</string>
     <string name="game_mode_xbox_sign_out_description">Вхід в Xbox виконано в плеєрі Flux Keyboard.</string>
     <string name="game_mode_xbox_sign_out_confirm">Хмарні ігри не запускатимуться в плеєрі Flux Keyboard, доки ви знову не ввійдете.</string>
+    <string name="game_mode_reset">Скинути</string>
+    <string name="game_mode_reset_emulator">Скинути налаштування %1$s</string>
+    <string name="game_mode_reset_emulator_confirm">Усе, що Flux Keyboard налаштував у %1$s (керування, графіка, контролер кожної гри), повернеться як було. Налаштування, змінені старою версією Flux Keyboard, повернути не можна.</string>
+    <string name="game_mode_reset_emulator_done">Налаштування %1$s повернуто до стану до змін Flux Keyboard.</string>
 </resources>

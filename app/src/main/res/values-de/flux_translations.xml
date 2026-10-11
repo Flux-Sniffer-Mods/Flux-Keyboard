@@ -1374,4 +1374,8 @@
     <string name="game_mode_xbox_sign_out">Von Xbox abmelden</string>
     <string name="game_mode_xbox_sign_out_description">Im Player von Flux Keyboard bei Xbox angemeldet.</string>
     <string name="game_mode_xbox_sign_out_confirm">Cloud-Spiele laufen im Player von Flux Keyboard erst wieder, wenn du dich erneut anmeldest.</string>
+    <string name="game_mode_reset">Zurücksetzen</string>
+    <string name="game_mode_reset_emulator">Einstellungen von %1$s zurücksetzen</string>
+    <string name="game_mode_reset_emulator_confirm">Alles, was Flux Keyboard in %1$s eingestellt hat (Steuerung, Grafik, Controller je Spiel), wird wie vorher. Von einer älteren Version von Flux Keyboard geänderte Einstellungen lassen sich nicht zurückholen.</string>
+    <string name="game_mode_reset_emulator_done">Die Einstellungen von %1$s sind wie vor den Änderungen durch Flux Keyboard.</string>
 </resources>

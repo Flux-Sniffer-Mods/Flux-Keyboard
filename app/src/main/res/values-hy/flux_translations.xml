@@ -1909,4 +1909,8 @@
     <string name="game_mode_xbox_sign_out">Դուրս գալ Xbox-ից</string>
     <string name="game_mode_xbox_sign_out_description">Մուտք ես գործել Xbox Flux Keyboard-ի նվագարկիչում։</string>
     <string name="game_mode_xbox_sign_out_confirm">Ամպային խաղերը չեն աշխատի Flux Keyboard-ի նվագարկիչում, մինչև նորից մուտք չգործես։</string>
+    <string name="game_mode_reset">Վերակայել</string>
+    <string name="game_mode_reset_emulator">Վերակայել %1$s-ի կարգավորումները</string>
+    <string name="game_mode_reset_emulator_confirm">Այն ամենը, ինչ Flux Keyboard-ը կարգավորել է %1$s-ում (կառավարում, գրաֆիկա, ամեն խաղի կոնտրոլեր), կվերադառնա նախկինին։ Flux Keyboard-ի հին տարբերակի փոխած կարգավորումները հնարավոր չէ վերադարձնել։</string>
+    <string name="game_mode_reset_emulator_done">%1$s-ի կարգավորումները վերադարձել են Flux Keyboard-ի փոփոխություններից առաջվա վիճակին։</string>
 </resources>

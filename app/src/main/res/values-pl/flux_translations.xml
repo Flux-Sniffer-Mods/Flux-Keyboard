@@ -1921,4 +1921,8 @@
     <string name="game_mode_xbox_sign_out">Wyloguj z Xbox</string>
     <string name="game_mode_xbox_sign_out_description">Zalogowano do Xbox w odtwarzaczu Flux Keyboard.</string>
     <string name="game_mode_xbox_sign_out_confirm">Gry z chmury nie będą działać w odtwarzaczu Flux Keyboard, dopóki nie zalogujesz się ponownie.</string>
+    <string name="game_mode_reset">Przywróć</string>
+    <string name="game_mode_reset_emulator">Przywróć ustawienia %1$s</string>
+    <string name="game_mode_reset_emulator_confirm">Wszystko, co Flux Keyboard ustawił w %1$s (sterowanie, grafika, kontroler każdej gry), wraca do stanu sprzed zmian. Ustawień zmienionych przez starszą wersję Flux Keyboard nie da się przywrócić.</string>
+    <string name="game_mode_reset_emulator_done">Ustawienia %1$s wróciły do stanu sprzed zmian Flux Keyboard.</string>
 </resources>

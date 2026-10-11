@@ -1283,4 +1283,8 @@
     <string name="game_mode_xbox_sign_out">Αποσύνδεση από το Xbox</string>
     <string name="game_mode_xbox_sign_out_description">Συνδεδεμένος στο Xbox στον player του Flux Keyboard.</string>
     <string name="game_mode_xbox_sign_out_confirm">Τα παιχνίδια cloud δεν θα παίζουν στον player του Flux Keyboard μέχρι να συνδεθείς ξανά.</string>
+    <string name="game_mode_reset">Επαναφορά</string>
+    <string name="game_mode_reset_emulator">Επαναφορά ρυθμίσεων του %1$s</string>
+    <string name="game_mode_reset_emulator_confirm">Ό,τι όρισε το Flux Keyboard στο %1$s (χειρισμοί, γραφικά, χειριστήριο ανά παιχνίδι) επιστρέφει όπως ήταν πριν. Ρυθμίσεις που άλλαξε παλαιότερη έκδοση του Flux Keyboard δεν μπορούν να επανέλθουν.</string>
+    <string name="game_mode_reset_emulator_done">Οι ρυθμίσεις του %1$s επανήλθαν όπως ήταν πριν τις αλλάξει το Flux Keyboard.</string>
 </resources>

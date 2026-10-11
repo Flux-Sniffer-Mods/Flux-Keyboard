@@ -1915,4 +1915,8 @@
     <string name="game_mode_xbox_sign_out">Cerrar sesión de Xbox</string>
     <string name="game_mode_xbox_sign_out_description">Sesión iniciada en Xbox en el reproductor de Flux Keyboard.</string>
     <string name="game_mode_xbox_sign_out_confirm">Los juegos en la nube no funcionarán en el reproductor de Flux Keyboard hasta que vuelvas a iniciar sesión.</string>
+    <string name="game_mode_reset">Restablecer</string>
+    <string name="game_mode_reset_emulator">Restablecer los ajustes de %1$s</string>
+    <string name="game_mode_reset_emulator_confirm">Todo lo que Flux Keyboard configuró en %1$s (controles, gráficos, mando de cada juego) vuelve a como estaba. Los ajustes cambiados por una versión anterior de Flux Keyboard no se pueden recuperar.</string>
+    <string name="game_mode_reset_emulator_done">Los ajustes de %1$s vuelven a estar como antes de que Flux Keyboard los cambiara.</string>
 </resources>
