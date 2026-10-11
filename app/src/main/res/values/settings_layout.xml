@@ -541,6 +541,7 @@
     <string name="extra_screen_touch_trackpad">Touch: trackpad</string>
     <string name="extra_screen_keys_screen">Keys: to screen</string>
     <string name="extra_screen_keys_phone">Keys: to phone</string>
+    <string name="stream_flux_games">Flux Games</string>
     <string name="stream_desktop_art">Android Desktop</string>
     <string name="extra_screen_title">Game screen</string>
     <string name="stream_phone_screen_art">Mirror Phone Screen</string>

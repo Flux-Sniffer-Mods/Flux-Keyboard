@@ -328,17 +328,26 @@
         <activity
             android:name=".gaming.GamesActivity"
             android:exported="true"
-            android:enabled="false"
             android:label="@string/games_app_title"
             android:icon="@mipmap/ic_games"
             android:roundIcon="@mipmap/ic_games"
             android:taskAffinity="it.palsoftware.pastiera.games"
-            android:theme="@style/Theme.Pastiera">
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density"
+            android:theme="@style/Theme.Pastiera" />
+        <!-- Its entry in the app list (Games in the app list): it opens from Moonlight either way -->
+        <activity-alias
+            android:name=".gaming.GamesLauncher"
+            android:targetActivity=".gaming.GamesActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:label="@string/games_app_title"
+            android:icon="@mipmap/ic_games"
+            android:roundIcon="@mipmap/ic_games">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
         <!-- Gaming mode's notification: the next profile -->
         <receiver
             android:name=".gaming.GameMode$Receiver"

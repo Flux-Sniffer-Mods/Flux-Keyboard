@@ -639,6 +639,12 @@
     },
     {
       "text": "Stream to Moonlight: the phone screen and Android desktop covers read Mirror Phone Screen and Android Desktop."
+    },
+    {
+      "text": "Stream to Moonlight: Flux Games opens the Games app on the TV, zoomed out to a TV's layout with the controller frame showing; Flux Games, Android Desktop and Mirror Phone Screen are listed first."
+    },
+    {
+      "text": "Games app: it opens from Moonlight whether or not Games in the app list is on."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

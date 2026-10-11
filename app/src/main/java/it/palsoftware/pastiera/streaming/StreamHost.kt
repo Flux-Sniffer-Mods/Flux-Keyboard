@@ -304,13 +304,16 @@ object StreamHost {
         val phoneScreen = appId == PHONE_SCREEN_ID && StreamHostService.phoneScreen(app)
         // Xbox Cloud Gaming's library, in Flux Keyboard's player
         val xcloud = appId == XCLOUD_ID
+        // Flux Keyboard's Games app, laid out for the TV
+        val launcher = appId == FLUX_GAMES_ID
         // Android's desktop on a screen of its own (the shell makes it)
         val desktop = appId == DESKTOP_ID && it.palsoftware.pastiera.adb.AdbShell.available()
-        if (!resume && game == null && !phoneScreen && !xcloud && !desktop) return root("", 404, "That game isn't in the games list")
+        if (!resume && game == null && !phoneScreen && !xcloud && !desktop && !launcher) return root("", 404, "That game isn't in the games list")
         // Asked on the phone first, unless this Moonlight client is trusted to start by itself
         val title = when {
             phoneScreen -> app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen)
             xcloud -> app.getString(it.palsoftware.pastiera.R.string.games_app_xbox)
+            launcher -> app.getString(it.palsoftware.pastiera.R.string.stream_flux_games)
             desktop -> app.getString(it.palsoftware.pastiera.R.string.stream_screen_desktop)
             else -> game?.name
         }
@@ -326,6 +329,7 @@ object StreamHost {
         val gameIntent = when {
             xcloud -> android.content.Intent(app, it.palsoftware.pastiera.gaming.XboxPlayActivity::class.java)
                 .setData(android.net.Uri.parse(it.palsoftware.pastiera.gaming.XboxPlayActivity.HOME))
+            launcher -> android.content.Intent(app, GamesActivity::class.java)
             game == null -> null
             else -> GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
         }
@@ -513,7 +517,9 @@ object StreamHost {
     const val XCLOUD_ID = 3
     /** Android's desktop on a screen of its own. */
     const val DESKTOP_ID = 6
-    private val SPECIAL_IDS = setOf(PHONE_SCREEN_ID, XCLOUD_ID, DESKTOP_ID)
+    /** Flux Keyboard's Games app, on the TV. */
+    const val FLUX_GAMES_ID = 7
+    private val SPECIAL_IDS = setOf(PHONE_SCREEN_ID, XCLOUD_ID, DESKTOP_ID, FLUX_GAMES_ID)
 
     /**
      * A game's number for Moonlight: stable while the game and its art stay the same. Moonlight
@@ -528,10 +534,15 @@ object StreamHost {
 
     private fun entry(title: String, id: Int) = "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(title)}</AppTitle><ID>$id</ID></App>"
 
-    /** Moonlight's list: the phone's screen, Android's desktop and XCloud Games, then the games. */
+    /**
+     * Moonlight's list: Flux Games, Android's desktop and the phone's screen, then XCloud Games
+     * and the games. Moonlight sorts by name, so the phone's own entries are in brackets, which
+     * sort before any letter.
+     */
     private fun appList(): String = root(
-        (if (StreamHostService.phoneScreen(app)) entry(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen), PHONE_SCREEN_ID) else "") +
-            (if (it.palsoftware.pastiera.adb.AdbShell.available()) entry(app.getString(it.palsoftware.pastiera.R.string.stream_screen_desktop), DESKTOP_ID) else "") +
+        entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_flux_games) + "]", FLUX_GAMES_ID) +
+            (if (it.palsoftware.pastiera.adb.AdbShell.available()) entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art) + "]", DESKTOP_ID) else "") +
+            (if (StreamHostService.phoneScreen(app)) entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art) + "]", PHONE_SCREEN_ID) else "") +
             entry(app.getString(it.palsoftware.pastiera.R.string.games_app_xbox), XCLOUD_ID) +
             games().filter { it.first !in SPECIAL_IDS }.joinToString("") { (id, profile) ->
                 "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"
@@ -568,6 +579,7 @@ object StreamHost {
             PHONE_SCREEN_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art))
             DESKTOP_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art))
             XCLOUD_ID.toString() -> runCatching { GameArt.xboxTile(app) }.getOrNull()
+            FLUX_GAMES_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_flux_games))
             else -> null
         } ?: profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
         val bytes = art?.let { bitmap ->

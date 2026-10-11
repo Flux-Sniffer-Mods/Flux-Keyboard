@@ -215,7 +215,7 @@ class XboxPlayActivity : Activity() {
     /** The game ended (back to Xbox's library): back to the Games app, as a console would go home. */
     private fun leaveToGames() {
         if (isFinishing) return
-        if (GamesActivity.enabled(this)) runCatching {
+        runCatching {
             startActivity(android.content.Intent(this, GamesActivity::class.java).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
         }
         finish()

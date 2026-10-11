@@ -61,14 +61,40 @@ class GamesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val editId = intent.getStringExtra(EXTRA_EDIT)
-        setContent { PastieraTheme { GamesList(editId) } }
+        setContent {
+            PastieraTheme {
+                // Shown on a TV (through Moonlight): zoomed out to a TV's layout
+                val metrics = resources.displayMetrics
+                val base = androidx.compose.ui.platform.LocalDensity.current
+                val tv = tvView()
+                val density = if (!tv) base else {
+                    val wide = maxOf(metrics.widthPixels, metrics.heightPixels)
+                    androidx.compose.ui.unit.Density((wide / TV_WIDTH_DP).coerceAtMost(base.density), base.fontScale)
+                }
+                androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides density) {
+                    GamesList(editId, tv)
+                }
+            }
+        }
+    }
+
+    /**
+     * Shown through Moonlight: on a screen of its own, or on the phone's while its screen is
+     * mirrored (the phone at the TV's shape).
+     */
+    private fun tvView(): Boolean {
+        @Suppress("DEPRECATION")
+        val display = windowManager.defaultDisplay?.displayId ?: android.view.Display.DEFAULT_DISPLAY
+        if (display != android.view.Display.DEFAULT_DISPLAY) return true
+        val session = it.palsoftware.pastiera.streaming.StreamHost.session ?: return false
+        return !session.separate
     }
 
     private data class Entry(val name: String, val profile: GameProfile, val intent: Intent)
 
     @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
     @Composable
-    private fun GamesList(editId: String?) {
+    private fun GamesList(editId: String?, tv: Boolean = false) {
         var entries by remember { mutableStateOf<List<Entry>?>(null) }
         var reload by remember { mutableStateOf(0) }
         // Its settings, as in Flux Keyboard's Gaming mode (opened straight away when asked to)
@@ -223,7 +249,8 @@ class GamesActivity : ComponentActivity() {
             val grid = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
             // The tile picked with keys (shown only once keys are used, not for touch)
             var selected by remember(page) { mutableStateOf(0) }
-            var byKeys by remember { mutableStateOf(false) }
+            // On a TV, picked with a controller: the frame shows from the start
+            var byKeys by remember { mutableStateOf(tv) }
             LaunchedEffect(selected, byKeys) { if (byKeys && selected in tiles.indices) grid.animateScrollToItem(selected) }
             // Keys reach the window, not the grid: what each does, set afresh as the page changes
             keyHandler = { native ->
@@ -313,6 +340,9 @@ class GamesActivity : ComponentActivity() {
     }
 
     private enum class Page { GAMES, APPS }
+
+    /** A TV's layout: this many dp across, as Android TV lays out 1080p. */
+    private val TV_WIDTH_DP = 960f
 
     /** Launchers and emulators: those with gaming mode settings, then the known ones installed. */
     private fun launchers(): List<Pair<String, GameProfile?>> {
@@ -455,10 +485,24 @@ class GamesActivity : ComponentActivity() {
         fun enabled(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_ENABLED, false)
 
         /** Games in the app list (on), or not: the app itself shown or hidden, its shortcuts kept in step. */
+        /** Its entry in the app list, shown with Games in the app list on. */
+        private const val LAUNCHER_ALIAS = "it.palsoftware.pastiera.gaming.GamesLauncher"
+
+        /**
+         * The app list's entry as the setting says (once after updating from when the activity
+         * itself was the entry, turned off with it).
+         */
+        fun syncLauncher(context: Context) {
+            val pm = context.packageManager
+            val component = ComponentName(context, LAUNCHER_ALIAS)
+            val shown = pm.getComponentEnabledSetting(component) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            if (shown != enabled(context)) setEnabled(context, enabled(context))
+        }
+
         fun setEnabled(context: Context, on: Boolean) {
             SettingsManager.getPreferences(context).edit().putBoolean(KEY_ENABLED, on).apply()
             context.packageManager.setComponentEnabledSetting(
-                ComponentName(context, GamesActivity::class.java),
+                ComponentName(context, LAUNCHER_ALIAS),
                 if (on) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP
             )
@@ -478,7 +522,7 @@ class GamesActivity : ComponentActivity() {
                     ShortcutInfo.Builder(context, "games_${profile.id}")
                         .setShortLabel(profile.name.ifBlank { "Game" })
                         .setIcon(art?.let { runCatching { GameLaunchActivity.artIcon(it) }.getOrNull() } ?: Icon.createWithResource(context, R.mipmap.ic_games))
-                        .setActivity(ComponentName(context, GamesActivity::class.java))
+                        .setActivity(ComponentName(context, LAUNCHER_ALIAS))
                         .setIntent(intent)
                         .setRank(rank)
                         .build()
