@@ -24,10 +24,14 @@ import kotlin.system.exitProcess
  * A screen of its own, made by the ADB shell (`app_process`): a display Android treats like a
  * plugged-in one (apps open on it, touch and keys reach them, with focus of its own), drawn into
  * an H.264 encoder and sent to Flux Keyboard as it changes. Started as
- * `ExtraScreenServer port token width height dpi fps kbps desktop`: it connects back to
- * 127.0.0.1:port, says the token, then sends frames ([ExtraScreen] reads them). Its input takes
- * `I` (a keyframe next) and `Q` (close). Closing either ends it: the display goes away, and what
- * was on it moves to the phone's screen.
+ * `ExtraScreenServer port token width height dpi fps kbps desktop passthrough`: it connects back
+ * to 127.0.0.1:port, says the token, then sends frames ([ExtraScreen] reads them). Its input takes
+ * `I` (a keyframe next), `P` (plugged-in keyboards, mice and controllers to the screen again, and
+ * the screen given focus) and `Q` (close). Closing either ends it: the display goes away, what was
+ * on it moves to the phone's screen, and the devices go back to the phone.
+ *
+ * `ExtraScreenServer clear p:port|d:descriptor...` only gives those devices back to the phone
+ * (after a helper that couldn't).
  */
 object ExtraScreenServer {
     // DisplayManager's flags (some hidden)
@@ -47,6 +51,10 @@ object ExtraScreenServer {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        if (args.firstOrNull() == "clear") {
+            args.drop(1).forEach { DevicePassThrough.release(it) }
+            exitProcess(0)
+        }
         val port = args[0].toInt()
         val token = args[1]
         val width = args[2].toInt()
@@ -55,6 +63,7 @@ object ExtraScreenServer {
         val fps = args[5].toInt()
         val kbps = args[6].toInt()
         val desktop = args.getOrNull(7) == "1"
+        val passthrough = args.getOrNull(8) == "1"
 
         Looper.prepareMainLooper()
         val socket = Socket(InetAddress.getLoopbackAddress(), port).apply { tcpNoDelay = true }
@@ -71,13 +80,20 @@ object ExtraScreenServer {
             System.err.println("no display: $e")
             exitProcess(1)
         }
-        send(out, ExtraScreen.TYPE_DISPLAY, display.display.displayId.toLong(), ByteArray(0))
+        val displayId = display.display.displayId
+        send(out, ExtraScreen.TYPE_DISPLAY, displayId.toLong(), ByteArray(0))
+        val devices = if (passthrough) DevicePassThrough(display.display, displayId) { key ->
+            runCatching { send(out, ExtraScreen.TYPE_DEVICE, 0, key.toByteArray()) }
+        } else null
+        devices?.update()
 
         Thread {
             runCatching {
                 System.`in`.bufferedReader().forEachLine { line ->
                     when (line.trim()) {
                         "I" -> runCatching { codec.setParameters(Bundle().apply { putInt(MediaCodec.PARAMETER_KEY_REQUEST_SYNC_FRAME, 0) }) }
+                        "P" -> devices?.update()
+                        "F" -> devices?.focus()
                         "Q" -> running = false
                     }
                 }
@@ -107,6 +123,7 @@ object ExtraScreenServer {
         } catch (_: IOException) {
         } catch (_: IllegalStateException) {
         }
+        devices?.releaseAll()
         runCatching { display.release() }
         runCatching { codec.stop() }
         runCatching { codec.release() }
@@ -187,6 +204,108 @@ private class ShellContext(base: Context) : ContextWrapper(base) {
             threadClass.getDeclaredField("mSystemThread").apply { isAccessible = true }.setBoolean(thread, true)
             val system = threadClass.getDeclaredMethod("getSystemContext").invoke(thread) as Context
             return ShellContext(system)
+        }
+    }
+}
+
+/**
+ * Plugged-in and Bluetooth keyboards, mice and controllers tied to the screen (Android's own
+ * input-to-display association): their keys and pointer go there, not to the phone. The screen
+ * also takes focus, for controllers' sticks (which go to the focused screen). Each device tied is
+ * reported ([onTied]) so Flux Keyboard can give it back should this helper die first: a device
+ * left tied to a screen that's gone stops working until the phone restarts.
+ */
+private class DevicePassThrough(private val display: android.view.Display, private val displayId: Int, private val onTied: (String) -> Unit) {
+    private val tied = linkedSetOf<String>()
+    private val uniqueId: String? = runCatching {
+        android.view.Display::class.java.getMethod("getUniqueId").invoke(display) as String?
+    }.getOrNull()
+
+    @Synchronized
+    fun update() {
+        val unique = uniqueId ?: return
+        val locations by lazy { locations() }
+        for (id in android.view.InputDevice.getDeviceIds()) {
+            val device = android.view.InputDevice.getDevice(id) ?: continue
+            if (!device.isExternal || device.isVirtual || !wanted(device)) continue
+            val key = if (Build.VERSION.SDK_INT >= 35) "d:${device.descriptor}"
+                else locations[device.descriptor]?.let { "p:$it" } ?: continue
+            if (key in tied) continue
+            if (tie(key, unique)) { tied += key; onTied(key) }
+        }
+        focus()
+    }
+
+    private fun wanted(device: android.view.InputDevice): Boolean {
+        val sources = device.sources
+        fun has(source: Int) = sources and source == source
+        return device.keyboardType == android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC ||
+            has(android.view.InputDevice.SOURCE_MOUSE) || has(android.view.InputDevice.SOURCE_TOUCHPAD) ||
+            has(android.view.InputDevice.SOURCE_GAMEPAD) || has(android.view.InputDevice.SOURCE_JOYSTICK)
+    }
+
+    /** The screen in focus: keys and sticks without a screen of their own go to it. */
+    fun focus() {
+        runCatching {
+            val service = Class.forName("android.app.ActivityTaskManager").getMethod("getService").invoke(null)
+            service.javaClass.getMethod("focusTopTask", Int::class.javaPrimitiveType).invoke(service, displayId)
+        }
+    }
+
+    @Synchronized
+    fun releaseAll() {
+        tied.forEach { release(it) }
+        tied.clear()
+    }
+
+    private fun tie(key: String, unique: String): Boolean = runCatching {
+        val manager = inputManager()
+        val value = key.substring(2)
+        if (key.startsWith("d:")) call(manager, "addUniqueIdAssociationByDescriptor", value, unique)
+        else call(manager, "addUniqueIdAssociationByPort", value, unique) || call(manager, "addUniqueIdAssociation", value, unique)
+    }.getOrDefault(false)
+
+    /** Each device's location (its port) by its descriptor, from the input service's own dump. */
+    private fun locations(): Map<String, String> = runCatching {
+        val dump = ProcessBuilder("dumpsys", "input").redirectErrorStream(true).start().inputStream.bufferedReader().readText()
+        val found = HashMap<String, String>()
+        var descriptor: String? = null
+        for (line in dump.lineSequence()) {
+            val trimmed = line.trim()
+            if (trimmed.startsWith("Descriptor:")) descriptor = trimmed.substringAfter(':').trim()
+            else if (trimmed.startsWith("Location:")) {
+                val location = trimmed.substringAfter(':').trim()
+                descriptor?.let { if (location.isNotEmpty()) found.putIfAbsent(it, location) }
+                descriptor = null
+            }
+        }
+        found
+    }.getOrDefault(emptyMap())
+
+    companion object {
+        fun inputManager(): Any {
+            val binder = Class.forName("android.os.ServiceManager").getMethod("getService", String::class.java).invoke(null, "input")
+            return Class.forName("android.hardware.input.IInputManager\$Stub")
+                .getMethod("asInterface", android.os.IBinder::class.java).invoke(null, binder)!!
+        }
+
+        /** [name](args) on the input service if it has it; true when it ran. */
+        fun call(manager: Any, name: String, vararg args: String): Boolean {
+            val method = manager.javaClass.methods.firstOrNull { m ->
+                m.name == name && m.parameterTypes.size == args.size && m.parameterTypes.all { it == String::class.java }
+            } ?: return false
+            method.invoke(manager, *args)
+            return true
+        }
+
+        /** A tied device back to the phone. */
+        fun release(key: String) {
+            runCatching {
+                val manager = inputManager()
+                val value = key.substring(2)
+                if (key.startsWith("d:")) call(manager, "removeUniqueIdAssociationByDescriptor", value)
+                else call(manager, "removeUniqueIdAssociationByPort", value) || call(manager, "removeUniqueIdAssociation", value)
+            }
         }
     }
 }

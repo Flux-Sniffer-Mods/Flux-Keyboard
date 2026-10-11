@@ -160,12 +160,12 @@ object StreamHost {
         val paired = client != null && isPaired(client)
         val out = socket.getOutputStream()
         when (path) {
-            "/serverinfo" -> xml(out, serverInfo(paired))
+            "/serverinfo" -> xml(out, serverInfo(paired, socket))
             "/pair" -> xml(out, pair(query, secure))
             "/unpair" -> { if (client != null) unpair(client); xml(out, root("")) }
             "/applist" -> xml(out, if (paired) appList() else root("", 401, "The device isn't paired"))
             "/appasset" -> if (paired) asset(out, query["appid"]) else xml(out, root("", 401, "The device isn't paired"))
-            "/launch", "/resume" -> xml(out, if (paired && client != null) launch(query, socket.inetAddress, client, path == "/resume") else root("", 401, "The device isn't paired"))
+            "/launch", "/resume" -> xml(out, if (paired && client != null) launch(query, socket, client, path == "/resume") else root("", 401, "The device isn't paired"))
             "/cancel" -> { if (paired) { session?.end(); currentGame = 0 }; xml(out, root("<cancel>1</cancel>")) }
             else -> xml(out, root("", 404, "Not found"))
         }
@@ -189,15 +189,20 @@ object StreamHost {
         out.flush()
     }
 
-    private fun localIp(): String = runCatching {
+    /**
+     * The phone's address as the Moonlight client reached it ([socket]): over Wi-Fi, USB
+     * tethering or Ethernet, whichever it came in by. Else the first one it has.
+     */
+    private fun localIp(socket: Socket? = null): String = socket?.localAddress
+        ?.takeIf { it is Inet4Address && !it.isAnyLocalAddress && !it.isLoopbackAddress }?.hostAddress ?: runCatching {
         NetworkInterface.getNetworkInterfaces().toList().filter { it.isUp && !it.isLoopback }
             .flatMap { it.inetAddresses.toList() }.firstOrNull { it is Inet4Address }?.hostAddress
     }.getOrNull() ?: "0.0.0.0"
 
-    private fun serverInfo(paired: Boolean): String = root(
+    private fun serverInfo(paired: Boolean, socket: Socket): String = root(
         "<hostname>${escape(hostname())}</hostname><appversion>7.1.431.-1</appversion><GfeVersion>3.23.0.74</GfeVersion>" +
             "<uniqueid>${id(app)}</uniqueid><HttpsPort>$HTTPS_PORT</HttpsPort><ExternalPort>$HTTP_PORT</ExternalPort>" +
-            "<MaxLumaPixelsHEVC>0</MaxLumaPixelsHEVC><mac>00:00:00:00:00:00</mac><LocalIP>${localIp()}</LocalIP>" +
+            "<MaxLumaPixelsHEVC>0</MaxLumaPixelsHEVC><mac>00:00:00:00:00:00</mac><LocalIP>${localIp(socket)}</LocalIP>" +
             "<ServerCodecModeSupport>1</ServerCodecModeSupport><SupportedDisplayMode>" +
             "<DisplayMode><Width>1920</Width><Height>1080</Height><RefreshRate>60</RefreshRate></DisplayMode>" +
             "<DisplayMode><Width>1280</Width><Height>720</Height><RefreshRate>60</RefreshRate></DisplayMode>" +
@@ -248,7 +253,8 @@ object StreamHost {
     /** The game to open once the screen can be captured (once). */
     fun takeLaunch(): android.content.Intent? = pendingLaunch.also { pendingLaunch = null }
 
-    private fun launch(query: Map<String, String>, client: java.net.InetAddress, cert: X509Certificate, resume: Boolean): String {
+    private fun launch(query: Map<String, String>, connection: Socket, cert: X509Certificate, resume: Boolean): String {
+        val client = connection.inetAddress
         val key = query["rikey"]?.let { runCatching { StreamPairing.unhex(it) }.getOrNull() }?.takeIf { it.size == 16 }
             ?: return root("", 400, "No key")
         val keyId = query["rikeyid"]?.toLongOrNull()?.toInt() ?: 0
@@ -301,7 +307,7 @@ object StreamHost {
         if (!separate && phoneSize != null) it.palsoftware.pastiera.gaming.GameMode.streaming(app, phoneSize)
         pendingLaunch = if (resume || separate) null else gameIntent
         capture()
-        return root("<sessionUrl0>rtsp://${localIp()}:${StreamSession.RTSP_PORT}</sessionUrl0><gamesession>1</gamesession>" +
+        return root("<sessionUrl0>rtsp://${localIp(connection)}:${StreamSession.RTSP_PORT}</sessionUrl0><gamesession>1</gamesession>" +
             (if (resume) "<resume>1</resume>" else ""))
     }
 

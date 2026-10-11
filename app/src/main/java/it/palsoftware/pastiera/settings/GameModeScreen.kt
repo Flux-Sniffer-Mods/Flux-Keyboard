@@ -256,6 +256,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 }
                 Text(stringResource(R.string.stream_screen_description), style = MaterialTheme.typography.bodySmall)
             }
+            // Keyboards, mice and controllers plugged into the phone, for the game's own screen
+            if (mode != it.palsoftware.pastiera.streaming.StreamHostService.SCREEN_MIRROR) {
+                var passThrough by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.passThrough(context)) }
+                FluxSwitchRow(
+                    linkId = null,
+                    title = stringResource(R.string.stream_pass_through),
+                    description = stringResource(R.string.stream_pass_through_description),
+                    checked = passThrough
+                ) { on ->
+                    passThrough = on
+                    it.palsoftware.pastiera.streaming.StreamHostService.setPassThrough(context, on)
+                }
+            }
         }
         if (paired > 0) FluxActionRow(
             linkId = null,

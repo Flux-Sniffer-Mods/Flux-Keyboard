@@ -206,7 +206,8 @@ internal class StreamSession(
         val app = game
         if (separate && app != null) {
             val screen = ExtraScreen.current?.takeIf { it.width == (width and 1.inv()) && it.height == (height and 1.inv()) }
-                ?: ExtraScreen.open(context, width, height, fps, bitrateKbps, StreamHostService.screenMode(context) == StreamHostService.SCREEN_DESKTOP)
+                ?: ExtraScreen.open(context, width, height, fps, bitrateKbps,
+                    StreamHostService.screenMode(context) == StreamHostService.SCREEN_DESKTOP, StreamHostService.passThrough(context))
             if (screen == null) {
                 Log.w(TAG, "no screen of its own: mirroring")
                 separate = false

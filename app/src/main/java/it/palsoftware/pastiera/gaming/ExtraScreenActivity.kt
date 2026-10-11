@@ -73,6 +73,8 @@ class ExtraScreenActivity : Activity() {
         ExtraScreen.focused = true
         // Gaming mode follows the game on the screen, not this page
         StreamHost.session?.gamePackage?.let { GameMode.onAppInFront(this, it) }
+        // This page took focus as it opened: given back to the screen once it has
+        window.decorView.postDelayed({ ExtraScreen.refocus() }, 600)
     }
 
     override fun onPause() {
@@ -111,7 +113,11 @@ class ExtraScreenActivity : Activity() {
                 val (x, y) = at(i)
                 ExtraScreen.touch('m', finger(i), x, y)
             }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> ExtraScreen.touch('u', finger(event.actionIndex), 0f, 0f)
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                ExtraScreen.touch('u', finger(event.actionIndex), 0f, 0f)
+                // Touching the phone gave it focus: back to the screen, for controllers plugged in
+                if (event.actionMasked == MotionEvent.ACTION_UP) ExtraScreen.refocus()
+            }
             MotionEvent.ACTION_CANCEL -> for (i in 0 until event.pointerCount) ExtraScreen.touch('u', finger(i), 0f, 0f)
         }
     }

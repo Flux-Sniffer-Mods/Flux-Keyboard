@@ -156,6 +156,14 @@ class StreamHostService : Service() {
         fun setScreenMode(context: Context, value: String) =
             SettingsManager.getPreferences(context).edit().putString(KEY_SCREEN_MODE, value).apply()
 
+        private const val KEY_PASS_THROUGH = "stream_pass_through"
+
+        /** On a screen of its own: plugged-in and Bluetooth keyboards, mice and controllers go to it. */
+        fun passThrough(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_PASS_THROUGH, true)
+
+        fun setPassThrough(context: Context, on: Boolean) =
+            SettingsManager.getPreferences(context).edit().putBoolean(KEY_PASS_THROUGH, on).apply()
+
         private const val KEY_PHONE_SCREEN = "stream_phone_screen"
 
         /** The phone's own screen listed in Moonlight, to show whatever is on it. */

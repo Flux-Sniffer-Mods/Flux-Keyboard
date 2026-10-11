@@ -523,6 +523,8 @@
     <string name="stream_screen_separate">A screen of its own</string>
     <string name="stream_screen_desktop">Android desktop</string>
     <string name="stream_screen_description">The phone\'s screen is mirrored to the Moonlight client. A screen of its own leaves the phone free: the game plays on a separate screen made for the client, and the Games app shows it on the phone, with your keys, touch and placed keys going to it. Android desktop does the same with Android 16\'s desktop on that screen (desktop windowing on in Developer options). Switch either way mid-stream from the streaming notification.</string>
+    <string name="stream_pass_through">Keyboards, mice and controllers to the game</string>
+    <string name="stream_pass_through_description">Keyboards, mice and controllers plugged into the phone or paired by Bluetooth go straight to the game\'s own screen while it streams, not the phone. They\'re the phone\'s again when the stream ends.</string>
     <string name="stream_screen_to_separate">Separate screen</string>
     <string name="stream_screen_to_mirror">Mirror phone</string>
     <string name="extra_screen_title">Game screen</string>
