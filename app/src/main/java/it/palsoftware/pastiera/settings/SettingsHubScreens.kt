@@ -480,6 +480,7 @@ fun DeveloperOptionsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         return
     }
     FluxScreenScaffold(stringResource(R.string.developer_options_title), onBack, modifier) {
+        TrackpadRecordRow()
         FluxNote(stringResource(R.string.developer_options_note))
         if (it.palsoftware.pastiera.update.forkUpdatesEnabled()) ForkUpdateChannelRow(context)
         if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice() || SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)) {

@@ -291,7 +291,7 @@
     <string name="root_backlight_fine_title">Fine dimming</string>
     <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
     <string name="game_mode_controller">Real controller</string>
-    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real, with Flux Keyboard\'s layout: W A S D its d-pad, O K P L its Y X B A, Q E its shoulders and Z C its triggers (the volume keys the left ones), Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad\'s left half the left stick. Other keys reach the game as they are.</string>
+    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real, with Flux Keyboard\'s layout: W A S D its d-pad, O K P L its Y X B A, Q E its shoulders and Z C its triggers (the volume keys too: up the left, down the right), Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad\'s left half the left stick. Other keys reach the game as they are.</string>
     <string name="game_mode_apps_section">Apps</string>
     <string name="game_mode_games_section">Games</string>
     <string name="game_mode_own_settings">Own settings</string>
@@ -331,11 +331,9 @@
     <string name="game_mode_own_game_none">None of the launchers or emulators Flux Keyboard can start games in (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) is installed.</string>
     <string name="game_mode_screen">Screen</string>
     <string name="game_mode_screen_app">As the app wants</string>
-    <string name="game_mode_screen_upright">Kept upright</string>
-    <string name="game_mode_screen_sideways">Sideways game, phone upright</string>
+    <string name="game_mode_screen_sideways">Kept upright</string>
     <string name="game_mode_screen_app_description">The app turns the screen as it likes. For GameNative, turn on its Portrait mode in the game\'s settings (General) to play with the phone upright.</string>
-    <string name="game_mode_screen_upright_description">The screen stays upright, whatever the app asks: for emulators and games that draw an upright layout.</string>
-    <string name="game_mode_screen_sideways_description">For apps that turn the screen sideways whatever they\'re told (GameHub): the screen is made landscape-shaped instead, a little shorter so it clears the camera, and the phone stays upright.</string>
+    <string name="game_mode_screen_sideways_description">Forces a landscape resolution so the game draws sideways with the phone held upright, a little shorter so it clears the camera.</string>
     <string name="game_mode_seen_title">Add %1$s to a profile</string>
     <string name="game_mode_seen_description">The last app a game ran in (%1$s) has no profile: a launcher can play its games in a part of its own. Add it to its launcher\'s profile so gaming mode stays on in the game.</string>
     <string name="game_mode_import">Add a game</string>
@@ -431,9 +429,9 @@
     <string name="game_mode_quick_launcher">Games in the quick launcher</string>
     <string name="game_mode_quick_launcher_description">The games found in the game folders and the games with a profile, started from the quick launcher as their home screen shortcuts start them.</string>
     <string name="game_mode_right_stick_keys">Right stick on keys</string>
-    <string name="game_mode_right_stick_keys_description">J B N M move the right stick (up, left, down, right), and the trackpad\'s left half is the left stick. The trackpad follows one finger at a time, so two sticks on it can\'t move together.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M move the right stick. The trackpad follows one finger at a time, so it can\'t move two sticks together.</string>
     <string name="game_mode_setup_controls">Set up %1$s\'s controls</string>
-    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s layout: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick, and the trackpad\'s left half the left stick.\n\nDolphin: GameCube controller 1 and Wii Remote 1 (with Nunchuk) are set, and kept as the \"Flux Keyboard\" profiles too. PPSSPP: its controls are set for every game.</string>
+    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s layout: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick, and the trackpad\'s left half the left stick.\n\nDolphin: GameCube controller 1 (L and R on the volume keys, Z on Z) and Wii Remote 1 with Nunchuk are set, the pointer following the trackpad\'s right half (set Dolphin\'s overlay IR mode to Follow). PPSSPP: its controls are set for every game.</string>
     <string name="game_mode_setup_not_found">%1$s\'s settings weren\'t found: open it once, then try again.</string>
     <string name="game_mode_setup_by_hand">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Wii controller</string>
@@ -441,4 +439,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote held sideways</string>
     <string name="game_mode_wii_set">This game now starts with: %1$s.</string>
+    <string name="game_mode_wii_gamecube">GameCube controller</string>
+    <string name="games_app_title">Games</string>
+    <string name="games_app_empty">No games yet: add them in Flux Keyboard\'s Gaming mode, or make the game folders.</string>
+    <string name="games_app_switch">Games in the app list</string>
+    <string name="games_app_switch_description">A Games app in the home screen\'s app list (Niagara\'s too), with every game in it. Long-press it for the games themselves.</string>
+    <string name="games_pin_all">Add every game to the home screen</string>
+    <string name="games_pin_all_description">A home screen shortcut with its art for each game with a profile. The home screen asks for each one.</string>
 </resources>

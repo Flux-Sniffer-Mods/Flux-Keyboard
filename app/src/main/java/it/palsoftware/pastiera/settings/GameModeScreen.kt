@@ -71,6 +71,10 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var addingOwn by remember { mutableStateOf(false) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     fun refresh() { profiles = GameProfiles.all(context) }
+    // Games named by their file: their titles, once their IDs are read
+    LaunchedEffect(Unit) {
+        if (withContext(Dispatchers.IO) { GameProfiles.retitle(context) }) refresh()
+    }
 
     editing?.let { profile ->
         GameProfileEditor(profile, onDone = { saved ->
@@ -142,40 +146,6 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_add),
             description = stringResource(R.string.game_mode_add_description)
         ) { picking = true }
-        // A recording of the trackpad, for when two sticks don't move together
-        var recording by remember { mutableStateOf(false) }
-        var recorded by remember { mutableStateOf<Pair<String?, Int>?>(null) }
-        var recordFailed by remember { mutableStateOf(false) }
-        val recordScope = androidx.compose.runtime.rememberCoroutineScope()
-        FluxActionRow(
-            linkId = null,
-            icon = "\u25CE",
-            title = stringResource(if (recording) R.string.game_mode_trackpad_test_running else R.string.game_mode_trackpad_test),
-            description = stringResource(R.string.game_mode_trackpad_test_description, it.palsoftware.pastiera.gaming.TrackpadTest.SECONDS)
-        ) {
-            if (!recording) {
-                recording = true
-                recordScope.launch {
-                    val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.TrackpadTest.record() }
-                    recording = false
-                    if (result == null) recordFailed = true else recorded = result
-                }
-            }
-        }
-        recorded?.let { (device, fingers) ->
-            AlertDialog(
-                onDismissRequest = { recorded = null },
-                title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
-                text = { Text(stringResource(R.string.game_mode_trackpad_test_result, fingers, device ?: "-")) },
-                confirmButton = { TextButton(onClick = { recorded = null }) { Text(stringResource(android.R.string.ok)) } }
-            )
-        }
-        if (recordFailed) AlertDialog(
-            onDismissRequest = { recordFailed = false },
-            title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
-            text = { Text(stringResource(R.string.adb_not_running)) },
-            confirmButton = { TextButton(onClick = { recordFailed = false }) { Text(stringResource(android.R.string.ok)) } }
-        )
         // The games: home screen shortcuts, art and detection, their app's settings unless their own
         SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
         profiles.filter { it.isGame }.forEach { profile ->
@@ -222,6 +192,23 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             inLauncher = on
             it.palsoftware.pastiera.commands.GameCommandSource.setEnabled(context, on)
         }
+        // The games in the home screen's app list too, as an app of their own (Niagara's list)
+        var inAppList by remember { mutableStateOf(it.palsoftware.pastiera.gaming.GamesActivity.enabled(context)) }
+        FluxSwitchRow(
+            linkId = null,
+            title = stringResource(R.string.games_app_switch),
+            description = stringResource(R.string.games_app_switch_description),
+            checked = inAppList
+        ) { on ->
+            inAppList = on
+            it.palsoftware.pastiera.gaming.GamesActivity.setEnabled(context, on)
+        }
+        FluxActionRow(
+            linkId = null,
+            icon = "+",
+            title = stringResource(R.string.games_pin_all),
+            description = stringResource(R.string.games_pin_all_description)
+        ) { it.palsoftware.pastiera.gaming.GamesActivity.pinAll(context) }
     }
 
     if (picking) {
@@ -501,7 +488,6 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
             val screens = it.palsoftware.pastiera.gaming.ScreenMode.entries
             val screenNames = listOf(
                 stringResource(R.string.game_mode_screen_app),
-                stringResource(R.string.game_mode_screen_upright),
                 stringResource(R.string.game_mode_screen_sideways)
             )
             ChoiceRow(stringResource(R.string.game_mode_screen), screenNames[current.screen.ordinal], screenNames) { index ->
@@ -511,20 +497,19 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 stringResource(
                     when (current.screen) {
                         it.palsoftware.pastiera.gaming.ScreenMode.APP -> R.string.game_mode_screen_app_description
-                        it.palsoftware.pastiera.gaming.ScreenMode.UPRIGHT -> R.string.game_mode_screen_upright_description
                         it.palsoftware.pastiera.gaming.ScreenMode.SIDEWAYS -> R.string.game_mode_screen_sideways_description
                     }
                 ),
                 style = MaterialTheme.typography.bodySmall
             )
-            // Keys reach the game as they are: the app maps them in its own controller settings
-            if (!current.controller) Text(
+            // An emulator: Flux Keyboard's layout written into its own controller settings; other
+            // apps map the keys themselves
+            val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
+            if (!current.controller && emulatorPkg == null) Text(
                 GameApps.appFor(current)?.let { app -> stringResource(R.string.game_mode_keys_pass_app, app) }
                     ?: stringResource(R.string.game_mode_keys_pass),
                 style = MaterialTheme.typography.bodySmall
             )
-            // An emulator: Flux Keyboard's layout written into its own controller settings
-            val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
             if (!current.controller && emulatorPkg != null) {
                 val emulatorName = it.palsoftware.pastiera.gaming.GameApps.emulator(emulatorPkg).orEmpty()
                 var setupResult by remember { mutableStateOf<String?>(null) }
@@ -631,7 +616,8 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
     val names = listOf(
         stringResource(R.string.game_mode_wii_nunchuk),
         stringResource(R.string.game_mode_wii_classic),
-        stringResource(R.string.game_mode_wii_sideways)
+        stringResource(R.string.game_mode_wii_sideways),
+        stringResource(R.string.game_mode_wii_gamecube)
     )
     val current = FluxLayout.WiiPad.entries.firstOrNull { pad -> pad.name == profile.wiiPad } ?: FluxLayout.WiiPad.NUNCHUK
     ChoiceRow(stringResource(R.string.game_mode_wii_controller), names[current.ordinal], names) { index ->
@@ -671,7 +657,7 @@ private fun ChoiceRow(title: String, value: String, options: List<String>, onPic
 
 /** A profile's game art, cropped square; its app's icon while there's none. */
 @Composable
-private fun GameArtIcon(profile: GameProfile) {
+internal fun GameArtIcon(profile: GameProfile) {
     val context = LocalContext.current
     val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, profile.id, profile.launch) {
         value = withContext(Dispatchers.IO) {
@@ -692,4 +678,43 @@ private fun GameArtIcon(profile: GameProfile) {
             profile.packages.firstOrNull()?.let { pkg -> FluxAppIcon(pkg) }
         }
     }
+}
+
+/** A recording of every touch surface, saved to share: what the trackpad reports. */
+@Composable
+internal fun TrackpadRecordRow() {
+    val context = LocalContext.current
+    var recording by remember { mutableStateOf(false) }
+    var recorded by remember { mutableStateOf<Pair<String?, Int>?>(null) }
+    var recordFailed by remember { mutableStateOf(false) }
+    val recordScope = androidx.compose.runtime.rememberCoroutineScope()
+    FluxActionRow(
+        linkId = null,
+        icon = "\u25CE",
+        title = stringResource(if (recording) R.string.game_mode_trackpad_test_running else R.string.game_mode_trackpad_test),
+        description = stringResource(R.string.game_mode_trackpad_test_description, it.palsoftware.pastiera.gaming.TrackpadTest.SECONDS)
+    ) {
+        if (!recording) {
+            recording = true
+            recordScope.launch {
+                val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.TrackpadTest.record() }
+                recording = false
+                if (result == null) recordFailed = true else recorded = result
+            }
+        }
+    }
+    recorded?.let { (device, fingers) ->
+        AlertDialog(
+            onDismissRequest = { recorded = null },
+            title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
+            text = { Text(stringResource(R.string.game_mode_trackpad_test_result, fingers, device ?: "-")) },
+            confirmButton = { TextButton(onClick = { recorded = null }) { Text(stringResource(android.R.string.ok)) } }
+        )
+    }
+    if (recordFailed) AlertDialog(
+        onDismissRequest = { recordFailed = false },
+        title = { Text(stringResource(R.string.game_mode_trackpad_test)) },
+        text = { Text(stringResource(R.string.adb_not_running)) },
+        confirmButton = { TextButton(onClick = { recordFailed = false }) { Text(stringResource(android.R.string.ok)) } }
+    )
 }

@@ -20,7 +20,8 @@ class FluxLayoutTest {
         assertTrue("Buttons/Start = `Space`" in lines)
         assertTrue("Main Stick/Up = `Up`" in lines)
         assertTrue("C-Stick/Left = `B`" in lines)
-        assertTrue("Triggers/L = `Q` | `Z` | `Volume Up` | `Volume Down`" in lines)
+        assertTrue("Triggers/L = `Volume Up` | `Q`" in lines)
+        assertTrue("Buttons/Z = `Z` | `C`" in lines)
     }
 
     @Test
@@ -53,5 +54,15 @@ class FluxLayoutTest {
         val set = FluxLayout.withKey(ini, "Controls", "WiimoteProfile1", "Flux Keyboard (sideways)")
         assertEquals("[Core]\nCPUThread = True\n\n[Controls]\nWiimoteProfile1 = Flux Keyboard (sideways)\n", set)
         assertEquals("[Core]\nCPUThread = True\n", FluxLayout.withKey(set, "Controls", "WiimoteProfile1", null))
+    }
+
+    @Test
+    fun aWiiGameCanTakeAGameCubeController() {
+        val gc = FluxLayout.wiiPadSettings("", FluxLayout.WiiPad.GAMECUBE)
+        assertTrue("PadType0 = 6" in gc)
+        assertTrue("WiimoteSource0 = 0" in gc)
+        assertTrue("PadProfile1 = Flux Keyboard" in gc)
+        // Back to the Nunchuk: nothing of it kept
+        assertEquals("", FluxLayout.wiiPadSettings(gc, FluxLayout.WiiPad.NUNCHUK))
     }
 }

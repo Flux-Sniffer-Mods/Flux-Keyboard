@@ -37,9 +37,11 @@ class GameProfilesTest {
         assertEquals(TrackpadRole.NONE, launcher.rightHalf)
         assertEquals(true, launcher.rightStickKeys)
         val emulator = GameProfiles.newProfile("Wind Waker", setOf("org.dolphinemu.dolphinemu"))
-        assertEquals(TrackpadRole.ARROW_KEYS, emulator.leftHalf)
+        // An emulator's left stick: the arrow keys its controls map, when there's no real controller
+        assertEquals(TrackpadRole.LEFT_STICK, emulator.leftHalf)
         assertEquals(TrackpadRole.NONE, emulator.rightHalf)
-        assertEquals(false, emulator.rightStickKeys)
+        assertEquals(true, emulator.rightStickKeys)
+        assertEquals(ScreenMode.SIDEWAYS, emulator.screen)
     }
 
     @Test

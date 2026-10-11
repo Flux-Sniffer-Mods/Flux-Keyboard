@@ -257,6 +257,21 @@
             android:noHistory="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Games: an app of its own in the app list, every game in it (off until turned on) -->
+        <activity
+            android:name=".gaming.GamesActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:label="@string/games_app_title"
+            android:icon="@mipmap/ic_games"
+            android:roundIcon="@mipmap/ic_games"
+            android:taskAffinity="it.palsoftware.pastiera.games"
+            android:theme="@style/Theme.Pastiera">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!-- Gaming mode's notification: the next profile -->
         <receiver
             android:name=".gaming.GameMode$Receiver"

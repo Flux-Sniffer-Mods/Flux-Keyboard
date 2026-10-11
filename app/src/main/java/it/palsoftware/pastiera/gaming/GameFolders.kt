@@ -144,6 +144,7 @@ object GameFolders {
         games.forEach { g -> list.put(org.json.JSONObject().put("name", g.name).put("package", g.packageName).put("launch", g.launch ?: "")) }
         it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit()
             .putString(KEY_SCANNED, list.toString()).putLong(KEY_SCANNED_AT, System.currentTimeMillis()).apply()
+        if (GamesActivity.enabled(context)) GamesActivity.sync(context.applicationContext)
         return games
     }
 

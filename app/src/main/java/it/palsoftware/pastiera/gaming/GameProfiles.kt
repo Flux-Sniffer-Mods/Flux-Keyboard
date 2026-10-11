@@ -11,6 +11,8 @@ enum class TrackpadRole(val label: String) {
     LEFT_STICK("Left stick"),
     RIGHT_STICK("Right stick"),
     MOUSE("Mouse"),
+    /** The half spread over the whole screen, touching where the finger is (Dolphin's Wii pointer, its IR mode on Follow). */
+    POINTER("Pointer (touch)"),
     /** Pushed past the centre: W A S D held, for emulators that bind keys to a stick. */
     WASD_KEYS("Direction keys: W A S D"),
     /** The same with the arrow keys. */
@@ -21,19 +23,13 @@ enum class TrackpadRole(val label: String) {
 enum class ScreenMode {
     /** As the app asks (GameNative: its own Portrait mode per game keeps it upright). */
     APP,
-    /** Held upright: apps asking for landscape are told no (emulators draw upright gamepads). */
-    UPRIGHT,
-    /** The app turns sideways whatever it's told (GameHub): a landscape-shaped screen instead, the phone upright. */
+    /** Kept upright: a landscape-shaped resolution forced, so the game draws sideways with the phone upright. */
     SIDEWAYS;
 
     companion object {
-        /** What suits [packageName] when nothing's been chosen. */
-        fun defaultFor(packageName: String?): ScreenMode = when {
-            packageName == null -> UPRIGHT
-            packageName == GameNativeBridge.PACKAGE -> APP
-            packageName.contains("gamehub", true) || packageName == "com.xiaoji.egggame" -> SIDEWAYS
-            else -> UPRIGHT
-        }
+        /** What suits [packageName] when nothing's been chosen: kept upright for game apps. */
+        fun defaultFor(packageName: String?): ScreenMode =
+            if (packageName != null && GameApps.appFor(packageName) != null) SIDEWAYS else APP
     }
 }
 
@@ -59,7 +55,7 @@ data class GameProfile(
     /** What starts the game itself (an intent URI), for its home screen shortcut. */
     val launch: String? = null,
     /** How the screen turns while it runs. */
-    val screen: ScreenMode = ScreenMode.UPRIGHT,
+    val screen: ScreenMode = ScreenMode.SIDEWAYS,
     /**
      * J B N M move the right stick, the trackpad's right half then no stick of its own: the
      * Titan's trackpad follows one finger at a time, so two sticks on it don't move together.
@@ -154,14 +150,13 @@ object GameProfiles {
         // Flux Keyboard's layout: the trackpad's left half the left stick (a real controller's,
         // a launcher's on-screen one, or for an emulator the arrow keys its controls map), J B N M
         // the right stick
-        val touch = controller || app == "GameHub" || app == "GameNative"
         return GameProfile(
             id = java.util.UUID.randomUUID().toString(),
             name = name,
             packages = packages,
-            leftHalf = if (touch) TrackpadRole.LEFT_STICK else TrackpadRole.ARROW_KEYS,
+            leftHalf = TrackpadRole.LEFT_STICK,
             rightHalf = TrackpadRole.NONE,
-            rightStickKeys = app == "GameHub" || app == "GameNative",
+            rightStickKeys = app != null,
             screen = ScreenMode.defaultFor(packages.firstOrNull()),
             controller = controller
         )
@@ -183,6 +178,8 @@ object GameProfiles {
 
     private fun saveAll(context: Context, profiles: List<GameProfile>) {
         prefs(context).edit().putString(KEY_PROFILES, JSONArray(profiles.map { it.toJson() }).toString()).apply()
+        // The Games app's long-press menu kept in step
+        if (GamesActivity.enabled(context)) context.applicationContext.let { app -> Thread { GamesActivity.sync(app) }.start() }
     }
 
     fun save(context: Context, profile: GameProfile) {
@@ -232,7 +229,8 @@ object GameProfiles {
         val controller = it.palsoftware.pastiera.adb.RootShell.active
         val made = if (GameApps.appFor(packageName) == "Dolphin") listOf(
             newProfile("$name (GameCube)", setOf(packageName), controller).copy(variant = VARIANT_GAMECUBE),
-            newProfile("$name (Wii)", setOf(packageName), controller).copy(variant = VARIANT_WII)
+            // The right half the Wii pointer
+            newProfile("$name (Wii)", setOf(packageName), controller).copy(variant = VARIANT_WII, rightHalf = TrackpadRole.POINTER)
         ) else listOf(newProfile(name, setOf(packageName), controller))
         made.forEach { save(context, it) }
         return made
@@ -250,8 +248,29 @@ object GameProfiles {
         val pkg = profile.packages.firstOrNull() ?: return profile
         val apps = appProfiles(context, pkg).ifEmpty { return profile }
         if (apps.size == 1) return apps.first()
-        val wii = profile.launch?.let { GameFiles.gameFile(it) }?.let { GameFiles.isWii(it) } == true
+        // A Wii game given a GameCube controller plays with the GameCube settings
+        val wii = profile.wiiPad != FluxLayout.WiiPad.GAMECUBE.name &&
+            profile.launch?.let { GameFiles.gameFile(it) }?.let { GameFiles.isWii(it) } == true
         return apps.firstOrNull { it.variant == if (wii) VARIANT_WII else VARIANT_GAMECUBE } ?: apps.first()
+    }
+
+    /**
+     * Emulator games still named by their file: named by their title instead, where their game ID
+     * can be read (or a title found in the file's name). Blocking (reads files through the
+     * shell); true when any was renamed.
+     */
+    fun retitle(context: Context): Boolean {
+        var renamed = false
+        for (profile in all(context).filter { it.isGame }) {
+            val emulator = profile.packages.firstNotNullOfOrNull { GameApps.emulator(it) } ?: continue
+            val path = profile.launch?.let { GameFiles.gameFile(it) } ?: continue
+            val file = path.substringAfterLast('/').substringBeforeLast('.')
+            if (!profile.name.equals(file, ignoreCase = true)) continue
+            val title = GameIds.title(context, emulator, path)?.takeIf { it.isNotBlank() && it != profile.name } ?: continue
+            save(context, profile.copy(name = title))
+            renamed = true
+        }
+        return renamed
     }
 
     fun setActive(context: Context, packageName: String, id: String) =

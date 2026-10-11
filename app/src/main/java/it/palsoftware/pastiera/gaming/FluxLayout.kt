@@ -7,7 +7,7 @@ import it.palsoftware.pastiera.adb.AdbShell
 /**
  * Flux Keyboard's controller layout, the same everywhere: W A S D the d-pad, O K P L the face
  * buttons where a controller has them (O top, K left, P right, L bottom), Q E the shoulders and
- * Z C the triggers (the volume keys the left ones too), Space Start, Enter Select, Backspace
+ * Z C the triggers (the volume keys too: up the left, down the right), Space Start, Enter Select, Backspace
  * Home, F and H the stick presses, J B N M the right stick and the arrow keys (the trackpad's
  * left half, pushed) the left stick. The real controller plays it, and it can be written into
  * an emulator's own controller settings, where keys reach the emulator as they are.
@@ -25,7 +25,7 @@ object FluxLayout {
         KeyEvent.KEYCODE_K to Control.X, KeyEvent.KEYCODE_O to Control.Y,
         KeyEvent.KEYCODE_Q to Control.L1, KeyEvent.KEYCODE_E to Control.R1,
         KeyEvent.KEYCODE_Z to Control.L2, KeyEvent.KEYCODE_C to Control.R2,
-        KeyEvent.KEYCODE_VOLUME_UP to Control.L1, KeyEvent.KEYCODE_VOLUME_DOWN to Control.L2,
+        KeyEvent.KEYCODE_VOLUME_UP to Control.L2, KeyEvent.KEYCODE_VOLUME_DOWN to Control.R2,
         KeyEvent.KEYCODE_ENTER to Control.SELECT, KeyEvent.KEYCODE_SPACE to Control.START,
         KeyEvent.KEYCODE_DEL to Control.HOME,
         KeyEvent.KEYCODE_F to Control.L3, KeyEvent.KEYCODE_H to Control.R3,
@@ -62,11 +62,13 @@ object FluxLayout {
 
     // ---- Dolphin: GameCube controller and Wii Remote with Nunchuk ----
 
+    /** The GameCube's L and R on the volume keys (and Q E), its Z on Z (and C). */
     private val GAMECUBE = listOf(
         "Buttons/A" to keys(Control.A), "Buttons/B" to keys(Control.B),
         "Buttons/X" to keys(Control.X), "Buttons/Y" to keys(Control.Y),
-        "Buttons/Z" to keys(Control.R1), "Buttons/Start" to keys(Control.START),
-        "Triggers/L" to keys(Control.L1, Control.L2), "Triggers/R" to keys(Control.R2),
+        "Buttons/Z" to listOf(KeyEvent.KEYCODE_Z, KeyEvent.KEYCODE_C), "Buttons/Start" to keys(Control.START),
+        "Triggers/L" to listOf(KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_Q),
+        "Triggers/R" to listOf(KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_E),
         "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
         "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
         "Main Stick/Up" to keys(Control.LS_UP), "Main Stick/Down" to keys(Control.LS_DOWN),
@@ -114,9 +116,14 @@ object FluxLayout {
         "Shake/X" to keys(Control.R1), "Shake/Y" to keys(Control.R1), "Shake/Z" to keys(Control.R1)
     )
 
-    /** The Wii controllers a game can be given, each a Dolphin Wii Remote profile of its own. */
+    /**
+     * The controllers a Wii game can be given, each a Dolphin profile of its own: a Wii Remote
+     * (with Nunchuk, Classic Controller, or sideways), or a GameCube controller, for the Wii
+     * games that take one (Mario Kart Wii).
+     */
     enum class WiiPad(val profile: String) {
-        NUNCHUK("Flux Keyboard"), CLASSIC("Flux Keyboard (Classic Controller)"), SIDEWAYS("Flux Keyboard (sideways)")
+        NUNCHUK("Flux Keyboard"), CLASSIC("Flux Keyboard (Classic Controller)"), SIDEWAYS("Flux Keyboard (sideways)"),
+        GAMECUBE("Flux Keyboard")
     }
 
     private fun dolphinLines(controls: List<Pair<String, List<Int>>>) =
@@ -126,7 +133,7 @@ object FluxLayout {
 
     internal fun dolphinWii(keyboard: String, pad: WiiPad = WiiPad.NUNCHUK): List<String> =
         listOf("Device = Android/0/$keyboard", "Source = 1") + when (pad) {
-            WiiPad.NUNCHUK -> listOf("Extension = Nunchuk") + dolphinLines(WII)
+            WiiPad.NUNCHUK, WiiPad.GAMECUBE -> listOf("Extension = Nunchuk") + dolphinLines(WII)
             WiiPad.CLASSIC -> listOf("Extension = Classic") + dolphinLines(CLASSIC)
             WiiPad.SIDEWAYS -> listOf("Extension = None", "Options/Sideways Wiimote = True") + dolphinLines(SIDEWAYS)
         }
@@ -241,11 +248,27 @@ object FluxLayout {
     fun setWiiPad(pkg: String, gameId: String, pad: WiiPad): Result {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
-        val profile = "$dir/Config/Profiles/Wiimote/${pad.profile}.ini"
-        if (!write(profile, withSection("", "Profile", dolphinWii(keyboard, pad)))) return Result.FAILED
+        val written = if (pad == WiiPad.GAMECUBE) {
+            write("$dir/Config/Profiles/GCPad/${pad.profile}.ini", withSection("", "Profile", dolphinGameCube(keyboard)))
+        } else {
+            write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad)))
+        }
+        if (!written) return Result.FAILED
         val file = "$dir/GameSettings/$gameId.ini"
-        val value = if (pad == WiiPad.NUNCHUK) null else pad.profile
-        return if (write(file, withKey(read(file), "Controls", "WiimoteProfile1", value))) Result.DONE else Result.FAILED
+        return if (write(file, wiiPadSettings(read(file), pad))) Result.DONE else Result.FAILED
+    }
+
+    /**
+     * A Wii game's [Controls]: its Wii Remote's profile; or for a GameCube controller, controller
+     * port 1 plugged in with its profile and Wii Remote 1 taken away (0 is none, 6 a GameCube
+     * controller). A Wii Remote with Nunchuk is everyone's: nothing kept.
+     */
+    internal fun wiiPadSettings(ini: String, pad: WiiPad): String {
+        val gc = pad == WiiPad.GAMECUBE
+        var out = withKey(ini, "Controls", "WiimoteProfile1", pad.profile.takeIf { pad == WiiPad.CLASSIC || pad == WiiPad.SIDEWAYS })
+        out = withKey(out, "Controls", "PadType0", if (gc) "6" else null)
+        out = withKey(out, "Controls", "PadProfile1", if (gc) pad.profile else null)
+        return withKey(out, "Controls", "WiimoteSource0", if (gc) "0" else null)
     }
 
     private fun ppsspp(pkg: String): Result {

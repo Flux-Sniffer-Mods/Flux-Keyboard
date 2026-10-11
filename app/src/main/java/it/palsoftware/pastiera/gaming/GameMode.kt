@@ -174,6 +174,7 @@ object GameMode {
         if (!passesKeys()) return false
         val code = event.keyCode
         val down = event.action == KeyEvent.ACTION_DOWN
+        if (down && event.repeatCount == 0) trackpadReader?.keyPressed()
         // A key placed on the screen touches its spot while held, whatever else it is
         val tap = if (inMenus) null else profile?.taps?.get(code)
         if (tap != null) {
@@ -183,8 +184,9 @@ object GameMode {
             }
             return true
         }
-        // Right stick on keys: J B N M push it
-        if ((pad || profile?.rightStickKeys == true) && code in RIGHT_STICK_KEYS) {
+        // Right stick on keys: J B N M push it (a real controller's, or an on-screen one; else
+        // they reach the app, whose own controls map them)
+        if ((pad || (profile?.rightStickKeys == true && profile?.stickZones?.containsKey(1) == true)) && code in RIGHT_STICK_KEYS) {
             if (event.repeatCount == 0) rightStickKey(code, down)
             return true
         }
@@ -244,7 +246,7 @@ object GameMode {
         trackpadRun++
         sticks.fill(0f); stickHeld.fill(false); rightKeysHeld.clear()
         if (pad) { pad = false; dpadHeld.clear(); send("G 0") }
-        trackpad?.destroy(); trackpad = null
+        trackpad?.destroy(); trackpad = null; trackpadReader = null
         runCatching { input?.close() }
         input = null
         inputProcess?.destroy(); inputProcess = null
@@ -394,12 +396,14 @@ object GameMode {
 
     // ---- The trackpad: sticks or a mouse ----
 
+    @Volatile private var trackpadReader: TrackpadReader? = null
+
     /** Which trackpad reading is current: one started before gaming mode stopped or switched ends itself. */
     @Volatile private var trackpadRun = 0
 
     private fun startTrackpad(current: GameProfile) {
         val run = ++trackpadRun
-        trackpad?.destroy(); trackpad = null
+        trackpad?.destroy(); trackpad = null; trackpadReader = null
         if (current.leftHalf == TrackpadRole.NONE && current.rightHalf == TrackpadRole.NONE) return
         Thread {
             runCatching {
@@ -411,7 +415,9 @@ object GameMode {
                 if (run != trackpadRun || profile == null) { process.destroy(); return@Thread }
                 trackpad = process
                 val span = device.xRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 1440f)
-                val reader = TrackpadReader(span.first, span.second)
+                val rows = device.yRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 600f)
+                val reader = TrackpadReader(span.first, span.second, rows.first, rows.second)
+                trackpadReader = reader
                 process.inputStream.bufferedReader().forEachLine { line -> reader.line(line) }
             }.onFailure { Log.w(TAG, "trackpad couldn't be read: $it") }
         }.apply { isDaemon = true; start() }
@@ -488,21 +494,24 @@ object GameMode {
      * moving to the one that moved last: the finger it leaves is taken as still down, its stick
      * held where it was, until the trackpad comes back to it or every finger is lifted.
      */
-    private class TrackpadReader(private val min: Float, private val max: Float) {
-        private class Finger(val role: TrackpadRole, val left: Boolean, var originX: Float, var originY: Float, val downAt: Long) {
+    private class TrackpadReader(private val min: Float, private val max: Float, private val top: Float, private val bottom: Float) {
+        private class Finger(var role: TrackpadRole, val left: Boolean, var originX: Float, var originY: Float, val downAt: Long) {
             var lastX = originX; var lastY = originY
             var moved = 0f
             /** Direction keys held: up, left, down, right. */
             val held = BooleanArray(4)
-            /** Gliding after a handover until then: its moves aren't the finger's. */
+            /** Gliding after a handover until then (at the latest): its moves aren't the finger's. */
             var settleUntil = 0L
             /** Its origin is taken once it has settled (a finger new to the trackpad's report). */
             var reorigin = false
+            /** Touching the screen, as the pointer. */
+            var pointing = false
         }
 
         private val fingers = HashMap<Int, Finger>()
         /** Fingers the trackpad stopped reporting but that are still down, by half (left true). */
         private val held = HashMap<Boolean, Finger>()
+        private val mid = (min + max) / 2
         private val radius = (max - min) / 8f
         private val slots = TouchSlots(::begin, ::move, ::up)
         private val lock = Any()
@@ -511,6 +520,19 @@ object GameMode {
         private var pendingSlot = -1
 
         fun line(line: String) = synchronized(lock) { slots.line(line) }
+
+        /**
+         * A key went down: the keyboard is the trackpad, so a finger that landed just before is
+         * that key being pressed, not a stick or pointer: it does nothing from now.
+         */
+        fun keyPressed() = synchronized(lock) {
+            val now = SystemClock.uptimeMillis()
+            for (f in fingers.values) {
+                if (now - f.downAt > KEY_TOUCH_MS || f.role == TrackpadRole.NONE) continue
+                end(f)
+                f.role = TrackpadRole.NONE
+            }
+        }
 
         private fun roleFor(current: GameProfile, left: Boolean): TrackpadRole = when {
             left -> current.leftHalf
@@ -529,18 +551,36 @@ object GameMode {
                 val left = !gone.left
                 val back = held.remove(left)
                 fingers[slot] = (back ?: Finger(roleFor(current, left), left, x.toFloat(), y.toFloat(), now).apply { reorigin = true })
-                    .apply { settleUntil = now + GLIDE_MS }
+                    .apply { settleUntil = now + GLIDE_MS; lastX = x.toFloat(); lastY = y.toFloat() }
                 return
             }
-            val left = x < (min + max) / 2
+            val left = x < mid
             var role = roleFor(current, left)
             if (role != TrackpadRole.NONE && (fingers.values + held.values).any { it.role == role }) role = TrackpadRole.NONE
             fingers[slot] = Finger(role, left, x.toFloat(), y.toFloat(), now)
         }
 
+        /**
+         * Still gliding after a handover: a report is the finger's own once it's well inside its
+         * half and has slowed down (the glide eases in), or the glide's time is up.
+         */
+        private fun gliding(f: Finger, x: Int, y: Int): Boolean {
+            val now = SystemClock.uptimeMillis()
+            if (now >= f.settleUntil) return false
+            val inside = if (f.left) x < mid - radius else x > mid + radius
+            val step = abs(x - f.lastX) + abs(y - f.lastY)
+            f.lastX = x.toFloat(); f.lastY = y.toFloat()
+            if (!inside || step > GLIDE_STEP) return true
+            f.settleUntil = 0L
+            return false
+        }
+
+        /** A stick with nowhere to go (no real controller, no on-screen stick): its keys instead. */
+        private fun byKeys(at: Int): Boolean = !pad && profile?.stickZones?.containsKey(at / 2) != true
+
         private fun move(slot: Int, x: Int, y: Int) {
             val f = fingers[slot] ?: return
-            if (SystemClock.uptimeMillis() < f.settleUntil) return
+            if (gliding(f, x, y)) return
             if (f.reorigin) {
                 f.reorigin = false
                 f.originX = x.toFloat(); f.originY = y.toFloat()
@@ -550,26 +590,38 @@ object GameMode {
             val dx = x - f.lastX; val dy = y - f.lastY
             f.moved += abs(dx) + abs(dy)
             f.lastX = x.toFloat(); f.lastY = y.toFloat()
+            val vx = (x - f.originX) / radius
+            val vy = (y - f.originY) / radius
             when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
-                    sticks[at] = ((x - f.originX) / radius).coerceIn(-1f, 1f)
-                    sticks[at + 1] = ((y - f.originY) / radius).coerceIn(-1f, 1f)
-                    pushStick(at)
+                    if (byKeys(at)) directionKeys(f, vx, vy, if (at == 0) ARROWS else RIGHT_KEYS)
+                    else {
+                        sticks[at] = vx.coerceIn(-1f, 1f)
+                        sticks[at + 1] = vy.coerceIn(-1f, 1f)
+                        pushStick(at)
+                    }
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
-                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(f, (x - f.originX) / radius, (y - f.originY) / radius)
+                TrackpadRole.POINTER -> point(f, x, y)
+                TrackpadRole.WASD_KEYS -> directionKeys(f, vx, vy, WASD)
+                TrackpadRole.ARROW_KEYS -> directionKeys(f, vx, vy, ARROWS)
                 TrackpadRole.NONE -> Unit
             }
         }
 
-        /** Each direction's key down once pushed past a third of the way, up when back. */
-        private fun directionKeys(f: Finger, vx: Float, vy: Float) {
-            val keys = if (f.role == TrackpadRole.WASD_KEYS) {
-                intArrayOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
-            } else {
-                intArrayOf(KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)
-            }
+        /** The pointer: the finger's place on its half, as a place on the whole screen, touched. */
+        private fun point(f: Finger, x: Int, y: Int) {
+            val from = if (f.left) min else mid
+            val px = ((x - from) / (mid - min)).coerceIn(0f, 1f) * screenW
+            val py = ((y - top) / (bottom - top)).coerceIn(0f, 1f) * screenH
+            val first = !f.pointing
+            f.pointing = true
+            worker.execute { send(if (first) "T d $POINTER_FINGER $px $py" else "T m $POINTER_FINGER $px $py") }
+        }
+
+        /** Each direction's key (up, left, down, right) down once pushed past a third of the way, up when back. */
+        private fun directionKeys(f: Finger, vx: Float, vy: Float, keys: IntArray) {
             val want = booleanArrayOf(vy < -DEAD_ZONE, vx < -DEAD_ZONE, vy > DEAD_ZONE, vx > DEAD_ZONE)
             for (i in 0..3) {
                 if (want[i] == f.held[i]) continue
@@ -597,15 +649,29 @@ object GameMode {
 
         private fun end(f: Finger) {
             when (f.role) {
-                TrackpadRole.LEFT_STICK -> releaseStick(0)
-                TrackpadRole.RIGHT_STICK -> releaseStick(2)
+                TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, ARROWS); releaseStick(0) }
+                TrackpadRole.RIGHT_STICK -> { directionKeys(f, 0f, 0f, RIGHT_KEYS); releaseStick(2) }
                 // A tap clicks
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - f.downAt < 200 && f.moved < radius / 4) {
                     worker.execute { send("B 1 1"); send("B 0 1") }
                 }
-                TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(f, 0f, 0f)
+                TrackpadRole.POINTER -> if (f.pointing) { f.pointing = false; worker.execute { send("T u $POINTER_FINGER") } }
+                TrackpadRole.WASD_KEYS -> directionKeys(f, 0f, 0f, WASD)
+                TrackpadRole.ARROW_KEYS -> directionKeys(f, 0f, 0f, ARROWS)
                 TrackpadRole.NONE -> Unit
             }
+        }
+
+        companion object {
+            private val WASD = intArrayOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
+            private val ARROWS = intArrayOf(KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)
+            /** The right stick's keys in the same order: J, B, N, M. */
+            private val RIGHT_KEYS = intArrayOf(KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_B, KeyEvent.KEYCODE_N, KeyEvent.KEYCODE_M)
+            private const val POINTER_FINGER = 3
+            /** A glide's report this close to the last is the finger at rest. */
+            private const val GLIDE_STEP = 12f
+            /** A finger landing this soon before a key goes down is that key. */
+            private const val KEY_TOUCH_MS = 150L
         }
     }
 
