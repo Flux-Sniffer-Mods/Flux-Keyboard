@@ -1899,4 +1899,9 @@
     <string name="game_mode_advice_driver_turnip">Turnip (найновіший)</string>
     <string name="game_mode_advice_driver_system">System (Turnip лише для Adreno)</string>
     <string name="game_mode_advice_game">У налаштуваннях самої гри: якість графіки Середня або Низька, обмеження 60 fps лише якщо воно тримається стабільно (інакше 30), і масштаб рендерингу або роздільність нижче 100%, якщо є.</string>
+    <string name="stream_resolution">Роздільність на телевізорі</string>
+    <string name="stream_resolution_auto">Автоматично</string>
+    <string name="stream_resolution_client">Як просить Moonlight</string>
+    <string name="stream_resolution_description">Під час трансляції екран телефона набуває форми телевізора в цьому розмірі, раніше за вибір екрана ігрового режиму. Автоматично — 1080p для екранів 16:9, інакше те, що просить Moonlight.</string>
+    <string name="games_app_settings">Налаштування ігор</string>
 </resources>

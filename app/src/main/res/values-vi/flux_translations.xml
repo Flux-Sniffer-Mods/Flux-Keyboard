@@ -1881,4 +1881,9 @@
     <string name="game_mode_advice_driver_turnip">Turnip (bản mới nhất)</string>
     <string name="game_mode_advice_driver_system">System (Turnip chỉ dành cho Adreno)</string>
     <string name="game_mode_advice_game">Trong cài đặt của chính game: chất lượng đồ họa Trung bình hoặc Thấp, giới hạn 60 fps chỉ khi giữ ổn định (nếu không thì 30), và tỉ lệ kết xuất hoặc độ phân giải dưới 100% nếu có.</string>
+    <string name="stream_resolution">Độ phân giải trên TV</string>
+    <string name="stream_resolution_auto">Tự động</string>
+    <string name="stream_resolution_client">Theo yêu cầu của Moonlight</string>
+    <string name="stream_resolution_description">Khi phát trực tuyến, màn hình điện thoại lấy hình dạng của TV ở kích thước này, ưu tiên hơn lựa chọn màn hình của chế độ chơi game. Tự động là 1080p cho màn hình 16:9, nếu không thì theo yêu cầu của Moonlight.</string>
+    <string name="games_app_settings">Cài đặt chơi game</string>
 </resources>
