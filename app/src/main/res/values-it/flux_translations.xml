@@ -1461,4 +1461,5 @@
     <string name="extra_screen_keys_screen">Tasti: allo schermo</string>
     <string name="extra_screen_keys_phone">Tasti: al telefono</string>
     <string name="stream_desktop_art">Desktop Android</string>
+    <string name="stream_flux_games">Flux Games</string>
 </resources>

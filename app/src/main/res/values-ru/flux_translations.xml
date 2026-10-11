@@ -1962,4 +1962,5 @@
     <string name="extra_screen_keys_screen">Клавиши: на экран</string>
     <string name="extra_screen_keys_phone">Клавиши: телефону</string>
     <string name="stream_desktop_art">Рабочий Стол Android</string>
+    <string name="stream_flux_games">Flux Games</string>
 </resources>

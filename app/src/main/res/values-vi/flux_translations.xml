@@ -1944,4 +1944,5 @@
     <string name="extra_screen_keys_screen">Phím: tới màn hình</string>
     <string name="extra_screen_keys_phone">Phím: tới điện thoại</string>
     <string name="stream_desktop_art">Màn Hình Nền Android</string>
+    <string name="stream_flux_games">Flux Games</string>
 </resources>
