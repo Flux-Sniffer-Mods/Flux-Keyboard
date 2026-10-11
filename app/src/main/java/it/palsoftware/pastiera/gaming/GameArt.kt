@@ -62,13 +62,59 @@ object GameArt {
         return load(context, profile)?.let(::portrait)
     }
 
+    /** What SteamGridDB lists the known launchers and emulators as (their names alone find games). */
+    private val APP_NAMES = mapOf(
+        "app.gamenative" to listOf("GameNative", "Winlator"),
+        "gamehub.lite" to listOf("GameHub"), "emuready.gamehub.lite" to listOf("GameHub"), "com.xiaoji.egggame" to listOf("GameHub"),
+        "org.dolphinemu.dolphinemu" to listOf("Dolphin Emulator"), "org.dolphinemu.mmjr" to listOf("Dolphin Emulator"),
+        "org.ppsspp.ppsspp" to listOf("PPSSPP"), "org.ppsspp.ppssppgold" to listOf("PPSSPP"),
+        "org.azahar_emu.azahar" to listOf("Azahar", "Citra"), "io.github.lime3ds.android" to listOf("Lime3DS", "Citra"),
+        "org.citra.citra_emu" to listOf("Citra"),
+        "dev.eden.eden_emulator" to listOf("Eden Emulator", "Yuzu"), "dev.legacy.eden_emulator" to listOf("Eden Emulator", "Yuzu"),
+        "com.retroarch" to listOf("RetroArch"), "com.retroarch.aarch64" to listOf("RetroArch"),
+        "org.es_de.frontend" to listOf("ES-DE", "EmulationStation"), "xyz.aethersx2.android" to listOf("AetherSX2"),
+        "com.github.stenzek.duckstation" to listOf("DuckStation")
+    )
+
     /**
-     * A launcher's or emulator's tile, upright like the games': art picked for it, else its icon
-     * over a dimmed fill of itself (no looking up: an app's name finds games, not the app).
+     * SteamGridDB's upright art for an app (a launcher or emulator) named any of [names]: only an
+     * entry whose name starts with the one asked for, so an emulator never gets a game's art.
+     */
+    private fun steamGridDbApp(names: List<String>): String? {
+        if (key.isEmpty()) return null
+        for (name in names) {
+            val found = api("search/autocomplete/" + java.net.URLEncoder.encode(name, "UTF-8").replace("+", "%20"))
+                ?.optJSONArray("data") ?: continue
+            val id = (0 until found.length()).map { found.optJSONObject(it) }
+                .firstOrNull { it?.optString("name").orEmpty().startsWith(name, ignoreCase = true) }
+                ?.optInt("id")?.takeIf { it > 0 } ?: continue
+            api("grids/game/$id?dimensions=600x900")?.optJSONArray("data")?.optJSONObject(0)
+                ?.let { it.optString("url").ifEmpty { it.optString("thumb") } }
+                ?.takeIf { it.startsWith("https://") }?.let { return it }
+        }
+        return null
+    }
+
+    /**
+     * A launcher's or emulator's tile, upright like the games': art picked for it, else
+     * SteamGridDB's for the app (fetched once), else its icon over a dimmed fill of itself.
      */
     fun appPortrait(context: Context, profile: GameProfile, packageName: String): Bitmap? {
         uprightFile(context, profile).takeIf { it.length() > 0 }?.let { file -> BitmapFactory.decodeFile(file.path)?.let { return it } }
         custom(context, profile)?.let { return portrait(it) }
+        val file = File(dir(context), "app-" + packageName + (if (key.isEmpty()) "" else "-sgdb") + ".img")
+        if (file.exists() && file.length() > 0) BitmapFactory.decodeFile(file.path)?.let { return it }
+        if (!file.exists() && !SettingsManager.isOfflineMode(context)) {
+            dir(context).mkdirs()
+            val names = APP_NAMES[packageName] ?: listOf(profile.name)
+            val art = steamGridDbApp(names)?.let(::fetch)?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+            if (art != null) {
+                val upright = portrait(art)
+                file.outputStream().use { upright.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+                return upright
+            }
+            file.writeBytes(ByteArray(0))
+        }
         return runCatching {
             val icon = context.packageManager.getApplicationIcon(packageName)
             val size = 256

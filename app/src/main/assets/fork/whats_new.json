@@ -591,6 +591,9 @@
     },
     {
       "text": "Clearer wording throughout gaming and streaming settings, such as Choose artwork from the internet in place of Found art."
+    },
+    {
+      "text": "Games app: launchers and emulators show their SteamGridDB artwork (Dolphin, PPSSPP, GameHub and others), falling back to their icon."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
