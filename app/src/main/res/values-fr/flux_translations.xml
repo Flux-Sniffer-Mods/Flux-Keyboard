@@ -1911,4 +1911,8 @@
     <string name="stream_phone_screen">Écran du téléphone</string>
     <string name="stream_phone_screen_switch">Écran du téléphone dans Moonlight</string>
     <string name="stream_phone_screen_description">Affiche l\'écran du téléphone dans Moonlight, avec tout ce qui s\'y trouve.</string>
+    <string name="game_mode_xbox_signed_in">Connecté à Xbox</string>
+    <string name="game_mode_xbox_sign_out">Se déconnecter de Xbox</string>
+    <string name="game_mode_xbox_sign_out_description">Connecté à Xbox dans le lecteur de Flux Keyboard.</string>
+    <string name="game_mode_xbox_sign_out_confirm">Les jeux cloud ne fonctionneront plus dans le lecteur de Flux Keyboard tant que tu ne te reconnectes pas.</string>
 </resources>

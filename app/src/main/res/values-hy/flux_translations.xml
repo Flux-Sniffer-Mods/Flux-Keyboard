@@ -1905,4 +1905,8 @@
     <string name="stream_phone_screen">Հեռախոսի էկրան</string>
     <string name="stream_phone_screen_switch">Հեռախոսի էկրանը Moonlight-ում</string>
     <string name="stream_phone_screen_description">Ցույց է տալիս հեռախոսի էկրանը Moonlight-ում՝ ինչ էլ որ դրա վրա լինի։</string>
+    <string name="game_mode_xbox_signed_in">Մուտք ես գործել Xbox</string>
+    <string name="game_mode_xbox_sign_out">Դուրս գալ Xbox-ից</string>
+    <string name="game_mode_xbox_sign_out_description">Մուտք ես գործել Xbox Flux Keyboard-ի նվագարկիչում։</string>
+    <string name="game_mode_xbox_sign_out_confirm">Ամպային խաղերը չեն աշխատի Flux Keyboard-ի նվագարկիչում, մինչև նորից մուտք չգործես։</string>
 </resources>

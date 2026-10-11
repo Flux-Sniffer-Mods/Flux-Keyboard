@@ -1899,4 +1899,8 @@
     <string name="stream_phone_screen">Màn hình điện thoại</string>
     <string name="stream_phone_screen_switch">Màn hình điện thoại trong Moonlight</string>
     <string name="stream_phone_screen_description">Hiển thị màn hình điện thoại trong Moonlight, với mọi thứ đang có trên đó.</string>
+    <string name="game_mode_xbox_signed_in">Đã đăng nhập Xbox</string>
+    <string name="game_mode_xbox_sign_out">Đăng xuất Xbox</string>
+    <string name="game_mode_xbox_sign_out_description">Đã đăng nhập Xbox trong trình phát của Flux Keyboard.</string>
+    <string name="game_mode_xbox_sign_out_confirm">Game đám mây sẽ không chạy trong trình phát của Flux Keyboard cho đến khi bạn đăng nhập lại.</string>
 </resources>

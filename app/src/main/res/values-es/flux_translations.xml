@@ -1911,4 +1911,8 @@
     <string name="stream_phone_screen">Pantalla del teléfono</string>
     <string name="stream_phone_screen_switch">Pantalla del teléfono en Moonlight</string>
     <string name="stream_phone_screen_description">Muestra la pantalla del teléfono en Moonlight, con lo que haya en ella.</string>
+    <string name="game_mode_xbox_signed_in">Sesión iniciada en Xbox</string>
+    <string name="game_mode_xbox_sign_out">Cerrar sesión de Xbox</string>
+    <string name="game_mode_xbox_sign_out_description">Sesión iniciada en Xbox en el reproductor de Flux Keyboard.</string>
+    <string name="game_mode_xbox_sign_out_confirm">Los juegos en la nube no funcionarán en el reproductor de Flux Keyboard hasta que vuelvas a iniciar sesión.</string>
 </resources>

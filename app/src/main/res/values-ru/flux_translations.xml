@@ -1917,4 +1917,8 @@
     <string name="stream_phone_screen">Экран телефона</string>
     <string name="stream_phone_screen_switch">Экран телефона в Moonlight</string>
     <string name="stream_phone_screen_description">Показывает экран телефона в Moonlight со всем, что на нём есть.</string>
+    <string name="game_mode_xbox_signed_in">Вход в Xbox выполнен</string>
+    <string name="game_mode_xbox_sign_out">Выйти из Xbox</string>
+    <string name="game_mode_xbox_sign_out_description">Вход в Xbox выполнен в плеере Flux Keyboard.</string>
+    <string name="game_mode_xbox_sign_out_confirm">Облачные игры не будут запускаться в плеере Flux Keyboard, пока вы снова не войдёте.</string>
 </resources>

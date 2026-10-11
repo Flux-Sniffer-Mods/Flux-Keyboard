@@ -1370,4 +1370,8 @@
     <string name="stream_phone_screen">Handybildschirm</string>
     <string name="stream_phone_screen_switch">Handybildschirm in Moonlight</string>
     <string name="stream_phone_screen_description">Zeigt den Bildschirm des Handys in Moonlight, mit allem, was darauf ist.</string>
+    <string name="game_mode_xbox_signed_in">Bei Xbox angemeldet</string>
+    <string name="game_mode_xbox_sign_out">Von Xbox abmelden</string>
+    <string name="game_mode_xbox_sign_out_description">Im Player von Flux Keyboard bei Xbox angemeldet.</string>
+    <string name="game_mode_xbox_sign_out_confirm">Cloud-Spiele laufen im Player von Flux Keyboard erst wieder, wenn du dich erneut anmeldest.</string>
 </resources>
