@@ -1285,4 +1285,9 @@
     <string name="game_mode_setup_done">Die Steuerung von %1$s folgt jetzt dem Layout von Flux Keyboard: W A S D das Steuerkreuz, O K P L die Aktionstasten an ihrer Controller-Position, Q E die Schultertasten, Z C die Trigger, Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick.\n\nDolphin: GameCube-Controller 1 und Wii Remote 1 (mit Nunchuk) sind eingestellt und auch als Profile \"Flux Keyboard\" gespeichert. PPSSPP: die Steuerung gilt für jedes Spiel.</string>
     <string name="game_mode_setup_not_found">Die Einstellungen von %1$s wurden nicht gefunden: einmal öffnen, dann erneut versuchen.</string>
     <string name="game_mode_setup_by_hand">%1$s kann keine Steuerung aus einer Datei laden: Belege in seinen Einstellungen unter Eingabe (Steuerung) jede Taste, indem du ihre Taste drückst:\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Wii-Controller</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote und Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote quer gehalten</string>
+    <string name="game_mode_wii_set">Dieses Spiel startet jetzt mit: %1$s.</string>
 </resources>

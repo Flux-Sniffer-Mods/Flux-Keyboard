@@ -1832,4 +1832,9 @@
     <string name="game_mode_setup_done">Керування %1$s тепер відповідає розкладці Flux Keyboard: W A S D — хрестовина, O K P L — кнопки дій на їхніх місцях на контролері, Q E — бампери, Z C — тригери, Пробіл — Start, Enter — Select, Backspace — Home, F і H — натискання стіків, J B N M — правий стік, ліва половина тачпада — лівий стік.\n\nDolphin: контролер GameCube 1 і Wii Remote 1 (з Nunchuk) налаштовано й збережено також як профілі \"Flux Keyboard\". PPSSPP: керування діє в усіх іграх.</string>
     <string name="game_mode_setup_not_found">Налаштування %1$s не знайдено: відкрийте його один раз і спробуйте знову.</string>
     <string name="game_mode_setup_by_hand">%1$s не завантажує керування з файлу: у його Налаштуваннях, Введення (Керування), призначте кожну кнопку, натискаючи її клавішу на запит:\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Контролер Wii</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote і Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote горизонтально</string>
+    <string name="game_mode_wii_set">Ця гра тепер запускається з: %1$s.</string>
 </resources>

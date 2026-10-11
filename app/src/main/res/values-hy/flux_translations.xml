@@ -1820,4 +1820,9 @@
     <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Keyboard-ի դասավորությանը. W A S D՝ խաչաձև կոճակ, O K P L՝ գործողության կոճակներն իրենց տեղերում, Q E՝ վերին ձգանները, Z C՝ ստորին ձգանները, Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։\n\nDolphin. կարգավորված են GameCube կարգավորիչ 1-ը և Wii Remote 1-ը (Nunchuk-ով), պահված նաև որպես \"Flux Keyboard\" պրոֆիլներ։ PPSSPP. կառավարումը գործում է բոլոր խաղերի համար։</string>
     <string name="game_mode_setup_not_found">%1$s-ի կարգավորումները չգտնվեցին. բացեք այն մեկ անգամ, ապա կրկին փորձեք։</string>
     <string name="game_mode_setup_by_hand">%1$s-ը չի կարող կառավարումը բեռնել ֆայլից. նրա Կարգավորումներում, Մուտք (Կառավարում), կապեք յուրաքանչյուր կոճակ՝ սեղմելով դրա ստեղնը, երբ խնդրի.\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Wii կարգավորիչ</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote և Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote՝ հորիզոնական</string>
+    <string name="game_mode_wii_set">Այս խաղն այժմ սկսվում է՝ %1$s։</string>
 </resources>

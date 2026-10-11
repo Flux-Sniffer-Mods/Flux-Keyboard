@@ -1826,4 +1826,9 @@
     <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant la disposition de Flux Keyboard : W A S D la croix, O K P L les boutons d\'action à leur place sur une manette, Q E les gâchettes hautes, Z C les gâchettes basses, Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche.\n\nDolphin : la manette GameCube 1 et la Wii Remote 1 (avec Nunchuk) sont configurées, et gardées aussi comme profils \"Flux Keyboard\". PPSSPP : ses commandes valent pour tous les jeux.</string>
     <string name="game_mode_setup_not_found">Les réglages de %1$s sont introuvables : ouvrez-le une fois, puis réessayez.</string>
     <string name="game_mode_setup_by_hand">%1$s ne charge pas de commandes depuis un fichier : dans ses Paramètres, Entrée (Commandes), associez chaque bouton en appuyant sur sa touche quand il le demande :\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Manette Wii</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote et Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote à l\'horizontale</string>
+    <string name="game_mode_wii_set">Ce jeu démarre maintenant avec : %1$s.</string>
 </resources>

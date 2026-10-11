@@ -1832,4 +1832,9 @@
     <string name="game_mode_setup_done">Sterowanie %1$s działa teraz według układu Flux Keyboard: W A S D krzyżak, O K P L przyciski akcji w miejscach z kontrolera, Q E przyciski barkowe, Z C spusty, Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa gałka.\n\nDolphin: kontroler GameCube 1 i Wii Remote 1 (z Nunchukiem) są ustawione i zapisane też jako profile \"Flux Keyboard\". PPSSPP: sterowanie działa w każdej grze.</string>
     <string name="game_mode_setup_not_found">Nie znaleziono ustawień %1$s: otwórz go raz, a potem spróbuj ponownie.</string>
     <string name="game_mode_setup_by_hand">%1$s nie wczytuje sterowania z pliku: w jego Ustawieniach, Wejście (Sterowanie), przypisz każdy przycisk, naciskając jego klawisz, gdy poprosi:\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Kontroler Wii</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote i Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote trzymany poziomo</string>
+    <string name="game_mode_wii_set">Ta gra startuje teraz z: %1$s.</string>
 </resources>

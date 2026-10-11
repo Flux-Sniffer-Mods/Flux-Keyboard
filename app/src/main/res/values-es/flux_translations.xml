@@ -1826,4 +1826,9 @@
     <string name="game_mode_setup_done">Los controles de %1$s siguen ahora la disposición de Flux Keyboard: W A S D la cruceta, O K P L los botones de acción donde los tiene un mando, Q E los gatillos superiores, Z C los inferiores, Espacio Start, Enter Select, Retroceso Home, F y H la pulsación de los sticks, J B N M el stick derecho y la mitad izquierda del trackpad el stick izquierdo.\n\nDolphin: el mando de GameCube 1 y el Wii Remote 1 (con Nunchuk) quedan configurados, y guardados también como perfiles \"Flux Keyboard\". PPSSPP: sus controles valen para todos los juegos.</string>
     <string name="game_mode_setup_not_found">No se encontraron los ajustes de %1$s: ábrelo una vez y vuelve a intentarlo.</string>
     <string name="game_mode_setup_by_hand">%1$s no carga controles desde un archivo: en sus Ajustes, Entrada (Controles), asigna cada botón pulsando su tecla cuando lo pida:\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Mando de Wii</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote y Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote en horizontal</string>
+    <string name="game_mode_wii_set">Este juego ahora empieza con: %1$s.</string>
 </resources>

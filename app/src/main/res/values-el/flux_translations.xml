@@ -1194,4 +1194,9 @@
     <string name="game_mode_setup_done">Οι χειρισμοί του %1$s ακολουθούν τώρα τη διάταξη του Flux Keyboard: W A S D το σταυρό, O K P L τα κουμπιά δράσης στη θέση του χειριστηρίου, Q E τα shoulder, Z C τις σκανδάλες, Space το Start, Enter το Select, Backspace το Home, F και H το πάτημα των μοχλών, J B N M ο δεξής μοχλός και το αριστερό μισό του trackpad ο αριστερός μοχλός.\n\nDolphin: ρυθμίστηκαν το χειριστήριο GameCube 1 και το Wii Remote 1 (με Nunchuk), και φυλάχτηκαν και ως προφίλ \"Flux Keyboard\". PPSSPP: οι χειρισμοί ισχύουν για κάθε παιχνίδι.</string>
     <string name="game_mode_setup_not_found">Δεν βρέθηκαν οι ρυθμίσεις του %1$s: ανοίξτε το μία φορά και δοκιμάστε ξανά.</string>
     <string name="game_mode_setup_by_hand">Το %1$s δεν φορτώνει χειρισμούς από αρχείο: στις Ρυθμίσεις του, Είσοδος (Χειρισμοί), αντιστοιχίστε κάθε κουμπί πατώντας το πλήκτρο του όταν ζητηθεί:\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Χειριστήριο Wii</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote και Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote οριζόντια</string>
+    <string name="game_mode_wii_set">Αυτό το παιχνίδι ξεκινά τώρα με: %1$s.</string>
 </resources>
