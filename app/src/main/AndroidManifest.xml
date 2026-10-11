@@ -257,6 +257,13 @@
             android:noHistory="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- One game's or app's gaming mode settings, on their own -->
+        <activity
+            android:name=".gaming.GameEditActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity="it.palsoftware.pastiera.games"
+            android:theme="@style/Theme.Pastiera" />
         <!-- Games: an app of its own in the app list, every game in it (off until turned on) -->
         <activity
             android:name=".gaming.GamesActivity"

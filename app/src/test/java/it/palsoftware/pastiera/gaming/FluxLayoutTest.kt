@@ -65,4 +65,24 @@ class FluxLayoutTest {
         // Back to the Nunchuk: nothing of it kept
         assertEquals("", FluxLayout.wiiPadSettings(gc, FluxLayout.WiiPad.NUNCHUK))
     }
+
+    @Test
+    fun theVolumeKeysAreTheLeftShoulderAndTrigger() {
+        assertEquals(6, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_VOLUME_UP])
+        assertEquals(8, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_VOLUME_DOWN])
+    }
+
+    @Test
+    fun theRedSideKeysDeviceIsFound() {
+        val dump = """add device 7: /dev/input/event0
+  name:     "gpio-keys"
+  events:
+    KEY (0001): 0072  0073
+add device 8: /dev/input/event1
+  name:     "mtk-pmic-keys"
+  events:
+    KEY (0001): 002a  0074  00f9
+"""
+        assertEquals("/dev/input/event1", GameMode.sideKeyDevice(dump))
+    }
 }

@@ -7,7 +7,8 @@ import it.palsoftware.pastiera.adb.AdbShell
 /**
  * Flux Keyboard's controller layout, the same everywhere: W A S D the d-pad, O K P L the face
  * buttons where a controller has them (O top, K left, P right, L bottom), Q E the shoulders and
- * Z C the triggers (the volume keys too: up the left, down the right), Space Start, Enter Select, Backspace
+ * Z C the triggers (Volume Up the left shoulder, Volume Down the left trigger; with root, the
+ * red side key the right trigger), Space Start, Enter Select, Backspace
  * Home, F and H the stick presses, J B N M the right stick and the arrow keys (the trackpad's
  * left half, pushed) the left stick. The real controller plays it, and it can be written into
  * an emulator's own controller settings, where keys reach the emulator as they are.
@@ -25,7 +26,7 @@ object FluxLayout {
         KeyEvent.KEYCODE_K to Control.X, KeyEvent.KEYCODE_O to Control.Y,
         KeyEvent.KEYCODE_Q to Control.L1, KeyEvent.KEYCODE_E to Control.R1,
         KeyEvent.KEYCODE_Z to Control.L2, KeyEvent.KEYCODE_C to Control.R2,
-        KeyEvent.KEYCODE_VOLUME_UP to Control.L2, KeyEvent.KEYCODE_VOLUME_DOWN to Control.R2,
+        KeyEvent.KEYCODE_VOLUME_UP to Control.L1, KeyEvent.KEYCODE_VOLUME_DOWN to Control.L2,
         KeyEvent.KEYCODE_ENTER to Control.SELECT, KeyEvent.KEYCODE_SPACE to Control.START,
         KeyEvent.KEYCODE_DEL to Control.HOME,
         KeyEvent.KEYCODE_F to Control.L3, KeyEvent.KEYCODE_H to Control.R3,

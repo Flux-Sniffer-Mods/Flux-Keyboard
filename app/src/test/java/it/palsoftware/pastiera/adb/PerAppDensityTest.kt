@@ -23,4 +23,12 @@ class PerAppDensityTest {
         )
         assertNull(PerAppDensity.parseResumed("nothing resumed"))
     }
+
+    @Test
+    fun theResumedActivitysTaskIsReadToo() {
+        assertEquals(
+            "com.android.vending" to 31,
+            PerAppDensity.parseActivity("  topResumedActivity=ActivityRecord{9f u0 com.android.vending/com.google.android.finsky.billing.BillingActivity t31}")
+        )
+    }
 }

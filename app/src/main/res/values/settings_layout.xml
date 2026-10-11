@@ -291,7 +291,7 @@
     <string name="root_backlight_fine_title">Fine dimming</string>
     <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
     <string name="game_mode_controller">Real controller</string>
-    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real, with Flux Keyboard\'s layout: W A S D its d-pad, O K P L its Y X B A, Q E its shoulders and Z C its triggers (the volume keys too: up the left, down the right), Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad\'s left half the left stick. Other keys reach the game as they are.</string>
+    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real, with Flux Keyboard\'s layout: W A S D its d-pad, O K P L its Y X B A, Q E its shoulders and Z C its triggers, Volume Up the left shoulder and Volume Down the left trigger, the red side key the right trigger (set its own action to none in the phone\'s settings), Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad\'s left half the left stick. Other keys reach the game as they are.</string>
     <string name="game_mode_apps_section">Apps</string>
     <string name="game_mode_games_section">Games</string>
     <string name="game_mode_own_settings">Own settings</string>
@@ -452,4 +452,9 @@
     <string name="game_first_start_play">Play</string>
     <string name="games_app_new">New: not set up yet</string>
     <string name="game_mode_found_short">Found: plays with %1$s\'s settings until set up</string>
+    <string name="game_detect_channel">Games found</string>
+    <string name="game_detect_title">%1$s looks like a game</string>
+    <string name="game_detect_text">Set up gaming mode for it: controller, screen and sticks.</string>
+    <string name="game_detect_not_game">Not now</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming takes a controller or its touch controls, not keys: with root, turn on Real controller; without, place keys and sticks on its touch controls from gaming mode\'s notification.</string>
 </resources>

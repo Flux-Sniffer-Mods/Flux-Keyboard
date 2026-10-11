@@ -61,7 +61,7 @@ class GameLaunchActivity : Activity() {
             .setTitle(getString(it.palsoftware.pastiera.R.string.game_first_start_title, profile.name))
             .setMessage(getString(it.palsoftware.pastiera.R.string.game_first_start_message, app))
             .setPositiveButton(it.palsoftware.pastiera.R.string.game_first_start_set_up) { _, _ ->
-                startActivity(GamesActivity.editIntent(this, profile.id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                startActivity(GameEditActivity.forProfile(this, profile.id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 finish()
             }
             .setNegativeButton(it.palsoftware.pastiera.R.string.game_first_start_play) { _, _ ->

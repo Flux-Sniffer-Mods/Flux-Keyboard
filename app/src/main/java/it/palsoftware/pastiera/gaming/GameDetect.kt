@@ -63,4 +63,66 @@ object GameDetect {
         ) ?: return null
         return ini.substringAfter('=', "").trim().ifEmpty { null }
     }
+
+    // ---- Apps that look like games: offered once for gaming mode ----
+
+    internal const val ACTION_NOT_GAME = "it.palsoftware.pastiera.GAME_MODE_NOT_GAME"
+    internal const val EXTRA_PACKAGE = "package"
+    private const val KEY_ASKED = "game_detect_asked"
+    private const val CHANNEL = "game_detect"
+    private const val NOTIFICATION_ID = 7303
+
+    /** An app Android files as a game (by its own category, or the older game flag), or a known game app. */
+    fun looksLikeGame(context: android.content.Context, packageName: String): Boolean = runCatching {
+        if (GameApps.appFor(packageName) != null) return true
+        val info = context.packageManager.getApplicationInfo(packageName, 0)
+        @Suppress("DEPRECATION")
+        info.category == android.content.pm.ApplicationInfo.CATEGORY_GAME ||
+            (info.flags and android.content.pm.ApplicationInfo.FLAG_IS_GAME) != 0
+    }.getOrDefault(false)
+
+    private fun asked(context: android.content.Context): Set<String> =
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).getStringSet(KEY_ASKED, emptySet()).orEmpty()
+
+    /** Not asked about again (set up, or turned down). */
+    fun dismiss(context: android.content.Context, packageName: String) {
+        val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
+        prefs.edit().putStringSet(KEY_ASKED, asked(context) + packageName).apply()
+        context.getSystemService(android.app.NotificationManager::class.java)?.cancel(NOTIFICATION_ID)
+    }
+
+    /**
+     * A game in front with no gaming mode settings: a notification, once per app, offering to
+     * set it up (its settings made from Flux Keyboard's layout) or to leave it.
+     */
+    fun offer(context: android.content.Context, packageName: String) {
+        if (packageName in asked(context) || !looksLikeGame(context, packageName)) return
+        val manager = context.getSystemService(android.app.NotificationManager::class.java) ?: return
+        val label = runCatching {
+            context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(packageName, 0)).toString()
+        }.getOrDefault(packageName)
+        manager.createNotificationChannel(
+            android.app.NotificationChannel(CHANNEL, context.getString(it.palsoftware.pastiera.R.string.game_detect_channel), android.app.NotificationManager.IMPORTANCE_DEFAULT)
+        )
+        val flags = android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+        val setUp = android.app.PendingIntent.getActivity(
+            context, packageName.hashCode(), GameEditActivity.forApp(context, packageName).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK), flags
+        )
+        val notGame = android.app.PendingIntent.getBroadcast(
+            context, packageName.hashCode() + 1,
+            android.content.Intent(context, GameMode.Receiver::class.java).setAction(ACTION_NOT_GAME).putExtra(EXTRA_PACKAGE, packageName), flags
+        )
+        val notification = android.app.Notification.Builder(context, CHANNEL)
+            .setSmallIcon(it.palsoftware.pastiera.R.drawable.ic_launcher_foreground)
+            .setContentTitle(context.getString(it.palsoftware.pastiera.R.string.game_detect_title, label))
+            .setContentText(context.getString(it.palsoftware.pastiera.R.string.game_detect_text))
+            .setContentIntent(setUp)
+            .setAutoCancel(true)
+            .addAction(android.app.Notification.Action.Builder(null, context.getString(it.palsoftware.pastiera.R.string.game_first_start_set_up), setUp).build())
+            .addAction(android.app.Notification.Action.Builder(null, context.getString(it.palsoftware.pastiera.R.string.game_detect_not_game), notGame).build())
+            .build()
+        runCatching { manager.notify(NOTIFICATION_ID, notification) }
+        // Asked once: turning it down or leaving it alike
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putStringSet(KEY_ASKED, asked(context) + packageName).apply()
+    }
 }

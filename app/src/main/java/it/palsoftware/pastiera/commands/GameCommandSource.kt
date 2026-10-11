@@ -3,9 +3,7 @@ package it.palsoftware.pastiera.commands
 import android.content.Context
 import android.content.Intent
 import it.palsoftware.pastiera.SettingsManager
-import it.palsoftware.pastiera.gaming.GameFolders
-import it.palsoftware.pastiera.gaming.GameLaunchActivity
-import it.palsoftware.pastiera.gaming.GameProfiles
+import it.palsoftware.pastiera.gaming.GamesActivity
 import it.palsoftware.pastiera.shortcuts.UserShortcuts
 
 /**
@@ -18,15 +16,12 @@ class GameCommandSource : CommandSource {
     override fun getCommands(context: Context): List<CommandTarget> {
         if (!enabled(context)) return emptyList()
         val pm = context.packageManager
-        val profiles = GameProfiles.all(context).filter { it.isGame }
-        val fromProfiles = profiles.map { profile ->
-            Triple(profile.name, profile.packages.firstOrNull().orEmpty(), GameLaunchActivity.intentFor(context, profile))
+        // The same games as the Games app, each started the way it starts them (its first-start
+        // question and profile included), not the emulator's own entry
+        val games = GamesActivity.games(context).map { (profile, intent) ->
+            Triple(profile.name, profile.packages.firstOrNull().orEmpty(), intent)
         }
-        val known = profiles.mapNotNull { it.launch }.toSet()
-        val fromFolders = GameFolders.scanned(context).filter { it.launch == null || it.launch !in known }.map { game ->
-            Triple(game.name, game.packageName, GameLaunchActivity.intentFor(context, game))
-        }
-        return (fromProfiles + fromFolders).distinctBy { it.first.lowercase() to it.second }.map { (name, pkg, intent) ->
+        return games.map { (name, pkg, intent) ->
             val appName = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
             CommandTarget(
                 id = "game:$pkg:$name",

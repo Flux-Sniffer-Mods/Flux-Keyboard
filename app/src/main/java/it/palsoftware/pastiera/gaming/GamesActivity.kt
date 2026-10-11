@@ -109,10 +109,6 @@ class GamesActivity : ComponentActivity() {
         private const val KEY_ENABLED = "games_app_enabled"
         private const val EXTRA_EDIT = "edit"
 
-        /** Games, opened at one game's settings. */
-        fun editIntent(context: Context, profileId: String): Intent =
-            Intent(context, GamesActivity::class.java).putExtra(EXTRA_EDIT, profileId)
-
         /**
          * Every game: those with a profile, then those found in the folders without one (as a
          * profile-less stand-in, for its art and app), each with what starts it, A to Z.

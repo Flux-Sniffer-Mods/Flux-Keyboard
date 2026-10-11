@@ -517,8 +517,12 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             // apps map the keys themselves
             val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
             if (!current.controller && emulatorPkg == null) Text(
-                GameApps.appFor(current)?.let { app -> stringResource(R.string.game_mode_keys_pass_app, app) }
-                    ?: stringResource(R.string.game_mode_keys_pass),
+                when (val app = GameApps.appFor(current)) {
+                    // Cloud gaming takes no keyboard: a real controller, or its touch controls
+                    GameApps.XBOX_NAME -> stringResource(R.string.game_mode_xbox_note)
+                    null -> stringResource(R.string.game_mode_keys_pass)
+                    else -> stringResource(R.string.game_mode_keys_pass_app, app)
+                },
                 style = MaterialTheme.typography.bodySmall
             )
             if (!current.controller && emulatorPkg != null) {

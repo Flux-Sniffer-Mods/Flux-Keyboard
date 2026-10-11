@@ -39,7 +39,11 @@ object PerAppDensity {
     }.getOrDefault(emptySet())
 
     /** A short wait so passing windows (a notification shade, a dialog) don't switch it. */
-    private const val SETTLE_MS = 400L
+    private const val SETTLE_MS = 200L
+
+    /** The app last taken as in front, and its task. */
+    @Volatile private var frontApp: String? = null
+    @Volatile private var frontTask: Int? = null
 
     private val handler = Handler(Looper.getMainLooper())
     private var pending: Runnable? = null
@@ -97,8 +101,14 @@ object PerAppDensity {
                 // The app Android actually has in front: a widget updating on a home screen
                 // (a calendar or weather widget in Niagara or the stock launcher) reports the
                 // widget's own app, which isn't in front at all
-                val front = resumedPackage() ?: if (needsConfirming) return@Thread else packageName
+                val resumed = resumedActivity()
+                val front = resumed?.first ?: if (needsConfirming) return@Thread else packageName
                 if (front in IGNORED || front in quickstep(app)) return@Thread
+                // Another app's screen opened inside the app in front's own task (a purchase in
+                // the Play Store, a sign-in, a share sheet): still that app, its screen kept
+                val task = resumed?.second
+                if (task != null && task == frontTask && front != frontApp) return@Thread
+                frontTask = task; frontApp = front
                 // Gaming mode follows the same app in front (its upright or sideways screen
                 // mustn't flicker with widgets, floating windows or recents either)
                 it.palsoftware.pastiera.gaming.GameMode.onAppInFront(app, front)
@@ -125,19 +135,23 @@ object PerAppDensity {
      */
     private fun watchRecents(app: Context) {
         stopRecentsWatch()
-        val owner = appliedFor ?: return
+        // The app whose screen size is in use, or the game gaming mode is playing
+        val owner = appliedFor ?: it.palsoftware.pastiera.gaming.GameMode.playing() ?: return
         var checks = 0
         val check = object : Runnable {
             override fun run() {
                 val again = this
                 Thread {
-                    if (!AdbShell.available() || appliedFor != owner) return@Thread
+                    if (!AdbShell.available()) return@Thread
                     val front = resumedPackage()
                     if (front != null && front !in quickstep(app)) return@Thread
                     val open = AdbShell.run(
                         "dumpsys activity recents | grep -c -F -e '$owner/' -e ':$owner' || true", 2_000
                     )?.trim()?.toIntOrNull() ?: return@Thread
                     if (open == 0) {
+                        // Swiped away: gaming mode ends with it, its screen put back
+                        it.palsoftware.pastiera.gaming.GameMode.gone(app, owner)
+                        if (appliedFor != owner) return@Thread
                         val base = base(app)
                         val command = if (base == BASE_RESET) "wm density reset" else {
                             val preset = ScreenDensity.Preset.byAction(base) ?: return@Thread
@@ -161,12 +175,18 @@ object PerAppDensity {
         recentsWatch = null
     }
 
-    private val resumed = Regex("(?:topResumedActivity|mResumedActivity|ResumedActivity)[^\\n]*?\\s([\\w.]+)/")
+    private val resumed = Regex("(?:topResumedActivity|mResumedActivity|ResumedActivity)[^\\n]*?\\s([\\w.]+)/[^\\s}]*(?:\\s+t(\\d+))?")
 
     /** The package of the activity Android has resumed, asked through the shell. */
-    internal fun resumedPackage(): String? =
-        AdbShell.run("dumpsys activity activities | grep -m 2 -E 'topResumedActivity|mResumedActivity'", 2_000)
-            ?.let { parseResumed(it) }
+    internal fun resumedPackage(): String? = resumedActivity()?.first
 
-    internal fun parseResumed(dump: String): String? = resumed.find(dump)?.groupValues?.get(1)
+    /** The resumed activity's package and task. */
+    internal fun resumedActivity(): Pair<String, Int?>? =
+        AdbShell.run("dumpsys activity activities | grep -m 2 -E 'topResumedActivity|mResumedActivity'", 2_000)
+            ?.let { parseActivity(it) }
+
+    internal fun parseResumed(dump: String): String? = parseActivity(dump)?.first
+
+    internal fun parseActivity(dump: String): Pair<String, Int?>? =
+        resumed.find(dump)?.let { it.groupValues[1] to it.groupValues[2].toIntOrNull() }
 }

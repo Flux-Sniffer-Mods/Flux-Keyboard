@@ -460,6 +460,9 @@
       "text": "Gaming mode: the games found in the game folders and the games with a profile are in the quick launcher too, started as their home screen shortcuts start them (Games in the quick launcher, in Gaming mode)."
     },
     {
+      "text": "Gaming mode: an app that looks like a game, with no settings yet, gets a notification offering to set it up. Xbox Cloud Gaming is recognised. A Play Store page or sign-in opened inside a game keeps its screen, the screen switches faster, and swiping a game away in recents ends gaming mode. A stick stroke starting near the trackpad's edge still reaches full push. With root, Volume Up and Down are the left shoulder and trigger and the red side key the right trigger. The quick launcher starts games the way the Games app does."
+    },
+    {
       "text": "Gaming mode: games found in the game folders join the games list by themselves, not set up until you say: the first time one starts, it asks to set it up or play it with its app's settings. The Games app has each game's settings too (\u2699)."
     },
     {

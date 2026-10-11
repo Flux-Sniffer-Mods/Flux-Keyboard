@@ -95,7 +95,64 @@ object GameMode {
             if (profile != null) worker.execute { stop(app) }
             return
         }
+        // An app that looks like a game, with no settings yet: asked once whether to set it up
+        if (GameProfiles.forPackage(app, packageName).isEmpty()) worker.execute { GameDetect.offer(app, packageName) }
         worker.execute { followGame(app, packageName) }
+    }
+
+    // ---- The red side key: the real controller's right trigger, read straight from the keys ----
+
+    /** The Titan's red side key (scan code 249, beside the power button's). */
+    private const val SIDE_KEY_SCAN = 249
+    @Volatile private var sideKey: Process? = null
+
+    /**
+     * With root, the red side key reads as the right trigger: from its input device directly,
+     * since Android may take it first (set its own action to none in the phone's settings so it
+     * does nothing else). The volume keys are the left bumper and trigger.
+     */
+    private fun startSideKey() {
+        stopSideKey()
+        Thread {
+            runCatching {
+                val dump = AdbShell.run("getevent -p", 4_000) ?: return@Thread
+                val path = sideKeyDevice(dump) ?: return@Thread
+                val process = AdbShell.newProcess(arrayOf("getevent", "-l", path))
+                if (!pad) { process.destroy(); return@Thread }
+                sideKey = process
+                process.inputStream.bufferedReader().forEachLine { line ->
+                    if (!line.contains("EV_KEY") || !line.contains("00f9")) return@forEachLine
+                    val down = line.trimEnd().endsWith("DOWN")
+                    if (down || line.trimEnd().endsWith("UP")) worker.execute { send("P 9 ${if (down) 1 else 0}") }
+                }
+            }.onFailure { Log.w(TAG, "side key couldn't be read: $it") }
+        }.apply { isDaemon = true; start() }
+    }
+
+    private fun stopSideKey() { sideKey?.destroy(); sideKey = null }
+
+    /** The input device with the red side key (key 00f9), from getevent -p. */
+    internal fun sideKeyDevice(dump: String): String? {
+        var device: String? = null
+        for (line in dump.lineSequence()) {
+            Regex("^add device \\d+:\\s+(\\S+)").find(line.trim())?.let { device = it.groupValues[1]; return@let }
+            if (device != null && Regex("\\b00f9\\b").containsMatchIn(line)) return device
+        }
+        return null
+    }
+
+    /** The app gaming mode is playing a game in, if it is. */
+    fun playing(): String? = frontPackage.takeIf { profile != null }
+
+    /** [packageName] swiped away from the recent apps: gaming mode ends if it was playing there. */
+    fun gone(context: Context, packageName: String) {
+        val app = context.applicationContext
+        worker.execute {
+            if (frontPackage != packageName || profile == null) return@execute
+            frontPackage = null
+            stop(app)
+            recover(app)
+        }
     }
 
     /** A home screen app (going home from a game isn't opening its player). */
@@ -175,6 +232,8 @@ object GameMode {
         val code = event.keyCode
         val down = event.action == KeyEvent.ACTION_DOWN
         if (down && event.repeatCount == 0) trackpadReader?.keyPressed()
+        // The red side key: the right trigger, read from its device (its own action kept away)
+        if (pad && event.scanCode == SIDE_KEY_SCAN) return true
         // A key placed on the screen touches its spot while held, whatever else it is
         val tap = if (inMenus) null else profile?.taps?.get(code)
         if (tap != null) {
@@ -232,6 +291,7 @@ object GameMode {
             pad = wantsPad
             dpadHeld.clear()
             worker.execute { send(if (wantsPad) "G 1" else "G 0") }
+            if (wantsPad) startSideKey() else stopSideKey()
         }
         // Each game's own screen choice, also when switching game mid-way
         screen(context, next.screen)
@@ -245,7 +305,7 @@ object GameMode {
         activeId = null
         trackpadRun++
         sticks.fill(0f); stickHeld.fill(false); rightKeysHeld.clear()
-        if (pad) { pad = false; dpadHeld.clear(); send("G 0") }
+        if (pad) { pad = false; dpadHeld.clear(); send("G 0"); stopSideKey() }
         trackpad?.destroy(); trackpad = null; trackpadReader = null
         runCatching { input?.close() }
         input = null
@@ -303,11 +363,14 @@ object GameMode {
         val rotation = prefs.getString(KEY_RESTORE_ROTATION, null)
         if (size == null && rotation == null) return
         if (!AdbShell.available()) return
-        if (size != null) AdbShell.run(if (size.isEmpty()) "wm size reset" else "wm size $size")
-        if (rotation != null) AdbShell.run(
-            "cmd window set-ignore-orientation-request false; " +
-                "settings put system accelerometer_rotation ${rotation.takeIf { it == "0" || it == "1" } ?: "1"}"
-        )
+        // In one go, for a quick switch back
+        AdbShell.run(listOfNotNull(
+            size?.let { if (it.isEmpty()) "wm size reset" else "wm size $it" },
+            rotation?.let {
+                "cmd window set-ignore-orientation-request false; " +
+                    "settings put system accelerometer_rotation ${it.takeIf { r -> r == "0" || r == "1" } ?: "1"}"
+            }
+        ).joinToString("; "), 5_000)
         prefs.edit().remove(KEY_RESTORE_SIZE).remove(KEY_RESTORE_ROTATION).apply()
         savedSize = null
         savedRotation = null
@@ -317,25 +380,62 @@ object GameMode {
     /** The screen choice applied now (APP: nothing changed). */
     private var appliedScreen = ScreenMode.APP
 
-    /** Moves the screen from the choice applied to [mode]: undoes the old one, then does the new. */
+    /**
+     * Moves the screen from the choice applied to [mode]: undoes the old one, then does the new,
+     * all in one go through the shell (one question first, when there's something to save), so
+     * the switch is quick.
+     */
     private fun screen(context: Context, mode: ScreenMode) {
         if (mode == appliedScreen) return
-        if (appliedScreen == ScreenMode.SIDEWAYS) sideways(context, false)
-        if (appliedScreen != ScreenMode.APP) restoreRotation(context)
+        val prefs = pending(context)
+        val commands = mutableListOf<String>()
+        var restoredSize: String? = null
+        if (appliedScreen == ScreenMode.SIDEWAYS) savedSize?.let { saved ->
+            commands += if (saved.isEmpty()) "wm size reset" else "wm size $saved"
+            restoredSize = saved
+            savedSize = null
+            prefs.edit().remove(KEY_RESTORE_SIZE).apply()
+        }
+        if (appliedScreen != ScreenMode.APP) savedRotation?.let { saved ->
+            commands += "cmd window set-ignore-orientation-request false; " +
+                "settings put system accelerometer_rotation ${saved.takeIf { it == "0" || it == "1" } ?: "1"}"
+            savedRotation = null
+            prefs.edit().remove(KEY_RESTORE_ROTATION).apply()
+        }
         appliedScreen = mode
-        // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
-        // app asking for landscape the other way round would show upside down)
-        if (mode != ScreenMode.APP) keepUpright(context)
-        if (mode == ScreenMode.SIDEWAYS) sideways(context, true)
-    }
-
-    private fun keepUpright(context: Context) {
-        savedRotation = AdbShell.run("settings get system accelerometer_rotation")?.trim()
-        pending(context).edit().putString(KEY_RESTORE_ROTATION, savedRotation ?: "1").apply()
-        AdbShell.run(
-            "cmd window set-ignore-orientation-request true; " +
+        var sideways: Pair<Int, Int>? = null
+        if (mode != ScreenMode.APP) {
+            // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
+            // app asking for landscape the other way round would show upside down)
+            val state = AdbShell.run("settings get system accelerometer_rotation; wm size").orEmpty()
+            savedRotation = state.lineSequence().firstOrNull()?.trim()?.takeIf { it == "0" || it == "1" } ?: "1"
+            prefs.edit().putString(KEY_RESTORE_ROTATION, savedRotation).apply()
+            commands += "cmd window set-ignore-orientation-request true; " +
                 "settings put system accelerometer_rotation 0; settings put system user_rotation 0"
-        )
+            if (mode == ScreenMode.SIDEWAYS) {
+                val physical = Regex("Physical size: (\\d+)x(\\d+)").find(state)?.destructured?.toList()?.map { it.toInt() }
+                if (physical != null) {
+                    val (w, h) = minOf(physical[0], physical[1]) to maxOf(physical[0], physical[1])
+                    savedSize = Regex("Override size: (\\d+x\\d+)").find(state)?.groupValues?.get(1) ?: ""
+                    prefs.edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
+                    sideways = sidewaysSize(w, h, cutoutTop(context))
+                    commands += "wm size ${sideways.first}x${sideways.second}"
+                }
+            }
+        }
+        if (commands.isEmpty()) return
+        AdbShell.run(commands.joinToString("; "), 5_000)
+        // Taps follow the screen's shape
+        val shape = sideways
+        if (shape != null) {
+            screenW = shape.first.toFloat(); screenH = shape.second.toFloat()
+        } else if (restoredSize != null) {
+            val size = restoredSize!!.ifEmpty { AdbShell.run("wm size").orEmpty() }
+            Regex("(\\d+)x(\\d+)").find(size)?.destructured?.toList()?.map { it.toFloat() }?.let {
+                screenW = minOf(it[0], it[1]); screenH = maxOf(it[0], it[1])
+            }
+        }
+        if (shape != null || restoredSize != null) send("S ${screenW.toInt()} ${screenH.toInt()}")
     }
 
     /** The camera cutout's depth at the top of the upright screen, in pixels (0 without one). */
@@ -352,46 +452,6 @@ object GameMode {
         val clear = ((h - 2 * cutout - 8).toLong() * h / w).toInt()
         val height = minOf(w, clear).coerceAtLeast(w / 2) and 1.inv()
         return h to height
-    }
-
-    /**
-     * A sideways-only game (GameHub turns the screen whatever it's told): the screen's size is
-     * swapped, so it's landscape-shaped while the phone stays upright and the game has no need to
-     * turn it, a little shorter than the screen's width so it sits clear of the camera cutout.
-     * Taps follow the new shape.
-     */
-    private fun sideways(context: Context, on: Boolean) {
-        if (on == (savedSize != null)) return
-        if (on) {
-            val sizes = AdbShell.run("wm size") ?: return
-            val physical = Regex("Physical size: (\\d+)x(\\d+)").find(sizes) ?: return
-            val (w, h) = physical.destructured.toList().map { it.toInt() }.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) }
-            savedSize = Regex("Override size: (\\d+x\\d+)").find(sizes)?.groupValues?.get(1) ?: ""
-            pending(context).edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
-            val (width, height) = sidewaysSize(w, h, cutoutTop(context))
-            AdbShell.run("wm size ${width}x$height")
-            screenW = width.toFloat(); screenH = height.toFloat()
-        } else {
-            val saved = savedSize ?: return
-            savedSize = null
-            AdbShell.run(if (saved.isEmpty()) "wm size reset" else "wm size $saved")
-            pending(context).edit().remove(KEY_RESTORE_SIZE).apply()
-            val sizes = AdbShell.run("wm size").orEmpty()
-            val (w, h) = Regex("(\\d+)x(\\d+)").find(saved.ifEmpty { sizes })?.destructured?.toList()?.map { it.toFloat() }
-                ?.let { minOf(it[0], it[1]) to maxOf(it[0], it[1]) } ?: (screenH to screenW)
-            screenW = w; screenH = h
-        }
-        send("S ${screenW.toInt()} ${screenH.toInt()}")
-    }
-
-    private fun restoreRotation(context: Context) {
-        val saved = savedRotation ?: return
-        savedRotation = null
-        pending(context).edit().remove(KEY_RESTORE_ROTATION).apply()
-        AdbShell.run(
-            "cmd window set-ignore-orientation-request false; " +
-                "settings put system accelerometer_rotation ${saved.takeIf { it == "0" || it == "1" } ?: "1"}"
-        )
     }
 
     // ---- The trackpad: sticks or a mouse ----
@@ -590,8 +650,8 @@ object GameMode {
             val dx = x - f.lastX; val dy = y - f.lastY
             f.moved += abs(dx) + abs(dy)
             f.lastX = x.toFloat(); f.lastY = y.toFloat()
-            val vx = (x - f.originX) / radius
-            val vy = (y - f.originY) / radius
+            val vx = push(x - f.originX, if (x < f.originX) f.originX - (if (f.left) min else mid) else (if (f.left) mid else max) - f.originX)
+            val vy = push(y - f.originY, if (y < f.originY) f.originY - top else bottom - f.originY)
             when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
@@ -609,6 +669,13 @@ object GameMode {
                 TrackpadRole.NONE -> Unit
             }
         }
+
+        /**
+         * How far a stick is pushed (-1 to 1) by a finger [moved] from where it landed, with
+         * [room] left to the trackpad's edge that way: a finger landing near an edge still
+         * reaches full push in the room it has (never less than a third of the usual reach).
+         */
+        private fun push(moved: Float, room: Float): Float = moved / room.coerceIn(radius / 3, radius)
 
         /** The pointer: the finger's place on its half, as a place on the whole screen, touched. */
         private fun point(f: Finger, x: Int, y: Int) {
@@ -710,6 +777,10 @@ object GameMode {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == ACTION_PLACE) {
                 profile?.let { GameTouchEditor.show(context.applicationContext, it) }
+                return
+            }
+            if (intent.action == GameDetect.ACTION_NOT_GAME) {
+                intent.getStringExtra(GameDetect.EXTRA_PACKAGE)?.let { GameDetect.dismiss(context, it) }
                 return
             }
             // Next: the app's other settings (Dolphin's GameCube and Wii)

@@ -11,14 +11,20 @@ object GameApps {
         "dev.eden.eden_emulator", "dev.legacy.eden_emulator", "org.yuzu.yuzu_emu", "org.citron.citron_emu", "org.sudachi.sudachi_emu"
     )
 
-    /** GameNative, GameHub or an emulator's name for [profile]'s app; null for other apps. */
+    /** Xbox's apps that stream Game Pass games (cloud gaming). */
+    private val XBOX = setOf("com.gamepass", "com.gamepass.beta", "com.microsoft.xboxone.smartglass", "com.microsoft.xboxone.smartglass.beta")
+
+    /** GameNative, GameHub, Xbox or an emulator's name for [profile]'s app; null for other apps. */
     fun appFor(profile: GameProfile): String? = profile.packages.firstNotNullOfOrNull { appFor(it) }
 
     fun appFor(packageName: String): String? = when {
         packageName == GameNativeBridge.PACKAGE -> "GameNative"
         packageName.contains("gamehub", true) || packageName == "com.xiaoji.egggame" -> "GameHub"
+        packageName in XBOX -> XBOX_NAME
         else -> emulator(packageName)
     }
+
+    const val XBOX_NAME = "Xbox Cloud Gaming"
 
     /** An emulator's name, for one Flux Keyboard knows. */
     fun emulator(packageName: String): String? = when (packageName) {
