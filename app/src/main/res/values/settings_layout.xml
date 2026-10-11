@@ -420,6 +420,11 @@
     <string name="game_mode_keys_pass">Your keys go to the game as normal keys: set them up in the game\'s own controls. For touch-only games, place keys on its buttons from the gaming mode notification.</string>
     <string name="game_mode_keys_pass_app">Your keys go to %1$s as normal keys: set them up once in its controller settings. Keys you place on screen tap there instead.</string>
     <string name="game_mode_place_keys">Place keys on screen</string>
+    <string name="game_mode_stick_smaller">Size \u2212</string>
+    <string name="game_mode_stick_bigger">Size +</string>
+    <string name="game_mode_stick_dead_zone">Dead zone %1$d%%</string>
+    <string name="game_mode_stick_range">Range %1$d%%</string>
+    <string name="game_mode_back_again">Press Back again to leave the game</string>
     <string name="game_mode_add_key">Add a key</string>
     <string name="game_mode_press_key">Pick a key below, or press it.</string>
     <string name="game_mode_trackpad_test">Record the trackpad</string>

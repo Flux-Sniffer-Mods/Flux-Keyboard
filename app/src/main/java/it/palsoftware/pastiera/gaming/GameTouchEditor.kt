@@ -84,12 +84,22 @@ object GameTouchEditor {
 
         // Nothing placed yet: the sticks where the launcher draws them
         if (zones.isEmpty() && taps.isEmpty()) zones.putAll(withDefaults(profile, always = true).stickZones)
+        // A stick circle's size is a share of the screen's shorter side, as gaming mode reaches it
+        val side = minOf(width, height)
+        val tuning = profile.stickTuning.toMutableMap()
+        val stickChips = mutableMapOf<Int, View>()
+        var refreshStickRow: () -> Unit = {}
         fun addStick(stick: Int) {
-            val zone = zones[stick] ?: Triple(if (stick == 0) 0.25f else 0.75f, 0.7f, 0.12f)
+            val zone = zones[stick] ?: Triple(if (stick == 0) 0.25f else 0.75f, 0.7f, 0.18f)
             zones[stick] = zone
-            val size = (zone.third * 2 * width).toInt()
-            frame.addView(chip(context.getString(if (stick == 0) R.string.game_mode_left_stick else R.string.game_mode_right_stick),
-                zone.first, zone.second, true, size) { x, y -> zones[stick] = Triple(x, y, zone.third) }.also { chips += it })
+            val size = (zone.third * 2 * side).toInt()
+            stickChips[stick]?.let { frame.removeView(it); chips -= it }
+            val chip = chip(context.getString(if (stick == 0) R.string.game_mode_left_stick else R.string.game_mode_right_stick),
+                zone.first, zone.second, true, size) { x, y -> zones[stick] = Triple(x, y, zones[stick]?.third ?: zone.third) }
+            frame.addView(chip)
+            chips += chip
+            stickChips[stick] = chip
+            refreshStickRow()
         }
         zones.keys.toList().forEach { addStick(it) }
         val keySize = (52 * density).toInt()
@@ -137,10 +147,11 @@ object GameTouchEditor {
                 addView(button(R.string.game_mode_place_clear) {
                     zones.clear(); taps.clear()
                     chips.forEach { frame.removeView(it) }
-                    chips.clear()
+                    chips.clear(); stickChips.clear()
+                    refreshStickRow()
                 })
                 addView(button(R.string.game_mode_save) {
-                    GameMode.placed(context, profile.copy(stickZones = zones.toMap(), taps = taps.toMap()))
+                    GameMode.placed(context, profile.copy(stickZones = zones.toMap(), taps = taps.toMap(), stickTuning = tuning.toMap()))
                     close(windows)
                 })
                 addView(button(R.string.cancel) { close(windows) })
@@ -149,6 +160,46 @@ object GameTouchEditor {
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP
             )
         }
+        // Each placed stick: its circle's size, its dead zone and its range
+        val stickRow = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+        bar.addView(stickRow)
+        refreshStickRow = {
+            stickRow.removeAllViews()
+            for (stick in zones.keys.sorted()) {
+                val (dead, range) = tuning[stick] ?: GameProfile.DEFAULT_TUNING
+                val name = context.getString(if (stick == 0) R.string.game_mode_left_stick else R.string.game_mode_right_stick)
+                fun resize(by: Float) {
+                    val zone = zones[stick] ?: return
+                    zones[stick] = Triple(zone.first, zone.second, (zone.third + by).coerceIn(0.05f, 0.45f))
+                    addStick(stick)
+                }
+                stickRow.addView(LinearLayout(context).apply {
+                    addView(TextView(context).apply { text = name; setTextColor(Color.WHITE); textSize = 13f
+                        setPadding((8 * density).toInt(), 0, (4 * density).toInt(), 0) })
+                    addView(button(R.string.game_mode_stick_smaller) { resize(-0.02f) })
+                    addView(button(R.string.game_mode_stick_bigger) { resize(0.02f) })
+                    addView(TextView(context).apply {
+                        text = context.getString(R.string.game_mode_stick_dead_zone, (dead * 100).toInt())
+                        setTextColor(Color.WHITE); textSize = 14f
+                        setPadding((12 * density).toInt(), (10 * density).toInt(), (12 * density).toInt(), (10 * density).toInt())
+                        setOnClickListener {
+                            val next = DEAD_ZONES[(DEAD_ZONES.indexOfFirst { kotlin.math.abs(it - dead) < 0.001f } + 1) % DEAD_ZONES.size]
+                            tuning[stick] = next to range; refreshStickRow()
+                        }
+                    })
+                    addView(TextView(context).apply {
+                        text = context.getString(R.string.game_mode_stick_range, (range * 100).toInt())
+                        setTextColor(Color.WHITE); textSize = 14f
+                        setPadding((12 * density).toInt(), (10 * density).toInt(), (12 * density).toInt(), (10 * density).toInt())
+                        setOnClickListener {
+                            val next = RANGES[(RANGES.indexOfFirst { kotlin.math.abs(it - range) < 0.001f } + 1) % RANGES.size]
+                            tuning[stick] = dead to next; refreshStickRow()
+                        }
+                    })
+                })
+            }
+        }
+        refreshStickRow()
         frame.addView(bar)
 
         // Back closes it, as Cancel does; the key pressed after Add a key gets a box in the
@@ -179,6 +230,10 @@ object GameTouchEditor {
         runCatching { windows.addView(frame, params); frame.requestFocus() }
             .onFailure { open = false; root = null }
     }
+
+    /** Dead zones and ranges to step through, tapped. */
+    private val DEAD_ZONES = listOf(0f, 0.04f, 0.08f, 0.12f, 0.16f, 0.2f, 0.3f)
+    private val RANGES = listOf(0.6f, 0.8f, 1f, 1.2f, 1.4f)
 
     /** The keys a game can be given, as on the keyboard: letters, then the rest. */
     private val PICKABLE = (KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z).toList() + listOf(

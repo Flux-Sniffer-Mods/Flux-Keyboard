@@ -657,6 +657,15 @@
     },
     {
       "text": "Quick launcher: Flux Games, XCloud Games and streaming's settings are commands of their own, and XCloud games show as XCloud Games."
+    },
+    {
+      "text": "Gaming mode: placed sticks can be resized in the placer, each with a dead zone and a range; a push is a circle (a diagonal no further than straight), the circle's edge is a full push, and touches stay on the screen, so pushing down works on a sideways screen too."
+    },
+    {
+      "text": "Gaming mode: Back in a game asks to be pressed again before leaving, so a stray press doesn't quit."
+    },
+    {
+      "text": "Gaming mode: the screen's density follows a sideways or lower resolution, so a game's screen holds as much as the phone's own (put back after)."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

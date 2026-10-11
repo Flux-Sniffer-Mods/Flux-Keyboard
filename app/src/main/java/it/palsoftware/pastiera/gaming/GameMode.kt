@@ -61,8 +61,8 @@ object GameMode {
         // Placed while streaming: kept apart from the phone's own placing
         val stored = GameProfiles.all(context).firstOrNull { it.id == updated.id } ?: updated
         // Only the placing is kept: the profile in use may carry a game's own screen over its app's
-        val saved = if (streamed()) stored.copy(streamStickZones = updated.stickZones, streamTaps = updated.taps)
-            else stored.copy(stickZones = updated.stickZones, taps = updated.taps)
+        val saved = (if (streamed()) stored.copy(streamStickZones = updated.stickZones, streamTaps = updated.taps)
+            else stored.copy(stickZones = updated.stickZones, taps = updated.taps)).copy(stickTuning = updated.stickTuning)
         GameProfiles.save(context, saved)
         if (profile?.id == updated.id) profile = GameTouchEditor.withDefaults(updated)
     }
@@ -158,6 +158,7 @@ object GameMode {
      */
     fun attachPlayer(context: Context, screenMode: ScreenMode, sink: (FloatArray) -> Unit) {
         val app = context.applicationContext
+        appContext = app
         worker.execute {
             stickSink = sink
             val player = GameProfile(
@@ -270,6 +271,7 @@ object GameMode {
     fun onKeyEvent(event: KeyEvent): Boolean {
         if (!passesKeys()) return false
         val code = event.keyCode
+        if (code == KeyEvent.KEYCODE_BACK && backGuard(event)) return true
         val down = event.action == KeyEvent.ACTION_DOWN
         if (down && event.repeatCount == 0) trackpadReader?.keyPressed()
         // The red side key: the right trigger, read from its device (its own action kept away)
@@ -306,6 +308,33 @@ object GameMode {
         return true
     }
 
+    /** When Back was last pressed in a game (the first press of two). */
+    @Volatile private var backPressedAt = 0L
+    /** The Back now held was taken (its letting go is too). */
+    @Volatile private var backTaken = false
+    @Volatile private var appContext: Context? = null
+
+    /**
+     * Back in a game: a first press only says to press again (a stray press doesn't leave the
+     * game); a second within two seconds goes back. True when Back is taken.
+     */
+    private fun backGuard(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_UP) return backTaken.also { backTaken = false }
+        if (event.action != KeyEvent.ACTION_DOWN || event.repeatCount > 0) return backTaken
+        val now = android.os.SystemClock.uptimeMillis()
+        if (now - backPressedAt < BACK_CONFIRM_MS) { backPressedAt = 0L; backTaken = false; return false }
+        backPressedAt = now
+        backTaken = true
+        appContext?.let { context ->
+            android.os.Handler(android.os.Looper.getMainLooper()).post {
+                android.widget.Toast.makeText(context, it.palsoftware.pastiera.R.string.game_mode_back_again, android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        return true
+    }
+
+    private const val BACK_CONFIRM_MS = 2_000L
+
     private fun send(line: String) {
         val writer = input ?: return
         runCatching { writer.write(line); writer.write("\n"); writer.flush() }
@@ -316,6 +345,7 @@ object GameMode {
     @Volatile private var activeId: String? = null
 
     private fun start(context: Context, chosen: GameProfile) {
+        appContext = context.applicationContext
         if (profile == null) {
             if (!AdbShell.available()) return
             startInput(context)
@@ -388,6 +418,12 @@ object GameMode {
     // ---- The screen stays upright while a game runs ----
 
     private const val KEY_RESTORE_SIZE = "game_mode_restore_size"
+    private const val KEY_RESTORE_DENSITY = "game_mode_restore_density"
+    /** The density override before gaming mode's (empty: none); null when it set none. */
+    private var savedDensity: String? = null
+
+    /** `wm density` for the density saved before gaming mode changed it. */
+    private fun densityCommand(saved: String) = if (saved.isEmpty()) "wm density reset" else "wm density $saved"
     private const val KEY_RESTORE_ROTATION = "game_mode_restore_rotation"
 
     /** What gaming mode changed on the screen, kept until it's put back: it outlives the process. */
@@ -402,19 +438,22 @@ object GameMode {
         val prefs = pending(context)
         val size = prefs.getString(KEY_RESTORE_SIZE, null)
         val rotation = prefs.getString(KEY_RESTORE_ROTATION, null)
-        if (size == null && rotation == null) return
+        val density = prefs.getString(KEY_RESTORE_DENSITY, null)
+        if (size == null && rotation == null && density == null) return
         if (!AdbShell.available()) return
         // In one go, for a quick switch back
         AdbShell.run(listOfNotNull(
             size?.let { if (it.isEmpty()) "wm size reset" else "wm size $it" },
+            density?.let { densityCommand(it) },
             rotation?.let {
                 "cmd window set-ignore-orientation-request false; " +
                     "settings put system accelerometer_rotation ${it.takeIf { r -> r == "0" || r == "1" } ?: "1"}"
             }
         ).joinToString("; "), 5_000)
-        prefs.edit().remove(KEY_RESTORE_SIZE).remove(KEY_RESTORE_ROTATION).apply()
+        prefs.edit().remove(KEY_RESTORE_SIZE).remove(KEY_RESTORE_ROTATION).remove(KEY_RESTORE_DENSITY).apply()
         savedSize = null
         savedRotation = null
+        savedDensity = null
         appliedScreen = ScreenMode.APP
     }
 
@@ -520,6 +559,13 @@ object GameMode {
             savedSize = null
             prefs.edit().remove(KEY_RESTORE_SIZE).apply()
         }
+        var restoredDensity: String? = null
+        if (appliedScreen == ScreenMode.SIDEWAYS) savedDensity?.let { saved ->
+            commands += densityCommand(saved)
+            restoredDensity = saved
+            savedDensity = null
+            prefs.edit().remove(KEY_RESTORE_DENSITY).apply()
+        }
         if (appliedScreen != ScreenMode.APP) savedRotation?.let { saved ->
             commands += "cmd window set-ignore-orientation-request false; " +
                 "settings put system accelerometer_rotation ${saved.takeIf { it == "0" || it == "1" } ?: "1"}"
@@ -534,7 +580,7 @@ object GameMode {
         if (mode != ScreenMode.APP) {
             // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
             // app asking for landscape the other way round would show upside down)
-            val state = AdbShell.run("settings get system accelerometer_rotation; wm size").orEmpty()
+            val state = AdbShell.run("settings get system accelerometer_rotation; wm size; wm density").orEmpty()
             // What's kept to put back is what was there before gaming mode, not its own last change
             savedRotation = restoredRotation ?: state.lineSequence().firstOrNull()?.trim()?.takeIf { it == "0" || it == "1" } ?: "1"
             prefs.edit().putString(KEY_RESTORE_ROTATION, savedRotation).apply()
@@ -548,6 +594,14 @@ object GameMode {
                     prefs.edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
                     sideways = stream ?: scaled(sidewaysSize(w, h, cutoutTop(context)), size)
                     commands += "wm size ${sideways.first}x${sideways.second}"
+                    // The density in step with the size, so the game's screen holds as much as the
+                    // phone's own does (else a shorter screen at the same density cuts things off)
+                    val physicalDensity = Regex("Physical density: (\\d+)").find(state)?.groupValues?.get(1)?.toIntOrNull()
+                    if (physicalDensity != null) {
+                        savedDensity = restoredDensity ?: Regex("Override density: (\\d+)").find(state)?.groupValues?.get(1) ?: ""
+                        prefs.edit().putString(KEY_RESTORE_DENSITY, savedDensity).apply()
+                        commands += "wm density ${sidewaysDensity(physicalDensity, w, sideways)}"
+                    }
                 }
             }
         }
@@ -571,6 +625,10 @@ object GameMode {
         }
         if (shape != null || restoredSize != null) send("S ${screenW.toInt()} ${screenH.toInt()}")
     }
+
+    /** The density for a sideways [size] on a screen [physicalShort] pixels across at [physical] dpi: its shorter side as many dp as the phone's. */
+    internal fun sidewaysDensity(physical: Int, physicalShort: Int, size: Pair<Int, Int>): Int =
+        (physical.toLong() * minOf(size.first, size.second) / physicalShort).toInt().coerceIn(physical / 3, physical)
 
     /** The camera cutout's depth at the top of the upright screen, in pixels (0 without one). */
     private fun cutoutTop(context: Context): Int = runCatching {
@@ -646,19 +704,37 @@ object GameMode {
 
     /** An on-screen stick: a finger on its place, pushed as far as the stick goes. */
     private fun dragStick(at: Int) {
-        val zone = profile?.stickZones?.get(at / 2) ?: return
+        val current = profile ?: return
+        val zone = current.stickZones[at / 2] ?: return
+        val (deadZone, range) = current.tuning(at / 2)
         val cx = zone.first * screenW
         val cy = zone.second * screenH
-        val reach = zone.third * screenW
+        // The circle's size is a share of the screen's shorter side (as the placer draws it), so
+        // a sideways screen doesn't push it off the bottom
+        val reach = zone.third * minOf(screenW, screenH) * range
         val finger = 1 + at / 2
         val first = !stickHeld[at / 2]
         stickHeld[at / 2] = true
-        val x = cx + sticks[at] * reach
-        val y = cy + sticks[at + 1] * reach
+        val (sx, sy) = stickShape(sticks[at], sticks[at + 1], deadZone)
+        // Never off the screen: a touch there is dropped, and the stick wouldn't move that way
+        val x = (cx + sx * reach).coerceIn(1f, screenW - 2f)
+        val y = (cy + sy * reach).coerceIn(1f, screenH - 2f)
         worker.execute {
             if (first) send("T d $finger $cx $cy")
             send("T m $finger $x $y")
         }
+    }
+
+    /**
+     * A stick's push as the game should see it: a circle, not a square (a diagonal reaches the
+     * edge, no further), nothing inside the dead zone, and the rest spread over the whole range
+     * so the edge is still a full push.
+     */
+    internal fun stickShape(x: Float, y: Float, deadZone: Float): Pair<Float, Float> {
+        val length = kotlin.math.sqrt(x * x + y * y)
+        if (length <= deadZone || length == 0f) return 0f to 0f
+        val scaled = ((minOf(length, 1f) - deadZone) / (1f - deadZone)).coerceIn(0f, 1f)
+        return x / length * scaled to y / length * scaled
     }
 
     private fun sendSticks() {

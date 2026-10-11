@@ -85,8 +85,16 @@ data class GameProfile(
     /** A Dolphin Wii game's controller ([FluxLayout.WiiPad]'s name; null: Wii Remote and Nunchuk). */
     val wiiPad: String? = null,
     /** Dolphin's two app profiles: "wii" or "gamecube", each game getting the one it is. */
-    val variant: String? = null
+    val variant: String? = null,
+    /**
+     * Each placed stick's dead zone (the share of a push ignored, 0 to 0.5) and range (how far
+     * a full push reaches, a share of its circle); missing: [DEFAULT_TUNING].
+     */
+    val stickTuning: Map<Int, Pair<Float, Float>> = emptyMap()
 ) {
+    /** A stick's dead zone and range. */
+    fun tuning(stick: Int): Pair<Float, Float> = stickTuning[stick] ?: DEFAULT_TUNING
+
     /** A game of its app (it starts one game), rather than the app's own settings. */
     val isGame: Boolean get() = launch != null
 
@@ -116,9 +124,15 @@ data class GameProfile(
         put("taps", tapsJson(taps))
         if (streamStickZones.isNotEmpty()) put("streamStickZones", zonesJson(streamStickZones))
         if (streamTaps.isNotEmpty()) put("streamTaps", tapsJson(streamTaps))
+        if (stickTuning.isNotEmpty()) put("stickTuning", JSONObject().apply {
+            stickTuning.forEach { (stick, t) -> put(stick.toString(), JSONArray(listOf(t.first.toDouble(), t.second.toDouble()))) }
+        })
     }
 
     companion object {
+        /** A stick's dead zone and range unless set: a little ignored around the middle, full reach at the circle's edge. */
+        val DEFAULT_TUNING = 0.08f to 1f
+
         private fun zonesJson(zones: Map<Int, Triple<Float, Float, Float>>) = JSONObject().apply {
             zones.forEach { (stick, zone) ->
                 put(stick.toString(), JSONArray(listOf(zone.first.toDouble(), zone.second.toDouble(), zone.third.toDouble())))
@@ -154,6 +168,7 @@ data class GameProfile(
                 taps = tapsFrom(json.optJSONObject("taps")),
                 streamStickZones = zonesFrom(json.optJSONObject("streamStickZones")),
                 streamTaps = tapsFrom(json.optJSONObject("streamTaps")),
+                stickTuning = tapsFrom(json.optJSONObject("stickTuning")),
                 launch = json.optString("launch").ifEmpty { null },
                 // Before one screen choice: "sideways", and a keep-upright switch for every game
                 screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }
