@@ -467,6 +467,11 @@
     <string name="game_mode_xbox_none">Couldn\'t load the catalogue. Check the phone is online and offline mode is off.</string>
     <string name="game_mode_xbox_sign_in">Sign in to Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Sign in to Xbox in Flux Keyboard\'s player. Once signed in, every cloud game plays.</string>
+    <string name="game_mode_xbox_add_to_games">Add to Games</string>
+    <string name="game_mode_xbox_add_to_games_description">Adds it to the Games app and to Moonlight\'s list, without playing it first.</string>
+    <string name="game_mode_xbox_in_games">Already in your games.</string>
+    <string name="game_mode_xbox_added">%1$s added to Games</string>
+    <string name="games_app_settings_short">Settings</string>
     <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Stream to Moonlight</string>

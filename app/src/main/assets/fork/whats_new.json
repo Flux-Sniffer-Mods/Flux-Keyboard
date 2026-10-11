@@ -618,6 +618,9 @@
     },
     {
       "text": "Games app: keys picked with W A S D now show a frame round the tile, with the rest dimmed."
+    },
+    {
+      "text": "XCloud Games in the Games app: tap a game to play it straight away; long-press it to add it to the Games app and Moonlight without playing, or open its settings."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

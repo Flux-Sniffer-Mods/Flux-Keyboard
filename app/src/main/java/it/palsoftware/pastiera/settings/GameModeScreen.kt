@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 
 import android.view.KeyEvent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -735,8 +736,41 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
 
 /** Xbox Cloud Gaming's games, searched by name: one picked becomes a game of its own. */
 @Composable
-internal fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
+internal fun XboxCloudDialog(
+    pkg: String,
+    onPicked: (GameLibrary.Game) -> Unit,
+    onDismiss: () -> Unit,
+    /** A tap plays the game straight away (the Games app); else a tap picks it, as [onPicked]. */
+    onPlay: ((GameLibrary.Game) -> Unit)? = null,
+    onAdded: () -> Unit = {}
+) {
     val context = LocalContext.current
+    // A game long-pressed: added to the games (the Games app and Moonlight), or its settings
+    var menuFor by remember { mutableStateOf<it.palsoftware.pastiera.gaming.XboxCloud.CloudGame?>(null) }
+    menuFor?.let { cloud ->
+        val game = it.palsoftware.pastiera.gaming.XboxCloud.asGame(cloud, pkg)
+        val profile = remember(cloud.id) { GameProfiles.profileFor(context, game) }
+        val added = remember(cloud.id) { GameProfiles.all(context).any { p -> p.id == profile.id } }
+        AlertDialog(
+            onDismissRequest = { menuFor = null },
+            title = { Text(cloud.name) },
+            text = { Text(stringResource(if (added) R.string.game_mode_xbox_in_games else R.string.game_mode_xbox_add_to_games_description)) },
+            confirmButton = {
+                if (!added) androidx.compose.material3.Button(onClick = {
+                    GameProfiles.save(context, profile)
+                    android.widget.Toast.makeText(context, context.getString(R.string.game_mode_xbox_added, cloud.name), android.widget.Toast.LENGTH_SHORT).show()
+                    menuFor = null
+                    onAdded()
+                }) { Text(stringResource(R.string.game_mode_xbox_add_to_games)) }
+            },
+            dismissButton = {
+                Row {
+                    if (onPlay != null) TextButton(onClick = { menuFor = null; onPicked(game) }) { Text(stringResource(R.string.games_app_settings_short)) }
+                    TextButton(onClick = { menuFor = null }) { Text(stringResource(R.string.cancel)) }
+                }
+            }
+        )
+    }
     var games by remember { mutableStateOf<List<it.palsoftware.pastiera.gaming.XboxCloud.CloudGame>?>(null) }
     var query by remember { mutableStateOf("") }
     // Signed in first: the games only play once Xbox knows who's playing
@@ -787,7 +821,10 @@ internal fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, 
                         ) {
                             items(shown.size, key = { shown[it].id.ifEmpty { "home" } }) { i ->
                                 val game = shown[i]
-                                CloudGameTile(game) { onPicked(it.palsoftware.pastiera.gaming.XboxCloud.asGame(game, pkg)) }
+                                CloudGameTile(game, onLongClick = { if (game.id.isNotEmpty()) menuFor = game }) {
+                                    val picked = it.palsoftware.pastiera.gaming.XboxCloud.asGame(game, pkg)
+                                    onPlay?.invoke(picked) ?: onPicked(picked)
+                                }
                             }
                         }
                     }
@@ -799,14 +836,15 @@ internal fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, 
 
 /** A cloud game's cover and name. */
 @Composable
-private fun CloudGameTile(game: it.palsoftware.pastiera.gaming.XboxCloud.CloudGame, onClick: () -> Unit) {
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+private fun CloudGameTile(game: it.palsoftware.pastiera.gaming.XboxCloud.CloudGame, onLongClick: () -> Unit = {}, onClick: () -> Unit) {
     val image by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, game.art) {
         value = game.art?.takeIf { it.isNotEmpty() }?.let { url ->
             withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameArt.thumbnail(url)?.asImageBitmap() }
         }
     }
     val shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
-    Column(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxWidth().combinedClickable(onClick = onClick, onLongClick = onLongClick), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(shape)
                 .then(Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape)),
