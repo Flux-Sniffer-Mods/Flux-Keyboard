@@ -208,6 +208,17 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             }
         }
         CustomGameFolders()
+        // The games in the quick launcher too, as apps are
+        var inLauncher by remember { mutableStateOf(it.palsoftware.pastiera.commands.GameCommandSource.enabled(context)) }
+        FluxSwitchRow(
+            linkId = null,
+            title = stringResource(R.string.game_mode_quick_launcher),
+            description = stringResource(R.string.game_mode_quick_launcher_description),
+            checked = inLauncher
+        ) { on ->
+            inLauncher = on
+            it.palsoftware.pastiera.commands.GameCommandSource.setEnabled(context, on)
+        }
     }
 
     if (picking) {

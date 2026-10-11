@@ -428,4 +428,6 @@
     <string name="game_mode_trackpad_test_running">Recording… move two fingers on the trackpad</string>
     <string name="game_mode_trackpad_test_description">For when both sticks don\'t move together: tap, then for %1$d seconds move a finger on each half of the trackpad. Saved to Download/Flux Keyboard/trackpad-test.txt, to share.</string>
     <string name="game_mode_trackpad_test_result">Most fingers seen at once: %1$d (%2$s).\n\nSaved to Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Games in the quick launcher</string>
+    <string name="game_mode_quick_launcher_description">The games found in the game folders and the games with a profile, started from the quick launcher as their home screen shortcuts start them.</string>
 </resources>

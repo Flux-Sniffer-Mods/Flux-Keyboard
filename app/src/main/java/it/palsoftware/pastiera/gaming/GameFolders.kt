@@ -114,8 +114,43 @@ object GameFolders {
         return AdbShell.run("mkdir -p $dirs && touch $noMedia && printf '%s\\n' '${note.replace("'", "")}' > \"$ROOT/About these folders.txt\"", 5_000) != null
     }
 
+    private const val KEY_SCANNED = "game_folders_scanned"
+    private const val KEY_SCANNED_AT = "game_folders_scanned_at"
+    private const val RESCAN_MS = 15 * 60_000L
+    @Volatile private var scanning = false
+
+    /**
+     * The games found the last time the folders were read, at once (for the quick launcher);
+     * read again in the background when that was a while ago.
+     */
+    fun scanned(context: Context): List<GameLibrary.Game> {
+        val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
+        val app = context.applicationContext
+        if (!scanning && System.currentTimeMillis() - prefs.getLong(KEY_SCANNED_AT, 0) > RESCAN_MS && AdbShell.available()) {
+            scanning = true
+            Thread { try { games(app) } finally { scanning = false } }.apply { isDaemon = true; start() }
+        }
+        return runCatching {
+            val list = org.json.JSONArray(prefs.getString(KEY_SCANNED, null) ?: return emptyList())
+            List(list.length()) { i ->
+                val o = list.getJSONObject(i)
+                GameLibrary.Game(o.getString("name"), o.getString("package"), launch = o.optString("launch").ifEmpty { null })
+            }
+        }.getOrDefault(emptyList())
+    }
+
+    private fun remember(context: Context, games: List<GameLibrary.Game>): List<GameLibrary.Game> {
+        val list = org.json.JSONArray()
+        games.forEach { g -> list.put(org.json.JSONObject().put("name", g.name).put("package", g.packageName).put("launch", g.launch ?: "")) }
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit()
+            .putString(KEY_SCANNED, list.toString()).putLong(KEY_SCANNED_AT, System.currentTimeMillis()).apply()
+        return games
+    }
+
     /** Every game in the folders whose player is installed (blocking: reads the shell). */
-    fun games(context: Context): List<GameLibrary.Game> {
+    fun games(context: Context): List<GameLibrary.Game> = scan(context).also { remember(context, it) }
+
+    private fun scan(context: Context): List<GameLibrary.Game> {
         val players = Player.entries.mapNotNull { player -> player.installed(context)?.let { player to it } }.toMap()
         if (players.isEmpty()) return emptyList()
         // Each file with its first line: an export file holds its game's ID

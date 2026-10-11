@@ -60,6 +60,7 @@ class CommandRegistry(
                 AppShortcutCommandSource(),
                 ListedAppCommandSource(),
                 TermuxScriptCommandSource(),
+                GameCommandSource(),
                 UserShortcutCommandSource(),
                 DeviceControlCommandSource(),
                 AdbCommandSource(),

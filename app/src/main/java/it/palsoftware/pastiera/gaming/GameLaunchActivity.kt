@@ -11,23 +11,28 @@ import android.os.Bundle
 
 /**
  * A game's home screen shortcut: makes its profile the one gaming mode uses for its launcher,
- * then starts the game (or, when the launcher can't be told which game, the launcher).
+ * then starts the game (or, when the launcher can't be told which game, the launcher). A game
+ * from the quick launcher may have no profile of its own: its app's settings play it.
  */
 class GameLaunchActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val launchUri = intent.getStringExtra(EXTRA_LAUNCH)
         val profile = intent.getStringExtra(EXTRA_PROFILE)?.let { id -> GameProfiles.all(this).firstOrNull { it.id == id } }
-        if (profile == null) {
+            ?: launchUri?.let { uri -> GameProfiles.all(this).firstOrNull { it.launch == uri } }
+        val packages = profile?.packages ?: setOfNotNull(intent.getStringExtra(EXTRA_PACKAGE))
+        val launch = profile?.launch ?: launchUri
+        if (packages.isEmpty()) {
             finish()
             return
         }
-        profile.packages.forEach { GameProfiles.setActive(this, it, profile.id) }
-        val game = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
-            ?.takeIf { (it.`package` ?: it.component?.packageName) in profile.packages }
+        profile?.let { p -> p.packages.forEach { GameProfiles.setActive(this, it, p.id) } }
+        val game = launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+            ?.takeIf { (it.`package` ?: it.component?.packageName) in packages }
             // An activity that isn't there (another GameHub build): the app itself instead
             ?.takeIf { packageManager.resolveActivity(it, 0) != null }
             ?.let { withGameFile(it) }
-        val app = profile.packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
+        val app = packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
         val emulatorGame = game != null && (game.data != null || game.hasExtra("AutoStartFile"))
         val pkg = game?.`package` ?: game?.component?.packageName
         if (emulatorGame && pkg != null && it.palsoftware.pastiera.adb.AdbShell.available()) {
@@ -60,6 +65,17 @@ class GameLaunchActivity : Activity() {
 
     companion object {
         private const val EXTRA_PROFILE = "profile"
+        private const val EXTRA_LAUNCH = "launch"
+        private const val EXTRA_PACKAGE = "package"
+
+        /** Starts a game found in the folders (or a launcher), through its profile when it has one. */
+        fun intentFor(context: Context, game: GameLibrary.Game): Intent =
+            Intent(context, GameLaunchActivity::class.java).setAction(Intent.ACTION_VIEW)
+                .putExtra(EXTRA_LAUNCH, game.launch).putExtra(EXTRA_PACKAGE, game.packageName)
+
+        /** Starts [profile]'s game. */
+        fun intentFor(context: Context, profile: GameProfile): Intent =
+            Intent(context, GameLaunchActivity::class.java).setAction(Intent.ACTION_VIEW).putExtra(EXTRA_PROFILE, profile.id)
 
         /** Asks the home screen to add [profile]'s shortcut; false when it can't. */
         /** The game's art as a home screen icon: cropped square, filling the icon's shape. */
@@ -87,10 +103,7 @@ class GameLaunchActivity : Activity() {
             val shortcut = ShortcutInfo.Builder(context, "game_${profile.id}")
                 .setShortLabel(profile.name.ifBlank { "Game" })
                 .setIcon(icon)
-                .setIntent(
-                    Intent(context, GameLaunchActivity::class.java).setAction(Intent.ACTION_VIEW)
-                        .putExtra(EXTRA_PROFILE, profile.id)
-                )
+                .setIntent(intentFor(context, profile))
                 .build()
             return runCatching { manager.requestPinShortcut(shortcut, null) }.getOrDefault(false)
         }
