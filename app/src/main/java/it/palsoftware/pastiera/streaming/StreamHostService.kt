@@ -71,6 +71,29 @@ class StreamHostService : Service() {
                 .putExtra(EXTRA_CODE, code).putExtra(EXTRA_DATA, data))
         }
 
+        private const val KEY_RESOLUTION = "stream_resolution"
+        /** Automatic (1080p for a 16:9 screen, else what Moonlight asks), a fixed height, or Moonlight's own. */
+        val RESOLUTIONS = listOf("auto", "720", "1080", "1440", "client")
+
+        fun resolution(context: Context): String =
+            SettingsManager.getPreferences(context).getString(KEY_RESOLUTION, "auto")?.takeIf { it in RESOLUTIONS } ?: "auto"
+
+        fun setResolution(context: Context, value: String) =
+            SettingsManager.getPreferences(context).edit().putString(KEY_RESOLUTION, value).apply()
+
+        /** The phone's screen size while streaming to a [width] x [height] screen: its shape, at the chosen height. */
+        internal fun phoneSize(choice: String, width: Int, height: Int): Pair<Int, Int> {
+            val sixteenNine = kotlin.math.abs(width.toFloat() / height - 16f / 9f) < 0.02f
+            val rows = when (choice) {
+                "720" -> 720
+                "1080" -> 1080
+                "1440" -> 1440
+                "client" -> height
+                else -> if (sixteenNine) 1080 else height
+            }
+            return ((rows.toLong() * width / height).toInt() and 1.inv()) to (rows and 1.inv())
+        }
+
         fun enabled(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_ENABLED, false)
 
         fun setEnabled(context: Context, on: Boolean) {

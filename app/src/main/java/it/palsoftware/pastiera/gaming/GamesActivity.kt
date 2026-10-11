@@ -67,6 +67,14 @@ class GamesActivity : ComponentActivity() {
             importing = false; addingOwn = false; addingXbox = false
             editing = GameProfiles.profileFor(this, game)
         }
+        // Gaming mode's own settings, opened from here too
+        var settings by remember { mutableStateOf(false) }
+        if (settings) {
+            androidx.activity.compose.BackHandler { settings = false; reload++ }
+            it.palsoftware.pastiera.settings.GameModeScreen(onBack = { settings = false; reload++ })
+            return
+        }
+        var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(this)) }
         if (importing) it.palsoftware.pastiera.settings.GameImportDialog(onPicked = pick, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
         if (addingOwn) it.palsoftware.pastiera.settings.OwnGameDialog(onAdded = pick, onDismiss = { addingOwn = false })
         if (addingXbox) it.palsoftware.pastiera.settings.XboxCloudDialog(XboxCloud.app(this), onPicked = pick, onDismiss = { addingXbox = false })
@@ -100,6 +108,17 @@ class GamesActivity : ComponentActivity() {
                         androidx.compose.material3.OutlinedButton(onClick = {
                             runCatching { startActivity(XboxPlayActivity.signIn(this@GamesActivity)) }
                         }) { Text(stringResource(R.string.game_mode_xbox_sign_in)) }
+                        // Streaming to Moonlight, on or off at a tap
+                        androidx.compose.material3.FilterChip(
+                            selected = streaming,
+                            onClick = {
+                                streaming = !streaming
+                                it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(this@GamesActivity, streaming)
+                            },
+                            label = { Text(stringResource(R.string.stream_switch)) },
+                            leadingIcon = if (streaming) { { Text("\u2713") } } else null
+                        )
+                        androidx.compose.material3.OutlinedButton(onClick = { settings = true }) { Text(stringResource(R.string.games_app_settings)) }
                     }
                 }
                 if (list != null && list.isEmpty()) item { Text(stringResource(R.string.games_app_empty)) }

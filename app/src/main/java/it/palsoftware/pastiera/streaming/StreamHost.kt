@@ -227,7 +227,11 @@ object StreamHost {
         if (!resume && game == null) return root("", 404, "That game isn't in the games list")
         session?.end()
         val started = StreamSession(app, client, appId, width, height, fps, key, keyId) { ended ->
-            if (session === ended) session = null
+            if (session === ended) {
+                session = null
+                // The screen back as gaming mode (or the phone) wants it
+                it.palsoftware.pastiera.gaming.GameMode.streaming(app, null)
+            }
         }
         runCatching { started.start() }.onFailure {
             Log.w(TAG, "session couldn't start: $it")
@@ -236,6 +240,9 @@ object StreamHost {
         }
         session = started
         currentGame = appId
+        // The game drawn at the TV's shape and the chosen size, ahead of gaming mode's own choice
+        it.palsoftware.pastiera.gaming.GameMode.streaming(app,
+            StreamHostService.phoneSize(StreamHostService.resolution(app), width, height))
         // A resumed game is already open; a new one opens once the screen can be captured
         pendingLaunch = if (resume || game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
         capture()

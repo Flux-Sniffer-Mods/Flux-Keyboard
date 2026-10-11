@@ -392,7 +392,7 @@ object GameMode {
      * for when it ended without undoing them (blocking: runs the shell).
      */
     fun recover(context: Context) {
-        if (profile != null) return
+        if (profile != null || streamSize != null) return
         val prefs = pending(context)
         val size = prefs.getString(KEY_RESTORE_SIZE, null)
         val rotation = prefs.getString(KEY_RESTORE_ROTATION, null)
@@ -414,17 +414,36 @@ object GameMode {
 
     /** The screen choice applied now (APP: nothing changed). */
     private var appliedScreen = ScreenMode.APP
+    /** What gaming mode last asked for, put back when streaming ends. */
+    @Volatile private var requestedScreen = ScreenMode.APP
+    /** Streaming's screen size (landscape-shaped), ahead of any game's choice; null when not streaming. */
+    @Volatile private var streamSize: Pair<Int, Int>? = null
+    private var appliedStream: Pair<Int, Int>? = null
+
+    /** The screen at [size] while streaming to Moonlight, or back to what gaming mode wants (null). */
+    fun streaming(context: Context, size: Pair<Int, Int>?) {
+        val app = context.applicationContext
+        worker.execute {
+            streamSize = size
+            screen(app, requestedScreen)
+        }
+    }
 
     /**
      * Moves the screen from the choice applied to [mode]: undoes the old one, then does the new,
      * all in one go through the shell (one question first, when there's something to save), so
      * the switch is quick.
      */
-    private fun screen(context: Context, mode: ScreenMode) {
-        if (mode == appliedScreen) return
+    private fun screen(context: Context, requested: ScreenMode) {
+        requestedScreen = requested
+        // Streaming to Moonlight comes first: the screen at the stream's size, whatever the game's choice
+        val stream = streamSize
+        val mode = if (stream != null) ScreenMode.SIDEWAYS else requested
+        if (mode == appliedScreen && stream == appliedStream) return
         val prefs = pending(context)
         val commands = mutableListOf<String>()
         var restoredSize: String? = null
+        var restoredRotation: String? = null
         if (appliedScreen == ScreenMode.SIDEWAYS) savedSize?.let { saved ->
             commands += if (saved.isEmpty()) "wm size reset" else "wm size $saved"
             restoredSize = saved
@@ -434,16 +453,19 @@ object GameMode {
         if (appliedScreen != ScreenMode.APP) savedRotation?.let { saved ->
             commands += "cmd window set-ignore-orientation-request false; " +
                 "settings put system accelerometer_rotation ${saved.takeIf { it == "0" || it == "1" } ?: "1"}"
+            restoredRotation = saved
             savedRotation = null
             prefs.edit().remove(KEY_RESTORE_ROTATION).apply()
         }
         appliedScreen = mode
+        appliedStream = stream
         var sideways: Pair<Int, Int>? = null
         if (mode != ScreenMode.APP) {
             // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
             // app asking for landscape the other way round would show upside down)
             val state = AdbShell.run("settings get system accelerometer_rotation; wm size").orEmpty()
-            savedRotation = state.lineSequence().firstOrNull()?.trim()?.takeIf { it == "0" || it == "1" } ?: "1"
+            // What's kept to put back is what was there before gaming mode, not its own last change
+            savedRotation = restoredRotation ?: state.lineSequence().firstOrNull()?.trim()?.takeIf { it == "0" || it == "1" } ?: "1"
             prefs.edit().putString(KEY_RESTORE_ROTATION, savedRotation).apply()
             commands += "cmd window set-ignore-orientation-request true; " +
                 "settings put system accelerometer_rotation 0; settings put system user_rotation 0"
@@ -451,9 +473,9 @@ object GameMode {
                 val physical = Regex("Physical size: (\\d+)x(\\d+)").find(state)?.destructured?.toList()?.map { it.toInt() }
                 if (physical != null) {
                     val (w, h) = minOf(physical[0], physical[1]) to maxOf(physical[0], physical[1])
-                    savedSize = Regex("Override size: (\\d+x\\d+)").find(state)?.groupValues?.get(1) ?: ""
+                    savedSize = restoredSize ?: Regex("Override size: (\\d+x\\d+)").find(state)?.groupValues?.get(1) ?: ""
                     prefs.edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
-                    sideways = sidewaysSize(w, h, cutoutTop(context))
+                    sideways = stream ?: sidewaysSize(w, h, cutoutTop(context))
                     commands += "wm size ${sideways.first}x${sideways.second}"
                 }
             }

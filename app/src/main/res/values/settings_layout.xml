@@ -503,4 +503,9 @@
     <string name="game_mode_advice_driver_turnip">Turnip (the newest)</string>
     <string name="game_mode_advice_driver_system">System (Turnip is only for Adreno)</string>
     <string name="game_mode_advice_game">In the game\'s own settings: graphics quality Medium or Low, a 60 fps limit only if it stays steady (else 30), and render scale or resolution below 100% if it offers one.</string>
+    <string name="stream_resolution">Resolution on the TV</string>
+    <string name="stream_resolution_auto">Automatic</string>
+    <string name="stream_resolution_client">As Moonlight asks</string>
+    <string name="stream_resolution_description">While streaming, the phone\'s screen takes the TV\'s shape at this size, ahead of gaming mode\'s own screen choice. Automatic is 1080p for 16:9 screens, else what Moonlight asks for.</string>
+    <string name="games_app_settings">Gaming settings</string>
 </resources>

@@ -207,6 +207,22 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             streaming = on
             it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
         }
+        // The game's size on the TV: the phone's screen takes the TV's shape while streaming
+        if (streaming) {
+            val resolutions = it.palsoftware.pastiera.streaming.StreamHostService.RESOLUTIONS
+            val names = listOf(
+                stringResource(R.string.stream_resolution_auto), "720p", "1080p", "1440p",
+                stringResource(R.string.stream_resolution_client)
+            )
+            var resolution by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.resolution(context)) }
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                ChoiceRow(stringResource(R.string.stream_resolution), names[resolutions.indexOf(resolution).coerceAtLeast(0)], names) { index ->
+                    resolution = resolutions[index]
+                    it.palsoftware.pastiera.streaming.StreamHostService.setResolution(context, resolution)
+                }
+                Text(stringResource(R.string.stream_resolution_description), style = MaterialTheme.typography.bodySmall)
+            }
+        }
         if (paired > 0) FluxActionRow(
             linkId = null,
             icon = "\u2715",
