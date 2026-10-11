@@ -1817,7 +1817,7 @@
     <string name="game_mode_folders_section">Папки игр</string>
     <string name="game_mode_place_keys">Разместить клавиши на экране</string>
     <string name="game_mode_add_key">Добавить клавишу</string>
-    <string name="game_mode_press_key">Нажмите клавишу, которую нужно разместить.</string>
+    <string name="game_mode_press_key">Нажмите клавишу ниже или на клавиатуре.</string>
     <string name="game_mode_trackpad_test">Записать тачпад</string>
     <string name="game_mode_trackpad_test_running">Запись… двигайте двумя пальцами по тачпаду</string>
     <string name="game_mode_trackpad_test_description">Если два стика не двигаются вместе: нажмите и %1$d секунд двигайте по пальцу на каждой половине тачпада. Сохраняется в Download/Flux Keyboard/trackpad-test.txt, чтобы поделиться.</string>

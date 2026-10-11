@@ -1805,7 +1805,7 @@
     <string name="game_mode_folders_section">Խաղերի թղթապանակներ</string>
     <string name="game_mode_place_keys">Տեղադրել ստեղները էկրանին</string>
     <string name="game_mode_add_key">Ավելացնել ստեղն</string>
-    <string name="game_mode_press_key">Սեղմեք տեղադրվող ստեղնը։</string>
+    <string name="game_mode_press_key">Հպիր ստորև ստեղնին կամ սեղմիր այն։</string>
     <string name="game_mode_trackpad_test">Ձայնագրել թաչփադը</string>
     <string name="game_mode_trackpad_test_running">Գրանցում… շարժեք երկու մատ թաչփադի վրա</string>
     <string name="game_mode_trackpad_test_description">Երբ երկու լծակները միասին չեն շարժվում. հպեք, ապա %1$d վայրկյան շարժեք մեկական մատ թաչփադի յուրաքանչյուր կեսին։ Պահվում է Download/Flux Keyboard/trackpad-test.txt-ում՝ կիսվելու համար։</string>

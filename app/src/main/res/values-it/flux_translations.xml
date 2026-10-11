@@ -1316,7 +1316,7 @@
     <string name="game_mode_folders_section">Cartelle dei giochi</string>
     <string name="game_mode_place_keys">Posiziona i tasti sullo schermo</string>
     <string name="game_mode_add_key">Aggiungi un tasto</string>
-    <string name="game_mode_press_key">Premi il tasto da posizionare.</string>
+    <string name="game_mode_press_key">Tocca un tasto qui sotto o premilo.</string>
     <string name="game_mode_trackpad_test">Registra il trackpad</string>
     <string name="game_mode_trackpad_test_running">Registrazione… muovi due dita sul trackpad</string>
     <string name="game_mode_trackpad_test_description">Per quando i due stick non si muovono insieme: tocca, poi per %1$d secondi muovi un dito su ogni metà del trackpad. Salvato in Download/Flux Keyboard/trackpad-test.txt, da condividere.</string>
