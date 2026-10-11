@@ -466,7 +466,7 @@
       "text": "Gaming mode: an app that looks like a game, with no settings yet, gets a notification offering to set it up. Xbox Cloud Gaming is recognised. A Play Store page or sign-in opened inside a game keeps its screen, the screen switches faster, and swiping a game away in recents ends gaming mode. A stick stroke starting near the trackpad's edge still reaches full push. With root, Volume Up and Down are the left shoulder and trigger and the red side key the right trigger. The quick launcher starts games the way the Games app does."
     },
     {
-      "text": "Gaming mode: games found in the game folders join the games list by themselves, not set up until you say: the first time one starts, it asks to set it up or play it with its app's settings. The Games app has each game's settings too (\u2699)."
+      "text": "Gaming mode: games found in the game folders, and games installed from the Play Store, join the games list by themselves, not set up (and not played with) until you say: the first time one starts, it asks to set it up or play it with its app's settings. The Games app has each game's settings too (\u2699)."
     },
     {
       "text": "Gaming mode: Games in the app list adds a Games app to the home screen's app list (Niagara's too) with every game, and every game can be added to the home screen at once. Screen is now as the app wants or kept upright (forcing a landscape resolution, the default for game apps). A Dolphin Wii game can take a GameCube controller (Mario Kart Wii), the Wii pointer follows the trackpad's right half, GameCube L and R sit on the volume keys, games named by their file get their title, and keys pressed while steering no longer stop the left stick. Record the trackpad moved to Developer options."

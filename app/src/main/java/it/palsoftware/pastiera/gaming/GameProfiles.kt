@@ -200,8 +200,9 @@ object GameProfiles {
     }
 
     /** The profiles for an app; several when it launches several games. */
+    /** The profiles gaming mode plays [packageName] with: found games not set up yet aren't among them. */
     fun forPackage(context: Context, packageName: String): List<GameProfile> =
-        all(context).filter { profile -> profile.packages.any { covers(it, packageName) } }
+        all(context).filter { profile -> !profile.pending && profile.packages.any { covers(it, packageName) } }
 
     /**
      * A profile's app covers [front] when it's that app, or one of its own parts that runs a game
@@ -294,13 +295,15 @@ object GameProfiles {
 
     /** A found game set up (or played as it is): no longer asked about, its app's settings made. */
     fun confirm(context: Context, profile: GameProfile): GameProfile {
-        // (Flux Keyboard's own player has no app settings of its own)
+        // A launcher's or emulator's game plays with its app's settings, made now; a game that
+        // is an app of its own (from the Play Store) has its own (Flux Keyboard's player has none)
         val pkg = profile.packages.firstOrNull()?.takeIf { it != context.packageName }
-        if (pkg != null) {
+        val player = pkg?.let { GameApps.appFor(it) }
+        if (pkg != null && player != null) {
             val label = runCatching { context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
             ensureApp(context, pkg, label)
         }
-        return profile.copy(pending = false).also { save(context, it) }
+        return profile.copy(pending = false, own = profile.own || (pkg != null && player == null)).also { save(context, it) }
     }
 
     /**

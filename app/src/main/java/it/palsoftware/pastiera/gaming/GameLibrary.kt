@@ -33,6 +33,27 @@ object GameLibrary {
             LAUNCHER_NAMES.any { it in name }
         }
 
+    /**
+     * The games installed as apps of their own (Play Store games, by Android's game category or
+     * the older game flag), each started from its home screen icon. Launchers and emulators
+     * Flux Keyboard knows are apps that play games, not games: left out.
+     */
+    fun installedGames(context: Context): List<Game> {
+        val pm = context.packageManager
+        val home = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+        return pm.queryIntentActivities(home, 0).mapNotNull { info ->
+            val app = info.activityInfo.applicationInfo
+            val pkg = info.activityInfo.packageName
+            @Suppress("DEPRECATION")
+            val game = app.category == android.content.pm.ApplicationInfo.CATEGORY_GAME ||
+                (app.flags and android.content.pm.ApplicationInfo.FLAG_IS_GAME) != 0
+            if (!game || pkg == context.packageName || GameApps.appFor(pkg) != null) return@mapNotNull null
+            val launch = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+                .setClassName(pkg, info.activityInfo.name).toUri(Intent.URI_INTENT_SCHEME)
+            Game(info.loadLabel(pm).toString(), pkg, launch = launch)
+        }.distinctBy { it.packageName }
+    }
+
     /** The games a launcher lists (blocking: reads the shell). */
     fun games(packageName: String): List<Game> {
         val shortcuts = AdbShell.run("dumpsys shortcut", 8_000)?.let { parseGames(it, packageName) }.orEmpty()

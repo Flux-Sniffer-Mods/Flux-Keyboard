@@ -17,12 +17,23 @@ class GameEditActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val profiles = GameProfiles.all(this)
         val profile = intent.getStringExtra(EXTRA_PROFILE)?.let { id -> profiles.firstOrNull { it.id == id } }
-            ?: intent.getStringExtra(EXTRA_APP)?.let { pkg ->
-                GameDetect.dismiss(this, pkg)
-                val label = runCatching { packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
-                GameProfiles.ensureApp(this, pkg, label).firstOrNull()
-            }
+            ?: intent.getStringExtra(EXTRA_APP)?.let { pkg -> forApp(pkg, profiles) }
         if (profile == null) { finish(); return }
+        show(profile)
+    }
+
+    /**
+     * An app's settings to set up: a game that's an app of its own, found already, is that one;
+     * else the app's settings, made now.
+     */
+    private fun forApp(pkg: String, profiles: List<GameProfile>): GameProfile? {
+        GameDetect.dismiss(this, pkg)
+        profiles.firstOrNull { it.pending && it.isGame && pkg in it.packages && GameApps.appFor(pkg) == null }?.let { return it }
+        val label = runCatching { packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
+        return GameProfiles.ensureApp(this, pkg, label).firstOrNull()
+    }
+
+    private fun show(profile: GameProfile) {
         setContent {
             PastieraTheme {
                 GameProfileEditor(profile, onDone = { saved ->

@@ -95,7 +95,8 @@ object GameMode {
             if (profile != null) worker.execute { stop(app) }
             return
         }
-        // An app that looks like a game, with no settings yet: asked once whether to set it up
+        // An app that looks like a game, with no settings yet (or only found, not set up): asked
+        // once whether to set it up
         if (GameProfiles.forPackage(app, packageName).isEmpty()) worker.execute { GameDetect.offer(app, packageName) }
         worker.execute { followGame(app, packageName) }
     }

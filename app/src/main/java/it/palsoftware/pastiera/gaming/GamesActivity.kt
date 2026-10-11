@@ -69,7 +69,7 @@ class GamesActivity : ComponentActivity() {
         if (importing) it.palsoftware.pastiera.settings.GameImportDialog(onPicked = pick, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
         if (addingOwn) it.palsoftware.pastiera.settings.OwnGameDialog(onAdded = pick, onDismiss = { addingOwn = false })
         if (addingXbox) it.palsoftware.pastiera.settings.XboxCloudDialog(XboxCloud.app(this), onPicked = pick, onDismiss = { addingXbox = false })
-        LaunchedEffect(reload) { entries = withContext(Dispatchers.IO) { games(this@GamesActivity) }.map { (profile, intent) -> Entry(profile.name, profile, intent) } }
+        LaunchedEffect(reload) { entries = withContext(Dispatchers.IO) { GameProfiles.addDetected(this@GamesActivity, GameLibrary.installedGames(this@GamesActivity)); games(this@GamesActivity) }.map { (profile, intent) -> Entry(profile.name, profile, intent) } }
         editing?.let { profile ->
             androidx.activity.compose.BackHandler { editing = null }
             it.palsoftware.pastiera.settings.GameProfileEditor(profile, onDone = { saved ->

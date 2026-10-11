@@ -107,6 +107,8 @@ class GameProfilesTest {
         val found = GameProfiles.all(context).filter { it.launch == game.launch }
         assertEquals(1, found.size)
         assertEquals(true, found.single().pending)
+        // Not played with until set up
+        assertEquals(true, GameProfiles.forPackage(context, "org.dolphinemu.dolphinemu").none { it.launch == game.launch })
         assertEquals(true, GameProfile.fromJson(found.single().toJson())?.pending)
         assertEquals(false, GameProfiles.confirm(context, found.single()).pending)
     }

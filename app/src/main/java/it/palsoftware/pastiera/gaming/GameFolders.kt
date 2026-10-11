@@ -144,8 +144,8 @@ object GameFolders {
         games.forEach { g -> list.put(org.json.JSONObject().put("name", g.name).put("package", g.packageName).put("launch", g.launch ?: "")) }
         it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit()
             .putString(KEY_SCANNED, list.toString()).putLong(KEY_SCANNED_AT, System.currentTimeMillis()).apply()
-        // Each one in the games list, not set up until asked
-        GameProfiles.addDetected(context, games)
+        // Each one in the games list, not set up until asked (the Play Store's games too)
+        GameProfiles.addDetected(context, games + GameLibrary.installedGames(context))
         if (GamesActivity.enabled(context)) GamesActivity.sync(context.applicationContext)
         return games
     }

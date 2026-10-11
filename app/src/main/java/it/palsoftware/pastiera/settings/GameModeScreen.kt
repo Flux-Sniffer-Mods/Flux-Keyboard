@@ -78,6 +78,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             if (it.palsoftware.pastiera.adb.AdbShell.available()) it.palsoftware.pastiera.gaming.GameFolders.games(context)
+            else GameProfiles.addDetected(context, GameLibrary.installedGames(context))
             GameProfiles.retitle(context)
         }
         refresh()
