@@ -25,6 +25,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -116,7 +119,11 @@ class GamesActivity : ComponentActivity() {
         Scaffold(
             topBar = {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
+                    // Clear of the status bar and the camera cutout
+                    modifier = Modifier.fillMaxWidth()
+                        .windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.safeDrawing.only(
+                            androidx.compose.foundation.layout.WindowInsetsSides.Top + androidx.compose.foundation.layout.WindowInsetsSides.Horizontal))
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Back from the launchers' page; else gaming mode's settings
@@ -172,7 +179,7 @@ class GamesActivity : ComponentActivity() {
                     item(key = "add") { Tile(stringResource(R.string.game_mode_import), null, { Symbol("+") }, { importing = true }, { importing = true }) }
                     // Xbox cloud games: signed in first, then picked; long-press to sign out
                     item(key = "xbox") {
-                        Tile(stringResource(R.string.games_app_xbox), null, { Symbol("\u2601") },
+                        Tile(stringResource(R.string.games_app_xbox), null, { XboxCover() },
                             onClick = { if (xbox.signedIn) addingXbox = true else xbox.click() },
                             onLongClick = { xboxMenu = true })
                     }
@@ -184,7 +191,7 @@ class GamesActivity : ComponentActivity() {
                         Tile(
                             name = profile?.name ?: it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg),
                             sub = null,
-                            art = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { it.palsoftware.pastiera.settings.FluxAppIcon(pkg, 64.dp) } },
+                            art = { AppCover(profile ?: GameProfiles.newProfile(it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg), setOf(pkg)).copy(id = "app:$pkg"), pkg) },
                             onClick = { packageManager.getLaunchIntentForPackage(pkg)?.let { launch -> runCatching { startActivity(launch) } } },
                             onLongClick = {
                                 editing = profile ?: GameProfiles.newProfile(it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg), setOf(pkg))
@@ -203,10 +210,17 @@ class GamesActivity : ComponentActivity() {
 
     /** Launchers and emulators: those with gaming mode settings, then the known ones installed. */
     private fun launchers(): List<Pair<String, GameProfile?>> {
-        val profiles = GameProfiles.all(this).filter { !it.isGame }
-        val withProfile = profiles.mapNotNull { profile -> profile.packages.firstOrNull()?.let { it to profile } }.distinctBy { it.first }
+        val all = GameProfiles.all(this)
+        // An app that's a game itself (a Play Store game) is on the games page, not here
+        val gameApps = games(this).map { it.first }.filter { game ->
+            val launch = game.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+            launch == null || launch.component?.packageName == game.packages.firstOrNull() && (launch.extras?.isEmpty ?: true) && launch.data == null
+        }.flatMap { it.packages }.toSet()
         val known = GameFolders.Player.entries.flatMap { player -> player.activities.map { it.first } } +
             listOf("org.dolphinemu.dolphinemu", "org.ppsspp.ppsspp", "org.ppsspp.ppssppgold")
+        val profiles = all.filter { !it.isGame }
+        val withProfile = profiles.mapNotNull { profile -> profile.packages.firstOrNull()?.let { it to profile } }
+            .distinctBy { it.first }.filter { (pkg, _) -> pkg in known || pkg !in gameApps }
         val installed = known.distinct().filter { pkg -> withProfile.none { it.first == pkg } && packageManager.getLaunchIntentForPackage(pkg) != null }
         return withProfile + installed.map { it to null }
     }
@@ -238,6 +252,33 @@ class GamesActivity : ComponentActivity() {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text, style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+
+    /** A launcher's or emulator's tile: art picked for it, else its icon, upright like the games'. */
+    @Composable
+    private fun AppCover(profile: GameProfile, pkg: String) {
+        val version = GameArt.version(this, profile)
+        val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, profile.id, version) {
+            value = withContext(Dispatchers.IO) { runCatching { GameArt.appPortrait(this@GamesActivity, profile, pkg)?.asImageBitmap() }.getOrNull() }
+        }
+        Cover(art) { it.palsoftware.pastiera.settings.FluxAppIcon(pkg, 64.dp) }
+    }
+
+    /** Xbox Cloud Gaming's tile: Game Pass art, a cloud while there's none. */
+    @Composable
+    private fun XboxCover() {
+        val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null) {
+            value = withContext(Dispatchers.IO) { runCatching { GameArt.xboxTile(this@GamesActivity)?.asImageBitmap() }.getOrNull() }
+        }
+        Cover(art) { Symbol("\u2601") }
+    }
+
+    @Composable
+    private fun Cover(image: androidx.compose.ui.graphics.ImageBitmap?, fallback: @Composable () -> Unit) {
+        if (image != null) androidx.compose.foundation.Image(
+            bitmap = image, contentDescription = null,
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.fillMaxSize()
+        ) else Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { fallback() }
     }
 
     /** A game's upright art, the same Moonlight shows; its app's icon while there's none. */

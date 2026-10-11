@@ -579,6 +579,9 @@
     },
     {
       "text": "Stream to Moonlight works over USB tethering and Ethernet as well as Wi-Fi: Moonlight is given the address it reached the phone by."
+    },
+    {
+      "text": "Games app: launchers and emulators get upright tiles like the games, the Xbox cloud tile shows Game Pass art, and games from the Play Store stay on the games page instead of also being listed as launchers."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -817,6 +820,9 @@
     },
     {
       "text": "The crash log includes why the app last closed and any not-responding traces, so freezes can be found too."
+    },
+    {
+      "text": "The Games app's top bar sits below the status bar and the camera cutout."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

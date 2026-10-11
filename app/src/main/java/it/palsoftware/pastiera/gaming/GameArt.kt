@@ -62,6 +62,42 @@ object GameArt {
         return load(context, profile)?.let(::portrait)
     }
 
+    /**
+     * A launcher's or emulator's tile, upright like the games': art picked for it, else its icon
+     * over a dimmed fill of itself (no looking up: an app's name finds games, not the app).
+     */
+    fun appPortrait(context: Context, profile: GameProfile, packageName: String): Bitmap? {
+        uprightFile(context, profile).takeIf { it.length() > 0 }?.let { file -> BitmapFactory.decodeFile(file.path)?.let { return it } }
+        custom(context, profile)?.let { return portrait(it) }
+        return runCatching {
+            val icon = context.packageManager.getApplicationIcon(packageName)
+            val size = 256
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            val canvas = android.graphics.Canvas(bitmap)
+            icon.setBounds(0, 0, size, size)
+            icon.draw(canvas)
+            portrait(bitmap)
+        }.getOrNull()
+    }
+
+    /** Xbox Cloud Gaming's tile: Game Pass's upright art from SteamGridDB (fetched once, blocking). */
+    fun xboxTile(context: Context): Bitmap? {
+        val file = File(dir(context), "xbox-cloud-tile" + (if (key.isEmpty()) "" else "-sgdb") + ".img")
+        if (file.exists()) return if (file.length() > 0) BitmapFactory.decodeFile(file.path) else null
+        if (SettingsManager.isOfflineMode(context)) return null
+        dir(context).mkdirs()
+        val stand = GameProfiles.newProfile("Xbox Game Pass", emptySet())
+        for (url in steamGridDbPortrait(stand)) {
+            val bytes = fetch(url) ?: continue
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: continue
+            val upright = portrait(bitmap)
+            file.outputStream().use { upright.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+            return upright
+        }
+        file.writeBytes(ByteArray(0))
+        return null
+    }
+
     /** [art] at 600×900: cropped when it's nearly that shape, else fitted over a dimmed fill of itself. */
     internal fun portrait(art: Bitmap): Bitmap {
         val out = Bitmap.createBitmap(PORTRAIT_W, PORTRAIT_H, Bitmap.Config.ARGB_8888)
