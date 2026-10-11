@@ -1333,4 +1333,9 @@
     <string name="phone_game_mode">Eigener Spielmodus des Handys</string>
     <string name="phone_game_mode_description">Der Spielbereich des Handys kann neben dem Spielmodus den Startbildschirm übernehmen: schalte seine Apps hier aus oder wieder ein.</string>
     <string name="phone_game_mode_none">Keine Spielmodus-Apps auf diesem Handy gefunden.</string>
+    <string name="game_mode_artwork">Artwork</string>
+    <string name="game_mode_artwork_description">In der Spieleliste, auf der Verknüpfung und in Moonlight. Dein eigenes Bild, sonst das gefundene.</string>
+    <string name="game_mode_artwork_choose">Bild wählen</string>
+    <string name="game_mode_artwork_reset">Gefundenes Bild nutzen</string>
+    <string name="game_mode_artwork_failed">Das Bild konnte nicht gelesen werden</string>
 </resources>

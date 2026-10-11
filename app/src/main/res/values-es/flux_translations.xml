@@ -1874,4 +1874,9 @@
     <string name="phone_game_mode">Modo juego propio del móvil</string>
     <string name="phone_game_mode_description">El espacio de juegos del móvil puede convertirse en pantalla de inicio junto al modo juego: desactiva sus apps aquí, o vuelve a activarlas.</string>
     <string name="phone_game_mode_none">No se han encontrado apps de modo juego en este móvil.</string>
+    <string name="game_mode_artwork">Portada</string>
+    <string name="game_mode_artwork_description">Se muestra en la lista de juegos, en su acceso directo y en Moonlight. Tu propia imagen o, si no, la encontrada.</string>
+    <string name="game_mode_artwork_choose">Elegir imagen</string>
+    <string name="game_mode_artwork_reset">Usar la portada encontrada</string>
+    <string name="game_mode_artwork_failed">No se pudo leer la imagen</string>
 </resources>

@@ -1874,4 +1874,9 @@
     <string name="phone_game_mode">Mode jeu du téléphone</string>
     <string name="phone_game_mode_description">L\'espace jeu du téléphone peut prendre la place de l\'écran d\'accueil à côté du mode jeu : désactivez ses applis ici, ou réactivez-les.</string>
     <string name="phone_game_mode_none">Aucune appli de mode jeu trouvée sur ce téléphone.</string>
+    <string name="game_mode_artwork">Jaquette</string>
+    <string name="game_mode_artwork_description">Affichée dans la liste des jeux, sur son raccourci et dans Moonlight. Ton image, sinon celle trouvée.</string>
+    <string name="game_mode_artwork_choose">Choisir une image</string>
+    <string name="game_mode_artwork_reset">Utiliser la jaquette trouvée</string>
+    <string name="game_mode_artwork_failed">Impossible de lire cette image</string>
 </resources>

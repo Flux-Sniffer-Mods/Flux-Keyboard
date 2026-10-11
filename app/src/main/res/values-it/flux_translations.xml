@@ -1379,4 +1379,9 @@
     <string name="phone_game_mode">Modalità gioco del telefono</string>
     <string name="phone_game_mode_description">Lo spazio giochi del telefono può prendere il posto della schermata Home accanto alla modalità gioco: disattiva qui le sue app, o riattivale.</string>
     <string name="phone_game_mode_none">Nessuna app di modalità gioco trovata su questo telefono.</string>
+    <string name="game_mode_artwork">Copertina</string>
+    <string name="game_mode_artwork_description">Mostrata nell\'elenco dei giochi, sulla scorciatoia e in Moonlight. La tua immagine, altrimenti quella trovata.</string>
+    <string name="game_mode_artwork_choose">Scegli un\'immagine</string>
+    <string name="game_mode_artwork_reset">Usa la copertina trovata</string>
+    <string name="game_mode_artwork_failed">Impossibile leggere l\'immagine</string>
 </resources>

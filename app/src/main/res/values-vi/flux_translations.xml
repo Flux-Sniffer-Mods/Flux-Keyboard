@@ -1862,4 +1862,9 @@
     <string name="phone_game_mode">Chế độ chơi game riêng của điện thoại</string>
     <string name="phone_game_mode_description">Không gian game của điện thoại có thể chiếm màn hình chính cùng chế độ chơi game: tắt ứng dụng của nó ở đây, hoặc bật lại.</string>
     <string name="phone_game_mode_none">Không tìm thấy ứng dụng chế độ game trên điện thoại này.</string>
+    <string name="game_mode_artwork">Ảnh bìa</string>
+    <string name="game_mode_artwork_description">Hiển thị trong danh sách trò chơi, trên lối tắt và trong Moonlight. Ảnh của bạn, nếu không thì ảnh tìm được.</string>
+    <string name="game_mode_artwork_choose">Chọn ảnh</string>
+    <string name="game_mode_artwork_reset">Dùng ảnh tìm được</string>
+    <string name="game_mode_artwork_failed">Không đọc được ảnh</string>
 </resources>

@@ -1880,4 +1880,9 @@
     <string name="phone_game_mode">Власний ігровий режим телефона</string>
     <string name="phone_game_mode_description">Ігровий простір телефона може стати головним екраном поряд з ігровим режимом: вимкніть його застосунки тут або ввімкніть знову.</string>
     <string name="phone_game_mode_none">На цьому телефоні не знайдено застосунків ігрового режиму.</string>
+    <string name="game_mode_artwork">Обкладинка</string>
+    <string name="game_mode_artwork_description">Показується у списку ігор, на ярлику та в Moonlight. Ваше зображення, інакше знайдене.</string>
+    <string name="game_mode_artwork_choose">Вибрати зображення</string>
+    <string name="game_mode_artwork_reset">Використати знайдену обкладинку</string>
+    <string name="game_mode_artwork_failed">Не вдалося прочитати зображення</string>
 </resources>
