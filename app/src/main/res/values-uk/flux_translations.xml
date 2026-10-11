@@ -1141,10 +1141,10 @@
     <string name="trackpad_gesture_add_word_full_width_title">Свайп додавання слова на всю ширину</string>
     <string name="trackpad_gesture_add_word_full_width_description">Коли показано лише кнопку додавання слова, її може натиснути будь-яка третина трекпада.</string>
     <string name="trackpad_provider_title">Свайпи по клавіатурі надходять від</string>
-    <string name="trackpad_provider_shizuku">Shizuku: у будь-якому застосунку, з помічником прокручування чи без</string>
+    <string name="trackpad_provider_shizuku">Доступ до оболонки: у будь-якому застосунку, з помічником прокручування чи без</string>
     <string name="trackpad_provider_native_ime">Android: лише в застосунках, які прокручує помічник прокручування</string>
     <string name="trackpad_provider_native_ime_status">Використовуються свайпи по клавіатурі від Android</string>
-    <string name="trackpad_shizuku_device_title">Пристрій введення Shizuku</string>
+    <string name="trackpad_shizuku_device_title">Пристрій введення тачпада</string>
     <string name="trackpad_shizuku_device_automatic">Автоматично (рекомендовано)</string>
     <string name="trackpad_shizuku_device_unavailable">%1$s (зараз недоступно)</string>
     <string name="trackpad_shizuku_device_discovery_failed">Не вдалося знайти пристрої. Автоматичний запасний варіант лишається активним.</string>
@@ -1880,7 +1880,7 @@
     <string name="phone_game_mode">Власний ігровий режим телефона</string>
     <string name="phone_game_mode_description">Ігровий режим Unihertz може зайняти місце головного екрана разом з ігровим режимом. Вимкніть його тут.</string>
     <string name="game_mode_artwork">Обкладинка</string>
-    <string name="game_mode_artwork_description">Використовується в списку ігор, на ярликах і в Moonlight.</string>
+    <string name="game_mode_artwork_description">Обкладинки видно в застосунку «Ігри» та в Moonlight, квадратні зображення — на ярликах і в налаштуваннях.</string>
     <string name="game_mode_artwork_choose">Використати зображення з телефона</string>
     <string name="game_mode_artwork_reset">Використати автоматичне зображення</string>
     <string name="game_mode_artwork_failed">Не вдалося прочитати зображення</string>
@@ -1932,8 +1932,8 @@
     <string name="game_mode_resolution_stream">Роздільність під час трансляції</string>
     <string name="game_mode_resolution_stream_default">Як у налаштуванні трансляції</string>
     <string name="game_mode_artwork_found">Вибрати зображення з інтернету</string>
-    <string name="game_mode_artwork_icons">Квадратні зображення (список ігор і ярлики)</string>
-    <string name="game_mode_artwork_upright">Обкладинки (Moonlight)</string>
+    <string name="game_mode_artwork_icons">Квадратні зображення (ярлики й налаштування)</string>
+    <string name="game_mode_artwork_upright">Обкладинки (застосунок «Ігри» і Moonlight)</string>
     <string name="game_mode_artwork_none">Зображення в інтернеті не знайдено. Спробуйте знайти його назву вище.</string>
     <string name="games_app_launchers">Лаунчери та емулятори</string>
     <string name="games_app_stream">Трансляція</string>
@@ -1963,4 +1963,6 @@
     <string name="extra_screen_keys_phone">Клавіші: телефону</string>
     <string name="stream_desktop_art">Робочий Стіл Android</string>
     <string name="stream_flux_games">Flux Games</string>
+    <string name="trackpad_gestures_shizuku_connected">Доступ до оболонки під\'єднано</string>
+    <string name="trackpad_gestures_shizuku_not_connected">Доступ до оболонки не запущено</string>
 </resources>

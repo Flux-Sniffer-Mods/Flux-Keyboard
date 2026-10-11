@@ -1141,10 +1141,10 @@
     <string name="trackpad_gesture_add_word_full_width_title">Dodawanie słowa przesunięciem na całej szerokości</string>
     <string name="trackpad_gesture_add_word_full_width_description">Gdy widoczny jest tylko przycisk dodawania słowa, dowolna trzecia część trackpada może je dodać.</string>
     <string name="trackpad_provider_title">Przesunięcia po klawiaturze pochodzą z</string>
-    <string name="trackpad_provider_shizuku">Shizuku: w każdej aplikacji, z Asystentem przewijania lub bez</string>
+    <string name="trackpad_provider_shizuku">Dostęp do powłoki: w każdej aplikacji, z asystentem przewijania lub bez</string>
     <string name="trackpad_provider_native_ime">Android: tylko w aplikacjach przewijanych przez Asystenta przewijania</string>
     <string name="trackpad_provider_native_ime_status">Używane przesunięcia po klawiaturze z Androida</string>
-    <string name="trackpad_shizuku_device_title">Urządzenie wejściowe Shizuku</string>
+    <string name="trackpad_shizuku_device_title">Urządzenie wejściowe gładzika</string>
     <string name="trackpad_shizuku_device_automatic">Automatycznie (zalecane)</string>
     <string name="trackpad_shizuku_device_unavailable">%1$s (obecnie niedostępne)</string>
     <string name="trackpad_shizuku_device_discovery_failed">Wykrywanie urządzeń nie powiodło się. Automatyczne rozwiązanie zapasowe pozostaje aktywne.</string>
@@ -1880,7 +1880,7 @@
     <string name="phone_game_mode">Własny tryb gry telefonu</string>
     <string name="phone_game_mode_description">Tryb gry Unihertz może przejąć ekran główny obok trybu gamingowego. Wyłącz go tutaj.</string>
     <string name="game_mode_artwork">Okładka</string>
-    <string name="game_mode_artwork_description">Używany na liście gier, w skrótach i w Moonlight.</string>
+    <string name="game_mode_artwork_description">Okładki widać w aplikacji Gry i w Moonlight, kwadratowe obrazy w skrótach i ustawieniach.</string>
     <string name="game_mode_artwork_choose">Użyj obrazu z telefonu</string>
     <string name="game_mode_artwork_reset">Użyj automatycznego obrazu</string>
     <string name="game_mode_artwork_failed">Nie udało się odczytać obrazu</string>
@@ -1932,8 +1932,8 @@
     <string name="game_mode_resolution_stream">Rozdzielczość podczas streamu</string>
     <string name="game_mode_resolution_stream_default">Jak ustawienie streamingu</string>
     <string name="game_mode_artwork_found">Wybierz obraz z internetu</string>
-    <string name="game_mode_artwork_icons">Kwadratowe obrazy (lista gier i skróty)</string>
-    <string name="game_mode_artwork_upright">Okładki (Moonlight)</string>
+    <string name="game_mode_artwork_icons">Kwadratowe obrazy (skróty i ustawienia)</string>
+    <string name="game_mode_artwork_upright">Okładki (aplikacja Gry i Moonlight)</string>
     <string name="game_mode_artwork_none">Nie znaleziono obrazu w internecie. Spróbuj wyszukać jego tytuł powyżej.</string>
     <string name="games_app_launchers">Launchery i emulatory</string>
     <string name="games_app_stream">Stream</string>
@@ -1963,4 +1963,6 @@
     <string name="extra_screen_keys_phone">Klawisze: do telefonu</string>
     <string name="stream_desktop_art">Pulpit Androida</string>
     <string name="stream_flux_games">Flux Games</string>
+    <string name="trackpad_gestures_shizuku_connected">Dostęp do powłoki połączony</string>
+    <string name="trackpad_gestures_shizuku_not_connected">Dostęp do powłoki nie działa</string>
 </resources>

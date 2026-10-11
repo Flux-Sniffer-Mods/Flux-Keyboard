@@ -334,8 +334,6 @@
     <string name="trackpad_gestures_install_shizuku">Zainstaluj Shizuku</string>
     <string name="trackpad_gestures_install_shizuku_description">Wymagane do wykrywania gestów trackpada</string>
     <string name="trackpad_gestures_shizuku_url">https://github.com/RikkaApps/Shizuku/releases/</string>
-    <string name="trackpad_gestures_shizuku_connected">Shizuku Połączony</string>
-    <string name="trackpad_gestures_shizuku_not_connected">Shizuku Nie Połączony</string>
     <string name="trackpad_gestures_shizuku_not_authorized">Aplikacja Nieautoryzowana w Shizuku</string>
     <string name="trackpad_tutorial_title">Sugestie Gestów Trackpada</string>
     <string name="trackpad_tutorial_welcome_title">Sugestie Gestów Trackpada</string>

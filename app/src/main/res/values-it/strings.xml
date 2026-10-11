@@ -776,8 +776,6 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="trackpad_gestures_install_shizuku">Installa Shizuku</string>
     <string name="trackpad_gestures_install_shizuku_description">Richiesto per il rilevamento delle gesture del trackpad</string>
     <string name="trackpad_gestures_shizuku_url">https://github.com/RikkaApps/Shizuku/releases/</string>
-    <string name="trackpad_gestures_shizuku_connected">Shizuku Connesso</string>
-    <string name="trackpad_gestures_shizuku_not_connected">Shizuku Non Connesso</string>
     <string name="trackpad_gestures_shizuku_not_authorized">App Non Autorizzata in Shizuku</string>
 
     <!-- Trackpad Gesture Tutorial -->

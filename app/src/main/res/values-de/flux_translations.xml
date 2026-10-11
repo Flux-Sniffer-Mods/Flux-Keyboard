@@ -685,7 +685,7 @@
     <string name="trackpad_gesture_add_word_full_width_title">Wort hinzufügen über die ganze Breite</string>
     <string name="trackpad_gesture_add_word_full_width_description">Wenn nur die Schaltfläche zum Hinzufügen angezeigt wird, kann jedes Trackpad-Drittel das Wort hinzufügen.</string>
     <string name="trackpad_provider_title">Tastatur-Wischgesten kommen von</string>
-    <string name="trackpad_provider_shizuku">Shizuku: in jeder App, ob Scroll-Assistent oder nicht</string>
+    <string name="trackpad_provider_shizuku">Shell-Zugriff: in jeder App, mit oder ohne Scroll-Assistent</string>
     <string name="trackpad_provider_native_ime">Android: nur in Apps, die der Scroll-Assistent scrollt</string>
     <string name="trackpad_provider_native_ime_status">Tastatur-Wischgesten von Android in Verwendung</string>
     <string name="status_bar_style_section">Tastaturleiste</string>
@@ -1333,7 +1333,7 @@
     <string name="phone_game_mode">Eigener Spielmodus des Handys</string>
     <string name="phone_game_mode_description">Der Spielmodus von Unihertz kann neben dem Gaming-Modus den Startbildschirm übernehmen. Hier ausschalten.</string>
     <string name="game_mode_artwork">Artwork</string>
-    <string name="game_mode_artwork_description">Wird in der Spieleliste, auf Verknüpfungen und in Moonlight verwendet.</string>
+    <string name="game_mode_artwork_description">Cover erscheinen in der Spiele-App und in Moonlight, quadratische Bilder auf Verknüpfungen und in den Einstellungen.</string>
     <string name="game_mode_artwork_choose">Bild vom Handy verwenden</string>
     <string name="game_mode_artwork_reset">Automatisches Bild verwenden</string>
     <string name="game_mode_artwork_failed">Das Bild konnte nicht gelesen werden</string>
@@ -1385,8 +1385,8 @@
     <string name="game_mode_resolution_stream">Auflösung beim Streamen</string>
     <string name="game_mode_resolution_stream_default">Wie beim Streaming eingestellt</string>
     <string name="game_mode_artwork_found">Bild aus dem Internet wählen</string>
-    <string name="game_mode_artwork_icons">Quadratische Bilder (Spieleliste und Verknüpfungen)</string>
-    <string name="game_mode_artwork_upright">Cover (Moonlight)</string>
+    <string name="game_mode_artwork_icons">Quadratische Bilder (Verknüpfungen und Einstellungen)</string>
+    <string name="game_mode_artwork_upright">Cover (Spiele-App und Moonlight)</string>
     <string name="game_mode_artwork_none">Kein Bild online gefunden. Suche oben nach seinem Titel.</string>
     <string name="games_app_launchers">Launcher und Emulatoren</string>
     <string name="games_app_stream">Streamen</string>
@@ -1416,4 +1416,7 @@
     <string name="extra_screen_keys_phone">Tasten: ans Handy</string>
     <string name="stream_desktop_art">Android-Desktop</string>
     <string name="stream_flux_games">Flux Games</string>
+    <string name="trackpad_gestures_shizuku_connected">Shell-Zugriff verbunden</string>
+    <string name="trackpad_gestures_shizuku_not_connected">Shell-Zugriff läuft nicht</string>
+    <string name="trackpad_shizuku_device_title">Trackpad-Eingabegerät</string>
 </resources>

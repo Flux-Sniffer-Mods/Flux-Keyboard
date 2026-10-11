@@ -1276,14 +1276,10 @@ QWERTZ σε φυσικό QWERTY
     <string name="trackpad_gestures_install_shizuku">Εγκατάσταση Shizuku</string>
     <string name="trackpad_gestures_install_shizuku_description">Απαιτείται για εντοπισμό χειρονομιών trackpad</string>
     <string name="trackpad_gestures_shizuku_url">https://github.com/RikkaApps/Shizuku/releases/</string>
-    <string name="trackpad_gestures_shizuku_connected">Το Shizuku είναι συνδεδεμένο</string>
-    <string name="trackpad_gestures_shizuku_not_connected">Το Shizuku δεν είναι συνδεδεμένο</string>
     <string name="trackpad_gestures_shizuku_not_authorized">Η εφαρμογή δεν έχει εξουσιοδοτηθεί στο Shizuku</string>
     <string name="trackpad_provider_title">Οι σαρώσεις στο πληκτρολόγιο έρχονται από</string>
-    <string name="trackpad_provider_shizuku">Shizuku: σε κάθε εφαρμογή, με ή χωρίς βοηθό κύλισης</string>
     <string name="trackpad_provider_native_ime">Android: μόνο σε εφαρμογές που κυλά ο βοηθός κύλισης</string>
     <string name="trackpad_provider_native_ime_status">Σε χρήση οι σαρώσεις πληκτρολογίου από το Android</string>
-    <string name="trackpad_shizuku_device_title">Συσκευή εισόδου Shizuku</string>
     <string name="trackpad_shizuku_device_automatic">Αυτόματο (προτεινόμενο)</string>
     <string name="trackpad_shizuku_device_unavailable">%1$s (προς το παρόν μη διαθέσιμο)</string>
     <string name="trackpad_shizuku_device_discovery_failed">Ο εντοπισμός συσκευής απέτυχε. Το αυτόματο fallback παραμένει ενεργό.</string>

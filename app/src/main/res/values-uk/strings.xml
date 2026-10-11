@@ -356,8 +356,6 @@
     <string name="trackpad_gestures_install_shizuku">Встановити Shizuku</string>
     <string name="trackpad_gestures_install_shizuku_description">Потрібно для виявлення жестів тачпада</string>
     <string name="trackpad_gestures_shizuku_url">https://github.com/RikkaApps/Shizuku/releases/</string>
-    <string name="trackpad_gestures_shizuku_connected">Shizuku підключено</string>
-    <string name="trackpad_gestures_shizuku_not_connected">Shizuku не підключено</string>
     <string name="trackpad_gestures_shizuku_not_authorized">Додаток не авторизовано в Shizuku</string>
     <string name="trackpad_tutorial_title">Жести тачпада для пропозицій</string>
     <string name="trackpad_tutorial_welcome_title">Жести тачпада для пропозицій</string>

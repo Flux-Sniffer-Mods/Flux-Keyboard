@@ -1141,10 +1141,10 @@
     <string name="trackpad_gesture_add_word_full_width_title">Balayage d’ajout de mot sur toute la largeur</string>
     <string name="trackpad_gesture_add_word_full_width_description">Quand seul le bouton d’ajout de mot est affiché, n’importe quel tiers du trackpad peut l’ajouter.</string>
     <string name="trackpad_provider_title">Les balayages sur le clavier viennent de</string>
-    <string name="trackpad_provider_shizuku">Shizuku : dans toutes les apps, assistant de défilement ou non</string>
+    <string name="trackpad_provider_shizuku">Accès shell : dans toutes les apps, avec ou sans assistant de défilement</string>
     <string name="trackpad_provider_native_ime">Android : seulement dans les apps que l\'assistant de défilement fait défiler</string>
     <string name="trackpad_provider_native_ime_status">Balayages sur le clavier d\'Android utilisés</string>
-    <string name="trackpad_shizuku_device_title">Périphérique de saisie Shizuku</string>
+    <string name="trackpad_shizuku_device_title">Périphérique d\'entrée du pavé tactile</string>
     <string name="trackpad_shizuku_device_automatic">Automatique (recommandé)</string>
     <string name="trackpad_shizuku_device_unavailable">%1$s (indisponible pour l’instant)</string>
     <string name="trackpad_shizuku_device_discovery_failed">La détection des périphériques a échoué. La solution automatique de secours reste active.</string>
@@ -1874,7 +1874,7 @@
     <string name="phone_game_mode">Mode jeu du téléphone</string>
     <string name="phone_game_mode_description">Le mode jeu d\'Unihertz peut prendre la place de l\'écran d\'accueil en plus du mode gaming. Désactive-le ici.</string>
     <string name="game_mode_artwork">Jaquette</string>
-    <string name="game_mode_artwork_description">Utilisée dans la liste des jeux, sur les raccourcis et dans Moonlight.</string>
+    <string name="game_mode_artwork_description">Les jaquettes s\'affichent dans l\'app Jeux et dans Moonlight ; les images carrées sur les raccourcis et dans les réglages.</string>
     <string name="game_mode_artwork_choose">Utiliser une image du téléphone</string>
     <string name="game_mode_artwork_reset">Utiliser l\'image automatique</string>
     <string name="game_mode_artwork_failed">Impossible de lire cette image</string>
@@ -1926,8 +1926,8 @@
     <string name="game_mode_resolution_stream">Résolution en streaming</string>
     <string name="game_mode_resolution_stream_default">Comme le réglage de streaming</string>
     <string name="game_mode_artwork_found">Choisir une image sur internet</string>
-    <string name="game_mode_artwork_icons">Images carrées (liste des jeux et raccourcis)</string>
-    <string name="game_mode_artwork_upright">Jaquettes (Moonlight)</string>
+    <string name="game_mode_artwork_icons">Images carrées (raccourcis et réglages)</string>
+    <string name="game_mode_artwork_upright">Jaquettes (app Jeux et Moonlight)</string>
     <string name="game_mode_artwork_none">Aucune image trouvée en ligne. Essayez de rechercher son titre ci-dessus.</string>
     <string name="games_app_launchers">Lanceurs et émulateurs</string>
     <string name="games_app_stream">Diffuser</string>
@@ -1957,4 +1957,6 @@
     <string name="extra_screen_keys_phone">Touches : vers le téléphone</string>
     <string name="stream_desktop_art">Bureau Android</string>
     <string name="stream_flux_games">Flux Games</string>
+    <string name="trackpad_gestures_shizuku_connected">Accès shell connecté</string>
+    <string name="trackpad_gestures_shizuku_not_connected">L\'accès shell n\'est pas actif</string>
 </resources>
