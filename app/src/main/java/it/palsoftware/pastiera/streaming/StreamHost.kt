@@ -33,10 +33,10 @@ import javax.net.ssl.X509TrustManager
 /**
  * The phone as a game streaming host Moonlight can find, pair with and list games from (the
  * GameStream protocol, as Sunshine speaks it): announced on the network, a plain web server for
- * finding and pairing, and an encrypted one for paired clients. Games are the games list's,
- * cloud games left out: those stream from the cloud to the Moonlight client's own Xbox app or browser
- * directly, not through the phone. Launching one starts a [StreamSession]: the game opens on the
- * phone, its screen and sound go to Moonlight, Moonlight's controls come back.
+ * finding and pairing, and an encrypted one for paired clients. Games are the games list's
+ * (cloud games once played in the phone's own player), and the phone's own screen. Launching one
+ * starts a [StreamSession]: the game opens on the phone, its screen and sound go to Moonlight,
+ * Moonlight's controls come back.
  */
 object StreamHost {
     private const val TAG = "StreamHost"
@@ -214,6 +214,18 @@ object StreamHost {
     @Volatile private var currentGame = 0
     @Volatile private var pendingLaunch: android.content.Intent? = null
 
+    /** What's streaming now, for the notification: the game, and the Moonlight client's name. */
+    @Volatile var streamingGame: String? = null
+        private set
+    @Volatile var streamingDevice: String? = null
+        private set
+
+    /** Ends the stream from the phone: Moonlight is told, and the game stops being Moonlight's. */
+    fun endStream() {
+        session?.end()
+        currentGame = 0
+    }
+
     /** The game to open once the screen can be captured (once). */
     fun takeLaunch(): android.content.Intent? = pendingLaunch.also { pendingLaunch = null }
 
@@ -227,15 +239,21 @@ object StreamHost {
         val fps = mode?.getOrNull(2)?.takeIf { it > 0 } ?: 60
         val appId = if (resume) currentGame else query["appid"]?.toIntOrNull() ?: 0
         val game = games().firstOrNull { it.first == appId }?.second
-        if (!resume && game == null) return root("", 404, "That game isn't in the games list")
+        // The phone's own screen, as it is: no game to open
+        val phoneScreen = appId == PHONE_SCREEN_ID && StreamHostService.phoneScreen(app)
+        if (!resume && game == null && !phoneScreen) return root("", 404, "That game isn't in the games list")
         // Asked on the phone first, unless this Moonlight client is trusted to start by itself
-        if (!trusted(cert) && !confirm(cert, nameOf(cert) ?: client.hostAddress.orEmpty(), game?.name)) {
+        val title = if (phoneScreen) app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen) else game?.name
+        if (!trusted(cert) && !confirm(cert, nameOf(cert) ?: client.hostAddress.orEmpty(), title)) {
             return root("", 403, "Not allowed on the phone")
         }
         session?.end()
         val started = StreamSession(app, client, appId, width, height, fps, key, keyId) { ended ->
             if (session === ended) {
                 session = null
+                streamingGame = null
+                streamingDevice = null
+                StreamHostService.refresh(app)
                 // The screen back as gaming mode (or the phone) wants it
                 it.palsoftware.pastiera.gaming.GameMode.streaming(app, null)
             }
@@ -247,8 +265,12 @@ object StreamHost {
         }
         session = started
         currentGame = appId
+        streamingGame = title
+        streamingDevice = nameOf(cert) ?: client.hostAddress
+        StreamHostService.refresh(app)
         // The game drawn at the Moonlight client's shape and the chosen size, ahead of gaming mode's own choice
-        it.palsoftware.pastiera.gaming.GameMode.streaming(app,
+        // (the phone's own screen stays as it is, fitted into the stream)
+        if (!phoneScreen) it.palsoftware.pastiera.gaming.GameMode.streaming(app,
             StreamHostService.phoneSize(StreamHostService.resolution(app), width, height))
         // A resumed game is already open; a new one opens once the screen can be captured
         pendingLaunch = if (resume || game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
@@ -399,8 +421,15 @@ object StreamHost {
 
     /** The games streamed: the games list's, cloud games left out (they stream to the Moonlight client's device directly). */
     internal fun games(): List<Pair<Int, GameProfile>> = GamesActivity.games(app).map { it.first }
-        .filter { profile -> profile.packages.none { it == app.packageName || GameApps.appFor(it) == GameApps.XBOX_NAME } }
+        // Cloud games only once played in Flux Keyboard's own player (so they're known to work)
+        .filter { profile ->
+            val cloud = profile.packages.any { it == app.packageName || GameApps.appFor(it) == GameApps.XBOX_NAME }
+            !cloud || it.palsoftware.pastiera.gaming.XboxPlayActivity.played(app, profile)
+        }
         .map { appId(it) to it }
+
+    /** The phone's own screen, listed first in Moonlight when that's on. */
+    const val PHONE_SCREEN_ID = 1
 
     /**
      * A game's number for Moonlight: stable while the game and its art stay the same. Moonlight
@@ -413,14 +442,28 @@ object StreamHost {
     /** Raised when the art Moonlight is sent changes for every game. */
     private const val ART_GENERATION = 2
 
-    private fun appList(): String = root(games().joinToString("") { (id, profile) ->
-        "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"
-    })
+    private fun appList(): String = root(
+        (if (StreamHostService.phoneScreen(app)) "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>" +
+            escape(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen)) + "</AppTitle><ID>$PHONE_SCREEN_ID</ID></App>" else "") +
+            games().filter { it.first != PHONE_SCREEN_ID }.joinToString("") { (id, profile) ->
+                "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"
+            }
+    )
+
+    /** The phone screen's art: Flux Keyboard's icon on a dark upright card. */
+    private fun phoneScreenArt(): android.graphics.Bitmap? = runCatching {
+        val icon = app.packageManager.getApplicationIcon(app.packageName)
+        val square = android.graphics.Bitmap.createBitmap(512, 512, android.graphics.Bitmap.Config.ARGB_8888)
+        icon.setBounds(0, 0, 512, 512)
+        icon.draw(android.graphics.Canvas(square))
+        GameArt.portrait(square)
+    }.getOrNull()
 
     /** A game's upright box art, for Moonlight's game picker. */
     private fun asset(out: OutputStream, appId: String?) {
         val profile = games().firstOrNull { it.first.toString() == appId }?.second
-        val art = profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
+        val art = if (appId == PHONE_SCREEN_ID.toString()) phoneScreenArt()
+            else profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
         val bytes = art?.let { bitmap ->
             java.io.ByteArrayOutputStream().also { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }.toByteArray()
         } ?: ByteArray(0)

@@ -96,8 +96,10 @@ class XboxPlayActivity : Activity() {
         web.onResume()
         immersive()
         if (signingIn) return
-        val screen = GameProfiles.all(this).firstOrNull { p -> p.launch?.contains(intent.dataString ?: "\u0000") == true }?.screen
-            ?: ScreenMode.SIDEWAYS
+        val playing = GameProfiles.all(this).firstOrNull { p -> p.launch?.contains(intent.dataString ?: "\u0000") == true }
+        // Played here once: listed in Moonlight from now on
+        playing?.let { markPlayed(this, it) }
+        val screen = playing?.screen ?: ScreenMode.SIDEWAYS
         GameMode.attachPlayer(this, screen) { sticks ->
             sticks.copyInto(trackpad)
             push()
@@ -203,6 +205,16 @@ class XboxPlayActivity : Activity() {
         @Volatile
         var inFront = false
             private set
+
+        private const val KEY_PLAYED = "xbox_played_"
+
+        /** A cloud game played in the player at least once. */
+        fun played(context: android.content.Context, profile: GameProfile): Boolean =
+            it.palsoftware.pastiera.SettingsManager.getPreferences(context).getBoolean(KEY_PLAYED + profile.id, false)
+
+        private fun markPlayed(context: android.content.Context, profile: GameProfile) {
+            if (!played(context, profile)) it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putBoolean(KEY_PLAYED + profile.id, true).apply()
+        }
 
         const val HOME = "https://www.xbox.com/play"
         /** Xbox's own sign-in (a Microsoft account), back to cloud gaming after. */

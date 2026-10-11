@@ -277,6 +277,13 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- The streaming notification tapped: end the stream or keep it -->
+        <activity
+            android:name=".streaming.StreamStop"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- A Moonlight client asking to stream, confirmed on the phone (started by the shell too: nothing without a request) -->
         <activity
             android:name=".streaming.StreamConfirm"

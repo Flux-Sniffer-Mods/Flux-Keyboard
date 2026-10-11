@@ -207,6 +207,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             streaming = on
             it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
         }
+        // The phone's own screen as one more entry in Moonlight
+        if (streaming) {
+            var phoneScreen by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.phoneScreen(context)) }
+            FluxSwitchRow(
+                linkId = null,
+                title = stringResource(R.string.stream_phone_screen_switch),
+                description = stringResource(R.string.stream_phone_screen_description),
+                checked = phoneScreen
+            ) { on ->
+                phoneScreen = on
+                it.palsoftware.pastiera.streaming.StreamHostService.setPhoneScreen(context, on)
+            }
+        }
         // The game's size for the Moonlight client: the phone's screen takes its shape while streaming
         if (streaming) {
             val resolutions = it.palsoftware.pastiera.streaming.StreamHostService.RESOLUTIONS

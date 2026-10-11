@@ -3490,6 +3490,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     override fun onStartCandidatesView(info: EditorInfo?, restarting: Boolean) {
         super.onStartCandidatesView(info, restarting)
+        if (playerEditor) return
         isInputViewActive = inputContextState.isEditable
         keyboardVisibilityController.onCandidatesViewStarted()
         updateStatusBarText()
@@ -3870,6 +3871,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     @Suppress("DEPRECATION")
     override fun onViewClicked(focusChanged: Boolean) {
         super.onViewClicked(focusChanged)
+        if (playerEditor) return
         // Tapping a search bar that waited for typing brings the keyboard bar up
         if (::keyboardVisibilityController.isInitialized && keyboardVisibilityController.shouldRecoverSurfaceOnHardwareKey() &&
             !keyboardHiddenForApp && !keyboardOutOfSight
@@ -3881,6 +3883,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     override fun onUpdateCursorAnchorInfo(cursorAnchorInfo: CursorAnchorInfo?) {
         super.onUpdateCursorAnchorInfo(cursorAnchorInfo)
+        if (playerEditor) return
         if (
             symPage != 4 ||
             !::candidatesBarController.isInitialized ||
@@ -4329,7 +4332,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
-        if (playerOwnsInput(info)) { super.onStartInput(info, restarting); return }
+        playerEditor = it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront && info?.packageName == packageName
+        if (playerEditor) { super.onStartInput(info, restarting); return }
         AutoCapitalizeHelper.debugPackage = info?.packageName
         info?.let {
             DebugCaptureStore.recordField(
@@ -4543,6 +4547,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        if (playerEditor) { super.onStartInputView(info, restarting); return }
         if (terminalModeActive) TerminalMode.apply(info)
         // A text field in a game: the keys type into it, not play
         it.palsoftware.pastiera.gaming.GameMode.typing = (info?.inputType ?: 0) != 0
@@ -4639,6 +4644,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onFinishInput() {
+        if (playerEditor) { super.onFinishInput(); return }
         ClicksAccessibilityKeyBridge.trackpadCaptured = false
         // Leaving the field: an email or number typed there is complete
         learnContactDetails(endOfEntry = true)
@@ -4681,6 +4687,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
+        if (playerEditor) return
         it.palsoftware.pastiera.gaming.GameMode.typing = false
         if (::textExpansionController.isInitialized) textExpansionController.clear()
         // Finishing a view does not finish the editor session (Back and backend transitions).
@@ -5918,9 +5925,24 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     // Back taken from Niagara's search to return to the app: its release is ours too
     private var niagaraBackReturnTo: String? = null
 
-    /** Flux Keyboard's own Xbox player in front, typing into itself: its keys and text are its own. */
+    /**
+     * The field being typed into is Flux Keyboard's own Xbox player's page: kept from when the field
+     * started until the next one, since leaving it (the player already gone from the front) must
+     * not touch its text either.
+     */
+    @Volatile private var playerEditor = false
+
+    /**
+     * Flux Keyboard's own Xbox player, typing into itself: its keys and text are its own. The
+     * keyboard and the page share this app's main thread, so any question put to the page's
+     * field from here (its text, its selection) waits on the thread the page needs to answer.
+     */
+    /** No connection to the player's own fields: nothing here can wait on the page. */
+    override fun getCurrentInputConnection(): android.view.inputmethod.InputConnection? =
+        if (playerEditor) null else super.getCurrentInputConnection()
+
     private fun playerOwnsInput(info: EditorInfo? = currentInputEditorInfo): Boolean =
-        it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront && info?.packageName == packageName
+        playerEditor || (it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront && info?.packageName == packageName)
 
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         // Keycode 0 types nothing: the keyboard light's wake-up key, passed straight on

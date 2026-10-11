@@ -19,14 +19,11 @@ class StreamHostService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val manager = getSystemService(NotificationManager::class.java)
-        manager?.createNotificationChannel(NotificationChannel(CHANNEL, getString(R.string.stream_host_channel), NotificationManager.IMPORTANCE_LOW))
-        val notification = android.app.Notification.Builder(this, CHANNEL)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(getString(R.string.stream_host_title))
-            .setContentText(getString(R.string.stream_host_text, StreamHost.hostname()))
-            .setOngoing(true)
-            .build()
+        if (intent?.action == ACTION_END) {
+            StreamHost.endStream()
+            return START_STICKY
+        }
+        val notification = notification(this)
         val data = intent?.takeIf { it.action == ACTION_CAPTURE }?.let {
             @Suppress("DEPRECATION")
             it.getParcelableExtra<Intent>(EXTRA_DATA)
@@ -62,6 +59,46 @@ class StreamHostService : Service() {
         private const val NOTIFICATION_ID = 7305
         private const val KEY_ENABLED = "stream_host_enabled"
         private const val ACTION_CAPTURE = "capture"
+        private const val ACTION_END = "end"
+
+        /**
+         * The service's notification: the phone listed in Moonlight, or while a game streams,
+         * which and to whom, with a way to end it (a tap asks first, the button doesn't).
+         */
+        fun notification(context: Context): android.app.Notification {
+            context.getSystemService(NotificationManager::class.java)?.createNotificationChannel(
+                NotificationChannel(CHANNEL, context.getString(R.string.stream_host_channel), NotificationManager.IMPORTANCE_LOW)
+            )
+            val builder = android.app.Notification.Builder(context, CHANNEL)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setOngoing(true)
+            val device = StreamHost.streamingDevice
+            if (StreamHost.session == null || device == null) {
+                return builder.setContentTitle(context.getString(R.string.stream_host_title))
+                    .setContentText(context.getString(R.string.stream_host_text, StreamHost.hostname())).build()
+            }
+            val end = android.app.PendingIntent.getService(
+                context, 3, Intent(context, StreamHostService::class.java).setAction(ACTION_END),
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+            )
+            val ask = android.app.PendingIntent.getActivity(
+                context, 4, Intent(context, StreamStop::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+            )
+            val game = StreamHost.streamingGame
+            return builder
+                .setContentTitle(if (game != null) context.getString(R.string.stream_now_game, game) else context.getString(R.string.stream_now))
+                .setContentText(context.getString(R.string.stream_now_to, device))
+                .setContentIntent(ask)
+                .addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.stream_end), end).build())
+                .build()
+        }
+
+        /** The notification brought up to date (a stream started or ended). */
+        fun refresh(context: Context) {
+            if (!enabled(context)) return
+            runCatching { context.getSystemService(NotificationManager::class.java)?.notify(NOTIFICATION_ID, notification(context)) }
+        }
         private const val EXTRA_CODE = "code"
         private const val EXTRA_DATA = "data"
 
@@ -91,6 +128,14 @@ class StreamHostService : Service() {
             }
             return ((rows.toLong() * width / height).toInt() and 1.inv()) to (rows and 1.inv())
         }
+
+        private const val KEY_PHONE_SCREEN = "stream_phone_screen"
+
+        /** The phone's own screen listed in Moonlight, to show whatever is on it. */
+        fun phoneScreen(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_PHONE_SCREEN, true)
+
+        fun setPhoneScreen(context: Context, on: Boolean) =
+            SettingsManager.getPreferences(context).edit().putBoolean(KEY_PHONE_SCREEN, on).apply()
 
         fun enabled(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_ENABLED, false)
 
