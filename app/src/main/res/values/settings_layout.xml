@@ -452,6 +452,8 @@
     <string name="game_first_start_message">Found among your games. Set up its controller, screen and sticks now, or play it with %1$s\'s settings.</string>
     <string name="game_first_start_set_up">Set up</string>
     <string name="game_first_start_play">Play</string>
+    <string name="games_app_controller_keys">Controller keys in the Games app</string>
+    <string name="games_app_controller_keys_description">Move through the Games app with the same keys as in games: W A S D to move, L to open, K for a game\'s settings, P to go back, Q or E to switch between games and launchers, Space for gaming settings. A controller works too.</string>
     <string name="games_app_new">New: not set up</string>
     <string name="game_mode_found_short">Uses %1$s\'s settings until you set it up</string>
     <string name="game_detect_channel">Games found</string>

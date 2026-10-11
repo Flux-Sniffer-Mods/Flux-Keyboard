@@ -13,6 +13,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.ui.draw.clip
@@ -159,51 +163,103 @@ class GamesActivity : ComponentActivity() {
             }
         ) { inner ->
             val list = entries
+            // Every tile on this page, in order: shown in the grid, and moved through by keys
+            val tiles = mutableListOf<TileSpec>()
+            if (page == Page.GAMES) {
+                list.orEmpty().forEach { entry ->
+                    tiles += TileSpec(entry.profile.id, entry.name,
+                        if (entry.profile.pending) stringResource(R.string.games_app_new) else null,
+                        { GameCover(entry.profile) },
+                        { runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } },
+                        { editing = entry.profile })
+                }
+                tiles += TileSpec("add", stringResource(R.string.game_mode_import), null, { Symbol("+") }, { importing = true }, { importing = true })
+                // Xbox cloud games: signed in first, then picked; long-press to sign out
+                tiles += TileSpec("xbox", stringResource(R.string.games_app_xbox), null, { XboxCover() },
+                    { if (xbox.signedIn) addingXbox = true else xbox.click() }, { xboxMenu = true })
+                tiles += TileSpec("apps", stringResource(R.string.games_app_launchers), null, { Symbol("\u25A6") }, { page = Page.APPS }, { page = Page.APPS })
+            } else {
+                launchers().forEach { (pkg, profile) ->
+                    val label = profile?.name ?: it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg)
+                    tiles += TileSpec(pkg, label, null,
+                        { AppCover(profile ?: GameProfiles.newProfile(label, setOf(pkg)).copy(id = "app:$pkg"), pkg) },
+                        { packageManager.getLaunchIntentForPackage(pkg)?.let { launch -> runCatching { startActivity(launch) } } },
+                        { editing = profile ?: GameProfiles.newProfile(label, setOf(pkg)) })
+                }
+            }
+            val grid = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+            // The tile picked with keys (shown only once keys are used, not for touch)
+            var selected by remember(page) { mutableStateOf(0) }
+            var byKeys by remember { mutableStateOf(false) }
+            val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+            LaunchedEffect(page, editing, importing, addingOwn, addingXbox) { runCatching { focus.requestFocus() } }
+            LaunchedEffect(selected, byKeys) { if (byKeys && selected in tiles.indices) grid.animateScrollToItem(selected) }
+            val controllerKeys = remember { controllerKeys(this@GamesActivity) }
             androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+                state = grid,
                 columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(104.dp),
-                modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 12.dp),
+                modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 12.dp)
+                    .focusRequester(focus)
+                    .onPreviewKeyEvent { event ->
+                        if (!controllerKeys) return@onPreviewKeyEvent false
+                        val native = event.nativeKeyEvent
+                        val action = navigation(native.keyCode) ?: return@onPreviewKeyEvent false
+                        if (native.action != android.view.KeyEvent.ACTION_DOWN) return@onPreviewKeyEvent true
+                        // Columns: how many tiles sit in the first row
+                        val columns = grid.layoutInfo.visibleItemsInfo.count { it.row == grid.layoutInfo.visibleItemsInfo.firstOrNull()?.row }.coerceAtLeast(1)
+                        val wasByKeys = byKeys
+                        byKeys = true
+                        when (action) {
+                            Nav.LEFT -> if (wasByKeys) selected = (selected - 1).coerceAtLeast(0)
+                            Nav.RIGHT -> if (wasByKeys) selected = (selected + 1).coerceAtMost(tiles.lastIndex)
+                            Nav.UP -> if (wasByKeys) selected = (selected - columns).coerceAtLeast(0)
+                            Nav.DOWN -> if (wasByKeys) selected = (selected + columns).coerceAtMost(tiles.lastIndex)
+                            Nav.OPEN -> tiles.getOrNull(selected)?.onClick?.invoke()
+                            Nav.OPTIONS -> tiles.getOrNull(selected)?.onLongClick?.invoke()
+                            Nav.BACK -> if (page == Page.APPS) page = Page.GAMES
+                            Nav.PAGE -> page = if (page == Page.GAMES) Page.APPS else Page.GAMES
+                            Nav.SETTINGS -> settings = true
+                        }
+                        true
+                    }
+                    .focusable(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                if (page == Page.GAMES) {
-                    items(list.orEmpty().size, key = { list!![it].profile.id }) { index ->
-                        val entry = list!![index]
-                        Tile(
-                            name = entry.name,
-                            sub = if (entry.profile.pending) stringResource(R.string.games_app_new) else null,
-                            art = { GameCover(entry.profile) },
-                            onClick = { runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } },
-                            onLongClick = { editing = entry.profile }
-                        )
-                    }
-                    item(key = "add") { Tile(stringResource(R.string.game_mode_import), null, { Symbol("+") }, { importing = true }, { importing = true }) }
-                    // Xbox cloud games: signed in first, then picked; long-press to sign out
-                    item(key = "xbox") {
-                        Tile(stringResource(R.string.games_app_xbox), null, { XboxCover() },
-                            onClick = { if (xbox.signedIn) addingXbox = true else xbox.click() },
-                            onLongClick = { xboxMenu = true })
-                    }
-                    item(key = "apps") { Tile(stringResource(R.string.games_app_launchers), null, { Symbol("\u25A6") }, { page = Page.APPS }, { page = Page.APPS }) }
-                } else {
-                    val apps = launchers()
-                    items(apps.size, key = { apps[it].first }) { index ->
-                        val (pkg, profile) = apps[index]
-                        Tile(
-                            name = profile?.name ?: it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg),
-                            sub = null,
-                            art = { AppCover(profile ?: GameProfiles.newProfile(it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg), setOf(pkg)).copy(id = "app:$pkg"), pkg) },
-                            onClick = { packageManager.getLaunchIntentForPackage(pkg)?.let { launch -> runCatching { startActivity(launch) } } },
-                            onLongClick = {
-                                editing = profile ?: GameProfiles.newProfile(it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg), setOf(pkg))
-                            }
-                        )
-                    }
+                items(tiles.size, key = { tiles[it].key }) { index ->
+                    val tile = tiles[index]
+                    Tile(tile.name, tile.sub, tile.art, tile.onClick, tile.onLongClick, selected = byKeys && index == selected)
                 }
                 if (page == Page.GAMES && list != null && list.isEmpty()) item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(maxLineSpan) }) {
                     Text(stringResource(R.string.games_app_empty))
                 }
             }
         }
+    }
+
+    private class TileSpec(
+        val key: String, val name: String, val sub: String?,
+        val art: @Composable () -> Unit, val onClick: () -> Unit, val onLongClick: () -> Unit
+    )
+
+    /** What a key does in the Games app, in Flux Keyboard's controller layout (or a real controller's). */
+    private enum class Nav { UP, DOWN, LEFT, RIGHT, OPEN, OPTIONS, BACK, PAGE, SETTINGS }
+
+    private fun navigation(code: Int): Nav? = when (code) {
+        android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_DPAD_UP -> Nav.UP
+        android.view.KeyEvent.KEYCODE_S, android.view.KeyEvent.KEYCODE_DPAD_DOWN -> Nav.DOWN
+        android.view.KeyEvent.KEYCODE_A, android.view.KeyEvent.KEYCODE_DPAD_LEFT -> Nav.LEFT
+        android.view.KeyEvent.KEYCODE_D, android.view.KeyEvent.KEYCODE_DPAD_RIGHT -> Nav.RIGHT
+        // L is the A button, K the X button, P the B button
+        android.view.KeyEvent.KEYCODE_L, android.view.KeyEvent.KEYCODE_BUTTON_A, android.view.KeyEvent.KEYCODE_DPAD_CENTER,
+        android.view.KeyEvent.KEYCODE_ENTER -> Nav.OPEN
+        android.view.KeyEvent.KEYCODE_K, android.view.KeyEvent.KEYCODE_BUTTON_X -> Nav.OPTIONS
+        android.view.KeyEvent.KEYCODE_P, android.view.KeyEvent.KEYCODE_BUTTON_B -> Nav.BACK
+        // Q E the bumpers: between games and launchers
+        android.view.KeyEvent.KEYCODE_Q, android.view.KeyEvent.KEYCODE_E,
+        android.view.KeyEvent.KEYCODE_BUTTON_L1, android.view.KeyEvent.KEYCODE_BUTTON_R1 -> Nav.PAGE
+        android.view.KeyEvent.KEYCODE_SPACE, android.view.KeyEvent.KEYCODE_BUTTON_START -> Nav.SETTINGS
+        else -> null
     }
 
     private enum class Page { GAMES, APPS }
@@ -228,7 +284,7 @@ class GamesActivity : ComponentActivity() {
     /** One tile: an upright picture, its name beneath; long-press for its settings. */
     @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
     @Composable
-    private fun Tile(name: String, sub: String?, art: @Composable () -> Unit, onClick: () -> Unit, onLongClick: () -> Unit) {
+    private fun Tile(name: String, sub: String?, art: @Composable () -> Unit, onClick: () -> Unit, onLongClick: () -> Unit, selected: Boolean = false) {
         val shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
         androidx.compose.foundation.layout.Column(
             modifier = Modifier.fillMaxWidth().combinedClickable(onClick = onClick, onLongClick = onLongClick),
@@ -318,6 +374,14 @@ class GamesActivity : ComponentActivity() {
                 .distinctBy { it.first.name.lowercase() to it.first.packages }
                 .sortedBy { it.first.name.lowercase() }
         }
+
+        private const val KEY_CONTROLLER_KEYS = "games_app_controller_keys"
+
+        /** The Games app moved through with gaming mode's keys (W A S D, L to open...). */
+        fun controllerKeys(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_CONTROLLER_KEYS, true)
+
+        fun setControllerKeys(context: Context, on: Boolean) =
+            SettingsManager.getPreferences(context).edit().putBoolean(KEY_CONTROLLER_KEYS, on).apply()
 
         fun enabled(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_ENABLED, false)
 

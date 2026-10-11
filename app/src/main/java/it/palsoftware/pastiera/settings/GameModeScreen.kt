@@ -317,6 +317,16 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             inAppList = on
             it.palsoftware.pastiera.gaming.GamesActivity.setEnabled(context, on)
         }
+        var controllerKeys by remember { mutableStateOf(it.palsoftware.pastiera.gaming.GamesActivity.controllerKeys(context)) }
+        FluxSwitchRow(
+            linkId = null,
+            title = stringResource(R.string.games_app_controller_keys),
+            description = stringResource(R.string.games_app_controller_keys_description),
+            checked = controllerKeys
+        ) { on ->
+            controllerKeys = on
+            it.palsoftware.pastiera.gaming.GamesActivity.setControllerKeys(context, on)
+        }
         FluxActionRow(
             linkId = null,
             icon = "+",
