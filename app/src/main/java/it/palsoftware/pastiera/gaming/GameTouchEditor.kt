@@ -96,6 +96,7 @@ object GameTouchEditor {
             text = context.getString(R.string.game_mode_place_hint)
         }
         var waitingForKey = false
+        var picker: View? = null
         fun button(label: Int, onClick: () -> Unit) = TextView(context).apply {
             text = context.getString(label)
             setTextColor(Color.WHITE)
@@ -112,6 +113,15 @@ object GameTouchEditor {
                 addView(button(R.string.game_mode_add_key) {
                     waitingForKey = true
                     hint.text = context.getString(R.string.game_mode_press_key)
+                    picker?.let { frame.removeView(it); picker = null } ?: run {
+                        // Every key at a tap: the game or the keyboard may take a key pressed here
+                        picker = keyPicker(context, density) { code ->
+                            picker?.let { frame.removeView(it) }; picker = null
+                            waitingForKey = false
+                            hint.text = context.getString(R.string.game_mode_place_hint)
+                            if (code !in taps) { taps[code] = 0.5f to 0.5f; addKey(code, 0.5f to 0.5f) }
+                        }.also { frame.addView(it) }
+                    }
                 })
                 addView(button(R.string.game_mode_left_stick) { if (0 !in zones) addStick(0) })
                 addView(button(R.string.game_mode_right_stick) { if (1 !in zones) addStick(1) })
@@ -140,6 +150,7 @@ object GameTouchEditor {
             if (keyCode == KeyEvent.KEYCODE_BACK) { close(windows); return@setOnKeyListener true }
             if (waitingForKey) {
                 waitingForKey = false
+                picker?.let { frame.removeView(it) }; picker = null
                 hint.text = context.getString(R.string.game_mode_place_hint)
                 if (keyCode !in taps) {
                     taps[keyCode] = 0.5f to 0.5f
@@ -158,6 +169,45 @@ object GameTouchEditor {
         )
         runCatching { windows.addView(frame, params); frame.requestFocus() }
             .onFailure { open = false; root = null }
+    }
+
+    /** The keys a game can be given, as on the keyboard: letters, then the rest. */
+    private val PICKABLE = (KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z).toList() + listOf(
+        KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_SHIFT_LEFT,
+        KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN
+    )
+
+    /** A grid of the keys, at the bottom of the screen: tapping one places it. */
+    private fun keyPicker(context: Context, density: Float, onPick: (Int) -> Unit): View {
+        val grid = android.widget.GridLayout(context).apply {
+            columnCount = 9
+            setBackgroundColor(0xEE111111.toInt())
+            setPadding((6 * density).toInt(), (6 * density).toInt(), (6 * density).toInt(), (6 * density).toInt())
+        }
+        for (code in PICKABLE) {
+            grid.addView(TextView(context).apply {
+                text = keyName(code)
+                setTextColor(Color.WHITE)
+                textSize = 13f
+                gravity = Gravity.CENTER
+                minWidth = (40 * density).toInt()
+                minHeight = (40 * density).toInt()
+                background = GradientDrawable().apply {
+                    cornerRadius = 8 * density
+                    setColor(0xAA3D5AFE.toInt())
+                }
+                layoutParams = android.widget.GridLayout.LayoutParams().apply {
+                    setMargins((3 * density).toInt(), (3 * density).toInt(), (3 * density).toInt(), (3 * density).toInt())
+                }
+                setOnClickListener { onPick(code) }
+            })
+        }
+        return android.widget.HorizontalScrollView(context).apply {
+            addView(grid)
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM
+            )
+        }
     }
 
     /** Where GameHub draws its sticks (sideways, its own layout): centre and reach, shares of the screen. */
