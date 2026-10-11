@@ -1175,7 +1175,7 @@
     <string name="game_mode_left_half">Trackpad linke Hälfte</string>
     <string name="game_mode_next_profile">Nächstes Profil</string>
     <string name="game_mode_no_apps">noch keine Apps</string>
-    <string name="game_mode_note">Der Spielmodus braucht die eingebaute Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Tasten erreichen das Spiel unverändert: Belege sie in den Controller-Einstellungen des Emulators oder Launchers. Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Ein Finger auf jeder Hälfte des Trackpads bewegt beide Sticks zugleich.</string>
+    <string name="game_mode_note">Der Spielmodus braucht die integrierte Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Tasten erreichen das Spiel unverändert: Belege sie in den Controller-Einstellungen des Emulators oder Launchers. Tippen in ein Textfeld des Spiels funktioniert wie gewohnt. Das Trackpad folgt immer nur einem Finger: Wechselt es zur anderen Hälfte, hält es den ersten Stick, wo er war. Für beide Sticks zugleich lege den rechten Stick auf Tasten.</string>
     <string name="game_mode_profile_name">Name</string>
     <string name="game_mode_remove">Entfernen</string>
     <string name="game_mode_right_half">Trackpad rechte Hälfte</string>
@@ -1279,4 +1279,6 @@
     <string name="game_mode_trackpad_test_result">Höchstens gleichzeitig erkannte Finger: %1$d (%2$s).\n\nGespeichert unter Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Spiele im Schnellstarter</string>
     <string name="game_mode_quick_launcher_description">Die in den Spieleordnern gefundenen Spiele und die Spiele mit Profil, aus dem Schnellstarter gestartet wie über ihre Startbildschirm-Verknüpfung.</string>
+    <string name="game_mode_right_stick_keys">Rechter Stick auf Tasten</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B bewegen den rechten Stick (hoch, links, rechts, runter), und die linke Trackpad-Hälfte ist der linke Stick. Das Trackpad folgt immer nur einem Finger, daher können sich zwei Sticks darauf nicht zusammen bewegen.</string>
 </resources>

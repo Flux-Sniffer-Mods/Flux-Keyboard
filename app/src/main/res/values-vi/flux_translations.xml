@@ -1704,7 +1704,7 @@
     <string name="game_mode_left_half">Nửa trái bàn di chuột</string>
     <string name="game_mode_next_profile">Hồ sơ tiếp theo</string>
     <string name="game_mode_no_apps">chưa có ứng dụng</string>
-    <string name="game_mode_note">Chế độ chơi game cần shell tích hợp (hoặc Shizuku) và trợ năng của bàn phím. Phím đến game nguyên vẹn: gán chúng trong cài đặt tay cầm của trình giả lập hoặc launcher. Gõ vào ô văn bản của game vẫn như thường. Mỗi ngón trên mỗi nửa bàn di chuột di chuyển cả hai cần analog cùng lúc.</string>
+    <string name="game_mode_note">Chế độ chơi game cần shell tích hợp (hoặc Shizuku) và trình hỗ trợ trợ năng của bàn phím. Phím đến game nguyên trạng: gán chúng trong cài đặt tay cầm của trình giả lập hoặc trình khởi chạy. Gõ vào ô văn bản của game vẫn như thường. Bàn di chuột chỉ theo một ngón mỗi lần: khi chuyển sang nửa kia, nó giữ cần analog đầu tiên ở chỗ cũ. Để dùng cả hai cần analog cùng lúc, đặt cần analog phải lên phím.</string>
     <string name="game_mode_profile_name">Tên</string>
     <string name="game_mode_remove">Bỏ</string>
     <string name="game_mode_right_half">Nửa phải bàn di chuột</string>
@@ -1808,4 +1808,6 @@
     <string name="game_mode_trackpad_test_result">Số ngón nhiều nhất cùng lúc: %1$d (%2$s).\n\nĐã lưu vào Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Game trong trình khởi chạy nhanh</string>
     <string name="game_mode_quick_launcher_description">Các game tìm thấy trong thư mục game và các game có hồ sơ, mở từ trình khởi chạy nhanh giống như từ lối tắt trên màn hình chính.</string>
+    <string name="game_mode_right_stick_keys">Cần analog phải trên phím</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B di chuyển cần analog phải (lên, trái, phải, xuống), và nửa trái bàn di chuột là cần analog trái. Bàn di chuột chỉ theo một ngón mỗi lần, nên hai cần analog trên nó không di chuyển cùng lúc.</string>
 </resources>

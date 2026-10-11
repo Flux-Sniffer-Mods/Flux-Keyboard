@@ -1722,7 +1722,7 @@
     <string name="game_mode_left_half">Левая половина трекпада</string>
     <string name="game_mode_next_profile">Следующий профиль</string>
     <string name="game_mode_no_apps">пока нет приложений</string>
-    <string name="game_mode_note">Игровому режиму нужна встроенная оболочка (или Shizuku) и помощник специальных возможностей клавиатуры. Клавиши доходят до игры как есть: назначьте их в настройках контроллера эмулятора или лаунчера. Ввод в текстовое поле игры работает как обычно. Палец на каждой половине тачпада двигает оба стика одновременно.</string>
+    <string name="game_mode_note">Игровому режиму нужны встроенная оболочка (или Shizuku) и помощник специальных возможностей клавиатуры. Клавиши попадают в игру как есть: назначьте их в настройках контроллера эмулятора или лаунчера. Ввод в текстовое поле игры работает как обычно. Тачпад следит за одним пальцем за раз: переходя на другую половину, он держит первый стик там, где он был. Чтобы двигать оба стика сразу, переведите правый стик на клавиши.</string>
     <string name="game_mode_profile_name">Название</string>
     <string name="game_mode_remove">Убрать</string>
     <string name="game_mode_right_half">Правая половина трекпада</string>
@@ -1826,4 +1826,6 @@
     <string name="game_mode_trackpad_test_result">Больше всего пальцев одновременно: %1$d (%2$s).\n\nСохранено в Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Игры в быстром запуске</string>
     <string name="game_mode_quick_launcher_description">Игры из папок игр и игры с профилем запускаются из быстрого запуска так же, как с ярлыка на главном экране.</string>
+    <string name="game_mode_right_stick_keys">Правый стик на клавишах</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B двигают правый стик (вверх, влево, вправо, вниз), а левая половина тачпада — левый стик. Тачпад следит за одним пальцем за раз, поэтому два стика на нём не двигаются вместе.</string>
 </resources>

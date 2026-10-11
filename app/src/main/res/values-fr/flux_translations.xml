@@ -1716,7 +1716,7 @@
     <string name="game_mode_left_half">Moitié gauche du pavé tactile</string>
     <string name="game_mode_next_profile">Profil suivant</string>
     <string name="game_mode_no_apps">aucune appli pour l\'instant</string>
-    <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'aide d\'accessibilité du clavier. Les touches arrivent au jeu telles quelles : attribuez-les dans les réglages de manette de l\'émulateur ou du lanceur. Écrire dans un champ de texte du jeu fonctionne comme d\'habitude. Un doigt sur chaque moitié du pavé tactile bouge les deux sticks à la fois.</string>
+    <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'assistant d\'accessibilité du clavier. Les touches arrivent au jeu telles quelles : associez-les dans les réglages de manette de l\'émulateur ou du lanceur. Écrire dans un champ de texte du jeu fonctionne comme d\'habitude. Le pavé tactile suit un doigt à la fois : passant à l\'autre moitié, il garde le premier stick où il était. Pour les deux sticks à la fois, mettez le stick droit sur les touches.</string>
     <string name="game_mode_profile_name">Nom</string>
     <string name="game_mode_remove">Retirer</string>
     <string name="game_mode_right_half">Moitié droite du pavé tactile</string>
@@ -1820,4 +1820,6 @@
     <string name="game_mode_trackpad_test_result">Maximum de doigts à la fois : %1$d (%2$s).\n\nEnregistré dans Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Jeux dans le lanceur rapide</string>
     <string name="game_mode_quick_launcher_description">Les jeux trouvés dans les dossiers de jeux et ceux qui ont un profil, lancés depuis le lanceur rapide comme depuis leur raccourci d\'écran d\'accueil.</string>
+    <string name="game_mode_right_stick_keys">Stick droit sur les touches</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B bougent le stick droit (haut, gauche, droite, bas), et la moitié gauche du pavé tactile est le stick gauche. Le pavé tactile suit un doigt à la fois, donc deux sticks dessus ne bougent pas ensemble.</string>
 </resources>

@@ -1221,7 +1221,7 @@
     <string name="game_mode_left_half">Metà sinistra del trackpad</string>
     <string name="game_mode_next_profile">Profilo successivo</string>
     <string name="game_mode_no_apps">ancora nessuna app</string>
-    <string name="game_mode_note">La modalità gioco richiede la shell integrata (o Shizuku) e l\'aiuto di accessibilità della tastiera. I tasti arrivano al gioco così come sono: assegnali nelle impostazioni del controller dell\'emulatore o del launcher. Scrivere in un campo di testo del gioco funziona come al solito. Un dito su ogni metà del trackpad muove entrambi gli stick insieme.</string>
+    <string name="game_mode_note">La modalità gioco richiede la shell integrata (o Shizuku) e l\'assistente di accessibilità della tastiera. I tasti arrivano al gioco così come sono: assegnali nelle impostazioni del controller dell\'emulatore o del launcher. Scrivere in un campo di testo del gioco funziona come al solito. Il trackpad segue un dito alla volta: passando all\'altra metà, tiene il primo stick dov\'era. Per entrambi gli stick insieme, metti lo stick destro sui tasti.</string>
     <string name="game_mode_profile_name">Nome</string>
     <string name="game_mode_remove">Rimuovi</string>
     <string name="game_mode_right_half">Metà destra del trackpad</string>
@@ -1325,4 +1325,6 @@
     <string name="game_mode_trackpad_test_result">Massimo di dita insieme: %1$d (%2$s).\n\nSalvato in Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Giochi nell\'avvio rapido</string>
     <string name="game_mode_quick_launcher_description">I giochi trovati nelle cartelle dei giochi e quelli con un profilo, avviati dall\'avvio rapido come dalla loro scorciatoia nella schermata Home.</string>
+    <string name="game_mode_right_stick_keys">Stick destro sui tasti</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B muovono lo stick destro (su, sinistra, destra, giù), e la metà sinistra del trackpad è lo stick sinistro. Il trackpad segue un dito alla volta, quindi due stick su di esso non si muovono insieme.</string>
 </resources>

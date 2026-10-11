@@ -1716,7 +1716,7 @@
     <string name="game_mode_left_half">Mitad izquierda del trackpad</string>
     <string name="game_mode_next_profile">Siguiente perfil</string>
     <string name="game_mode_no_apps">aún sin apps</string>
-    <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el ayudante de accesibilidad del teclado. Las teclas llegan al juego tal cual: asígnalas en los ajustes de mando del emulador o del lanzador. Escribir en un campo de texto del juego funciona como siempre. Un dedo en cada mitad del trackpad mueve los dos sticks a la vez.</string>
+    <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el asistente de accesibilidad del teclado. Las teclas llegan al juego tal cual: asígnalas en los ajustes de mando del emulador o lanzador. Escribir en un campo de texto del juego funciona como siempre. El trackpad sigue un dedo cada vez: al pasar a la otra mitad, mantiene el primer stick donde estaba. Para los dos sticks a la vez, pon el stick derecho en teclas.</string>
     <string name="game_mode_profile_name">Nombre</string>
     <string name="game_mode_remove">Quitar</string>
     <string name="game_mode_right_half">Mitad derecha del trackpad</string>
@@ -1820,4 +1820,6 @@
     <string name="game_mode_trackpad_test_result">Máximo de dedos a la vez: %1$d (%2$s).\n\nGuardado en Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Juegos en el lanzador rápido</string>
     <string name="game_mode_quick_launcher_description">Los juegos encontrados en las carpetas de juegos y los que tienen perfil, abiertos desde el lanzador rápido igual que desde su acceso directo en la pantalla de inicio.</string>
+    <string name="game_mode_right_stick_keys">Stick derecho en teclas</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B mueven el stick derecho (arriba, izquierda, derecha, abajo), y la mitad izquierda del trackpad es el stick izquierdo. El trackpad sigue un dedo cada vez, así que dos sticks en él no se mueven a la vez.</string>
 </resources>
