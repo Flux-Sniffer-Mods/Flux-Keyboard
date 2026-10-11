@@ -302,9 +302,18 @@ object StreamHost {
         val game = games().firstOrNull { it.first == appId }?.second
         // The phone's own screen, as it is: no game to open
         val phoneScreen = appId == PHONE_SCREEN_ID && StreamHostService.phoneScreen(app)
-        if (!resume && game == null && !phoneScreen) return root("", 404, "That game isn't in the games list")
+        // Xbox Cloud Gaming's library, in Flux Keyboard's player
+        val xcloud = appId == XCLOUD_ID
+        // Android's desktop on a screen of its own (the shell makes it)
+        val desktop = appId == DESKTOP_ID && it.palsoftware.pastiera.adb.AdbShell.available()
+        if (!resume && game == null && !phoneScreen && !xcloud && !desktop) return root("", 404, "That game isn't in the games list")
         // Asked on the phone first, unless this Moonlight client is trusted to start by itself
-        val title = if (phoneScreen) app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen) else game?.name
+        val title = when {
+            phoneScreen -> app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen)
+            xcloud -> app.getString(it.palsoftware.pastiera.R.string.games_app_xbox)
+            desktop -> app.getString(it.palsoftware.pastiera.R.string.stream_screen_desktop)
+            else -> game?.name
+        }
         if (!trusted(cert) && !confirm(cert, nameOf(cert) ?: client.hostAddress.orEmpty(), title)) {
             return root("", 403, "Not allowed on the phone")
         }
@@ -313,11 +322,16 @@ object StreamHost {
         // Moonlight client's shape and that size while mirrored (the phone's own screen stays as it is)
         val choice = game?.let { g -> runCatching { it.palsoftware.pastiera.gaming.GameProfiles.effective(app, g).streamHeight }.getOrNull() }
             ?.toString() ?: StreamHostService.resolution(app)
-        val phoneSize = if (phoneScreen) null else StreamHostService.phoneSize(choice, width, height)
-        val gameIntent = if (game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
-        val separate = gameIntent != null && StreamHostService.screenMode(app) != StreamHostService.SCREEN_MIRROR &&
+        val phoneSize = if (phoneScreen || desktop) null else StreamHostService.phoneSize(choice, width, height)
+        val gameIntent = when {
+            xcloud -> android.content.Intent(app, it.palsoftware.pastiera.gaming.XboxPlayActivity::class.java)
+                .setData(android.net.Uri.parse(it.palsoftware.pastiera.gaming.XboxPlayActivity.HOME))
+            game == null -> null
+            else -> GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
+        }
+        val separate = desktop || gameIntent != null && StreamHostService.screenMode(app) != StreamHostService.SCREEN_MIRROR &&
             it.palsoftware.pastiera.adb.AdbShell.available()
-        val started = StreamSession(app, client, appId, width, height, fps, key, keyId, gameIntent, phoneSize, separate) { ended ->
+        val started = StreamSession(app, client, appId, width, height, fps, key, keyId, gameIntent, phoneSize, separate, desktopOnly = desktop) { ended ->
             if (session === ended) {
                 session = null
                 streamingGame = null
@@ -495,6 +509,11 @@ object StreamHost {
 
     /** The phone's own screen, listed first in Moonlight when that's on. */
     const val PHONE_SCREEN_ID = 2
+    /** Xbox Cloud Gaming's library, listed in Moonlight as XCloud Games. */
+    const val XCLOUD_ID = 3
+    /** Android's desktop on a screen of its own. */
+    const val DESKTOP_ID = 4
+    private val SPECIAL_IDS = setOf(PHONE_SCREEN_ID, XCLOUD_ID, DESKTOP_ID)
 
     /**
      * A game's number for Moonlight: stable while the game and its art stay the same. Moonlight
@@ -507,17 +526,20 @@ object StreamHost {
     /** Raised when the art Moonlight is sent changes for every game. */
     private const val ART_GENERATION = 2
 
+    private fun entry(title: String, id: Int) = "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(title)}</AppTitle><ID>$id</ID></App>"
+
+    /** Moonlight's list: the phone's screen, Android's desktop and XCloud Games, then the games. */
     private fun appList(): String = root(
-        (if (StreamHostService.phoneScreen(app)) "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>" +
-            escape(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen)) + "</AppTitle><ID>$PHONE_SCREEN_ID</ID></App>" else "") +
-            games().filter { it.first != PHONE_SCREEN_ID }.joinToString("") { (id, profile) ->
+        (if (StreamHostService.phoneScreen(app)) entry(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen), PHONE_SCREEN_ID) else "") +
+            (if (it.palsoftware.pastiera.adb.AdbShell.available()) entry(app.getString(it.palsoftware.pastiera.R.string.stream_screen_desktop), DESKTOP_ID) else "") +
+            entry(app.getString(it.palsoftware.pastiera.R.string.games_app_xbox), XCLOUD_ID) +
+            games().filter { it.first !in SPECIAL_IDS }.joinToString("") { (id, profile) ->
                 "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"
             }
     )
 
-    /** The phone screen's art: Flux Keyboard's icon on a dark upright card. */
-    /** The phone's screen in Moonlight's list: its name on a dark grey gradient, like Flux Keyboard's key art. */
-    private fun phoneScreenArt(): android.graphics.Bitmap? = runCatching {
+    /** An entry of the phone's own in Moonlight's list ([text]): its name on a dark grey gradient, like Flux Keyboard's key art. */
+    private fun textArt(text: String): android.graphics.Bitmap? = runCatching {
         val width = 600; val height = 900
         val bitmap = android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
@@ -530,7 +552,6 @@ object StreamHost {
             textSize = 76f
             typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
         }
-        val text = app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art)
         val layout = android.text.StaticLayout.Builder.obtain(text, 0, text.length, paint, width - 120)
             .setAlignment(android.text.Layout.Alignment.ALIGN_CENTER).setLineSpacing(0f, 1.05f).build()
         canvas.save()
@@ -543,8 +564,12 @@ object StreamHost {
     /** A game's upright box art, for Moonlight's game picker. */
     private fun asset(out: OutputStream, appId: String?) {
         val profile = games().firstOrNull { it.first.toString() == appId }?.second
-        val art = if (appId == PHONE_SCREEN_ID.toString()) phoneScreenArt()
-            else profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
+        val art = when (appId) {
+            PHONE_SCREEN_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art))
+            DESKTOP_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_screen_desktop))
+            XCLOUD_ID.toString() -> runCatching { GameArt.xboxTile(app) }.getOrNull()
+            else -> null
+        } ?: profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
         val bytes = art?.let { bitmap ->
             java.io.ByteArrayOutputStream().also { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }.toByteArray()
         } ?: ByteArray(0)

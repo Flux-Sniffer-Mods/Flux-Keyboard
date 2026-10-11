@@ -31,10 +31,12 @@ internal class StreamSession(
     /** The phone's screen size while it's mirrored (null: left as it is). */
     private val phoneSize: Pair<Int, Int>?,
     separateAtStart: Boolean,
+    /** Android's desktop on a screen of its own, no game: always that screen. */
+    private val desktopOnly: Boolean = false,
     private val onEnded: (StreamSession) -> Unit
 ) {
     /** The game on a screen of its own (Separate screen) rather than the phone's mirrored. */
-    @Volatile var separate = separateAtStart && game != null
+    @Volatile var separate = separateAtStart && game != null || desktopOnly
         private set
     /** The game's app, for gaming mode while it's on a screen of its own. */
     val gamePackage: String? get() = game?.component?.packageName ?: game?.`package`
@@ -81,7 +83,7 @@ internal class StreamSession(
     }
 
     /** Can switch screens: a game, and the shell to make a screen. */
-    fun canSeparate(): Boolean = game != null && it.palsoftware.pastiera.adb.AdbShell.available()
+    fun canSeparate(): Boolean = game != null && !desktopOnly && it.palsoftware.pastiera.adb.AdbShell.available()
 
     /** The game on a screen of its own ([on]), or the phone's mirrored. */
     fun setSeparate(on: Boolean) = worker.execute {
@@ -204,10 +206,10 @@ internal class StreamSession(
         val stream = video ?: return
         val dpi = context.resources.displayMetrics.densityDpi
         val app = game
-        if (separate && app != null) {
+        if (separate && (app != null || desktopOnly)) {
             val screen = ExtraScreen.current?.takeIf { it.width == (width and 1.inv()) && it.height == (height and 1.inv()) }
                 ?: ExtraScreen.open(context, width, height, fps, bitrateKbps,
-                    StreamHostService.screenMode(context) == StreamHostService.SCREEN_DESKTOP, StreamHostService.passThrough(context))
+                    desktopOnly || StreamHostService.screenMode(context) == StreamHostService.SCREEN_DESKTOP, StreamHostService.passThrough(context))
             if (screen == null) {
                 Log.w(TAG, "no screen of its own: mirroring")
                 separate = false
@@ -220,7 +222,7 @@ internal class StreamSession(
             GameMode.streaming(context, null)
             stream.useScreen()
             input?.target(screen)
-            ExtraScreen.bring(context, app, screen.id)
+            if (app != null) ExtraScreen.bring(context, app, screen.id)
             StreamHost.openScreenPage(context)
         } else {
             val wasSeparate = ExtraScreen.current != null

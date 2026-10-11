@@ -624,6 +624,9 @@
     },
     {
       "text": "Games app: emulators and launchers are looked up on SteamGridDB under the names it lists them by (Dolphin Emulator, Citra for Azahar, Yuzu for Eden, PCSX2 for AetherSX2 and more), so most get artwork automatically."
+    },
+    {
+      "text": "Stream to Moonlight: XCloud Games (Xbox Cloud Gaming's library, with its tile's art) and Android desktop (the phone's desktop on a screen of its own, the phone left free) are listed in Moonlight beside the phone's screen."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
