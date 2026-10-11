@@ -725,7 +725,7 @@ object GameMode {
             when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
-                    if (byKeys(at)) directionKeys(f, vx, vy, if (at == 0) ARROWS else RIGHT_KEYS)
+                    if (byKeys(at)) directionKeys(f, vx, vy, if (at == 0) FluxLayout.LEFT_STICK else RIGHT_KEYS)
                     else {
                         sticks[at] = vx.coerceIn(-1f, 1f)
                         sticks[at + 1] = vy.coerceIn(-1f, 1f)
@@ -786,7 +786,7 @@ object GameMode {
 
         private fun end(f: Finger) {
             when (f.role) {
-                TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, ARROWS); releaseStick(0) }
+                TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, FluxLayout.LEFT_STICK); releaseStick(0) }
                 TrackpadRole.RIGHT_STICK -> { directionKeys(f, 0f, 0f, RIGHT_KEYS); releaseStick(2) }
                 // A tap clicks
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - f.downAt < 200 && f.moved < radius / 4) {
@@ -826,10 +826,7 @@ object GameMode {
             .setOngoing(true)
         // Keys and sticks placed on the game's own on-screen controls (for games that only take
         // touch), drawn over it
-        val place = PendingIntent.getBroadcast(
-            context, 1, Intent(context, Receiver::class.java).setAction(ACTION_PLACE),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val place = placeKeys(context)
         builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys), place).build())
         val pkg = frontPackage
         if (pkg != null && GameProfiles.appProfiles(context, pkg).size > 1) {
@@ -843,6 +840,12 @@ object GameMode {
     }
 
     /** Next profile: the game launcher's next game. */
+    /** Opens the on-screen key placer for the game playing (from a notification). */
+    fun placeKeys(context: Context): PendingIntent = PendingIntent.getBroadcast(
+        context, 1, Intent(context, Receiver::class.java).setAction(ACTION_PLACE),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
     class Receiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == ACTION_PLACE) {

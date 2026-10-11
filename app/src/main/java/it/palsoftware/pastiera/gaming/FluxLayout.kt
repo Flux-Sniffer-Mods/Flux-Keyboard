@@ -30,11 +30,16 @@ object FluxLayout {
         KeyEvent.KEYCODE_ENTER to Control.SELECT, KeyEvent.KEYCODE_SPACE to Control.START,
         KeyEvent.KEYCODE_DEL to Control.HOME,
         KeyEvent.KEYCODE_F to Control.L3, KeyEvent.KEYCODE_H to Control.R3,
-        KeyEvent.KEYCODE_DPAD_UP to Control.LS_UP, KeyEvent.KEYCODE_DPAD_DOWN to Control.LS_DOWN,
-        KeyEvent.KEYCODE_DPAD_LEFT to Control.LS_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT to Control.LS_RIGHT,
+        // The left stick on R T Y and G (keys the keyboard really has: an emulator only takes a
+        // device's own keys, and the Titan's keyboard has no arrows), pressed by the trackpad
+        KeyEvent.KEYCODE_T to Control.LS_UP, KeyEvent.KEYCODE_G to Control.LS_DOWN,
+        KeyEvent.KEYCODE_R to Control.LS_LEFT, KeyEvent.KEYCODE_Y to Control.LS_RIGHT,
         KeyEvent.KEYCODE_J to Control.RS_UP, KeyEvent.KEYCODE_N to Control.RS_DOWN,
         KeyEvent.KEYCODE_B to Control.RS_LEFT, KeyEvent.KEYCODE_M to Control.RS_RIGHT
     )
+
+    /** The left stick's keys in the trackpad's order: up, left, down, right. */
+    val LEFT_STICK = intArrayOf(KeyEvent.KEYCODE_T, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_G, KeyEvent.KEYCODE_Y)
 
     /** The right stick's keys: up, left, right, down. */
     val RIGHT_STICK = intArrayOf(KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_B, KeyEvent.KEYCODE_M, KeyEvent.KEYCODE_N)

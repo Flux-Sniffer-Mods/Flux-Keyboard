@@ -18,7 +18,7 @@ class FluxLayoutTest {
         val lines = FluxLayout.dolphinGameCube("TitanKey")
         assertEquals("Device = Android/0/TitanKey", lines.first())
         assertTrue("Buttons/Start = `Space`" in lines)
-        assertTrue("Main Stick/Up = `Up`" in lines)
+        assertTrue("Main Stick/Up = `T`" in lines)
         assertTrue("C-Stick/Left = `B`" in lines)
         assertTrue("Triggers/L = `Volume Up` | `Q`" in lines)
         assertTrue("Buttons/Z = `Z` | `C`" in lines)

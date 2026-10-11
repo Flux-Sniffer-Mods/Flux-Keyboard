@@ -91,6 +91,9 @@ class StreamHostService : Service() {
                 .setContentText(context.getString(R.string.stream_now_to, device))
                 .setContentIntent(ask)
                 .addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.stream_end), end).build())
+                // The game's on-screen keys, placed while it streams
+                .addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys),
+                    it.palsoftware.pastiera.gaming.GameMode.placeKeys(context)).build())
                 .build()
         }
 
