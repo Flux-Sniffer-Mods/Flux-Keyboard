@@ -1852,9 +1852,9 @@
     <string name="game_detect_title">%1$s схоже на гру</string>
     <string name="game_detect_text">Налаштуйте для неї ігровий режим: контролер, екран і стіки.</string>
     <string name="game_detect_not_game">Не зараз</string>
-    <string name="game_mode_xbox_note">Xbox Cloud Gaming приймає контролер або своє сенсорне керування, не клавіші: з root увімкніть справжній контролер; без root розмістіть клавіші й стіки на його сенсорному керуванні зі сповіщення ігрового режиму.</string>
+    <string name="game_mode_xbox_note">Грає у власному плеєрі Flux Keyboard: увійдіть один раз, і клавіші з тачпадом грають у кожну гру як контролер, у розкладці Flux Keyboard.</string>
     <string name="game_mode_xbox_add">Додати хмарну гру Xbox</string>
-    <string name="game_mode_xbox_add_description">Усі ігри, які транслює Xbox Cloud Gaming, з його каталогу: кожна має власні налаштування й запускається одразу в грі.</string>
+    <string name="game_mode_xbox_add_description">Xbox Cloud Gaming у власному плеєрі Flux Keyboard (xbox.com/play; застосунки Xbox не транслюють на телефонах) або будь-яка його гра з каталогу: кожна має власні налаштування й запускається одразу в грі.</string>
     <string name="game_mode_xbox_search">Пошук</string>
     <string name="game_mode_xbox_none">Не вдалося прочитати каталог. Телефон у мережі, а автономний режим вимкнено?</string>
 </resources>

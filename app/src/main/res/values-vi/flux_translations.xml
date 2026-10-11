@@ -1834,9 +1834,9 @@
     <string name="game_detect_title">%1$s có vẻ là game</string>
     <string name="game_detect_text">Thiết lập chế độ chơi game cho nó: tay cầm, màn hình và cần analog.</string>
     <string name="game_detect_not_game">Để sau</string>
-    <string name="game_mode_xbox_note">Xbox Cloud Gaming nhận tay cầm hoặc điều khiển cảm ứng của nó, không nhận phím: có root, bật tay cầm thật; không có, đặt phím và cần analog lên điều khiển cảm ứng từ thông báo của chế độ chơi game.</string>
+    <string name="game_mode_xbox_note">Chơi trong trình phát riêng của Flux Keyboard: đăng nhập một lần, rồi phím và bàn di chuột chơi mọi game như tay cầm, theo bố cục của Flux Keyboard.</string>
     <string name="game_mode_xbox_add">Thêm game Xbox Cloud</string>
-    <string name="game_mode_xbox_add_description">Mọi game Xbox Cloud Gaming phát trực tuyến, từ danh mục của nó: mỗi game có cài đặt riêng và vào thẳng game.</string>
+    <string name="game_mode_xbox_add_description">Xbox Cloud Gaming trong trình phát riêng của Flux Keyboard (xbox.com/play; ứng dụng Xbox không phát trực tuyến trên điện thoại), hoặc bất kỳ game nào trong danh mục: mỗi game có cài đặt riêng và vào thẳng game.</string>
     <string name="game_mode_xbox_search">Tìm kiếm</string>
     <string name="game_mode_xbox_none">Không đọc được danh mục. Điện thoại có trực tuyến và đã tắt chế độ ngoại tuyến chưa?</string>
 </resources>

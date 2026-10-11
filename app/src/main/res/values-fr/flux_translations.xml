@@ -1846,9 +1846,9 @@
     <string name="game_detect_title">%1$s ressemble à un jeu</string>
     <string name="game_detect_text">Configurez le mode jeu pour lui : manette, écran et sticks.</string>
     <string name="game_detect_not_game">Pas maintenant</string>
-    <string name="game_mode_xbox_note">Xbox Cloud Gaming prend une manette ou ses commandes tactiles, pas des touches : avec root, activez la vraie manette ; sans, placez touches et sticks sur ses commandes tactiles depuis la notification du mode jeu.</string>
+    <string name="game_mode_xbox_note">Se joue dans le lecteur de Flux Keyboard : connectez-vous une fois, puis les touches et le pavé tactile jouent chaque jeu comme une manette, avec la disposition de Flux Keyboard.</string>
     <string name="game_mode_xbox_add">Ajouter un jeu Xbox Cloud</string>
-    <string name="game_mode_xbox_add_description">Tous les jeux que diffuse Xbox Cloud Gaming, depuis son catalogue : chacun a ses propres réglages et démarre directement dans le jeu.</string>
+    <string name="game_mode_xbox_add_description">Xbox Cloud Gaming dans le lecteur de Flux Keyboard (xbox.com/play ; les applis Xbox ne diffusent pas sur téléphone), ou n\'importe lequel de ses jeux, depuis son catalogue : chacun a ses réglages et démarre directement dans le jeu.</string>
     <string name="game_mode_xbox_search">Rechercher</string>
     <string name="game_mode_xbox_none">Le catalogue n\'a pas pu être lu. Le téléphone est-il en ligne, avec le mode hors ligne désactivé ?</string>
 </resources>
