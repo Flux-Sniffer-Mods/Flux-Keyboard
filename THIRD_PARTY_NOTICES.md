@@ -86,3 +86,11 @@ and their manifests. Conversion and serialization scripts live under `scripts/`.
 Provenance note: the maintained dictionary pipeline and current maintainer-provided sources point
 mainly to Leipzig/Wortschatz frequency data. Some older bundled entries predate the current
 documentation trail, so their exact upstream corpus IDs are not fully reconstructed here.
+
+## Concentus
+
+- Project: Concentus, a pure Java port of the Opus audio codec (`io.github.jaredmdobson:concentus`)
+- Source repository: https://github.com/lostromb/concentus
+- License: BSD 3-Clause (as libopus), used unmodified as a library dependency
+
+Used to encode the phone's sound as Opus when streaming to Moonlight.

@@ -35,7 +35,8 @@ import javax.net.ssl.X509TrustManager
  * GameStream protocol, as Sunshine speaks it): announced on the network, a plain web server for
  * finding and pairing, and an encrypted one for paired clients. Games are the games list's,
  * cloud games left out: those stream from the cloud to the TV's own Xbox app or browser
- * directly, not through the phone. Starting a stream comes next.
+ * directly, not through the phone. Launching one starts a [StreamSession]: the game opens on the
+ * phone, its screen and sound go to Moonlight, Moonlight's controls come back.
  */
 object StreamHost {
     private const val TAG = "StreamHost"
@@ -161,8 +162,8 @@ object StreamHost {
             "/unpair" -> { if (client != null) unpair(client); xml(out, root("")) }
             "/applist" -> xml(out, if (paired) appList() else root("", 401, "The device isn't paired"))
             "/appasset" -> if (paired) asset(out, query["appid"]) else xml(out, root("", 401, "The device isn't paired"))
-            "/launch", "/resume" -> xml(out, root("", 503, "Streaming from the phone isn't ready yet"))
-            "/cancel" -> xml(out, root("<cancel>1</cancel>"))
+            "/launch", "/resume" -> xml(out, if (paired) launch(query, socket.inetAddress, path == "/resume") else root("", 401, "The device isn't paired"))
+            "/cancel" -> { if (paired) { session?.end(); currentGame = 0 }; xml(out, root("<cancel>1</cancel>")) }
             else -> xml(out, root("", 404, "Not found"))
         }
     }
@@ -197,9 +198,66 @@ object StreamHost {
             "<ServerCodecModeSupport>1</ServerCodecModeSupport><SupportedDisplayMode>" +
             "<DisplayMode><Width>1920</Width><Height>1080</Height><RefreshRate>60</RefreshRate></DisplayMode>" +
             "<DisplayMode><Width>1280</Width><Height>720</Height><RefreshRate>60</RefreshRate></DisplayMode>" +
-            "</SupportedDisplayMode><PairStatus>${if (paired) 1 else 0}</PairStatus><currentgame>0</currentgame>" +
-            "<state>SUNSHINE_SERVER_FREE</state>"
+            "</SupportedDisplayMode><PairStatus>${if (paired) 1 else 0}</PairStatus><currentgame>${if (paired) currentGame else 0}</currentgame>" +
+            "<state>${if (currentGame != 0) "SUNSHINE_SERVER_BUSY" else "SUNSHINE_SERVER_FREE"}</state>"
     )
+
+    // ---- Streaming ----
+
+    /** The session streaming now, if any. */
+    @Volatile internal var session: StreamSession? = null
+        private set
+    /** The game Moonlight started (it stays "running" between sessions, for resuming). */
+    @Volatile private var currentGame = 0
+    @Volatile private var pendingLaunch: android.content.Intent? = null
+
+    /** The game to open once the screen can be captured (once). */
+    fun takeLaunch(): android.content.Intent? = pendingLaunch.also { pendingLaunch = null }
+
+    private fun launch(query: Map<String, String>, client: java.net.InetAddress, resume: Boolean): String {
+        val key = query["rikey"]?.let { runCatching { StreamPairing.unhex(it) }.getOrNull() }?.takeIf { it.size == 16 }
+            ?: return root("", 400, "No key")
+        val keyId = query["rikeyid"]?.toLongOrNull()?.toInt() ?: 0
+        val mode = query["mode"]?.split('x')?.mapNotNull { it.toIntOrNull() }
+        val width = mode?.getOrNull(0)?.takeIf { it > 0 } ?: 1920
+        val height = mode?.getOrNull(1)?.takeIf { it > 0 } ?: 1080
+        val fps = mode?.getOrNull(2)?.takeIf { it > 0 } ?: 60
+        val appId = if (resume) currentGame else query["appid"]?.toIntOrNull() ?: 0
+        val game = games().firstOrNull { it.first == appId }?.second
+        if (!resume && game == null) return root("", 404, "That game isn't in the games list")
+        session?.end()
+        val started = StreamSession(app, client, appId, width, height, fps, key, keyId) { ended ->
+            if (session === ended) session = null
+        }
+        runCatching { started.start() }.onFailure {
+            Log.w(TAG, "session couldn't start: $it")
+            started.end(notify = false)
+            return root("", 503, "Streaming couldn't start")
+        }
+        session = started
+        currentGame = appId
+        // A resumed game is already open; a new one opens once the screen can be captured
+        pendingLaunch = if (resume || game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
+        capture()
+        return root("<sessionUrl0>rtsp://${localIp()}:${StreamSession.RTSP_PORT}</sessionUrl0><gamesession>1</gamesession>" +
+            (if (resume) "<resume>1</resume>" else ""))
+    }
+
+    /**
+     * Asks to capture the screen: the shell allows it ahead so it goes straight through, and
+     * captured sound needs the microphone permission. Without the shell, a notification asks.
+     */
+    private fun capture() {
+        val pkg = app.packageName
+        val activity = "$pkg/${StreamCapture::class.java.name}"
+        if (it.palsoftware.pastiera.adb.AdbShell.available()) {
+            it.palsoftware.pastiera.adb.AdbShell.runAsync(
+                "appops set $pkg PROJECT_MEDIA allow; pm grant $pkg android.permission.RECORD_AUDIO; am start -n $activity"
+            ) { result -> if (result == null) StreamPin.askCapture(app) }
+        } else {
+            StreamPin.askCapture(app)
+        }
+    }
 
     // ---- Pairing ----
 

@@ -35,6 +35,7 @@ class StreamPin : Activity() {
     companion object {
         private const val CHANNEL = "stream_pairing"
         private const val NOTIFICATION_ID = 7304
+        private const val CAPTURE_ID = 7307
 
         fun ask(context: Context) {
             val manager = context.getSystemService(NotificationManager::class.java) ?: return
@@ -53,6 +54,26 @@ class StreamPin : Activity() {
                 .setAutoCancel(true)
                 .build()
             runCatching { manager.notify(NOTIFICATION_ID, notification) }
+        }
+
+        /** Without the shell, Moonlight's stream waits for a tap here to capture the screen. */
+        fun askCapture(context: Context) {
+            val manager = context.getSystemService(NotificationManager::class.java) ?: return
+            manager.createNotificationChannel(
+                NotificationChannel(CHANNEL, context.getString(R.string.stream_pairing_channel), NotificationManager.IMPORTANCE_HIGH)
+            )
+            val open = PendingIntent.getActivity(
+                context, 1, Intent(context, StreamCapture::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val notification = android.app.Notification.Builder(context, CHANNEL)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(context.getString(R.string.stream_capture_title))
+                .setContentText(context.getString(R.string.stream_capture_text))
+                .setContentIntent(open)
+                .setAutoCancel(true)
+                .build()
+            runCatching { manager.notify(CAPTURE_ID, notification) }
         }
 
         fun done(context: Context) {

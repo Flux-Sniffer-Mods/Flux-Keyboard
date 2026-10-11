@@ -454,6 +454,8 @@ dependencies {
     // The built-in shell: pairs with wireless debugging and starts the shell helper
     implementation("com.github.MuntashirAkon:libadb-android:3.1.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
+    // Opus in plain Java, for streaming sound to Moonlight in its short packets
+    implementation("io.github.jaredmdobson:concentus:1.0.2")
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation("org.mockito:mockito-core:5.11.0")

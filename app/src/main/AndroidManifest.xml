@@ -25,6 +25,8 @@
     <!-- Streaming games to Moonlight: the host runs while it's on -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- Streaming to Moonlight: the screen and what's playing -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <!-- Reads the Clicks Power Keyboard's details over Bluetooth LE -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -264,7 +266,7 @@
         <service
             android:name=".streaming.StreamHostService"
             android:exported="false"
-            android:foregroundServiceType="specialUse">
+            android:foregroundServiceType="specialUse|mediaProjection">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Game streaming host that Moonlight clients on the local network pair with" />
@@ -272,6 +274,13 @@
         <activity
             android:name=".streaming.StreamPin"
             android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Started by the shell when Moonlight launches a game: does nothing without a session -->
+        <activity
+            android:name=".streaming.StreamCapture"
+            android:exported="true"
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />

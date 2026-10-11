@@ -14,8 +14,10 @@ import android.view.MotionEvent
  * - `D id`: the device the events come from (the keyboard's)
  * - `S width height`: the screen, for the mouse
  * - `K 1|0 keyCode g|k`: a key down or up, as a controller button (g) or a keyboard key (k)
- * - `J lx ly rx ry`: both sticks, -1 to 1
- * - `M dx dy`: the mouse moved
+ * - `J lx ly rx ry [lt rt]`: both sticks, -1 to 1 (and the triggers, 0 to 1)
+ * - `M dx dy`: the mouse moved; `MA x y`: the mouse moved to a point on the screen
+ * - `W v h`: the mouse wheel turned, in notches (up and right positive)
+ * - `X text`: text typed (Base64, UTF-8), as the keys that type it
  * - `B 1|0 1|2`: the left or right mouse button down or up
  * - `T d|m|u id x y`: a finger down, moved or up on the screen (several at once)
  * - `G 1|0`: a real controller plugged in or out (run as root: see [VirtualGamepad])
@@ -65,8 +67,9 @@ object GameInputServer {
         when (parts.firstOrNull()) {
             "D" -> deviceId = parts[1].toInt()
             "S" -> {
-                width = parts[1].toFloat(); height = parts[2].toFloat()
-                mouseX = width / 2; mouseY = height / 2
+                val w = parts[1].toFloat(); val h = parts[2].toFloat()
+                // The mouse starts in the middle, and goes back there when the screen turns
+                if (w != width || h != height) { width = w; height = h; mouseX = width / 2; mouseY = height / 2 }
             }
             "K" -> {
                 val action = if (parts[1] == "1") KeyEvent.ACTION_DOWN else KeyEvent.ACTION_UP
@@ -79,6 +82,8 @@ object GameInputServer {
                     setAxisValue(MotionEvent.AXIS_Y, parts[2].toFloat())
                     setAxisValue(MotionEvent.AXIS_Z, parts[3].toFloat())
                     setAxisValue(MotionEvent.AXIS_RZ, parts[4].toFloat())
+                    parts.getOrNull(5)?.toFloat()?.let { setAxisValue(MotionEvent.AXIS_LTRIGGER, it); setAxisValue(MotionEvent.AXIS_BRAKE, it) }
+                    parts.getOrNull(6)?.toFloat()?.let { setAxisValue(MotionEvent.AXIS_RTRIGGER, it); setAxisValue(MotionEvent.AXIS_GAS, it) }
                 }
                 val properties = MotionEvent.PointerProperties().apply { id = 0; toolType = MotionEvent.TOOL_TYPE_UNKNOWN }
                 val event = MotionEvent.obtain(
@@ -96,6 +101,17 @@ object GameInputServer {
                 mouseX = (mouseX + parts[1].toFloat()).coerceIn(0f, width - 1)
                 mouseY = (mouseY + parts[2].toFloat()).coerceIn(0f, height - 1)
                 mouse(if (buttons != 0) MotionEvent.ACTION_MOVE else MotionEvent.ACTION_HOVER_MOVE, now)
+            }
+            "MA" -> {
+                mouseX = parts[1].toFloat().coerceIn(0f, width - 1)
+                mouseY = parts[2].toFloat().coerceIn(0f, height - 1)
+                mouse(if (buttons != 0) MotionEvent.ACTION_MOVE else MotionEvent.ACTION_HOVER_MOVE, now)
+            }
+            "W" -> scroll(parts[1].toFloat(), parts[2].toFloat(), now)
+            "X" -> {
+                val text = String(android.util.Base64.decode(parts[1], android.util.Base64.DEFAULT), Charsets.UTF_8)
+                android.view.KeyCharacterMap.load(android.view.KeyCharacterMap.VIRTUAL_KEYBOARD).getEvents(text.toCharArray())
+                    ?.forEach { injector(it) }
             }
             "T" -> touch(parts[1], parts[2].toInt(), parts.getOrNull(3)?.toFloat() ?: 0f, parts.getOrNull(4)?.toFloat() ?: 0f, now)
             "B" -> {
@@ -150,6 +166,19 @@ object GameInputServer {
             touchDownTime, now, action, fingers.size, properties, coords,
             0, 0, 1f, 1f, touchDevice, 0, InputDevice.SOURCE_TOUCHSCREEN, 0
         )
+        injector(event)
+        event.recycle()
+    }
+
+    private fun scroll(vertical: Float, horizontal: Float, now: Long) {
+        val coords = MotionEvent.PointerCoords().apply {
+            x = mouseX; y = mouseY
+            setAxisValue(MotionEvent.AXIS_VSCROLL, vertical)
+            setAxisValue(MotionEvent.AXIS_HSCROLL, horizontal)
+        }
+        val properties = MotionEvent.PointerProperties().apply { id = 0; toolType = MotionEvent.TOOL_TYPE_MOUSE }
+        val event = MotionEvent.obtain(now, now, MotionEvent.ACTION_SCROLL, 1, arrayOf(properties), arrayOf(coords),
+            0, buttons, 1f, 1f, deviceId, 0, InputDevice.SOURCE_MOUSE, 0)
         injector(event)
         event.recycle()
     }

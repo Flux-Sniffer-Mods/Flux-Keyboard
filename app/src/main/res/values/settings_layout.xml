@@ -489,4 +489,6 @@
     <string name="game_mode_artwork_choose">Choose a picture</string>
     <string name="game_mode_artwork_reset">Use the found art</string>
     <string name="game_mode_artwork_failed">Couldn\'t read that picture</string>
+    <string name="stream_capture_title">Moonlight wants to play</string>
+    <string name="stream_capture_text">Tap to let it see the screen.</string>
 </resources>
