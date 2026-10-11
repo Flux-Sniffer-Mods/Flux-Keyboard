@@ -38,6 +38,8 @@ internal class StreamSession(
     /** The game on a screen of its own (Separate screen) rather than the phone's mirrored. */
     @Volatile var separate = separateAtStart && game != null || desktopOnly
         private set
+    /** Android's desktop streaming (no game). */
+    val isDesktop: Boolean get() = desktopOnly
     /** The game's app, for gaming mode while it's on a screen of its own. */
     val gamePackage: String? get() = game?.component?.packageName ?: game?.`package`
     /** Switching screens and starting the stream wait on the shell: off the threads that ask. */

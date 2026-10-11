@@ -633,6 +633,12 @@
     },
     {
       "text": "Choosing artwork from the internet has a search box: look up any title for a game, launcher or emulator without renaming it."
+    },
+    {
+      "text": "Game screen page: choose where input goes. Touch works on the screen as you touch it, or as a trackpad (one finger moves a pointer, tap to click, two-finger tap to right-click, two fingers to scroll); keys go to the screen or stay with the phone. Android desktop starts as a trackpad."
+    },
+    {
+      "text": "Stream to Moonlight: the phone screen and Android desktop covers read Mirror Phone Screen and Android Desktop."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -877,6 +883,9 @@
     },
     {
       "text": "A game picked in Moonlight opens once the phone's screen has changed size, so GameHub opens the game rather than its library."
+    },
+    {
+      "text": "Moonlight's Wake starts streaming even when Android won't start the streaming service from the background, and each wake packet is noted in the crash log."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

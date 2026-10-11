@@ -537,8 +537,13 @@
     <string name="stream_pass_through_description">Keyboards, mice and controllers connected by USB or Bluetooth control the game\'s screen while streaming instead of the phone. They go back to the phone when the stream ends.</string>
     <string name="stream_screen_to_separate">Separate screen</string>
     <string name="stream_screen_to_mirror">Mirror phone</string>
+    <string name="extra_screen_touch_direct">Touch: on screen</string>
+    <string name="extra_screen_touch_trackpad">Touch: trackpad</string>
+    <string name="extra_screen_keys_screen">Keys: to screen</string>
+    <string name="extra_screen_keys_phone">Keys: to phone</string>
+    <string name="stream_desktop_art">Android Desktop</string>
     <string name="extra_screen_title">Game screen</string>
-    <string name="stream_phone_screen_art">Mirror phone screen</string>
+    <string name="stream_phone_screen_art">Mirror Phone Screen</string>
     <string name="stream_phone_screen">Phone screen</string>
     <string name="stream_phone_screen_switch">Show the phone\'s screen in Moonlight</string>
     <string name="stream_phone_screen_description">Adds the phone\'s screen to Moonlight\'s list, to show whatever is on it.</string>

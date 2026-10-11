@@ -30,16 +30,23 @@ object StreamWake {
             while (true) {
                 val packet = DatagramPacket(buffer, buffer.size)
                 if (runCatching { socket.receive(packet) }.isFailure) break
-                if (isWake(buffer.copyOf(packet.length), StreamHost.mac(app))) wake(app)
+                // Logged as a warning, so the crash log shows whether Moonlight's Wake arrives at all
+                val ours = isWake(buffer.copyOf(packet.length), StreamHost.mac(app))
+                Log.w(TAG, "packet on $port from ${packet.address?.hostAddress} (${packet.length} bytes): ${if (ours) "wake for this phone" else "not this phone's wake"}")
+                if (ours) wake(app)
             }
         }, "StreamWake$port").apply { isDaemon = true; start() }
     }
 
     private fun wake(context: Context) {
-        Log.i(TAG, "woken by Moonlight")
         // Only for a phone that streams at all: paired with a Moonlight client before
-        if (StreamHost.pairedCount(context) == 0) return
-        runCatching { StreamHostService.setEnabled(context, true) }.onFailure { Log.w(TAG, "streaming couldn't start: $it") }
+        if (StreamHost.pairedCount(context) == 0) { Log.w(TAG, "woken, but no Moonlight client is paired"); return }
+        // Its service, with its notification; when Android won't start a service from the
+        // background, the streaming itself starts here, in the keyboard's process
+        runCatching { StreamHostService.setEnabled(context, true) }.onFailure {
+            Log.w(TAG, "the streaming service couldn't start ($it): streaming without it")
+            StreamHost.start(context)
+        }
     }
 
     /** A magic packet for [mac] ("02:ab:..."): six 0xFF, then the address 16 times. */

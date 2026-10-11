@@ -508,11 +508,11 @@ object StreamHost {
         .map { appId(it) to it }
 
     /** The phone's own screen, listed first in Moonlight when that's on. */
-    const val PHONE_SCREEN_ID = 2
+    const val PHONE_SCREEN_ID = 5
     /** Xbox Cloud Gaming's library, listed in Moonlight as XCloud Games. */
     const val XCLOUD_ID = 3
     /** Android's desktop on a screen of its own. */
-    const val DESKTOP_ID = 4
+    const val DESKTOP_ID = 6
     private val SPECIAL_IDS = setOf(PHONE_SCREEN_ID, XCLOUD_ID, DESKTOP_ID)
 
     /**
@@ -566,7 +566,7 @@ object StreamHost {
         val profile = games().firstOrNull { it.first.toString() == appId }?.second
         val art = when (appId) {
             PHONE_SCREEN_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art))
-            DESKTOP_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_screen_desktop))
+            DESKTOP_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art))
             XCLOUD_ID.toString() -> runCatching { GameArt.xboxTile(app) }.getOrNull()
             else -> null
         } ?: profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }

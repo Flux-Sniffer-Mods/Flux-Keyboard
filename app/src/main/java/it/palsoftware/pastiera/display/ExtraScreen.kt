@@ -44,6 +44,8 @@ object ExtraScreen {
 
     /** The phone gives its keys to the screen (the Games app's page for it is in front). */
     @Volatile var focused = false
+    /** The phone's keys go to the screen while [focused] (else the phone keeps them). */
+    @Volatile var keysToScreen = true
 
     private var process: Process? = null
     private var commands: Writer? = null
@@ -176,6 +178,7 @@ object ExtraScreen {
         socket = null
         config = null
         stopInput()
+        hidePointer()
         appContext?.let { if (screen.desktop) desktopMode(it, false) }
         watchers.forEach { runCatching { it() } }
     }
@@ -356,7 +359,7 @@ object ExtraScreen {
 
     /** A key the phone got, sent to the screen instead when it has the phone's keys. True when it took it. */
     fun key(event: KeyEvent): Boolean {
-        if (!focused || current == null || event.keyCode in PHONE_KEYS) return false
+        if (!focused || !keysToScreen || current == null || event.keyCode in PHONE_KEYS) return false
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return true
         if (event.repeatCount > 0) return true
         val pad = event.isFromSource(InputDevice.SOURCE_GAMEPAD) || KeyEvent.isGamepadButton(event.keyCode)
@@ -366,4 +369,89 @@ object ExtraScreen {
 
     /** A finger down (d), moved (m) or up (u) at a point on the screen. */
     fun touch(kind: Char, finger: Int, x: Float, y: Float) = send("T $kind $finger $x $y")
+
+    // ---- A mouse on the screen (the phone's screen as its trackpad), with a pointer drawn ----
+
+    @Volatile private var pointerX = -1f
+    @Volatile private var pointerY = -1f
+    private var pointer: android.view.View? = null
+
+    /** The mouse moved by [dx], [dy] screen pixels. */
+    fun mouseMove(context: Context, dx: Float, dy: Float) {
+        val screen = current ?: return
+        if (pointerX < 0) { pointerX = screen.width / 2f; pointerY = screen.height / 2f }
+        pointerX = (pointerX + dx).coerceIn(0f, screen.width - 1f)
+        pointerY = (pointerY + dy).coerceIn(0f, screen.height - 1f)
+        send("MA $pointerX $pointerY")
+        showPointer(context, screen)
+    }
+
+    /** The left (or [right]) mouse button pressed or let go. */
+    fun mouseButton(down: Boolean, right: Boolean = false) = send("B ${if (down) 1 else 0} ${if (right) 2 else 1}")
+
+    /** The mouse wheel turned, in notches (up and right positive). */
+    fun scroll(vertical: Float, horizontal: Float) = send("W $vertical $horizontal")
+
+    /**
+     * The pointer drawn on the screen where the mouse is (Android draws none for a mouse it
+     * didn't see plugged in): a small arrow in a window of Flux Keyboard's on that display.
+     */
+    private fun showPointer(context: Context, screen: Screen) {
+        val x = pointerX.toInt(); val y = pointerY.toInt()
+        android.os.Handler(android.os.Looper.getMainLooper()).post {
+            if (current !== screen) return@post
+            runCatching {
+                val view = pointer ?: run {
+                    if (!android.provider.Settings.canDrawOverlays(context)) return@post
+                    val display = context.getSystemService(android.hardware.display.DisplayManager::class.java)?.getDisplay(screen.id) ?: return@post
+                    val displayContext = context.createDisplayContext(display)
+                    val windows = displayContext.getSystemService(android.view.WindowManager::class.java) ?: return@post
+                    val arrow = PointerView(displayContext)
+                    val size = (screen.height / 40).coerceAtLeast(20)
+                    windows.addView(arrow, pointerParams(x, y, size))
+                    pointerWindows = windows
+                    pointer = arrow
+                    arrow
+                }
+                val params = view.layoutParams as android.view.WindowManager.LayoutParams
+                params.x = x; params.y = y
+                pointerWindows?.updateViewLayout(view, params)
+            }
+        }
+    }
+
+    private var pointerWindows: android.view.WindowManager? = null
+
+    private fun pointerParams(x: Int, y: Int, size: Int) = android.view.WindowManager.LayoutParams(
+        size, (size * 1.5f).toInt(),
+        android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+            android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+        android.graphics.PixelFormat.TRANSLUCENT
+    ).apply { gravity = android.view.Gravity.TOP or android.view.Gravity.START; this.x = x; this.y = y }
+
+    private fun hidePointer() {
+        val view = pointer ?: return
+        val windows = pointerWindows
+        pointer = null; pointerWindows = null
+        pointerX = -1f; pointerY = -1f
+        android.os.Handler(android.os.Looper.getMainLooper()).post { runCatching { windows?.removeView(view) } }
+    }
+
+    /** An arrow pointer: white with a dark edge, readable on any picture. */
+    private class PointerView(context: Context) : android.view.View(context) {
+        private val fill = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.WHITE }
+        private val edge = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.BLACK; style = android.graphics.Paint.Style.STROKE; strokeWidth = 2f
+        }
+        override fun onDraw(canvas: android.graphics.Canvas) {
+            val w = width.toFloat(); val h = height.toFloat()
+            val path = android.graphics.Path().apply {
+                moveTo(1f, 1f); lineTo(1f, h * 0.8f); lineTo(w * 0.3f, h * 0.6f); lineTo(w * 0.5f, h - 1f)
+                lineTo(w * 0.65f, h * 0.92f); lineTo(w * 0.45f, h * 0.55f); lineTo(w - 1f, h * 0.55f); close()
+            }
+            canvas.drawPath(path, fill)
+            canvas.drawPath(path, edge)
+        }
+    }
 }

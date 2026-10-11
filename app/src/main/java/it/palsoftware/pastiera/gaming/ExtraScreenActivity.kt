@@ -56,11 +56,43 @@ class ExtraScreenActivity : Activity() {
             setPadding((12 * density).toInt(), (10 * density).toInt(), (12 * density).toInt(), (10 * density).toInt())
             setOnClickListener { onClick() }
         }
+        // Where each kind of input goes: the phone's touch as the screen's touch or its
+        // trackpad, the phone's keys to the screen or kept by the phone
+        val desktop = StreamHost.session?.isDesktop == true
+        val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(this)
+        val kind = if (desktop) "desktop" else "game"
+        trackpad = prefs.getBoolean("extra_screen_trackpad_$kind", desktop)
+        ExtraScreen.keysToScreen = prefs.getBoolean("extra_screen_keys_$kind", true)
+        lateinit var touchButton: TextView
+        lateinit var keysButton: TextView
+        fun labels() {
+            touchButton.text = getString(if (trackpad) R.string.extra_screen_touch_trackpad else R.string.extra_screen_touch_direct)
+            keysButton.text = getString(if (ExtraScreen.keysToScreen) R.string.extra_screen_keys_screen else R.string.extra_screen_keys_phone)
+        }
+        touchButton = button(R.string.extra_screen_touch_direct) {
+            trackpad = !trackpad
+            prefs.edit().putBoolean("extra_screen_trackpad_$kind", trackpad).apply()
+            labels()
+        }
+        keysButton = button(R.string.extra_screen_keys_screen) {
+            ExtraScreen.keysToScreen = !ExtraScreen.keysToScreen
+            prefs.edit().putBoolean("extra_screen_keys_$kind", ExtraScreen.keysToScreen).apply()
+            labels()
+        }
+        labels()
         root.addView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
             setBackgroundColor(0x99000000.toInt())
-            addView(button(R.string.game_mode_place_keys) { runCatching { GameMode.placeKeys(this@ExtraScreenActivity).send() } })
-            addView(button(R.string.stream_screen_to_mirror) { StreamHost.toggleScreen() })
-            addView(button(R.string.stream_end) { StreamHost.endStream() })
+            addView(LinearLayout(this@ExtraScreenActivity).apply {
+                addView(touchButton)
+                addView(keysButton)
+            })
+            addView(LinearLayout(this@ExtraScreenActivity).apply {
+                addView(button(R.string.game_mode_place_keys) { runCatching { GameMode.placeKeys(this@ExtraScreenActivity).send() } })
+                // A game moves back to the phone; the desktop has none to move
+                if (!desktop) addView(button(R.string.stream_screen_to_mirror) { StreamHost.toggleScreen() })
+                addView(button(R.string.stream_end) { StreamHost.endStream() })
+            })
         }, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP or Gravity.END))
         setContentView(root)
         open = WeakReference(this)
@@ -96,8 +128,57 @@ class ExtraScreenActivity : Activity() {
         return super.dispatchKeyEvent(event)
     }
 
+    /** The phone's screen as the extra screen's trackpad (else its touch, at the same spots). */
+    private var trackpad = false
+    private var lastX = 0f
+    private var lastY = 0f
+    private var downTime = 0L
+    private var moved = 0f
+    private var fingers = 0
+    private var scrollRest = 0f
+
+    /**
+     * Trackpad: one finger moves the pointer, a tap clicks, a two-finger tap right-clicks, two
+     * fingers moving scroll.
+     */
+    private fun trackpadTouch(view: View, event: MotionEvent) {
+        val screen = ExtraScreen.current ?: return
+        // Across the phone, a little more than across the screen: the pointer covers it in one swipe
+        val speed = 1.6f * screen.width / view.width.coerceAtLeast(1)
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                lastX = event.x; lastY = event.y; downTime = event.eventTime; moved = 0f; fingers = 1; scrollRest = 0f
+            }
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                fingers = maxOf(fingers, event.pointerCount)
+                lastX = event.getX(0); lastY = event.getY(0)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val dx = event.getX(0) - lastX; val dy = event.getY(0) - lastY
+                lastX = event.getX(0); lastY = event.getY(0)
+                moved += kotlin.math.abs(dx) + kotlin.math.abs(dy)
+                if (event.pointerCount >= 2) {
+                    // Two fingers: the wheel, a notch per 40 pixels
+                    scrollRest += dy / 40f
+                    val notches = scrollRest.toInt()
+                    if (notches != 0) { ExtraScreen.scroll(notches.toFloat(), 0f); scrollRest -= notches }
+                } else ExtraScreen.mouseMove(this, dx * speed, dy * speed)
+            }
+            MotionEvent.ACTION_UP -> {
+                val tap = event.eventTime - downTime < 250 && moved < 24 * resources.displayMetrics.density
+                if (tap) {
+                    val right = fingers >= 2
+                    ExtraScreen.mouseButton(true, right)
+                    ExtraScreen.mouseButton(false, right)
+                }
+                fingers = 0
+            }
+        }
+    }
+
     /** Fingers on the picture, at the same spots on the screen. */
     private fun touch(view: View, event: MotionEvent) {
+        if (trackpad) { trackpadTouch(view, event); return }
         val screen = ExtraScreen.current ?: return
         val sx = screen.width.toFloat() / view.width.coerceAtLeast(1)
         val sy = screen.height.toFloat() / view.height.coerceAtLeast(1)
