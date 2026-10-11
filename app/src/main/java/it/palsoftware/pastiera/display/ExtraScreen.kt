@@ -221,19 +221,21 @@ object ExtraScreen {
     // ---- Android's desktop on the screen ----
 
     /**
-     * Developer options' desktop windowing (and freeform windows), switched on for good: Android
-     * reads them as it starts, so switching them off after each stream would need a restart
-     * every time. When they were off, a restart now makes the desktop appear: the phone says so.
+     * Developer options, Window management: Force activities to be resizeable, Enable
+     * non-resizable in Multi-window, Enable freeform windows, switched on for good (Android reads
+     * them as it starts, so switching them off after each stream would need a restart every
+     * time; when they were off, the phone says a restart makes the desktop appear). Enable
+     * freeform windows on secondary display is switched on for the stream only, below.
      */
-    private val WINDOWING = listOf(
-        "override_desktop_mode_features", "override_desktop_experience_features",
-        "enable_freeform_support", "force_resizable_activities"
-    )
+    private val WINDOWING = listOf("force_resizable_activities", "enable_non_resizable_multi_window", "enable_freeform_support")
+    /** Newer Android's desktop windowing switches, where the phone has them (harmless where it doesn't). */
+    private val DESKTOP_FEATURES = listOf("override_desktop_mode_features", "override_desktop_experience_features")
 
     private fun windowing(context: Context) {
         val now = AdbShell.run(WINDOWING.joinToString("; ") { "settings get global $it" }).orEmpty().lines().map { it.trim() }
-        if (WINDOWING.indices.all { now.getOrNull(it) == "1" }) return
-        AdbShell.run(WINDOWING.joinToString("; ") { "settings put global $it 1" })
+        val wasOn = WINDOWING.indices.all { now.getOrNull(it) == "1" }
+        AdbShell.run((WINDOWING + DESKTOP_FEATURES).joinToString("; ") { "settings put global $it 1" })
+        if (wasOn) return
         android.os.Handler(android.os.Looper.getMainLooper()).post {
             android.widget.Toast.makeText(context, it.palsoftware.pastiera.R.string.stream_desktop_restart, android.widget.Toast.LENGTH_LONG).show()
         }
