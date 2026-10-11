@@ -1410,4 +1410,9 @@
     <string name="games_app_settings_short">Einstellungen</string>
     <string name="stream_desktop_restart">Desktop-Fenster sind jetzt an. Falls der Desktop nicht erscheint, starte das Handy einmal neu.</string>
     <string name="game_mode_artwork_search">Nach einem Titel suchen</string>
+    <string name="extra_screen_touch_direct">Berührung: auf dem Bildschirm</string>
+    <string name="extra_screen_touch_trackpad">Berührung: Trackpad</string>
+    <string name="extra_screen_keys_screen">Tasten: an den Bildschirm</string>
+    <string name="extra_screen_keys_phone">Tasten: ans Handy</string>
+    <string name="stream_desktop_art">Android-Desktop</string>
 </resources>

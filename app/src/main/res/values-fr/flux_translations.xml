@@ -1951,4 +1951,9 @@
     <string name="games_app_settings_short">Réglages</string>
     <string name="stream_desktop_restart">Le fenêtrage du bureau est activé. Si le bureau n\'apparaît pas, redémarrez le téléphone une fois.</string>
     <string name="game_mode_artwork_search">Rechercher un titre</string>
+    <string name="extra_screen_touch_direct">Tactile : à l\'écran</string>
+    <string name="extra_screen_touch_trackpad">Tactile : pavé tactile</string>
+    <string name="extra_screen_keys_screen">Touches : vers l\'écran</string>
+    <string name="extra_screen_keys_phone">Touches : vers le téléphone</string>
+    <string name="stream_desktop_art">Bureau Android</string>
 </resources>

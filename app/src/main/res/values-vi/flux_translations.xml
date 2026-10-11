@@ -1939,4 +1939,9 @@
     <string name="games_app_settings_short">Cài đặt</string>
     <string name="stream_desktop_restart">Cửa sổ màn hình nền đã được bật. Nếu màn hình nền không hiện, hãy khởi động lại điện thoại một lần.</string>
     <string name="game_mode_artwork_search">Tìm theo tên</string>
+    <string name="extra_screen_touch_direct">Chạm: trên màn hình</string>
+    <string name="extra_screen_touch_trackpad">Chạm: bàn di chuột</string>
+    <string name="extra_screen_keys_screen">Phím: tới màn hình</string>
+    <string name="extra_screen_keys_phone">Phím: tới điện thoại</string>
+    <string name="stream_desktop_art">Màn Hình Nền Android</string>
 </resources>

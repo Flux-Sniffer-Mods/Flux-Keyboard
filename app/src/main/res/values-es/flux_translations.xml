@@ -1951,4 +1951,9 @@
     <string name="games_app_settings_short">Ajustes</string>
     <string name="stream_desktop_restart">Las ventanas de escritorio ya están activadas. Si no aparece el escritorio, reinicia el móvil una vez.</string>
     <string name="game_mode_artwork_search">Buscar un título</string>
+    <string name="extra_screen_touch_direct">Toque: en pantalla</string>
+    <string name="extra_screen_touch_trackpad">Toque: panel táctil</string>
+    <string name="extra_screen_keys_screen">Teclas: a la pantalla</string>
+    <string name="extra_screen_keys_phone">Teclas: al móvil</string>
+    <string name="stream_desktop_art">Escritorio de Android</string>
 </resources>

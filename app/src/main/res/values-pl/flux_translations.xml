@@ -1957,4 +1957,9 @@
     <string name="games_app_settings_short">Ustawienia</string>
     <string name="stream_desktop_restart">Okna pulpitu są włączone. Jeśli pulpit się nie pojawi, uruchom telefon ponownie raz.</string>
     <string name="game_mode_artwork_search">Szukaj tytułu</string>
+    <string name="extra_screen_touch_direct">Dotyk: na ekranie</string>
+    <string name="extra_screen_touch_trackpad">Dotyk: gładzik</string>
+    <string name="extra_screen_keys_screen">Klawisze: do ekranu</string>
+    <string name="extra_screen_keys_phone">Klawisze: do telefonu</string>
+    <string name="stream_desktop_art">Pulpit Androida</string>
 </resources>

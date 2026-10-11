@@ -1945,4 +1945,9 @@
     <string name="games_app_settings_short">Կարգավորումներ</string>
     <string name="stream_desktop_restart">Աշխատասեղանի պատուհաններն այժմ միացված են։ Եթե աշխատասեղանը չի երևում, մեկ անգամ վերագործարկիր հեռախոսը։</string>
     <string name="game_mode_artwork_search">Որոնել անուն</string>
+    <string name="extra_screen_touch_direct">Հպում՝ էկրանին</string>
+    <string name="extra_screen_touch_trackpad">Հպում՝ թաչփեդ</string>
+    <string name="extra_screen_keys_screen">Ստեղներ՝ էկրանին</string>
+    <string name="extra_screen_keys_phone">Ստեղներ՝ հեռախոսին</string>
+    <string name="stream_desktop_art">Android-ի Աշխատասեղան</string>
 </resources>

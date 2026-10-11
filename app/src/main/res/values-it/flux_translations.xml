@@ -1456,4 +1456,9 @@
     <string name="games_app_settings_short">Impostazioni</string>
     <string name="stream_desktop_restart">Le finestre desktop sono attive. Se il desktop non compare, riavvia il telefono una volta.</string>
     <string name="game_mode_artwork_search">Cerca un titolo</string>
+    <string name="extra_screen_touch_direct">Tocco: sullo schermo</string>
+    <string name="extra_screen_touch_trackpad">Tocco: trackpad</string>
+    <string name="extra_screen_keys_screen">Tasti: allo schermo</string>
+    <string name="extra_screen_keys_phone">Tasti: al telefono</string>
+    <string name="stream_desktop_art">Desktop Android</string>
 </resources>

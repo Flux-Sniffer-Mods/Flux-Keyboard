@@ -1319,4 +1319,9 @@
     <string name="games_app_settings_short">Ρυθμίσεις</string>
     <string name="stream_desktop_restart">Τα παράθυρα επιφάνειας εργασίας είναι πλέον ενεργά. Αν δεν εμφανιστεί η επιφάνεια εργασίας, κάνε μία επανεκκίνηση στο τηλέφωνο.</string>
     <string name="game_mode_artwork_search">Αναζήτηση τίτλου</string>
+    <string name="extra_screen_touch_direct">Αφή: στην οθόνη</string>
+    <string name="extra_screen_touch_trackpad">Αφή: επιφάνεια αφής</string>
+    <string name="extra_screen_keys_screen">Πλήκτρα: στην οθόνη</string>
+    <string name="extra_screen_keys_phone">Πλήκτρα: στο τηλέφωνο</string>
+    <string name="stream_desktop_art">Επιφάνεια Εργασίας Android</string>
 </resources>

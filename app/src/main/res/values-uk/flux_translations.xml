@@ -1957,4 +1957,9 @@
     <string name="games_app_settings_short">Налаштування</string>
     <string name="stream_desktop_restart">Віконний режим робочого столу ввімкнено. Якщо робочий стіл не з\'явиться, перезапустіть телефон один раз.</string>
     <string name="game_mode_artwork_search">Шукати за назвою</string>
+    <string name="extra_screen_touch_direct">Дотик: на екрані</string>
+    <string name="extra_screen_touch_trackpad">Дотик: тачпад</string>
+    <string name="extra_screen_keys_screen">Клавіші: на екран</string>
+    <string name="extra_screen_keys_phone">Клавіші: телефону</string>
+    <string name="stream_desktop_art">Робочий Стіл Android</string>
 </resources>

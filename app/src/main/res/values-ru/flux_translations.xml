@@ -1957,4 +1957,9 @@
     <string name="games_app_settings_short">Настройки</string>
     <string name="stream_desktop_restart">Оконный режим рабочего стола включён. Если рабочий стол не появится, перезагрузите телефон один раз.</string>
     <string name="game_mode_artwork_search">Искать по названию</string>
+    <string name="extra_screen_touch_direct">Касание: на экране</string>
+    <string name="extra_screen_touch_trackpad">Касание: тачпад</string>
+    <string name="extra_screen_keys_screen">Клавиши: на экран</string>
+    <string name="extra_screen_keys_phone">Клавиши: телефону</string>
+    <string name="stream_desktop_art">Рабочий Стол Android</string>
 </resources>
