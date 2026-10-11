@@ -275,10 +275,27 @@ object GameTouchEditor {
     }
 
     /** Where GameHub draws its sticks (sideways, its own layout): centre and reach, shares of the screen. */
-    private val GAMEHUB = Triple(0.146f, 0.692f, 0.0875f) to Triple(0.683f, 0.692f, 0.0875f)
+    private val GAMEHUB = Triple(0.146f, 0.692f, 0.156f) to Triple(0.683f, 0.692f, 0.156f)
 
     /** Where GameNative's built-in on-screen controller (its default controls profile) has its sticks. */
-    private val GAMENATIVE = Triple(0.216f, 0.733f, 0.054f) to Triple(0.784f, 0.733f, 0.054f)
+    private val GAMENATIVE = Triple(0.216f, 0.733f, 0.096f) to Triple(0.784f, 0.733f, 0.096f)
+
+    /**
+     * Where most touch games draw their sticks: a joystick low on the left, the camera dragged on
+     * the right (sizes a share of the screen's shorter side).
+     */
+    private val TOUCH_GAME = Triple(0.17f, 0.72f, 0.17f) to Triple(0.78f, 0.55f, 0.2f)
+
+    /**
+     * A program played by touch: keys placed on its screen, or a game that is an app of its own
+     * (not an emulator's or launcher's game, nor a cloud game, which take a controller).
+     */
+    private fun playedByTouch(profile: GameProfile): Boolean {
+        if (profile.taps.isNotEmpty()) return true
+        val pkg = profile.packages.firstOrNull() ?: return false
+        return profile.isGame && GameApps.appFor(profile) == null && GameApps.emulator(pkg) == null &&
+            pkg != it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
+    }
 
     /**
      * [profile] with the trackpad's sticks on its launcher's on-screen sticks, when none have
@@ -289,7 +306,8 @@ object GameTouchEditor {
         val (left, right) = when (GameApps.appFor(profile)) {
             "GameHub" -> GAMEHUB
             "GameNative" -> GAMENATIVE
-            else -> if (always) GAMEHUB else return profile
+            // Programs played by touch: the trackpad moves their own on-screen sticks
+            else -> if (always || playedByTouch(profile)) TOUCH_GAME else return profile
         }
         val halves = listOf(profile.leftHalf, profile.rightHalf)
         val zones = buildMap {

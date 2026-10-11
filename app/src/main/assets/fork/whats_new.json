@@ -666,6 +666,9 @@
     },
     {
       "text": "Gaming mode: the screen's density follows a sideways or lower resolution, so a game's screen holds as much as the phone's own (put back after)."
+    },
+    {
+      "text": "Gaming mode: in games played by touch (Play Store games, or any with keys placed on their screen), the trackpad moves the game's own on-screen sticks from the start, placed where most touch games draw them; move or resize them in the placer."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
