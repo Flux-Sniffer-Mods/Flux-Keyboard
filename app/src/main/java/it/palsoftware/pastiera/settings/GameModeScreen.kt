@@ -69,6 +69,8 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var importing by remember { mutableStateOf(false) }
     var gameNativeSetup by remember { mutableStateOf(false) }
     var addingOwn by remember { mutableStateOf(false) }
+    var addingXbox by remember { mutableStateOf(false) }
+    val xboxApp = remember { it.palsoftware.pastiera.gaming.XboxCloud.app(context) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     fun refresh() { profiles = GameProfiles.all(context) }
     // The game folders read again (games found join the list, not set up yet), and games named
@@ -174,6 +176,13 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_import),
             description = stringResource(R.string.game_mode_import_description)
         ) { importing = true }
+        // Xbox Cloud Gaming's games, from its catalogue, each a game of its own
+        if (xboxApp != null) FluxActionRow(
+            linkId = null,
+            icon = "+",
+            title = stringResource(R.string.game_mode_xbox_add),
+            description = stringResource(R.string.game_mode_xbox_add_description)
+        ) { addingXbox = true }
         // Where games are found: Flux Keyboard's folders, ES-DE's, and your own
         SettingsSectionDivider(stringResource(R.string.game_mode_folders_section))
         FluxActionRow(
@@ -244,6 +253,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     }
     if (importing) GameImportDialog(onPicked = pickGame, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
     if (addingOwn) OwnGameDialog(onAdded = pickGame, onDismiss = { addingOwn = false })
+    if (addingXbox && xboxApp != null) XboxCloudDialog(xboxApp, onPicked = { game -> addingXbox = false; pickGame(game) }, onDismiss = { addingXbox = false })
     if (gameNativeSetup) {
         AlertDialog(
             onDismissRequest = { gameNativeSetup = false },
@@ -651,6 +661,42 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
             ).show()
         }
     }
+}
+
+/** Xbox Cloud Gaming's games, searched by name: one picked becomes a game of its own. */
+@Composable
+private fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    var games by remember { mutableStateOf<List<it.palsoftware.pastiera.gaming.XboxCloud.CloudGame>?>(null) }
+    var query by remember { mutableStateOf("") }
+    LaunchedEffect(Unit) { games = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.XboxCloud.games(context) } }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.game_mode_xbox_add)) },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = query, onValueChange = { query = it }, singleLine = true,
+                    label = { Text(stringResource(R.string.game_mode_xbox_search)) }, modifier = Modifier.fillMaxWidth()
+                )
+                val list = games
+                when {
+                    list == null -> Text(stringResource(R.string.game_mode_import_reading), modifier = Modifier.padding(top = 8.dp))
+                    list.isEmpty() -> Text(stringResource(R.string.game_mode_xbox_none), modifier = Modifier.padding(top = 8.dp))
+                    else -> androidx.compose.foundation.lazy.LazyColumn(modifier = Modifier.height(360.dp)) {
+                        val shown = list.filter { query.isBlank() || it.name.contains(query.trim(), ignoreCase = true) }.take(80)
+                        items(shown.size) { i ->
+                            val game = shown[i]
+                            Text(game.name, modifier = Modifier.fillMaxWidth().clickable {
+                                onPicked(it.palsoftware.pastiera.gaming.XboxCloud.asGame(game, pkg))
+                            }.padding(vertical = 10.dp))
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
 }
 
 @Composable

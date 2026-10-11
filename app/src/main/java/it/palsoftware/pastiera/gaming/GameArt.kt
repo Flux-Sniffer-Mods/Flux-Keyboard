@@ -47,6 +47,8 @@ object GameArt {
     internal fun urls(context: Context, profile: GameProfile): List<String> {
         val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
             ?: return emptyList()
+        // An Xbox cloud game: its box art from Microsoft's catalogue
+        profile.launch?.let { XboxCloud.artFor(context, it) }?.let { return listOf(it) }
         steamId(launch)?.let { id ->
             return listOf("library_600x900.jpg", "header.jpg").map { "https://cdn.cloudflare.steamstatic.com/steam/apps/$id/$it" }
         }
