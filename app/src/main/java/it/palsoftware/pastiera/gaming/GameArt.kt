@@ -247,6 +247,15 @@ object GameArt {
     fun version(context: Context, profile: GameProfile): Long =
         maxOf(customFile(context, profile).lastModified(), uprightFile(context, profile).lastModified())
 
+    /**
+     * Changes only when the cover Moonlight shows changes: the upright art picked for it, else
+     * (when there's none) the picture it's made from. Picking a square icon leaves it alone.
+     */
+    fun coverVersion(context: Context, profile: GameProfile): Long {
+        val upright = uprightFile(context, profile)
+        return if (upright.length() > 0) upright.lastModified() else customFile(context, profile).lastModified()
+    }
+
     /** Upright art picked for Moonlight, apart from the list's. */
     private fun uprightFile(context: Context, profile: GameProfile) = File(dir(context), profile.id + "-upright-custom.img")
 

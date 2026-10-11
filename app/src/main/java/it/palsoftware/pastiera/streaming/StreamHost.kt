@@ -303,7 +303,7 @@ object StreamHost {
         // The phone's own screen, as it is: no game to open
         val phoneScreen = appId == PHONE_SCREEN_ID && StreamHostService.phoneScreen(app)
         // Xbox Cloud Gaming's library, in Flux Keyboard's player
-        val xcloud = appId == XCLOUD_ID
+        val xcloud = appId == xcloudId()
         // Flux Keyboard's Games app, laid out for the TV
         val launcher = appId == FLUX_GAMES_ID
         // Android's desktop on a screen of its own (the shell makes it)
@@ -515,11 +515,17 @@ object StreamHost {
     const val PHONE_SCREEN_ID = 5
     /** Xbox Cloud Gaming's library, listed in Moonlight as XCloud Games. */
     const val XCLOUD_ID = 3
+
+    /** XCloud Games' number: [XCLOUD_ID] until art is picked for its tile, then one that changes with that art only. */
+    private fun xcloudId(): Int {
+        val version = GameArt.coverVersion(app, GameArt.XBOX_TILE)
+        return if (version == 0L) XCLOUD_ID else ("xcloud|$version".hashCode() and 0x7FFFFFFF).coerceAtLeast(10)
+    }
     /** Android's desktop on a screen of its own. */
     const val DESKTOP_ID = 6
     /** Flux Keyboard's Games app, on the TV. */
     const val FLUX_GAMES_ID = 7
-    private val SPECIAL_IDS = setOf(PHONE_SCREEN_ID, XCLOUD_ID, DESKTOP_ID, FLUX_GAMES_ID)
+    private val SPECIAL_IDS get() = setOf(PHONE_SCREEN_ID, xcloudId(), DESKTOP_ID, FLUX_GAMES_ID)
 
     /**
      * A game's number for Moonlight: stable while the game and its art stay the same. Moonlight
@@ -527,7 +533,7 @@ object StreamHost {
      * picture of your own) gets a new number.
      */
     internal fun appId(profile: GameProfile): Int =
-        ("${profile.id}|$ART_GENERATION|${GameArt.version(app, profile)}".hashCode() and 0x7FFFFFFF).coerceAtLeast(1)
+        ("${profile.id}|$ART_GENERATION|${GameArt.coverVersion(app, profile)}".hashCode() and 0x7FFFFFFF).coerceAtLeast(1)
 
     /** Raised when the art Moonlight is sent changes for every game. */
     private const val ART_GENERATION = 2
@@ -541,9 +547,10 @@ object StreamHost {
      */
     private fun appList(): String = root(
         entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_flux_games) + "]", FLUX_GAMES_ID) +
-            (if (it.palsoftware.pastiera.adb.AdbShell.available()) entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art) + "]", DESKTOP_ID) else "") +
+            // Always listed (not only while the shell answers), so the list doesn't change under Moonlight
+            entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art) + "]", DESKTOP_ID) +
             (if (StreamHostService.phoneScreen(app)) entry("[" + app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art) + "]", PHONE_SCREEN_ID) else "") +
-            entry(app.getString(it.palsoftware.pastiera.R.string.games_app_xbox), XCLOUD_ID) +
+            entry(app.getString(it.palsoftware.pastiera.R.string.games_app_xbox), xcloudId()) +
             games().filter { it.first !in SPECIAL_IDS }.joinToString("") { (id, profile) ->
                 "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"
             }
@@ -573,17 +580,25 @@ object StreamHost {
     }.getOrNull()
 
     /** A game's upright box art, for Moonlight's game picker. */
+    /** Covers sent, by entry and cover: the same bytes every time Moonlight asks again. */
+    private val covers = java.util.concurrent.ConcurrentHashMap<String, ByteArray>()
+
     private fun asset(out: OutputStream, appId: String?) {
-        val profile = games().firstOrNull { it.first.toString() == appId }?.second
-        val art = when (appId) {
-            PHONE_SCREEN_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art))
-            DESKTOP_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art))
-            XCLOUD_ID.toString() -> runCatching { GameArt.xboxTile(app) }.getOrNull()
-            FLUX_GAMES_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_flux_games))
-            else -> null
-        } ?: profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
-        val bytes = art?.let { bitmap ->
-            java.io.ByteArrayOutputStream().also { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }.toByteArray()
+        val bytes = covers[appId.orEmpty()] ?: run {
+            val profile = games().firstOrNull { it.first.toString() == appId }?.second
+            val art = when (appId) {
+                xcloudId().toString() -> runCatching { GameArt.xboxTile(app) }.getOrNull()
+                    ?: textArt(app.getString(it.palsoftware.pastiera.R.string.games_app_xbox))
+                PHONE_SCREEN_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art))
+                DESKTOP_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_desktop_art))
+                FLUX_GAMES_ID.toString() -> textArt(app.getString(it.palsoftware.pastiera.R.string.stream_flux_games))
+                else -> null
+            } ?: profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() ?: textArt(it.name) }
+            val encoded = art?.let { bitmap ->
+                java.io.ByteArrayOutputStream().also { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }.toByteArray()
+            }
+            // Kept once there's a cover (an entry's number changes with its cover, so a kept one never goes stale)
+            encoded?.also { if (appId != null) covers[appId] = it }
         } ?: ByteArray(0)
         respond(out, "image/png", bytes)
     }

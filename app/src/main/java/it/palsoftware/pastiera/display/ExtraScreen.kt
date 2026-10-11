@@ -74,6 +74,8 @@ object ExtraScreen {
      * and controllers go to the screen rather than the phone. Blocking (the shell starts it); null
      * when it couldn't open.
      */
+    private var restoreFreeform = true
+
     @Synchronized
     fun open(context: Context, width: Int, height: Int, fps: Int, kbps: Int, desktop: Boolean, passthrough: Boolean = false): Screen? {
         close()
@@ -81,8 +83,14 @@ object ExtraScreen {
         appContext = app
         if (!AdbShell.available()) return null
         val token = java.util.UUID.randomUUID().toString().replace("-", "")
+        restoreFreeform = true
         val server = ServerSocket(0, 1, InetAddress.getLoopbackAddress()).apply { soTimeout = 10_000 }
         if (desktop) desktopMode(app, true)
+        // A game's screen is fullscreen even where Developer options make other screens desktops
+        // (Enable freeform windows on secondary display): off while it's made, then put back
+        val freeformScreens = if (desktop) null
+            else AdbShell.run("settings get global force_desktop_mode_on_external_displays")?.trim()?.takeIf { it == "1" }
+        if (freeformScreens != null) AdbShell.run("settings put global force_desktop_mode_on_external_displays 0")
         val apk = app.applicationInfo.sourceDir
         val w = width and 1.inv(); val h = height and 1.inv()
         var started: Process? = null
@@ -109,6 +117,7 @@ object ExtraScreen {
             if (stream.readByte().toInt() != TYPE_DISPLAY) throw IllegalStateException("no display")
             val id = stream.readLong().toInt()
             stream.skipBytes(stream.readInt())
+            if (freeformScreens != null) { AdbShell.run("settings put global force_desktop_mode_on_external_displays 1"); restoreFreeform = false }
             accepted.soTimeout = 0
             val screen = Screen(id, w, h, desktop)
             process = started
@@ -122,6 +131,7 @@ object ExtraScreen {
             return screen
         } catch (e: Exception) {
             Log.w(TAG, "screen couldn't open: $e")
+            if (freeformScreens != null && restoreFreeform) AdbShell.run("settings put global force_desktop_mode_on_external_displays 1")
             runCatching { connection?.close() }
             started?.destroy()
             if (desktop) desktopMode(app, false)
@@ -279,10 +289,17 @@ object ExtraScreen {
         }
         if (displayId == 0) return
         val launch = Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        // Filling the screen, not in a window of its own (Android's desktop keeps its windows)
+        val fullscreen = current?.desktop != true
         runCatching {
-            context.startActivity(launch, ActivityOptions.makeBasic().setLaunchDisplayId(displayId).toBundle())
+            val options = ActivityOptions.makeBasic().setLaunchDisplayId(displayId)
+            if (fullscreen) runCatching {
+                ActivityOptions::class.java.getMethod("setLaunchWindowingMode", Int::class.javaPrimitiveType).invoke(options, WINDOWING_FULLSCREEN)
+            }
+            context.startActivity(launch, options.toBundle())
         }.onFailure {
-            AdbShell.run("am start --display $displayId -n ${component.flattenToShortString()}")
+            AdbShell.run("am start --display $displayId" + (if (fullscreen) " --windowingMode $WINDOWING_FULLSCREEN" else "") +
+                " -n ${component.flattenToShortString()}")
         }
     }
 
@@ -295,6 +312,9 @@ object ExtraScreen {
         val own = component.packageName == context.packageName
         return rootTaskIn(list, component.packageName, if (own) component.className.substringAfterLast('.') else null)
     }
+
+    /** WindowConfiguration.WINDOWING_MODE_FULLSCREEN. */
+    private const val WINDOWING_FULLSCREEN = 1
 
     internal fun rootTaskIn(list: String, packageName: String, activity: String?): Int? {
         var root: Int? = null

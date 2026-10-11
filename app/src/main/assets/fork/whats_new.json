@@ -892,6 +892,12 @@
     },
     {
       "text": "Moonlight's Wake starts streaming even when Android won't start the streaming service from the background, and each wake packet is noted in the crash log."
+    },
+    {
+      "text": "Moonlight's list no longer flickers coming back from a stream: entries stay the same, covers are sent the same each time (a game without one gets its name on the dark gradient), and a cover only changes when you pick new cover art for it."
+    },
+    {
+      "text": "A game on a separate screen fills it, even with Developer options' Enable freeform windows on secondary display on (Android desktop still opens as a desktop)."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
