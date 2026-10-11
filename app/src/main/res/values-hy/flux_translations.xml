@@ -1776,11 +1776,9 @@
     <string name="game_mode_own_game_none">Տեղադրված չէ գործարկիչներից կամ էմուլյատորներից ոչ մեկը, որտեղ Flux Keyboard-ը կարող է խաղեր գործարկել (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden)։</string>
     <string name="game_mode_screen">Էկրան</string>
     <string name="game_mode_screen_app">Ինչպես ուզում է հավելվածը</string>
-    <string name="game_mode_screen_upright">Միշտ ուղղահայաց</string>
-    <string name="game_mode_screen_sideways">Հորիզոնական խաղ, հեռախոսը ուղիղ</string>
+    <string name="game_mode_screen_sideways">Ուղղահայաց պահված</string>
     <string name="game_mode_screen_app_description">Հավելվածը պտտում է էկրանն ինչպես ուզում է։ GameNative-ի համար խաղի կարգավորումներում (Ընդհանուր) միացրեք ուղղահայաց ռեժիմը՝ ուղիղ հեռախոսով խաղալու համար։</string>
-    <string name="game_mode_screen_upright_description">Էկրանը մնում է ուղիղ, ինչ էլ որ խնդրի հավելվածը՝ էմուլյատորների և ուղղահայաց դասավորությամբ խաղերի համար։</string>
-    <string name="game_mode_screen_sideways_description">Այն հավելվածների համար, որոնք պտտում են էկրանը՝ ինչ էլ ասես (GameHub)․ էկրանը փոխարենը դառնում է հորիզոնական ձևի, մի փոքր ցածր՝ տեսախցիկը շրջանցելու համար, և հեռախոսը մնում է ուղիղ։</string>
+    <string name="game_mode_screen_sideways_description">Պարտադրում է հորիզոնական լուծաչափ, որպեսզի խաղը նկարվի կողքից, իսկ հեռախոսը մնա ուղղահայաց, մի փոքր ավելի կարճ՝ տեսախցիկը ազատ թողնելու համար։</string>
     <string name="game_mode_seen_title">Ավելացնել %1$s-ը պրոֆիլին</string>
     <string name="game_mode_seen_description">Վերջին հավելվածը, որտեղ խաղ էր աշխատում (%1$s), պրոֆիլ չունի․ գործարկիչը կարող է խաղերը գործարկել իր առանձին մասում։ Ավելացրեք այն գործարկչի պրոֆիլին, որ խաղային ռեժիմը միացված մնա խաղում։</string>
     <string name="shell_elsewhere_section">Այլ տեղերում</string>
@@ -1796,7 +1794,7 @@
     <string name="root_backlight_fine_title">Նուրբ մթագնում</string>
     <string name="root_backlight_fine_description">Root-ի միջոցով ստեղնաշարի LED-ները կարգավորվում են իրենց սեփական քայլերով՝ շատ ավելի նուրբ, քան լուսավորության սովորական մակարդակները, ուստի էկրանի պայծառությանը հետևելը տեսանելի աստիճաններ չունի։</string>
     <string name="game_mode_controller">Իրական կարգավորիչ</string>
-    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական, Flux Keyboard-ի դասավորությամբ. W A S D՝ խաչաձև կոճակ, O K P L՝ Y X B A, Q E՝ վերին ձգանները, Z C՝ ստորինները (ձայնի ստեղները՝ ձախերը), Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։ Մյուս ստեղները խաղին հասնում են այնպես, ինչպես կան։</string>
+    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական, Flux Keyboard-ի դասավորությամբ. W A S D՝ խաչաձև կոճակ, O K P L՝ Y X B A, Q E՝ վերին ձգանները, Z C՝ ստորինները (նաև ձայնի ստեղները՝ վերը ձախը, վարը աջը), Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։ Մյուս ստեղները խաղին հասնում են այնպես, ինչպես կան։</string>
     <string name="game_mode_apps_section">Հավելվածներ</string>
     <string name="game_mode_games_section">Խաղեր</string>
     <string name="game_mode_own_settings">Սեփական կարգավորումներ</string>
@@ -1815,9 +1813,9 @@
     <string name="game_mode_quick_launcher">Խաղերը արագ գործարկիչում</string>
     <string name="game_mode_quick_launcher_description">Խաղերի պանակներում գտնված խաղերը և պրոֆիլ ունեցող խաղերը գործարկվում են արագ գործարկիչից այնպես, ինչպես գլխավոր էկրանի դյուրանցումից։</string>
     <string name="game_mode_right_stick_keys">Աջ լծակը ստեղների վրա</string>
-    <string name="game_mode_right_stick_keys_description">J B N M-ը շարժում են աջ լծակը (վեր, ձախ, վար, աջ), իսկ թաչփադի ձախ կեսը ձախ լծակն է։ Թաչփադը միաժամանակ հետևում է մեկ մատի, ուստի դրա վրա երկու լծակ միասին չեն շարժվում։</string>
+    <string name="game_mode_right_stick_keys_description">J B N M-ը շարժում են աջ լծակը։ Թաչփադը միաժամանակ հետևում է մեկ մատի, ուստի երկու լծակ միասին չի շարժում։</string>
     <string name="game_mode_setup_controls">Կարգավորել %1$s-ի կառավարումը</string>
-    <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Keyboard-ի դասավորությանը. W A S D՝ խաչաձև կոճակ, O K P L՝ գործողության կոճակներն իրենց տեղերում, Q E՝ վերին ձգանները, Z C՝ ստորին ձգանները, Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։\n\nDolphin. կարգավորված են GameCube կարգավորիչ 1-ը և Wii Remote 1-ը (Nunchuk-ով), պահված նաև որպես \"Flux Keyboard\" պրոֆիլներ։ PPSSPP. կառավարումը գործում է բոլոր խաղերի համար։</string>
+    <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Keyboard-ի դասավորությանը. W A S D՝ խաչաձև կոճակ, O K P L՝ գործողության կոճակներն իրենց տեղերում, Q E՝ վերին ձգանները, Z C՝ ստորինները, Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։\n\nDolphin. կարգավորված են GameCube կարգավորիչ 1-ը (L և R՝ ձայնի ստեղներին, Z՝ Z-ին) և Wii Remote 1-ը Nunchuk-ով, ցուցիչը հետևում է թաչփադի աջ կեսին (Dolphin-ի overlay-ի IR ռեժիմը դրեք Follow)։ PPSSPP. կառավարումը գործում է բոլոր խաղերի համար։</string>
     <string name="game_mode_setup_not_found">%1$s-ի կարգավորումները չգտնվեցին. բացեք այն մեկ անգամ, ապա կրկին փորձեք։</string>
     <string name="game_mode_setup_by_hand">%1$s-ը չի կարող կառավարումը բեռնել ֆայլից. նրա Կարգավորումներում, Մուտք (Կառավարում), կապեք յուրաքանչյուր կոճակ՝ սեղմելով դրա ստեղնը, երբ խնդրի.\n\n%2$s</string>
     <string name="game_mode_wii_controller">Wii կարգավորիչ</string>
@@ -1825,4 +1823,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote՝ հորիզոնական</string>
     <string name="game_mode_wii_set">Այս խաղն այժմ սկսվում է՝ %1$s։</string>
+    <string name="game_mode_wii_gamecube">GameCube կարգավորիչ</string>
+    <string name="games_app_title">Խաղեր</string>
+    <string name="games_app_empty">Դեռ խաղեր չկան. ավելացրեք դրանք Flux Keyboard-ի խաղային ռեժիմում կամ ստեղծեք խաղերի պանակները։</string>
+    <string name="games_app_switch">Խաղերը հավելվածների ցանկում</string>
+    <string name="games_app_switch_description">Խաղեր հավելված գլխավոր էկրանի հավելվածների ցանկում (նաև Niagara-ում)՝ բոլոր խաղերով։ Երկար սեղմեք՝ խաղերի համար։</string>
+    <string name="games_pin_all">Ավելացնել բոլոր խաղերը գլխավոր էկրանին</string>
+    <string name="games_pin_all_description">Նկարով դյուրանցում պրոֆիլ ունեցող յուրաքանչյուր խաղի համար։ Գլխավոր էկրանը հարցնում է յուրաքանչյուրի համար։</string>
 </resources>

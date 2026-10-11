@@ -1150,11 +1150,9 @@
     <string name="game_mode_own_game_none">Δεν είναι εγκατεστημένος κανένας από τους εκκινητές ή εξομοιωτές όπου το Flux Keyboard μπορεί να ξεκινά παιχνίδια (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Οθόνη</string>
     <string name="game_mode_screen_app">Όπως θέλει η εφαρμογή</string>
-    <string name="game_mode_screen_upright">Πάντα όρθια</string>
-    <string name="game_mode_screen_sideways">Οριζόντιο παιχνίδι, τηλέφωνο όρθιο</string>
+    <string name="game_mode_screen_sideways">Όρθιο</string>
     <string name="game_mode_screen_app_description">Η εφαρμογή γυρίζει την οθόνη όπως θέλει. Για το GameNative, ενεργοποιήστε την κατακόρυφη λειτουργία στις ρυθμίσεις του παιχνιδιού (Γενικά) για να παίζετε με όρθιο τηλέφωνο.</string>
-    <string name="game_mode_screen_upright_description">Η οθόνη μένει όρθια ό,τι κι αν ζητά η εφαρμογή: για εξομοιωτές και παιχνίδια με όρθια διάταξη.</string>
-    <string name="game_mode_screen_sideways_description">Για εφαρμογές που γυρίζουν την οθόνη ό,τι κι αν τους πεις (GameHub): η οθόνη παίρνει οριζόντιο σχήμα, λίγο πιο χαμηλή για να αφήνει την κάμερα, και το τηλέφωνο μένει όρθιο.</string>
+    <string name="game_mode_screen_sideways_description">Επιβάλλει οριζόντια ανάλυση ώστε το παιχνίδι να σχεδιάζεται πλάγια με το τηλέφωνο όρθιο, λίγο πιο κοντή ώστε να αφήνει ελεύθερη την κάμερα.</string>
     <string name="game_mode_seen_title">Προσθήκη του %1$s σε προφίλ</string>
     <string name="game_mode_seen_description">Η τελευταία εφαρμογή όπου έτρεξε παιχνίδι (%1$s) δεν έχει προφίλ: ένας εκκινητής μπορεί να τρέχει παιχνίδια σε δικό του μέρος. Προσθέστε τη στο προφίλ του εκκινητή ώστε η λειτουργία παιχνιδιού να μένει ενεργή.</string>
     <string name="shell_elsewhere_section">Αλλού</string>
@@ -1170,7 +1168,7 @@
     <string name="root_backlight_fine_title">Λεπτή ρύθμιση φωτεινότητας</string>
     <string name="root_backlight_fine_description">Μέσω root, τα LED του πληκτρολογίου ρυθμίζονται στα δικά τους βήματα, πολύ λεπτότερα από τα συνηθισμένα επίπεδα του φωτισμού, ώστε η παρακολούθηση της φωτεινότητας της οθόνης να μην έχει ορατά σκαλοπάτια.</string>
     <string name="game_mode_controller">Πραγματικό χειριστήριο</string>
-    <string name="game_mode_controller_description">Με root, η λειτουργία παιχνιδιού συνδέει ένα χειριστήριο που το παιχνίδι βλέπει ως πραγματικό, με τη διάταξη του Flux Keyboard: W A S D ο σταυρός, O K P L τα Y X B A, Q E τα shoulder και Z C οι σκανδάλες (τα πλήκτρα έντασης τα αριστερά), Space το Start, Enter το Select, Backspace το Home, F και H το πάτημα των μοχλών, J B N M ο δεξής μοχλός και το αριστερό μισό του trackpad ο αριστερός. Άλλα πλήκτρα φτάνουν στο παιχνίδι όπως είναι.</string>
+    <string name="game_mode_controller_description">Με root, η λειτουργία παιχνιδιού συνδέει ένα χειριστήριο που το παιχνίδι βλέπει ως πραγματικό, με τη διάταξη του Flux Keyboard: W A S D ο σταυρός, O K P L τα Y X B A, Q E τα shoulder και Z C οι σκανδάλες (και τα πλήκτρα έντασης: πάνω η αριστερή, κάτω η δεξιά), Space το Start, Enter το Select, Backspace το Home, F και H το πάτημα των μοχλών, J B N M ο δεξής μοχλός και το αριστερό μισό του trackpad ο αριστερός. Άλλα πλήκτρα φτάνουν στο παιχνίδι όπως είναι.</string>
     <string name="game_mode_apps_section">Εφαρμογές</string>
     <string name="game_mode_games_section">Παιχνίδια</string>
     <string name="game_mode_own_settings">Δικές του ρυθμίσεις</string>
@@ -1189,9 +1187,9 @@
     <string name="game_mode_quick_launcher">Παιχνίδια στη γρήγορη εκκίνηση</string>
     <string name="game_mode_quick_launcher_description">Τα παιχνίδια που βρέθηκαν στους φακέλους παιχνιδιών και όσα έχουν προφίλ, ξεκινούν από τη γρήγορη εκκίνηση όπως από τη συντόμευση της αρχικής οθόνης.</string>
     <string name="game_mode_right_stick_keys">Δεξής μοχλός σε πλήκτρα</string>
-    <string name="game_mode_right_stick_keys_description">Τα J B N M κινούν τον δεξή μοχλό (πάνω, αριστερά, κάτω, δεξιά) και το αριστερό μισό του trackpad είναι ο αριστερός μοχλός. Το trackpad ακολουθεί ένα δάχτυλο τη φορά, οπότε δύο μοχλοί σε αυτό δεν κινούνται μαζί.</string>
+    <string name="game_mode_right_stick_keys_description">Τα J B N M κινούν τον δεξή μοχλό. Το trackpad ακολουθεί ένα δάχτυλο τη φορά, οπότε δεν κινεί δύο μοχλούς μαζί.</string>
     <string name="game_mode_setup_controls">Ρύθμιση χειρισμών του %1$s</string>
-    <string name="game_mode_setup_done">Οι χειρισμοί του %1$s ακολουθούν τώρα τη διάταξη του Flux Keyboard: W A S D το σταυρό, O K P L τα κουμπιά δράσης στη θέση του χειριστηρίου, Q E τα shoulder, Z C τις σκανδάλες, Space το Start, Enter το Select, Backspace το Home, F και H το πάτημα των μοχλών, J B N M ο δεξής μοχλός και το αριστερό μισό του trackpad ο αριστερός μοχλός.\n\nDolphin: ρυθμίστηκαν το χειριστήριο GameCube 1 και το Wii Remote 1 (με Nunchuk), και φυλάχτηκαν και ως προφίλ \"Flux Keyboard\". PPSSPP: οι χειρισμοί ισχύουν για κάθε παιχνίδι.</string>
+    <string name="game_mode_setup_done">Οι χειρισμοί του %1$s ακολουθούν τώρα τη διάταξη του Flux Keyboard: W A S D ο σταυρός, O K P L τα κουμπιά δράσης στη θέση του χειριστηρίου, Q E τα shoulder, Z C οι σκανδάλες, Space το Start, Enter το Select, Backspace το Home, F και H το πάτημα των μοχλών, J B N M ο δεξής μοχλός και το αριστερό μισό του trackpad ο αριστερός.\n\nDolphin: ρυθμίστηκαν το χειριστήριο GameCube 1 (L και R στα πλήκτρα έντασης, Z στο Z) και το Wii Remote 1 με Nunchuk, με τον δείκτη να ακολουθεί το δεξί μισό του trackpad (ορίστε τη λειτουργία IR του overlay του Dolphin σε Follow). PPSSPP: οι χειρισμοί ισχύουν για κάθε παιχνίδι.</string>
     <string name="game_mode_setup_not_found">Δεν βρέθηκαν οι ρυθμίσεις του %1$s: ανοίξτε το μία φορά και δοκιμάστε ξανά.</string>
     <string name="game_mode_setup_by_hand">Το %1$s δεν φορτώνει χειρισμούς από αρχείο: στις Ρυθμίσεις του, Είσοδος (Χειρισμοί), αντιστοιχίστε κάθε κουμπί πατώντας το πλήκτρο του όταν ζητηθεί:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Χειριστήριο Wii</string>
@@ -1199,4 +1197,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote οριζόντια</string>
     <string name="game_mode_wii_set">Αυτό το παιχνίδι ξεκινά τώρα με: %1$s.</string>
+    <string name="game_mode_wii_gamecube">Χειριστήριο GameCube</string>
+    <string name="games_app_title">Παιχνίδια</string>
+    <string name="games_app_empty">Κανένα παιχνίδι ακόμα: προσθέστε τα στη λειτουργία παιχνιδιού του Flux Keyboard ή φτιάξτε τους φακέλους παιχνιδιών.</string>
+    <string name="games_app_switch">Παιχνίδια στη λίστα εφαρμογών</string>
+    <string name="games_app_switch_description">Μια εφαρμογή Παιχνίδια στη λίστα εφαρμογών της αρχικής οθόνης (και του Niagara), με όλα τα παιχνίδια. Πατήστε παρατεταμένα για τα ίδια τα παιχνίδια.</string>
+    <string name="games_pin_all">Προσθήκη όλων των παιχνιδιών στην αρχική οθόνη</string>
+    <string name="games_pin_all_description">Μια συντόμευση με εικόνα για κάθε παιχνίδι με προφίλ. Η αρχική οθόνη ρωτά για καθεμία.</string>
 </resources>

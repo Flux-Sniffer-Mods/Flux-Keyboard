@@ -1782,11 +1782,9 @@
     <string name="game_mode_own_game_none">Aucun des lanceurs ou émulateurs où Flux Keyboard peut lancer des jeux (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) n\'est installé.</string>
     <string name="game_mode_screen">Écran</string>
     <string name="game_mode_screen_app">Comme l\'app le veut</string>
-    <string name="game_mode_screen_upright">Gardé droit</string>
-    <string name="game_mode_screen_sideways">Jeu en paysage, téléphone droit</string>
+    <string name="game_mode_screen_sideways">Gardé à la verticale</string>
     <string name="game_mode_screen_app_description">L\'app tourne l\'écran comme elle veut. Pour GameNative, activez son mode portrait dans les réglages du jeu (Général) pour jouer téléphone droit.</string>
-    <string name="game_mode_screen_upright_description">L\'écran reste droit, quoi que demande l\'app : pour les émulateurs et les jeux à disposition verticale.</string>
-    <string name="game_mode_screen_sideways_description">Pour les apps qui tournent l\'écran quoi qu\'on leur dise (GameHub) : l\'écran prend une forme paysage, un peu moins haute pour dégager la caméra, et le téléphone reste droit.</string>
+    <string name="game_mode_screen_sideways_description">Force une résolution paysage pour que le jeu s\'affiche de côté avec le téléphone à la verticale, un peu plus courte pour dégager la caméra.</string>
     <string name="game_mode_seen_title">Ajouter %1$s à un profil</string>
     <string name="game_mode_seen_description">La dernière app où un jeu a tourné (%1$s) n\'a pas de profil : un lanceur peut faire tourner ses jeux dans une partie à lui. Ajoutez-la au profil de son lanceur pour que le mode jeu reste actif en jeu.</string>
     <string name="shell_elsewhere_section">Ailleurs</string>
@@ -1802,7 +1800,7 @@
     <string name="root_backlight_fine_title">Gradation fine</string>
     <string name="root_backlight_fine_description">Avec le root, les LED du clavier sont réglées dans leurs propres pas, bien plus fins que les niveaux habituels de l\'éclairage, pour suivre la luminosité de l\'écran sans paliers visibles.</string>
     <string name="game_mode_controller">Vraie manette</string>
-    <string name="game_mode_controller_description">Avec root, le mode jeu branche une manette que le jeu voit comme réelle, avec la disposition de Flux Keyboard : W A S D sa croix, O K P L ses Y X B A, Q E ses gâchettes hautes et Z C ses gâchettes basses (les touches de volume celles de gauche), Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche. Les autres touches arrivent au jeu telles quelles.</string>
+    <string name="game_mode_controller_description">Avec root, le mode jeu branche une manette que le jeu voit comme réelle, avec la disposition de Flux Keyboard : W A S D sa croix, O K P L ses Y X B A, Q E ses gâchettes hautes et Z C ses basses (les touches de volume aussi : haut la gauche, bas la droite), Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche. Les autres touches arrivent au jeu telles quelles.</string>
     <string name="game_mode_apps_section">Applis</string>
     <string name="game_mode_games_section">Jeux</string>
     <string name="game_mode_own_settings">Réglages propres</string>
@@ -1821,9 +1819,9 @@
     <string name="game_mode_quick_launcher">Jeux dans le lanceur rapide</string>
     <string name="game_mode_quick_launcher_description">Les jeux trouvés dans les dossiers de jeux et ceux qui ont un profil, lancés depuis le lanceur rapide comme depuis leur raccourci d\'écran d\'accueil.</string>
     <string name="game_mode_right_stick_keys">Stick droit sur les touches</string>
-    <string name="game_mode_right_stick_keys_description">J B N M bougent le stick droit (haut, gauche, bas, droite), et la moitié gauche du pavé tactile est le stick gauche. Le pavé tactile suit un doigt à la fois, donc deux sticks dessus ne bougent pas ensemble.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M bougent le stick droit. Le pavé tactile suit un doigt à la fois, il ne peut donc pas bouger deux sticks ensemble.</string>
     <string name="game_mode_setup_controls">Configurer les commandes de %1$s</string>
-    <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant la disposition de Flux Keyboard : W A S D la croix, O K P L les boutons d\'action à leur place sur une manette, Q E les gâchettes hautes, Z C les gâchettes basses, Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche.\n\nDolphin : la manette GameCube 1 et la Wii Remote 1 (avec Nunchuk) sont configurées, et gardées aussi comme profils \"Flux Keyboard\". PPSSPP : ses commandes valent pour tous les jeux.</string>
+    <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant la disposition de Flux Keyboard : W A S D la croix, O K P L les boutons d\'action à leur place sur une manette, Q E les gâchettes hautes, Z C les basses, Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche.\n\nDolphin : la manette GameCube 1 (L et R sur les touches de volume, Z sur Z) et la Wii Remote 1 avec Nunchuk sont configurées, le pointeur suivant la moitié droite du pavé tactile (mettez le mode IR de la surcouche de Dolphin sur Suivre). PPSSPP : ses commandes valent pour tous les jeux.</string>
     <string name="game_mode_setup_not_found">Les réglages de %1$s sont introuvables : ouvrez-le une fois, puis réessayez.</string>
     <string name="game_mode_setup_by_hand">%1$s ne charge pas de commandes depuis un fichier : dans ses Paramètres, Entrée (Commandes), associez chaque bouton en appuyant sur sa touche quand il le demande :\n\n%2$s</string>
     <string name="game_mode_wii_controller">Manette Wii</string>
@@ -1831,4 +1829,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote à l\'horizontale</string>
     <string name="game_mode_wii_set">Ce jeu démarre maintenant avec : %1$s.</string>
+    <string name="game_mode_wii_gamecube">Manette GameCube</string>
+    <string name="games_app_title">Jeux</string>
+    <string name="games_app_empty">Pas encore de jeux : ajoutez-les dans le mode jeu de Flux Keyboard, ou créez les dossiers de jeux.</string>
+    <string name="games_app_switch">Jeux dans la liste des applis</string>
+    <string name="games_app_switch_description">Une appli Jeux dans la liste des applis de l\'écran d\'accueil (celle de Niagara aussi), avec tous les jeux. Appui long pour les jeux eux-mêmes.</string>
+    <string name="games_pin_all">Ajouter tous les jeux à l\'écran d\'accueil</string>
+    <string name="games_pin_all_description">Un raccourci avec son image pour chaque jeu qui a un profil. L\'écran d\'accueil demande pour chacun.</string>
 </resources>

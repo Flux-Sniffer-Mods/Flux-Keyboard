@@ -1788,11 +1788,9 @@
     <string name="game_mode_own_game_none">Nie zainstalowano żadnego launchera ani emulatora, w którym Flux Keyboard może uruchamiać gry (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Ekran</string>
     <string name="game_mode_screen_app">Jak chce aplikacja</string>
-    <string name="game_mode_screen_upright">Zawsze pionowo</string>
-    <string name="game_mode_screen_sideways">Gra poziomo, telefon pionowo</string>
+    <string name="game_mode_screen_sideways">Trzymany pionowo</string>
     <string name="game_mode_screen_app_description">Aplikacja obraca ekran po swojemu. W GameNative włącz tryb pionowy w ustawieniach gry (Ogólne), by grać z telefonem pionowo.</string>
-    <string name="game_mode_screen_upright_description">Ekran zostaje pionowo, czego by aplikacja nie chciała: dla emulatorów i gier z pionowym układem.</string>
-    <string name="game_mode_screen_sideways_description">Dla aplikacji, które obracają ekran bez względu na wszystko (GameHub): ekran dostaje poziomy kształt, nieco niższy, by ominąć aparat, a telefon zostaje pionowo.</string>
+    <string name="game_mode_screen_sideways_description">Wymusza rozdzielczość poziomą, by gra rysowała się bokiem przy telefonie trzymanym pionowo, nieco niższą, by nie zasłaniać aparatu.</string>
     <string name="game_mode_seen_title">Dodaj %1$s do profilu</string>
     <string name="game_mode_seen_description">Ostatnia aplikacja, w której działała gra (%1$s), nie ma profilu: launcher może uruchamiać gry we własnej części. Dodaj ją do profilu launchera, by tryb gry działał w grze.</string>
     <string name="shell_elsewhere_section">Gdzie indziej</string>
@@ -1808,7 +1806,7 @@
     <string name="root_backlight_fine_title">Dokładne przyciemnianie</string>
     <string name="root_backlight_fine_description">Przez roota diody klawiatury są ustawiane w ich własnych krokach, dużo drobniejszych niż zwykłe poziomy podświetlenia, więc podążanie za jasnością ekranu nie ma widocznych skoków.</string>
     <string name="game_mode_controller">Prawdziwy kontroler</string>
-    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy, w układzie Flux Keyboard: W A S D krzyżak, O K P L jego Y X B A, Q E przyciski barkowe i Z C spusty (klawisze głośności lewe), Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa. Pozostałe klawisze trafiają do gry bez zmian.</string>
+    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy, w układzie Flux Keyboard: W A S D krzyżak, O K P L jego Y X B A, Q E przyciski barkowe i Z C spusty (także klawisze głośności: w górę lewy, w dół prawy), Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa. Pozostałe klawisze trafiają do gry bez zmian.</string>
     <string name="game_mode_apps_section">Aplikacje</string>
     <string name="game_mode_games_section">Gry</string>
     <string name="game_mode_own_settings">Własne ustawienia</string>
@@ -1827,9 +1825,9 @@
     <string name="game_mode_quick_launcher">Gry w szybkim starcie</string>
     <string name="game_mode_quick_launcher_description">Gry znalezione w folderach gier i gry z profilem, uruchamiane z szybkiego startu tak jak ze skrótu na ekranie głównym.</string>
     <string name="game_mode_right_stick_keys">Prawa gałka na klawiszach</string>
-    <string name="game_mode_right_stick_keys_description">J B N M poruszają prawą gałką (góra, lewo, dół, prawo), a lewa połowa gładzika jest lewą gałką. Gładzik śledzi jeden palec naraz, więc dwie gałki na nim nie ruszają się razem.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M poruszają prawą gałką. Gładzik śledzi jeden palec naraz, więc nie poruszy dwóch gałek razem.</string>
     <string name="game_mode_setup_controls">Skonfiguruj sterowanie %1$s</string>
-    <string name="game_mode_setup_done">Sterowanie %1$s działa teraz według układu Flux Keyboard: W A S D krzyżak, O K P L przyciski akcji w miejscach z kontrolera, Q E przyciski barkowe, Z C spusty, Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa gałka.\n\nDolphin: kontroler GameCube 1 i Wii Remote 1 (z Nunchukiem) są ustawione i zapisane też jako profile \"Flux Keyboard\". PPSSPP: sterowanie działa w każdej grze.</string>
+    <string name="game_mode_setup_done">Sterowanie %1$s działa teraz według układu Flux Keyboard: W A S D krzyżak, O K P L przyciski akcji w miejscach z kontrolera, Q E przyciski barkowe, Z C spusty, Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa.\n\nDolphin: kontroler GameCube 1 (L i R na klawiszach głośności, Z na Z) i Wii Remote 1 z Nunchukiem są ustawione, a wskaźnik podąża za prawą połową gładzika (ustaw tryb IR nakładki Dolphina na Podążaj). PPSSPP: sterowanie działa w każdej grze.</string>
     <string name="game_mode_setup_not_found">Nie znaleziono ustawień %1$s: otwórz go raz, a potem spróbuj ponownie.</string>
     <string name="game_mode_setup_by_hand">%1$s nie wczytuje sterowania z pliku: w jego Ustawieniach, Wejście (Sterowanie), przypisz każdy przycisk, naciskając jego klawisz, gdy poprosi:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Kontroler Wii</string>
@@ -1837,4 +1835,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote trzymany poziomo</string>
     <string name="game_mode_wii_set">Ta gra startuje teraz z: %1$s.</string>
+    <string name="game_mode_wii_gamecube">Kontroler GameCube</string>
+    <string name="games_app_title">Gry</string>
+    <string name="games_app_empty">Brak gier: dodaj je w trybie gry Flux Keyboard albo utwórz foldery gier.</string>
+    <string name="games_app_switch">Gry na liście aplikacji</string>
+    <string name="games_app_switch_description">Aplikacja Gry na liście aplikacji ekranu głównego (także w Niagara), ze wszystkimi grami. Przytrzymaj, by zobaczyć same gry.</string>
+    <string name="games_pin_all">Dodaj wszystkie gry do ekranu głównego</string>
+    <string name="games_pin_all_description">Skrót z obrazem dla każdej gry z profilem. Ekran główny zapyta o każdy.</string>
 </resources>

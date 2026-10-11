@@ -1241,11 +1241,9 @@
     <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
     <string name="game_mode_screen">Bildschirm</string>
     <string name="game_mode_screen_app">Wie die App will</string>
-    <string name="game_mode_screen_upright">Aufrecht gehalten</string>
-    <string name="game_mode_screen_sideways">Querformat-Spiel, Telefon aufrecht</string>
+    <string name="game_mode_screen_sideways">Aufrecht gehalten</string>
     <string name="game_mode_screen_app_description">Die App dreht den Bildschirm, wie sie will. Für GameNative schalte in den Spieleinstellungen (Allgemein) den Hochformatmodus ein, um mit aufrechtem Telefon zu spielen.</string>
-    <string name="game_mode_screen_upright_description">Der Bildschirm bleibt aufrecht, egal was die App verlangt: für Emulatoren und Spiele mit aufrechtem Layout.</string>
-    <string name="game_mode_screen_sideways_description">Für Apps, die den Bildschirm drehen, egal was man ihnen sagt (GameHub): Der Bildschirm wird stattdessen querformatig, etwas niedriger, damit er die Kamera freilässt, und das Telefon bleibt aufrecht.</string>
+    <string name="game_mode_screen_sideways_description">Erzwingt eine Querformat-Auflösung, damit das Spiel quer gezeichnet wird, während das Handy aufrecht bleibt, etwas niedriger, damit die Kamera frei bleibt.</string>
     <string name="game_mode_seen_title">%1$s zu einem Profil hinzufügen</string>
     <string name="game_mode_seen_description">Die App, in der zuletzt ein Spiel lief (%1$s), hat kein Profil: Ein Launcher kann Spiele in einem eigenen Teil spielen. Füge sie dem Profil ihres Launchers hinzu, damit der Spielmodus im Spiel an bleibt.</string>
     <string name="shell_elsewhere_section">Anderswo</string>
@@ -1261,7 +1259,7 @@
     <string name="root_backlight_fine_title">Feines Dimmen</string>
     <string name="root_backlight_fine_description">Über Root werden die LEDs der Tastatur in ihren eigenen Stufen gesetzt, viel feiner als die üblichen Stufen der Beleuchtung, sodass das Folgen der Bildschirmhelligkeit keine sichtbaren Sprünge hat.</string>
     <string name="game_mode_controller">Echter Controller</string>
-    <string name="game_mode_controller_description">Mit Root schließt der Spielmodus einen Controller an, den das Spiel als echt erkennt, mit dem Layout von Flux Keyboard: W A S D sein Steuerkreuz, O K P L seine Y X B A, Q E seine Schultertasten und Z C seine Trigger (die Lautstärketasten die linken), Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick. Andere Tasten erreichen das Spiel unverändert.</string>
+    <string name="game_mode_controller_description">Mit Root schließt der Spielmodus einen Controller an, den das Spiel als echt erkennt, mit dem Layout von Flux Keyboard: W A S D sein Steuerkreuz, O K P L seine Y X B A, Q E seine Schultertasten und Z C seine Trigger (auch die Lautstärketasten: lauter links, leiser rechts), Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick. Andere Tasten erreichen das Spiel unverändert.</string>
     <string name="game_mode_apps_section">Apps</string>
     <string name="game_mode_games_section">Spiele</string>
     <string name="game_mode_own_settings">Eigene Einstellungen</string>
@@ -1280,9 +1278,9 @@
     <string name="game_mode_quick_launcher">Spiele im Schnellstarter</string>
     <string name="game_mode_quick_launcher_description">Die in den Spieleordnern gefundenen Spiele und die Spiele mit Profil, aus dem Schnellstarter gestartet wie über ihre Startbildschirm-Verknüpfung.</string>
     <string name="game_mode_right_stick_keys">Rechter Stick auf Tasten</string>
-    <string name="game_mode_right_stick_keys_description">J B N M bewegen den rechten Stick (hoch, links, runter, rechts), und die linke Trackpad-Hälfte ist der linke Stick. Das Trackpad folgt immer nur einem Finger, daher können sich zwei Sticks darauf nicht zusammen bewegen.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M bewegen den rechten Stick. Das Trackpad folgt immer nur einem Finger, daher kann es keine zwei Sticks zugleich bewegen.</string>
     <string name="game_mode_setup_controls">Steuerung von %1$s einrichten</string>
-    <string name="game_mode_setup_done">Die Steuerung von %1$s folgt jetzt dem Layout von Flux Keyboard: W A S D das Steuerkreuz, O K P L die Aktionstasten an ihrer Controller-Position, Q E die Schultertasten, Z C die Trigger, Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick.\n\nDolphin: GameCube-Controller 1 und Wii Remote 1 (mit Nunchuk) sind eingestellt und auch als Profile \"Flux Keyboard\" gespeichert. PPSSPP: die Steuerung gilt für jedes Spiel.</string>
+    <string name="game_mode_setup_done">Die Steuerung von %1$s folgt jetzt dem Layout von Flux Keyboard: W A S D das Steuerkreuz, O K P L die Aktionstasten an ihrer Controller-Position, Q E die Schultertasten, Z C die Trigger, Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick.\n\nDolphin: GameCube-Controller 1 (L und R auf den Lautstärketasten, Z auf Z) und Wii Remote 1 mit Nunchuk sind eingestellt, der Zeiger folgt der rechten Trackpad-Hälfte (stelle den IR-Modus des Dolphin-Overlays auf Folgen). PPSSPP: die Steuerung gilt für jedes Spiel.</string>
     <string name="game_mode_setup_not_found">Die Einstellungen von %1$s wurden nicht gefunden: einmal öffnen, dann erneut versuchen.</string>
     <string name="game_mode_setup_by_hand">%1$s kann keine Steuerung aus einer Datei laden: Belege in seinen Einstellungen unter Eingabe (Steuerung) jede Taste, indem du ihre Taste drückst:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Wii-Controller</string>
@@ -1290,4 +1288,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote quer gehalten</string>
     <string name="game_mode_wii_set">Dieses Spiel startet jetzt mit: %1$s.</string>
+    <string name="game_mode_wii_gamecube">GameCube-Controller</string>
+    <string name="games_app_title">Spiele</string>
+    <string name="games_app_empty">Noch keine Spiele: füge sie im Spielmodus von Flux Keyboard hinzu oder lege die Spieleordner an.</string>
+    <string name="games_app_switch">Spiele in der App-Liste</string>
+    <string name="games_app_switch_description">Eine Spiele-App in der App-Liste des Startbildschirms (auch in Niagara), mit allen Spielen darin. Lange drücken für die Spiele selbst.</string>
+    <string name="games_pin_all">Alle Spiele zum Startbildschirm hinzufügen</string>
+    <string name="games_pin_all_description">Eine Verknüpfung mit Bild für jedes Spiel mit Profil. Der Startbildschirm fragt bei jeder nach.</string>
 </resources>

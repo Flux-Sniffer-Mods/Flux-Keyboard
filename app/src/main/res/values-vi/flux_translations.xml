@@ -1770,11 +1770,9 @@
     <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Màn hình</string>
     <string name="game_mode_screen_app">Theo ứng dụng</string>
-    <string name="game_mode_screen_upright">Luôn đứng thẳng</string>
-    <string name="game_mode_screen_sideways">Trò chơi nằm ngang, điện thoại đứng</string>
+    <string name="game_mode_screen_sideways">Giữ dọc</string>
     <string name="game_mode_screen_app_description">Ứng dụng xoay màn hình theo ý nó. Với GameNative, bật chế độ dọc trong cài đặt trò chơi (Chung) để chơi với điện thoại đứng.</string>
-    <string name="game_mode_screen_upright_description">Màn hình luôn đứng thẳng, dù ứng dụng yêu cầu gì: cho trình giả lập và trò chơi có bố cục dọc.</string>
-    <string name="game_mode_screen_sideways_description">Cho các ứng dụng luôn xoay màn hình dù được bảo gì (GameHub): màn hình thành hình ngang thay vào đó, thấp hơn chút để tránh camera, và điện thoại vẫn đứng.</string>
+    <string name="game_mode_screen_sideways_description">Ép độ phân giải ngang để game hiển thị nằm ngang trong khi điện thoại vẫn dọc, thấp hơn một chút để tránh camera.</string>
     <string name="game_mode_seen_title">Thêm %1$s vào hồ sơ</string>
     <string name="game_mode_seen_description">Ứng dụng gần nhất có trò chơi chạy (%1$s) chưa có hồ sơ: trình khởi chạy có thể chạy trò chơi trong một phần riêng. Thêm nó vào hồ sơ của trình khởi chạy để chế độ chơi game vẫn bật trong trò chơi.</string>
     <string name="shell_elsewhere_section">Ở nơi khác</string>
@@ -1790,7 +1788,7 @@
     <string name="root_backlight_fine_title">Điều chỉnh độ sáng mịn</string>
     <string name="root_backlight_fine_description">Qua root, đèn LED bàn phím được đặt theo các bước riêng của chúng, mịn hơn nhiều so với các mức thông thường của đèn, nên khi theo độ sáng màn hình sẽ không có bậc nhảy thấy được.</string>
     <string name="game_mode_controller">Tay cầm thật</string>
-    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật, theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là Y X B A, Q E là nút vai và Z C là cò (phím âm lượng là bên trái), Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần analog phải và nửa trái bàn di chuột là cần trái. Các phím khác đến game nguyên trạng.</string>
+    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật, theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là Y X B A, Q E là nút vai và Z C là cò (cả phím âm lượng: lên là trái, xuống là phải), Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần phải và nửa trái bàn di chuột là cần trái. Các phím khác đến game nguyên trạng.</string>
     <string name="game_mode_apps_section">Ứng dụng</string>
     <string name="game_mode_games_section">Game</string>
     <string name="game_mode_own_settings">Cài đặt riêng</string>
@@ -1809,9 +1807,9 @@
     <string name="game_mode_quick_launcher">Game trong trình khởi chạy nhanh</string>
     <string name="game_mode_quick_launcher_description">Các game tìm thấy trong thư mục game và các game có hồ sơ, mở từ trình khởi chạy nhanh giống như từ lối tắt trên màn hình chính.</string>
     <string name="game_mode_right_stick_keys">Cần analog phải trên phím</string>
-    <string name="game_mode_right_stick_keys_description">J B N M di chuyển cần analog phải (lên, trái, xuống, phải), và nửa trái bàn di chuột là cần analog trái. Bàn di chuột chỉ theo một ngón mỗi lần, nên hai cần analog trên nó không di chuyển cùng lúc.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M di chuyển cần analog phải. Bàn di chuột chỉ theo một ngón mỗi lần, nên không di chuyển hai cần cùng lúc.</string>
     <string name="game_mode_setup_controls">Thiết lập điều khiển của %1$s</string>
-    <string name="game_mode_setup_done">Điều khiển của %1$s giờ theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là các nút hành động đúng vị trí trên tay cầm, Q E là nút vai, Z C là cò, Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần analog phải và nửa trái bàn di chuột là cần analog trái.\n\nDolphin: tay cầm GameCube 1 và Wii Remote 1 (kèm Nunchuk) đã được thiết lập, và lưu cả thành hồ sơ \"Flux Keyboard\". PPSSPP: điều khiển áp dụng cho mọi game.</string>
+    <string name="game_mode_setup_done">Điều khiển của %1$s giờ theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là các nút hành động đúng vị trí trên tay cầm, Q E là nút vai, Z C là cò, Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần phải và nửa trái bàn di chuột là cần trái.\n\nDolphin: tay cầm GameCube 1 (L và R trên phím âm lượng, Z trên Z) và Wii Remote 1 kèm Nunchuk đã được thiết lập, con trỏ theo nửa phải bàn di chuột (đặt chế độ IR của lớp phủ Dolphin thành Follow). PPSSPP: điều khiển áp dụng cho mọi game.</string>
     <string name="game_mode_setup_not_found">Không tìm thấy cài đặt của %1$s: mở nó một lần rồi thử lại.</string>
     <string name="game_mode_setup_by_hand">%1$s không tải điều khiển từ tệp: trong Cài đặt của nó, Đầu vào (Điều khiển), gán từng nút bằng cách nhấn phím tương ứng khi được hỏi:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Tay cầm Wii</string>
@@ -1819,4 +1817,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote cầm ngang</string>
     <string name="game_mode_wii_set">Game này giờ khởi động với: %1$s.</string>
+    <string name="game_mode_wii_gamecube">Tay cầm GameCube</string>
+    <string name="games_app_title">Game</string>
+    <string name="games_app_empty">Chưa có game: thêm chúng trong chế độ chơi game của Flux Keyboard, hoặc tạo thư mục game.</string>
+    <string name="games_app_switch">Game trong danh sách ứng dụng</string>
+    <string name="games_app_switch_description">Một ứng dụng Game trong danh sách ứng dụng của màn hình chính (cả Niagara), chứa mọi game. Nhấn giữ để xem các game.</string>
+    <string name="games_pin_all">Thêm mọi game vào màn hình chính</string>
+    <string name="games_pin_all_description">Một lối tắt kèm ảnh cho mỗi game có hồ sơ. Màn hình chính sẽ hỏi cho từng cái.</string>
 </resources>

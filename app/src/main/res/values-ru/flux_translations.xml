@@ -1788,11 +1788,9 @@
     <string name="game_mode_own_game_none">Не установлен ни один лаунчер или эмулятор, в которых Flux Keyboard может запускать игры (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Экран</string>
     <string name="game_mode_screen_app">Как хочет приложение</string>
-    <string name="game_mode_screen_upright">Всегда вертикально</string>
-    <string name="game_mode_screen_sideways">Горизонтальная игра, телефон вертикально</string>
+    <string name="game_mode_screen_sideways">Вертикально</string>
     <string name="game_mode_screen_app_description">Приложение поворачивает экран как хочет. Для GameNative включите портретный режим в настройках игры (Общие), чтобы играть с вертикальным телефоном.</string>
-    <string name="game_mode_screen_upright_description">Экран остаётся вертикальным, что бы ни просило приложение: для эмуляторов и игр с вертикальной раскладкой.</string>
-    <string name="game_mode_screen_sideways_description">Для приложений, которые поворачивают экран, что бы им ни говорили (GameHub): экран становится горизонтальным по форме, чуть ниже, чтобы не задевать камеру, а телефон остаётся вертикальным.</string>
+    <string name="game_mode_screen_sideways_description">Задаёт горизонтальное разрешение, чтобы игра рисовалась боком, а телефон оставался вертикально, чуть ниже, чтобы не закрывать камеру.</string>
     <string name="game_mode_seen_title">Добавить %1$s в профиль</string>
     <string name="game_mode_seen_description">Последнее приложение, где шла игра (%1$s), без профиля: лаунчер может запускать игры в своей отдельной части. Добавьте его в профиль лаунчера, чтобы игровой режим работал в игре.</string>
     <string name="shell_elsewhere_section">В других разделах</string>
@@ -1808,7 +1806,7 @@
     <string name="root_backlight_fine_title">Точная яркость</string>
     <string name="root_backlight_fine_description">Через root светодиоды клавиатуры задаются их собственными шагами, гораздо мельче обычных уровней подсветки, поэтому следование за яркостью экрана идёт без видимых ступеней.</string>
     <string name="game_mode_controller">Настоящий контроллер</string>
-    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий, с раскладкой Flux Keyboard: W A S D — крестовина, O K P L — его Y X B A, Q E — бамперы, Z C — триггеры (клавиши громкости — левые), Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый. Остальные клавиши попадают в игру как есть.</string>
+    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий, с раскладкой Flux Keyboard: W A S D — крестовина, O K P L — его Y X B A, Q E — бамперы, Z C — триггеры (и клавиши громкости: вверх — левый, вниз — правый), Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый. Остальные клавиши попадают в игру как есть.</string>
     <string name="game_mode_apps_section">Приложения</string>
     <string name="game_mode_games_section">Игры</string>
     <string name="game_mode_own_settings">Свои настройки</string>
@@ -1827,9 +1825,9 @@
     <string name="game_mode_quick_launcher">Игры в быстром запуске</string>
     <string name="game_mode_quick_launcher_description">Игры из папок игр и игры с профилем запускаются из быстрого запуска так же, как с ярлыка на главном экране.</string>
     <string name="game_mode_right_stick_keys">Правый стик на клавишах</string>
-    <string name="game_mode_right_stick_keys_description">J B N M двигают правый стик (вверх, влево, вниз, вправо), а левая половина тачпада — левый стик. Тачпад следит за одним пальцем за раз, поэтому два стика на нём не двигаются вместе.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M двигают правый стик. Тачпад следит за одним пальцем за раз, поэтому не двигает два стика вместе.</string>
     <string name="game_mode_setup_controls">Настроить управление %1$s</string>
-    <string name="game_mode_setup_done">Управление %1$s теперь следует раскладке Flux Keyboard: W A S D — крестовина, O K P L — кнопки действий на их местах на контроллере, Q E — бамперы, Z C — триггеры, Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый стик.\n\nDolphin: контроллер GameCube 1 и Wii Remote 1 (с Nunchuk) настроены и сохранены также как профили \"Flux Keyboard\". PPSSPP: управление действует во всех играх.</string>
+    <string name="game_mode_setup_done">Управление %1$s теперь следует раскладке Flux Keyboard: W A S D — крестовина, O K P L — кнопки действий на их местах на контроллере, Q E — бамперы, Z C — триггеры, Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый.\n\nDolphin: контроллер GameCube 1 (L и R на клавишах громкости, Z на Z) и Wii Remote 1 с Nunchuk настроены, указатель следует за правой половиной тачпада (установите режим IR в оверлее Dolphin на «Следовать»). PPSSPP: управление действует во всех играх.</string>
     <string name="game_mode_setup_not_found">Настройки %1$s не найдены: откройте его один раз и попробуйте снова.</string>
     <string name="game_mode_setup_by_hand">%1$s не загружает управление из файла: в его Настройках, Ввод (Управление), назначьте каждую кнопку, нажимая её клавишу по запросу:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Контроллер Wii</string>
@@ -1837,4 +1835,11 @@
     <string name="game_mode_wii_classic">Classic Controller</string>
     <string name="game_mode_wii_sideways">Wii Remote горизонтально</string>
     <string name="game_mode_wii_set">Эта игра теперь запускается с: %1$s.</string>
+    <string name="game_mode_wii_gamecube">Контроллер GameCube</string>
+    <string name="games_app_title">Игры</string>
+    <string name="games_app_empty">Игр пока нет: добавьте их в игровом режиме Flux Keyboard или создайте папки игр.</string>
+    <string name="games_app_switch">Игры в списке приложений</string>
+    <string name="games_app_switch_description">Приложение «Игры» в списке приложений главного экрана (и в Niagara) со всеми играми. Долгое нажатие покажет сами игры.</string>
+    <string name="games_pin_all">Добавить все игры на главный экран</string>
+    <string name="games_pin_all_description">Ярлык с картинкой для каждой игры с профилем. Главный экран спросит про каждый.</string>
 </resources>
