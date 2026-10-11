@@ -1446,4 +1446,6 @@
     <string name="extra_screen_title">Schermo del gioco</string>
     <string name="stream_pass_through">Invia tastiere, mouse e controller al gioco</string>
     <string name="stream_pass_through_description">Tastiere, mouse e controller collegati al telefono o associati via Bluetooth vanno dritti allo schermo del gioco durante lo streaming, non al telefono. Tornano al telefono a fine streaming.</string>
+    <string name="games_app_controller_keys">Tasti controller nell\'app Giochi</string>
+    <string name="games_app_controller_keys_description">Muoviti nell\'app Giochi con gli stessi tasti dei giochi: W A S D per muoverti, L per aprire, K per le impostazioni di un gioco, P per tornare indietro, Q o E per passare tra giochi e launcher, Spazio per le impostazioni di gioco. Funziona anche un controller.</string>
 </resources>

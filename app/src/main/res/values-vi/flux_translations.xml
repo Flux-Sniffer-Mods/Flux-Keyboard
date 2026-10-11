@@ -1929,4 +1929,6 @@
     <string name="extra_screen_title">Màn hình trò chơi</string>
     <string name="stream_pass_through">Gửi bàn phím, chuột và tay cầm tới trò chơi</string>
     <string name="stream_pass_through_description">Bàn phím, chuột và tay cầm cắm vào điện thoại hoặc ghép qua Bluetooth đi thẳng tới màn hình riêng của trò chơi khi phát trực tuyến, không tới điện thoại. Chúng trở lại với điện thoại khi kết thúc phát.</string>
+    <string name="games_app_controller_keys">Phím tay cầm trong ứng dụng Trò chơi</string>
+    <string name="games_app_controller_keys_description">Di chuyển trong ứng dụng Trò chơi bằng cùng các phím như trong trò chơi: W A S D để di chuyển, L để mở, K cho cài đặt của trò chơi, P để quay lại, Q hoặc E để chuyển giữa trò chơi và trình khởi chạy, Space cho cài đặt chơi game. Tay cầm cũng dùng được.</string>
 </resources>

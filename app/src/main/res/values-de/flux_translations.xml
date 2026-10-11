@@ -1400,4 +1400,6 @@
     <string name="extra_screen_title">Spielbildschirm</string>
     <string name="stream_pass_through">Tastaturen, Mäuse und Controller ans Spiel</string>
     <string name="stream_pass_through_description">Am Handy angeschlossene oder per Bluetooth gekoppelte Tastaturen, Mäuse und Controller gehen beim Streamen direkt an den eigenen Bildschirm des Spiels, nicht ans Handy. Nach dem Stream gehören sie wieder dem Handy.</string>
+    <string name="games_app_controller_keys">Controller-Tasten in der Spiele-App</string>
+    <string name="games_app_controller_keys_description">Bewege dich in der Spiele-App mit denselben Tasten wie in Spielen: W A S D zum Bewegen, L zum Öffnen, K für die Einstellungen eines Spiels, P für zurück, Q oder E zum Wechseln zwischen Spielen und Launchern, Leertaste für die Gaming-Einstellungen. Ein Controller funktioniert auch.</string>
 </resources>

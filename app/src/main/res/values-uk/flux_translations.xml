@@ -1947,4 +1947,6 @@
     <string name="extra_screen_title">Екран гри</string>
     <string name="stream_pass_through">Клавіатури, миші й контролери — у гру</string>
     <string name="stream_pass_through_description">Клавіатури, миші й контролери, під\'єднані до телефона або через Bluetooth, під час трансляції йдуть просто на власний екран гри, а не на телефон. Коли трансляція закінчується, вони знову працюють із телефоном.</string>
+    <string name="games_app_controller_keys">Клавіші контролера в застосунку «Ігри»</string>
+    <string name="games_app_controller_keys_description">Переміщуйтеся застосунком «Ігри» тими самими клавішами, що й в іграх: W A S D — рух, L — відкрити, K — налаштування гри, P — назад, Q або E — перемикання між іграми та лаунчерами, Пробіл — ігрові налаштування. Контролер теж працює.</string>
 </resources>

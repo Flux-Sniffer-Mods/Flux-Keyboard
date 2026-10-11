@@ -1941,4 +1941,6 @@
     <string name="extra_screen_title">Écran du jeu</string>
     <string name="stream_pass_through">Envoyer claviers, souris et manettes au jeu</string>
     <string name="stream_pass_through_description">Les claviers, souris et manettes branchés au téléphone ou appairés en Bluetooth vont directement à l\'écran du jeu pendant le stream, pas au téléphone. Ils reviennent au téléphone à la fin du stream.</string>
+    <string name="games_app_controller_keys">Touches manette dans l\'app Jeux</string>
+    <string name="games_app_controller_keys_description">Parcourez l\'app Jeux avec les mêmes touches qu\'en jeu : W A S D pour se déplacer, L pour ouvrir, K pour les réglages d\'un jeu, P pour revenir, Q ou E pour passer des jeux aux lanceurs, Espace pour les réglages de jeu. Une manette fonctionne aussi.</string>
 </resources>

@@ -1935,4 +1935,6 @@
     <string name="extra_screen_title">Խաղի էկրան</string>
     <string name="stream_pass_through">Ստեղնաշարեր, մկներ և կարգավարներ՝ խաղին</string>
     <string name="stream_pass_through_description">Հեռախոսին միացված կամ Bluetooth-ով զուգակցված ստեղնաշարերը, մկները և կարգավարները հեռարձակման ժամանակ գնում են ուղիղ խաղի սեփական էկրանին, ոչ թե հեռախոսին։ Հեռարձակման ավարտին նրանք կրկին հեռախոսինն են։</string>
+    <string name="games_app_controller_keys">Կարգավարի ստեղներ Խաղեր հավելվածում</string>
+    <string name="games_app_controller_keys_description">Շարժվիր Խաղեր հավելվածում նույն ստեղներով, ինչ խաղերում․ W A S D՝ շարժվելու, L՝ բացելու, K՝ խաղի կարգավորումների, P՝ հետ գնալու, Q կամ E՝ խաղերի և գործարկիչների միջև անցնելու, Space՝ խաղային կարգավորումների համար։ Կարգավարն էլ է աշխատում։</string>
 </resources>

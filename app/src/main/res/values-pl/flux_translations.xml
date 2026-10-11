@@ -1947,4 +1947,6 @@
     <string name="extra_screen_title">Ekran gry</string>
     <string name="stream_pass_through">Klawiatury, myszy i kontrolery do gry</string>
     <string name="stream_pass_through_description">Klawiatury, myszy i kontrolery podłączone do telefonu lub sparowane przez Bluetooth trafiają podczas streamu prosto na własny ekran gry, nie do telefonu. Po zakończeniu streamu wracają do telefonu.</string>
+    <string name="games_app_controller_keys">Klawisze kontrolera w aplikacji Gry</string>
+    <string name="games_app_controller_keys_description">Poruszaj się po aplikacji Gry tymi samymi klawiszami co w grach: W A S D do ruchu, L aby otworzyć, K dla ustawień gry, P aby wrócić, Q lub E aby przełączać między grami a launcherami, Spacja dla ustawień grania. Kontroler też działa.</string>
 </resources>

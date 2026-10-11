@@ -1941,4 +1941,6 @@
     <string name="extra_screen_title">Pantalla del juego</string>
     <string name="stream_pass_through">Enviar teclados, ratones y mandos al juego</string>
     <string name="stream_pass_through_description">Los teclados, ratones y mandos conectados al móvil o emparejados por Bluetooth van directos a la pantalla propia del juego mientras se transmite, no al móvil. Vuelven al móvil al terminar la transmisión.</string>
+    <string name="games_app_controller_keys">Teclas de mando en la app Juegos</string>
+    <string name="games_app_controller_keys_description">Muévete por la app Juegos con las mismas teclas que en los juegos: W A S D para moverte, L para abrir, K para los ajustes de un juego, P para volver, Q o E para cambiar entre juegos y lanzadores, Espacio para los ajustes de juego. También funciona con un mando.</string>
 </resources>
