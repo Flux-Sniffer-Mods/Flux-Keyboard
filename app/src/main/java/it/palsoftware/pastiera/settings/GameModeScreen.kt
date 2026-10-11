@@ -911,6 +911,31 @@ internal fun TrackpadRecordRow() {
     )
 }
 
+/**
+ * The app's last times not responding, with where each thread was (its main thread first), kept
+ * where the shell can read them; null when there are none.
+ */
+private fun anrTraces(context: android.content.Context): java.io.File? = runCatching {
+    val manager = context.getSystemService(android.app.ActivityManager::class.java) ?: return null
+    val exits = manager.getHistoricalProcessExitReasons(context.packageName, 0, 10)
+        .filter { it.reason == android.app.ApplicationExitInfo.REASON_ANR }.take(2)
+    if (exits.isEmpty()) return null
+    val dir = context.getExternalFilesDir(null) ?: return null
+    val file = java.io.File(dir, "anr-traces.txt")
+    file.bufferedWriter().use { out ->
+        for (exit in exits) {
+            out.write("--- ${java.util.Date(exit.timestamp)}: ${exit.description}\n")
+            val trace = exit.traceInputStream?.bufferedReader()?.use { it.readText() }.orEmpty()
+            // The main thread, then the rest up to a size worth sending
+            val main = Regex("(?s)\"main\".*?\n\n").find(trace)?.value.orEmpty()
+            out.write(main)
+            out.write(trace.take(60_000))
+            out.write("\n")
+        }
+    }
+    file
+}.getOrNull()
+
 /** Android's record of the last crashes (Flux Keyboard's and its web pages'), saved to share. */
 @Composable
 internal fun CrashLogRow() {
@@ -926,13 +951,17 @@ internal fun CrashLogRow() {
             val saved = withContext(Dispatchers.IO) {
                 val file = "/storage/emulated/0/Download/Flux Keyboard/crash-log.txt"
                 val app = it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
+                // When the app stopped answering: where its threads were, which only the app can read
+                val traces = anrTraces(context)
                 it.palsoftware.pastiera.adb.AdbShell.run(
                     "f='$file'; mkdir -p \"\${f%/*}\"; { " +
                         // Why Android last ended the app: a crash, its web page's renderer dying, memory running low
                         "echo '== why it stopped =='; dumpsys activity exit-info $app | head -n 120; " +
                         "echo '== crashes =='; logcat -d -b crash -t 400; " +
                         "echo '== warnings and errors =='; logcat -d -b main,system -t 8000 '*:W' | " +
-                        "grep -i -E '$app|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | tail -n 400; } > \"\$f\" 2>&1; echo ok",
+                        "grep -i -E '$app|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | tail -n 400; " +
+                        (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +
+                        "} > \"\$f\" 2>&1; echo ok",
                     15_000
                 )?.contains("ok") == true
             }

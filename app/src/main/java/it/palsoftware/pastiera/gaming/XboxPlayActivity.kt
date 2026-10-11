@@ -99,7 +99,7 @@ class XboxPlayActivity : Activity() {
             ?: ScreenMode.SIDEWAYS
         GameMode.attachPlayer(this, screen) { sticks ->
             sticks.copyInto(trackpad)
-            runOnUiThread { push() }
+            push()
         }
     }
 
@@ -165,13 +165,26 @@ class XboxPlayActivity : Activity() {
         return true
     }
 
-    /** The controller's state, into the page. */
+    /** A state sent this frame already: the trackpad moves far faster than the screen draws. */
+    @Volatile private var pushPending = false
+
+    /**
+     * The controller's state, into the page: once a frame at most, however often the keys and
+     * trackpad change it (each call into the page costs the main thread, and a flood of them
+     * stalls it until Android ends the app).
+     */
     private fun push() {
-        // Keys held push a stick fully; else the trackpad's
-        val axes = FloatArray(4) { if (stickKeys[it] != 0f) stickKeys[it] else trackpad[it] }
-        web.evaluateJavascript(
-            "window.__fluxPad&&__fluxPad.set([${buttons.joinToString(",")}],[${axes.joinToString(",")}])", null
-        )
+        if (pushPending) return
+        pushPending = true
+        web.postOnAnimation {
+            pushPending = false
+            if (isDestroyed) return@postOnAnimation
+            // Keys held push a stick fully; else the trackpad's
+            val axes = FloatArray(4) { if (stickKeys[it] != 0f) stickKeys[it] else trackpad[it] }
+            web.evaluateJavascript(
+                "window.__fluxPad&&__fluxPad.set([${buttons.joinToString(",")}],[${axes.joinToString(",")}])", null
+            )
+        }
     }
 
     @Deprecated("Back: the page's own back first")
