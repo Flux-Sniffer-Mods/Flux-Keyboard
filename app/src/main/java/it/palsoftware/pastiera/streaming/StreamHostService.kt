@@ -120,12 +120,8 @@ class StreamHostService : Service() {
 
         /** The phone's screen size while streaming to a [width] x [height] screen: its shape, at the chosen height. */
         internal fun phoneSize(choice: String, width: Int, height: Int): Pair<Int, Int> {
-            val rows = when (choice) {
-                "720" -> 720
-                "1080" -> 1080
-                "1440" -> 1440
-                else -> height
-            }
+            // A height of its own (a game's), or Moonlight's
+            val rows = choice.toIntOrNull()?.takeIf { it in 240..4320 } ?: height
             return ((rows.toLong() * width / height).toInt() and 1.inv()) to (rows and 1.inv())
         }
 

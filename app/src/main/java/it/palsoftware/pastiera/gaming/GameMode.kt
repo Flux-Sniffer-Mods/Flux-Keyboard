@@ -328,8 +328,8 @@ object GameMode {
             worker.execute { send(if (wantsPad) "G 1" else "G 0") }
             if (wantsPad) startSideKey() else stopSideKey()
         }
-        // Each game's own screen choice, also when switching game mid-way
-        screen(context, next.screen)
+        // Each game's own screen choice (and size), also when switching game mid-way
+        screen(context, next.screen, next.phoneHeight)
         startTrackpad(next)
         notify(context, next)
     }
@@ -416,6 +416,14 @@ object GameMode {
     private var appliedScreen = ScreenMode.APP
     /** What gaming mode last asked for, put back when streaming ends. */
     @Volatile private var requestedScreen = ScreenMode.APP
+    @Volatile private var requestedHeight: Int? = null
+    private var appliedHeight: Int? = null
+
+    /** A landscape [size] drawn [height] rows high, its shape kept (never larger than it is). */
+    internal fun scaled(size: Pair<Int, Int>, height: Int?): Pair<Int, Int> {
+        if (height == null || height >= size.second) return size
+        return ((size.first.toLong() * height / size.second).toInt() and 1.inv()) to (height and 1.inv())
+    }
     /** Streaming's screen size (landscape-shaped), ahead of any game's choice; null when not streaming. */
     @Volatile private var streamSize: Pair<Int, Int>? = null
     private var appliedStream: Pair<Int, Int>? = null
@@ -434,12 +442,14 @@ object GameMode {
      * all in one go through the shell (one question first, when there's something to save), so
      * the switch is quick.
      */
-    private fun screen(context: Context, requested: ScreenMode) {
+    private fun screen(context: Context, requested: ScreenMode, height: Int? = requestedHeight) {
         requestedScreen = requested
+        requestedHeight = height
         // Streaming to Moonlight comes first: the screen at the stream's size, whatever the game's choice
         val stream = streamSize
         val mode = if (stream != null) ScreenMode.SIDEWAYS else requested
-        if (mode == appliedScreen && stream == appliedStream) return
+        val size = if (stream == null) height else null
+        if (mode == appliedScreen && stream == appliedStream && size == appliedHeight) return
         val prefs = pending(context)
         val commands = mutableListOf<String>()
         var restoredSize: String? = null
@@ -459,6 +469,7 @@ object GameMode {
         }
         appliedScreen = mode
         appliedStream = stream
+        appliedHeight = size
         var sideways: Pair<Int, Int>? = null
         if (mode != ScreenMode.APP) {
             // Turning held at upright either way: a sideways-shaped screen still mustn't turn (an
@@ -475,7 +486,7 @@ object GameMode {
                     val (w, h) = minOf(physical[0], physical[1]) to maxOf(physical[0], physical[1])
                     savedSize = restoredSize ?: Regex("Override size: (\\d+x\\d+)").find(state)?.groupValues?.get(1) ?: ""
                     prefs.edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
-                    sideways = stream ?: sidewaysSize(w, h, cutoutTop(context))
+                    sideways = stream ?: scaled(sidewaysSize(w, h, cutoutTop(context)), size)
                     commands += "wm size ${sideways.first}x${sideways.second}"
                 }
             }

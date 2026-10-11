@@ -270,8 +270,10 @@ object StreamHost {
         StreamHostService.refresh(app)
         // The game drawn at the Moonlight client's shape and the chosen size, ahead of gaming mode's own choice
         // (the phone's own screen stays as it is, fitted into the stream)
-        if (!phoneScreen) it.palsoftware.pastiera.gaming.GameMode.streaming(app,
-            StreamHostService.phoneSize(StreamHostService.resolution(app), width, height))
+        // A game's own streaming resolution first, else streaming's
+        val choice = game?.let { g -> runCatching { it.palsoftware.pastiera.gaming.GameProfiles.effective(app, g).streamHeight }.getOrNull() }
+            ?.toString() ?: StreamHostService.resolution(app)
+        if (!phoneScreen) it.palsoftware.pastiera.gaming.GameMode.streaming(app, StreamHostService.phoneSize(choice, width, height))
         // A resumed game is already open; a new one opens once the screen can be captured
         pendingLaunch = if (resume || game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
         capture()

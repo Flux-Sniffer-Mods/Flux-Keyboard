@@ -112,4 +112,13 @@ class GameProfilesTest {
         assertEquals(true, GameProfile.fromJson(found.single().toJson())?.pending)
         assertEquals(false, GameProfiles.confirm(context, found.single()).pending)
     }
+
+    @Test
+    fun aGameCanDrawSmallerItsShapeKept() {
+        // Kept upright on a 1240 x 1080-ish landscape shape, drawn 720 rows high
+        assertEquals(1240 to 720, GameMode.scaled(1860 to 1080, 720))
+        assertEquals(1860 to 1080, GameMode.scaled(1860 to 1080, null))
+        // Never larger than the screen
+        assertEquals(1860 to 1080, GameMode.scaled(1860 to 1080, 1440))
+    }
 }

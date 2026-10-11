@@ -497,6 +497,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             if (current.isGame) {
                 GameArtworkRow(current)
                 ScreenChoice(current) { current = it }
+                ResolutionChoices(current) { current = it }
             }
             // A Dolphin Wii game: the Wii controller that suits it, set in its own Dolphin settings
             if (current.isGame) DolphinWiiPadRow(current) { pad -> current = current.copy(wiiPad = pad) }
@@ -865,6 +866,24 @@ private fun ScreenChoice(profile: GameProfile, onChange: (GameProfile) -> Unit) 
             ),
             style = MaterialTheme.typography.bodySmall
         )
+    }
+}
+
+/** A game's sizes: on the phone (kept upright, its shape kept) and while streaming. */
+@Composable
+private fun ResolutionChoices(profile: GameProfile, onChange: (GameProfile) -> Unit) {
+    val heights = listOf(null, 1080, 900, 720, 540)
+    val phoneNames = listOf(stringResource(R.string.game_mode_resolution_full)) + heights.drop(1).map { "${it}p" }
+    Column {
+        ChoiceRow(stringResource(R.string.game_mode_resolution_phone), phoneNames[heights.indexOf(profile.phoneHeight).coerceAtLeast(0)], phoneNames) { index ->
+            onChange(profile.copy(phoneHeight = heights[index]))
+        }
+        Text(stringResource(R.string.game_mode_resolution_phone_description), style = MaterialTheme.typography.bodySmall)
+        val streamHeights = listOf(null, 720, 1080, 1440)
+        val streamNames = listOf(stringResource(R.string.game_mode_resolution_stream_default)) + streamHeights.drop(1).map { "${it}p" }
+        ChoiceRow(stringResource(R.string.game_mode_resolution_stream), streamNames[streamHeights.indexOf(profile.streamHeight).coerceAtLeast(0)], streamNames) { index ->
+            onChange(profile.copy(streamHeight = streamHeights[index]))
+        }
     }
 }
 
