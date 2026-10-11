@@ -475,6 +475,11 @@
     <string name="game_mode_xbox_add_to_games">Add to Games</string>
     <string name="game_mode_xbox_add_to_games_description">Adds it to the Games app and Moonlight\'s list without playing it. Games you play are added by themselves.</string>
     <string name="game_mode_xbox_in_games">In your games: in the Games app and Moonlight.</string>
+    <string name="game_mode_xbox_plan">Game Pass plan</string>
+    <string name="game_mode_xbox_plan_ultimate">Ultimate</string>
+    <string name="game_mode_xbox_plan_premium">Premium</string>
+    <string name="game_mode_xbox_plan_essential">Essential</string>
+    <string name="game_mode_xbox_plan_description">The XCloud catalogue lists only the cloud games your plan includes, from Microsoft\'s own Game Pass lists.</string>
     <string name="game_mode_xbox_remove_from_games">Remove from Games</string>
     <string name="game_mode_xbox_added">%1$s added to Games</string>
     <string name="games_app_settings_short">Settings</string>

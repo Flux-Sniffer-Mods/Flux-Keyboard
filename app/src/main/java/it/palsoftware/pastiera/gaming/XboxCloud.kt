@@ -17,6 +17,7 @@ import java.io.File
  */
 object XboxCloud {
     /** The catalogue's list of every cloud game. */
+    private const val SIGLS = "https://catalog.gamepass.com/sigls/v2?language=en-us&market=US&id="
     private const val CLOUD_LIST = "https://catalog.gamepass.com/sigls/v2?id=29a81209-df6f-41fd-a528-2ae6b91f719c&language=en-us&market=US"
     private const val PRODUCTS = "https://displaycatalog.mp.microsoft.com/v7.0/products?market=US&languages=en-us&bigIds="
     private const val KEEP_MS = 7L * 24 * 60 * 60 * 1000
@@ -55,8 +56,41 @@ object XboxCloud {
     /** Xbox Cloud Gaming itself, every game (its home page), as an entry of its own. */
     val HOME = CloudGame("", "Xbox Cloud Gaming", null)
 
-    /** Every cloud game, A to Z (blocking: fetched when the copy kept is a week old). */
+    /** Game Pass plans, as Microsoft's catalogue lists their games (Ultimate has every cloud game). */
+    enum class Plan(val list: String?) {
+        ULTIMATE(null),
+        PREMIUM("09a72c0d-c466-426a-9580-b78955d8173a"),
+        ESSENTIAL("34031711-5a70-4196-bab7-45757dc2294e")
+    }
+
+    private const val KEY_PLAN = "xbox_plan"
+
+    fun plan(context: Context): Plan =
+        SettingsManager.getPreferences(context).getString(KEY_PLAN, null)?.let { name -> Plan.entries.firstOrNull { it.name == name } } ?: Plan.ULTIMATE
+
+    fun setPlan(context: Context, plan: Plan) =
+        SettingsManager.getPreferences(context).edit().putString(KEY_PLAN, plan.name).apply()
+
+    /** The game IDs [plan] includes (null: every game), from a copy kept a week. */
+    private fun planIds(context: Context, plan: Plan): Set<String>? {
+        val list = plan.list ?: return null
+        val kept = File(context.filesDir, "xbox_plan_${plan.name.lowercase()}.json")
+        val fresh = kept.exists() && System.currentTimeMillis() - kept.lastModified() < KEEP_MS
+        if (!fresh && !SettingsManager.isOfflineMode(context)) get(SIGLS + list)?.let { json ->
+            runCatching { parseIds(json) }.getOrNull()?.takeIf { it.isNotEmpty() }?.let { kept.writeText(JSONArray(it).toString()) }
+        }
+        return runCatching { JSONArray(kept.readText()).let { a -> (0 until a.length()).map { a.getString(it).uppercase() }.toSet() } }.getOrNull()
+    }
+
+    /** The cloud games the chosen plan plays, A to Z (blocking). */
     fun games(context: Context): List<CloudGame> {
+        val all = allGames(context)
+        val included = planIds(context, plan(context)) ?: return all
+        return all.filter { it.id.uppercase() in included }
+    }
+
+    /** Every cloud game, A to Z (blocking: fetched when the copy kept is a week old). */
+    private fun allGames(context: Context): List<CloudGame> {
         val kept = file(context)
         val fresh = kept.exists() && System.currentTimeMillis() - kept.lastModified() < KEEP_MS
         if (!fresh && !SettingsManager.isOfflineMode(context)) fetch()?.let { games ->

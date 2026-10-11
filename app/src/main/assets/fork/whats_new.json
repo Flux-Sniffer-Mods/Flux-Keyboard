@@ -669,6 +669,9 @@
     },
     {
       "text": "Gaming mode: in games played by touch (Play Store games, or any with keys placed on their screen), the trackpad moves the game's own on-screen sticks from the start, placed where most touch games draw them; move or resize them in the placer."
+    },
+    {
+      "text": "XCloud Games: choose your Game Pass plan (Ultimate, Premium or Essential) and the catalogue lists only the cloud games it includes, from Microsoft's own Game Pass lists."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -198,6 +198,8 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out else R.string.game_mode_xbox_sign_in),
             description = stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out_description else R.string.game_mode_xbox_sign_in_description)
         ) { xbox.click() }
+        // Which cloud games the catalogue lists: the ones the Game Pass plan plays
+        XboxPlanRow()
         // The phone's own game mode, which can take over as the home screen
         PhoneGameModeRow()
         // Streaming games to a Moonlight client
@@ -1370,5 +1372,25 @@ internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
     ) {
         it.palsoftware.pastiera.streaming.StreamHost.unpairAll(context)
         paired = 0
+    }
+}
+
+/** The Game Pass plan: the XCloud catalogue lists only the cloud games it plays. */
+@Composable
+internal fun XboxPlanRow() {
+    val context = LocalContext.current
+    val plans = it.palsoftware.pastiera.gaming.XboxCloud.Plan.entries
+    val names = listOf(
+        stringResource(R.string.game_mode_xbox_plan_ultimate),
+        stringResource(R.string.game_mode_xbox_plan_premium),
+        stringResource(R.string.game_mode_xbox_plan_essential)
+    )
+    var plan by remember { mutableStateOf(it.palsoftware.pastiera.gaming.XboxCloud.plan(context)) }
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        ChoiceRow(stringResource(R.string.game_mode_xbox_plan), names[plans.indexOf(plan)], names) { index ->
+            plan = plans[index]
+            it.palsoftware.pastiera.gaming.XboxCloud.setPlan(context, plan)
+        }
+        Text(stringResource(R.string.game_mode_xbox_plan_description), style = MaterialTheme.typography.bodySmall)
     }
 }

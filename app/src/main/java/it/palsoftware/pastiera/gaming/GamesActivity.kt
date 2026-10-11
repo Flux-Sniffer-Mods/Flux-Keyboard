@@ -171,6 +171,7 @@ class GamesActivity : ComponentActivity() {
                 androidx.compose.foundation.layout.Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
                     Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out_description else R.string.game_mode_xbox_sign_in_description))
                     // The tile's own art
+                    it.palsoftware.pastiera.settings.XboxPlanRow()
                     it.palsoftware.pastiera.settings.GameArtworkRow(GameArt.XBOX_TILE)
                 }
             },
