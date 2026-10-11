@@ -58,7 +58,12 @@ object GameMode {
 
     /** The placer saved new spots: play with them from now on. */
     internal fun placed(context: Context, updated: GameProfile) {
-        GameProfiles.save(context, updated)
+        // Placed while streaming: kept apart from the phone's own placing
+        val stored = GameProfiles.all(context).firstOrNull { it.id == updated.id } ?: updated
+        // Only the placing is kept: the profile in use may carry a game's own screen over its app's
+        val saved = if (streamSize != null) stored.copy(streamStickZones = updated.stickZones, streamTaps = updated.taps)
+            else stored.copy(stickZones = updated.stickZones, taps = updated.taps)
+        GameProfiles.save(context, saved)
         if (profile?.id == updated.id) profile = GameTouchEditor.withDefaults(updated)
     }
 
@@ -319,7 +324,7 @@ object GameMode {
         // A game plays with its app's settings unless it has its own (Dolphin: Wii or GameCube)
         val next = GameProfiles.effective(context, chosen)
         // GameHub's and GameNative's games: their on-screen sticks, unless placed by hand
-        profile = GameTouchEditor.withDefaults(next)
+        profile = GameTouchEditor.withDefaults(next.forScreen(streamSize != null))
         // With root, a profile can play as a real controller, plugged in while it's on
         val wantsPad = next.controller && it.palsoftware.pastiera.adb.RootShell.active
         if (wantsPad != pad) {
@@ -434,6 +439,12 @@ object GameMode {
         worker.execute {
             streamSize = size
             screen(app, requestedScreen)
+            // The game's keys placed for the screen in use now
+            val id = activeId
+            val current = profile
+            if (id != null && current != null) GameProfiles.all(app).firstOrNull { it.id == id }?.let { chosen ->
+                profile = GameTouchEditor.withDefaults(GameProfiles.effective(app, chosen).forScreen(size != null))
+            }
         }
     }
 

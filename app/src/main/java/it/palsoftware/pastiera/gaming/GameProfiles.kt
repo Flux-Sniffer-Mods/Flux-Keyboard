@@ -72,6 +72,12 @@ data class GameProfile(
     val pending: Boolean = false,
     /** A game's own screen choice, kept even while it plays with its app's other settings. */
     val ownScreen: Boolean = false,
+    /**
+     * Sticks and keys placed for streaming (the screen in the Moonlight client's shape), apart
+     * from the phone's own; empty: the phone's are used.
+     */
+    val streamStickZones: Map<Int, Triple<Float, Float, Float>> = emptyMap(),
+    val streamTaps: Map<Int, Pair<Float, Float>> = emptyMap(),
     /** The height to draw at on the phone, kept upright (its shape kept); null: the screen's own. */
     val phoneHeight: Int? = null,
     /** The height to draw at while streaming; null: streaming's own choice. */
@@ -83,6 +89,11 @@ data class GameProfile(
 ) {
     /** A game of its app (it starts one game), rather than the app's own settings. */
     val isGame: Boolean get() = launch != null
+
+    /** The sticks and keys placed for the screen in use: streaming's when streaming and placed. */
+    fun forScreen(streaming: Boolean): GameProfile =
+        if (streaming && (streamStickZones.isNotEmpty() || streamTaps.isNotEmpty())) copy(stickZones = streamStickZones, taps = streamTaps)
+        else this
 
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
@@ -101,17 +112,37 @@ data class GameProfile(
         put("packages", JSONArray(packages.toList()))
         put("left", leftHalf.name)
         put("right", rightHalf.name)
-        put("stickZones", JSONObject().apply {
-            stickZones.forEach { (stick, zone) ->
-                put(stick.toString(), JSONArray(listOf(zone.first.toDouble(), zone.second.toDouble(), zone.third.toDouble())))
-            }
-        })
-        put("taps", JSONObject().apply {
-            taps.forEach { (key, at) -> put(key.toString(), JSONArray(listOf(at.first.toDouble(), at.second.toDouble()))) }
-        })
+        put("stickZones", zonesJson(stickZones))
+        put("taps", tapsJson(taps))
+        if (streamStickZones.isNotEmpty()) put("streamStickZones", zonesJson(streamStickZones))
+        if (streamTaps.isNotEmpty()) put("streamTaps", tapsJson(streamTaps))
     }
 
     companion object {
+        private fun zonesJson(zones: Map<Int, Triple<Float, Float, Float>>) = JSONObject().apply {
+            zones.forEach { (stick, zone) ->
+                put(stick.toString(), JSONArray(listOf(zone.first.toDouble(), zone.second.toDouble(), zone.third.toDouble())))
+            }
+        }
+
+        private fun tapsJson(taps: Map<Int, Pair<Float, Float>>) = JSONObject().apply {
+            taps.forEach { (key, at) -> put(key.toString(), JSONArray(listOf(at.first.toDouble(), at.second.toDouble()))) }
+        }
+
+        private fun zonesFrom(zones: JSONObject?): Map<Int, Triple<Float, Float, Float>> = zones?.let {
+            it.keys().asSequence().mapNotNull { key ->
+                val z = it.optJSONArray(key) ?: return@mapNotNull null
+                key.toIntOrNull()?.let { stick -> stick to Triple(z.getDouble(0).toFloat(), z.getDouble(1).toFloat(), z.getDouble(2).toFloat()) }
+            }.toMap()
+        }.orEmpty()
+
+        private fun tapsFrom(taps: JSONObject?): Map<Int, Pair<Float, Float>> = taps?.let {
+            it.keys().asSequence().mapNotNull { key ->
+                val at = it.optJSONArray(key) ?: return@mapNotNull null
+                key.toIntOrNull()?.let { code -> code to Pair(at.getDouble(0).toFloat(), at.getDouble(1).toFloat()) }
+            }.toMap()
+        }.orEmpty()
+
         fun fromJson(json: JSONObject): GameProfile? = runCatching {
             GameProfile(
                 id = json.getString("id"),
@@ -119,18 +150,10 @@ data class GameProfile(
                 packages = json.optJSONArray("packages")?.let { array -> List(array.length()) { array.getString(it) }.toSet() }.orEmpty(),
                 leftHalf = TrackpadRole.entries.firstOrNull { it.name == json.optString("left") } ?: TrackpadRole.NONE,
                 rightHalf = TrackpadRole.entries.firstOrNull { it.name == json.optString("right") } ?: TrackpadRole.NONE,
-                stickZones = json.optJSONObject("stickZones")?.let { zones ->
-                    zones.keys().asSequence().mapNotNull { key ->
-                        val z = zones.optJSONArray(key) ?: return@mapNotNull null
-                        key.toIntOrNull()?.let { it to Triple(z.getDouble(0).toFloat(), z.getDouble(1).toFloat(), z.getDouble(2).toFloat()) }
-                    }.toMap()
-                }.orEmpty(),
-                taps = json.optJSONObject("taps")?.let { taps ->
-                    taps.keys().asSequence().mapNotNull { key ->
-                        val at = taps.optJSONArray(key) ?: return@mapNotNull null
-                        key.toIntOrNull()?.let { it to Pair(at.getDouble(0).toFloat(), at.getDouble(1).toFloat()) }
-                    }.toMap()
-                }.orEmpty(),
+                stickZones = zonesFrom(json.optJSONObject("stickZones")),
+                taps = tapsFrom(json.optJSONObject("taps")),
+                streamStickZones = zonesFrom(json.optJSONObject("streamStickZones")),
+                streamTaps = tapsFrom(json.optJSONObject("streamTaps")),
                 launch = json.optString("launch").ifEmpty { null },
                 // Before one screen choice: "sideways", and a keep-upright switch for every game
                 screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }
