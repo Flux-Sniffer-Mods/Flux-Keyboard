@@ -279,6 +279,7 @@
         <activity
             android:name=".gaming.XboxPlayActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:taskAffinity="it.palsoftware.pastiera.xbox"
             android:label="Xbox Cloud Gaming"
             android:hardwareAccelerated="true"

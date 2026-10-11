@@ -41,6 +41,8 @@ class XboxPlayActivity : Activity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         web = WebView(this)
+        // Drawn on the GPU in a layer of its own: scrolling and typing stay smooth
+        web.setLayerType(View.LAYER_TYPE_HARDWARE, null)
         setContentView(web)
         immersive()
         CookieManager.getInstance().setAcceptCookie(true)
@@ -50,8 +52,9 @@ class XboxPlayActivity : Activity() {
             domStorageEnabled = true
             databaseEnabled = true
             mediaPlaybackRequiresUserGesture = false
-            loadWithOverviewMode = true
-            useWideViewPort = true
+            // Signing in: the page laid out for a phone (not a desktop page shrunk to fit)
+            loadWithOverviewMode = !signingIn
+            useWideViewPort = !signingIn
             // A phone's Chrome, not a web view: the site plays only in browsers it knows
             userAgentString = userAgentString.replace("; wv", "").replace(Regex("Version/\\S+ "), "")
         }
@@ -73,8 +76,9 @@ class XboxPlayActivity : Activity() {
         }
         web.loadUrl(if (signingIn) SIGN_IN else intent.dataString?.takeIf { it.startsWith("https://www.xbox.com/") } ?: HOME)
         // The page may be rebuilt as it moves between screens: the controller kept in it
-        web.postDelayed(object : Runnable {
-            override fun run() { inject(); web.postDelayed(this, 2_000) }
+        // (not while signing in: the sign-in pages have no controller to keep)
+        if (!signingIn) web.postDelayed(object : Runnable {
+            override fun run() { inject(); web.postDelayed(this, 5_000) }
         }, 2_000)
     }
 
