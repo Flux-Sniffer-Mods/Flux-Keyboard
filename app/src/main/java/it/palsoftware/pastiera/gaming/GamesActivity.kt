@@ -95,6 +95,8 @@ class GamesActivity : ComponentActivity() {
     @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
     @Composable
     private fun GamesList(editId: String?, tv: Boolean = false) {
+        // Keys move through the grid only while it's what's shown (not a game's settings, where they type)
+        keyHandler = null
         var entries by remember { mutableStateOf<List<Entry>?>(null) }
         var reload by remember { mutableStateOf(0) }
         // Its settings, as in Flux Keyboard's Gaming mode (opened straight away when asked to)

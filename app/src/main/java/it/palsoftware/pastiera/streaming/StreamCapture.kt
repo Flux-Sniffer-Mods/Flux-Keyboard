@@ -31,7 +31,8 @@ class StreamCapture : Activity() {
                 val app = applicationContext
                 StreamHost.takeLaunch()?.let { game ->
                     it.palsoftware.pastiera.gaming.GameMode.afterScreen {
-                        runCatching { app.startActivity(game.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                        // Through the shell: by then this screen has closed, and Android doesn't let an app in the background open things
+                        Thread { it.palsoftware.pastiera.display.ExtraScreen.startFromBackground(app, game) }.start()
                     }
                 }
             } else {

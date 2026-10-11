@@ -493,7 +493,7 @@
     <string name="phone_game_mode">Phone\'s own game mode</string>
     <string name="phone_game_mode_description">Unihertz\'s Game Mode can take over as the home screen alongside gaming mode. Turn it off here.</string>
     <string name="game_mode_artwork">Artwork</string>
-    <string name="game_mode_artwork_description">Used in the games list, on shortcuts and in Moonlight.</string>
+    <string name="game_mode_artwork_description">Covers show in the Games app and Moonlight; square artwork on shortcuts and in settings.</string>
     <string name="game_mode_artwork_choose">Use a picture from the phone</string>
     <string name="game_mode_artwork_reset">Use automatic artwork</string>
     <string name="game_mode_artwork_failed">Couldn\'t open that picture</string>
@@ -564,8 +564,8 @@
     <string name="game_mode_resolution_stream_default">Same as streaming setting</string>
     <string name="game_mode_artwork_found">Choose artwork from the internet</string>
     <string name="game_mode_artwork_search">Search for a title</string>
-    <string name="game_mode_artwork_icons">Square artwork (games list and shortcuts)</string>
-    <string name="game_mode_artwork_upright">Covers (Moonlight)</string>
+    <string name="game_mode_artwork_icons">Square artwork (shortcuts and settings)</string>
+    <string name="game_mode_artwork_upright">Covers (Games app and Moonlight)</string>
     <string name="game_mode_artwork_none">No artwork found online. Try searching for its title above.</string>
     <string name="games_app_launchers">Launchers and emulators</string>
     <string name="games_app_stream">Stream</string>

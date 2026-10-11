@@ -904,6 +904,18 @@
     },
     {
       "text": "If Flux Keyboard closes mid-stream (a crash), the phone's screen size and turning, its notification setting and its desktop setting go back to normal as soon as it starts again."
+    },
+    {
+      "text": "Typing in the Games app (renaming a game, searching) works again: its controller keys only move through the grid."
+    },
+    {
+      "text": "After leaving a stream in Moonlight, another one starts straight away, without turning streaming off and on."
+    },
+    {
+      "text": "Games opened from Moonlight (on a separate screen or mirrored) open by themselves, even with Flux Keyboard in the background."
+    },
+    {
+      "text": "Keyboard swipes' settings say Shell access, which they use, not Shizuku; artwork settings say covers show in the Games app as well as Moonlight."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -97,6 +97,13 @@ class GameLaunchActivity : Activity() {
         private const val EXTRA_ASKED = "asked"
 
         /** Starts a game found in the folders (or a launcher), through its profile when it has one. */
+        /** The app [intent] (one of these shortcuts) opens a game in. */
+        fun packageOf(context: Context, intent: Intent): String? {
+            intent.getStringExtra(EXTRA_PROFILE)?.let { id -> GameProfiles.all(context).firstOrNull { it.id == id } }
+                ?.packages?.firstOrNull()?.let { return it }
+            return intent.getStringExtra(EXTRA_PACKAGE)
+        }
+
         fun intentFor(context: Context, game: GameLibrary.Game): Intent =
             Intent(context, GameLaunchActivity::class.java).setAction(Intent.ACTION_VIEW)
                 .putExtra(EXTRA_LAUNCH, game.launch).putExtra(EXTRA_PACKAGE, game.packageName)

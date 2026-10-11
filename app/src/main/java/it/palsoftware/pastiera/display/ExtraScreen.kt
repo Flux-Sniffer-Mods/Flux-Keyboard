@@ -287,34 +287,60 @@ object ExtraScreen {
     fun bring(context: Context, intent: Intent, displayId: Int) {
         val component = intent.component ?: context.packageManager.resolveActivity(intent, 0)?.activityInfo
             ?.let { ComponentName(it.packageName, it.name) } ?: return
-        val task = rootTask(context, component)
+        // A game's shortcut (Flux Keyboard's launcher) opens another app: that app's task is the one to move
+        val trampoline = component.className == it.palsoftware.pastiera.gaming.GameLaunchActivity::class.java.name
+        val target = if (trampoline) it.palsoftware.pastiera.gaming.GameLaunchActivity.packageOf(context, intent) else null
+        val task = if (target != null && target != context.packageName) rootTask(context, ComponentName(target, ""), byApp = true)
+            else if (!trampoline) rootTask(context, component) else null
         if (task != null) {
             AdbShell.run("am display move-stack $task $displayId")
             return
         }
         if (displayId == 0) return
-        val launch = Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        // Started by the shell, so it opens even with Flux Keyboard in the background (Android
+        // doesn't let a background app open things on another screen); Flux Keyboard's own
+        // screens that only it can open go through its game launcher, which the shell can open
+        val exported = runCatching { context.packageManager.getActivityInfo(component, 0).exported }.getOrDefault(false)
+        val launch = if (exported) intent else it.palsoftware.pastiera.gaming.GameLaunchActivity.intentFor(context,
+            it.palsoftware.pastiera.gaming.GameLibrary.Game(component.className.substringAfterLast('.'), component.packageName,
+                launch = intent.toUri(Intent.URI_INTENT_SCHEME)))
+        val uri = Intent(launch).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).toUri(Intent.URI_INTENT_SCHEME).replace("'", "")
         // Filling the screen, not in a window of its own (Android's desktop keeps its windows)
         val fullscreen = current?.desktop != true
-        runCatching {
+        val started = AdbShell.run("am start --display $displayId" + (if (fullscreen) " --windowingMode $WINDOWING_FULLSCREEN" else "") + " '$uri'")
+        if (started == null) runCatching {
             val options = ActivityOptions.makeBasic().setLaunchDisplayId(displayId)
             if (fullscreen) runCatching {
                 ActivityOptions::class.java.getMethod("setLaunchWindowingMode", Int::class.javaPrimitiveType).invoke(options, WINDOWING_FULLSCREEN)
             }
-            context.startActivity(launch, options.toBundle())
-        }.onFailure {
-            AdbShell.run("am start --display $displayId" + (if (fullscreen) " --windowingMode $WINDOWING_FULLSCREEN" else "") +
-                " -n ${component.flattenToShortString()}")
+            context.startActivity(Intent(launch).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), options.toBundle())
         }
+    }
+
+    /**
+     * Opens [intent] from the background on the phone's screen: through the shell (Android
+     * blocks a background app opening things), Flux Keyboard's own screens through its game
+     * launcher, else as usual.
+     */
+    fun startFromBackground(context: Context, intent: Intent) {
+        val component = intent.component ?: context.packageManager.resolveActivity(intent, 0)?.activityInfo
+            ?.let { ComponentName(it.packageName, it.name) }
+        val exported = component != null && runCatching { context.packageManager.getActivityInfo(component, 0).exported }.getOrDefault(false)
+        val launch = if (exported || component == null) intent else it.palsoftware.pastiera.gaming.GameLaunchActivity.intentFor(context,
+            it.palsoftware.pastiera.gaming.GameLibrary.Game(component.className.substringAfterLast('.'), component.packageName,
+                launch = intent.toUri(Intent.URI_INTENT_SCHEME)))
+        val uri = Intent(launch).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).toUri(Intent.URI_INTENT_SCHEME).replace("'", "")
+        val started = AdbShell.available() && AdbShell.run("am start '$uri'") != null
+        if (!started) runCatching { context.startActivity(Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
     }
 
     /**
      * The root task [component]'s app is open in, from `am stack list`: its app's, or for Flux
      * Keyboard's own (the Xbox player), the one with that activity.
      */
-    private fun rootTask(context: Context, component: ComponentName): Int? {
+    private fun rootTask(context: Context, component: ComponentName, byApp: Boolean = false): Int? {
         val list = AdbShell.run("am stack list") ?: return null
-        val own = component.packageName == context.packageName
+        val own = component.packageName == context.packageName && !byApp
         return rootTaskIn(list, component.packageName, if (own) component.className.substringAfterLast('.') else null)
     }
 

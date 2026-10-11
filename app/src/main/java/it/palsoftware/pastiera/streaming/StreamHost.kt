@@ -353,6 +353,9 @@ object StreamHost {
         val started = StreamSession(app, client, appId, width, height, fps, key, keyId, gameIntent, phoneSize, separate, desktopOnly = desktop) { ended ->
             if (session === ended) {
                 session = null
+                // Nothing left running as far as Moonlight knows: any entry starts afresh (the
+                // same game, still open, is brought back rather than restarted)
+                currentGame = 0
                 streamingGame = null
                 streamingDevice = null
                 notificationsWhileStreaming(false)
