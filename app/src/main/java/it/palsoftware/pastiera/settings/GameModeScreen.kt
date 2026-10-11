@@ -571,8 +571,14 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 TextButton(onClick = {
                     setupScope.launch {
                         val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.apply(emulatorPkg) }
+                        // Its graphics too, where its settings can be written: suited to this phone's GPU
+                        val graphics = withContext(Dispatchers.IO) {
+                            if (it.palsoftware.pastiera.gaming.GraphicsTuning.writable(emulatorPkg) &&
+                                it.palsoftware.pastiera.gaming.GraphicsTuning.tune(context, emulatorPkg) == it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE
+                            ) "\n\n" + it.palsoftware.pastiera.gaming.GraphicsTuning.summary(context, emulatorPkg) else ""
+                        }
                         setupResult = when (result) {
-                            it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE -> context.getString(R.string.game_mode_setup_done, emulatorName)
+                            it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE -> context.getString(R.string.game_mode_setup_done, emulatorName) + graphics
                             it.palsoftware.pastiera.gaming.FluxLayout.Result.NOT_FOUND -> context.getString(R.string.game_mode_setup_not_found, emulatorName)
                             it.palsoftware.pastiera.gaming.FluxLayout.Result.BY_HAND ->
                                 context.getString(R.string.game_mode_setup_by_hand, emulatorName, it.palsoftware.pastiera.gaming.FluxLayout.bindList())
@@ -591,6 +597,27 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             }
             }
             if (current.isGame) GameArtworkRow(current)
+            // Apps whose graphics settings can't be written: what suits this phone, to set by hand
+            val advice = remember(current.packages) {
+                val app = GameApps.appFor(current)
+                if (current.packages.any { pkg -> it.palsoftware.pastiera.gaming.GraphicsTuning.writable(pkg) }) null
+                else runCatching { it.palsoftware.pastiera.gaming.GraphicsTuning.advice(context, app) }.getOrNull()
+            }
+            if (advice != null) {
+                var showAdvice by remember { mutableStateOf(false) }
+                FluxActionRow(
+                    linkId = null,
+                    icon = "\u2699",
+                    title = stringResource(R.string.game_mode_advice),
+                    description = stringResource(R.string.game_mode_advice_description)
+                ) { showAdvice = true }
+                if (showAdvice) AlertDialog(
+                    onDismissRequest = { showAdvice = false },
+                    title = { Text(stringResource(R.string.game_mode_advice)) },
+                    text = { Text(advice) },
+                    confirmButton = { TextButton(onClick = { showAdvice = false }) { Text(stringResource(android.R.string.ok)) } }
+                )
+            }
             val pinScope = androidx.compose.runtime.rememberCoroutineScope()
             if (current.isGame) TextButton(onClick = {
                 val profile = current.also { saved -> GameProfiles.save(context, saved) }

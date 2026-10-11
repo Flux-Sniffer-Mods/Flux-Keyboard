@@ -430,7 +430,7 @@
     <string name="game_mode_quick_launcher_description">The games found in the game folders and the games with a profile, started from the quick launcher as their home screen shortcuts start them.</string>
     <string name="game_mode_right_stick_keys">Right stick on keys</string>
     <string name="game_mode_right_stick_keys_description">J B N M move the right stick. The trackpad follows one finger at a time, so it can\'t move two sticks together.</string>
-    <string name="game_mode_setup_controls">Set up %1$s\'s controls</string>
+    <string name="game_mode_setup_controls">Set up %1$s for this phone</string>
     <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s layout: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick, and the trackpad\'s left half the left stick.\n\nDolphin: GameCube controller 1 (L and R on the volume keys, Z on Z) and Wii Remote 1 with Nunchuk are set, the pointer following the trackpad\'s right half (set Dolphin\'s overlay IR mode to Follow). PPSSPP: its controls are set for every game.</string>
     <string name="game_mode_setup_not_found">%1$s\'s settings weren\'t found: open it once, then try again.</string>
     <string name="game_mode_setup_by_hand">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s</string>
@@ -491,4 +491,17 @@
     <string name="game_mode_artwork_failed">Couldn\'t read that picture</string>
     <string name="stream_capture_title">Moonlight wants to play</string>
     <string name="stream_capture_text">Tap to let it see the screen.</string>
+    <string name="game_mode_tune_dolphin">Graphics: %1$s, native resolution, shaders built in the background (things may appear a moment late instead of stuttering), dual core on, VSync off. Raise the resolution in Dolphin for lighter games.</string>
+    <string name="game_mode_tune_dolphin_strong">Graphics: %1$s, 2× resolution, shaders built in the background, dual core on, VSync off.</string>
+    <string name="game_mode_tune_ppsspp">Graphics: %1$s, 2× PSP resolution, no frame skipping, hardware transform and skinning on.</string>
+    <string name="game_mode_tune_ppsspp_strong">Graphics: %1$s, 3× PSP resolution, no frame skipping, hardware transform and skinning on.</string>
+    <string name="game_mode_advice">Best settings for this phone</string>
+    <string name="game_mode_advice_description">What to set in its own settings to play smoothly</string>
+    <string name="game_mode_advice_azahar">In Azahar\'s Settings, Graphics: Graphics API %1$s, Internal resolution 1×, Disk shader cache on, Asynchronous shader compilation on. Lighter games can take 2×.</string>
+    <string name="game_mode_advice_eden">In Eden\'s Settings, Graphics: Resolution 0.75× (1× for lighter games), Accuracy Normal, Asynchronous shaders on, Disk shader cache on.</string>
+    <string name="game_mode_advice_eden_mali">In Eden\'s Settings, Graphics: Resolution 0.5×, Accuracy Normal, Asynchronous shaders on, Disk shader cache on. This phone\'s Mali GPU runs fewer Switch games than Adreno phones do: check reports for a game first.</string>
+    <string name="game_mode_advice_windows">In %1$s, the game\'s (or its container\'s) settings: Graphics driver %2$s, DXVK for DirectX 9 to 11 games (WineD3D if one won\'t start), VKD3D for DirectX 12, Screen size 1280×720, Box64 preset Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (the newest)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip is only for Adreno)</string>
+    <string name="game_mode_advice_game">In the game\'s own settings: graphics quality Medium or Low, a 60 fps limit only if it stays steady (else 30), and render scale or resolution below 100% if it offers one.</string>
 </resources>

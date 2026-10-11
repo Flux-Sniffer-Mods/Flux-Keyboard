@@ -199,12 +199,12 @@ object FluxLayout {
         }?.name
     }
 
-    private fun write(path: String, content: String): Boolean {
+    internal fun write(path: String, content: String): Boolean {
         val data = android.util.Base64.encodeToString(content.toByteArray(), android.util.Base64.NO_WRAP)
         return AdbShell.run("mkdir -p \"${path.substringBeforeLast('/')}\" && echo '$data' | base64 -d > \"$path\"", 5_000) != null
     }
 
-    private fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
+    internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
 
     /** Writes the layout into [pkg]'s controller settings (blocking: through the shell, the emulator stopped first). */
     fun apply(pkg: String): Result {
@@ -237,7 +237,7 @@ object FluxLayout {
         return if (ok) Result.DONE else Result.FAILED
     }
 
-    private fun dolphinDir(pkg: String): String? = AdbShell.run(
+    internal fun dolphinDir(pkg: String): String? = AdbShell.run(
         "for d in \"/storage/emulated/0/Android/data/$pkg/files\" /storage/emulated/0/dolphin-emu; do " +
             "[ -d \"\$d/Config\" ] && { echo \"\$d\"; break; }; done; true", 3_000
     )?.trim()?.ifEmpty { null }
@@ -272,11 +272,13 @@ object FluxLayout {
         return withKey(out, "Controls", "WiimoteSource0", if (gc) "0" else null)
     }
 
+    internal fun ppssppDir(pkg: String): String? = AdbShell.run(
+        "for d in /storage/emulated/0/PSP \"/storage/emulated/0/Android/data/$pkg/files/PSP\"; do " +
+            "[ -d \"\$d/SYSTEM\" ] && { echo \"\$d\"; break; }; done; true", 3_000
+    )?.trim()?.ifEmpty { null }
+
     private fun ppsspp(pkg: String): Result {
-        val dir = AdbShell.run(
-            "for d in /storage/emulated/0/PSP \"/storage/emulated/0/Android/data/$pkg/files/PSP\"; do " +
-                "[ -d \"\$d/SYSTEM\" ] && { echo \"\$d\"; break; }; done; true", 3_000
-        )?.trim()?.ifEmpty { null } ?: return Result.NOT_FOUND
+        val dir = ppssppDir(pkg) ?: return Result.NOT_FOUND
         AdbShell.run("am force-stop $pkg", 3_000)
         val file = "$dir/SYSTEM/controls.ini"
         return if (write(file, withSection(read(file), "ControlMapping", pspMapping()))) Result.DONE else Result.FAILED
