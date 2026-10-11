@@ -206,10 +206,10 @@ class GamesActivity : ComponentActivity() {
                         { runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } },
                         { editing = entry.profile })
                 }
-                tiles += TileSpec("add", stringResource(R.string.game_mode_import), null, { Symbol("+") }, { importing = true }, { importing = true })
                 // Xbox cloud games: signed in first, then picked; long-press to sign out
                 tiles += TileSpec("xbox", stringResource(R.string.games_app_xbox), null, { XboxCover() },
                     { if (xbox.signedIn) addingXbox = true else xbox.click() }, { xboxMenu = true })
+                tiles += TileSpec("add", stringResource(R.string.game_mode_import), null, { Symbol("+") }, { importing = true }, { importing = true })
                 tiles += TileSpec("apps", stringResource(R.string.games_app_launchers), null, { Symbol("\u25A6") }, { page = Page.APPS }, { page = Page.APPS })
             } else {
                 launchers().forEach { (pkg, profile) ->
