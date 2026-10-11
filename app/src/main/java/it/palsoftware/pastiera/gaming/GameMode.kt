@@ -188,6 +188,11 @@ object GameMode {
             }
             return true
         }
+        // Right stick on keys: Y G H B push it
+        if (profile?.rightStickKeys == true && code in RIGHT_STICK_KEYS) {
+            if (event.repeatCount == 0) rightStickKey(code, down)
+            return true
+        }
         if (!pad) return false
         val button = PAD_BUTTONS[code]
         when {
@@ -242,6 +247,7 @@ object GameMode {
         profile = null
         activeId = null
         trackpadRun++
+        sticks.fill(0f); stickHeld.fill(false); rightKeysHeld.clear()
         if (pad) { pad = false; dpadHeld.clear(); send("G 0") }
         trackpad?.destroy(); trackpad = null
         runCatching { input?.close() }
@@ -417,35 +423,135 @@ object GameMode {
     }
 
     private const val DEAD_ZONE = 0.33f
+    /** The Titan's trackpad reports one finger: moving to another, it lifts and touches again this soon. */
+    private const val HANDOVER_MS = 30L
+    /** ...and glides from the last finger's spot to the new one's over this long. */
+    private const val GLIDE_MS = 220L
+
+    /** The sticks (left x y, right x y), -1 to 1: from the trackpad, and the right one from keys too. */
+    private val sticks = FloatArray(4)
+    private val stickHeld = BooleanArray(2)
+
+    /** A stick moved: on the game's on-screen stick where one is placed, else as a controller's. */
+    @Synchronized
+    private fun pushStick(at: Int) {
+        val current = profile
+        if (current != null && !pad && !inMenus && current.stickZones.containsKey(at / 2)) dragStick(at) else sendSticks()
+    }
+
+    @Synchronized
+    private fun releaseStick(at: Int) {
+        sticks[at] = 0f; sticks[at + 1] = 0f
+        if (stickHeld[at / 2]) {
+            val finger = 1 + at / 2
+            worker.execute { send("T u $finger") }
+            stickHeld[at / 2] = false
+        } else sendSticks()
+    }
+
+    /** An on-screen stick: a finger on its place, pushed as far as the stick goes. */
+    private fun dragStick(at: Int) {
+        val zone = profile?.stickZones?.get(at / 2) ?: return
+        val cx = zone.first * screenW
+        val cy = zone.second * screenH
+        val reach = zone.third * screenW
+        val finger = 1 + at / 2
+        val first = !stickHeld[at / 2]
+        stickHeld[at / 2] = true
+        val x = cx + sticks[at] * reach
+        val y = cy + sticks[at + 1] * reach
+        worker.execute {
+            if (first) send("T d $finger $cx $cy")
+            send("T m $finger $x $y")
+        }
+    }
+
+    private fun sendSticks() {
+        // The real controller's sticks, with root; else stick events from the keyboard
+        val line = (if (pad) "A" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
+        worker.execute { send(line) }
+    }
+
+    /** The right stick's keys (up, left, right, down), with Right stick on keys. */
+    private val RIGHT_STICK_KEYS = intArrayOf(KeyEvent.KEYCODE_Y, KeyEvent.KEYCODE_G, KeyEvent.KEYCODE_H, KeyEvent.KEYCODE_B)
+    private val rightKeysHeld = mutableSetOf<Int>()
+
+    /** Y G H B held: the right stick pushed their way (a diagonal no further than a straight push). */
+    private fun rightStickKey(code: Int, down: Boolean) {
+        val changed = if (down) rightKeysHeld.add(code) else rightKeysHeld.remove(code)
+        if (!changed) return
+        fun held(i: Int) = if (RIGHT_STICK_KEYS[i] in rightKeysHeld) 1f else 0f
+        var x = held(2) - held(1)
+        var y = held(3) - held(0)
+        if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }
+        if (x == 0f && y == 0f) releaseStick(2) else { sticks[2] = x; sticks[3] = y; pushStick(2) }
+    }
 
     /**
-     * The trackpad as the game's controls: each finger plays the half it lands on, so a finger on
-     * each half moves both sticks at once. A half already played by one finger ignores another.
+     * The trackpad as the game's controls: each finger plays the half it lands on (the left half
+     * always the left stick's when it's one). The Titan's trackpad reports one finger at a time,
+     * moving to the one that moved last: the finger it leaves is taken as still down, its stick
+     * held where it was, until the trackpad comes back to it or every finger is lifted.
      */
     private class TrackpadReader(private val min: Float, private val max: Float) {
-        private class Finger(val role: TrackpadRole, val originX: Float, val originY: Float, val downAt: Long) {
+        private class Finger(val role: TrackpadRole, val left: Boolean, var originX: Float, var originY: Float, val downAt: Long) {
             var lastX = originX; var lastY = originY
             var moved = 0f
             /** Direction keys held: up, left, down, right. */
             val held = BooleanArray(4)
+            /** Gliding after a handover until then: its moves aren't the finger's. */
+            var settleUntil = 0L
+            /** Its origin is taken once it has settled (a finger new to the trackpad's report). */
+            var reorigin = false
         }
 
         private val fingers = HashMap<Int, Finger>()
-        private val sticks = FloatArray(4)
+        /** Fingers the trackpad stopped reporting but that are still down, by half (left true). */
+        private val held = HashMap<Boolean, Finger>()
         private val radius = (max - min) / 8f
         private val slots = TouchSlots(::begin, ::move, ::up)
+        private val lock = Any()
+        private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        private var pendingUp: Runnable? = null
+        private var pendingSlot = -1
 
-        fun line(line: String) = slots.line(line)
+        fun line(line: String) = synchronized(lock) { slots.line(line) }
+
+        private fun roleFor(current: GameProfile, left: Boolean): TrackpadRole = when {
+            left -> current.leftHalf
+            current.rightStickKeys && current.rightHalf == TrackpadRole.RIGHT_STICK -> TrackpadRole.NONE
+            else -> current.rightHalf
+        }
 
         private fun begin(slot: Int, x: Int, y: Int) {
             val current = profile ?: return
-            val role = if (x < (min + max) / 2) current.leftHalf else current.rightHalf
-            if (role == TrackpadRole.NONE || fingers.values.any { it.role == role }) return
-            fingers[slot] = Finger(role, x.toFloat(), y.toFloat(), SystemClock.uptimeMillis())
+            val now = SystemClock.uptimeMillis()
+            val gone = pendingUp?.let { handler.removeCallbacks(it); pendingUp = null; fingers.remove(pendingSlot) }
+            if (gone != null) {
+                // A handover: the finger before is still down, and this one is on the other half
+                // (where it is isn't known yet: the trackpad glides there from the last spot)
+                held[gone.left] = gone
+                val left = !gone.left
+                val back = held.remove(left)
+                fingers[slot] = (back ?: Finger(roleFor(current, left), left, x.toFloat(), y.toFloat(), now).apply { reorigin = true })
+                    .apply { settleUntil = now + GLIDE_MS }
+                return
+            }
+            val left = x < (min + max) / 2
+            var role = roleFor(current, left)
+            if (role != TrackpadRole.NONE && (fingers.values + held.values).any { it.role == role }) role = TrackpadRole.NONE
+            fingers[slot] = Finger(role, left, x.toFloat(), y.toFloat(), now)
         }
 
         private fun move(slot: Int, x: Int, y: Int) {
             val f = fingers[slot] ?: return
+            if (SystemClock.uptimeMillis() < f.settleUntil) return
+            if (f.reorigin) {
+                f.reorigin = false
+                f.originX = x.toFloat(); f.originY = y.toFloat()
+                f.lastX = f.originX; f.lastY = f.originY
+                return
+            }
             val dx = x - f.lastX; val dy = y - f.lastY
             f.moved += abs(dx) + abs(dy)
             f.lastX = x.toFloat(); f.lastY = y.toFloat()
@@ -454,8 +560,7 @@ object GameMode {
                     val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
                     sticks[at] = ((x - f.originX) / radius).coerceIn(-1f, 1f)
                     sticks[at + 1] = ((y - f.originY) / radius).coerceIn(-1f, 1f)
-                    val current = profile
-                    if (current != null && (!pad && !inMenus && current.stickZones.containsKey(at / 2))) dragStick(at) else sendSticks()
+                    pushStick(at)
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(f, (x - f.originX) / radius, (y - f.originY) / radius)
@@ -479,18 +584,26 @@ object GameMode {
             }
         }
 
+        /** Lifted, or a handover: which, is known when the next finger comes (or doesn't) soon after. */
         private fun up(slot: Int) {
-            val f = fingers.remove(slot) ?: return
-            when (f.role) {
-                TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
-                    val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
-                    sticks[at] = 0f; sticks[at + 1] = 0f
-                    if (stickHeld[at / 2]) {
-                        val finger = 1 + at / 2
-                        worker.execute { send("T u $finger") }
-                        stickHeld[at / 2] = false
-                    } else sendSticks()
+            pendingUp?.let { handler.removeCallbacks(it); it.run() }
+            pendingSlot = slot
+            val lifted = Runnable {
+                synchronized(lock) {
+                    pendingUp = null
+                    fingers.remove(slot)?.let { end(it) }
+                    // Every finger off: the ones the trackpad had stopped reporting too
+                    if (fingers.isEmpty()) { held.values.forEach { end(it) }; held.clear() }
                 }
+            }
+            pendingUp = lifted
+            handler.postDelayed(lifted, HANDOVER_MS)
+        }
+
+        private fun end(f: Finger) {
+            when (f.role) {
+                TrackpadRole.LEFT_STICK -> releaseStick(0)
+                TrackpadRole.RIGHT_STICK -> releaseStick(2)
                 // A tap clicks
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - f.downAt < 200 && f.moved < radius / 4) {
                     worker.execute { send("B 1 1"); send("B 0 1") }
@@ -498,31 +611,6 @@ object GameMode {
                 TrackpadRole.WASD_KEYS, TrackpadRole.ARROW_KEYS -> directionKeys(f, 0f, 0f)
                 TrackpadRole.NONE -> Unit
             }
-        }
-
-        private val stickHeld = BooleanArray(2)
-
-        /** An on-screen stick: a finger on its place, pushed as far as the stick goes. */
-        private fun dragStick(at: Int) {
-            val zone = profile?.stickZones?.get(at / 2) ?: return
-            val cx = zone.first * screenW
-            val cy = zone.second * screenH
-            val reach = zone.third * screenW
-            val finger = 1 + at / 2
-            val first = !stickHeld[at / 2]
-            stickHeld[at / 2] = true
-            val x = cx + sticks[at] * reach
-            val y = cy + sticks[at + 1] * reach
-            worker.execute {
-                if (first) send("T d $finger $cx $cy")
-                send("T m $finger $x $y")
-            }
-        }
-
-        private fun sendSticks() {
-            // The real controller's sticks, with root; else stick events from the keyboard
-            val line = (if (pad) "A" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
-            worker.execute { send(line) }
         }
     }
 

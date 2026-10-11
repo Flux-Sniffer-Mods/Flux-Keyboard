@@ -445,7 +445,7 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                                 val app = withContext(Dispatchers.IO) { GameProfiles.effective(context, current.copy(own = false)) }
                                 current = current.copy(
                                     own = true, leftHalf = app.leftHalf, rightHalf = app.rightHalf, stickZones = app.stickZones, taps = app.taps,
-                                    screen = app.screen, controller = app.controller
+                                    screen = app.screen, controller = app.controller, rightStickKeys = app.rightStickKeys
                                 )
                             }
                         }
@@ -480,6 +480,17 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
             }
             ChoiceRow(stringResource(R.string.game_mode_right_half), current.rightHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(rightHalf = TrackpadRole.entries[it])
+            }
+            // The trackpad follows one finger at a time: the right stick on keys instead
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.game_mode_right_stick_keys))
+                    Text(stringResource(R.string.game_mode_right_stick_keys_description), style = MaterialTheme.typography.bodySmall)
+                }
+                androidx.compose.material3.Switch(
+                    checked = current.rightStickKeys,
+                    onCheckedChange = { on -> current = current.copy(rightStickKeys = on) }
+                )
             }
             // One screen choice per game, its app's suited one to start with
             val screens = it.palsoftware.pastiera.gaming.ScreenMode.entries

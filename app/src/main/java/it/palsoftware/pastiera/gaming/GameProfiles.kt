@@ -60,6 +60,11 @@ data class GameProfile(
     val launch: String? = null,
     /** How the screen turns while it runs. */
     val screen: ScreenMode = ScreenMode.UPRIGHT,
+    /**
+     * Y G H B move the right stick, the trackpad's right half then no stick of its own: the
+     * Titan's trackpad follows one finger at a time, so two sticks on it don't move together.
+     */
+    val rightStickKeys: Boolean = false,
     /** With root: plays as a real controller (its keys its buttons, the trackpad its sticks). */
     val controller: Boolean = false,
     /**
@@ -78,6 +83,7 @@ data class GameProfile(
         launch?.let { put("launch", it) }
         put("screen", screen.name)
         put("controller", controller)
+        put("rightStickKeys", rightStickKeys)
         put("own", own)
         variant?.let { put("variant", it) }
         put("name", name)
@@ -120,6 +126,7 @@ data class GameProfile(
                     ?: if (json.optBoolean("sideways", false)) ScreenMode.SIDEWAYS
                     else ScreenMode.defaultFor(json.optJSONArray("packages")?.optString(0)),
                 controller = json.optBoolean("controller", false),
+                rightStickKeys = json.optBoolean("rightStickKeys", false),
                 // Games made before apps had settings of their own keep theirs
                 own = json.optBoolean("own", true),
                 variant = json.optString("variant").ifEmpty { null }

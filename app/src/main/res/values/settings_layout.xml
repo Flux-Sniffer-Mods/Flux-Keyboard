@@ -310,7 +310,7 @@
     <string name="adb_not_running">The built-in shell isn\'t running, and neither is Shizuku. Set up the built-in shell above, or start Shizuku, then come back.</string>
     <string name="game_mode_title">Gaming mode</string>
     <string name="game_mode_switch_description">In apps with a game profile, keys reach the game as they are or tap its on-screen buttons, and the trackpad moves its sticks.</string>
-    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. A finger on each half of the trackpad moves both sticks at once.</string>
+    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. The trackpad follows one finger at a time: moving to the other half, it holds the first stick where it was. For both sticks at once, put the right stick on keys.</string>
     <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add an app</string>
     <string name="game_mode_add_description">A launcher or emulator: its games play with its settings.</string>
@@ -430,4 +430,6 @@
     <string name="game_mode_trackpad_test_result">Most fingers seen at once: %1$d (%2$s).\n\nSaved to Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Games in the quick launcher</string>
     <string name="game_mode_quick_launcher_description">The games found in the game folders and the games with a profile, started from the quick launcher as their home screen shortcuts start them.</string>
+    <string name="game_mode_right_stick_keys">Right stick on keys</string>
+    <string name="game_mode_right_stick_keys_description">Y G H B move the right stick (up, left, right, down), and the trackpad\'s left half is the left stick. The trackpad follows one finger at a time, so two sticks on it can\'t move together.</string>
 </resources>

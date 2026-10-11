@@ -24,6 +24,12 @@ class GameProfilesTest {
     }
 
     @Test
+    fun theRightStickOnKeysIsKept() {
+        val profile = GameProfiles.newProfile("Game", setOf("com.example.game")).copy(rightStickKeys = true)
+        assertEquals(true, GameProfile.fromJson(profile.toJson())?.rightStickKeys)
+    }
+
+    @Test
     fun theTrackpadStartsAsTheGamesSticks() {
         // Launchers' games: their on-screen sticks; emulators: direction keys they map themselves
         val launcher = GameProfiles.newProfile("Stray", setOf("app.gamenative"))
