@@ -92,6 +92,7 @@ class XboxPlayActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        inFront = true
         web.onResume()
         immersive()
         if (signingIn) return
@@ -104,6 +105,7 @@ class XboxPlayActivity : Activity() {
     }
 
     override fun onPause() {
+        inFront = false
         if (!signingIn) GameMode.detachPlayer(this)
         web.onPause()
         super.onPause()
@@ -193,6 +195,15 @@ class XboxPlayActivity : Activity() {
     }
 
     companion object {
+        /**
+         * The player in front. The keyboard lives in this same app: asking the page for its text
+         * as a key goes by would wait on the very thread the page needs to answer, so while the
+         * player is in front the keyboard leaves its keys and text alone.
+         */
+        @Volatile
+        var inFront = false
+            private set
+
         const val HOME = "https://www.xbox.com/play"
         /** Xbox's own sign-in (a Microsoft account), back to cloud gaming after. */
         const val SIGN_IN = "https://www.xbox.com/en-US/auth/msa?action=logIn&returnUrl=https%3A%2F%2Fwww.xbox.com%2Fplay"

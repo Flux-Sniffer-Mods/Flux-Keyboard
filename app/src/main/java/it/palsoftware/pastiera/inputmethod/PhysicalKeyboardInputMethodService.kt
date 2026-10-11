@@ -4329,6 +4329,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
+        if (playerOwnsInput(info)) { super.onStartInput(info, restarting); return }
         AutoCapitalizeHelper.debugPackage = info?.packageName
         info?.let {
             DebugCaptureStore.recordField(
@@ -4902,6 +4903,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     ) {
         val perfStart = ImePerfLogger.mark()
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        if (playerOwnsInput()) return
         if (contactChips.isNotEmpty() || contactFieldKind() != null) refreshContactSuggestions()
         
         val state = inputContextState
@@ -5871,6 +5873,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onKeyLongPress(keyCode_: Int, event_: KeyEvent?): Boolean {
+        if (playerOwnsInput()) return false
         if (keyboardHiddenForApp && !hiddenAppKeyGoesToPastiera(keyCode_)) return super.onKeyLongPress(keyCode_, event_)
         if (!replayingProtectedNumberKey) {
             val accidentalInput = accidentalKeyInput(keyCode_, event_)
@@ -5915,9 +5918,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     // Back taken from Niagara's search to return to the app: its release is ours too
     private var niagaraBackReturnTo: String? = null
 
+    /** Flux Keyboard's own Xbox player in front, typing into itself: its keys and text are its own. */
+    private fun playerOwnsInput(info: EditorInfo? = currentInputEditorInfo): Boolean =
+        it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront && info?.packageName == packageName
+
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         // Keycode 0 types nothing: the keyboard light's wake-up key, passed straight on
         if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyDown(keyCode_, event_)
+        if (playerOwnsInput()) return false
         // The quick launcher in front: its keys go to it, not to the app's field beneath
         if (QuickLauncherActivity.ownsKey(event_)) return false
         // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
@@ -6886,6 +6894,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     override fun onKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
         if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyUp(keyCode_, event_)
+        if (playerOwnsInput()) return false
         if (QuickLauncherActivity.ownsKey(event_)) return false
         if (keyCode_ == KEYCODE_SYM) {
             symKeyHeld = false
