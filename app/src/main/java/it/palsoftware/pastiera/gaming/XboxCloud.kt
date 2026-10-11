@@ -36,7 +36,11 @@ object XboxCloud {
      * named XBXXtk… once a Microsoft account has signed in.
      */
     fun signedIn(): Boolean = runCatching {
-        android.webkit.CookieManager.getInstance().getCookie("https://www.xbox.com")?.contains("XBXXtk") == true
+        // Xbox's tokens for the signed-in player (XBXXtk...), on its pages' cookies
+        val cookies = android.webkit.CookieManager.getInstance()
+        listOf("https://www.xbox.com", "https://www.xbox.com/play").any { url ->
+            cookies.getCookie(url)?.split(';')?.any { it.trim().startsWith("XBXXtk") } == true
+        }
     }.getOrDefault(false)
 
     /** Signs out of Xbox in Flux Keyboard's player: its cookies and the site's stored data gone. */

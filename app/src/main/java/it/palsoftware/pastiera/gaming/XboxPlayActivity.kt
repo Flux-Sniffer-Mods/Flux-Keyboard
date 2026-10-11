@@ -65,11 +65,7 @@ class XboxPlayActivity : Activity() {
             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) = inject()
             override fun onPageFinished(view: WebView, url: String?) {
                 inject()
-                // Signed in and back on Xbox's own pages: the sign-in page's work is done
-                if (signingIn && url != null && url.startsWith("https://www.xbox.com/") && "/auth/" !in url && XboxCloud.signedIn()) {
-                    android.widget.Toast.makeText(this@XboxPlayActivity, R.string.game_mode_xbox_signed_in, android.widget.Toast.LENGTH_SHORT).show()
-                    finish()
-                }
+                if (signingIn) checkSignedIn()
             }
 
             // The page's renderer died (out of memory, or a crash): only the player starts again,
@@ -97,6 +93,9 @@ class XboxPlayActivity : Activity() {
         // The page may be rebuilt as it moves between screens: the controller kept in it
         // (not while signing in: the sign-in pages have no controller to keep)
         if (!signingIn) web.postDelayed(reinject, 2_000)
+        // Signing in: checked every second, as Xbox's sign-in lands back in steps and sets its
+        // cookie after the page has loaded
+        else web.postDelayed(signInCheck, 1_000)
     }
 
     override fun onResume() {
@@ -122,6 +121,23 @@ class XboxPlayActivity : Activity() {
         super.onPause()
     }
 
+    private val signInCheck: Runnable = object : Runnable {
+        override fun run() {
+            if (isDestroyed || isFinishing) return
+            if (!checkSignedIn()) web.postDelayed(this, 1_000)
+        }
+    }
+
+    /** Signed in and back on Xbox's own pages: the sign-in page closes. True when it did. */
+    private fun checkSignedIn(): Boolean {
+        val url = web.url.orEmpty()
+        val onXbox = url.startsWith("https://www.xbox.com/") && "/auth/" !in url
+        if (!onXbox || !XboxCloud.signedIn()) return false
+        android.widget.Toast.makeText(this, R.string.game_mode_xbox_signed_in, android.widget.Toast.LENGTH_SHORT).show()
+        finish()
+        return true
+    }
+
     private val reinject: Runnable = object : Runnable {
         override fun run() {
             if (isDestroyed) return
@@ -132,6 +148,7 @@ class XboxPlayActivity : Activity() {
 
     override fun onDestroy() {
         web.removeCallbacks(reinject)
+        web.removeCallbacks(signInCheck)
         runCatching { web.destroy() }
         super.onDestroy()
     }
