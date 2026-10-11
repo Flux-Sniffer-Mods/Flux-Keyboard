@@ -1919,4 +1919,5 @@
     <string name="game_mode_reset_emulator">Réinitialiser les réglages de %1$s</string>
     <string name="game_mode_reset_emulator_confirm">Tout ce que Flux Keyboard a réglé dans %1$s (commandes, graphismes, manette de chaque jeu) revient comme avant. Les réglages modifiés par une ancienne version de Flux Keyboard ne peuvent pas être restaurés.</string>
     <string name="game_mode_reset_emulator_done">Les réglages de %1$s sont revenus comme avant les changements de Flux Keyboard.</string>
+    <string name="game_mode_screen_follow">Comme les réglages de son appli</string>
 </resources>

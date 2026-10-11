@@ -1913,4 +1913,5 @@
     <string name="game_mode_reset_emulator">Վերակայել %1$s-ի կարգավորումները</string>
     <string name="game_mode_reset_emulator_confirm">Այն ամենը, ինչ Flux Keyboard-ը կարգավորել է %1$s-ում (կառավարում, գրաֆիկա, ամեն խաղի կոնտրոլեր), կվերադառնա նախկինին։ Flux Keyboard-ի հին տարբերակի փոխած կարգավորումները հնարավոր չէ վերադարձնել։</string>
     <string name="game_mode_reset_emulator_done">%1$s-ի կարգավորումները վերադարձել են Flux Keyboard-ի փոփոխություններից առաջվա վիճակին։</string>
+    <string name="game_mode_screen_follow">Ինչպես իր հավելվածի կարգավորումները</string>
 </resources>

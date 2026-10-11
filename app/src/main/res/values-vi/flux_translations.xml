@@ -1907,4 +1907,5 @@
     <string name="game_mode_reset_emulator">Đặt lại cài đặt của %1$s</string>
     <string name="game_mode_reset_emulator_confirm">Mọi thứ Flux Keyboard đã đặt trong %1$s (điều khiển, đồ họa, tay cầm từng game) sẽ trở lại như trước. Cài đặt do phiên bản Flux Keyboard cũ thay đổi thì không khôi phục được.</string>
     <string name="game_mode_reset_emulator_done">Cài đặt của %1$s đã trở lại như trước khi Flux Keyboard thay đổi.</string>
+    <string name="game_mode_screen_follow">Theo cài đặt của ứng dụng</string>
 </resources>

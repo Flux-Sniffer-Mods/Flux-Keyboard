@@ -1378,4 +1378,5 @@
     <string name="game_mode_reset_emulator">Einstellungen von %1$s zurücksetzen</string>
     <string name="game_mode_reset_emulator_confirm">Alles, was Flux Keyboard in %1$s eingestellt hat (Steuerung, Grafik, Controller je Spiel), wird wie vorher. Von einer älteren Version von Flux Keyboard geänderte Einstellungen lassen sich nicht zurückholen.</string>
     <string name="game_mode_reset_emulator_done">Die Einstellungen von %1$s sind wie vor den Änderungen durch Flux Keyboard.</string>
+    <string name="game_mode_screen_follow">Wie die Einstellungen seiner App</string>
 </resources>
