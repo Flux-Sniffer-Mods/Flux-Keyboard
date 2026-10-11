@@ -1853,4 +1853,8 @@
     <string name="game_detect_text">Skonfiguruj dla niej tryb gry: kontroler, ekran i gałki.</string>
     <string name="game_detect_not_game">Nie teraz</string>
     <string name="game_mode_xbox_note">Xbox Cloud Gaming przyjmuje kontroler lub swoje sterowanie dotykowe, nie klawisze: z rootem włącz prawdziwy kontroler; bez niego umieść klawisze i gałki na sterowaniu dotykowym z powiadomienia trybu gry.</string>
+    <string name="game_mode_xbox_add">Dodaj grę Xbox Cloud</string>
+    <string name="game_mode_xbox_add_description">Każda gra, którą streamuje Xbox Cloud Gaming, z jego katalogu: każda ma własne ustawienia i startuje od razu w grze.</string>
+    <string name="game_mode_xbox_search">Szukaj</string>
+    <string name="game_mode_xbox_none">Nie udało się odczytać katalogu. Czy telefon jest online, a tryb offline wyłączony?</string>
 </resources>

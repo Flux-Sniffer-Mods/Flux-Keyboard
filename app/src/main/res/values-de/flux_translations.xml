@@ -1306,4 +1306,8 @@
     <string name="game_detect_text">Richte den Spielmodus dafür ein: Controller, Bildschirm und Sticks.</string>
     <string name="game_detect_not_game">Nicht jetzt</string>
     <string name="game_mode_xbox_note">Xbox Cloud Gaming nimmt einen Controller oder seine Touch-Steuerung, keine Tasten: mit Root den echten Controller einschalten, ohne Root Tasten und Sticks über die Benachrichtigung des Spielmodus auf seine Touch-Steuerung legen.</string>
+    <string name="game_mode_xbox_add">Xbox-Cloud-Spiel hinzufügen</string>
+    <string name="game_mode_xbox_add_description">Jedes Spiel, das Xbox Cloud Gaming streamt, aus seinem Katalog: jedes bekommt eigene Einstellungen und startet direkt im Spiel.</string>
+    <string name="game_mode_xbox_search">Suchen</string>
+    <string name="game_mode_xbox_none">Der Katalog konnte nicht gelesen werden. Ist das Handy online und der Offlinemodus aus?</string>
 </resources>

@@ -1215,4 +1215,8 @@
     <string name="game_detect_text">Ρυθμίστε τη λειτουργία παιχνιδιού: χειριστήριο, οθόνη και μοχλούς.</string>
     <string name="game_detect_not_game">Όχι τώρα</string>
     <string name="game_mode_xbox_note">Το Xbox Cloud Gaming δέχεται χειριστήριο ή τα χειριστήρια αφής του, όχι πλήκτρα: με root ενεργοποιήστε το πραγματικό χειριστήριο· χωρίς, τοποθετήστε πλήκτρα και μοχλούς στα χειριστήρια αφής από την ειδοποίηση της λειτουργίας παιχνιδιού.</string>
+    <string name="game_mode_xbox_add">Προσθήκη παιχνιδιού Xbox cloud</string>
+    <string name="game_mode_xbox_add_description">Κάθε παιχνίδι που μεταδίδει το Xbox Cloud Gaming, από τον κατάλογό του: καθένα έχει δικές του ρυθμίσεις και ξεκινά κατευθείαν στο παιχνίδι.</string>
+    <string name="game_mode_xbox_search">Αναζήτηση</string>
+    <string name="game_mode_xbox_none">Ο κατάλογος δεν διαβάστηκε. Είναι το τηλέφωνο online, με τη λειτουργία εκτός σύνδεσης ανενεργή;</string>
 </resources>

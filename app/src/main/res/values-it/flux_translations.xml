@@ -1352,4 +1352,8 @@
     <string name="game_detect_text">Configura la modalità gioco per lui: controller, schermo e stick.</string>
     <string name="game_detect_not_game">Non ora</string>
     <string name="game_mode_xbox_note">Xbox Cloud Gaming accetta un controller o i suoi comandi touch, non i tasti: con root attiva il controller reale; senza, posiziona tasti e stick sui comandi touch dalla notifica della modalità gioco.</string>
+    <string name="game_mode_xbox_add">Aggiungi un gioco Xbox Cloud</string>
+    <string name="game_mode_xbox_add_description">Ogni gioco che Xbox Cloud Gaming trasmette, dal suo catalogo: ciascuno ha le sue impostazioni e parte direttamente nel gioco.</string>
+    <string name="game_mode_xbox_search">Cerca</string>
+    <string name="game_mode_xbox_none">Impossibile leggere il catalogo. Il telefono è online, con la modalità offline disattivata?</string>
 </resources>

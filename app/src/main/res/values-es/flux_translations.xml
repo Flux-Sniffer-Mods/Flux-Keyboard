@@ -1847,4 +1847,8 @@
     <string name="game_detect_text">Configura el modo juego para él: mando, pantalla y sticks.</string>
     <string name="game_detect_not_game">Ahora no</string>
     <string name="game_mode_xbox_note">Xbox Cloud Gaming acepta un mando o sus controles táctiles, no teclas: con root, activa el mando real; sin root, coloca teclas y sticks sobre sus controles táctiles desde la notificación del modo juego.</string>
+    <string name="game_mode_xbox_add">Añadir un juego de Xbox Cloud</string>
+    <string name="game_mode_xbox_add_description">Todos los juegos que transmite Xbox Cloud Gaming, de su catálogo: cada uno con sus propios ajustes y empieza directamente en el juego.</string>
+    <string name="game_mode_xbox_search">Buscar</string>
+    <string name="game_mode_xbox_none">No se pudo leer el catálogo. ¿Está el móvil conectado y el modo sin conexión desactivado?</string>
 </resources>

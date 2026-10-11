@@ -1841,4 +1841,8 @@
     <string name="game_detect_text">Կարգավորեք խաղային ռեժիմը դրա համար՝ կարգավորիչ, էկրան և լծակներ։</string>
     <string name="game_detect_not_game">Ոչ հիմա</string>
     <string name="game_mode_xbox_note">Xbox Cloud Gaming-ն ընդունում է կարգավորիչ կամ իր հպումային կառավարումը, ոչ ստեղներ. root-ով միացրեք իրական կարգավորիչը, առանց root-ի՝ ստեղներն ու լծակները դրեք նրա հպումային կառավարման վրա խաղային ռեժիմի ծանուցումից։</string>
+    <string name="game_mode_xbox_add">Ավելացնել Xbox ամպային խաղ</string>
+    <string name="game_mode_xbox_add_description">Xbox Cloud Gaming-ի հեռարձակած յուրաքանչյուր խաղ՝ նրա կատալոգից. յուրաքանչյուրն ունի իր կարգավորումները և սկսվում է անմիջապես խաղում։</string>
+    <string name="game_mode_xbox_search">Որոնել</string>
+    <string name="game_mode_xbox_none">Կատալոգը չհաջողվեց կարդալ։ Հեռախոսը առցանց է, իսկ անցանց ռեժիմն անջատվա՞ծ է։</string>
 </resources>
