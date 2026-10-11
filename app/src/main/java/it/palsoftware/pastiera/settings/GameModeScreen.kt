@@ -185,13 +185,14 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_xbox_add),
             description = stringResource(R.string.game_mode_xbox_add_description)
         ) { addingXbox = true }
-        // Signing in to Xbox: a plain browser page, keys typing
+        // Signing in to Xbox (a plain browser page, keys typing), or out once signed in
+        val xbox = rememberXboxAccount()
         FluxActionRow(
             linkId = null,
             icon = "\u2192",
-            title = stringResource(R.string.game_mode_xbox_sign_in),
-            description = stringResource(R.string.game_mode_xbox_sign_in_description)
-        ) { runCatching { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) } }
+            title = stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out else R.string.game_mode_xbox_sign_in),
+            description = stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out_description else R.string.game_mode_xbox_sign_in_description)
+        ) { xbox.click() }
         // The phone's own game mode, which can take over as the home screen
         PhoneGameModeRow()
         // Streaming games to a Moonlight client
@@ -858,6 +859,46 @@ private fun GameArtworkRow(profile: GameProfile) {
             changed()
         }) { Text(stringResource(R.string.game_mode_artwork_reset)) }
     }
+}
+
+/** Signed in to Xbox in Flux Keyboard's player, checked again whenever the screen comes back. */
+internal class XboxAccount(private val context: android.content.Context) {
+    var signedIn by mutableStateOf(it.palsoftware.pastiera.gaming.XboxCloud.signedIn())
+    var confirming by mutableStateOf(false)
+
+    /** Signs in, or asks before signing out. */
+    fun click() {
+        if (signedIn) confirming = true
+        else runCatching { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) }
+    }
+}
+
+@Composable
+internal fun rememberXboxAccount(): XboxAccount {
+    val context = LocalContext.current
+    val account = remember { XboxAccount(context) }
+    val owner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    androidx.compose.runtime.DisposableEffect(owner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) account.signedIn = it.palsoftware.pastiera.gaming.XboxCloud.signedIn()
+        }
+        owner.lifecycle.addObserver(observer)
+        onDispose { owner.lifecycle.removeObserver(observer) }
+    }
+    if (account.confirming) AlertDialog(
+        onDismissRequest = { account.confirming = false },
+        title = { Text(stringResource(R.string.game_mode_xbox_sign_out)) },
+        text = { Text(stringResource(R.string.game_mode_xbox_sign_out_confirm)) },
+        confirmButton = {
+            TextButton(onClick = {
+                it.palsoftware.pastiera.gaming.XboxCloud.signOut()
+                account.signedIn = false
+                account.confirming = false
+            }) { Text(stringResource(R.string.game_mode_xbox_sign_out)) }
+        },
+        dismissButton = { TextButton(onClick = { account.confirming = false }) { Text(stringResource(R.string.cancel)) } }
+    )
+    return account
 }
 
 /** A profile's game art, cropped square; its app's icon while there's none. */

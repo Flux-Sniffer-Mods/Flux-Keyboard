@@ -521,4 +521,8 @@
     <string name="stream_phone_screen">Phone screen</string>
     <string name="stream_phone_screen_switch">Phone screen in Moonlight</string>
     <string name="stream_phone_screen_description">Lists the phone\'s own screen in Moonlight, to show whatever is on it.</string>
+    <string name="game_mode_xbox_signed_in">Signed in to Xbox</string>
+    <string name="game_mode_xbox_sign_out">Log out of Xbox</string>
+    <string name="game_mode_xbox_sign_out_description">Signed in to Xbox in Flux Keyboard\'s player.</string>
+    <string name="game_mode_xbox_sign_out_confirm">Cloud games won\'t play in Flux Keyboard\'s player until you sign in again.</string>
 </resources>

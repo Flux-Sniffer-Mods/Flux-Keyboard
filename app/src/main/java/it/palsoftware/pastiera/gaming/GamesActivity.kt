@@ -105,9 +105,10 @@ class GamesActivity : ComponentActivity() {
                     ) {
                         androidx.compose.material3.OutlinedButton(onClick = { importing = true }) { Text(stringResource(R.string.game_mode_import)) }
                         androidx.compose.material3.OutlinedButton(onClick = { addingXbox = true }) { Text(stringResource(R.string.games_app_xbox)) }
-                        androidx.compose.material3.OutlinedButton(onClick = {
-                            runCatching { startActivity(XboxPlayActivity.signIn(this@GamesActivity)) }
-                        }) { Text(stringResource(R.string.game_mode_xbox_sign_in)) }
+                        val xbox = it.palsoftware.pastiera.settings.rememberXboxAccount()
+                        androidx.compose.material3.OutlinedButton(onClick = { xbox.click() }) {
+                            Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out else R.string.game_mode_xbox_sign_in))
+                        }
                         // Streaming to Moonlight, on or off at a tap
                         androidx.compose.material3.FilterChip(
                             selected = streaming,

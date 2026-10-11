@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.R
+
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
@@ -61,7 +63,14 @@ class XboxPlayActivity : Activity() {
         web.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) = inject()
-            override fun onPageFinished(view: WebView, url: String?) = inject()
+            override fun onPageFinished(view: WebView, url: String?) {
+                inject()
+                // Signed in and back on Xbox's own pages: the sign-in page's work is done
+                if (signingIn && url != null && url.startsWith("https://www.xbox.com/") && "/auth/" !in url && XboxCloud.signedIn()) {
+                    android.widget.Toast.makeText(this@XboxPlayActivity, R.string.game_mode_xbox_signed_in, android.widget.Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
 
             // The page's renderer died (out of memory, or a crash): only the player starts again,
             // not the whole app with the keyboard in it

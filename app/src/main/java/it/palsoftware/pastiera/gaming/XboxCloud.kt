@@ -39,6 +39,15 @@ object XboxCloud {
         android.webkit.CookieManager.getInstance().getCookie("https://www.xbox.com")?.contains("XBXXtk") == true
     }.getOrDefault(false)
 
+    /** Signs out of Xbox in Flux Keyboard's player: its cookies and the site's stored data gone. */
+    fun signOut() {
+        runCatching {
+            android.webkit.CookieManager.getInstance().removeAllCookies(null)
+            android.webkit.CookieManager.getInstance().flush()
+        }
+        runCatching { android.webkit.WebStorage.getInstance().deleteAllData() }
+    }
+
     /** Xbox Cloud Gaming itself, every game (its home page), as an entry of its own. */
     val HOME = CloudGame("", "Xbox Cloud Gaming", null)
 
