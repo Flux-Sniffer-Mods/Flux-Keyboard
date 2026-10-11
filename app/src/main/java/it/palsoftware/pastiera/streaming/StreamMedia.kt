@@ -13,6 +13,7 @@ import android.media.MediaFormat
 import android.media.projection.MediaProjection
 import android.os.Bundle
 import android.util.Log
+import it.palsoftware.pastiera.display.ExtraScreen
 import io.github.jaredmdobson.concentus.OpusApplication
 import io.github.jaredmdobson.concentus.OpusMSEncoder
 import io.github.jaredmdobson.concentus.OpusMode
@@ -54,8 +55,10 @@ internal class StreamPort(port: Int, private val client: InetAddress) {
 }
 
 /**
- * The phone's screen as H.264 for Moonlight: mirrored into a display of the size Moonlight asked
- * for (the screen fitted inside it), encoded as it changes, a keyframe whenever Moonlight needs one.
+ * The stream's picture as H.264 for Moonlight: the phone's screen mirrored into a display of the
+ * size Moonlight asked for (the screen fitted inside it), or a screen of its own
+ * ([ExtraScreen], Separate screen), switched either way mid-stream. Encoded as it changes, a
+ * keyframe whenever Moonlight needs one.
  */
 internal class StreamVideo(
     private val projection: MediaProjection,
@@ -68,12 +71,23 @@ internal class StreamVideo(
 ) {
     private val packetizer = StreamProtocol.VideoPacketizer(packetSize)
     private var codec: MediaCodec? = null
+    /** The mirror: made once (Android allows one per capture), its encoder swapped as it's used. */
     private var display: VirtualDisplay? = null
     @Volatile private var running = false
+    @Volatile private var separate = false
     private var config = ByteArray(0)
     private var frameIndex = 0
 
+    private val screenFrames = ExtraScreen.Frames { type, data, pts ->
+        if (separate) send(type == ExtraScreen.TYPE_CONFIG, type == ExtraScreen.TYPE_KEYFRAME, data, pts)
+    }
+
+    /** The phone's screen, mirrored. */
+    @Synchronized
     fun start(dpi: Int) {
+        separate = false
+        ExtraScreen.removeFrames(screenFrames)
+        if (codec != null) return
         val format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height).apply {
             setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
             setInteger(MediaFormat.KEY_BIT_RATE, bitrateKbps * 1000)
@@ -92,48 +106,74 @@ internal class StreamVideo(
         encoder.start()
         codec = encoder
         running = true
-        display = projection.createVirtualDisplay(
-            "Moonlight", width, height, dpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, surface, null, null
-        )
+        display?.setSurface(surface) ?: run {
+            display = projection.createVirtualDisplay(
+                "Moonlight", width, height, dpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, surface, null, null
+            )
+        }
         Thread({ drain(encoder) }, "StreamVideo").apply { priority = Thread.MAX_PRIORITY; start() }
+        keyframe()
+    }
+
+    /** The extra screen's own picture instead of the mirror (it's open, at this stream's size). */
+    @Synchronized
+    fun useScreen() {
+        stopMirror()
+        separate = true
+        ExtraScreen.addFrames(screenFrames)
     }
 
     /** A keyframe next, for a client starting or catching up after a loss. */
     fun keyframe() {
-        runCatching { codec?.setParameters(Bundle().apply { putInt(MediaCodec.PARAMETER_KEY_REQUEST_SYNC_FRAME, 0) }) }
+        if (separate) ExtraScreen.keyframe()
+        else runCatching { codec?.setParameters(Bundle().apply { putInt(MediaCodec.PARAMETER_KEY_REQUEST_SYNC_FRAME, 0) }) }
     }
 
     private fun drain(encoder: MediaCodec) {
         val info = MediaCodec.BufferInfo()
-        while (running) {
+        while (running && codec === encoder) {
             val index = try { encoder.dequeueOutputBuffer(info, 100_000) } catch (e: IllegalStateException) { break }
             if (index < 0) continue
             val buffer = encoder.getOutputBuffer(index)
             if (buffer != null && info.size > 0) {
                 val data = ByteArray(info.size)
                 buffer.position(info.offset); buffer.get(data)
-                if (info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0) {
-                    // SPS and PPS: sent again before every keyframe
-                    config = data
-                } else {
-                    val key = info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0
-                    val frame = if (key) config + data else data
-                    val timestamp = (info.presentationTimeUs * 9 / 100).toInt()
-                    frameIndex++
-                    for (packet in packetizer.packetize(frame, frameIndex, key, timestamp)) port.send(packet)
-                }
+                send(info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0,
+                    info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0, data, info.presentationTimeUs)
             }
             runCatching { encoder.releaseOutputBuffer(index, false) }
         }
     }
 
+    @Synchronized
+    private fun send(isConfig: Boolean, key: Boolean, data: ByteArray, ptsUs: Long) {
+        if (isConfig) {
+            // SPS and PPS: sent again before every keyframe
+            config = data
+            return
+        }
+        val frame = if (key) config + data else data
+        val timestamp = (ptsUs * 9 / 100).toInt()
+        frameIndex++
+        for (packet in packetizer.packetize(frame, frameIndex, key, timestamp)) port.send(packet)
+    }
+
+    private fun stopMirror() {
+        val encoder = codec ?: return
+        codec = null
+        runCatching { display?.setSurface(null) }
+        runCatching { encoder.stop() }
+        runCatching { encoder.release() }
+    }
+
+    @Synchronized
     fun stop() {
         running = false
+        separate = false
+        ExtraScreen.removeFrames(screenFrames)
+        stopMirror()
         runCatching { display?.release() }
         display = null
-        runCatching { codec?.stop() }
-        runCatching { codec?.release() }
-        codec = null
     }
 }
 

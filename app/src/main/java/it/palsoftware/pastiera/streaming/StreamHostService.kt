@@ -23,6 +23,10 @@ class StreamHostService : Service() {
             StreamHost.endStream()
             return START_STICKY
         }
+        if (intent?.action == ACTION_SCREEN) {
+            StreamHost.toggleScreen()
+            return START_STICKY
+        }
         val notification = notification(this)
         val data = intent?.takeIf { it.action == ACTION_CAPTURE }?.let {
             @Suppress("DEPRECATION")
@@ -60,6 +64,7 @@ class StreamHostService : Service() {
         private const val KEY_ENABLED = "stream_host_enabled"
         private const val ACTION_CAPTURE = "capture"
         private const val ACTION_END = "end"
+        private const val ACTION_SCREEN = "screen"
 
         /**
          * The service's notification: the phone listed in Moonlight, or while a game streams,
@@ -86,13 +91,23 @@ class StreamHostService : Service() {
                 android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
             )
             val game = StreamHost.streamingGame
-            return builder
+            builder
                 .setContentTitle(if (game != null) context.getString(R.string.stream_now_game, game) else context.getString(R.string.stream_now))
                 .setContentText(context.getString(R.string.stream_now_to, device))
                 .setContentIntent(ask)
                 .addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.stream_end), end).build())
-                // The game's on-screen keys, placed while it streams
-                .addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys),
+            val session = StreamHost.session
+            if (session != null && session.canSeparate()) {
+                // The game between the phone's screen and a screen of its own
+                val toggle = android.app.PendingIntent.getService(
+                    context, 5, Intent(context, StreamHostService::class.java).setAction(ACTION_SCREEN),
+                    android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+                )
+                builder.addAction(android.app.Notification.Action.Builder(null,
+                    context.getString(if (session.separate) R.string.stream_screen_to_mirror else R.string.stream_screen_to_separate), toggle).build())
+            }
+            // The game's on-screen keys, placed while it streams
+            return builder.addAction(android.app.Notification.Action.Builder(null, context.getString(R.string.game_mode_place_keys),
                     it.palsoftware.pastiera.gaming.GameMode.placeKeys(context)).build())
                 .build()
         }
@@ -127,6 +142,19 @@ class StreamHostService : Service() {
             val rows = choice.toIntOrNull()?.takeIf { it in 240..4320 } ?: height
             return ((rows.toLong() * width / height).toInt() and 1.inv()) to (rows and 1.inv())
         }
+
+        private const val KEY_SCREEN_MODE = "stream_screen_mode"
+        /** The phone's screen mirrored (the default), the game on a screen of its own, or Android's desktop there. */
+        const val SCREEN_MIRROR = "mirror"
+        const val SCREEN_SEPARATE = "separate"
+        const val SCREEN_DESKTOP = "desktop"
+        val SCREEN_MODES = listOf(SCREEN_MIRROR, SCREEN_SEPARATE, SCREEN_DESKTOP)
+
+        fun screenMode(context: Context): String =
+            SettingsManager.getPreferences(context).getString(KEY_SCREEN_MODE, SCREEN_MIRROR)?.takeIf { it in SCREEN_MODES } ?: SCREEN_MIRROR
+
+        fun setScreenMode(context: Context, value: String) =
+            SettingsManager.getPreferences(context).edit().putString(KEY_SCREEN_MODE, value).apply()
 
         private const val KEY_PHONE_SCREEN = "stream_phone_screen"
 

@@ -240,6 +240,23 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 Text(stringResource(R.string.stream_resolution_description), style = MaterialTheme.typography.bodySmall)
             }
         }
+        // Where the game plays while it streams: the phone's screen mirrored, or one of its own
+        if (streaming) {
+            val modes = it.palsoftware.pastiera.streaming.StreamHostService.SCREEN_MODES
+            val names = listOf(
+                stringResource(R.string.stream_screen_mirror),
+                stringResource(R.string.stream_screen_separate),
+                stringResource(R.string.stream_screen_desktop)
+            )
+            var mode by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.screenMode(context)) }
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                ChoiceRow(stringResource(R.string.stream_screen), names[modes.indexOf(mode).coerceAtLeast(0)], names) { index ->
+                    mode = modes[index]
+                    it.palsoftware.pastiera.streaming.StreamHostService.setScreenMode(context, mode)
+                }
+                Text(stringResource(R.string.stream_screen_description), style = MaterialTheme.typography.bodySmall)
+            }
+        }
         if (paired > 0) FluxActionRow(
             linkId = null,
             icon = "\u2715",

@@ -300,6 +300,15 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Xbox Cloud Gaming in Flux Keyboard's own player (sizes change while it plays: kept) -->
         <activity
+            android:name=".gaming.ExtraScreenActivity"
+            android:exported="false"
+            android:label="@string/extra_screen_title"
+            android:taskAffinity="it.palsoftware.pastiera.screen"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|navigation"
+            android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen" />
+
+        <activity
             android:name=".gaming.XboxPlayActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"

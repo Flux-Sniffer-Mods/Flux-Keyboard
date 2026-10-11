@@ -61,7 +61,7 @@ object GameMode {
         // Placed while streaming: kept apart from the phone's own placing
         val stored = GameProfiles.all(context).firstOrNull { it.id == updated.id } ?: updated
         // Only the placing is kept: the profile in use may carry a game's own screen over its app's
-        val saved = if (streamSize != null) stored.copy(streamStickZones = updated.stickZones, streamTaps = updated.taps)
+        val saved = if (streamed()) stored.copy(streamStickZones = updated.stickZones, streamTaps = updated.taps)
             else stored.copy(stickZones = updated.stickZones, taps = updated.taps)
         GameProfiles.save(context, saved)
         if (profile?.id == updated.id) profile = GameTouchEditor.withDefaults(updated)
@@ -319,12 +319,13 @@ object GameMode {
         if (profile == null) {
             if (!AdbShell.available()) return
             startInput(context)
+            extra?.let { send("Z ${it.id}"); screenW = it.width.toFloat(); screenH = it.height.toFloat(); send("S ${it.width} ${it.height}") }
         }
         activeId = chosen.id
         // A game plays with its app's settings unless it has its own (Dolphin: Wii or GameCube)
         val next = GameProfiles.effective(context, chosen)
         // GameHub's and GameNative's games: their on-screen sticks, unless placed by hand
-        profile = GameTouchEditor.withDefaults(next.forScreen(streamSize != null))
+        profile = GameTouchEditor.withDefaults(next.forScreen(streamed()))
         // With root, a profile can play as a real controller, plugged in while it's on
         val wantsPad = next.controller && it.palsoftware.pastiera.adb.RootShell.active
         if (wantsPad != pad) {
@@ -443,10 +444,49 @@ object GameMode {
             val id = activeId
             val current = profile
             if (id != null && current != null) GameProfiles.all(app).firstOrNull { it.id == id }?.let { chosen ->
-                profile = GameTouchEditor.withDefaults(GameProfiles.effective(app, chosen).forScreen(size != null))
+                profile = GameTouchEditor.withDefaults(GameProfiles.effective(app, chosen).forScreen(streamed()))
             }
         }
     }
+
+    /** A screen of its own the game plays on (Separate screen), else null: the phone's. */
+    @Volatile private var extra: it.palsoftware.pastiera.display.ExtraScreen.Screen? = null
+
+    /** Placed and played for a stream: mirrored at the stream's shape, or on a screen of its own. */
+    private fun streamed() = streamSize != null || extra != null
+
+    /**
+     * The game on [screen], a screen of its own (null: back on the phone's): keys and the
+     * trackpad aimed there, placed for the stream, and the phone's screen left as it is.
+     */
+    fun extraScreen(context: Context, screen: it.palsoftware.pastiera.display.ExtraScreen.Screen?) {
+        val app = context.applicationContext
+        worker.execute {
+            if (extra?.id == screen?.id) return@execute
+            extra = screen
+            if (screen != null) {
+                screen(app, requestedScreen)
+                screenW = screen.width.toFloat(); screenH = screen.height.toFloat()
+                send("Z ${screen.id}")
+            } else {
+                send("Z 0")
+                val size = android.graphics.Point()
+                @Suppress("DEPRECATION")
+                app.getSystemService(android.view.WindowManager::class.java)?.defaultDisplay?.getRealSize(size)
+                screenW = minOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
+                screenH = maxOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
+                screen(app, requestedScreen)
+            }
+            send("S ${screenW.toInt()} ${screenH.toInt()}")
+            val id = activeId
+            if (id != null && profile != null) GameProfiles.all(app).firstOrNull { it.id == id }?.let { chosen ->
+                profile = GameTouchEditor.withDefaults(GameProfiles.effective(app, chosen).forScreen(streamed()))
+            }
+        }
+    }
+
+    /** The screen of its own the game plays on now, if any. */
+    fun extraScreen(): it.palsoftware.pastiera.display.ExtraScreen.Screen? = extra
 
     /**
      * Moves the screen from the choice applied to [mode]: undoes the old one, then does the new,
@@ -457,9 +497,10 @@ object GameMode {
         requestedScreen = requested
         requestedHeight = height
         // Streaming to Moonlight comes first: the screen at the stream's size, whatever the game's choice
-        val stream = streamSize
-        val mode = if (stream != null) ScreenMode.SIDEWAYS else requested
-        val size = if (stream == null) height else null
+        // On a screen of its own, the phone's is left as it is
+        val stream = streamSize.takeIf { extra == null }
+        val mode = if (extra != null) ScreenMode.APP else if (stream != null) ScreenMode.SIDEWAYS else requested
+        val size = if (stream == null && extra == null) height else null
         if (mode == appliedScreen && stream == appliedStream && size == appliedHeight) return
         val prefs = pending(context)
         val commands = mutableListOf<String>()
@@ -506,6 +547,12 @@ object GameMode {
         AdbShell.run(commands.joinToString("; "), 5_000)
         // Taps follow the screen's shape
         val shape = sideways
+        val own = extra
+        if (own != null) {
+            screenW = own.width.toFloat(); screenH = own.height.toFloat()
+            send("S ${own.width} ${own.height}")
+            return
+        }
         if (shape != null) {
             screenW = shape.first.toFloat(); screenH = shape.second.toFloat()
         } else if (restoredSize != null) {

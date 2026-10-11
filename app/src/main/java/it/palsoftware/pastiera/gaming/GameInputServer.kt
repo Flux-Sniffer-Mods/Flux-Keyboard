@@ -20,12 +20,14 @@ import android.view.MotionEvent
  * - `X text`: text typed (Base64, UTF-8), as the keys that type it
  * - `B 1|0 1|2`: the left or right mouse button down or up
  * - `T d|m|u id x y`: a finger down, moved or up on the screen (several at once)
+ * - `Z id`: the display the events are for (0, the phone's own; another, a screen of its own)
  * - `G 1|0`: a real controller plugged in or out (run as root: see [VirtualGamepad])
  * - `P index 1|0`: one of its buttons down or up; `H up down left right` (1 or 0): its d-pad;
  *   `A lx ly rx ry`: its sticks, -1 to 1
  */
 object GameInputServer {
     private var deviceId = 0
+    private var displayId = 0
     private var gamepad: VirtualGamepad? = null
     private var width = 1080f
     private var height = 1080f
@@ -47,7 +49,11 @@ object GameInputServer {
             Class.forName("android.hardware.input.InputManagerGlobal").getMethod("getInstance").invoke(null)
         }.getOrNull() ?: Class.forName("android.hardware.input.InputManager").getMethod("getInstance").invoke(null)
         val inject = manager!!.javaClass.getMethod("injectInputEvent", InputEvent::class.java, Int::class.javaPrimitiveType)
-        val send: (InputEvent) -> Unit = { event -> inject.invoke(manager, event, 0) }
+        val target = runCatching { InputEvent::class.java.getMethod("setDisplayId", Int::class.javaPrimitiveType) }.getOrNull()
+        val send: (InputEvent) -> Unit = { event ->
+            if (displayId != 0) target?.invoke(event, displayId)
+            inject.invoke(manager, event, 0)
+        }
         send
     }
 
@@ -66,6 +72,7 @@ object GameInputServer {
         val now = SystemClock.uptimeMillis()
         when (parts.firstOrNull()) {
             "D" -> deviceId = parts[1].toInt()
+            "Z" -> displayId = parts[1].toInt()
             "S" -> {
                 val w = parts[1].toFloat(); val h = parts[2].toFloat()
                 // The mouse starts in the middle, and goes back there when the screen turns

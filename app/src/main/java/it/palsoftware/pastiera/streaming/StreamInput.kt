@@ -23,6 +23,16 @@ internal class StreamInput(private val context: Context, private val streamWidth
     private val pads = HashMap<Int, Input.Pad>()
     private var padPlugged = false
     private val root = RootShell.active
+    /** A screen of its own the input goes to (Separate screen), else the phone's. */
+    @Volatile private var screen: it.palsoftware.pastiera.display.ExtraScreen.Screen? = null
+
+    /** Input to [target] from now on (null: the phone's screen). */
+    fun target(target: it.palsoftware.pastiera.display.ExtraScreen.Screen?) {
+        screen = target
+        send("Z ${target?.id ?: 0}")
+        val (w, h) = screen()
+        send("S $w $h")
+    }
 
     fun start() {
         val apk = context.applicationInfo.sourceDir
@@ -72,6 +82,7 @@ internal class StreamInput(private val context: Context, private val streamWidth
 
     /** The screen's size the way it's turned now. */
     private fun screen(): Pair<Int, Int> {
+        screen?.let { return it.width to it.height }
         val size = Point()
         @Suppress("DEPRECATION")
         context.getSystemService(DisplayManager::class.java)?.getDisplay(Display.DEFAULT_DISPLAY)?.getRealSize(size)

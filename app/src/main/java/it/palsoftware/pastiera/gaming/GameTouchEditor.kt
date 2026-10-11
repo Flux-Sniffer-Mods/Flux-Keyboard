@@ -18,6 +18,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.display.ExtraScreen
+import it.palsoftware.pastiera.display.ScreenPreview
 
 /**
  * Placing keys and the trackpad's sticks on a game's own on-screen controls (games that only take
@@ -45,13 +47,20 @@ object GameTouchEditor {
         }
         val windows = context.getSystemService(WindowManager::class.java) ?: return
         val metrics = context.resources.displayMetrics
-        val width = metrics.widthPixels.toFloat()
-        val height = metrics.heightPixels.toFloat()
         val density = metrics.density
+        // The game on a screen of its own: placed on a live picture of it, fitted on the phone's
+        val screen = GameMode.extraScreen()?.takeIf { own -> own.id == ExtraScreen.current?.id }
+        val scale = screen?.let { minOf(metrics.widthPixels.toFloat() / it.width, metrics.heightPixels.toFloat() / it.height) }
+        val width = if (screen != null && scale != null) screen.width * scale else metrics.widthPixels.toFloat()
+        val height = if (screen != null && scale != null) screen.height * scale else metrics.heightPixels.toFloat()
+        val left = (metrics.widthPixels - width) / 2
+        val top = (metrics.heightPixels - height) / 2
         val chips = mutableListOf<View>()
         val zones = profile.stickZones.toMutableMap()
         val taps = profile.taps.toMutableMap()
-        val frame = FrameLayout(context).apply { setBackgroundColor(0x55000000) }
+        val frame = FrameLayout(context).apply { setBackgroundColor(if (screen != null) Color.BLACK else 0x55000000) }
+        if (screen != null) frame.addView(ScreenPreview(context).apply { alpha = 0.85f },
+            FrameLayout.LayoutParams(width.toInt(), height.toInt()).apply { leftMargin = left.toInt(); topMargin = top.toInt() })
         root = frame
         open = true
 
@@ -68,9 +77,9 @@ object GameTouchEditor {
                     setStroke((2 * density).toInt(), Color.WHITE)
                 }
                 layoutParams = FrameLayout.LayoutParams(sizePx, sizePx)
-                this.x = x * width - sizePx / 2f
-                this.y = y * height - sizePx / 2f
-                setOnTouchListener(dragger(sizePx) { cx, cy -> onMoved(cx / width, cy / height) })
+                this.x = left + x * width - sizePx / 2f
+                this.y = top + y * height - sizePx / 2f
+                setOnTouchListener(dragger(sizePx) { cx, cy -> onMoved((cx - left) / width, (cy - top) / height) })
             }
 
         // Nothing placed yet: the sticks where the launcher draws them

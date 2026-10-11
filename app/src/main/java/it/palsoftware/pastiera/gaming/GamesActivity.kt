@@ -126,6 +126,18 @@ class GamesActivity : ComponentActivity() {
                         stringResource(if (page == Page.APPS) R.string.games_app_launchers else R.string.games_app_title),
                         style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).padding(start = 4.dp)
                     )
+                    // A game on a screen of its own: its page, which gives it the phone's keys and touch
+                    var screenOpen by remember { mutableStateOf(it.palsoftware.pastiera.display.ExtraScreen.current != null) }
+                    androidx.compose.runtime.DisposableEffect(Unit) {
+                        val watcher = { screenOpen = it.palsoftware.pastiera.display.ExtraScreen.current != null }
+                        it.palsoftware.pastiera.display.ExtraScreen.watch(watcher)
+                        onDispose { it.palsoftware.pastiera.display.ExtraScreen.unwatch(watcher) }
+                    }
+                    if (screenOpen) androidx.compose.material3.AssistChip(
+                        onClick = { it.palsoftware.pastiera.streaming.StreamHost.openScreenPage(this@GamesActivity) },
+                        label = { Text(stringResource(R.string.extra_screen_title)) },
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
                     // Streaming to Moonlight, on or off at a tap
                     androidx.compose.material3.FilterChip(
                         selected = streaming,

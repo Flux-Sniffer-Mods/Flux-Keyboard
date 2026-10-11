@@ -518,6 +518,14 @@
     <string name="stream_end">End stream</string>
     <string name="stream_end_title">End the stream?</string>
     <string name="stream_keep">Keep streaming</string>
+    <string name="stream_screen">Game plays on</string>
+    <string name="stream_screen_mirror">The phone\'s screen</string>
+    <string name="stream_screen_separate">A screen of its own</string>
+    <string name="stream_screen_desktop">Android desktop</string>
+    <string name="stream_screen_description">The phone\'s screen is mirrored to the Moonlight client. A screen of its own leaves the phone free: the game plays on a separate screen made for the client, and the Games app shows it on the phone, with your keys, touch and placed keys going to it. Android desktop does the same with Android 16\'s desktop on that screen (desktop windowing on in Developer options). Switch either way mid-stream from the streaming notification.</string>
+    <string name="stream_screen_to_separate">Separate screen</string>
+    <string name="stream_screen_to_mirror">Mirror phone</string>
+    <string name="extra_screen_title">Game screen</string>
     <string name="stream_phone_screen">Phone screen</string>
     <string name="stream_phone_screen_switch">Phone screen in Moonlight</string>
     <string name="stream_phone_screen_description">Lists the phone\'s own screen in Moonlight, to show whatever is on it.</string>

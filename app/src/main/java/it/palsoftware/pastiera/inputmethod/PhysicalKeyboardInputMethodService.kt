@@ -4332,7 +4332,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
-        playerEditor = it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront && info?.packageName == packageName
+        playerEditor = playerInFront() && info?.packageName == packageName
         if (playerEditor) { super.onStartInput(info, restarting); return }
         AutoCapitalizeHelper.debugPackage = info?.packageName
         info?.let {
@@ -5942,7 +5942,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (playerEditor) null else super.getCurrentInputConnection()
 
     private fun playerOwnsInput(info: EditorInfo? = currentInputEditorInfo): Boolean =
-        playerEditor || (it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront && info?.packageName == packageName)
+        playerEditor || (playerInFront() && info?.packageName == packageName)
+
+    /** Flux Keyboard's own player, or its page for a game's own screen, is in front. */
+    private fun playerInFront(): Boolean =
+        it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront || it.palsoftware.pastiera.gaming.ExtraScreenActivity.inFront
 
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         // Keycode 0 types nothing: the keyboard light's wake-up key, passed straight on

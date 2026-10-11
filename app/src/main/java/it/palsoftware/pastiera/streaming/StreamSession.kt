@@ -3,6 +3,8 @@ package it.palsoftware.pastiera.streaming
 import android.content.Context
 import android.media.projection.MediaProjection
 import android.util.Log
+import it.palsoftware.pastiera.display.ExtraScreen
+import it.palsoftware.pastiera.gaming.GameMode
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.InetAddress
@@ -24,8 +26,20 @@ internal class StreamSession(
     private var fps: Int,
     private val key: ByteArray,
     private val keyId: Int,
+    /** The game, to open or move onto a screen of its own (null: the phone's own screen streams). */
+    private val game: android.content.Intent?,
+    /** The phone's screen size while it's mirrored (null: left as it is). */
+    private val phoneSize: Pair<Int, Int>?,
+    separateAtStart: Boolean,
     private val onEnded: (StreamSession) -> Unit
 ) {
+    /** The game on a screen of its own (Separate screen) rather than the phone's mirrored. */
+    @Volatile var separate = separateAtStart && game != null
+        private set
+    /** The game's app, for gaming mode while it's on a screen of its own. */
+    val gamePackage: String? get() = game?.component?.packageName ?: game?.`package`
+    /** Switching screens and starting the stream wait on the shell: off the threads that ask. */
+    private val worker = java.util.concurrent.Executors.newSingleThreadExecutor()
     private var rtsp: ServerSocket? = null
     private var control: StreamControl? = null
     private var videoPort: StreamPort? = null
@@ -63,7 +77,18 @@ internal class StreamSession(
     /** The phone's screen, captured for this session (asked for when it was launched). */
     fun onProjection(capture: MediaProjection) {
         projection = capture
-        media()
+        worker.execute { media() }
+    }
+
+    /** Can switch screens: a game, and the shell to make a screen. */
+    fun canSeparate(): Boolean = game != null && it.palsoftware.pastiera.adb.AdbShell.available()
+
+    /** The game on a screen of its own ([on]), or the phone's mirrored. */
+    fun setSeparate(on: Boolean) = worker.execute {
+        if (ended || on == separate || (on && !canSeparate())) return@execute
+        separate = on
+        if (video != null) applyScreen()
+        StreamHostService.refresh(context)
     }
 
     /** Ends the session: Moonlight is told when [notify] (it didn't leave by itself). */
@@ -72,12 +97,19 @@ internal class StreamSession(
         ended = true
         if (notify) runCatching { control?.end() }
         runCatching { video?.stop() }; video = null
+        // The game back on the phone (the screen's closing moves it)
+        if (separate) {
+            ExtraScreen.close()
+            GameMode.extraScreen(context, null)
+            StreamHost.closeScreenPage()
+        }
         runCatching { audio?.stop() }; audio = null
         runCatching { input?.stop() }; input = null
         runCatching { projection?.stop() }; projection = null
         runCatching { control?.stop() }; control = null
         runCatching { rtsp?.close() }; rtsp = null
         videoPort?.close(); audioPort?.close()
+        worker.shutdown()
         onEnded(this)
     }
 
@@ -101,7 +133,7 @@ internal class StreamSession(
                 else StreamProtocol.rtspResponse(request.cseq, listOf("Session" to "DEADBEEFCAFE;timeout = 90", "Transport" to "server_port=$port"))
             }
             "ANNOUNCE" -> { announce(request.body); StreamProtocol.rtspResponse(request.cseq) }
-            "PLAY" -> { playing = true; media(); StreamProtocol.rtspResponse(request.cseq) }
+            "PLAY" -> { playing = true; worker.execute { media() }; StreamProtocol.rtspResponse(request.cseq) }
             else -> StreamProtocol.rtspResponse(request.cseq, status = "404 NOT FOUND")
         }
         out.write(response)
@@ -153,15 +185,53 @@ internal class StreamSession(
         val capture = projection ?: return
         if (!playing || video != null || ended) return
         runCatching {
-            video = StreamVideo(capture, width, height, fps, bitrateKbps, packetSize, videoPort!!).also {
-                it.start(context.resources.displayMetrics.densityDpi)
-                it.keyframe()
-            }
+            video = StreamVideo(capture, width, height, fps, bitrateKbps, packetSize, videoPort!!)
             audio = StreamAudio(capture, channels, packetMs, if (audioEncrypted) key else null, keyId, audioPort!!).also { it.start() }
             input = StreamInput(context, width, height).also { it.start() }
+            applyScreen()
         }.onFailure {
             Log.w(TAG, "stream couldn't start: $it")
             end()
+        }
+    }
+
+    /**
+     * The picture from the screen chosen now: a screen of its own at the stream's size with the
+     * game moved onto it, the phone left as it is and showing the Games app's page for it; or
+     * the phone's screen mirrored, the game back on it.
+     */
+    private fun applyScreen() {
+        val stream = video ?: return
+        val dpi = context.resources.displayMetrics.densityDpi
+        val app = game
+        if (separate && app != null) {
+            val screen = ExtraScreen.current?.takeIf { it.width == (width and 1.inv()) && it.height == (height and 1.inv()) }
+                ?: ExtraScreen.open(context, width, height, fps, bitrateKbps, StreamHostService.screenMode(context) == StreamHostService.SCREEN_DESKTOP)
+            if (screen == null) {
+                Log.w(TAG, "no screen of its own: mirroring")
+                separate = false
+                stream.start(dpi)
+                GameMode.streaming(context, phoneSize)
+                return
+            }
+            // Gaming mode on the new screen first, so the phone's isn't turned in between
+            GameMode.extraScreen(context, screen)
+            GameMode.streaming(context, null)
+            stream.useScreen()
+            input?.target(screen)
+            ExtraScreen.bring(context, app, screen.id)
+            StreamHost.openScreenPage(context)
+        } else {
+            val wasSeparate = ExtraScreen.current != null
+            if (wasSeparate && app != null) ExtraScreen.bring(context, app, 0)
+            GameMode.streaming(context, phoneSize)
+            GameMode.extraScreen(context, null)
+            input?.target(null)
+            stream.start(dpi)
+            if (wasSeparate) {
+                StreamHost.closeScreenPage()
+                ExtraScreen.close()
+            }
         }
     }
 

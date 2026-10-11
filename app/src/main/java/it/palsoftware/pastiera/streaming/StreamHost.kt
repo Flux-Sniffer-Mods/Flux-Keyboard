@@ -226,6 +226,25 @@ object StreamHost {
         currentGame = 0
     }
 
+    /** Switches the game between the phone's screen (mirrored) and a screen of its own. */
+    fun toggleScreen() {
+        val current = session ?: return
+        current.setSeparate(!current.separate)
+    }
+
+    /**
+     * The Games app's page for the game's own screen, on the phone: it shows that screen and
+     * gives it the phone's keys and touch.
+     */
+    fun openScreenPage(context: Context) {
+        runCatching {
+            context.startActivity(android.content.Intent(context, it.palsoftware.pastiera.gaming.ExtraScreenActivity::class.java)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP))
+        }
+    }
+
+    fun closeScreenPage() = it.palsoftware.pastiera.gaming.ExtraScreenActivity.finishOpen()
+
     /** The game to open once the screen can be captured (once). */
     fun takeLaunch(): android.content.Intent? = pendingLaunch.also { pendingLaunch = null }
 
@@ -248,7 +267,15 @@ object StreamHost {
             return root("", 403, "Not allowed on the phone")
         }
         session?.end()
-        val started = StreamSession(app, client, appId, width, height, fps, key, keyId) { ended ->
+        // A game's own streaming resolution first, else streaming's: the phone's screen at the
+        // Moonlight client's shape and that size while mirrored (the phone's own screen stays as it is)
+        val choice = game?.let { g -> runCatching { it.palsoftware.pastiera.gaming.GameProfiles.effective(app, g).streamHeight }.getOrNull() }
+            ?.toString() ?: StreamHostService.resolution(app)
+        val phoneSize = if (phoneScreen) null else StreamHostService.phoneSize(choice, width, height)
+        val gameIntent = if (game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
+        val separate = gameIntent != null && StreamHostService.screenMode(app) != StreamHostService.SCREEN_MIRROR &&
+            it.palsoftware.pastiera.adb.AdbShell.available()
+        val started = StreamSession(app, client, appId, width, height, fps, key, keyId, gameIntent, phoneSize, separate) { ended ->
             if (session === ended) {
                 session = null
                 streamingGame = null
@@ -268,14 +295,11 @@ object StreamHost {
         streamingGame = title
         streamingDevice = nameOf(cert) ?: client.hostAddress
         StreamHostService.refresh(app)
-        // The game drawn at the Moonlight client's shape and the chosen size, ahead of gaming mode's own choice
-        // (the phone's own screen stays as it is, fitted into the stream)
-        // A game's own streaming resolution first, else streaming's
-        val choice = game?.let { g -> runCatching { it.palsoftware.pastiera.gaming.GameProfiles.effective(app, g).streamHeight }.getOrNull() }
-            ?.toString() ?: StreamHostService.resolution(app)
-        if (!phoneScreen) it.palsoftware.pastiera.gaming.GameMode.streaming(app, StreamHostService.phoneSize(choice, width, height))
-        // A resumed game is already open; a new one opens once the screen can be captured
-        pendingLaunch = if (resume || game == null) null else GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
+        // Mirrored: the phone at the stream's shape now, the game opened once the screen can be
+        // captured (a resumed one is already open). On a screen of its own, the session opens
+        // or moves it there once the screen's made.
+        if (!separate && phoneSize != null) it.palsoftware.pastiera.gaming.GameMode.streaming(app, phoneSize)
+        pendingLaunch = if (resume || separate) null else gameIntent
         capture()
         return root("<sessionUrl0>rtsp://${localIp()}:${StreamSession.RTSP_PORT}</sessionUrl0><gamesession>1</gamesession>" +
             (if (resume) "<resume>1</resume>" else ""))

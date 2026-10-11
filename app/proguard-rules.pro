@@ -38,3 +38,4 @@
 -keep class it.palsoftware.pastiera.adb.shell.ShellServer { public static void main(java.lang.String[]); }
 -keep class io.github.muntashirakon.adb.** { *; }
 -keep class it.palsoftware.pastiera.gaming.GameInputServer { public static void main(java.lang.String[]); }
+-keep class it.palsoftware.pastiera.display.ExtraScreenServer { public static void main(java.lang.String[]); }
