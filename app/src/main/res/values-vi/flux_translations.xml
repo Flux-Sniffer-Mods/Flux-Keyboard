@@ -1788,7 +1788,7 @@
     <string name="root_backlight_fine_title">Điều chỉnh độ sáng mịn</string>
     <string name="root_backlight_fine_description">Qua root, đèn LED bàn phím được đặt theo các bước riêng của chúng, mịn hơn nhiều so với các mức thông thường của đèn, nên khi theo độ sáng màn hình sẽ không có bậc nhảy thấy được.</string>
     <string name="game_mode_controller">Tay cầm thật</string>
-    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật, theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là Y X B A, Q E là nút vai và Z C là cò (cả phím âm lượng: lên là trái, xuống là phải), Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần phải và nửa trái bàn di chuột là cần trái. Các phím khác đến game nguyên trạng.</string>
+    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật, theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là Y X B A, Q E là nút vai và Z C là cò, Tăng âm lượng là vai trái, Giảm âm lượng là cò trái, phím cạnh màu đỏ là cò phải (đặt hành động riêng của nó thành không trong cài đặt điện thoại), Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần phải và nửa trái bàn di chuột là cần trái. Các phím khác đến game nguyên trạng.</string>
     <string name="game_mode_apps_section">Ứng dụng</string>
     <string name="game_mode_games_section">Game</string>
     <string name="game_mode_own_settings">Cài đặt riêng</string>
@@ -1830,4 +1830,9 @@
     <string name="game_first_start_play">Chơi</string>
     <string name="games_app_new">Mới: chưa thiết lập</string>
     <string name="game_mode_found_short">Tìm thấy: dùng cài đặt của %1$s cho đến khi thiết lập</string>
+    <string name="game_detect_channel">Game tìm thấy</string>
+    <string name="game_detect_title">%1$s có vẻ là game</string>
+    <string name="game_detect_text">Thiết lập chế độ chơi game cho nó: tay cầm, màn hình và cần analog.</string>
+    <string name="game_detect_not_game">Để sau</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming nhận tay cầm hoặc điều khiển cảm ứng của nó, không nhận phím: có root, bật tay cầm thật; không có, đặt phím và cần analog lên điều khiển cảm ứng từ thông báo của chế độ chơi game.</string>
 </resources>

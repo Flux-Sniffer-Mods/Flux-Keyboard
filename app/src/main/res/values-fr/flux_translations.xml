@@ -1800,7 +1800,7 @@
     <string name="root_backlight_fine_title">Gradation fine</string>
     <string name="root_backlight_fine_description">Avec le root, les LED du clavier sont réglées dans leurs propres pas, bien plus fins que les niveaux habituels de l\'éclairage, pour suivre la luminosité de l\'écran sans paliers visibles.</string>
     <string name="game_mode_controller">Vraie manette</string>
-    <string name="game_mode_controller_description">Avec root, le mode jeu branche une manette que le jeu voit comme réelle, avec la disposition de Flux Keyboard : W A S D sa croix, O K P L ses Y X B A, Q E ses gâchettes hautes et Z C ses basses (les touches de volume aussi : haut la gauche, bas la droite), Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche. Les autres touches arrivent au jeu telles quelles.</string>
+    <string name="game_mode_controller_description">Avec root, le mode jeu branche une manette que le jeu voit comme réelle, avec la disposition de Flux Keyboard : W A S D sa croix, O K P L ses Y X B A, Q E ses gâchettes hautes et Z C ses basses, Volume + la gâchette haute gauche et Volume − la basse gauche, la touche latérale rouge la gâchette droite (réglez sa propre action sur aucune dans les paramètres du téléphone), Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche. Les autres touches arrivent au jeu telles quelles.</string>
     <string name="game_mode_apps_section">Applis</string>
     <string name="game_mode_games_section">Jeux</string>
     <string name="game_mode_own_settings">Réglages propres</string>
@@ -1842,4 +1842,9 @@
     <string name="game_first_start_play">Jouer</string>
     <string name="games_app_new">Nouveau : pas encore configuré</string>
     <string name="game_mode_found_short">Trouvé : utilise les réglages de %1$s jusqu\'à sa configuration</string>
+    <string name="game_detect_channel">Jeux trouvés</string>
+    <string name="game_detect_title">%1$s ressemble à un jeu</string>
+    <string name="game_detect_text">Configurez le mode jeu pour lui : manette, écran et sticks.</string>
+    <string name="game_detect_not_game">Pas maintenant</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming prend une manette ou ses commandes tactiles, pas des touches : avec root, activez la vraie manette ; sans, placez touches et sticks sur ses commandes tactiles depuis la notification du mode jeu.</string>
 </resources>

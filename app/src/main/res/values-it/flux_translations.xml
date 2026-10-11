@@ -1305,7 +1305,7 @@
     <string name="root_backlight_fine_title">Regolazione fine</string>
     <string name="root_backlight_fine_description">Con root, i LED della tastiera vengono impostati nei loro passi, molto più fini dei normali livelli della luce, così seguire la luminosità dello schermo non ha scatti visibili.</string>
     <string name="game_mode_controller">Controller vero</string>
-    <string name="game_mode_controller_description">Con root, la modalità gioco collega un controller che il gioco vede come reale, con il layout di Flux Keyboard: W A S D la croce, O K P L i suoi Y X B A, Q E i dorsali e Z C i grilletti (anche i tasti del volume: su il sinistro, giù il destro), Spazio Start, Invio Select, Backspace Home, F e H la pressione degli stick, J B N M lo stick destro e la metà sinistra del trackpad quello sinistro. Gli altri tasti arrivano al gioco così come sono.</string>
+    <string name="game_mode_controller_description">Con root, la modalità gioco collega un controller che il gioco vede come reale, con il layout di Flux Keyboard: W A S D la croce, O K P L i suoi Y X B A, Q E i dorsali e Z C i grilletti, Volume su il dorsale sinistro e Volume giù il grilletto sinistro, il tasto laterale rosso il grilletto destro (imposta la sua azione su nessuna nelle impostazioni del telefono), Spazio Start, Invio Select, Backspace Home, F e H la pressione degli stick, J B N M lo stick destro e la metà sinistra del trackpad quello sinistro. Gli altri tasti arrivano al gioco così come sono.</string>
     <string name="game_mode_apps_section">App</string>
     <string name="game_mode_games_section">Giochi</string>
     <string name="game_mode_own_settings">Impostazioni proprie</string>
@@ -1347,4 +1347,9 @@
     <string name="game_first_start_play">Gioca</string>
     <string name="games_app_new">Nuovo: non ancora configurato</string>
     <string name="game_mode_found_short">Trovato: usa le impostazioni di %1$s finché non lo configuri</string>
+    <string name="game_detect_channel">Giochi trovati</string>
+    <string name="game_detect_title">%1$s sembra un gioco</string>
+    <string name="game_detect_text">Configura la modalità gioco per lui: controller, schermo e stick.</string>
+    <string name="game_detect_not_game">Non ora</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming accetta un controller o i suoi comandi touch, non i tasti: con root attiva il controller reale; senza, posiziona tasti e stick sui comandi touch dalla notifica della modalità gioco.</string>
 </resources>

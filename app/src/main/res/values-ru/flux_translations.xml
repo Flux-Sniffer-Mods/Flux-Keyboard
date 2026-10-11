@@ -1806,7 +1806,7 @@
     <string name="root_backlight_fine_title">Точная яркость</string>
     <string name="root_backlight_fine_description">Через root светодиоды клавиатуры задаются их собственными шагами, гораздо мельче обычных уровней подсветки, поэтому следование за яркостью экрана идёт без видимых ступеней.</string>
     <string name="game_mode_controller">Настоящий контроллер</string>
-    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий, с раскладкой Flux Keyboard: W A S D — крестовина, O K P L — его Y X B A, Q E — бамперы, Z C — триггеры (и клавиши громкости: вверх — левый, вниз — правый), Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый. Остальные клавиши попадают в игру как есть.</string>
+    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий, с раскладкой Flux Keyboard: W A S D — крестовина, O K P L — его Y X B A, Q E — бамперы, Z C — триггеры, Громкость вверх — левый бампер, Громкость вниз — левый триггер, красная боковая клавиша — правый триггер (выключите её собственное действие в настройках телефона), Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый. Остальные клавиши попадают в игру как есть.</string>
     <string name="game_mode_apps_section">Приложения</string>
     <string name="game_mode_games_section">Игры</string>
     <string name="game_mode_own_settings">Свои настройки</string>
@@ -1848,4 +1848,9 @@
     <string name="game_first_start_play">Играть</string>
     <string name="games_app_new">Новая: ещё не настроена</string>
     <string name="game_mode_found_short">Найдена: использует настройки %1$s, пока не настроена</string>
+    <string name="game_detect_channel">Найденные игры</string>
+    <string name="game_detect_title">%1$s похоже на игру</string>
+    <string name="game_detect_text">Настройте для неё игровой режим: контроллер, экран и стики.</string>
+    <string name="game_detect_not_game">Не сейчас</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming принимает контроллер или своё сенсорное управление, не клавиши: с root включите настоящий контроллер; без root разместите клавиши и стики на его сенсорном управлении из уведомления игрового режима.</string>
 </resources>

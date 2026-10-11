@@ -1806,7 +1806,7 @@
     <string name="root_backlight_fine_title">Dokładne przyciemnianie</string>
     <string name="root_backlight_fine_description">Przez roota diody klawiatury są ustawiane w ich własnych krokach, dużo drobniejszych niż zwykłe poziomy podświetlenia, więc podążanie za jasnością ekranu nie ma widocznych skoków.</string>
     <string name="game_mode_controller">Prawdziwy kontroler</string>
-    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy, w układzie Flux Keyboard: W A S D krzyżak, O K P L jego Y X B A, Q E przyciski barkowe i Z C spusty (także klawisze głośności: w górę lewy, w dół prawy), Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa. Pozostałe klawisze trafiają do gry bez zmian.</string>
+    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy, w układzie Flux Keyboard: W A S D krzyżak, O K P L jego Y X B A, Q E przyciski barkowe i Z C spusty, Głośniej lewy barkowy, Ciszej lewy spust, czerwony klawisz boczny prawy spust (ustaw jego własną akcję na brak w ustawieniach telefonu), Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa. Pozostałe klawisze trafiają do gry bez zmian.</string>
     <string name="game_mode_apps_section">Aplikacje</string>
     <string name="game_mode_games_section">Gry</string>
     <string name="game_mode_own_settings">Własne ustawienia</string>
@@ -1848,4 +1848,9 @@
     <string name="game_first_start_play">Graj</string>
     <string name="games_app_new">Nowa: jeszcze nieskonfigurowana</string>
     <string name="game_mode_found_short">Znaleziona: używa ustawień %1$s, dopóki jej nie skonfigurujesz</string>
+    <string name="game_detect_channel">Znalezione gry</string>
+    <string name="game_detect_title">%1$s wygląda na grę</string>
+    <string name="game_detect_text">Skonfiguruj dla niej tryb gry: kontroler, ekran i gałki.</string>
+    <string name="game_detect_not_game">Nie teraz</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming przyjmuje kontroler lub swoje sterowanie dotykowe, nie klawisze: z rootem włącz prawdziwy kontroler; bez niego umieść klawisze i gałki na sterowaniu dotykowym z powiadomienia trybu gry.</string>
 </resources>

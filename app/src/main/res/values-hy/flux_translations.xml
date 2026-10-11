@@ -1794,7 +1794,7 @@
     <string name="root_backlight_fine_title">Նուրբ մթագնում</string>
     <string name="root_backlight_fine_description">Root-ի միջոցով ստեղնաշարի LED-ները կարգավորվում են իրենց սեփական քայլերով՝ շատ ավելի նուրբ, քան լուսավորության սովորական մակարդակները, ուստի էկրանի պայծառությանը հետևելը տեսանելի աստիճաններ չունի։</string>
     <string name="game_mode_controller">Իրական կարգավորիչ</string>
-    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական, Flux Keyboard-ի դասավորությամբ. W A S D՝ խաչաձև կոճակ, O K P L՝ Y X B A, Q E՝ վերին ձգանները, Z C՝ ստորինները (նաև ձայնի ստեղները՝ վերը ձախը, վարը աջը), Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։ Մյուս ստեղները խաղին հասնում են այնպես, ինչպես կան։</string>
+    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական, Flux Keyboard-ի դասավորությամբ. W A S D՝ խաչաձև կոճակ, O K P L՝ Y X B A, Q E՝ վերին ձգանները, Z C՝ ստորինները, ձայնի բարձրացումը՝ ձախ վերինը, իջեցումը՝ ձախ ստորինը, կարմիր կողային ստեղնը՝ աջ ստորինը (հեռախոսի կարգավորումներում դրա գործողությունը դրեք ոչ մի), Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։ Մյուս ստեղները խաղին հասնում են այնպես, ինչպես կան։</string>
     <string name="game_mode_apps_section">Հավելվածներ</string>
     <string name="game_mode_games_section">Խաղեր</string>
     <string name="game_mode_own_settings">Սեփական կարգավորումներ</string>
@@ -1836,4 +1836,9 @@
     <string name="game_first_start_play">Խաղալ</string>
     <string name="games_app_new">Նոր. դեռ կարգավորված չէ</string>
     <string name="game_mode_found_short">Գտնված. խաղում է %1$s-ի կարգավորումներով, մինչև կարգավորվի</string>
+    <string name="game_detect_channel">Գտնված խաղեր</string>
+    <string name="game_detect_title">%1$s-ը խաղի է նման</string>
+    <string name="game_detect_text">Կարգավորեք խաղային ռեժիմը դրա համար՝ կարգավորիչ, էկրան և լծակներ։</string>
+    <string name="game_detect_not_game">Ոչ հիմա</string>
+    <string name="game_mode_xbox_note">Xbox Cloud Gaming-ն ընդունում է կարգավորիչ կամ իր հպումային կառավարումը, ոչ ստեղներ. root-ով միացրեք իրական կարգավորիչը, առանց root-ի՝ ստեղներն ու լծակները դրեք նրա հպումային կառավարման վրա խաղային ռեժիմի ծանուցումից։</string>
 </resources>
