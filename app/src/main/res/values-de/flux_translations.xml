@@ -1277,4 +1277,6 @@
     <string name="game_mode_trackpad_test_running">Aufnahme… bewege zwei Finger auf dem Trackpad</string>
     <string name="game_mode_trackpad_test_description">Falls sich beide Sticks nicht zusammen bewegen: tippen, dann %1$d Sekunden lang je einen Finger auf jeder Trackpad-Hälfte bewegen. Gespeichert unter Download/Flux Keyboard/trackpad-test.txt zum Teilen.</string>
     <string name="game_mode_trackpad_test_result">Höchstens gleichzeitig erkannte Finger: %1$d (%2$s).\n\nGespeichert unter Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Spiele im Schnellstarter</string>
+    <string name="game_mode_quick_launcher_description">Die in den Spieleordnern gefundenen Spiele und die Spiele mit Profil, aus dem Schnellstarter gestartet wie über ihre Startbildschirm-Verknüpfung.</string>
 </resources>

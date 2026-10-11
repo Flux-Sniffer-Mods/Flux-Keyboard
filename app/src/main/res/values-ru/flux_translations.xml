@@ -1824,4 +1824,6 @@
     <string name="game_mode_trackpad_test_running">Запись… двигайте двумя пальцами по тачпаду</string>
     <string name="game_mode_trackpad_test_description">Если два стика не двигаются вместе: нажмите и %1$d секунд двигайте по пальцу на каждой половине тачпада. Сохраняется в Download/Flux Keyboard/trackpad-test.txt, чтобы поделиться.</string>
     <string name="game_mode_trackpad_test_result">Больше всего пальцев одновременно: %1$d (%2$s).\n\nСохранено в Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Игры в быстром запуске</string>
+    <string name="game_mode_quick_launcher_description">Игры из папок игр и игры с профилем запускаются из быстрого запуска так же, как с ярлыка на главном экране.</string>
 </resources>

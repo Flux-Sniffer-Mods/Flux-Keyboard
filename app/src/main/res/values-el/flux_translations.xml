@@ -1186,4 +1186,6 @@
     <string name="game_mode_trackpad_test_running">Καταγραφή… κινήστε δύο δάχτυλα στο trackpad</string>
     <string name="game_mode_trackpad_test_description">Όταν οι δύο μοχλοί δεν κινούνται μαζί: πατήστε και για %1$d δευτερόλεπτα κινήστε ένα δάχτυλο σε κάθε μισό του trackpad. Αποθηκεύεται στο Download/Flux Keyboard/trackpad-test.txt για κοινοποίηση.</string>
     <string name="game_mode_trackpad_test_result">Περισσότερα δάχτυλα ταυτόχρονα: %1$d (%2$s).\n\nΑποθηκεύτηκε στο Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Παιχνίδια στη γρήγορη εκκίνηση</string>
+    <string name="game_mode_quick_launcher_description">Τα παιχνίδια που βρέθηκαν στους φακέλους παιχνιδιών και όσα έχουν προφίλ, ξεκινούν από τη γρήγορη εκκίνηση όπως από τη συντόμευση της αρχικής οθόνης.</string>
 </resources>

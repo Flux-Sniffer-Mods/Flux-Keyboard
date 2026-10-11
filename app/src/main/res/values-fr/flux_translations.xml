@@ -1818,4 +1818,6 @@
     <string name="game_mode_trackpad_test_running">Enregistrement… bougez deux doigts sur le pavé tactile</string>
     <string name="game_mode_trackpad_test_description">Si les deux sticks ne bougent pas ensemble : touchez, puis pendant %1$d secondes bougez un doigt sur chaque moitié du pavé tactile. Enregistré dans Download/Flux Keyboard/trackpad-test.txt, à partager.</string>
     <string name="game_mode_trackpad_test_result">Maximum de doigts à la fois : %1$d (%2$s).\n\nEnregistré dans Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Jeux dans le lanceur rapide</string>
+    <string name="game_mode_quick_launcher_description">Les jeux trouvés dans les dossiers de jeux et ceux qui ont un profil, lancés depuis le lanceur rapide comme depuis leur raccourci d\'écran d\'accueil.</string>
 </resources>

@@ -1323,4 +1323,6 @@
     <string name="game_mode_trackpad_test_running">Registrazione… muovi due dita sul trackpad</string>
     <string name="game_mode_trackpad_test_description">Per quando i due stick non si muovono insieme: tocca, poi per %1$d secondi muovi un dito su ogni metà del trackpad. Salvato in Download/Flux Keyboard/trackpad-test.txt, da condividere.</string>
     <string name="game_mode_trackpad_test_result">Massimo di dita insieme: %1$d (%2$s).\n\nSalvato in Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Giochi nell\'avvio rapido</string>
+    <string name="game_mode_quick_launcher_description">I giochi trovati nelle cartelle dei giochi e quelli con un profilo, avviati dall\'avvio rapido come dalla loro scorciatoia nella schermata Home.</string>
 </resources>

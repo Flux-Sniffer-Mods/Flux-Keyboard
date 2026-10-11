@@ -1806,4 +1806,6 @@
     <string name="game_mode_trackpad_test_running">Đang ghi… di chuyển hai ngón trên bàn di chuột</string>
     <string name="game_mode_trackpad_test_description">Khi hai cần analog không di chuyển cùng lúc: chạm, rồi trong %1$d giây di chuyển mỗi ngón trên mỗi nửa bàn di chuột. Lưu vào Download/Flux Keyboard/trackpad-test.txt để chia sẻ.</string>
     <string name="game_mode_trackpad_test_result">Số ngón nhiều nhất cùng lúc: %1$d (%2$s).\n\nĐã lưu vào Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Game trong trình khởi chạy nhanh</string>
+    <string name="game_mode_quick_launcher_description">Các game tìm thấy trong thư mục game và các game có hồ sơ, mở từ trình khởi chạy nhanh giống như từ lối tắt trên màn hình chính.</string>
 </resources>

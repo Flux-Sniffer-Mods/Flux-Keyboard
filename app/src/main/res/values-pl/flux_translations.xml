@@ -1824,4 +1824,6 @@
     <string name="game_mode_trackpad_test_running">Nagrywanie… poruszaj dwoma palcami na gładziku</string>
     <string name="game_mode_trackpad_test_description">Gdy obie gałki nie ruszają się razem: dotknij, a potem przez %1$d sekund poruszaj palcem na każdej połowie gładzika. Zapisane w Download/Flux Keyboard/trackpad-test.txt do udostępnienia.</string>
     <string name="game_mode_trackpad_test_result">Najwięcej palców naraz: %1$d (%2$s).\n\nZapisano w Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Gry w szybkim starcie</string>
+    <string name="game_mode_quick_launcher_description">Gry znalezione w folderach gier i gry z profilem, uruchamiane z szybkiego startu tak jak ze skrótu na ekranie głównym.</string>
 </resources>

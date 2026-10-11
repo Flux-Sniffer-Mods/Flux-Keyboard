@@ -1818,4 +1818,6 @@
     <string name="game_mode_trackpad_test_running">Grabando… mueve dos dedos en el trackpad</string>
     <string name="game_mode_trackpad_test_description">Para cuando los dos sticks no se mueven a la vez: toca y durante %1$d segundos mueve un dedo en cada mitad del trackpad. Se guarda en Download/Flux Keyboard/trackpad-test.txt para compartir.</string>
     <string name="game_mode_trackpad_test_result">Máximo de dedos a la vez: %1$d (%2$s).\n\nGuardado en Download/Flux Keyboard/trackpad-test.txt.</string>
+    <string name="game_mode_quick_launcher">Juegos en el lanzador rápido</string>
+    <string name="game_mode_quick_launcher_description">Los juegos encontrados en las carpetas de juegos y los que tienen perfil, abiertos desde el lanzador rápido igual que desde su acceso directo en la pantalla de inicio.</string>
 </resources>

@@ -1812,4 +1812,6 @@
     <string name="game_mode_trackpad_test_running">Գրանցում… շարժեք երկու մատ թաչփադի վրա</string>
     <string name="game_mode_trackpad_test_description">Երբ երկու լծակները միասին չեն շարժվում. հպեք, ապա %1$d վայրկյան շարժեք մեկական մատ թաչփադի յուրաքանչյուր կեսին։ Պահվում է Download/Flux Keyboard/trackpad-test.txt-ում՝ կիսվելու համար։</string>
     <string name="game_mode_trackpad_test_result">Միաժամանակ տեսած առավելագույն մատներ՝ %1$d (%2$s)։\n\nՊահված է Download/Flux Keyboard/trackpad-test.txt-ում։</string>
+    <string name="game_mode_quick_launcher">Խաղերը արագ գործարկիչում</string>
+    <string name="game_mode_quick_launcher_description">Խաղերի պանակներում գտնված խաղերը և պրոֆիլ ունեցող խաղերը գործարկվում են արագ գործարկիչից այնպես, ինչպես գլխավոր էկրանի դյուրանցումից։</string>
 </resources>
