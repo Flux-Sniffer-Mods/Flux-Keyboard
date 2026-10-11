@@ -58,6 +58,17 @@ class GamesActivity : ComponentActivity() {
         var reload by remember { mutableStateOf(0) }
         // Its settings, as in Flux Keyboard's Gaming mode (opened straight away when asked to)
         var editing by remember { mutableStateOf(editId?.let { id -> GameProfiles.all(this).firstOrNull { it.id == id } }) }
+        // Adding a game, as in Gaming mode: a launcher's or folder's, one by hand, or an Xbox cloud game
+        var importing by remember { mutableStateOf(false) }
+        var addingOwn by remember { mutableStateOf(false) }
+        var addingXbox by remember { mutableStateOf(false) }
+        val pick: (GameLibrary.Game) -> Unit = { game ->
+            importing = false; addingOwn = false; addingXbox = false
+            editing = GameProfiles.profileFor(this, game)
+        }
+        if (importing) it.palsoftware.pastiera.settings.GameImportDialog(onPicked = pick, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
+        if (addingOwn) it.palsoftware.pastiera.settings.OwnGameDialog(onAdded = pick, onDismiss = { addingOwn = false })
+        if (addingXbox) it.palsoftware.pastiera.settings.XboxCloudDialog(XboxCloud.app(this), onPicked = pick, onDismiss = { addingXbox = false })
         LaunchedEffect(reload) { entries = withContext(Dispatchers.IO) { games(this@GamesActivity) }.map { (profile, intent) -> Entry(profile.name, profile, intent) } }
         editing?.let { profile ->
             androidx.activity.compose.BackHandler { editing = null }
@@ -77,6 +88,15 @@ class GamesActivity : ComponentActivity() {
             LazyColumn(modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 16.dp)) {
                 item {
                     Text(stringResource(R.string.games_app_title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(vertical = 16.dp))
+                }
+                item {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        androidx.compose.material3.OutlinedButton(onClick = { importing = true }) { Text(stringResource(R.string.game_mode_import)) }
+                        androidx.compose.material3.OutlinedButton(onClick = { addingXbox = true }) { Text(stringResource(R.string.games_app_xbox)) }
+                    }
+                    androidx.compose.material3.TextButton(onClick = { startActivity(XboxPlayActivity.signIn(this@GamesActivity)) }) {
+                        Text(stringResource(R.string.game_mode_xbox_sign_in))
+                    }
                 }
                 if (list != null && list.isEmpty()) item { Text(stringResource(R.string.games_app_empty)) }
                 items(list.orEmpty(), key = { it.name + it.profile.packages }) { entry ->

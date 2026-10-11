@@ -30,6 +30,12 @@ class XboxPlayActivity : Activity() {
     private val trackpad = FloatArray(4)
     private val held = mutableSetOf<Int>()
 
+    /** Signing in: a plain browser page, keys typing, no controller. */
+    private val signingIn by lazy { intent.getBooleanExtra(EXTRA_SIGN_IN, false) }
+
+    /** A text field has the focus in the page: keys type there, not play. */
+    @Volatile private var typing = false
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,13 +60,18 @@ class XboxPlayActivity : Activity() {
             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) = inject()
             override fun onPageFinished(view: WebView, url: String?) = inject()
         }
+        // The page says when a text field has the focus (a search, a sign-in form)
+        web.addJavascriptInterface(object {
+            @android.webkit.JavascriptInterface
+            fun typing(on: Boolean) { this@XboxPlayActivity.typing = on }
+        }, "FluxTyping")
         web.webChromeClient = object : WebChromeClient() {
             // The stream's audio and video: nothing asked of the phone beyond what playing needs
             override fun onPermissionRequest(request: PermissionRequest) {
                 request.grant(request.resources.filter { it == PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID }.toTypedArray())
             }
         }
-        web.loadUrl(intent.dataString?.takeIf { it.startsWith("https://www.xbox.com/") } ?: HOME)
+        web.loadUrl(if (signingIn) SIGN_IN else intent.dataString?.takeIf { it.startsWith("https://www.xbox.com/") } ?: HOME)
         // The page may be rebuilt as it moves between screens: the controller kept in it
         web.postDelayed(object : Runnable {
             override fun run() { inject(); web.postDelayed(this, 2_000) }
@@ -71,6 +82,7 @@ class XboxPlayActivity : Activity() {
         super.onResume()
         web.onResume()
         immersive()
+        if (signingIn) return
         val screen = GameProfiles.all(this).firstOrNull { p -> p.launch?.contains(intent.dataString ?: "\u0000") == true }?.screen
             ?: ScreenMode.SIDEWAYS
         GameMode.attachPlayer(this, screen) { sticks ->
@@ -80,7 +92,7 @@ class XboxPlayActivity : Activity() {
     }
 
     override fun onPause() {
-        GameMode.detachPlayer(this)
+        if (!signingIn) GameMode.detachPlayer(this)
         web.onPause()
         super.onPause()
     }
@@ -98,10 +110,15 @@ class XboxPlayActivity : Activity() {
         web.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     }
 
-    /** The page's controller, if it hasn't one yet. */
-    private fun inject() = web.evaluateJavascript(PAD_SCRIPT, null)
+    /** The page's controller, if it hasn't one yet, and word of text fields taking the focus. */
+    private fun inject() {
+        web.evaluateJavascript(TYPING_SCRIPT, null)
+        if (!signingIn) web.evaluateJavascript(PAD_SCRIPT, null)
+    }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // Signing in or typing in a field: keys type
+        if (signingIn || typing) return super.dispatchKeyEvent(event)
         val down = when (event.action) {
             KeyEvent.ACTION_DOWN -> true
             KeyEvent.ACTION_UP -> false
@@ -143,6 +160,27 @@ class XboxPlayActivity : Activity() {
 
     companion object {
         const val HOME = "https://www.xbox.com/play"
+        /** Xbox's own sign-in (a Microsoft account), back to cloud gaming after. */
+        const val SIGN_IN = "https://www.xbox.com/en-US/auth/msa?action=logIn&returnUrl=https%3A%2F%2Fwww.xbox.com%2Fplay"
+        private const val EXTRA_SIGN_IN = "sign_in"
+
+        /** The player as a plain browser page, to sign in to Xbox. */
+        fun signIn(context: android.content.Context): android.content.Intent =
+            android.content.Intent(context, XboxPlayActivity::class.java).putExtra(EXTRA_SIGN_IN, true)
+
+        /** Tells the player whenever a text field takes or loses the focus. */
+        private const val TYPING_SCRIPT = """(function(){
+  if (window.__fluxTyping || !window.FluxTyping) return;
+  window.__fluxTyping = true;
+  var check = function(){
+    var e = document.activeElement;
+    var on = !!e && (e.tagName === 'INPUT' || e.tagName === 'TEXTAREA' || e.isContentEditable);
+    FluxTyping.typing(on);
+  };
+  document.addEventListener('focusin', check, true);
+  document.addEventListener('focusout', function(){ setTimeout(check, 0); }, true);
+  check();
+})();"""
 
         /** Each control's button in the web's standard gamepad. */
         private val BUTTON_INDEX = mapOf(

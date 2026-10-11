@@ -461,4 +461,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming in Flux Keyboard\'s own player (xbox.com/play; the Xbox apps don\'t stream on phones), or any of its games, from its catalogue: each gets its own settings and starts straight into the game.</string>
     <string name="game_mode_xbox_search">Search</string>
     <string name="game_mode_xbox_none">The catalogue couldn\'t be read. Is the phone online, with offline mode off?</string>
+    <string name="game_mode_xbox_sign_in">Sign in to Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">Xbox\'s sign-in in Flux Keyboard\'s player, keys typing as usual. Signed in once, every cloud game plays.</string>
+    <string name="games_app_xbox">Xbox cloud game</string>
 </resources>

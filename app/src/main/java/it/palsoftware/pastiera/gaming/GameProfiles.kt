@@ -275,6 +275,23 @@ object GameProfiles {
         if (added.isNotEmpty()) saveAll(context, profiles + added)
     }
 
+    /**
+     * The game [game] picked to add: the one found already, else a new one (not saved yet),
+     * playing with its app's settings, made for the app if it has none (Flux Keyboard's own
+     * player has none).
+     */
+    fun profileFor(context: Context, game: GameLibrary.Game): GameProfile {
+        if (game.packageName != context.packageName) {
+            val pm = context.packageManager
+            val label = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(game.packageName, 0)).toString() }.getOrDefault(game.packageName)
+            ensureApp(context, game.packageName, label)
+        }
+        val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME)
+        return all(context).firstOrNull { it.isGame && it.launch == launch }
+            ?: newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
+                .copy(launch = launch, own = false)
+    }
+
     /** A found game set up (or played as it is): no longer asked about, its app's settings made. */
     fun confirm(context: Context, profile: GameProfile): GameProfile {
         // (Flux Keyboard's own player has no app settings of its own)

@@ -183,6 +183,13 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_xbox_add),
             description = stringResource(R.string.game_mode_xbox_add_description)
         ) { addingXbox = true }
+        // Signing in to Xbox: a plain browser page, keys typing
+        FluxActionRow(
+            linkId = null,
+            icon = "\u2192",
+            title = stringResource(R.string.game_mode_xbox_sign_in),
+            description = stringResource(R.string.game_mode_xbox_sign_in_description)
+        ) { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) }
         // Where games are found: Flux Keyboard's folders, ES-DE's, and your own
         SettingsSectionDivider(stringResource(R.string.game_mode_folders_section))
         FluxActionRow(
@@ -242,14 +249,9 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val pickGame: (GameLibrary.Game) -> Unit = { game ->
         importing = false
         addingOwn = false
-        // The game plays with its app's settings, made for the app if it has none yet (Flux
-        // Keyboard's own player has none)
-        if (game.packageName != context.packageName) GameProfiles.ensureApp(context, game.packageName, appLabel(context, game.packageName))
+        // Already found by itself: that one, set up now; else a new one with its app's settings
+        editing = GameProfiles.profileFor(context, game)
         refresh()
-        // Already found by itself: that one, set up now
-        val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME)
-        editing = GameProfiles.all(context).firstOrNull { it.isGame && it.launch == launch } ?: GameProfiles.newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
-            .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME), own = false)
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
     if (importing) GameImportDialog(onPicked = pickGame, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
@@ -277,7 +279,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
  * or emulator you added it to, and its file (an emulator's game, a launcher's exported file) or ID.
  */
 @Composable
-private fun OwnGameDialog(onAdded: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
+internal fun OwnGameDialog(onAdded: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val folders = it.palsoftware.pastiera.gaming.GameFolders
     val players = remember { folders.installedPlayers(context) }
@@ -379,7 +381,7 @@ private fun appLabel(context: android.content.Context, pkg: String): String = ru
 
 /** The games of the game launchers installed, one tap making a profile for it. */
 @Composable
-private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onByHand: () -> Unit, onDismiss: () -> Unit) {
+internal fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onByHand: () -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     var games by remember { mutableStateOf<List<GameLibrary.Game>?>(null) }
     LaunchedEffect(Unit) {
@@ -666,7 +668,7 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
 
 /** Xbox Cloud Gaming's games, searched by name: one picked becomes a game of its own. */
 @Composable
-private fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
+internal fun XboxCloudDialog(pkg: String, onPicked: (GameLibrary.Game) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     var games by remember { mutableStateOf<List<it.palsoftware.pastiera.gaming.XboxCloud.CloudGame>?>(null) }
     var query by remember { mutableStateOf("") }
