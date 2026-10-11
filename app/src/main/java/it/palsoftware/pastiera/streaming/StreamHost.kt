@@ -267,6 +267,21 @@ object StreamHost {
         }.apply { isDaemon = true; start() }
     }
 
+    /**
+     * The failsafe after Flux Keyboard ended mid-stream (a crash, or Android closing it): with no
+     * stream running, the phone's screen size and turning, Android's notification setting and
+     * its desktop setting go back to how they were. Run as Flux Keyboard starts and again once
+     * the shell answers (blocking).
+     */
+    fun recover(context: Context) {
+        if (session != null) return
+        if (!::app.isInitialized) app = context.applicationContext
+        if (!it.palsoftware.pastiera.adb.AdbShell.available()) return
+        it.palsoftware.pastiera.gaming.GameMode.recover(app)
+        if (SettingsManager.getPreferences(app).contains(KEY_SCREEN_SHARE_RESTORE)) notificationsWhileStreaming(false)
+        it.palsoftware.pastiera.display.ExtraScreen.recover(app)
+    }
+
     /** Switches the game between the phone's screen (mirrored) and a screen of its own. */
     fun toggleScreen() {
         val current = session ?: return

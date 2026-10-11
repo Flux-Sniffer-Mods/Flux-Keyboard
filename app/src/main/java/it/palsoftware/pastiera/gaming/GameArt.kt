@@ -46,6 +46,9 @@ object GameArt {
     fun loadPortrait(context: Context, profile: GameProfile): Bitmap? {
         uprightFile(context, profile).takeIf { it.length() > 0 }?.let { file -> BitmapFactory.decodeFile(file.path)?.let { return it } }
         custom(context, profile)?.let { return portrait(it) }
+        // Xbox Cloud Gaming itself (its library, no one game): the XCloud Games tile's art
+        val launch = profile.launch
+        if (launch != null && launch.contains("xbox.com/play") && XboxCloud.idOf(launch) == null) xboxTile(context)?.let { return it }
         val file = File(dir(context), profile.id + "-portrait" + (if (key.isEmpty()) "" else "-sgdb") + ".img")
         if (file.exists()) return if (file.length() > 0) BitmapFactory.decodeFile(file.path) else load(context, profile)?.let(::portrait)
         if (!SettingsManager.isOfflineMode(context)) {

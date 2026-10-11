@@ -111,6 +111,9 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        // A stream that ended with the app (a crash): the phone's screen put back
+        val app = applicationContext
+        Thread { runCatching { it.palsoftware.pastiera.streaming.StreamHost.recover(app) } }.start()
         // Keyboard swipes: taken from apps while a field is typed in, handed to the keyboard
         ClicksAccessibilityKeyBridge.onTrackpadCaptureChanged = { captured -> claimTrackpad(captured) }
         claimTrackpad(ClicksAccessibilityKeyBridge.trackpadCaptured)

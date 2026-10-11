@@ -645,6 +645,9 @@
     },
     {
       "text": "Games app: it opens from Moonlight whether or not Games in the app list is on."
+    },
+    {
+      "text": "Xbox Cloud Gaming's own entry (in the XCloud catalogue, the Games app and Moonlight) shows the XCloud Games tile's art."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -898,6 +901,9 @@
     },
     {
       "text": "A game on a separate screen fills it, even with Developer options' Enable freeform windows on secondary display on (Android desktop still opens as a desktop)."
+    },
+    {
+      "text": "If Flux Keyboard closes mid-stream (a crash), the phone's screen size and turning, its notification setting and its desktop setting go back to normal as soon as it starts again."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

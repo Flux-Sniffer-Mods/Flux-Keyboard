@@ -273,6 +273,11 @@ object ExtraScreen {
         }
     }
 
+    /** Android's desktop setting back as it was, after Flux Keyboard ended with a screen open (blocking). */
+    fun recover(context: Context) {
+        if (current == null) desktopMode(context.applicationContext, false)
+    }
+
     // ---- Apps on the screen ----
 
     /**

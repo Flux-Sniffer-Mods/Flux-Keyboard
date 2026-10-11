@@ -2070,6 +2070,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         ClicksAccessibilityKeyBridge.register(this)
         // Moonlight's Wake starts streaming when it isn't running
         it.palsoftware.pastiera.streaming.StreamWake.start(this)
+        // A stream that ended with the app (a crash): the phone's screen put back, now and once the shell answers
+        Thread { runCatching { it.palsoftware.pastiera.streaming.StreamHost.recover(this) } }.start()
+        it.palsoftware.pastiera.adb.shell.BuiltInShell.addStartListener {
+            runCatching { it.palsoftware.pastiera.streaming.StreamHost.recover(this) }
+        }
         // The Games app's entry in the app list as its setting says
         Thread { runCatching { it.palsoftware.pastiera.gaming.GamesActivity.syncLauncher(this) } }.start()
         // Root: the keyboard backlight follows the screen, when set (the Root page)

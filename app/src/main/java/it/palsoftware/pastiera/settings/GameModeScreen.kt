@@ -838,9 +838,12 @@ internal fun XboxCloudDialog(
 @Composable
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 private fun CloudGameTile(game: it.palsoftware.pastiera.gaming.XboxCloud.CloudGame, onLongClick: () -> Unit = {}, onClick: () -> Unit) {
+    val context = LocalContext.current
     val image by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, game.art) {
-        value = game.art?.takeIf { it.isNotEmpty() }?.let { url ->
-            withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameArt.thumbnail(url)?.asImageBitmap() }
+        value = withContext(Dispatchers.IO) {
+            // Xbox Cloud Gaming itself: the XCloud Games tile's art, as in the Games app
+            if (game.id.isEmpty()) runCatching { it.palsoftware.pastiera.gaming.GameArt.xboxTile(context)?.asImageBitmap() }.getOrNull()
+            else game.art?.takeIf { it.isNotEmpty() }?.let { url -> it.palsoftware.pastiera.gaming.GameArt.thumbnail(url)?.asImageBitmap() }
         }
     }
     val shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
