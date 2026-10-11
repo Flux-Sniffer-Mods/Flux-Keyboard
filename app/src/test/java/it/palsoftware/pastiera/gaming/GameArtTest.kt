@@ -26,4 +26,13 @@ class GameArtTest {
         )
         assertEquals(true, GameArt.libretro("Nintendo - Wii", "Game: Name").endsWith("Game_%20Name.png"))
     }
+
+    @Test
+    fun moonlightArtIsAlwaysUpright() {
+        for ((w, h) in listOf(512 to 512, 460 to 215, 600 to 900, 160 to 224)) {
+            val art = GameArt.portrait(android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888))
+            assertEquals(600, art.width)
+            assertEquals(900, art.height)
+        }
+    }
 }

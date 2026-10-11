@@ -290,10 +290,10 @@ object StreamHost {
         "<App><IsHdrSupported>0</IsHdrSupported><AppTitle>${escape(profile.name)}</AppTitle><ID>$id</ID></App>"
     })
 
-    /** A game's box art, for Moonlight's game picker. */
+    /** A game's upright box art, for Moonlight's game picker. */
     private fun asset(out: OutputStream, appId: String?) {
         val profile = games().firstOrNull { it.first.toString() == appId }?.second
-        val art = profile?.let { runCatching { GameArt.load(app, it) }.getOrNull() }
+        val art = profile?.let { runCatching { GameArt.loadPortrait(app, it) }.getOrNull() }
         val bytes = art?.let { bitmap ->
             java.io.ByteArrayOutputStream().also { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }.toByteArray()
         } ?: ByteArray(0)

@@ -12,13 +12,15 @@ import java.io.File
  * A profile's game art for the list: a Steam game's from Steam's own store images (GameNative
  * and GameHub), a Wii, GameCube or 3DS game's cover from GameTDB by its game ID, else the
  * libretro thumbnail sets' box art by the game file's name. Fetched once and kept; none in
- * offline mode, or when nothing is found (the app's icon shows then).
+ * offline mode, or when nothing is found (the app's icon shows then). Art the user picks for a
+ * game comes before all of these.
  */
 object GameArt {
     private fun dir(context: Context) = File(context.filesDir, "game_art")
 
     /** The art for [profile], fetched if need be (blocking); null when there's none. */
     fun load(context: Context, profile: GameProfile): Bitmap? {
+        custom(context, profile)?.let { return it }
         // Kept apart with SteamGridDB's key, so art not found without it is looked for again
         val file = File(dir(context), profile.id + (if (key.isEmpty()) "" else "-sgdb") + ".img")
         // An empty file: looked for before and nothing found
@@ -37,10 +39,89 @@ object GameArt {
         return null
     }
 
-    /** Forgets [profile]'s art, so it's looked for again. */
+    /**
+     * [profile]'s art upright, as Moonlight's game picker shows it (2:3): its own upright art
+     * where there is some, else its art over a dimmed, filled copy of itself.
+     */
+    fun loadPortrait(context: Context, profile: GameProfile): Bitmap? {
+        custom(context, profile)?.let { return portrait(it) }
+        val file = File(dir(context), profile.id + "-portrait" + (if (key.isEmpty()) "" else "-sgdb") + ".img")
+        if (file.exists()) return if (file.length() > 0) BitmapFactory.decodeFile(file.path) else load(context, profile)?.let(::portrait)
+        if (!SettingsManager.isOfflineMode(context)) {
+            dir(context).mkdirs()
+            for (url in steamGridDbPortrait(profile) + urls(context, profile)) {
+                val bitmap = fetch(url)?.let { BitmapFactory.decodeByteArray(it, 0, it.size) } ?: continue
+                if (bitmap.width >= bitmap.height) continue
+                val upright = portrait(bitmap)
+                file.outputStream().use { upright.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+                return upright
+            }
+            file.writeBytes(ByteArray(0))
+        }
+        return load(context, profile)?.let(::portrait)
+    }
+
+    /** [art] at 600×900: cropped when it's nearly that shape, else fitted over a dimmed fill of itself. */
+    internal fun portrait(art: Bitmap): Bitmap {
+        val out = Bitmap.createBitmap(PORTRAIT_W, PORTRAIT_H, Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(out)
+        val paint = android.graphics.Paint(android.graphics.Paint.FILTER_BITMAP_FLAG)
+        val ratio = art.width.toFloat() / art.height
+        val target = PORTRAIT_W.toFloat() / PORTRAIT_H
+        fun fill() {
+            val scale = maxOf(PORTRAIT_W.toFloat() / art.width, PORTRAIT_H.toFloat() / art.height)
+            val w = art.width * scale
+            val h = art.height * scale
+            canvas.drawBitmap(art, null, android.graphics.RectF((PORTRAIT_W - w) / 2, (PORTRAIT_H - h) / 2, (PORTRAIT_W + w) / 2, (PORTRAIT_H + h) / 2), paint)
+        }
+        if (kotlin.math.abs(ratio - target) / target < 0.15f) {
+            fill()
+            return out
+        }
+        fill()
+        canvas.drawColor(0xB0000000.toInt())
+        val scale = minOf(PORTRAIT_W.toFloat() / art.width, PORTRAIT_H.toFloat() / art.height)
+        val w = art.width * scale
+        val h = art.height * scale
+        canvas.drawBitmap(art, null, android.graphics.RectF((PORTRAIT_W - w) / 2, (PORTRAIT_H - h) / 2, (PORTRAIT_W + w) / 2, (PORTRAIT_H + h) / 2), paint)
+        return out
+    }
+
+    /** Forgets [profile]'s art, so it's looked for again (art the user picked stays). */
     fun forget(context: Context, profile: GameProfile) {
-        File(dir(context), profile.id + ".img").delete()
-        File(dir(context), profile.id + "-sgdb.img").delete()
+        for (name in listOf(".img", "-sgdb.img", "-portrait.img", "-portrait-sgdb.img")) File(dir(context), profile.id + name).delete()
+    }
+
+    // ---- Art the user picked ----
+
+    private fun customFile(context: Context, profile: GameProfile) = File(dir(context), profile.id + "-custom.img")
+
+    private fun custom(context: Context, profile: GameProfile): Bitmap? =
+        customFile(context, profile).takeIf { it.length() > 0 }?.let { BitmapFactory.decodeFile(it.path) }
+
+    /** Whether [profile] has art the user picked. */
+    fun hasCustom(context: Context, profile: GameProfile): Boolean = customFile(context, profile).length() > 0
+
+    /** Changes when [profile]'s art does, for redrawing it. */
+    fun version(context: Context, profile: GameProfile): Long = customFile(context, profile).lastModified()
+
+    /** Keeps the image at [uri] as [profile]'s art, at most 1200 px; false when it can't be read. */
+    fun setCustom(context: Context, profile: GameProfile, uri: android.net.Uri): Boolean = runCatching {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+        var sample = 1
+        while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= 1200) sample *= 2
+        val bitmap = context.contentResolver.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
+        } ?: return false
+        dir(context).mkdirs()
+        customFile(context, profile).outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        true
+    }.getOrDefault(false)
+
+    /** Goes back to the art found for [profile]. */
+    fun clearCustom(context: Context, profile: GameProfile) {
+        customFile(context, profile).delete()
     }
 
     /** Where [profile]'s game art may be, best first. */
@@ -78,11 +159,7 @@ object GameArt {
     internal fun steamGridDb(profile: GameProfile): List<String> {
         if (key.isEmpty()) return emptyList()
         val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
-        val game = launch?.let { steamId(it) }?.let { id -> api("games/steam/$id")?.optJSONObject("data")?.optInt("id") }
-            ?: api("search/autocomplete/" + java.net.URLEncoder.encode(profile.name, "UTF-8").replace("+", "%20"))
-                ?.optJSONArray("data")?.optJSONObject(0)?.optInt("id")
-            ?: return emptyList()
-        if (game <= 0) return emptyList()
+        val game = sgdbGame(launch, profile) ?: return emptyList()
         fun first(path: String) = api(path)?.optJSONArray("data")?.optJSONObject(0)?.let { it.optString("thumb").ifEmpty { it.optString("url") } }
         return listOfNotNull(
             first("icons/game/$game"),
@@ -90,6 +167,21 @@ object GameArt {
             first("grids/game/$game")
         ).filter { it.startsWith("https://") && !it.endsWith(".ico") }
     }
+
+    /** SteamGridDB's upright (600×900) grid art for [profile]'s game. */
+    internal fun steamGridDbPortrait(profile: GameProfile): List<String> {
+        if (key.isEmpty()) return emptyList()
+        val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+        val game = sgdbGame(launch, profile) ?: return emptyList()
+        return listOfNotNull(
+            api("grids/game/$game?dimensions=600x900")?.optJSONArray("data")?.optJSONObject(0)?.let { it.optString("url").ifEmpty { it.optString("thumb") } }
+        ).filter { it.startsWith("https://") }
+    }
+
+    private fun sgdbGame(launch: Intent?, profile: GameProfile): Int? =
+        (launch?.let { steamId(it) }?.let { id -> api("games/steam/$id")?.optJSONObject("data")?.optInt("id") }
+            ?: api("search/autocomplete/" + java.net.URLEncoder.encode(profile.name, "UTF-8").replace("+", "%20"))
+                ?.optJSONArray("data")?.optJSONObject(0)?.optInt("id"))?.takeIf { it > 0 }
 
     private fun api(path: String): org.json.JSONObject? = runCatching {
         val connection = java.net.URL("https://www.steamgriddb.com/api/v2/$path").openConnection() as java.net.HttpURLConnection
@@ -120,6 +212,9 @@ object GameArt {
         val encoded = java.net.URLEncoder.encode(file, "UTF-8").replace("+", "%20")
         return "https://raw.githubusercontent.com/libretro-thumbnails/$repo/master/Named_Boxarts/$encoded.png"
     }
+
+    private const val PORTRAIT_W = 600
+    private const val PORTRAIT_H = 900
 
     private fun fetch(url: String): ByteArray? = runCatching {
         val connection = java.net.URL(url).openConnection() as java.net.HttpURLConnection

@@ -92,6 +92,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             refresh()
         }, onDelete = {
             GameProfiles.delete(context, profile.id); it.palsoftware.pastiera.gaming.GameArt.forget(context, profile)
+            it.palsoftware.pastiera.gaming.GameArt.clearCustom(context, profile)
             editing = null
             refresh()
         })
@@ -589,6 +590,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 }
             }
             }
+            if (current.isGame) GameArtworkRow(current)
             val pinScope = androidx.compose.runtime.rememberCoroutineScope()
             if (current.isGame) TextButton(onClick = {
                 val profile = current.also { saved -> GameProfiles.save(context, saved) }
@@ -763,11 +765,51 @@ private fun ChoiceRow(title: String, value: String, options: List<String>, onPic
     }
 }
 
+/** A game's art, picked from the phone's pictures for its list entry and Moonlight, or the art found for it. */
+@Composable
+private fun GameArtworkRow(profile: GameProfile) {
+    val context = LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var version by remember { mutableStateOf(it.palsoftware.pastiera.gaming.GameArt.version(context, profile)) }
+    fun changed() {
+        it.palsoftware.pastiera.gaming.GameArt.forget(context, profile)
+        version = it.palsoftware.pastiera.gaming.GameArt.version(context, profile)
+        val app = context.applicationContext
+        Thread { runCatching { it.palsoftware.pastiera.gaming.GamesActivity.sync(app) } }.start()
+    }
+    val picker = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        scope.launch {
+            val ok = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameArt.setCustom(context, profile, uri) }
+            if (ok) changed()
+            else android.widget.Toast.makeText(context, R.string.game_mode_artwork_failed, android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        androidx.compose.runtime.key(version) { GameArtIcon(profile, version) }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(stringResource(R.string.game_mode_artwork))
+            Text(stringResource(R.string.game_mode_artwork_description), style = MaterialTheme.typography.bodySmall)
+        }
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        androidx.compose.material3.OutlinedButton(onClick = {
+            picker.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }) { Text(stringResource(R.string.game_mode_artwork_choose)) }
+        if (version > 0) androidx.compose.material3.OutlinedButton(onClick = {
+            it.palsoftware.pastiera.gaming.GameArt.clearCustom(context, profile)
+            changed()
+        }) { Text(stringResource(R.string.game_mode_artwork_reset)) }
+    }
+}
+
 /** A profile's game art, cropped square; its app's icon while there's none. */
 @Composable
-internal fun GameArtIcon(profile: GameProfile) {
+internal fun GameArtIcon(profile: GameProfile, version: Long = 0) {
     val context = LocalContext.current
-    val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, profile.id, profile.launch) {
+    val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, profile.id, profile.launch, version) {
         value = withContext(Dispatchers.IO) {
             runCatching { it.palsoftware.pastiera.gaming.GameArt.load(context, profile)?.asImageBitmap() }.getOrNull()
         }
