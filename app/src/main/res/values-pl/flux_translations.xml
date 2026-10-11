@@ -1950,4 +1950,9 @@
     <string name="games_app_controller_keys">Klawisze kontrolera w aplikacji Gry</string>
     <string name="games_app_controller_keys_description">Poruszaj się po aplikacji Gry tymi samymi klawiszami co w grach: W A S D do ruchu, L aby otworzyć, K dla ustawień gry, P aby wrócić, Q lub E aby przełączać między grami a launcherami, Spacja dla ustawień grania. Kontroler też działa.</string>
     <string name="stream_phone_screen_art">Odbij ekran telefonu</string>
+    <string name="game_mode_xbox_add_to_games">Dodaj do Gier</string>
+    <string name="game_mode_xbox_add_to_games_description">Dodaje ją do aplikacji Gry i listy w Moonlight bez wcześniejszego grania.</string>
+    <string name="game_mode_xbox_in_games">Już jest w twoich grach.</string>
+    <string name="game_mode_xbox_added">Dodano %1$s do Gier</string>
+    <string name="games_app_settings_short">Ustawienia</string>
 </resources>

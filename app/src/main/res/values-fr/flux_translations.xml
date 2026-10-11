@@ -1944,4 +1944,9 @@
     <string name="games_app_controller_keys">Touches manette dans l\'app Jeux</string>
     <string name="games_app_controller_keys_description">Parcourez l\'app Jeux avec les mêmes touches qu\'en jeu : W A S D pour se déplacer, L pour ouvrir, K pour les réglages d\'un jeu, P pour revenir, Q ou E pour passer des jeux aux lanceurs, Espace pour les réglages de jeu. Une manette fonctionne aussi.</string>
     <string name="stream_phone_screen_art">Dupliquer l\'écran du téléphone</string>
+    <string name="game_mode_xbox_add_to_games">Ajouter aux Jeux</string>
+    <string name="game_mode_xbox_add_to_games_description">L\'ajoute à l\'app Jeux et à la liste de Moonlight, sans y jouer d\'abord.</string>
+    <string name="game_mode_xbox_in_games">Déjà dans vos jeux.</string>
+    <string name="game_mode_xbox_added">%1$s ajouté aux Jeux</string>
+    <string name="games_app_settings_short">Réglages</string>
 </resources>

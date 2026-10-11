@@ -1944,4 +1944,9 @@
     <string name="games_app_controller_keys">Teclas de mando en la app Juegos</string>
     <string name="games_app_controller_keys_description">Muévete por la app Juegos con las mismas teclas que en los juegos: W A S D para moverte, L para abrir, K para los ajustes de un juego, P para volver, Q o E para cambiar entre juegos y lanzadores, Espacio para los ajustes de juego. También funciona con un mando.</string>
     <string name="stream_phone_screen_art">Reflejar la pantalla del móvil</string>
+    <string name="game_mode_xbox_add_to_games">Añadir a Juegos</string>
+    <string name="game_mode_xbox_add_to_games_description">Lo añade a la app Juegos y a la lista de Moonlight, sin jugarlo antes.</string>
+    <string name="game_mode_xbox_in_games">Ya está en tus juegos.</string>
+    <string name="game_mode_xbox_added">%1$s añadido a Juegos</string>
+    <string name="games_app_settings_short">Ajustes</string>
 </resources>

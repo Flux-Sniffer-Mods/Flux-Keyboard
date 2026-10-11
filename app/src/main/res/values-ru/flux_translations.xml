@@ -1950,4 +1950,9 @@
     <string name="games_app_controller_keys">Клавиши контроллера в приложении «Игры»</string>
     <string name="games_app_controller_keys_description">Перемещайтесь по приложению «Игры» теми же клавишами, что и в играх: W A S D — перемещение, L — открыть, K — настройки игры, P — назад, Q или E — переключение между играми и лаунчерами, Пробел — игровые настройки. Контроллер тоже работает.</string>
     <string name="stream_phone_screen_art">Дублировать экран телефона</string>
+    <string name="game_mode_xbox_add_to_games">Добавить в «Игры»</string>
+    <string name="game_mode_xbox_add_to_games_description">Добавляет её в приложение «Игры» и в список Moonlight, не запуская перед этим.</string>
+    <string name="game_mode_xbox_in_games">Уже в ваших играх.</string>
+    <string name="game_mode_xbox_added">%1$s добавлена в «Игры»</string>
+    <string name="games_app_settings_short">Настройки</string>
 </resources>

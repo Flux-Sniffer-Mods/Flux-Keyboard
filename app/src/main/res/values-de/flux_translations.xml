@@ -1403,4 +1403,9 @@
     <string name="games_app_controller_keys">Controller-Tasten in der Spiele-App</string>
     <string name="games_app_controller_keys_description">Bewege dich in der Spiele-App mit denselben Tasten wie in Spielen: W A S D zum Bewegen, L zum Öffnen, K für die Einstellungen eines Spiels, P für zurück, Q oder E zum Wechseln zwischen Spielen und Launchern, Leertaste für die Gaming-Einstellungen. Ein Controller funktioniert auch.</string>
     <string name="stream_phone_screen_art">Handybildschirm spiegeln</string>
+    <string name="game_mode_xbox_add_to_games">Zu Spielen hinzufügen</string>
+    <string name="game_mode_xbox_add_to_games_description">Fügt es der Spiele-App und der Liste in Moonlight hinzu, ohne es vorher zu spielen.</string>
+    <string name="game_mode_xbox_in_games">Schon in deinen Spielen.</string>
+    <string name="game_mode_xbox_added">%1$s zu Spielen hinzugefügt</string>
+    <string name="games_app_settings_short">Einstellungen</string>
 </resources>

@@ -1449,4 +1449,9 @@
     <string name="games_app_controller_keys">Tasti controller nell\'app Giochi</string>
     <string name="games_app_controller_keys_description">Muoviti nell\'app Giochi con gli stessi tasti dei giochi: W A S D per muoverti, L per aprire, K per le impostazioni di un gioco, P per tornare indietro, Q o E per passare tra giochi e launcher, Spazio per le impostazioni di gioco. Funziona anche un controller.</string>
     <string name="stream_phone_screen_art">Duplica lo schermo del telefono</string>
+    <string name="game_mode_xbox_add_to_games">Aggiungi a Giochi</string>
+    <string name="game_mode_xbox_add_to_games_description">Lo aggiunge all\'app Giochi e alla lista di Moonlight, senza giocarci prima.</string>
+    <string name="game_mode_xbox_in_games">Già nei tuoi giochi.</string>
+    <string name="game_mode_xbox_added">%1$s aggiunto a Giochi</string>
+    <string name="games_app_settings_short">Impostazioni</string>
 </resources>
