@@ -1959,4 +1959,6 @@
     <string name="game_mode_stick_dead_zone">Մեռյալ գոտի %1$d%%</string>
     <string name="game_mode_stick_range">Միջակայք %1$d%%</string>
     <string name="game_mode_back_again">Կրկին սեղմիր Հետ՝ խաղից դուրս գալու համար</string>
+    <string name="game_mode_xbox_plan">Game Pass բաժանորդագրություն</string>
+    <string name="game_mode_xbox_plan_description">XCloud կատալոգը ցույց է տալիս միայն քո բաժանորդագրության մեջ մտնող ամպային խաղերը՝ Microsoft-ի Game Pass ցանկերից։</string>
 </resources>

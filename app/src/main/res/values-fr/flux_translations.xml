@@ -1965,4 +1965,6 @@
     <string name="game_mode_stick_dead_zone">Zone morte %1$d%%</string>
     <string name="game_mode_stick_range">Portée %1$d%%</string>
     <string name="game_mode_back_again">Appuyez de nouveau sur Retour pour quitter le jeu</string>
+    <string name="game_mode_xbox_plan">Abonnement Game Pass</string>
+    <string name="game_mode_xbox_plan_description">Le catalogue XCloud n\'affiche que les jeux cloud inclus dans votre abonnement, d\'après les listes Game Pass de Microsoft.</string>
 </resources>

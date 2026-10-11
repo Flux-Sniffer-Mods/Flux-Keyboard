@@ -1470,4 +1470,6 @@
     <string name="game_mode_stick_dead_zone">Zona morta %1$d%%</string>
     <string name="game_mode_stick_range">Raggio %1$d%%</string>
     <string name="game_mode_back_again">Premi di nuovo Indietro per uscire dal gioco</string>
+    <string name="game_mode_xbox_plan">Abbonamento Game Pass</string>
+    <string name="game_mode_xbox_plan_description">Il catalogo XCloud mostra solo i giochi cloud inclusi nel tuo abbonamento, secondo gli elenchi Game Pass di Microsoft.</string>
 </resources>

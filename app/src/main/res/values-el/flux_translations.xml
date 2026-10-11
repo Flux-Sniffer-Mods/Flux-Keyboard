@@ -1335,4 +1335,6 @@
     <string name="game_mode_stick_dead_zone">Νεκρή ζώνη %1$d%%</string>
     <string name="game_mode_stick_range">Εύρος %1$d%%</string>
     <string name="game_mode_back_again">Πάτησε ξανά Πίσω για να βγεις από το παιχνίδι</string>
+    <string name="game_mode_xbox_plan">Συνδρομή Game Pass</string>
+    <string name="game_mode_xbox_plan_description">Ο κατάλογος XCloud δείχνει μόνο τα παιχνίδια cloud που περιλαμβάνει η συνδρομή σου, από τις λίστες Game Pass της ίδιας της Microsoft.</string>
 </resources>

@@ -1971,4 +1971,6 @@
     <string name="game_mode_stick_dead_zone">Мёртвая зона %1$d%%</string>
     <string name="game_mode_stick_range">Диапазон %1$d%%</string>
     <string name="game_mode_back_again">Нажмите «Назад» ещё раз, чтобы выйти из игры</string>
+    <string name="game_mode_xbox_plan">Подписка Game Pass</string>
+    <string name="game_mode_xbox_plan_description">Каталог XCloud показывает только облачные игры, входящие в вашу подписку, по спискам Game Pass от Microsoft.</string>
 </resources>
