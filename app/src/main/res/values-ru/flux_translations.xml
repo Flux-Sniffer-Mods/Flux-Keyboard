@@ -1941,7 +1941,7 @@
     <string name="stream_screen_mirror">Дублировать телефон</string>
     <string name="stream_screen_separate">Отдельный экран</string>
     <string name="stream_screen_desktop">Рабочем столе Android</string>
-    <string name="stream_screen_description">Экран телефона транслируется на клиент Moonlight. Собственный экран оставляет телефон свободным: игра идёт на отдельном экране, созданном для клиента, а приложение «Игры» показывает его на телефоне, и клавиши, касания и размещённые клавиши идут туда. Рабочий стол Android делает то же самое с рабочим столом Android 16 на этом экране (оконный режим рабочего стола включён в параметрах разработчика). Переключайте во время трансляции из её уведомления.</string>
+    <string name="stream_screen_description">Дублирование показывает экран телефона на клиенте Moonlight. Отдельный экран запускает игру на собственном экране для клиента и оставляет телефон свободным; приложение «Игры» показывает его на телефоне и отправляет туда клавиши, касания и размещённые клавиши. Рабочий стол Android делает то же самое с рабочим столом Android 16 и сам включает оконный режим (в первый раз может понадобиться перезагрузка). Переключайте из уведомления трансляции.</string>
     <string name="stream_screen_to_separate">Отдельный экран</string>
     <string name="stream_screen_to_mirror">Дублировать телефон</string>
     <string name="extra_screen_title">Экран игры</string>
@@ -1955,4 +1955,5 @@
     <string name="game_mode_xbox_in_games">Уже в ваших играх.</string>
     <string name="game_mode_xbox_added">%1$s добавлена в «Игры»</string>
     <string name="games_app_settings_short">Настройки</string>
+    <string name="stream_desktop_restart">Оконный режим рабочего стола включён. Если рабочий стол не появится, перезагрузите телефон один раз.</string>
 </resources>

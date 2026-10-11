@@ -1935,7 +1935,7 @@
     <string name="stream_screen_mirror">Reflejar el móvil</string>
     <string name="stream_screen_separate">Pantalla aparte</string>
     <string name="stream_screen_desktop">Escritorio de Android</string>
-    <string name="stream_screen_description">La pantalla del móvil se refleja en el cliente de Moonlight. Una pantalla propia deja libre el móvil: el juego se ejecuta en una pantalla aparte creada para el cliente, y la app Juegos la muestra en el móvil, con tus teclas, toques y teclas colocadas yendo a ella. Escritorio de Android hace lo mismo con el escritorio de Android 16 en esa pantalla (ventanas de escritorio activadas en Opciones para desarrolladores). Cambia en cualquier momento desde la notificación de streaming.</string>
+    <string name="stream_screen_description">Reflejar muestra la pantalla del móvil en el cliente de Moonlight. Pantalla aparte ejecuta el juego en una pantalla propia para el cliente y deja libre el móvil; la app Juegos la muestra en el móvil y le envía tus teclas, toques y teclas colocadas. Escritorio de Android hace lo mismo con el escritorio de Android 16 y activa las ventanas de escritorio por ti (la primera vez puede hacer falta reiniciar). Cambia desde la notificación de streaming.</string>
     <string name="stream_screen_to_separate">Pantalla aparte</string>
     <string name="stream_screen_to_mirror">Reflejar móvil</string>
     <string name="extra_screen_title">Pantalla del juego</string>
@@ -1949,4 +1949,5 @@
     <string name="game_mode_xbox_in_games">Ya está en tus juegos.</string>
     <string name="game_mode_xbox_added">%1$s añadido a Juegos</string>
     <string name="games_app_settings_short">Ajustes</string>
+    <string name="stream_desktop_restart">Las ventanas de escritorio ya están activadas. Si no aparece el escritorio, reinicia el móvil una vez.</string>
 </resources>

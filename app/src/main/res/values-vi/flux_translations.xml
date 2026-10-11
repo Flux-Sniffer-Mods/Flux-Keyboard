@@ -1923,7 +1923,7 @@
     <string name="stream_screen_mirror">Phản chiếu điện thoại</string>
     <string name="stream_screen_separate">Màn hình riêng</string>
     <string name="stream_screen_desktop">Màn hình nền Android</string>
-    <string name="stream_screen_description">Màn hình điện thoại được phản chiếu sang Moonlight client. Màn hình riêng để điện thoại rảnh: trò chơi chạy trên một màn hình riêng tạo cho client, và ứng dụng Trò chơi hiển thị nó trên điện thoại, với phím, cảm ứng và các phím đã đặt đều đi tới đó. Màn hình nền Android làm tương tự với màn hình nền của Android 16 trên màn hình đó (bật cửa sổ màn hình nền trong Tùy chọn cho nhà phát triển). Chuyển đổi giữa chừng từ thông báo phát trực tuyến.</string>
+    <string name="stream_screen_description">Phản chiếu hiện màn hình điện thoại trên Moonlight client. Màn hình riêng chạy trò chơi trên màn hình riêng cho client và để điện thoại rảnh; ứng dụng Trò chơi hiển thị nó trên điện thoại và gửi phím, cảm ứng và các phím đã đặt tới đó. Màn hình nền Android làm tương tự với màn hình nền Android 16, tự bật cửa sổ màn hình nền cho bạn (lần đầu có thể cần khởi động lại). Chuyển đổi từ thông báo phát trực tuyến.</string>
     <string name="stream_screen_to_separate">Màn hình riêng</string>
     <string name="stream_screen_to_mirror">Phản chiếu điện thoại</string>
     <string name="extra_screen_title">Màn hình trò chơi</string>
@@ -1937,4 +1937,5 @@
     <string name="game_mode_xbox_in_games">Đã có trong trò chơi của bạn.</string>
     <string name="game_mode_xbox_added">Đã thêm %1$s vào Trò chơi</string>
     <string name="games_app_settings_short">Cài đặt</string>
+    <string name="stream_desktop_restart">Cửa sổ màn hình nền đã được bật. Nếu màn hình nền không hiện, hãy khởi động lại điện thoại một lần.</string>
 </resources>

@@ -1440,7 +1440,7 @@
     <string name="stream_screen_mirror">Duplica il telefono</string>
     <string name="stream_screen_separate">Schermo separato</string>
     <string name="stream_screen_desktop">Desktop Android</string>
-    <string name="stream_screen_description">Lo schermo del telefono viene duplicato sul client Moonlight. Uno schermo tutto suo lascia libero il telefono: il gioco gira su uno schermo separato creato per il client, e l\'app Giochi lo mostra sul telefono, con tasti, tocco e tasti posizionati diretti lì. Desktop Android fa lo stesso con il desktop di Android 16 su quello schermo (finestre desktop attive nelle Opzioni sviluppatore). Cambia durante lo streaming dalla notifica dello streaming.</string>
+    <string name="stream_screen_description">Duplica mostra lo schermo del telefono sul client Moonlight. Schermo separato fa girare il gioco su uno schermo suo per il client e lascia libero il telefono; l\'app Giochi lo mostra sul telefono e gli invia tasti, tocchi e tasti posizionati. Desktop Android fa lo stesso con il desktop di Android 16, attivando per te le finestre desktop (la prima volta può servire un riavvio). Cambia dalla notifica dello streaming.</string>
     <string name="stream_screen_to_separate">Schermo separato</string>
     <string name="stream_screen_to_mirror">Duplica il telefono</string>
     <string name="extra_screen_title">Schermo del gioco</string>
@@ -1454,4 +1454,5 @@
     <string name="game_mode_xbox_in_games">Già nei tuoi giochi.</string>
     <string name="game_mode_xbox_added">%1$s aggiunto a Giochi</string>
     <string name="games_app_settings_short">Impostazioni</string>
+    <string name="stream_desktop_restart">Le finestre desktop sono attive. Se il desktop non compare, riavvia il telefono una volta.</string>
 </resources>

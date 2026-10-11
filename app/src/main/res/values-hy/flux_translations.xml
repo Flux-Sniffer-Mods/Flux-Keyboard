@@ -1929,7 +1929,7 @@
     <string name="stream_screen_mirror">Արտացոլել հեռախոսը</string>
     <string name="stream_screen_separate">Առանձին էկրան</string>
     <string name="stream_screen_desktop">Android-ի աշխատասեղան</string>
-    <string name="stream_screen_description">Հեռախոսի էկրանը արտացոլվում է Moonlight client-ին։ Սեփական էկրանը թողնում է հեռախոսն ազատ․ խաղն աշխատում է client-ի համար ստեղծված առանձին էկրանին, և Խաղեր հավելվածը այն ցույց է տալիս հեռախոսում, իսկ ստեղները, հպումը և տեղադրված ստեղները գնում են այնտեղ։ Android-ի աշխատասեղանը նույնն է անում Android 16-ի աշխատասեղանով այդ էկրանին (աշխատասեղանի պատուհանները միացված Մշակողի ընտրանքներում)։ Փոխիր հեռարձակման ընթացքում՝ հեռարձակման ծանուցումից։</string>
+    <string name="stream_screen_description">Արտացոլումը ցույց է տալիս հեռախոսի էկրանը Moonlight client-ում։ Առանձին էկրանը խաղը աշխատեցնում է client-ի համար առանձին էկրանին և թողնում հեռախոսն ազատ․ Խաղեր հավելվածը այն ցույց է տալիս հեռախոսում և ուղարկում այնտեղ ստեղները, հպումը և տեղադրված ստեղները։ Android-ի աշխատասեղանը նույնն է անում Android 16-ի աշխատասեղանով՝ քո փոխարեն միացնելով աշխատասեղանի պատուհանները (առաջին անգամ կարող է պետք լինել վերագործարկում)։ Փոխիր հեռարձակման ծանուցումից։</string>
     <string name="stream_screen_to_separate">Առանձին էկրան</string>
     <string name="stream_screen_to_mirror">Արտացոլել հեռախոսը</string>
     <string name="extra_screen_title">Խաղի էկրան</string>
@@ -1943,4 +1943,5 @@
     <string name="game_mode_xbox_in_games">Արդեն քո խաղերում է։</string>
     <string name="game_mode_xbox_added">%1$s-ը ավելացվեց Խաղերին</string>
     <string name="games_app_settings_short">Կարգավորումներ</string>
+    <string name="stream_desktop_restart">Աշխատասեղանի պատուհաններն այժմ միացված են։ Եթե աշխատասեղանը չի երևում, մեկ անգամ վերագործարկիր հեռախոսը։</string>
 </resources>

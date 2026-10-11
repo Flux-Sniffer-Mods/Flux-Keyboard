@@ -1394,7 +1394,7 @@
     <string name="stream_screen_mirror">Handy spiegeln</string>
     <string name="stream_screen_separate">Eigener Bildschirm</string>
     <string name="stream_screen_desktop">Android-Desktop</string>
-    <string name="stream_screen_description">Der Handybildschirm wird auf den Moonlight-Client gespiegelt. Ein eigener Bildschirm lässt das Handy frei: Das Spiel läuft auf einem eigenen Bildschirm für den Client, und die Spiele-App zeigt ihn auf dem Handy, wobei deine Tasten, Berührungen und platzierten Tasten dorthin gehen. Android-Desktop macht dasselbe mit dem Desktop von Android 16 auf diesem Bildschirm (Desktop-Fenster in den Entwickleroptionen aktiviert). Während des Streams in der Streaming-Benachrichtigung umschalten.</string>
+    <string name="stream_screen_description">Spiegeln zeigt den Handybildschirm auf dem Moonlight-Client. Eigener Bildschirm lässt das Spiel auf einem eigenen Bildschirm für den Client laufen und das Handy frei; die Spiele-App zeigt ihn auf dem Handy und schickt deine Tasten, Berührungen und platzierten Tasten dorthin. Android-Desktop macht dasselbe mit dem Desktop von Android 16 und schaltet die Desktop-Fenster für dich ein (beim ersten Mal kann ein Neustart nötig sein). Umschalten geht über die Streaming-Benachrichtigung.</string>
     <string name="stream_screen_to_separate">Eigener Bildschirm</string>
     <string name="stream_screen_to_mirror">Handy spiegeln</string>
     <string name="extra_screen_title">Spielbildschirm</string>
@@ -1408,4 +1408,5 @@
     <string name="game_mode_xbox_in_games">Schon in deinen Spielen.</string>
     <string name="game_mode_xbox_added">%1$s zu Spielen hinzugefügt</string>
     <string name="games_app_settings_short">Einstellungen</string>
+    <string name="stream_desktop_restart">Desktop-Fenster sind jetzt an. Falls der Desktop nicht erscheint, starte das Handy einmal neu.</string>
 </resources>
