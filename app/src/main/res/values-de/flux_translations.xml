@@ -1390,4 +1390,12 @@
     <string name="game_mode_artwork_none">Keine Bilder für dieses Spiel gefunden. Sein Name muss eventuell dem echten Titel entsprechen.</string>
     <string name="games_app_launchers">Launcher und Emulatoren</string>
     <string name="games_app_stream">Streamen</string>
+    <string name="stream_screen">Spiel läuft auf</string>
+    <string name="stream_screen_mirror">Dem Handybildschirm</string>
+    <string name="stream_screen_separate">Einem eigenen Bildschirm</string>
+    <string name="stream_screen_desktop">Android-Desktop</string>
+    <string name="stream_screen_description">Der Handybildschirm wird auf den Moonlight-Client gespiegelt. Ein eigener Bildschirm lässt das Handy frei: Das Spiel läuft auf einem eigenen Bildschirm für den Client, und die Spiele-App zeigt ihn auf dem Handy, wobei deine Tasten, Berührungen und platzierten Tasten dorthin gehen. Android-Desktop macht dasselbe mit dem Desktop von Android 16 auf diesem Bildschirm (Desktop-Fenster in den Entwickleroptionen aktiviert). Während des Streams in der Streaming-Benachrichtigung umschalten.</string>
+    <string name="stream_screen_to_separate">Eigener Bildschirm</string>
+    <string name="stream_screen_to_mirror">Handy spiegeln</string>
+    <string name="extra_screen_title">Spielbildschirm</string>
 </resources>

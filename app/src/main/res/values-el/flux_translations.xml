@@ -1299,4 +1299,12 @@
     <string name="game_mode_artwork_none">Δεν βρέθηκαν εικόνες για αυτό το παιχνίδι. Ίσως το όνομά του πρέπει να ταιριάζει με τον πραγματικό τίτλο.</string>
     <string name="games_app_launchers">Launchers και εξομοιωτές</string>
     <string name="games_app_stream">Μετάδοση</string>
+    <string name="stream_screen">Το παιχνίδι παίζει σε</string>
+    <string name="stream_screen_mirror">Την οθόνη του τηλεφώνου</string>
+    <string name="stream_screen_separate">Δική του οθόνη</string>
+    <string name="stream_screen_desktop">Επιφάνεια εργασίας Android</string>
+    <string name="stream_screen_description">Η οθόνη του τηλεφώνου καθρεφτίζεται στο Moonlight client. Η δική του οθόνη αφήνει το τηλέφωνο ελεύθερο: το παιχνίδι παίζει σε ξεχωριστή οθόνη φτιαγμένη για τον client, και η εφαρμογή Παιχνίδια τη δείχνει στο τηλέφωνο, με τα πλήκτρα, την αφή και τα τοποθετημένα πλήκτρα να πηγαίνουν εκεί. Η επιφάνεια εργασίας Android κάνει το ίδιο με την επιφάνεια εργασίας του Android 16 σε εκείνη την οθόνη (παράθυρα επιφάνειας εργασίας ενεργά στις Επιλογές προγραμματιστή). Άλλαξε κατά τη μετάδοση από την ειδοποίηση μετάδοσης.</string>
+    <string name="stream_screen_to_separate">Ξεχωριστή οθόνη</string>
+    <string name="stream_screen_to_mirror">Καθρέφτης τηλεφώνου</string>
+    <string name="extra_screen_title">Οθόνη παιχνιδιού</string>
 </resources>

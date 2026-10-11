@@ -1931,4 +1931,12 @@
     <string name="game_mode_artwork_none">Aucune image trouvée pour ce jeu. Son nom doit peut-être correspondre au vrai titre.</string>
     <string name="games_app_launchers">Lanceurs et émulateurs</string>
     <string name="games_app_stream">Diffuser</string>
+    <string name="stream_screen">Le jeu s\'affiche sur</string>
+    <string name="stream_screen_mirror">L\'écran du téléphone</string>
+    <string name="stream_screen_separate">Un écran à lui</string>
+    <string name="stream_screen_desktop">Bureau Android</string>
+    <string name="stream_screen_description">L\'écran du téléphone est dupliqué sur le client Moonlight. Un écran à lui laisse le téléphone libre : le jeu tourne sur un écran séparé créé pour le client, et l\'app Jeux l\'affiche sur le téléphone, vos touches, le tactile et les touches placées allant vers lui. Bureau Android fait de même avec le bureau d\'Android 16 sur cet écran (fenêtrage du bureau activé dans les Options pour les développeurs). Basculez en cours de stream depuis la notification de streaming.</string>
+    <string name="stream_screen_to_separate">Écran séparé</string>
+    <string name="stream_screen_to_mirror">Dupliquer le téléphone</string>
+    <string name="extra_screen_title">Écran du jeu</string>
 </resources>

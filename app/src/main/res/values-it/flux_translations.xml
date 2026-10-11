@@ -1436,4 +1436,12 @@
     <string name="game_mode_artwork_none">Nessuna immagine trovata per questo gioco. Forse il nome deve corrispondere al titolo reale.</string>
     <string name="games_app_launchers">Launcher ed emulatori</string>
     <string name="games_app_stream">Streaming</string>
+    <string name="stream_screen">Il gioco va su</string>
+    <string name="stream_screen_mirror">Lo schermo del telefono</string>
+    <string name="stream_screen_separate">Uno schermo tutto suo</string>
+    <string name="stream_screen_desktop">Desktop Android</string>
+    <string name="stream_screen_description">Lo schermo del telefono viene duplicato sul client Moonlight. Uno schermo tutto suo lascia libero il telefono: il gioco gira su uno schermo separato creato per il client, e l\'app Giochi lo mostra sul telefono, con tasti, tocco e tasti posizionati diretti lì. Desktop Android fa lo stesso con il desktop di Android 16 su quello schermo (finestre desktop attive nelle Opzioni sviluppatore). Cambia durante lo streaming dalla notifica dello streaming.</string>
+    <string name="stream_screen_to_separate">Schermo separato</string>
+    <string name="stream_screen_to_mirror">Duplica il telefono</string>
+    <string name="extra_screen_title">Schermo del gioco</string>
 </resources>

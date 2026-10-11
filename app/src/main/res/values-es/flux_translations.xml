@@ -1931,4 +1931,12 @@
     <string name="game_mode_artwork_none">No se encontraron imágenes para este juego. Puede que su nombre deba coincidir con el título real.</string>
     <string name="games_app_launchers">Lanzadores y emuladores</string>
     <string name="games_app_stream">Transmitir</string>
+    <string name="stream_screen">El juego se ve en</string>
+    <string name="stream_screen_mirror">La pantalla del móvil</string>
+    <string name="stream_screen_separate">Una pantalla propia</string>
+    <string name="stream_screen_desktop">Escritorio de Android</string>
+    <string name="stream_screen_description">La pantalla del móvil se refleja en el cliente de Moonlight. Una pantalla propia deja libre el móvil: el juego se ejecuta en una pantalla aparte creada para el cliente, y la app Juegos la muestra en el móvil, con tus teclas, toques y teclas colocadas yendo a ella. Escritorio de Android hace lo mismo con el escritorio de Android 16 en esa pantalla (ventanas de escritorio activadas en Opciones para desarrolladores). Cambia en cualquier momento desde la notificación de streaming.</string>
+    <string name="stream_screen_to_separate">Pantalla aparte</string>
+    <string name="stream_screen_to_mirror">Reflejar móvil</string>
+    <string name="extra_screen_title">Pantalla del juego</string>
 </resources>

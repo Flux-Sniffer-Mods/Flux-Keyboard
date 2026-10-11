@@ -1937,4 +1937,12 @@
     <string name="game_mode_artwork_none">Nie znaleziono grafik dla tej gry. Może jej nazwa musi pasować do prawdziwego tytułu.</string>
     <string name="games_app_launchers">Launchery i emulatory</string>
     <string name="games_app_stream">Stream</string>
+    <string name="stream_screen">Gra działa na</string>
+    <string name="stream_screen_mirror">Ekranie telefonu</string>
+    <string name="stream_screen_separate">Własnym ekranie</string>
+    <string name="stream_screen_desktop">Pulpicie Androida</string>
+    <string name="stream_screen_description">Ekran telefonu jest odbijany na kliencie Moonlight. Własny ekran zostawia telefon wolny: gra działa na osobnym ekranie utworzonym dla klienta, a aplikacja Gry pokazuje go na telefonie, a klawisze, dotyk i umieszczone klawisze trafiają tam. Pulpit Androida robi to samo z pulpitem Androida 16 na tym ekranie (okna pulpitu włączone w Opcjach programisty). Przełączaj w trakcie streamu z powiadomienia o streamingu.</string>
+    <string name="stream_screen_to_separate">Osobny ekran</string>
+    <string name="stream_screen_to_mirror">Odbij telefon</string>
+    <string name="extra_screen_title">Ekran gry</string>
 </resources>

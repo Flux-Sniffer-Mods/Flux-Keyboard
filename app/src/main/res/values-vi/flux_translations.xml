@@ -1919,4 +1919,12 @@
     <string name="game_mode_artwork_none">Không tìm thấy ảnh cho game này. Có thể tên của nó cần khớp với tên thật.</string>
     <string name="games_app_launchers">Trình khởi chạy và giả lập</string>
     <string name="games_app_stream">Phát</string>
+    <string name="stream_screen">Trò chơi chạy trên</string>
+    <string name="stream_screen_mirror">Màn hình điện thoại</string>
+    <string name="stream_screen_separate">Màn hình riêng</string>
+    <string name="stream_screen_desktop">Màn hình nền Android</string>
+    <string name="stream_screen_description">Màn hình điện thoại được phản chiếu sang Moonlight client. Màn hình riêng để điện thoại rảnh: trò chơi chạy trên một màn hình riêng tạo cho client, và ứng dụng Trò chơi hiển thị nó trên điện thoại, với phím, cảm ứng và các phím đã đặt đều đi tới đó. Màn hình nền Android làm tương tự với màn hình nền của Android 16 trên màn hình đó (bật cửa sổ màn hình nền trong Tùy chọn cho nhà phát triển). Chuyển đổi giữa chừng từ thông báo phát trực tuyến.</string>
+    <string name="stream_screen_to_separate">Màn hình riêng</string>
+    <string name="stream_screen_to_mirror">Phản chiếu điện thoại</string>
+    <string name="extra_screen_title">Màn hình trò chơi</string>
 </resources>

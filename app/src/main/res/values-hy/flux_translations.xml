@@ -1925,4 +1925,12 @@
     <string name="game_mode_artwork_none">Այս խաղի համար պատկերներ չգտնվեցին։ Հնարավոր է՝ անունը պետք է համընկնի իրական վերնագրի հետ։</string>
     <string name="games_app_launchers">Գործարկիչներ և էմուլյատորներ</string>
     <string name="games_app_stream">Հեռարձակել</string>
+    <string name="stream_screen">Խաղը ցուցադրվում է</string>
+    <string name="stream_screen_mirror">Հեռախոսի էկրանին</string>
+    <string name="stream_screen_separate">Իր սեփական էկրանին</string>
+    <string name="stream_screen_desktop">Android-ի աշխատասեղան</string>
+    <string name="stream_screen_description">Հեռախոսի էկրանը արտացոլվում է Moonlight client-ին։ Սեփական էկրանը թողնում է հեռախոսն ազատ․ խաղն աշխատում է client-ի համար ստեղծված առանձին էկրանին, և Խաղեր հավելվածը այն ցույց է տալիս հեռախոսում, իսկ ստեղները, հպումը և տեղադրված ստեղները գնում են այնտեղ։ Android-ի աշխատասեղանը նույնն է անում Android 16-ի աշխատասեղանով այդ էկրանին (աշխատասեղանի պատուհանները միացված Մշակողի ընտրանքներում)։ Փոխիր հեռարձակման ընթացքում՝ հեռարձակման ծանուցումից։</string>
+    <string name="stream_screen_to_separate">Առանձին էկրան</string>
+    <string name="stream_screen_to_mirror">Արտացոլել հեռախոսը</string>
+    <string name="extra_screen_title">Խաղի էկրան</string>
 </resources>
