@@ -1878,8 +1878,7 @@
     <string name="crash_log_description">Zapis Androida ostatnich awarii Flux Keyboard, zapisany w Download/Flux Keyboard/crash-log.txt do udostępnienia.</string>
     <string name="crash_log_saved">Zapisano w Download/Flux Keyboard/crash-log.txt</string>
     <string name="phone_game_mode">Własny tryb gry telefonu</string>
-    <string name="phone_game_mode_description">Przestrzeń gier telefonu może przejąć ekran główny obok trybu gry: wyłącz tu jej aplikacje albo włącz je z powrotem.</string>
-    <string name="phone_game_mode_none">Nie znaleziono aplikacji trybu gry na tym telefonie.</string>
+    <string name="phone_game_mode_description">Tryb gry Unihertz może przejąć ekran główny obok trybu gamingowego. Wyłącz go tutaj.</string>
     <string name="game_mode_artwork">Okładka</string>
     <string name="game_mode_artwork_description">Widoczna na liście gier, na skrócie i w Moonlight. Twój obraz, a jeśli go nie ma — znaleziony.</string>
     <string name="game_mode_artwork_choose">Wybierz obraz</string>

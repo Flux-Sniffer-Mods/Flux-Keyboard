@@ -1240,8 +1240,7 @@
     <string name="crash_log_description">Η καταγραφή του Android για τα τελευταία σφάλματα του Flux Keyboard, αποθηκευμένη στο Download/Flux Keyboard/crash-log.txt για κοινοποίηση.</string>
     <string name="crash_log_saved">Αποθηκεύτηκε στο Download/Flux Keyboard/crash-log.txt</string>
     <string name="phone_game_mode">Λειτουργία παιχνιδιού του τηλεφώνου</string>
-    <string name="phone_game_mode_description">Ο χώρος παιχνιδιών του τηλεφώνου μπορεί να γίνει αρχική οθόνη μαζί με τη λειτουργία παιχνιδιού: απενεργοποιήστε τις εφαρμογές του εδώ ή ενεργοποιήστε τις ξανά.</string>
-    <string name="phone_game_mode_none">Δεν βρέθηκαν εφαρμογές λειτουργίας παιχνιδιού σε αυτό το τηλέφωνο.</string>
+    <string name="phone_game_mode_description">Η λειτουργία παιχνιδιού της Unihertz μπορεί να γίνει η αρχική οθόνη μαζί με τη λειτουργία gaming. Απενεργοποίησέ την εδώ.</string>
     <string name="game_mode_artwork">Εξώφυλλο</string>
     <string name="game_mode_artwork_description">Εμφανίζεται στη λίστα παιχνιδιών, στη συντόμευση και στο Moonlight. Δική σου εικόνα, αλλιώς αυτή που βρέθηκε.</string>
     <string name="game_mode_artwork_choose">Επιλογή εικόνας</string>

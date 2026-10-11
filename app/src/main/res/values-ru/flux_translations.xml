@@ -1878,8 +1878,7 @@
     <string name="crash_log_description">Запись Android о последних сбоях Flux Keyboard, сохранённая в Download/Flux Keyboard/crash-log.txt, чтобы поделиться.</string>
     <string name="crash_log_saved">Сохранено в Download/Flux Keyboard/crash-log.txt</string>
     <string name="phone_game_mode">Собственный игровой режим телефона</string>
-    <string name="phone_game_mode_description">Игровое пространство телефона может стать главным экраном рядом с игровым режимом: отключите его приложения здесь или включите обратно.</string>
-    <string name="phone_game_mode_none">На этом телефоне не найдено приложений игрового режима.</string>
+    <string name="phone_game_mode_description">Игровой режим Unihertz может занять место главного экрана вместе с игровым режимом. Отключите его здесь.</string>
     <string name="game_mode_artwork">Обложка</string>
     <string name="game_mode_artwork_description">Показывается в списке игр, на ярлыке и в Moonlight. Ваше изображение, иначе найденное.</string>
     <string name="game_mode_artwork_choose">Выбрать изображение</string>

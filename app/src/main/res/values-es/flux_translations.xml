@@ -1872,8 +1872,7 @@
     <string name="crash_log_description">El registro de Android de los últimos fallos de Flux Keyboard, guardado en Download/Flux Keyboard/crash-log.txt para compartir.</string>
     <string name="crash_log_saved">Guardado en Download/Flux Keyboard/crash-log.txt</string>
     <string name="phone_game_mode">Modo juego propio del móvil</string>
-    <string name="phone_game_mode_description">El espacio de juegos del móvil puede convertirse en pantalla de inicio junto al modo juego: desactiva sus apps aquí, o vuelve a activarlas.</string>
-    <string name="phone_game_mode_none">No se han encontrado apps de modo juego en este móvil.</string>
+    <string name="phone_game_mode_description">El modo juego de Unihertz puede convertirse en la pantalla de inicio junto al modo gaming. Apágalo aquí.</string>
     <string name="game_mode_artwork">Portada</string>
     <string name="game_mode_artwork_description">Se muestra en la lista de juegos, en su acceso directo y en Moonlight. Tu propia imagen o, si no, la encontrada.</string>
     <string name="game_mode_artwork_choose">Elegir imagen</string>
