@@ -460,7 +460,7 @@
       "text": "Gaming mode: the games found in the game folders and the games with a profile are in the quick launcher too, started as their home screen shortcuts start them (Games in the quick launcher, in Gaming mode)."
     },
     {
-      "text": "Gaming mode: one controller layout everywhere: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad's left half the left stick. The real controller (root) plays it, and Set up Dolphin's (or PPSSPP's) controls writes it into the emulator's own controller settings."
+      "text": "Gaming mode: one controller layout everywhere: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad's left half the left stick. The real controller (root) plays it, and Set up Dolphin's (or PPSSPP's) controls writes it into the emulator's own controller settings. A Dolphin Wii game can be given a Classic Controller or a Wii Remote held sideways instead of the Nunchuk (Wii controller, in the game's settings)."
     },
     {
       "text": "Gaming mode: the trackpad follows one finger at a time, so moving to the other half holds the first stick where it was until you lift. Right stick on keys puts the right stick on J B N M, with the trackpad's left half the left stick, so both move together. Record the trackpad (in Gaming mode) saves what the trackpad reports, to share."

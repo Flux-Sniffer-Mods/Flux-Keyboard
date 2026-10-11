@@ -36,4 +36,22 @@ class FluxLayoutTest {
         assertTrue("Start = 1-${KeyEvent.KEYCODE_SPACE}" in FluxLayout.pspMapping())
         assertTrue("Cross = 1-${KeyEvent.KEYCODE_L}" in FluxLayout.pspMapping())
     }
+
+    @Test
+    fun eachWiiControllerHasItsOwnSetUp() {
+        val classic = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.CLASSIC)
+        assertTrue("Extension = Classic" in classic)
+        assertTrue("Classic/Right Stick/Up = `J`" in classic)
+        val sideways = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.SIDEWAYS)
+        assertTrue("Options/Sideways Wiimote = True" in sideways)
+        assertTrue("Buttons/2 = `L`" in sideways)
+    }
+
+    @Test
+    fun aGamesControllerIsOneKeyInItsSettings() {
+        val ini = "[Core]\nCPUThread = True\n"
+        val set = FluxLayout.withKey(ini, "Controls", "WiimoteProfile1", "Flux Keyboard (sideways)")
+        assertEquals("[Core]\nCPUThread = True\n\n[Controls]\nWiimoteProfile1 = Flux Keyboard (sideways)\n", set)
+        assertEquals("[Core]\nCPUThread = True\n", FluxLayout.withKey(set, "Controls", "WiimoteProfile1", null))
+    }
 }

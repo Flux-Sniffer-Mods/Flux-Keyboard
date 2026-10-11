@@ -47,6 +47,9 @@ import it.palsoftware.pastiera.gaming.GameLibrary
 import it.palsoftware.pastiera.gaming.GameProfile
 import it.palsoftware.pastiera.gaming.GameProfiles
 import it.palsoftware.pastiera.gaming.GameApps
+import it.palsoftware.pastiera.gaming.FluxLayout
+import it.palsoftware.pastiera.gaming.GameFiles
+import it.palsoftware.pastiera.gaming.GameIds
 import it.palsoftware.pastiera.gaming.TrackpadRole
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -424,6 +427,8 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+            // A Dolphin Wii game: the Wii controller that suits it, set in its own Dolphin settings
+            if (current.isGame) DolphinWiiPadRow(current) { pad -> current = current.copy(wiiPad = pad) }
             // A game plays with its app's settings, unless it needs its own (sticks elsewhere)
             if (current.isGame) {
                 val ownScope = androidx.compose.runtime.rememberCoroutineScope()
@@ -607,6 +612,46 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
 }
 
 /** A label and its value, the value picked from a menu. */
+/** A Dolphin Wii game's controller: Wii Remote and Nunchuk, Classic Controller or held sideways. */
+@Composable
+private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) {
+    val context = LocalContext.current
+    val pkg = profile.packages.firstOrNull { p -> GameApps.emulator(p) == "Dolphin" } ?: return
+    // The game's ID, when it's a Wii game (read from its file through the shell)
+    var gameId by remember(profile.launch) { mutableStateOf<String?>(null) }
+    LaunchedEffect(profile.launch) {
+        gameId = withContext(Dispatchers.IO) {
+            val path = profile.launch?.let { launch -> GameFiles.gameFile(launch) } ?: return@withContext null
+            if (!GameFiles.isWii(path)) return@withContext null
+            GameIds.id(context, "Dolphin", path)
+        }
+    }
+    val id = gameId ?: return
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val names = listOf(
+        stringResource(R.string.game_mode_wii_nunchuk),
+        stringResource(R.string.game_mode_wii_classic),
+        stringResource(R.string.game_mode_wii_sideways)
+    )
+    val current = FluxLayout.WiiPad.entries.firstOrNull { pad -> pad.name == profile.wiiPad } ?: FluxLayout.WiiPad.NUNCHUK
+    ChoiceRow(stringResource(R.string.game_mode_wii_controller), names[current.ordinal], names) { index ->
+        val pad = FluxLayout.WiiPad.entries[index]
+        onPicked(pad.name.takeIf { pad != FluxLayout.WiiPad.NUNCHUK })
+        scope.launch {
+            val result = withContext(Dispatchers.IO) { FluxLayout.setWiiPad(pkg, id, pad) }
+            android.widget.Toast.makeText(
+                context,
+                when (result) {
+                    FluxLayout.Result.DONE -> context.getString(R.string.game_mode_wii_set, names[index])
+                    FluxLayout.Result.NOT_FOUND -> context.getString(R.string.game_mode_setup_not_found, "Dolphin")
+                    else -> context.getString(R.string.adb_not_running)
+                },
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+}
+
 @Composable
 private fun ChoiceRow(title: String, value: String, options: List<String>, onPick: (Int) -> Unit) {
     var open by remember { mutableStateOf(false) }

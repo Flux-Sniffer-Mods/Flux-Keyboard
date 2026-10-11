@@ -89,13 +89,57 @@ object FluxLayout {
         "Nunchuk/Stick/Left" to keys(Control.LS_LEFT), "Nunchuk/Stick/Right" to keys(Control.LS_RIGHT)
     )
 
+    private val CLASSIC = listOf(
+        "Classic/Buttons/A" to keys(Control.A), "Classic/Buttons/B" to keys(Control.B),
+        "Classic/Buttons/X" to keys(Control.X), "Classic/Buttons/Y" to keys(Control.Y),
+        "Classic/Triggers/L" to keys(Control.L1), "Classic/Triggers/R" to keys(Control.R1),
+        "Classic/Buttons/ZL" to keys(Control.L2), "Classic/Buttons/ZR" to keys(Control.R2),
+        "Classic/Buttons/-" to keys(Control.SELECT), "Classic/Buttons/+" to keys(Control.START),
+        "Classic/Buttons/Home" to keys(Control.HOME),
+        "Classic/D-Pad/Up" to keys(Control.UP), "Classic/D-Pad/Down" to keys(Control.DOWN),
+        "Classic/D-Pad/Left" to keys(Control.LEFT), "Classic/D-Pad/Right" to keys(Control.RIGHT),
+        "Classic/Left Stick/Up" to keys(Control.LS_UP), "Classic/Left Stick/Down" to keys(Control.LS_DOWN),
+        "Classic/Left Stick/Left" to keys(Control.LS_LEFT), "Classic/Left Stick/Right" to keys(Control.LS_RIGHT),
+        "Classic/Right Stick/Up" to keys(Control.RS_UP), "Classic/Right Stick/Down" to keys(Control.RS_DOWN),
+        "Classic/Right Stick/Left" to keys(Control.RS_LEFT), "Classic/Right Stick/Right" to keys(Control.RS_RIGHT)
+    )
+
+    /** Held sideways, as for NES-style games: 2 (right-hand) on A, 1 on X and B, the remote's A and B on Y and R2. */
+    private val SIDEWAYS = listOf(
+        "Buttons/2" to keys(Control.A), "Buttons/1" to keys(Control.X, Control.B),
+        "Buttons/A" to keys(Control.Y), "Buttons/B" to keys(Control.R2),
+        "Buttons/-" to keys(Control.SELECT), "Buttons/+" to keys(Control.START), "Buttons/Home" to keys(Control.HOME),
+        "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
+        "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
+        "Shake/X" to keys(Control.R1), "Shake/Y" to keys(Control.R1), "Shake/Z" to keys(Control.R1)
+    )
+
+    /** The Wii controllers a game can be given, each a Dolphin Wii Remote profile of its own. */
+    enum class WiiPad(val profile: String) {
+        NUNCHUK("Flux Keyboard"), CLASSIC("Flux Keyboard (Classic Controller)"), SIDEWAYS("Flux Keyboard (sideways)")
+    }
+
     private fun dolphinLines(controls: List<Pair<String, List<Int>>>) =
         controls.map { (control, keys) -> "$control = " + keys.joinToString(" | ") { "`${keyName(it)}`" } }
 
     internal fun dolphinGameCube(keyboard: String): List<String> = listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE)
 
-    internal fun dolphinWii(keyboard: String): List<String> =
-        listOf("Device = Android/0/$keyboard", "Source = 1", "Extension = Nunchuk") + dolphinLines(WII)
+    internal fun dolphinWii(keyboard: String, pad: WiiPad = WiiPad.NUNCHUK): List<String> =
+        listOf("Device = Android/0/$keyboard", "Source = 1") + when (pad) {
+            WiiPad.NUNCHUK -> listOf("Extension = Nunchuk") + dolphinLines(WII)
+            WiiPad.CLASSIC -> listOf("Extension = Classic") + dolphinLines(CLASSIC)
+            WiiPad.SIDEWAYS -> listOf("Extension = None", "Options/Sideways Wiimote = True") + dolphinLines(SIDEWAYS)
+        }
+
+    /** [ini] with [key] in [section] set to [value] (null: taken out), the rest kept. */
+    internal fun withKey(ini: String, section: String, key: String, value: String?): String {
+        val pattern = Regex("(?ms)^\\[" + Regex.escape(section) + "\\]\\R(.*?)(?=^\\[|\\z)")
+        val body = pattern.find(ini)?.groupValues?.get(1).orEmpty().lines()
+            .filter { it.isNotBlank() && !it.trimStart().startsWith("$key ") && !it.trimStart().startsWith("$key=") }
+        val lines = body + listOfNotNull(value?.let { "$key = $it" })
+        if (lines.isEmpty()) return pattern.replace(ini, "").trimEnd().let { if (it.isEmpty()) "" else "$it\n" }
+        return withSection(ini, section, lines)
+    }
 
     /** [ini] with section [name] holding [lines] (added when it has none). */
     internal fun withSection(ini: String, name: String, lines: List<String>): String {
@@ -179,8 +223,29 @@ object FluxLayout {
             write("$dir/Config/WiimoteNew.ini", withSection(read("$dir/Config/WiimoteNew.ini"), "Wiimote1", wii)) &&
             // Also as profiles, to load again after changing them
             write("$dir/Config/Profiles/GCPad/Flux Keyboard.ini", withSection("", "Profile", gc)) &&
-            write("$dir/Config/Profiles/Wiimote/Flux Keyboard.ini", withSection("", "Profile", wii))
+            WiiPad.entries.all { pad ->
+                write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad)))
+            }
         return if (ok) Result.DONE else Result.FAILED
+    }
+
+    private fun dolphinDir(pkg: String): String? = AdbShell.run(
+        "for d in \"/storage/emulated/0/Android/data/$pkg/files\" /storage/emulated/0/dolphin-emu; do " +
+            "[ -d \"\$d/Config\" ] && { echo \"\$d\"; break; }; done; true", 3_000
+    )?.trim()?.ifEmpty { null }
+
+    /**
+     * One Wii game's controller: its own Dolphin settings (GameSettings/<game ID>.ini) load the
+     * matching profile as it starts; a Wii Remote with Nunchuk is everyone's, so nothing is kept.
+     */
+    fun setWiiPad(pkg: String, gameId: String, pad: WiiPad): Result {
+        val keyboard = keyboardName() ?: return Result.FAILED
+        val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
+        val profile = "$dir/Config/Profiles/Wiimote/${pad.profile}.ini"
+        if (!write(profile, withSection("", "Profile", dolphinWii(keyboard, pad)))) return Result.FAILED
+        val file = "$dir/GameSettings/$gameId.ini"
+        val value = if (pad == WiiPad.NUNCHUK) null else pad.profile
+        return if (write(file, withKey(read(file), "Controls", "WiimoteProfile1", value))) Result.DONE else Result.FAILED
     }
 
     private fun ppsspp(pkg: String): Result {

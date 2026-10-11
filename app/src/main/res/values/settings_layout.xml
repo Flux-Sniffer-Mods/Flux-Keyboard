@@ -436,4 +436,9 @@
     <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s layout: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick, and the trackpad\'s left half the left stick.\n\nDolphin: GameCube controller 1 and Wii Remote 1 (with Nunchuk) are set, and kept as the \"Flux Keyboard\" profiles too. PPSSPP: its controls are set for every game.</string>
     <string name="game_mode_setup_not_found">%1$s\'s settings weren\'t found: open it once, then try again.</string>
     <string name="game_mode_setup_by_hand">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s</string>
+    <string name="game_mode_wii_controller">Wii controller</string>
+    <string name="game_mode_wii_nunchuk">Wii Remote and Nunchuk</string>
+    <string name="game_mode_wii_classic">Classic Controller</string>
+    <string name="game_mode_wii_sideways">Wii Remote held sideways</string>
+    <string name="game_mode_wii_set">This game now starts with: %1$s.</string>
 </resources>

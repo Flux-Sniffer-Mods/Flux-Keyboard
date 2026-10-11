@@ -72,6 +72,8 @@ data class GameProfile(
      * app's. App profiles (no [launch]) always have their own.
      */
     val own: Boolean = false,
+    /** A Dolphin Wii game's controller ([FluxLayout.WiiPad]'s name; null: Wii Remote and Nunchuk). */
+    val wiiPad: String? = null,
     /** Dolphin's two app profiles: "wii" or "gamecube", each game getting the one it is. */
     val variant: String? = null
 ) {
@@ -86,6 +88,7 @@ data class GameProfile(
         put("rightStickKeys", rightStickKeys)
         put("own", own)
         variant?.let { put("variant", it) }
+        wiiPad?.let { put("wiiPad", it) }
         put("name", name)
         put("packages", JSONArray(packages.toList()))
         put("left", leftHalf.name)
@@ -129,7 +132,8 @@ data class GameProfile(
                 rightStickKeys = json.optBoolean("rightStickKeys", false),
                 // Games made before apps had settings of their own keep theirs
                 own = json.optBoolean("own", true),
-                variant = json.optString("variant").ifEmpty { null }
+                variant = json.optString("variant").ifEmpty { null },
+                wiiPad = json.optString("wiiPad").ifEmpty { null }
             )
         }.getOrNull()
     }
