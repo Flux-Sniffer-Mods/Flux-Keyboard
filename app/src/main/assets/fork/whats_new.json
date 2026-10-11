@@ -534,6 +534,51 @@
     },
     {
       "text": "Number fields take a decimal point, minus and the like from their keys, in the separator the phone uses."
+    },
+    {
+      "text": "Gaming mode: Dolphin and PPSSPP get graphics settings suited to the phone's GPU (Vulkan and the right options for the Titan 2 Elite's Mali), with advice for games whose settings can't be written."
+    },
+    {
+      "text": "Gaming mode: the phone's own game mode (com.agui.game) is one switch, no pop-up."
+    },
+    {
+      "text": "Gaming mode: each game can have its own resolution, on the phone and when streaming (Infinity Nikki at 720p, say), keeping the shape its Screen choice gives it."
+    },
+    {
+      "text": "Gaming mode: Reset puts an emulator's controller and graphics settings back to how they were before Flux Keyboard set them."
+    },
+    {
+      "text": "Gaming mode: the trackpad's left stick works in Dolphin without setting it up by hand: it presses keys the keyboard has (R T Y G), which Dolphin's profile maps to the stick."
+    },
+    {
+      "text": "Gaming mode: on-screen keys are placed separately for the phone and for streaming, the placer opens from the streaming notification, and keys are picked from a grid as well as pressed."
+    },
+    {
+      "text": "Gaming mode: pick a game's art from everything its sources have, upright and icon, or a picture of your own."
+    },
+    {
+      "text": "Games app: a grid of upright covers with names, Add a game and Xbox cloud game among them, launchers and emulators on a page of their own, settings behind the gear and streaming on the chip at the top. Long-press a game for its settings."
+    },
+    {
+      "text": "Xbox Cloud Gaming: the sign-in page closes by itself once you're signed in, and long-pressing the Xbox tile signs you out (it asks first)."
+    },
+    {
+      "text": "Stream to Moonlight: Automatic runs at exactly the resolution the Moonlight client asks for (4K included); 720p, 1080p or 1440p run the game smaller, scaled up on the client."
+    },
+    {
+      "text": "Stream to Moonlight: the phone asks before a Moonlight client starts a stream (Don't ask again per device), and a notification shows what's streaming where, with End stream and Place keys."
+    },
+    {
+      "text": "Stream to Moonlight: Moonlight shows each game's upright art (the art you picked), the phone's own screen can be listed as well, and Xbox cloud games are listed once played in Flux Keyboard's player."
+    },
+    {
+      "text": "Stream to Moonlight: a game can play on a screen of its own instead of the phone's being mirrored, leaving the phone free. The Games app shows that screen live, and your keys, touch, placed keys and trackpad sticks go to it. Android 16's desktop can be shown there too. The notification switches either way mid-stream."
+    },
+    {
+      "text": "Stream to Moonlight: on a screen of its own, keyboards, mice and controllers plugged into the phone or paired by Bluetooth go straight to the game, and back to the phone after."
+    },
+    {
+      "text": "Stream to Moonlight works over USB tethering and Ethernet as well as Wi-Fi: Moonlight is given the address it reached the phone by."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -766,6 +811,12 @@
     },
     {
       "text": "Suggestions read as they'll be typed: I, I'm, names and places with their capitals, a capital first letter with Shift on or after a typed capital, and all capitals with Caps Lock."
+    },
+    {
+      "text": "Xbox Cloud Gaming no longer freezes after typing an email address or on opening: the keyboard waited on the page, which waited on the keyboard. A crashed page reloads the player only."
+    },
+    {
+      "text": "The crash log includes why the app last closed and any not-responding traces, so freezes can be found too."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
