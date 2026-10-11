@@ -929,58 +929,45 @@ internal fun CrashLogRow() {
 }
 
 /**
- * The phone's own game mode (Unihertz's game space, and the like): it can take over as the home
- * screen, at odds with gaming mode. Its apps are listed, each turned off or back on (through
- * the shell: they're system apps).
+ * The phone's own game mode (Unihertz's, com.agui.game): it can take over as the home screen,
+ * at odds with gaming mode. Turned off here, or back on (through the shell: it's a system app);
+ * not shown on phones without it.
  */
 @Composable
 internal fun PhoneGameModeRow() {
-    val context = LocalContext.current
     val scope = androidx.compose.runtime.rememberCoroutineScope()
-    var apps by remember { mutableStateOf<List<Pair<String, Boolean>>?>(null) }
-    var open by remember { mutableStateOf(false) }
+    // Installed and turned on: null while it's being read, nothing shown when it isn't there
+    var state by remember { mutableStateOf<Boolean?>(null) }
+    var present by remember { mutableStateOf(false) }
     fun load() = scope.launch {
-        apps = withContext(Dispatchers.IO) {
-            val shell = it.palsoftware.pastiera.adb.AdbShell
-            val all = shell.run("pm list packages -s | grep -i -E 'game' ; true", 5_000).orEmpty()
-            val disabled = shell.run("pm list packages -d ; true", 5_000).orEmpty()
-            all.lines().map { line -> line.removePrefix("package:").trim() }.filter { it.isNotEmpty() }
-                .map { pkg -> pkg to !disabled.lines().any { it.trim() == "package:$pkg" } }
+        val shell = it.palsoftware.pastiera.adb.AdbShell
+        val (installed, on) = withContext(Dispatchers.IO) {
+            val all = shell.run("pm list packages -s $PHONE_GAME_MODE ; true", 5_000).orEmpty()
+            val disabled = shell.run("pm list packages -d $PHONE_GAME_MODE ; true", 5_000).orEmpty()
+            fun has(list: String) = list.lines().any { it.trim() == "package:$PHONE_GAME_MODE" }
+            has(all) to !has(disabled)
+        }
+        present = installed
+        state = on
+    }
+    androidx.compose.runtime.LaunchedEffect(Unit) { load() }
+    if (!present) return
+    FluxSwitchRow(
+        linkId = null,
+        title = stringResource(R.string.phone_game_mode),
+        description = stringResource(R.string.phone_game_mode_description),
+        checked = state == true
+    ) { want ->
+        state = want
+        scope.launch {
+            withContext(Dispatchers.IO) {
+                it.palsoftware.pastiera.adb.AdbShell.run(
+                    if (want) "pm enable $PHONE_GAME_MODE" else "pm disable-user --user 0 $PHONE_GAME_MODE", 5_000
+                )
+            }
+            load()
         }
     }
-    FluxActionRow(
-        linkId = null,
-        icon = "\u2699",
-        title = stringResource(R.string.phone_game_mode),
-        description = stringResource(R.string.phone_game_mode_description)
-    ) { open = true; load() }
-    if (open) AlertDialog(
-        onDismissRequest = { open = false },
-        title = { Text(stringResource(R.string.phone_game_mode)) },
-        text = {
-            Column {
-                val list = apps
-                when {
-                    list == null -> Text(stringResource(R.string.game_mode_import_reading))
-                    list.isEmpty() -> Text(stringResource(R.string.phone_game_mode_none))
-                    else -> list.forEach { (pkg, on) ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(appLabel(context, pkg) + "\n" + pkg, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                            androidx.compose.material3.Switch(checked = on, onCheckedChange = { want ->
-                                scope.launch {
-                                    withContext(Dispatchers.IO) {
-                                        it.palsoftware.pastiera.adb.AdbShell.run(
-                                            if (want) "pm enable $pkg" else "pm disable-user --user 0 $pkg", 5_000
-                                        )
-                                    }
-                                    load()
-                                }
-                            })
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(android.R.string.ok)) } }
-    )
 }
+
+private const val PHONE_GAME_MODE = "com.agui.game"

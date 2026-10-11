@@ -482,8 +482,7 @@
     <string name="crash_log_description">Android\'s record of Flux Keyboard\'s last crashes, saved to Download/Flux Keyboard/crash-log.txt to share.</string>
     <string name="crash_log_saved">Saved to Download/Flux Keyboard/crash-log.txt</string>
     <string name="phone_game_mode">Phone\'s own game mode</string>
-    <string name="phone_game_mode_description">The phone\'s game space can take over as the home screen alongside gaming mode: turn its apps off here, or back on.</string>
-    <string name="phone_game_mode_none">No game mode apps found on this phone.</string>
+    <string name="phone_game_mode_description">Unihertz\'s Game Mode can take over as the home screen alongside gaming mode. Turn it off here.</string>
     <string name="game_mode_artwork">Artwork</string>
     <string name="game_mode_artwork_description">Shown in the game list, on its shortcut and in Moonlight. Your own picture, else the art found for it.</string>
     <string name="game_mode_artwork_choose">Choose a picture</string>
