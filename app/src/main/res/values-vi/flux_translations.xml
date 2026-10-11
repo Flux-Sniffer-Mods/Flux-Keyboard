@@ -1844,7 +1844,7 @@
     <string name="games_app_xbox">Game Xbox Cloud</string>
     <string name="stream_section">Phát trực tuyến</string>
     <string name="stream_switch">Phát tới Moonlight</string>
-    <string name="stream_switch_description">Điện thoại hiện trong Moonlight trên TV hoặc thiết bị khác cùng Wi-Fi: ghép nối bằng mã PIN Moonlight hiển thị, và game của bạn sẽ có ở đó. Game đám mây thì không: chơi chúng trên ứng dụng Xbox hoặc trình duyệt của TV, thẳng từ đám mây. Phát chính game sẽ có tiếp theo.</string>
+    <string name="stream_switch_description">Điện thoại hiện trong Moonlight trên mọi thiết bị cùng Wi-Fi: ghép nối bằng mã PIN Moonlight hiển thị, và game của bạn sẽ có ở đó. Game đám mây thì không: chơi chúng trong ứng dụng Xbox hoặc trình duyệt của thiết bị đó, trực tiếp từ đám mây.</string>
     <string name="stream_unpair">Quên thiết bị đã ghép nối</string>
     <string name="stream_unpair_description">Đã ghép %1$d. Mỗi thiết bị sẽ ghép lại bằng mã PIN.</string>
     <string name="stream_pin_title">Ghép nối %1$s</string>
@@ -1881,8 +1881,13 @@
     <string name="game_mode_advice_driver_turnip">Turnip (bản mới nhất)</string>
     <string name="game_mode_advice_driver_system">System (Turnip chỉ dành cho Adreno)</string>
     <string name="game_mode_advice_game">Trong cài đặt của chính game: chất lượng đồ họa Trung bình hoặc Thấp, giới hạn 60 fps chỉ khi giữ ổn định (nếu không thì 30), và tỉ lệ kết xuất hoặc độ phân giải dưới 100% nếu có.</string>
-    <string name="stream_resolution">Độ phân giải trên TV</string>
+    <string name="stream_resolution">Độ phân giải phát trực tuyến</string>
     <string name="stream_resolution_client">Theo yêu cầu của Moonlight</string>
-    <string name="stream_resolution_description">Khi phát trực tuyến, màn hình điện thoại lấy hình dạng của TV ở kích thước này, ưu tiên hơn lựa chọn màn hình của chế độ chơi game. Mặc định theo yêu cầu của Moonlight (đặt trong cài đặt của nó); kích thước nhỏ hơn ở đây giúp game chạy mượt hơn.</string>
+    <string name="stream_resolution_description">Khi phát trực tuyến, màn hình điện thoại lấy hình dạng của Moonlight client. Tự động chạy đúng độ phân giải client yêu cầu (đặt trong cài đặt của Moonlight), kể cả 4K. Kích thước chọn ở đây cho game chạy ở kích thước đó, rồi phóng lên theo client: nhẹ hơn cho điện thoại.</string>
     <string name="games_app_settings">Cài đặt chơi game</string>
+    <string name="stream_confirm_title">Kết nối %1$s?</string>
+    <string name="stream_confirm_text">Thiết bị muốn phát trực tuyến từ điện thoại này.</string>
+    <string name="stream_confirm_text_game">Thiết bị muốn chơi %1$s từ điện thoại này.</string>
+    <string name="stream_confirm_always">Không hỏi lại cho thiết bị này</string>
+    <string name="stream_confirm_connect">Kết nối</string>
 </resources>

@@ -1850,7 +1850,7 @@
     <string name="games_app_xbox">Xbox ամպային խաղ</string>
     <string name="stream_section">Հեռարձակում</string>
     <string name="stream_switch">Հեռարձակել Moonlight</string>
-    <string name="stream_switch_description">Հեռախոսը երևում է Moonlight-ում ձեր հեռուստացույցում կամ նույն Wi-Fi-ի այլ սարքում. զուգակցեք այն Moonlight-ի ցույց տված PIN-ով, և ձեր խաղերը կհայտնվեն այնտեղ։ Ամպային խաղերը՝ ոչ. խաղացեք դրանք հեռուստացույցի Xbox հավելվածում կամ բրաուզերում՝ անմիջապես ամպից։ Խաղի հեռարձակումը հաջորդն է։</string>
+    <string name="stream_switch_description">Հեռախոսը երևում է Moonlight-ում նույն Wi-Fi-ի ցանկացած սարքում. զուգակցիր Moonlight-ի ցույց տված PIN-ով, և խաղերդ կհայտնվեն այնտեղ։ Ամպային խաղերը՝ ոչ. խաղա դրանք այդ սարքի Xbox հավելվածում կամ բրաուզերում՝ անմիջապես ամպից։</string>
     <string name="stream_unpair">Մոռանալ զուգակցված սարքերը</string>
     <string name="stream_unpair_description">%1$d զուգակցված։ Յուրաքանչյուրը նորից կզուգակցվի PIN-ով։</string>
     <string name="stream_pin_title">Զուգակցել %1$s</string>
@@ -1887,8 +1887,13 @@
     <string name="game_mode_advice_driver_turnip">Turnip (ամենանորը)</string>
     <string name="game_mode_advice_driver_system">System (Turnip-ը միայն Adreno-ի համար է)</string>
     <string name="game_mode_advice_game">Խաղի սեփական կարգավորումներում. գրաֆիկայի որակ Միջին կամ Ցածր, 60 fps սահմանաչափ միայն եթե կայուն է մնում (այլապես 30), և ռենդերի մասշտաբ կամ լուծաչափ 100%-ից ցածր, եթե առաջարկում է։</string>
-    <string name="stream_resolution">Լուծաչափը հեռուստացույցում</string>
+    <string name="stream_resolution">Հեռարձակման լուծաչափ</string>
     <string name="stream_resolution_client">Ինչպես Moonlight-ն է խնդրում</string>
-    <string name="stream_resolution_description">Հեռարձակման ժամանակ հեռախոսի էկրանը ստանում է հեռուստացույցի ձևը այս չափով՝ խաղային ռեժիմի էկրանի ընտրությունից առաջ։ Սկզբում՝ ինչ Moonlight-ն է խնդրում (նրա կարգավորումներում)․ ավելի փոքր չափն այստեղ խաղերը ավելի սահուն է դարձնում։</string>
+    <string name="stream_resolution_description">Հեռարձակման ժամանակ հեռախոսի էկրանը ստանում է Moonlight կլիենտի ձևը։ Ավտոմատը աշխատում է ճիշտ այն լուծաչափով, որ կլիենտը խնդրում է (Moonlight-ի կարգավորումներում), ներառյալ 4K։ Այստեղ ընտրված չափը խաղը աշխատեցնում է այդ չափով՝ մասշտաբավորված կլիենտինին. ավելի թեթև հեռախոսի համար։</string>
     <string name="games_app_settings">Խաղային կարգավորումներ</string>
+    <string name="stream_confirm_title">Միացնե՞լ %1$s-ը</string>
+    <string name="stream_confirm_text">Այն ուզում է հեռարձակել այս հեռախոսից։</string>
+    <string name="stream_confirm_text_game">Այն ուզում է խաղալ %1$s այս հեռախոսից։</string>
+    <string name="stream_confirm_always">Այլևս չհարցնել այս սարքի համար</string>
+    <string name="stream_confirm_connect">Միացնել</string>
 </resources>

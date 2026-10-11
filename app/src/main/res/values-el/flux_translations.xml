@@ -1224,7 +1224,7 @@
     <string name="games_app_xbox">Παιχνίδι Xbox cloud</string>
     <string name="stream_section">Ροή</string>
     <string name="stream_switch">Ροή στο Moonlight</string>
-    <string name="stream_switch_description">Το τηλέφωνο εμφανίζεται στο Moonlight στην τηλεόρασή σας ή σε άλλη συσκευή στο ίδιο Wi-Fi: συνδέστε το με το PIN που δείχνει το Moonlight και τα παιχνίδια σας εμφανίζονται εκεί. Τα παιχνίδια cloud όχι: παίξτε τα στην εφαρμογή Xbox ή στον browser της τηλεόρασης, απευθείας από το cloud. Η ροή ενός παιχνιδιού έρχεται στη συνέχεια.</string>
+    <string name="stream_switch_description">Το τηλέφωνο εμφανίζεται στο Moonlight σε κάθε συσκευή στο ίδιο Wi-Fi: σύζευξε με το PIN που δείχνει το Moonlight και τα παιχνίδια σου εμφανίζονται εκεί. Τα παιχνίδια cloud όχι: παίξε τα στην εφαρμογή Xbox ή στον browser εκείνης της συσκευής, απευθείας από το cloud.</string>
     <string name="stream_unpair">Διαγραφή συνδεδεμένων συσκευών</string>
     <string name="stream_unpair_description">%1$d συνδεδεμένες. Καθεμία συνδέεται ξανά με PIN.</string>
     <string name="stream_pin_title">Σύζευξη %1$s</string>
@@ -1261,8 +1261,13 @@
     <string name="game_mode_advice_driver_turnip">Turnip (ο νεότερος)</string>
     <string name="game_mode_advice_driver_system">System (ο Turnip είναι μόνο για Adreno)</string>
     <string name="game_mode_advice_game">Στις ρυθμίσεις του παιχνιδιού: ποιότητα γραφικών Μέτρια ή Χαμηλή, όριο 60 fps μόνο αν μένει σταθερό (αλλιώς 30), και κλίμακα απόδοσης ή ανάλυση κάτω από 100% αν υπάρχει.</string>
-    <string name="stream_resolution">Ανάλυση στην τηλεόραση</string>
+    <string name="stream_resolution">Ανάλυση μετάδοσης</string>
     <string name="stream_resolution_client">Όπως ζητά το Moonlight</string>
-    <string name="stream_resolution_description">Κατά τη μετάδοση, η οθόνη του τηλεφώνου παίρνει το σχήμα της τηλεόρασης σε αυτό το μέγεθος, πριν από την επιλογή οθόνης της λειτουργίας gaming. Αρχικά ό,τι ζητά το Moonlight (ορίζεται στις ρυθμίσεις του)· ένα μικρότερο μέγεθος εδώ κάνει τα παιχνίδια πιο ομαλά.</string>
+    <string name="stream_resolution_description">Κατά τη μετάδοση, η οθόνη του τηλεφώνου παίρνει το σχήμα του Moonlight client. Το Αυτόματα τρέχει ακριβώς στην ανάλυση που ζητά ο client (ορίζεται στις ρυθμίσεις του Moonlight), μαζί και 4K. Ένα μέγεθος που επιλέγεις εδώ τρέχει το παιχνίδι σε αυτό, κλιμακωμένο στο μέγεθος του client: πιο ελαφρύ για το τηλέφωνο.</string>
     <string name="games_app_settings">Ρυθμίσεις gaming</string>
+    <string name="stream_confirm_title">Σύνδεση με %1$s;</string>
+    <string name="stream_confirm_text">Θέλει να κάνει μετάδοση από αυτό το τηλέφωνο.</string>
+    <string name="stream_confirm_text_game">Θέλει να παίξει %1$s από αυτό το τηλέφωνο.</string>
+    <string name="stream_confirm_always">Να μην ξαναρωτηθώ για αυτή τη συσκευή</string>
+    <string name="stream_confirm_connect">Σύνδεση</string>
 </resources>

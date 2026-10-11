@@ -1856,7 +1856,7 @@
     <string name="games_app_xbox">Jeu Xbox Cloud</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Diffuser vers Moonlight</string>
-    <string name="stream_switch_description">Le téléphone apparaît dans Moonlight sur votre TV ou un autre appareil du même Wi-Fi : associez-le avec le code PIN que Moonlight affiche, et vos jeux y sont listés. Pas les jeux cloud : jouez-y dans l\'appli Xbox ou le navigateur de la TV, directement depuis le cloud. La diffusion d\'un jeu arrive ensuite.</string>
+    <string name="stream_switch_description">Le téléphone apparaît dans Moonlight sur tout appareil du même Wi-Fi : associe-le avec le code PIN qu\'affiche Moonlight, et tes jeux y sont listés. Pas les jeux cloud : joue-les dans l\'appli Xbox ou le navigateur de cet appareil, directement depuis le cloud.</string>
     <string name="stream_unpair">Oublier les appareils associés</string>
     <string name="stream_unpair_description">%1$d associés. Chacun s\'associe à nouveau avec un code PIN.</string>
     <string name="stream_pin_title">Associer %1$s</string>
@@ -1893,8 +1893,13 @@
     <string name="game_mode_advice_driver_turnip">Turnip (le plus récent)</string>
     <string name="game_mode_advice_driver_system">System (Turnip est réservé à Adreno)</string>
     <string name="game_mode_advice_game">Dans les réglages du jeu : qualité graphique Moyenne ou Basse, limite de 60 i/s seulement si elle reste stable (sinon 30), et échelle de rendu ou résolution sous 100 % si proposée.</string>
-    <string name="stream_resolution">Résolution sur la télé</string>
+    <string name="stream_resolution">Résolution du streaming</string>
     <string name="stream_resolution_client">Celle que demande Moonlight</string>
-    <string name="stream_resolution_description">Pendant le streaming, l\'écran du téléphone prend la forme de la télé à cette taille, avant le choix d\'écran du mode gaming. Par défaut, ce que demande Moonlight (réglé dans ses propres paramètres) ; une taille plus petite ici rend les jeux plus fluides.</string>
+    <string name="stream_resolution_description">Pendant le streaming, l\'écran du téléphone prend la forme du client Moonlight. Automatique tourne exactement à la résolution demandée par le client (réglée dans Moonlight), 4K compris. Une taille choisie ici fait tourner le jeu à cette taille, mise à l\'échelle de celle du client : plus léger pour le téléphone.</string>
     <string name="games_app_settings">Réglages de jeu</string>
+    <string name="stream_confirm_title">Connecter %1$s ?</string>
+    <string name="stream_confirm_text">Il veut diffuser depuis ce téléphone.</string>
+    <string name="stream_confirm_text_game">Il veut jouer à %1$s depuis ce téléphone.</string>
+    <string name="stream_confirm_always">Ne plus demander pour cet appareil</string>
+    <string name="stream_confirm_connect">Connecter</string>
 </resources>

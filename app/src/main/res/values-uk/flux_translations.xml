@@ -1862,7 +1862,7 @@
     <string name="games_app_xbox">Хмарна гра Xbox</string>
     <string name="stream_section">Стримінг</string>
     <string name="stream_switch">Стримити в Moonlight</string>
-    <string name="stream_switch_description">Телефон з\'являється в Moonlight на телевізорі чи іншому пристрої в тій самій мережі Wi-Fi: зв\'яжіть його PIN-кодом, який показує Moonlight, і ваші ігри з\'являться там. Хмарні ігри — ні: грайте в них у застосунку Xbox або браузері телевізора, прямо з хмари. Стримінг самої гри з\'явиться наступним.</string>
+    <string name="stream_switch_description">Телефон з\'являється в Moonlight на будь-якому пристрої в тій самій мережі Wi-Fi: виконайте сполучення за PIN-кодом із Moonlight, і ваші ігри з\'являться там. Хмарні ігри — ні: грайте в них у застосунку Xbox або браузері того пристрою, прямо з хмари.</string>
     <string name="stream_unpair">Забути зв\'язані пристрої</string>
     <string name="stream_unpair_description">Зв\'язано: %1$d. Кожен знову зв\'яжеться PIN-кодом.</string>
     <string name="stream_pin_title">Зв\'язати %1$s</string>
@@ -1899,8 +1899,13 @@
     <string name="game_mode_advice_driver_turnip">Turnip (найновіший)</string>
     <string name="game_mode_advice_driver_system">System (Turnip лише для Adreno)</string>
     <string name="game_mode_advice_game">У налаштуваннях самої гри: якість графіки Середня або Низька, обмеження 60 fps лише якщо воно тримається стабільно (інакше 30), і масштаб рендерингу або роздільність нижче 100%, якщо є.</string>
-    <string name="stream_resolution">Роздільність на телевізорі</string>
+    <string name="stream_resolution">Роздільність трансляції</string>
     <string name="stream_resolution_client">Як просить Moonlight</string>
-    <string name="stream_resolution_description">Під час трансляції екран телефона набуває форми телевізора в цьому розмірі, раніше за вибір екрана ігрового режиму. Типово — те, що просить Moonlight (задається в його налаштуваннях); менший розмір тут робить ігри плавнішими.</string>
+    <string name="stream_resolution_description">Під час трансляції екран телефона набуває форми клієнта Moonlight. Автоматично — рівно та роздільність, яку просить клієнт (задається в налаштуваннях Moonlight), включно з 4K. Вибраний тут розмір запускає гру в ньому з масштабуванням до розміру клієнта: легше для телефона.</string>
     <string name="games_app_settings">Налаштування ігор</string>
+    <string name="stream_confirm_title">Підключити %1$s?</string>
+    <string name="stream_confirm_text">Воно хоче транслювати з цього телефона.</string>
+    <string name="stream_confirm_text_game">Воно хоче грати в %1$s з цього телефона.</string>
+    <string name="stream_confirm_always">Більше не питати для цього пристрою</string>
+    <string name="stream_confirm_connect">Підключити</string>
 </resources>
