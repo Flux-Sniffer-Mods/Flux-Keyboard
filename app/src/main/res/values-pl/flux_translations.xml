@@ -1926,4 +1926,9 @@
     <string name="game_mode_reset_emulator_confirm">Wszystko, co Flux Keyboard ustawił w %1$s (sterowanie, grafika, kontroler każdej gry), wraca do stanu sprzed zmian. Ustawień zmienionych przez starszą wersję Flux Keyboard nie da się przywrócić.</string>
     <string name="game_mode_reset_emulator_done">Ustawienia %1$s wróciły do stanu sprzed zmian Flux Keyboard.</string>
     <string name="game_mode_screen_follow">Jak ustawienia jego aplikacji</string>
+    <string name="game_mode_resolution_phone">Rozdzielczość na telefonie</string>
+    <string name="game_mode_resolution_phone_description">Trzymane pionowo: gra rysuje się w tej wysokości, z zachowanym kształtem ekranu, i jest skalowana, by go wypełnić. Niższa działa płynniej.</string>
+    <string name="game_mode_resolution_full">Pełna</string>
+    <string name="game_mode_resolution_stream">Rozdzielczość podczas streamu</string>
+    <string name="game_mode_resolution_stream_default">Jak w ustawieniach streamu</string>
 </resources>

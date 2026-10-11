@@ -1920,4 +1920,9 @@
     <string name="game_mode_reset_emulator_confirm">Tout ce que Flux Keyboard a réglé dans %1$s (commandes, graphismes, manette de chaque jeu) revient comme avant. Les réglages modifiés par une ancienne version de Flux Keyboard ne peuvent pas être restaurés.</string>
     <string name="game_mode_reset_emulator_done">Les réglages de %1$s sont revenus comme avant les changements de Flux Keyboard.</string>
     <string name="game_mode_screen_follow">Comme les réglages de son appli</string>
+    <string name="game_mode_resolution_phone">Résolution sur le téléphone</string>
+    <string name="game_mode_resolution_phone_description">Gardé droit : le jeu est dessiné à cette hauteur, la forme de l\'écran gardée, puis agrandi pour le remplir. Plus bas, c\'est plus fluide.</string>
+    <string name="game_mode_resolution_full">Complète</string>
+    <string name="game_mode_resolution_stream">Résolution en streaming</string>
+    <string name="game_mode_resolution_stream_default">Comme réglé pour le streaming</string>
 </resources>

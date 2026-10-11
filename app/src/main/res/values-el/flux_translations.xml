@@ -1288,4 +1288,9 @@
     <string name="game_mode_reset_emulator_confirm">Ό,τι όρισε το Flux Keyboard στο %1$s (χειρισμοί, γραφικά, χειριστήριο ανά παιχνίδι) επιστρέφει όπως ήταν πριν. Ρυθμίσεις που άλλαξε παλαιότερη έκδοση του Flux Keyboard δεν μπορούν να επανέλθουν.</string>
     <string name="game_mode_reset_emulator_done">Οι ρυθμίσεις του %1$s επανήλθαν όπως ήταν πριν τις αλλάξει το Flux Keyboard.</string>
     <string name="game_mode_screen_follow">Όπως οι ρυθμίσεις της εφαρμογής του</string>
+    <string name="game_mode_resolution_phone">Ανάλυση στο τηλέφωνο</string>
+    <string name="game_mode_resolution_phone_description">Όταν μένει όρθιο: το παιχνίδι σχεδιάζεται σε αυτό το ύψος, με το ίδιο σχήμα οθόνης, και κλιμακώνεται για να τη γεμίσει. Χαμηλότερα τρέχει πιο ομαλά.</string>
+    <string name="game_mode_resolution_full">Πλήρης</string>
+    <string name="game_mode_resolution_stream">Ανάλυση στη μετάδοση</string>
+    <string name="game_mode_resolution_stream_default">Όπως έχει οριστεί για τη μετάδοση</string>
 </resources>

@@ -1914,4 +1914,9 @@
     <string name="game_mode_reset_emulator_confirm">Այն ամենը, ինչ Flux Keyboard-ը կարգավորել է %1$s-ում (կառավարում, գրաֆիկա, ամեն խաղի կոնտրոլեր), կվերադառնա նախկինին։ Flux Keyboard-ի հին տարբերակի փոխած կարգավորումները հնարավոր չէ վերադարձնել։</string>
     <string name="game_mode_reset_emulator_done">%1$s-ի կարգավորումները վերադարձել են Flux Keyboard-ի փոփոխություններից առաջվա վիճակին։</string>
     <string name="game_mode_screen_follow">Ինչպես իր հավելվածի կարգավորումները</string>
+    <string name="game_mode_resolution_phone">Լուծաչափ հեռախոսում</string>
+    <string name="game_mode_resolution_phone_description">Ուղղահայաց պահելիս՝ խաղը նկարվում է այս բարձրությամբ՝ էկրանի ձևը պահպանելով, և մեծացվում է այն լցնելու համար։ Ցածրը ավելի սահուն է աշխատում։</string>
+    <string name="game_mode_resolution_full">Լրիվ</string>
+    <string name="game_mode_resolution_stream">Լուծաչափ հեռարձակելիս</string>
+    <string name="game_mode_resolution_stream_default">Ինչպես հեռարձակման համար է դրված</string>
 </resources>
