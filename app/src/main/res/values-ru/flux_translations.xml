@@ -1935,4 +1935,6 @@
     <string name="game_mode_artwork_icons">Значки (список игр и ярлыки)</string>
     <string name="game_mode_artwork_upright">Вертикальные обложки (Moonlight)</string>
     <string name="game_mode_artwork_none">Для этой игры ничего не найдено. Возможно, её название должно совпадать с настоящим.</string>
+    <string name="games_app_launchers">Лаунчеры и эмуляторы</string>
+    <string name="games_app_stream">Трансляция</string>
 </resources>

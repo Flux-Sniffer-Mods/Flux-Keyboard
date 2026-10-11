@@ -1923,4 +1923,6 @@
     <string name="game_mode_artwork_icons">Պատկերակներ (խաղերի ցանկ և դյուրանցումներ)</string>
     <string name="game_mode_artwork_upright">Ուղղահայաց շապիկներ (Moonlight)</string>
     <string name="game_mode_artwork_none">Այս խաղի համար պատկերներ չգտնվեցին։ Հնարավոր է՝ անունը պետք է համընկնի իրական վերնագրի հետ։</string>
+    <string name="games_app_launchers">Գործարկիչներ և էմուլյատորներ</string>
+    <string name="games_app_stream">Հեռարձակել</string>
 </resources>

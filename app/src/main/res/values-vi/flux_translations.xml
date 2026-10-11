@@ -1917,4 +1917,6 @@
     <string name="game_mode_artwork_icons">Biểu tượng (danh sách game và lối tắt)</string>
     <string name="game_mode_artwork_upright">Bìa dọc (Moonlight)</string>
     <string name="game_mode_artwork_none">Không tìm thấy ảnh cho game này. Có thể tên của nó cần khớp với tên thật.</string>
+    <string name="games_app_launchers">Trình khởi chạy và giả lập</string>
+    <string name="games_app_stream">Phát</string>
 </resources>

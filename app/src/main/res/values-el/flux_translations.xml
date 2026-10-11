@@ -1297,4 +1297,6 @@
     <string name="game_mode_artwork_icons">Εικονίδια (λίστα παιχνιδιών και συντομεύσεις)</string>
     <string name="game_mode_artwork_upright">Κάθετα εξώφυλλα (Moonlight)</string>
     <string name="game_mode_artwork_none">Δεν βρέθηκαν εικόνες για αυτό το παιχνίδι. Ίσως το όνομά του πρέπει να ταιριάζει με τον πραγματικό τίτλο.</string>
+    <string name="games_app_launchers">Launchers και εξομοιωτές</string>
+    <string name="games_app_stream">Μετάδοση</string>
 </resources>

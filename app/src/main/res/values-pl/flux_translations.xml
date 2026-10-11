@@ -1935,4 +1935,6 @@
     <string name="game_mode_artwork_icons">Ikony (lista gier i skróty)</string>
     <string name="game_mode_artwork_upright">Pionowe okładki (Moonlight)</string>
     <string name="game_mode_artwork_none">Nie znaleziono grafik dla tej gry. Może jej nazwa musi pasować do prawdziwego tytułu.</string>
+    <string name="games_app_launchers">Launchery i emulatory</string>
+    <string name="games_app_stream">Stream</string>
 </resources>

@@ -1929,4 +1929,6 @@
     <string name="game_mode_artwork_icons">Iconos (lista de juegos y accesos directos)</string>
     <string name="game_mode_artwork_upright">Portadas verticales (Moonlight)</string>
     <string name="game_mode_artwork_none">No se encontraron imágenes para este juego. Puede que su nombre deba coincidir con el título real.</string>
+    <string name="games_app_launchers">Lanzadores y emuladores</string>
+    <string name="games_app_stream">Transmitir</string>
 </resources>

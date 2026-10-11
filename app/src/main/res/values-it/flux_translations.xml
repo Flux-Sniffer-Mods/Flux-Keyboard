@@ -1434,4 +1434,6 @@
     <string name="game_mode_artwork_icons">Icone (elenco giochi e scorciatoie)</string>
     <string name="game_mode_artwork_upright">Copertine verticali (Moonlight)</string>
     <string name="game_mode_artwork_none">Nessuna immagine trovata per questo gioco. Forse il nome deve corrispondere al titolo reale.</string>
+    <string name="games_app_launchers">Launcher ed emulatori</string>
+    <string name="games_app_stream">Streaming</string>
 </resources>

@@ -1929,4 +1929,6 @@
     <string name="game_mode_artwork_icons">Icônes (liste des jeux et raccourcis)</string>
     <string name="game_mode_artwork_upright">Jaquettes verticales (Moonlight)</string>
     <string name="game_mode_artwork_none">Aucune image trouvée pour ce jeu. Son nom doit peut-être correspondre au vrai titre.</string>
+    <string name="games_app_launchers">Lanceurs et émulateurs</string>
+    <string name="games_app_stream">Diffuser</string>
 </resources>

@@ -1388,4 +1388,6 @@
     <string name="game_mode_artwork_icons">Symbole (Spieleliste und Verknüpfungen)</string>
     <string name="game_mode_artwork_upright">Hochformat-Cover (Moonlight)</string>
     <string name="game_mode_artwork_none">Keine Bilder für dieses Spiel gefunden. Sein Name muss eventuell dem echten Titel entsprechen.</string>
+    <string name="games_app_launchers">Launcher und Emulatoren</string>
+    <string name="games_app_stream">Streamen</string>
 </resources>
