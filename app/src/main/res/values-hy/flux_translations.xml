@@ -1850,7 +1850,7 @@
     <string name="games_app_xbox">Xbox ամպային խաղ</string>
     <string name="stream_section">Հեռարձակում</string>
     <string name="stream_switch">Հեռարձակել Moonlight</string>
-    <string name="stream_switch_description">Հեռախոսը երևում է Moonlight-ում նույն Wi-Fi-ի ցանկացած սարքում. զուգակցիր Moonlight-ի ցույց տված PIN-ով, և խաղերդ կհայտնվեն այնտեղ։ Ամպային խաղերը՝ ոչ. խաղա դրանք այդ սարքի Xbox հավելվածում կամ բրաուզերում՝ անմիջապես ամպից։</string>
+    <string name="stream_switch_description">Հեռախոսը երևում է Moonlight-ում նույն Wi-Fi-ի ցանկացած սարքում. զուգակցիր Moonlight-ի ցույց տված PIN-ով, և խաղերդ կհայտնվեն այնտեղ։ Xbox ամպային խաղերը կհայտնվեն, երբ դրանք խաղաս Flux Keyboard-ի նվագարկիչում։</string>
     <string name="stream_unpair">Մոռանալ զուգակցված սարքերը</string>
     <string name="stream_unpair_description">%1$d զուգակցված։ Յուրաքանչյուրը նորից կզուգակցվի PIN-ով։</string>
     <string name="stream_pin_title">Զուգակցել %1$s</string>
@@ -1896,4 +1896,13 @@
     <string name="stream_confirm_text_game">Այն ուզում է խաղալ %1$s այս հեռախոսից։</string>
     <string name="stream_confirm_always">Այլևս չհարցնել այս սարքի համար</string>
     <string name="stream_confirm_connect">Միացնել</string>
+    <string name="stream_now">Հեռարձակում</string>
+    <string name="stream_now_game">Հեռարձակվում է %1$s</string>
+    <string name="stream_now_to">Դեպի %1$s</string>
+    <string name="stream_end">Ավարտել</string>
+    <string name="stream_end_title">Ավարտե՞լ հեռարձակումը</string>
+    <string name="stream_keep">Շարունակել</string>
+    <string name="stream_phone_screen">Հեռախոսի էկրան</string>
+    <string name="stream_phone_screen_switch">Հեռախոսի էկրանը Moonlight-ում</string>
+    <string name="stream_phone_screen_description">Ցույց է տալիս հեռախոսի էկրանը Moonlight-ում՝ ինչ էլ որ դրա վրա լինի։</string>
 </resources>

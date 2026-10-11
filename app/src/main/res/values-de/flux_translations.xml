@@ -1315,7 +1315,7 @@
     <string name="games_app_xbox">Xbox-Cloud-Spiel</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Zu Moonlight streamen</string>
-    <string name="stream_switch_description">Das Handy erscheint in Moonlight auf jedem Gerät im selben WLAN: mit der PIN koppeln, die Moonlight zeigt, und deine Spiele sind dort aufgelistet. Cloud-Spiele nicht: spiele sie in der Xbox-App oder im Browser dieses Geräts, direkt aus der Cloud.</string>
+    <string name="stream_switch_description">Das Handy erscheint in Moonlight auf jedem Gerät im selben WLAN: mit der PIN koppeln, die Moonlight zeigt, und deine Spiele sind dort aufgelistet. Xbox-Cloud-Spiele erscheinen, sobald du sie im eigenen Player von Flux Keyboard gespielt hast.</string>
     <string name="stream_unpair">Gekoppelte Geräte vergessen</string>
     <string name="stream_unpair_description">%1$d gekoppelt. Jedes koppelt sich erneut mit einer PIN.</string>
     <string name="stream_pin_title">%1$s koppeln</string>
@@ -1361,4 +1361,13 @@
     <string name="stream_confirm_text_game">Es möchte %1$s von diesem Handy spielen.</string>
     <string name="stream_confirm_always">Für dieses Gerät nicht mehr fragen</string>
     <string name="stream_confirm_connect">Verbinden</string>
+    <string name="stream_now">Streamt</string>
+    <string name="stream_now_game">Streamt %1$s</string>
+    <string name="stream_now_to">An %1$s</string>
+    <string name="stream_end">Stream beenden</string>
+    <string name="stream_end_title">Stream beenden?</string>
+    <string name="stream_keep">Weiter streamen</string>
+    <string name="stream_phone_screen">Handybildschirm</string>
+    <string name="stream_phone_screen_switch">Handybildschirm in Moonlight</string>
+    <string name="stream_phone_screen_description">Zeigt den Bildschirm des Handys in Moonlight, mit allem, was darauf ist.</string>
 </resources>

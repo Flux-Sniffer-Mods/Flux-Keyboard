@@ -1224,7 +1224,7 @@
     <string name="games_app_xbox">Παιχνίδι Xbox cloud</string>
     <string name="stream_section">Ροή</string>
     <string name="stream_switch">Ροή στο Moonlight</string>
-    <string name="stream_switch_description">Το τηλέφωνο εμφανίζεται στο Moonlight σε κάθε συσκευή στο ίδιο Wi-Fi: σύζευξε με το PIN που δείχνει το Moonlight και τα παιχνίδια σου εμφανίζονται εκεί. Τα παιχνίδια cloud όχι: παίξε τα στην εφαρμογή Xbox ή στον browser εκείνης της συσκευής, απευθείας από το cloud.</string>
+    <string name="stream_switch_description">Το τηλέφωνο εμφανίζεται στο Moonlight σε κάθε συσκευή στο ίδιο Wi-Fi: σύζευξε με το PIN που δείχνει το Moonlight και τα παιχνίδια σου εμφανίζονται εκεί. Τα παιχνίδια Xbox cloud εμφανίζονται αφού τα παίξεις στον player του Flux Keyboard.</string>
     <string name="stream_unpair">Διαγραφή συνδεδεμένων συσκευών</string>
     <string name="stream_unpair_description">%1$d συνδεδεμένες. Καθεμία συνδέεται ξανά με PIN.</string>
     <string name="stream_pin_title">Σύζευξη %1$s</string>
@@ -1270,4 +1270,13 @@
     <string name="stream_confirm_text_game">Θέλει να παίξει %1$s από αυτό το τηλέφωνο.</string>
     <string name="stream_confirm_always">Να μην ξαναρωτηθώ για αυτή τη συσκευή</string>
     <string name="stream_confirm_connect">Σύνδεση</string>
+    <string name="stream_now">Μετάδοση</string>
+    <string name="stream_now_game">Μετάδοση: %1$s</string>
+    <string name="stream_now_to">Προς %1$s</string>
+    <string name="stream_end">Τέλος μετάδοσης</string>
+    <string name="stream_end_title">Τέλος της μετάδοσης;</string>
+    <string name="stream_keep">Συνέχεια μετάδοσης</string>
+    <string name="stream_phone_screen">Οθόνη τηλεφώνου</string>
+    <string name="stream_phone_screen_switch">Οθόνη τηλεφώνου στο Moonlight</string>
+    <string name="stream_phone_screen_description">Εμφανίζει την οθόνη του τηλεφώνου στο Moonlight, με ό,τι υπάρχει πάνω της.</string>
 </resources>

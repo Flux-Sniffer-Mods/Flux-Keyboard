@@ -1862,7 +1862,7 @@
     <string name="games_app_xbox">Облачная игра Xbox</string>
     <string name="stream_section">Стриминг</string>
     <string name="stream_switch">Стримить в Moonlight</string>
-    <string name="stream_switch_description">Телефон появляется в Moonlight на любом устройстве в той же сети Wi-Fi: выполните сопряжение по PIN-коду из Moonlight, и ваши игры появятся там. Облачные игры — нет: играйте в них в приложении Xbox или браузере того устройства, прямо из облака.</string>
+    <string name="stream_switch_description">Телефон появляется в Moonlight на любом устройстве в той же сети Wi-Fi: выполните сопряжение по PIN-коду из Moonlight, и ваши игры появятся там. Облачные игры Xbox появляются после того, как вы сыграете в них в плеере Flux Keyboard.</string>
     <string name="stream_unpair">Забыть связанные устройства</string>
     <string name="stream_unpair_description">Связано: %1$d. Каждое снова свяжется по PIN-коду.</string>
     <string name="stream_pin_title">Связать %1$s</string>
@@ -1908,4 +1908,13 @@
     <string name="stream_confirm_text_game">Оно хочет играть в %1$s с этого телефона.</string>
     <string name="stream_confirm_always">Больше не спрашивать для этого устройства</string>
     <string name="stream_confirm_connect">Подключить</string>
+    <string name="stream_now">Трансляция</string>
+    <string name="stream_now_game">Трансляция: %1$s</string>
+    <string name="stream_now_to">На %1$s</string>
+    <string name="stream_end">Завершить</string>
+    <string name="stream_end_title">Завершить трансляцию?</string>
+    <string name="stream_keep">Продолжить</string>
+    <string name="stream_phone_screen">Экран телефона</string>
+    <string name="stream_phone_screen_switch">Экран телефона в Moonlight</string>
+    <string name="stream_phone_screen_description">Показывает экран телефона в Moonlight со всем, что на нём есть.</string>
 </resources>

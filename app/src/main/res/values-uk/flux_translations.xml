@@ -1862,7 +1862,7 @@
     <string name="games_app_xbox">Хмарна гра Xbox</string>
     <string name="stream_section">Стримінг</string>
     <string name="stream_switch">Стримити в Moonlight</string>
-    <string name="stream_switch_description">Телефон з\'являється в Moonlight на будь-якому пристрої в тій самій мережі Wi-Fi: виконайте сполучення за PIN-кодом із Moonlight, і ваші ігри з\'являться там. Хмарні ігри — ні: грайте в них у застосунку Xbox або браузері того пристрою, прямо з хмари.</string>
+    <string name="stream_switch_description">Телефон з\'являється в Moonlight на будь-якому пристрої в тій самій мережі Wi-Fi: виконайте сполучення за PIN-кодом із Moonlight, і ваші ігри з\'являться там. Хмарні ігри Xbox з\'являються після того, як ви зіграєте в них у плеєрі Flux Keyboard.</string>
     <string name="stream_unpair">Забути зв\'язані пристрої</string>
     <string name="stream_unpair_description">Зв\'язано: %1$d. Кожен знову зв\'яжеться PIN-кодом.</string>
     <string name="stream_pin_title">Зв\'язати %1$s</string>
@@ -1908,4 +1908,13 @@
     <string name="stream_confirm_text_game">Воно хоче грати в %1$s з цього телефона.</string>
     <string name="stream_confirm_always">Більше не питати для цього пристрою</string>
     <string name="stream_confirm_connect">Підключити</string>
+    <string name="stream_now">Трансляція</string>
+    <string name="stream_now_game">Трансляція: %1$s</string>
+    <string name="stream_now_to">На %1$s</string>
+    <string name="stream_end">Завершити</string>
+    <string name="stream_end_title">Завершити трансляцію?</string>
+    <string name="stream_keep">Продовжити</string>
+    <string name="stream_phone_screen">Екран телефона</string>
+    <string name="stream_phone_screen_switch">Екран телефона в Moonlight</string>
+    <string name="stream_phone_screen_description">Показує екран телефона в Moonlight з усім, що на ньому є.</string>
 </resources>

@@ -1856,7 +1856,7 @@
     <string name="games_app_xbox">Juego de Xbox Cloud</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Transmitir a Moonlight</string>
-    <string name="stream_switch_description">El teléfono aparece en Moonlight en cualquier dispositivo de la misma Wi-Fi: vincúlalo con el PIN que muestra Moonlight y tus juegos aparecen allí. Los juegos en la nube no: juégalos en la app de Xbox o el navegador de ese dispositivo, directamente desde la nube.</string>
+    <string name="stream_switch_description">El teléfono aparece en Moonlight en cualquier dispositivo de la misma Wi-Fi: vincúlalo con el PIN que muestra Moonlight y tus juegos aparecen allí. Los juegos de Xbox en la nube aparecen cuando los has jugado en el reproductor de Flux Keyboard.</string>
     <string name="stream_unpair">Olvidar dispositivos vinculados</string>
     <string name="stream_unpair_description">%1$d vinculados. Cada uno se vuelve a vincular con un PIN.</string>
     <string name="stream_pin_title">Vincular %1$s</string>
@@ -1902,4 +1902,13 @@
     <string name="stream_confirm_text_game">Quiere jugar a %1$s desde este teléfono.</string>
     <string name="stream_confirm_always">No volver a preguntar para este dispositivo</string>
     <string name="stream_confirm_connect">Conectar</string>
+    <string name="stream_now">Transmitiendo</string>
+    <string name="stream_now_game">Transmitiendo %1$s</string>
+    <string name="stream_now_to">A %1$s</string>
+    <string name="stream_end">Terminar</string>
+    <string name="stream_end_title">¿Terminar la transmisión?</string>
+    <string name="stream_keep">Seguir transmitiendo</string>
+    <string name="stream_phone_screen">Pantalla del teléfono</string>
+    <string name="stream_phone_screen_switch">Pantalla del teléfono en Moonlight</string>
+    <string name="stream_phone_screen_description">Muestra la pantalla del teléfono en Moonlight, con lo que haya en ella.</string>
 </resources>

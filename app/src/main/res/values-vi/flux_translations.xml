@@ -1844,7 +1844,7 @@
     <string name="games_app_xbox">Game Xbox Cloud</string>
     <string name="stream_section">Phát trực tuyến</string>
     <string name="stream_switch">Phát tới Moonlight</string>
-    <string name="stream_switch_description">Điện thoại hiện trong Moonlight trên mọi thiết bị cùng Wi-Fi: ghép nối bằng mã PIN Moonlight hiển thị, và game của bạn sẽ có ở đó. Game đám mây thì không: chơi chúng trong ứng dụng Xbox hoặc trình duyệt của thiết bị đó, trực tiếp từ đám mây.</string>
+    <string name="stream_switch_description">Điện thoại hiện trong Moonlight trên mọi thiết bị cùng Wi-Fi: ghép nối bằng mã PIN Moonlight hiển thị, và game của bạn sẽ có ở đó. Game Xbox đám mây xuất hiện sau khi bạn chơi chúng trong trình phát của Flux Keyboard.</string>
     <string name="stream_unpair">Quên thiết bị đã ghép nối</string>
     <string name="stream_unpair_description">Đã ghép %1$d. Mỗi thiết bị sẽ ghép lại bằng mã PIN.</string>
     <string name="stream_pin_title">Ghép nối %1$s</string>
@@ -1890,4 +1890,13 @@
     <string name="stream_confirm_text_game">Thiết bị muốn chơi %1$s từ điện thoại này.</string>
     <string name="stream_confirm_always">Không hỏi lại cho thiết bị này</string>
     <string name="stream_confirm_connect">Kết nối</string>
+    <string name="stream_now">Đang phát</string>
+    <string name="stream_now_game">Đang phát %1$s</string>
+    <string name="stream_now_to">Tới %1$s</string>
+    <string name="stream_end">Kết thúc</string>
+    <string name="stream_end_title">Kết thúc phát trực tuyến?</string>
+    <string name="stream_keep">Tiếp tục phát</string>
+    <string name="stream_phone_screen">Màn hình điện thoại</string>
+    <string name="stream_phone_screen_switch">Màn hình điện thoại trong Moonlight</string>
+    <string name="stream_phone_screen_description">Hiển thị màn hình điện thoại trong Moonlight, với mọi thứ đang có trên đó.</string>
 </resources>
