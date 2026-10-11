@@ -1966,4 +1966,9 @@
     <string name="trackpad_gestures_shizuku_connected">Доступ до оболонки під\'єднано</string>
     <string name="trackpad_gestures_shizuku_not_connected">Доступ до оболонки не запущено</string>
     <string name="game_mode_xbox_remove_from_games">Прибрати з «Ігор»</string>
+    <string name="game_mode_stick_smaller">Розмір −</string>
+    <string name="game_mode_stick_bigger">Розмір +</string>
+    <string name="game_mode_stick_dead_zone">Мертва зона %1$d%%</string>
+    <string name="game_mode_stick_range">Діапазон %1$d%%</string>
+    <string name="game_mode_back_again">Натисніть «Назад» ще раз, щоб вийти з гри</string>
 </resources>

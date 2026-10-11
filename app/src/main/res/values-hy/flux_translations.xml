@@ -1954,4 +1954,9 @@
     <string name="trackpad_gestures_shizuku_connected">Shell մուտքը միացված է</string>
     <string name="trackpad_gestures_shizuku_not_connected">Shell մուտքը չի աշխատում</string>
     <string name="game_mode_xbox_remove_from_games">Հեռացնել Խաղերից</string>
+    <string name="game_mode_stick_smaller">Չափ −</string>
+    <string name="game_mode_stick_bigger">Չափ +</string>
+    <string name="game_mode_stick_dead_zone">Մեռյալ գոտի %1$d%%</string>
+    <string name="game_mode_stick_range">Միջակայք %1$d%%</string>
+    <string name="game_mode_back_again">Կրկին սեղմիր Հետ՝ խաղից դուրս գալու համար</string>
 </resources>

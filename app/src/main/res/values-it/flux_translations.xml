@@ -1465,4 +1465,9 @@
     <string name="trackpad_gestures_shizuku_connected">Accesso shell connesso</string>
     <string name="trackpad_gestures_shizuku_not_connected">Accesso shell non attivo</string>
     <string name="game_mode_xbox_remove_from_games">Rimuovi da Giochi</string>
+    <string name="game_mode_stick_smaller">Dimensione −</string>
+    <string name="game_mode_stick_bigger">Dimensione +</string>
+    <string name="game_mode_stick_dead_zone">Zona morta %1$d%%</string>
+    <string name="game_mode_stick_range">Raggio %1$d%%</string>
+    <string name="game_mode_back_again">Premi di nuovo Indietro per uscire dal gioco</string>
 </resources>

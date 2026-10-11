@@ -1960,4 +1960,9 @@
     <string name="trackpad_gestures_shizuku_connected">Accès shell connecté</string>
     <string name="trackpad_gestures_shizuku_not_connected">L\'accès shell n\'est pas actif</string>
     <string name="game_mode_xbox_remove_from_games">Retirer des Jeux</string>
+    <string name="game_mode_stick_smaller">Taille −</string>
+    <string name="game_mode_stick_bigger">Taille +</string>
+    <string name="game_mode_stick_dead_zone">Zone morte %1$d%%</string>
+    <string name="game_mode_stick_range">Portée %1$d%%</string>
+    <string name="game_mode_back_again">Appuyez de nouveau sur Retour pour quitter le jeu</string>
 </resources>

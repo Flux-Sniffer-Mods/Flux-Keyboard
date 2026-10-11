@@ -1948,4 +1948,9 @@
     <string name="trackpad_gestures_shizuku_connected">Đã kết nối quyền truy cập shell</string>
     <string name="trackpad_gestures_shizuku_not_connected">Quyền truy cập shell không chạy</string>
     <string name="game_mode_xbox_remove_from_games">Xóa khỏi Trò chơi</string>
+    <string name="game_mode_stick_smaller">Kích thước −</string>
+    <string name="game_mode_stick_bigger">Kích thước +</string>
+    <string name="game_mode_stick_dead_zone">Vùng chết %1$d%%</string>
+    <string name="game_mode_stick_range">Phạm vi %1$d%%</string>
+    <string name="game_mode_back_again">Nhấn Quay lại lần nữa để thoát trò chơi</string>
 </resources>

@@ -1420,4 +1420,9 @@
     <string name="trackpad_gestures_shizuku_not_connected">Shell-Zugriff läuft nicht</string>
     <string name="trackpad_shizuku_device_title">Trackpad-Eingabegerät</string>
     <string name="game_mode_xbox_remove_from_games">Aus Spielen entfernen</string>
+    <string name="game_mode_stick_smaller">Größe −</string>
+    <string name="game_mode_stick_bigger">Größe +</string>
+    <string name="game_mode_stick_dead_zone">Totzone %1$d%%</string>
+    <string name="game_mode_stick_range">Reichweite %1$d%%</string>
+    <string name="game_mode_back_again">Drücke Zurück erneut, um das Spiel zu verlassen</string>
 </resources>

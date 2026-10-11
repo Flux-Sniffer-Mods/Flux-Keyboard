@@ -1966,4 +1966,9 @@
     <string name="trackpad_gestures_shizuku_connected">Dostęp do powłoki połączony</string>
     <string name="trackpad_gestures_shizuku_not_connected">Dostęp do powłoki nie działa</string>
     <string name="game_mode_xbox_remove_from_games">Usuń z Gier</string>
+    <string name="game_mode_stick_smaller">Rozmiar −</string>
+    <string name="game_mode_stick_bigger">Rozmiar +</string>
+    <string name="game_mode_stick_dead_zone">Martwa strefa %1$d%%</string>
+    <string name="game_mode_stick_range">Zasięg %1$d%%</string>
+    <string name="game_mode_back_again">Naciśnij Wstecz ponownie, aby wyjść z gry</string>
 </resources>
