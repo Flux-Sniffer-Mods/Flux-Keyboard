@@ -1293,4 +1293,8 @@
     <string name="game_mode_resolution_full">Πλήρης</string>
     <string name="game_mode_resolution_stream">Ανάλυση στη μετάδοση</string>
     <string name="game_mode_resolution_stream_default">Όπως έχει οριστεί για τη μετάδοση</string>
+    <string name="game_mode_artwork_found">Εικόνες που βρέθηκαν</string>
+    <string name="game_mode_artwork_icons">Εικονίδια (λίστα παιχνιδιών και συντομεύσεις)</string>
+    <string name="game_mode_artwork_upright">Κάθετα εξώφυλλα (Moonlight)</string>
+    <string name="game_mode_artwork_none">Δεν βρέθηκαν εικόνες για αυτό το παιχνίδι. Ίσως το όνομά του πρέπει να ταιριάζει με τον πραγματικό τίτλο.</string>
 </resources>

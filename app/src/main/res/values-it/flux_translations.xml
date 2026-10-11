@@ -1430,4 +1430,8 @@
     <string name="game_mode_resolution_full">Piena</string>
     <string name="game_mode_resolution_stream">Risoluzione in streaming</string>
     <string name="game_mode_resolution_stream_default">Come impostato per lo streaming</string>
+    <string name="game_mode_artwork_found">Immagini trovate</string>
+    <string name="game_mode_artwork_icons">Icone (elenco giochi e scorciatoie)</string>
+    <string name="game_mode_artwork_upright">Copertine verticali (Moonlight)</string>
+    <string name="game_mode_artwork_none">Nessuna immagine trovata per questo gioco. Forse il nome deve corrispondere al titolo reale.</string>
 </resources>

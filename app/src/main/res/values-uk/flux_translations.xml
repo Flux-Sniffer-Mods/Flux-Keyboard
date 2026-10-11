@@ -1931,4 +1931,8 @@
     <string name="game_mode_resolution_full">Повна</string>
     <string name="game_mode_resolution_stream">Роздільність під час трансляції</string>
     <string name="game_mode_resolution_stream_default">Як у налаштуваннях трансляції</string>
+    <string name="game_mode_artwork_found">Знайдені зображення</string>
+    <string name="game_mode_artwork_icons">Значки (список ігор і ярлики)</string>
+    <string name="game_mode_artwork_upright">Вертикальні обкладинки (Moonlight)</string>
+    <string name="game_mode_artwork_none">Для цієї гри нічого не знайдено. Можливо, її назва має збігатися зі справжньою.</string>
 </resources>

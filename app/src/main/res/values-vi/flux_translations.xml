@@ -1913,4 +1913,8 @@
     <string name="game_mode_resolution_full">Đầy đủ</string>
     <string name="game_mode_resolution_stream">Độ phân giải khi phát trực tuyến</string>
     <string name="game_mode_resolution_stream_default">Theo cài đặt phát trực tuyến</string>
+    <string name="game_mode_artwork_found">Ảnh tìm được</string>
+    <string name="game_mode_artwork_icons">Biểu tượng (danh sách game và lối tắt)</string>
+    <string name="game_mode_artwork_upright">Bìa dọc (Moonlight)</string>
+    <string name="game_mode_artwork_none">Không tìm thấy ảnh cho game này. Có thể tên của nó cần khớp với tên thật.</string>
 </resources>

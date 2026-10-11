@@ -1384,4 +1384,8 @@
     <string name="game_mode_resolution_full">Voll</string>
     <string name="game_mode_resolution_stream">Auflösung beim Streamen</string>
     <string name="game_mode_resolution_stream_default">Wie fürs Streamen eingestellt</string>
+    <string name="game_mode_artwork_found">Gefundene Bilder</string>
+    <string name="game_mode_artwork_icons">Symbole (Spieleliste und Verknüpfungen)</string>
+    <string name="game_mode_artwork_upright">Hochformat-Cover (Moonlight)</string>
+    <string name="game_mode_artwork_none">Keine Bilder für dieses Spiel gefunden. Sein Name muss eventuell dem echten Titel entsprechen.</string>
 </resources>

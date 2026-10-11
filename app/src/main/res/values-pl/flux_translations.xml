@@ -1931,4 +1931,8 @@
     <string name="game_mode_resolution_full">Pełna</string>
     <string name="game_mode_resolution_stream">Rozdzielczość podczas streamu</string>
     <string name="game_mode_resolution_stream_default">Jak w ustawieniach streamu</string>
+    <string name="game_mode_artwork_found">Znalezione grafiki</string>
+    <string name="game_mode_artwork_icons">Ikony (lista gier i skróty)</string>
+    <string name="game_mode_artwork_upright">Pionowe okładki (Moonlight)</string>
+    <string name="game_mode_artwork_none">Nie znaleziono grafik dla tej gry. Może jej nazwa musi pasować do prawdziwego tytułu.</string>
 </resources>

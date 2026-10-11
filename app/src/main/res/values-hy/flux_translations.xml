@@ -1919,4 +1919,8 @@
     <string name="game_mode_resolution_full">Լրիվ</string>
     <string name="game_mode_resolution_stream">Լուծաչափ հեռարձակելիս</string>
     <string name="game_mode_resolution_stream_default">Ինչպես հեռարձակման համար է դրված</string>
+    <string name="game_mode_artwork_found">Գտնված պատկերներ</string>
+    <string name="game_mode_artwork_icons">Պատկերակներ (խաղերի ցանկ և դյուրանցումներ)</string>
+    <string name="game_mode_artwork_upright">Ուղղահայաց շապիկներ (Moonlight)</string>
+    <string name="game_mode_artwork_none">Այս խաղի համար պատկերներ չգտնվեցին։ Հնարավոր է՝ անունը պետք է համընկնի իրական վերնագրի հետ։</string>
 </resources>

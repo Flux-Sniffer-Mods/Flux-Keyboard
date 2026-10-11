@@ -1925,4 +1925,8 @@
     <string name="game_mode_resolution_full">Complète</string>
     <string name="game_mode_resolution_stream">Résolution en streaming</string>
     <string name="game_mode_resolution_stream_default">Comme réglé pour le streaming</string>
+    <string name="game_mode_artwork_found">Images trouvées</string>
+    <string name="game_mode_artwork_icons">Icônes (liste des jeux et raccourcis)</string>
+    <string name="game_mode_artwork_upright">Jaquettes verticales (Moonlight)</string>
+    <string name="game_mode_artwork_none">Aucune image trouvée pour ce jeu. Son nom doit peut-être correspondre au vrai titre.</string>
 </resources>
