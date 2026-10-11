@@ -191,6 +191,28 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_xbox_sign_in),
             description = stringResource(R.string.game_mode_xbox_sign_in_description)
         ) { context.startActivity(it.palsoftware.pastiera.gaming.XboxPlayActivity.signIn(context)) }
+        // Streaming games to a TV or another device running Moonlight
+        SettingsSectionDivider(stringResource(R.string.stream_section))
+        var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(context)) }
+        var paired by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHost.pairedCount(context)) }
+        FluxSwitchRow(
+            linkId = null,
+            title = stringResource(R.string.stream_switch),
+            description = stringResource(R.string.stream_switch_description),
+            checked = streaming
+        ) { on ->
+            streaming = on
+            it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
+        }
+        if (paired > 0) FluxActionRow(
+            linkId = null,
+            icon = "\u2715",
+            title = stringResource(R.string.stream_unpair),
+            description = stringResource(R.string.stream_unpair_description, paired)
+        ) {
+            it.palsoftware.pastiera.streaming.StreamHost.unpairAll(context)
+            paired = 0
+        }
         // Where games are found: Flux Keyboard's folders, ES-DE's, and your own
         SettingsSectionDivider(stringResource(R.string.game_mode_folders_section))
         FluxActionRow(

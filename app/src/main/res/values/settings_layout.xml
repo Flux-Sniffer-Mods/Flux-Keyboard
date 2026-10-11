@@ -464,4 +464,17 @@
     <string name="game_mode_xbox_sign_in">Sign in to Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Xbox\'s sign-in in Flux Keyboard\'s player, keys typing as usual. Signed in once, every cloud game plays.</string>
     <string name="games_app_xbox">Xbox cloud game</string>
+    <string name="stream_section">Streaming</string>
+    <string name="stream_switch">Stream to Moonlight</string>
+    <string name="stream_switch_description">The phone shows up in Moonlight on your TV or another device on the same Wi-Fi: pair it with the PIN Moonlight shows, and your games are listed there. Cloud games aren\'t: play them on the TV\'s own Xbox app or browser, straight from the cloud. Streaming a game itself is coming next.</string>
+    <string name="stream_unpair">Forget paired devices</string>
+    <string name="stream_unpair_description">%1$d paired. Each pairs again with a PIN.</string>
+    <string name="stream_pin_title">Pair %1$s</string>
+    <string name="stream_pin_text">Type the PIN Moonlight shows.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Pair</string>
+    <string name="stream_pairing_channel">Moonlight pairing</string>
+    <string name="stream_host_channel">Streaming</string>
+    <string name="stream_host_title">Streaming to Moonlight</string>
+    <string name="stream_host_text">%1$s is listed in Moonlight on this Wi-Fi.</string>
 </resources>

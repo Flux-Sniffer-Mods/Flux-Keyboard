@@ -460,6 +460,9 @@
       "text": "Gaming mode: the games found in the game folders and the games with a profile are in the quick launcher too, started as their home screen shortcuts start them (Games in the quick launcher, in Gaming mode)."
     },
     {
+      "text": "Gaming mode: Stream to Moonlight (first step): the phone shows up in Moonlight on your TV or another device on the same Wi-Fi, pairs with the PIN Moonlight shows, and lists your games there with their art. Cloud games are left out, played on the TV straight from the cloud. Streaming a game itself comes next."
+    },
+    {
       "text": "Gaming mode: Xbox Cloud Gaming plays in Flux Keyboard's own player (xbox.com/play), where the keys and trackpad are a controller in Flux Keyboard's layout, for every cloud game. Add an Xbox cloud game adds it, or any game Xbox Cloud Gaming streams (from Microsoft's catalogue), each with its box art and its own settings, started straight into the game. Sign in to Xbox opens Xbox's sign-in with the keys typing, and keys type into any text field in the player. The Games app can add games too."
     },
     {

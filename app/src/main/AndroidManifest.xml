@@ -22,6 +22,9 @@
     
     <!-- Internet: update checks, GIF search, online layouts and dictionaries -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Streaming games to Moonlight: the host runs while it's on -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <!-- Reads the Clicks Power Keyboard's details over Bluetooth LE -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -255,6 +258,21 @@
             android:exported="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Streaming games to Moonlight: the host, and the PIN typed to pair a device -->
+        <service
+            android:name=".streaming.StreamHostService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Game streaming host that Moonlight clients on the local network pair with" />
+        </service>
+        <activity
+            android:name=".streaming.StreamPin"
+            android:exported="false"
+            android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Xbox Cloud Gaming in Flux Keyboard's own player (sizes change while it plays: kept) -->
