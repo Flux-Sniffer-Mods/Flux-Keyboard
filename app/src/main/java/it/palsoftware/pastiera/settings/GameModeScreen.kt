@@ -912,8 +912,12 @@ internal fun CrashLogRow() {
                 val file = "/storage/emulated/0/Download/Flux Keyboard/crash-log.txt"
                 val app = it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
                 it.palsoftware.pastiera.adb.AdbShell.run(
-                    "f='$file'; mkdir -p \"\${f%/*}\"; { echo '== crashes =='; logcat -d -b crash -t 400; " +
-                        "echo '== errors =='; logcat -d -t 3000 '*:E' | grep -i -E '$app|AndroidRuntime|chromium|webview' | tail -n 400; } > \"\$f\" 2>&1; echo ok",
+                    "f='$file'; mkdir -p \"\${f%/*}\"; { " +
+                        // Why Android last ended the app: a crash, its web page's renderer dying, memory running low
+                        "echo '== why it stopped =='; dumpsys activity exit-info $app | head -n 120; " +
+                        "echo '== crashes =='; logcat -d -b crash -t 400; " +
+                        "echo '== warnings and errors =='; logcat -d -b main,system -t 8000 '*:W' | " +
+                        "grep -i -E '$app|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | tail -n 400; } > \"\$f\" 2>&1; echo ok",
                     15_000
                 )?.contains("ok") == true
             }

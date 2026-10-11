@@ -62,6 +62,16 @@ class XboxPlayActivity : Activity() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) = inject()
             override fun onPageFinished(view: WebView, url: String?) = inject()
+
+            // The page's renderer died (out of memory, or a crash): only the player starts again,
+            // not the whole app with the keyboard in it
+            override fun onRenderProcessGone(view: WebView, detail: android.webkit.RenderProcessGoneDetail): Boolean {
+                android.util.Log.w("XboxPlay", "renderer gone (crashed: ${detail.didCrash()})")
+                (view.parent as? android.view.ViewGroup)?.removeView(view)
+                view.destroy()
+                if (!isFinishing) recreate()
+                return true
+            }
         }
         // The page says when a text field has the focus (a search, a sign-in form)
         web.addJavascriptInterface(object {
@@ -77,9 +87,7 @@ class XboxPlayActivity : Activity() {
         web.loadUrl(if (signingIn) SIGN_IN else intent.dataString?.takeIf { it.startsWith("https://www.xbox.com/") } ?: HOME)
         // The page may be rebuilt as it moves between screens: the controller kept in it
         // (not while signing in: the sign-in pages have no controller to keep)
-        if (!signingIn) web.postDelayed(object : Runnable {
-            override fun run() { inject(); web.postDelayed(this, 5_000) }
-        }, 2_000)
+        if (!signingIn) web.postDelayed(reinject, 2_000)
     }
 
     override fun onResume() {
@@ -101,8 +109,17 @@ class XboxPlayActivity : Activity() {
         super.onPause()
     }
 
+    private val reinject: Runnable = object : Runnable {
+        override fun run() {
+            if (isDestroyed) return
+            inject()
+            web.postDelayed(this, 5_000)
+        }
+    }
+
     override fun onDestroy() {
-        web.destroy()
+        web.removeCallbacks(reinject)
+        runCatching { web.destroy() }
         super.onDestroy()
     }
 
