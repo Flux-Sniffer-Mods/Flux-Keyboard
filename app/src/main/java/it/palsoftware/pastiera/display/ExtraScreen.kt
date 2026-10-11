@@ -220,10 +220,30 @@ object ExtraScreen {
 
     // ---- Android's desktop on the screen ----
 
+    /**
+     * Developer options' desktop windowing (and freeform windows), switched on for good: Android
+     * reads them as it starts, so switching them off after each stream would need a restart
+     * every time. When they were off, a restart now makes the desktop appear: the phone says so.
+     */
+    private val WINDOWING = listOf(
+        "override_desktop_mode_features", "override_desktop_experience_features",
+        "enable_freeform_support", "force_resizable_activities"
+    )
+
+    private fun windowing(context: Context) {
+        val now = AdbShell.run(WINDOWING.joinToString("; ") { "settings get global $it" }).orEmpty().lines().map { it.trim() }
+        if (WINDOWING.indices.all { now.getOrNull(it) == "1" }) return
+        AdbShell.run(WINDOWING.joinToString("; ") { "settings put global $it 1" })
+        android.os.Handler(android.os.Looper.getMainLooper()).post {
+            android.widget.Toast.makeText(context, it.palsoftware.pastiera.R.string.stream_desktop_restart, android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+
     /** Android's desktop on screens of their own (Android 16, Developer options), put back after. */
     private fun desktopMode(context: Context, on: Boolean) {
         val prefs = SettingsManager.getPreferences(context)
         if (on) {
+            windowing(context)
             val before = AdbShell.run("settings get global force_desktop_mode_on_external_displays")?.trim().orEmpty()
             if (!prefs.contains(KEY_DESKTOP_RESTORE)) prefs.edit().putString(KEY_DESKTOP_RESTORE, before).apply()
             AdbShell.run("settings put global force_desktop_mode_on_external_displays 1")

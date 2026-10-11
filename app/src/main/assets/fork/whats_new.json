@@ -627,6 +627,9 @@
     },
     {
       "text": "Stream to Moonlight: XCloud Games (Xbox Cloud Gaming's library, with its tile's art) and Android desktop (the phone's desktop on a screen of its own, the phone left free) are listed in Moonlight beside the phone's screen."
+    },
+    {
+      "text": "Stream to Moonlight: Android desktop switches Developer options' desktop windowing on by itself (a restart may be needed the first time; the phone says so)."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
