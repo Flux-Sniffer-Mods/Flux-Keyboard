@@ -1808,7 +1808,7 @@
     <string name="root_backlight_fine_title">Dokładne przyciemnianie</string>
     <string name="root_backlight_fine_description">Przez roota diody klawiatury są ustawiane w ich własnych krokach, dużo drobniejszych niż zwykłe poziomy podświetlenia, więc podążanie za jasnością ekranu nie ma widocznych skoków.</string>
     <string name="game_mode_controller">Prawdziwy kontroler</string>
-    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy: W A S D jego krzyżak, O K P L jego Y X B A, Q E Z C jego bumpery i spusty (a klawisze głośności lewe), Enter Start, Backspace Select, F i J wciśnięcie gałek, a gładzik jego gałki. Pozostałe klawisze trafiają do gry bez zmian.</string>
+    <string name="game_mode_controller_description">Z rootem tryb gry podłącza kontroler, który gra widzi jako prawdziwy, w układzie Flux Keyboard: W A S D krzyżak, O K P L jego Y X B A, Q E przyciski barkowe i Z C spusty (klawisze głośności lewe), Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa. Pozostałe klawisze trafiają do gry bez zmian.</string>
     <string name="game_mode_apps_section">Aplikacje</string>
     <string name="game_mode_games_section">Gry</string>
     <string name="game_mode_own_settings">Własne ustawienia</string>
@@ -1827,5 +1827,9 @@
     <string name="game_mode_quick_launcher">Gry w szybkim starcie</string>
     <string name="game_mode_quick_launcher_description">Gry znalezione w folderach gier i gry z profilem, uruchamiane z szybkiego startu tak jak ze skrótu na ekranie głównym.</string>
     <string name="game_mode_right_stick_keys">Prawa gałka na klawiszach</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B poruszają prawą gałką (góra, lewo, prawo, dół), a lewa połowa gładzika jest lewą gałką. Gładzik śledzi jeden palec naraz, więc dwie gałki na nim nie ruszają się razem.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M poruszają prawą gałką (góra, lewo, dół, prawo), a lewa połowa gładzika jest lewą gałką. Gładzik śledzi jeden palec naraz, więc dwie gałki na nim nie ruszają się razem.</string>
+    <string name="game_mode_setup_controls">Skonfiguruj sterowanie %1$s</string>
+    <string name="game_mode_setup_done">Sterowanie %1$s działa teraz według układu Flux Keyboard: W A S D krzyżak, O K P L przyciski akcji w miejscach z kontrolera, Q E przyciski barkowe, Z C spusty, Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa gałka.\n\nDolphin: kontroler GameCube 1 i Wii Remote 1 (z Nunchukiem) są ustawione i zapisane też jako profile \"Flux Keyboard\". PPSSPP: sterowanie działa w każdej grze.</string>
+    <string name="game_mode_setup_not_found">Nie znaleziono ustawień %1$s: otwórz go raz, a potem spróbuj ponownie.</string>
+    <string name="game_mode_setup_by_hand">%1$s nie wczytuje sterowania z pliku: w jego Ustawieniach, Wejście (Sterowanie), przypisz każdy przycisk, naciskając jego klawisz, gdy poprosi:\n\n%2$s</string>
 </resources>

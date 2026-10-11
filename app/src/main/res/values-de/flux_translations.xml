@@ -1261,7 +1261,7 @@
     <string name="root_backlight_fine_title">Feines Dimmen</string>
     <string name="root_backlight_fine_description">Über Root werden die LEDs der Tastatur in ihren eigenen Stufen gesetzt, viel feiner als die üblichen Stufen der Beleuchtung, sodass das Folgen der Bildschirmhelligkeit keine sichtbaren Sprünge hat.</string>
     <string name="game_mode_controller">Echter Controller</string>
-    <string name="game_mode_controller_description">Mit Root schließt der Spielmodus einen Controller an, den das Spiel als echt erkennt: W A S D sein Steuerkreuz, O K P L seine Y X B A, Q E Z C seine Schultertasten und Trigger (und die Lautstärketasten die linken), Enter Start, Rücktaste Select, F und J das Drücken der Sticks, und das Trackpad seine Sticks. Andere Tasten erreichen das Spiel unverändert.</string>
+    <string name="game_mode_controller_description">Mit Root schließt der Spielmodus einen Controller an, den das Spiel als echt erkennt, mit dem Layout von Flux Keyboard: W A S D sein Steuerkreuz, O K P L seine Y X B A, Q E seine Schultertasten und Z C seine Trigger (die Lautstärketasten die linken), Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick. Andere Tasten erreichen das Spiel unverändert.</string>
     <string name="game_mode_apps_section">Apps</string>
     <string name="game_mode_games_section">Spiele</string>
     <string name="game_mode_own_settings">Eigene Einstellungen</string>
@@ -1280,5 +1280,9 @@
     <string name="game_mode_quick_launcher">Spiele im Schnellstarter</string>
     <string name="game_mode_quick_launcher_description">Die in den Spieleordnern gefundenen Spiele und die Spiele mit Profil, aus dem Schnellstarter gestartet wie über ihre Startbildschirm-Verknüpfung.</string>
     <string name="game_mode_right_stick_keys">Rechter Stick auf Tasten</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B bewegen den rechten Stick (hoch, links, rechts, runter), und die linke Trackpad-Hälfte ist der linke Stick. Das Trackpad folgt immer nur einem Finger, daher können sich zwei Sticks darauf nicht zusammen bewegen.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M bewegen den rechten Stick (hoch, links, runter, rechts), und die linke Trackpad-Hälfte ist der linke Stick. Das Trackpad folgt immer nur einem Finger, daher können sich zwei Sticks darauf nicht zusammen bewegen.</string>
+    <string name="game_mode_setup_controls">Steuerung von %1$s einrichten</string>
+    <string name="game_mode_setup_done">Die Steuerung von %1$s folgt jetzt dem Layout von Flux Keyboard: W A S D das Steuerkreuz, O K P L die Aktionstasten an ihrer Controller-Position, Q E die Schultertasten, Z C die Trigger, Leertaste Start, Enter Select, Rücktaste Home, F und H das Drücken der Sticks, J B N M der rechte Stick und die linke Trackpad-Hälfte der linke Stick.\n\nDolphin: GameCube-Controller 1 und Wii Remote 1 (mit Nunchuk) sind eingestellt und auch als Profile \"Flux Keyboard\" gespeichert. PPSSPP: die Steuerung gilt für jedes Spiel.</string>
+    <string name="game_mode_setup_not_found">Die Einstellungen von %1$s wurden nicht gefunden: einmal öffnen, dann erneut versuchen.</string>
+    <string name="game_mode_setup_by_hand">%1$s kann keine Steuerung aus einer Datei laden: Belege in seinen Einstellungen unter Eingabe (Steuerung) jede Taste, indem du ihre Taste drückst:\n\n%2$s</string>
 </resources>

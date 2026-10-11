@@ -1796,7 +1796,7 @@
     <string name="root_backlight_fine_title">Նուրբ մթագնում</string>
     <string name="root_backlight_fine_description">Root-ի միջոցով ստեղնաշարի LED-ները կարգավորվում են իրենց սեփական քայլերով՝ շատ ավելի նուրբ, քան լուսավորության սովորական մակարդակները, ուստի էկրանի պայծառությանը հետևելը տեսանելի աստիճաններ չունի։</string>
     <string name="game_mode_controller">Իրական կարգավորիչ</string>
-    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական․ W A S D՝ դրա d-pad-ը, O K P L՝ դրա Y X B A-ն, Q E Z C՝ դրա ուսային կոճակներն ու ձգանները (իսկ ձայնի ստեղները՝ ձախերը), Enter՝ Start, Backspace՝ Select, F և J՝ լծակների սեղմումը, իսկ թաչփադը՝ դրա լծակները։ Մյուս ստեղները հասնում են խաղին այնպես, ինչպես կան։</string>
+    <string name="game_mode_controller_description">Root-ով խաղային ռեժիմը միացնում է կարգավորիչ, որը խաղը տեսնում է որպես իրական, Flux Keyboard-ի դասավորությամբ. W A S D՝ խաչաձև կոճակ, O K P L՝ Y X B A, Q E՝ վերին ձգանները, Z C՝ ստորինները (ձայնի ստեղները՝ ձախերը), Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։ Մյուս ստեղները խաղին հասնում են այնպես, ինչպես կան։</string>
     <string name="game_mode_apps_section">Հավելվածներ</string>
     <string name="game_mode_games_section">Խաղեր</string>
     <string name="game_mode_own_settings">Սեփական կարգավորումներ</string>
@@ -1815,5 +1815,9 @@
     <string name="game_mode_quick_launcher">Խաղերը արագ գործարկիչում</string>
     <string name="game_mode_quick_launcher_description">Խաղերի պանակներում գտնված խաղերը և պրոֆիլ ունեցող խաղերը գործարկվում են արագ գործարկիչից այնպես, ինչպես գլխավոր էկրանի դյուրանցումից։</string>
     <string name="game_mode_right_stick_keys">Աջ լծակը ստեղների վրա</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B-ն շարժում են աջ լծակը (վեր, ձախ, աջ, վար), իսկ թաչփադի ձախ կեսը ձախ լծակն է։ Թաչփադը միաժամանակ հետևում է մեկ մատի, ուստի դրա վրա երկու լծակ միասին չեն շարժվում։</string>
+    <string name="game_mode_right_stick_keys_description">J B N M-ը շարժում են աջ լծակը (վեր, ձախ, վար, աջ), իսկ թաչփադի ձախ կեսը ձախ լծակն է։ Թաչփադը միաժամանակ հետևում է մեկ մատի, ուստի դրա վրա երկու լծակ միասին չեն շարժվում։</string>
+    <string name="game_mode_setup_controls">Կարգավորել %1$s-ի կառավարումը</string>
+    <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Keyboard-ի դասավորությանը. W A S D՝ խաչաձև կոճակ, O K P L՝ գործողության կոճակներն իրենց տեղերում, Q E՝ վերին ձգանները, Z C՝ ստորին ձգանները, Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։\n\nDolphin. կարգավորված են GameCube կարգավորիչ 1-ը և Wii Remote 1-ը (Nunchuk-ով), պահված նաև որպես \"Flux Keyboard\" պրոֆիլներ։ PPSSPP. կառավարումը գործում է բոլոր խաղերի համար։</string>
+    <string name="game_mode_setup_not_found">%1$s-ի կարգավորումները չգտնվեցին. բացեք այն մեկ անգամ, ապա կրկին փորձեք։</string>
+    <string name="game_mode_setup_by_hand">%1$s-ը չի կարող կառավարումը բեռնել ֆայլից. նրա Կարգավորումներում, Մուտք (Կառավարում), կապեք յուրաքանչյուր կոճակ՝ սեղմելով դրա ստեղնը, երբ խնդրի.\n\n%2$s</string>
 </resources>

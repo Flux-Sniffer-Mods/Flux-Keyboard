@@ -1790,7 +1790,7 @@
     <string name="root_backlight_fine_title">Điều chỉnh độ sáng mịn</string>
     <string name="root_backlight_fine_description">Qua root, đèn LED bàn phím được đặt theo các bước riêng của chúng, mịn hơn nhiều so với các mức thông thường của đèn, nên khi theo độ sáng màn hình sẽ không có bậc nhảy thấy được.</string>
     <string name="game_mode_controller">Tay cầm thật</string>
-    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật: W A S D là d-pad, O K P L là Y X B A, Q E Z C là nút vai và cò (phím âm lượng là bên trái), Enter là Start, Backspace là Select, F và J là nhấn cần analog, và bàn di chuột là các cần analog. Các phím khác đến game nguyên vẹn.</string>
+    <string name="game_mode_controller_description">Với root, chế độ chơi game cắm một tay cầm mà game coi là thật, theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là Y X B A, Q E là nút vai và Z C là cò (phím âm lượng là bên trái), Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần analog phải và nửa trái bàn di chuột là cần trái. Các phím khác đến game nguyên trạng.</string>
     <string name="game_mode_apps_section">Ứng dụng</string>
     <string name="game_mode_games_section">Game</string>
     <string name="game_mode_own_settings">Cài đặt riêng</string>
@@ -1809,5 +1809,9 @@
     <string name="game_mode_quick_launcher">Game trong trình khởi chạy nhanh</string>
     <string name="game_mode_quick_launcher_description">Các game tìm thấy trong thư mục game và các game có hồ sơ, mở từ trình khởi chạy nhanh giống như từ lối tắt trên màn hình chính.</string>
     <string name="game_mode_right_stick_keys">Cần analog phải trên phím</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B di chuyển cần analog phải (lên, trái, phải, xuống), và nửa trái bàn di chuột là cần analog trái. Bàn di chuột chỉ theo một ngón mỗi lần, nên hai cần analog trên nó không di chuyển cùng lúc.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M di chuyển cần analog phải (lên, trái, xuống, phải), và nửa trái bàn di chuột là cần analog trái. Bàn di chuột chỉ theo một ngón mỗi lần, nên hai cần analog trên nó không di chuyển cùng lúc.</string>
+    <string name="game_mode_setup_controls">Thiết lập điều khiển của %1$s</string>
+    <string name="game_mode_setup_done">Điều khiển của %1$s giờ theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là các nút hành động đúng vị trí trên tay cầm, Q E là nút vai, Z C là cò, Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần analog phải và nửa trái bàn di chuột là cần analog trái.\n\nDolphin: tay cầm GameCube 1 và Wii Remote 1 (kèm Nunchuk) đã được thiết lập, và lưu cả thành hồ sơ \"Flux Keyboard\". PPSSPP: điều khiển áp dụng cho mọi game.</string>
+    <string name="game_mode_setup_not_found">Không tìm thấy cài đặt của %1$s: mở nó một lần rồi thử lại.</string>
+    <string name="game_mode_setup_by_hand">%1$s không tải điều khiển từ tệp: trong Cài đặt của nó, Đầu vào (Điều khiển), gán từng nút bằng cách nhấn phím tương ứng khi được hỏi:\n\n%2$s</string>
 </resources>

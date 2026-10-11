@@ -1808,7 +1808,7 @@
     <string name="root_backlight_fine_title">Точная яркость</string>
     <string name="root_backlight_fine_description">Через root светодиоды клавиатуры задаются их собственными шагами, гораздо мельче обычных уровней подсветки, поэтому следование за яркостью экрана идёт без видимых ступеней.</string>
     <string name="game_mode_controller">Настоящий контроллер</string>
-    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий: W A S D — его крестовина, O K P L — его Y X B A, Q E Z C — бамперы и триггеры (а клавиши громкости — левые), Enter — Start, Backspace — Select, F и J — нажатие стиков, а тачпад — его стики. Остальные клавиши доходят до игры как есть.</string>
+    <string name="game_mode_controller_description">С root игровой режим подключает контроллер, который игра видит как настоящий, с раскладкой Flux Keyboard: W A S D — крестовина, O K P L — его Y X B A, Q E — бамперы, Z C — триггеры (клавиши громкости — левые), Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый. Остальные клавиши попадают в игру как есть.</string>
     <string name="game_mode_apps_section">Приложения</string>
     <string name="game_mode_games_section">Игры</string>
     <string name="game_mode_own_settings">Свои настройки</string>
@@ -1827,5 +1827,9 @@
     <string name="game_mode_quick_launcher">Игры в быстром запуске</string>
     <string name="game_mode_quick_launcher_description">Игры из папок игр и игры с профилем запускаются из быстрого запуска так же, как с ярлыка на главном экране.</string>
     <string name="game_mode_right_stick_keys">Правый стик на клавишах</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B двигают правый стик (вверх, влево, вправо, вниз), а левая половина тачпада — левый стик. Тачпад следит за одним пальцем за раз, поэтому два стика на нём не двигаются вместе.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M двигают правый стик (вверх, влево, вниз, вправо), а левая половина тачпада — левый стик. Тачпад следит за одним пальцем за раз, поэтому два стика на нём не двигаются вместе.</string>
+    <string name="game_mode_setup_controls">Настроить управление %1$s</string>
+    <string name="game_mode_setup_done">Управление %1$s теперь следует раскладке Flux Keyboard: W A S D — крестовина, O K P L — кнопки действий на их местах на контроллере, Q E — бамперы, Z C — триггеры, Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый стик.\n\nDolphin: контроллер GameCube 1 и Wii Remote 1 (с Nunchuk) настроены и сохранены также как профили \"Flux Keyboard\". PPSSPP: управление действует во всех играх.</string>
+    <string name="game_mode_setup_not_found">Настройки %1$s не найдены: откройте его один раз и попробуйте снова.</string>
+    <string name="game_mode_setup_by_hand">%1$s не загружает управление из файла: в его Настройках, Ввод (Управление), назначьте каждую кнопку, нажимая её клавишу по запросу:\n\n%2$s</string>
 </resources>

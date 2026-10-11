@@ -1802,7 +1802,7 @@
     <string name="root_backlight_fine_title">Gradation fine</string>
     <string name="root_backlight_fine_description">Avec le root, les LED du clavier sont réglées dans leurs propres pas, bien plus fins que les niveaux habituels de l\'éclairage, pour suivre la luminosité de l\'écran sans paliers visibles.</string>
     <string name="game_mode_controller">Vraie manette</string>
-    <string name="game_mode_controller_description">Avec le root, le mode jeu branche une manette que le jeu voit comme réelle : W A S D sa croix directionnelle, O K P L ses Y X B A, Q E Z C ses gâchettes et boutons de tranche (et les touches de volume ceux de gauche), Entrée Start, Retour arrière Select, F et J l\'appui des sticks, et le pavé tactile ses sticks. Les autres touches arrivent au jeu telles quelles.</string>
+    <string name="game_mode_controller_description">Avec root, le mode jeu branche une manette que le jeu voit comme réelle, avec la disposition de Flux Keyboard : W A S D sa croix, O K P L ses Y X B A, Q E ses gâchettes hautes et Z C ses gâchettes basses (les touches de volume celles de gauche), Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche. Les autres touches arrivent au jeu telles quelles.</string>
     <string name="game_mode_apps_section">Applis</string>
     <string name="game_mode_games_section">Jeux</string>
     <string name="game_mode_own_settings">Réglages propres</string>
@@ -1821,5 +1821,9 @@
     <string name="game_mode_quick_launcher">Jeux dans le lanceur rapide</string>
     <string name="game_mode_quick_launcher_description">Les jeux trouvés dans les dossiers de jeux et ceux qui ont un profil, lancés depuis le lanceur rapide comme depuis leur raccourci d\'écran d\'accueil.</string>
     <string name="game_mode_right_stick_keys">Stick droit sur les touches</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B bougent le stick droit (haut, gauche, droite, bas), et la moitié gauche du pavé tactile est le stick gauche. Le pavé tactile suit un doigt à la fois, donc deux sticks dessus ne bougent pas ensemble.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M bougent le stick droit (haut, gauche, bas, droite), et la moitié gauche du pavé tactile est le stick gauche. Le pavé tactile suit un doigt à la fois, donc deux sticks dessus ne bougent pas ensemble.</string>
+    <string name="game_mode_setup_controls">Configurer les commandes de %1$s</string>
+    <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant la disposition de Flux Keyboard : W A S D la croix, O K P L les boutons d\'action à leur place sur une manette, Q E les gâchettes hautes, Z C les gâchettes basses, Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche.\n\nDolphin : la manette GameCube 1 et la Wii Remote 1 (avec Nunchuk) sont configurées, et gardées aussi comme profils \"Flux Keyboard\". PPSSPP : ses commandes valent pour tous les jeux.</string>
+    <string name="game_mode_setup_not_found">Les réglages de %1$s sont introuvables : ouvrez-le une fois, puis réessayez.</string>
+    <string name="game_mode_setup_by_hand">%1$s ne charge pas de commandes depuis un fichier : dans ses Paramètres, Entrée (Commandes), associez chaque bouton en appuyant sur sa touche quand il le demande :\n\n%2$s</string>
 </resources>

@@ -1307,7 +1307,7 @@
     <string name="root_backlight_fine_title">Regolazione fine</string>
     <string name="root_backlight_fine_description">Con root, i LED della tastiera vengono impostati nei loro passi, molto più fini dei normali livelli della luce, così seguire la luminosità dello schermo non ha scatti visibili.</string>
     <string name="game_mode_controller">Controller vero</string>
-    <string name="game_mode_controller_description">Con root, la modalità gioco collega un controller che il gioco vede come vero: W A S D la sua croce direzionale, O K P L i suoi Y X B A, Q E Z C i suoi dorsali e grilletti (e i tasti volume quelli sinistri), Invio Start, Backspace Select, F e J la pressione degli stick, e il trackpad i suoi stick. Gli altri tasti arrivano al gioco così come sono.</string>
+    <string name="game_mode_controller_description">Con root, la modalità gioco collega un controller che il gioco vede come reale, con il layout di Flux Keyboard: W A S D la croce direzionale, O K P L i suoi Y X B A, Q E i dorsali e Z C i grilletti (i tasti del volume quelli sinistri), Spazio Start, Invio Select, Backspace Home, F e H la pressione degli stick, J B N M lo stick destro e la metà sinistra del trackpad quello sinistro. Gli altri tasti arrivano al gioco così come sono.</string>
     <string name="game_mode_apps_section">App</string>
     <string name="game_mode_games_section">Giochi</string>
     <string name="game_mode_own_settings">Impostazioni proprie</string>
@@ -1326,5 +1326,9 @@
     <string name="game_mode_quick_launcher">Giochi nell\'avvio rapido</string>
     <string name="game_mode_quick_launcher_description">I giochi trovati nelle cartelle dei giochi e quelli con un profilo, avviati dall\'avvio rapido come dalla loro scorciatoia nella schermata Home.</string>
     <string name="game_mode_right_stick_keys">Stick destro sui tasti</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B muovono lo stick destro (su, sinistra, destra, giù), e la metà sinistra del trackpad è lo stick sinistro. Il trackpad segue un dito alla volta, quindi due stick su di esso non si muovono insieme.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M muovono lo stick destro (su, sinistra, giù, destra), e la metà sinistra del trackpad è lo stick sinistro. Il trackpad segue un dito alla volta, quindi due stick su di esso non si muovono insieme.</string>
+    <string name="game_mode_setup_controls">Configura i comandi di %1$s</string>
+    <string name="game_mode_setup_done">I comandi di %1$s ora seguono il layout di Flux Keyboard: W A S D la croce direzionale, O K P L i pulsanti d\'azione dove li ha un controller, Q E i dorsali, Z C i grilletti, Spazio Start, Invio Select, Backspace Home, F e H la pressione degli stick, J B N M lo stick destro e la metà sinistra del trackpad lo stick sinistro.\n\nDolphin: il controller GameCube 1 e il Wii Remote 1 (con Nunchuk) sono configurati, e salvati anche come profili \"Flux Keyboard\". PPSSPP: i comandi valgono per tutti i giochi.</string>
+    <string name="game_mode_setup_not_found">Impostazioni di %1$s non trovate: aprilo una volta, poi riprova.</string>
+    <string name="game_mode_setup_by_hand">%1$s non carica i comandi da un file: nelle sue Impostazioni, Input (Comandi), assegna ogni pulsante premendo il suo tasto quando richiesto:\n\n%2$s</string>
 </resources>
