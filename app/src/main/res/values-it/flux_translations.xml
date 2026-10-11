@@ -1356,4 +1356,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming nel lettore di Flux Keyboard (xbox.com/play; le app Xbox non trasmettono sui telefoni), o uno dei suoi giochi dal catalogo: ciascuno ha le sue impostazioni e parte direttamente nel gioco.</string>
     <string name="game_mode_xbox_search">Cerca</string>
     <string name="game_mode_xbox_none">Impossibile leggere il catalogo. Il telefono è online, con la modalità offline disattivata?</string>
+    <string name="game_mode_xbox_sign_in">Accedi a Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">L\'accesso a Xbox nel lettore di Flux Keyboard, con i tasti che scrivono come sempre. Fatto l\'accesso una volta, ogni gioco cloud funziona.</string>
+    <string name="games_app_xbox">Gioco Xbox Cloud</string>
 </resources>

@@ -1857,4 +1857,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming у власному плеєрі Flux Keyboard (xbox.com/play; застосунки Xbox не транслюють на телефонах) або будь-яка його гра з каталогу: кожна має власні налаштування й запускається одразу в грі.</string>
     <string name="game_mode_xbox_search">Пошук</string>
     <string name="game_mode_xbox_none">Не вдалося прочитати каталог. Телефон у мережі, а автономний режим вимкнено?</string>
+    <string name="game_mode_xbox_sign_in">Увійти в Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">Вхід у Xbox у плеєрі Flux Keyboard, клавіші друкують як зазвичай. Увійшовши один раз, можна грати в будь-яку хмарну гру.</string>
+    <string name="games_app_xbox">Хмарна гра Xbox</string>
 </resources>

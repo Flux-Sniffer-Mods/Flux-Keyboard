@@ -1845,4 +1845,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming-ը Flux Keyboard-ի սեփական նվագարկիչում (xbox.com/play. Xbox հավելվածները հեռախոսներում չեն հեռարձակում), կամ նրա ցանկացած խաղ կատալոգից. յուրաքանչյուրն ունի իր կարգավորումները և սկսվում է անմիջապես։</string>
     <string name="game_mode_xbox_search">Որոնել</string>
     <string name="game_mode_xbox_none">Կատալոգը չհաջողվեց կարդալ։ Հեռախոսը առցանց է, իսկ անցանց ռեժիմն անջատվա՞ծ է։</string>
+    <string name="game_mode_xbox_sign_in">Մուտք Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">Xbox-ի մուտքը Flux Keyboard-ի նվագարկիչում, ստեղները տպում են ինչպես սովորաբար։ Մեկ անգամ մուտք գործելով՝ յուրաքանչյուր ամպային խաղ աշխատում է։</string>
+    <string name="games_app_xbox">Xbox ամպային խաղ</string>
 </resources>

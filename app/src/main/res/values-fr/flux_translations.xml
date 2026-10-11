@@ -1851,4 +1851,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming dans le lecteur de Flux Keyboard (xbox.com/play ; les applis Xbox ne diffusent pas sur téléphone), ou n\'importe lequel de ses jeux, depuis son catalogue : chacun a ses réglages et démarre directement dans le jeu.</string>
     <string name="game_mode_xbox_search">Rechercher</string>
     <string name="game_mode_xbox_none">Le catalogue n\'a pas pu être lu. Le téléphone est-il en ligne, avec le mode hors ligne désactivé ?</string>
+    <string name="game_mode_xbox_sign_in">Se connecter à Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">La connexion Xbox dans le lecteur de Flux Keyboard, les touches tapant comme d\'habitude. Connecté une fois, chaque jeu cloud se lance.</string>
+    <string name="games_app_xbox">Jeu Xbox Cloud</string>
 </resources>

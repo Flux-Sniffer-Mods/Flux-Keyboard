@@ -1219,4 +1219,7 @@
     <string name="game_mode_xbox_add_description">Το Xbox Cloud Gaming στο δικό του πρόγραμμα αναπαραγωγής του Flux Keyboard (xbox.com/play· οι εφαρμογές Xbox δεν κάνουν streaming σε τηλέφωνα), ή οποιοδήποτε παιχνίδι του από τον κατάλογο: καθένα έχει δικές του ρυθμίσεις και ξεκινά κατευθείαν.</string>
     <string name="game_mode_xbox_search">Αναζήτηση</string>
     <string name="game_mode_xbox_none">Ο κατάλογος δεν διαβάστηκε. Είναι το τηλέφωνο online, με τη λειτουργία εκτός σύνδεσης ανενεργή;</string>
+    <string name="game_mode_xbox_sign_in">Σύνδεση στο Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">Η σύνδεση του Xbox στο πρόγραμμα αναπαραγωγής του Flux Keyboard, με τα πλήκτρα να πληκτρολογούν κανονικά. Μία σύνδεση και παίζει κάθε παιχνίδι cloud.</string>
+    <string name="games_app_xbox">Παιχνίδι Xbox cloud</string>
 </resources>

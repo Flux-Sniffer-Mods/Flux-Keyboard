@@ -1857,4 +1857,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming в собственном плеере Flux Keyboard (xbox.com/play; приложения Xbox не транслируют на телефонах) или любая его игра из каталога: у каждой свои настройки, и она запускается сразу в игре.</string>
     <string name="game_mode_xbox_search">Поиск</string>
     <string name="game_mode_xbox_none">Не удалось прочитать каталог. Телефон в сети, а автономный режим выключен?</string>
+    <string name="game_mode_xbox_sign_in">Войти в Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">Вход в Xbox в плеере Flux Keyboard, клавиши печатают как обычно. Войдя один раз, можно играть в любую облачную игру.</string>
+    <string name="games_app_xbox">Облачная игра Xbox</string>
 </resources>

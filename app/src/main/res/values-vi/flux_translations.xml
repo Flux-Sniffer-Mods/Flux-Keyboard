@@ -1839,4 +1839,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming trong trình phát riêng của Flux Keyboard (xbox.com/play; ứng dụng Xbox không phát trực tuyến trên điện thoại), hoặc bất kỳ game nào trong danh mục: mỗi game có cài đặt riêng và vào thẳng game.</string>
     <string name="game_mode_xbox_search">Tìm kiếm</string>
     <string name="game_mode_xbox_none">Không đọc được danh mục. Điện thoại có trực tuyến và đã tắt chế độ ngoại tuyến chưa?</string>
+    <string name="game_mode_xbox_sign_in">Đăng nhập Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">Đăng nhập Xbox trong trình phát của Flux Keyboard, phím gõ như thường. Đăng nhập một lần là chơi được mọi game đám mây.</string>
+    <string name="games_app_xbox">Game Xbox Cloud</string>
 </resources>

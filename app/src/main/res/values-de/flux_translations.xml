@@ -1310,4 +1310,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming im eigenen Player von Flux Keyboard (xbox.com/play; die Xbox-Apps streamen auf Handys nicht) oder eines seiner Spiele aus dem Katalog: jedes bekommt eigene Einstellungen und startet direkt im Spiel.</string>
     <string name="game_mode_xbox_search">Suchen</string>
     <string name="game_mode_xbox_none">Der Katalog konnte nicht gelesen werden. Ist das Handy online und der Offlinemodus aus?</string>
+    <string name="game_mode_xbox_sign_in">Bei Xbox anmelden</string>
+    <string name="game_mode_xbox_sign_in_description">Die Xbox-Anmeldung im Player von Flux Keyboard, Tasten tippen wie gewohnt. Einmal angemeldet, läuft jedes Cloud-Spiel.</string>
+    <string name="games_app_xbox">Xbox-Cloud-Spiel</string>
 </resources>

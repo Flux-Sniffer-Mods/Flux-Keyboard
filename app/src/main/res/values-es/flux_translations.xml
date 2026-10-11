@@ -1851,4 +1851,7 @@
     <string name="game_mode_xbox_add_description">Xbox Cloud Gaming en el reproductor propio de Flux Keyboard (xbox.com/play; las apps de Xbox no transmiten en móviles), o cualquiera de sus juegos, de su catálogo: cada uno con sus ajustes y empieza directamente en el juego.</string>
     <string name="game_mode_xbox_search">Buscar</string>
     <string name="game_mode_xbox_none">No se pudo leer el catálogo. ¿Está el móvil conectado y el modo sin conexión desactivado?</string>
+    <string name="game_mode_xbox_sign_in">Iniciar sesión en Xbox</string>
+    <string name="game_mode_xbox_sign_in_description">El inicio de sesión de Xbox en el reproductor de Flux Keyboard, con las teclas escribiendo como siempre. Con iniciar sesión una vez, se juega cualquier juego en la nube.</string>
+    <string name="games_app_xbox">Juego de Xbox Cloud</string>
 </resources>
