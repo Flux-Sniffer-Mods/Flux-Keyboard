@@ -446,4 +446,10 @@
     <string name="games_app_switch_description">A Games app in the home screen\'s app list (Niagara\'s too), with every game in it. Long-press it for the games themselves.</string>
     <string name="games_pin_all">Add every game to the home screen</string>
     <string name="games_pin_all_description">A home screen shortcut with its art for each game with a profile. The home screen asks for each one.</string>
+    <string name="game_first_start_title">Set up %1$s?</string>
+    <string name="game_first_start_message">Found among your games. Set up its controller, screen and sticks now, or play it with %1$s\'s settings.</string>
+    <string name="game_first_start_set_up">Set up</string>
+    <string name="game_first_start_play">Play</string>
+    <string name="games_app_new">New: not set up yet</string>
+    <string name="game_mode_found_short">Found: plays with %1$s\'s settings until set up</string>
 </resources>

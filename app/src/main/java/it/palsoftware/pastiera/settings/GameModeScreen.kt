@@ -71,14 +71,20 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var addingOwn by remember { mutableStateOf(false) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     fun refresh() { profiles = GameProfiles.all(context) }
-    // Games named by their file: their titles, once their IDs are read
+    // The game folders read again (games found join the list, not set up yet), and games named
+    // by their file given their titles once their IDs are read
     LaunchedEffect(Unit) {
-        if (withContext(Dispatchers.IO) { GameProfiles.retitle(context) }) refresh()
+        withContext(Dispatchers.IO) {
+            if (it.palsoftware.pastiera.adb.AdbShell.available()) it.palsoftware.pastiera.gaming.GameFolders.games(context)
+            GameProfiles.retitle(context)
+        }
+        refresh()
     }
 
     editing?.let { profile ->
         GameProfileEditor(profile, onDone = { saved ->
-            if (saved != null) GameProfiles.save(context, saved)
+            // A found game, looked at: set up from now on
+            if (saved != null) { if (saved.pending) GameProfiles.confirm(context, saved) else GameProfiles.save(context, saved) }
             editing = null
             refresh()
         }, onDelete = {
@@ -153,8 +159,11 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             FluxActionRow(
                 linkId = null,
                 title = profile.name,
-                description = if (profile.own) stringResource(R.string.game_mode_own_settings_short)
-                    else stringResource(R.string.game_mode_app_settings_short, appName),
+                description = when {
+                    profile.pending -> stringResource(R.string.game_mode_found_short, appName)
+                    profile.own -> stringResource(R.string.game_mode_own_settings_short)
+                    else -> stringResource(R.string.game_mode_app_settings_short, appName)
+                },
                 leading = { GameArtIcon(profile) }
             ) { editing = profile }
         }
@@ -227,7 +236,9 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         // The game plays with its app's settings, made for the app if it has none yet
         GameProfiles.ensureApp(context, game.packageName, appLabel(context, game.packageName))
         refresh()
-        editing = GameProfiles.newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
+        // Already found by itself: that one, set up now
+        val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME)
+        editing = GameProfiles.all(context).firstOrNull { it.isGame && it.launch == launch } ?: GameProfiles.newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
             .copy(launch = GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME), own = false)
         if (game.packageName == it.palsoftware.pastiera.gaming.GameNativeBridge.PACKAGE) gameNativeSetup = true
     }
@@ -401,7 +412,7 @@ private fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onByHand: () 
 
 /** One profile: its name, trackpad halves, screen, home screen shortcut and apps. */
 @Composable
-private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Unit, onDelete: () -> Unit) {
+internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Unit, onDelete: () -> Unit) {
     val context = LocalContext.current
     var current by remember { mutableStateOf(profile) }
     var addingApp by remember { mutableStateOf(false) }

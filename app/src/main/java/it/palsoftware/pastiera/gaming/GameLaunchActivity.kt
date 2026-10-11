@@ -26,6 +26,11 @@ class GameLaunchActivity : Activity() {
             finish()
             return
         }
+        // A game found by itself, starting for the first time: set it up, or play it as it is
+        if (profile != null && profile.pending && !intent.getBooleanExtra(EXTRA_ASKED, false)) {
+            ask(profile)
+            return
+        }
         profile?.let { p -> p.packages.forEach { GameProfiles.setActive(this, it, p.id) } }
         val game = launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
             ?.takeIf { (it.`package` ?: it.component?.packageName) in packages }
@@ -45,6 +50,27 @@ class GameLaunchActivity : Activity() {
         } else {
             start(game, app)
         }
+    }
+
+    /** Set up first (Games, at its settings), or played with its app's settings from now on. */
+    private fun ask(profile: GameProfile) {
+        val app = profile.packages.firstOrNull()?.let { pkg ->
+            runCatching { packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrNull()
+        } ?: ""
+        android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle(getString(it.palsoftware.pastiera.R.string.game_first_start_title, profile.name))
+            .setMessage(getString(it.palsoftware.pastiera.R.string.game_first_start_message, app))
+            .setPositiveButton(it.palsoftware.pastiera.R.string.game_first_start_set_up) { _, _ ->
+                startActivity(GamesActivity.editIntent(this, profile.id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                finish()
+            }
+            .setNegativeButton(it.palsoftware.pastiera.R.string.game_first_start_play) { _, _ ->
+                GameProfiles.confirm(this, profile)
+                startActivity(Intent(intent).putExtra(EXTRA_ASKED, true))
+                finish()
+            }
+            .setOnCancelListener { finish() }
+            .show()
     }
 
     /** The game, or the app when the game can't be started. */
@@ -67,6 +93,7 @@ class GameLaunchActivity : Activity() {
         private const val EXTRA_PROFILE = "profile"
         private const val EXTRA_LAUNCH = "launch"
         private const val EXTRA_PACKAGE = "package"
+        private const val EXTRA_ASKED = "asked"
 
         /** Starts a game found in the folders (or a launcher), through its profile when it has one. */
         fun intentFor(context: Context, game: GameLibrary.Game): Intent =

@@ -46,15 +46,32 @@ import kotlinx.coroutines.withContext
 class GamesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { PastieraTheme { GamesList() } }
+        val editId = intent.getStringExtra(EXTRA_EDIT)
+        setContent { PastieraTheme { GamesList(editId) } }
     }
 
     private data class Entry(val name: String, val profile: GameProfile, val intent: Intent)
 
     @Composable
-    private fun GamesList() {
+    private fun GamesList(editId: String?) {
         var entries by remember { mutableStateOf<List<Entry>?>(null) }
-        LaunchedEffect(Unit) { entries = withContext(Dispatchers.IO) { games(this@GamesActivity) }.map { (profile, intent) -> Entry(profile.name, profile, intent) } }
+        var reload by remember { mutableStateOf(0) }
+        // Its settings, as in Flux Keyboard's Gaming mode (opened straight away when asked to)
+        var editing by remember { mutableStateOf(editId?.let { id -> GameProfiles.all(this).firstOrNull { it.id == id } }) }
+        LaunchedEffect(reload) { entries = withContext(Dispatchers.IO) { games(this@GamesActivity) }.map { (profile, intent) -> Entry(profile.name, profile, intent) } }
+        editing?.let { profile ->
+            androidx.activity.compose.BackHandler { editing = null }
+            it.palsoftware.pastiera.settings.GameProfileEditor(profile, onDone = { saved ->
+                if (saved != null) { if (saved.pending) GameProfiles.confirm(this, saved) else GameProfiles.save(this, saved) }
+                editing = null
+                reload++
+            }, onDelete = {
+                GameProfiles.delete(this, profile.id)
+                editing = null
+                reload++
+            })
+            return
+        }
         Scaffold { inner ->
             val list = entries
             LazyColumn(modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 16.dp)) {
@@ -71,7 +88,17 @@ class GamesActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         GameArtIcon(entry.profile)
-                        Text(entry.name, style = MaterialTheme.typography.titleMedium)
+                        androidx.compose.foundation.layout.Column(modifier = Modifier.weight(1f)) {
+                            Text(entry.name, style = MaterialTheme.typography.titleMedium)
+                            if (entry.profile.pending) Text(
+                                stringResource(R.string.games_app_new), style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        // Its own settings, where it has a profile
+                        if (!entry.profile.id.startsWith("found:")) androidx.compose.material3.TextButton(onClick = { editing = entry.profile }) {
+                            Text("\u2699")
+                        }
                     }
                 }
             }
@@ -80,6 +107,11 @@ class GamesActivity : ComponentActivity() {
 
     companion object {
         private const val KEY_ENABLED = "games_app_enabled"
+        private const val EXTRA_EDIT = "edit"
+
+        /** Games, opened at one game's settings. */
+        fun editIntent(context: Context, profileId: String): Intent =
+            Intent(context, GamesActivity::class.java).putExtra(EXTRA_EDIT, profileId)
 
         /**
          * Every game: those with a profile, then those found in the folders without one (as a

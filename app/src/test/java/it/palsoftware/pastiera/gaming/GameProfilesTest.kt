@@ -97,4 +97,17 @@ class GameProfilesTest {
         assertEquals(listOf("Celeste", "Hades"), games.map { it.name })
         assertEquals(listOf(570, 1145360), games.map { it.gameId })
     }
+
+    @Test
+    fun gamesFoundJoinTheListOnceAndWaitToBeSetUp() {
+        val context = org.robolectric.RuntimeEnvironment.getApplication()
+        val game = GameLibrary.Game("Wind Waker", "org.dolphinemu.dolphinemu", launch = "intent:#Intent;S.AutoStartFile=/x/zelda.rvz;end")
+        GameProfiles.addDetected(context, listOf(game))
+        GameProfiles.addDetected(context, listOf(game))
+        val found = GameProfiles.all(context).filter { it.launch == game.launch }
+        assertEquals(1, found.size)
+        assertEquals(true, found.single().pending)
+        assertEquals(true, GameProfile.fromJson(found.single().toJson())?.pending)
+        assertEquals(false, GameProfiles.confirm(context, found.single()).pending)
+    }
 }

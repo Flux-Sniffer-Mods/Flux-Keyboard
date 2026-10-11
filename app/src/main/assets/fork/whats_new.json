@@ -460,6 +460,9 @@
       "text": "Gaming mode: the games found in the game folders and the games with a profile are in the quick launcher too, started as their home screen shortcuts start them (Games in the quick launcher, in Gaming mode)."
     },
     {
+      "text": "Gaming mode: games found in the game folders join the games list by themselves, not set up until you say: the first time one starts, it asks to set it up or play it with its app's settings. The Games app has each game's settings too (\u2699)."
+    },
+    {
       "text": "Gaming mode: Games in the app list adds a Games app to the home screen's app list (Niagara's too) with every game, and every game can be added to the home screen at once. Screen is now as the app wants or kept upright (forcing a landscape resolution, the default for game apps). A Dolphin Wii game can take a GameCube controller (Mario Kart Wii), the Wii pointer follows the trackpad's right half, GameCube L and R sit on the volume keys, games named by their file get their title, and keys pressed while steering no longer stop the left stick. Record the trackpad moved to Developer options."
     },
     {

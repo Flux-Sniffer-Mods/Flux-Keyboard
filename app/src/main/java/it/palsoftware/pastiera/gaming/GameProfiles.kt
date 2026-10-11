@@ -68,6 +68,8 @@ data class GameProfile(
      * app's. App profiles (no [launch]) always have their own.
      */
     val own: Boolean = false,
+    /** Found by itself (the game folders), not set up yet: asked about the first time it starts. */
+    val pending: Boolean = false,
     /** A Dolphin Wii game's controller ([FluxLayout.WiiPad]'s name; null: Wii Remote and Nunchuk). */
     val wiiPad: String? = null,
     /** Dolphin's two app profiles: "wii" or "gamecube", each game getting the one it is. */
@@ -85,6 +87,7 @@ data class GameProfile(
         put("own", own)
         variant?.let { put("variant", it) }
         wiiPad?.let { put("wiiPad", it) }
+        if (pending) put("pending", true)
         put("name", name)
         put("packages", JSONArray(packages.toList()))
         put("left", leftHalf.name)
@@ -129,7 +132,8 @@ data class GameProfile(
                 // Games made before apps had settings of their own keep theirs
                 own = json.optBoolean("own", true),
                 variant = json.optString("variant").ifEmpty { null },
-                wiiPad = json.optString("wiiPad").ifEmpty { null }
+                wiiPad = json.optString("wiiPad").ifEmpty { null },
+                pending = json.optBoolean("pending", false)
             )
         }.getOrNull()
     }
@@ -252,6 +256,33 @@ object GameProfiles {
         val wii = profile.wiiPad != FluxLayout.WiiPad.GAMECUBE.name &&
             profile.launch?.let { GameFiles.gameFile(it) }?.let { GameFiles.isWii(it) } == true
         return apps.firstOrNull { it.variant == if (wii) VARIANT_WII else VARIANT_GAMECUBE } ?: apps.first()
+    }
+
+    /**
+     * Games found by themselves (the game folders, a launcher's list), each added as a game
+     * that isn't set up yet: playing with its app's settings, asked about when it first starts.
+     * Ones already there (by what starts them) are left alone. Its app's settings aren't made
+     * until it's set up.
+     */
+    fun addDetected(context: Context, games: List<GameLibrary.Game>) {
+        val profiles = all(context)
+        val known = profiles.mapNotNull { it.launch }.toMutableSet()
+        val added = games.mapNotNull { game ->
+            val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME) ?: return@mapNotNull null
+            if (!known.add(launch)) return@mapNotNull null
+            newProfile(game.name, setOf(game.packageName)).copy(launch = launch, own = false, pending = true)
+        }
+        if (added.isNotEmpty()) saveAll(context, profiles + added)
+    }
+
+    /** A found game set up (or played as it is): no longer asked about, its app's settings made. */
+    fun confirm(context: Context, profile: GameProfile): GameProfile {
+        val pkg = profile.packages.firstOrNull()
+        if (pkg != null) {
+            val label = runCatching { context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
+            ensureApp(context, pkg, label)
+        }
+        return profile.copy(pending = false).also { save(context, it) }
     }
 
     /**
