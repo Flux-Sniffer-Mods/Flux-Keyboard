@@ -449,6 +449,14 @@ object GameMode {
         }
     }
 
+    /**
+     * [action] on the main thread once the screen changes asked for so far are made, and a
+     * moment more: a game opened as the screen changes size may restart into its menu (GameHub).
+     */
+    fun afterScreen(action: () -> Unit) = worker.execute {
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(action, 700)
+    }
+
     /** A screen of its own the game plays on (Separate screen), else null: the phone's. */
     @Volatile private var extra: it.palsoftware.pastiera.display.ExtraScreen.Screen? = null
 

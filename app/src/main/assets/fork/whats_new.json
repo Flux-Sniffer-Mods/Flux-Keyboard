@@ -600,6 +600,24 @@
     },
     {
       "text": "Games app: long-press Stream for streaming settings (mirror or separate screen, resolution, devices, paired clients); a tap still turns it on or off."
+    },
+    {
+      "text": "Stream to Moonlight: Moonlight's Wake starts streaming on the phone when it's off, so a game can be picked straight away."
+    },
+    {
+      "text": "Stream to Moonlight: every XCloud game in the games list is listed in Moonlight, played yet or not."
+    },
+    {
+      "text": "Stream to Moonlight: notifications show as usual while streaming (Android 15 and later hide them during screen capture; put back after)."
+    },
+    {
+      "text": "Stream to Moonlight: the phone's screen has its own cover in Moonlight, Mirror phone screen on a dark gradient."
+    },
+    {
+      "text": "Games app: pick artwork for launchers, emulators and the XCloud tile, which is now called XCloud Games and skips covers with a white frame."
+    },
+    {
+      "text": "Games app: keys picked with W A S D now show a frame round the tile, with the rest dimmed."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -841,6 +859,9 @@
     },
     {
       "text": "The Games app's top bar sits below the status bar and the camera cutout."
+    },
+    {
+      "text": "A game picked in Moonlight opens once the phone's screen has changed size, so GameHub opens the game rather than its library."
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -2068,6 +2068,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     override fun onCreate() {
         super.onCreate()
         ClicksAccessibilityKeyBridge.register(this)
+        // Moonlight's Wake starts streaming when it isn't running
+        it.palsoftware.pastiera.streaming.StreamWake.start(this)
         // Root: the keyboard backlight follows the screen, when set (the Root page)
         it.palsoftware.pastiera.adb.KeyboardBacklight.start(this)
         // A code arriving while typing is offered straight away
@@ -5954,6 +5956,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (playerOwnsInput()) return false
         // The quick launcher in front: its keys go to it, not to the app's field beneath
         if (QuickLauncherActivity.ownsKey(event_)) return false
+        // The Games app moved through with keys: its keys
+        if (it.palsoftware.pastiera.gaming.GamesActivity.ownsKey(this, event_)) return false
         // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
         if ((event_?.repeatCount ?: 0) == 0 && !KeyEvent.isModifierKey(keyCode_)) {
             if (keyCode_ == KeyEvent.KEYCODE_DEL) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
@@ -6922,6 +6926,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyUp(keyCode_, event_)
         if (playerOwnsInput()) return false
         if (QuickLauncherActivity.ownsKey(event_)) return false
+        // The Games app moved through with keys: its keys
+        if (it.palsoftware.pastiera.gaming.GamesActivity.ownsKey(this, event_)) return false
         if (keyCode_ == KEYCODE_SYM) {
             symKeyHeld = false
             // Released after a chord in a hidden app: no panel

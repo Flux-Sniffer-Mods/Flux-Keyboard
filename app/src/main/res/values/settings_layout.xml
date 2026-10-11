@@ -467,10 +467,10 @@
     <string name="game_mode_xbox_none">Couldn\'t load the catalogue. Check the phone is online and offline mode is off.</string>
     <string name="game_mode_xbox_sign_in">Sign in to Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Sign in to Xbox in Flux Keyboard\'s player. Once signed in, every cloud game plays.</string>
-    <string name="games_app_xbox">Xbox cloud game</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Stream to Moonlight</string>
-    <string name="stream_switch_description">Lists the phone in Moonlight on any device on the same network. Pair with the PIN Moonlight shows, and your games appear there. Xbox cloud games appear once you\'ve played them here.</string>
+    <string name="stream_switch_description">Lists the phone in Moonlight on any device on the same network. Pair with the PIN Moonlight shows, and your games appear there, XCloud games included. Moonlight\'s Wake starts streaming on the phone if it\'s off.</string>
     <string name="stream_unpair">Forget paired devices</string>
     <string name="stream_unpair_description">%1$d paired. Each will need the PIN again.</string>
     <string name="stream_pin_title">Pair %1$s</string>
@@ -532,6 +532,7 @@
     <string name="stream_screen_to_separate">Separate screen</string>
     <string name="stream_screen_to_mirror">Mirror phone</string>
     <string name="extra_screen_title">Game screen</string>
+    <string name="stream_phone_screen_art">Mirror phone screen</string>
     <string name="stream_phone_screen">Phone screen</string>
     <string name="stream_phone_screen_switch">Show the phone\'s screen in Moonlight</string>
     <string name="stream_phone_screen_description">Adds the phone\'s screen to Moonlight\'s list, to show whatever is on it.</string>

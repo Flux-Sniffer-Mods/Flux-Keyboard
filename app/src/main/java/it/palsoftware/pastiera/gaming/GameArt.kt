@@ -77,20 +77,49 @@ object GameArt {
     )
 
     /**
-     * SteamGridDB's upright art for an app (a launcher or emulator) named any of [names]: only an
-     * entry whose name starts with the one asked for, so an emulator never gets a game's art.
+     * SteamGridDB's entry for an app (a launcher or emulator) named any of [names]: only one
+     * whose name starts with the name asked for, so an emulator never gets a game's art.
      */
-    private fun steamGridDbApp(names: List<String>): String? {
+    private fun sgdbApp(names: List<String>): Int? {
         if (key.isEmpty()) return null
         for (name in names) {
             val found = api("search/autocomplete/" + java.net.URLEncoder.encode(name, "UTF-8").replace("+", "%20"))
                 ?.optJSONArray("data") ?: continue
-            val id = (0 until found.length()).map { found.optJSONObject(it) }
+            (0 until found.length()).map { found.optJSONObject(it) }
                 .firstOrNull { it?.optString("name").orEmpty().startsWith(name, ignoreCase = true) }
-                ?.optInt("id")?.takeIf { it > 0 } ?: continue
-            api("grids/game/$id?dimensions=600x900")?.optJSONArray("data")?.optJSONObject(0)
-                ?.let { it.optString("url").ifEmpty { it.optString("thumb") } }
-                ?.takeIf { it.startsWith("https://") }?.let { return it }
+                ?.optInt("id")?.takeIf { it > 0 }?.let { return it }
+        }
+        return null
+    }
+
+    /** The names an app is looked up by: its known names, else its own. */
+    private fun appNames(profile: GameProfile, packageName: String?): List<String> =
+        packageName?.let { APP_NAMES[it] } ?: profile.packages.firstNotNullOfOrNull { APP_NAMES[it] } ?: listOf(profile.name)
+
+    /** SteamGridDB's upright grids for an entry, best first. */
+    private fun sgdbUpright(id: Int): List<String> = api("grids/game/$id?dimensions=600x900")?.optJSONArray("data")?.let { data ->
+        (0 until data.length()).mapNotNull { data.optJSONObject(it)?.let { item -> item.optString("url").ifEmpty { item.optString("thumb") } } }
+    }.orEmpty().filter { it.startsWith("https://") }
+
+    /** Art with a plain white frame (some covers have one): looks wrong inside a rounded tile. */
+    internal fun framed(art: Bitmap): Boolean {
+        val w = art.width; val h = art.height
+        if (w < 40 || h < 40) return false
+        fun light(x: Int, y: Int): Boolean {
+            val c = art.getPixel(x, y)
+            return android.graphics.Color.red(c) > 230 && android.graphics.Color.green(c) > 230 && android.graphics.Color.blue(c) > 230
+        }
+        val inset = 3
+        val edges = listOf(w / 4, w / 2, 3 * w / 4).flatMap { x -> listOf(light(x, inset), light(x, h - 1 - inset)) } +
+            listOf(h / 4, h / 2, 3 * h / 4).flatMap { y -> listOf(light(inset, y), light(w - 1 - inset, y)) }
+        return edges.count { it } >= edges.size - 1 && !light(w / 2, h / 2)
+    }
+
+    /** The first of [urls] that decodes and isn't framed in white, upright. */
+    private fun firstUnframed(urls: List<String>): Bitmap? {
+        for (url in urls.take(8)) {
+            val art = fetch(url)?.let { BitmapFactory.decodeByteArray(it, 0, it.size) } ?: continue
+            if (!framed(art)) return portrait(art)
         }
         return null
     }
@@ -106,10 +135,8 @@ object GameArt {
         if (file.exists() && file.length() > 0) BitmapFactory.decodeFile(file.path)?.let { return it }
         if (!file.exists() && !SettingsManager.isOfflineMode(context)) {
             dir(context).mkdirs()
-            val names = APP_NAMES[packageName] ?: listOf(profile.name)
-            val art = steamGridDbApp(names)?.let(::fetch)?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-            if (art != null) {
-                val upright = portrait(art)
+            val upright = sgdbApp(appNames(profile, packageName))?.let { firstUnframed(sgdbUpright(it)) }
+            if (upright != null) {
                 file.outputStream().use { upright.compress(Bitmap.CompressFormat.JPEG, 90, it) }
                 return upright
             }
@@ -126,17 +153,23 @@ object GameArt {
         }.getOrNull()
     }
 
-    /** Xbox Cloud Gaming's tile: Game Pass's upright art from SteamGridDB (fetched once, blocking). */
+    /** Xbox Cloud Gaming's tile in the Games app, for art picked for it. */
+    val XBOX_TILE: GameProfile get() = GameProfiles.newProfile("Xbox Game Pass", emptySet()).copy(id = "xbox-cloud-tile")
+
+    /**
+     * Xbox Cloud Gaming's tile: art picked for it, else Game Pass's upright art from SteamGridDB
+     * (the first without a white frame; fetched once, blocking).
+     */
     fun xboxTile(context: Context): Bitmap? {
-        val file = File(dir(context), "xbox-cloud-tile" + (if (key.isEmpty()) "" else "-sgdb") + ".img")
+        val profile = XBOX_TILE
+        uprightFile(context, profile).takeIf { it.length() > 0 }?.let { file -> BitmapFactory.decodeFile(file.path)?.let { return it } }
+        custom(context, profile)?.let { return portrait(it) }
+        val file = File(dir(context), "xbox-cloud-tile-2" + (if (key.isEmpty()) "" else "-sgdb") + ".img")
         if (file.exists()) return if (file.length() > 0) BitmapFactory.decodeFile(file.path) else null
         if (SettingsManager.isOfflineMode(context)) return null
         dir(context).mkdirs()
-        val stand = GameProfiles.newProfile("Xbox Game Pass", emptySet())
-        for (url in steamGridDbPortrait(stand)) {
-            val bytes = fetch(url) ?: continue
-            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: continue
-            val upright = portrait(bitmap)
+        val upright = sgdbApp(listOf("Xbox Game Pass", "Xbox Cloud Gaming"))?.let { firstUnframed(sgdbUpright(it)) }
+        if (upright != null) {
             file.outputStream().use { upright.compress(Bitmap.CompressFormat.JPEG, 90, it) }
             return upright
         }
@@ -207,7 +240,9 @@ object GameArt {
         val upright = mutableListOf<Choice>()
         if (key.isNotEmpty()) {
             val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
-            sgdbGame(launch, profile)?.let { game ->
+            // A launcher or emulator (or the Xbox tile): its own entry, not a game of its name
+            val entry = if (profile.isGame) sgdbGame(launch, profile) else sgdbApp(appNames(profile, null))
+            entry?.let { game ->
                 fun all(path: String) = api(path)?.optJSONArray("data")?.let { data ->
                     List(data.length()) { data.optJSONObject(it) }.mapNotNull { item ->
                         val full = item?.optString("url").orEmpty()

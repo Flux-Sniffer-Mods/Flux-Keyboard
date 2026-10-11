@@ -113,7 +113,9 @@ class XboxPlayActivity : Activity() {
         web.onResume()
         immersive()
         if (signingIn) return
-        val playing = GameProfiles.all(this).firstOrNull { p -> p.launch?.contains(intent.dataString ?: "\u0000") == true }
+        // The cloud game this page plays: by its game ID, in the profile's link and the page's
+        val id = intent.dataString?.let { XboxCloud.idOf(it) }
+        val playing = id?.let { GameProfiles.all(this).firstOrNull { p -> p.launch?.let { l -> XboxCloud.idOf(l) }.equals(it, ignoreCase = true) } }
         // Played here once: listed in Moonlight from now on
         playing?.let { markPlayed(this, it) }
         val screen = playing?.screen ?: ScreenMode.SIDEWAYS

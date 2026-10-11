@@ -27,7 +27,13 @@ class StreamCapture : Activity() {
         if (requestCode == REQUEST) {
             if (resultCode == RESULT_OK && data != null) {
                 StreamHostService.capture(this, resultCode, data)
-                StreamHost.takeLaunch()?.let { game -> runCatching { startActivity(game.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
+                // Opened once the phone's screen is at the stream's size, not while it changes
+                val app = applicationContext
+                StreamHost.takeLaunch()?.let { game ->
+                    it.palsoftware.pastiera.gaming.GameMode.afterScreen {
+                        runCatching { app.startActivity(game.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                    }
+                }
             } else {
                 StreamHost.session?.end()
             }

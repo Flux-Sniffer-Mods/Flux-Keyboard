@@ -537,7 +537,11 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 )
             }
             // An app's screen choice (a game's sits with its art, below its name)
-            if (!current.isGame) ScreenChoice(current) { current = it }
+            if (!current.isGame) {
+                // Its tile in the Games app
+                GameArtworkRow(current)
+                ScreenChoice(current) { current = it }
+            }
             // An emulator: Flux Keyboard's layout written into its own controller settings; other
             // apps map the keys themselves
             val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
@@ -892,7 +896,7 @@ private fun ResolutionChoices(profile: GameProfile, onChange: (GameProfile) -> U
 /** A game's art, picked from the phone's pictures for its list entry and Moonlight, or the art found for it. */
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-private fun GameArtworkRow(profile: GameProfile) {
+internal fun GameArtworkRow(profile: GameProfile) {
     val context = LocalContext.current
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     var version by remember { mutableStateOf(it.palsoftware.pastiera.gaming.GameArt.version(context, profile)) }

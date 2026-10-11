@@ -74,6 +74,15 @@ object StreamHost {
         return prefs.getString(KEY_ID, null) ?: UUID.randomUUID().toString().uppercase().also { prefs.edit().putString(KEY_ID, it).apply() }
     }
 
+    /**
+     * The address Moonlight wakes the phone by: a stable made-up one (a phone's own isn't
+     * readable), locally administered so it's no real device's.
+     */
+    fun mac(context: Context): String {
+        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(id(context).toByteArray())
+        return (listOf(0x02) + (0 until 5).map { digest[it].toInt() and 0xFF }).joinToString(":") { "%02x".format(it) }
+    }
+
     fun start(context: Context) {
         if (running) return
         app = context.applicationContext
@@ -202,7 +211,7 @@ object StreamHost {
     private fun serverInfo(paired: Boolean, socket: Socket): String = root(
         "<hostname>${escape(hostname())}</hostname><appversion>7.1.431.-1</appversion><GfeVersion>3.23.0.74</GfeVersion>" +
             "<uniqueid>${id(app)}</uniqueid><HttpsPort>$HTTPS_PORT</HttpsPort><ExternalPort>$HTTP_PORT</ExternalPort>" +
-            "<MaxLumaPixelsHEVC>0</MaxLumaPixelsHEVC><mac>00:00:00:00:00:00</mac><LocalIP>${localIp(socket)}</LocalIP>" +
+            "<MaxLumaPixelsHEVC>0</MaxLumaPixelsHEVC><mac>${mac(app)}</mac><LocalIP>${localIp(socket)}</LocalIP>" +
             "<ServerCodecModeSupport>1</ServerCodecModeSupport><SupportedDisplayMode>" +
             "<DisplayMode><Width>1920</Width><Height>1080</Height><RefreshRate>60</RefreshRate></DisplayMode>" +
             "<DisplayMode><Width>1280</Width><Height>720</Height><RefreshRate>60</RefreshRate></DisplayMode>" +
@@ -229,6 +238,33 @@ object StreamHost {
     fun endStream() {
         session?.end()
         currentGame = 0
+    }
+
+    private const val SCREEN_SHARE_SETTING = "disable_screen_share_protections_for_apps_and_notifications"
+    private const val KEY_SCREEN_SHARE_RESTORE = "stream_screen_share_restore"
+
+    /**
+     * Android 15 on hides notifications while the screen is captured, as it is for the stream:
+     * shown as usual while streaming ([on]), Android's own setting put back after.
+     */
+    private fun notificationsWhileStreaming(on: Boolean) {
+        if (android.os.Build.VERSION.SDK_INT < 35 || !it.palsoftware.pastiera.adb.AdbShell.available()) return
+        val prefs = SettingsManager.getPreferences(app)
+        Thread {
+            if (on) {
+                if (!prefs.contains(KEY_SCREEN_SHARE_RESTORE)) {
+                    val before = it.palsoftware.pastiera.adb.AdbShell.run("settings get global $SCREEN_SHARE_SETTING")?.trim().orEmpty()
+                    prefs.edit().putString(KEY_SCREEN_SHARE_RESTORE, before).apply()
+                }
+                it.palsoftware.pastiera.adb.AdbShell.run("settings put global $SCREEN_SHARE_SETTING 1")
+            } else {
+                val before = prefs.getString(KEY_SCREEN_SHARE_RESTORE, null) ?: return@Thread
+                it.palsoftware.pastiera.adb.AdbShell.run(
+                    if (before == "1") "true" else if (before == "0") "settings put global $SCREEN_SHARE_SETTING 0"
+                    else "settings delete global $SCREEN_SHARE_SETTING")
+                prefs.edit().remove(KEY_SCREEN_SHARE_RESTORE).apply()
+            }
+        }.apply { isDaemon = true; start() }
     }
 
     /** Switches the game between the phone's screen (mirrored) and a screen of its own. */
@@ -286,6 +322,7 @@ object StreamHost {
                 session = null
                 streamingGame = null
                 streamingDevice = null
+                notificationsWhileStreaming(false)
                 StreamHostService.refresh(app)
                 // The screen back as gaming mode (or the phone) wants it
                 it.palsoftware.pastiera.gaming.GameMode.streaming(app, null)
@@ -297,6 +334,7 @@ object StreamHost {
             return root("", 503, "Streaming couldn't start")
         }
         session = started
+        notificationsWhileStreaming(true)
         currentGame = appId
         streamingGame = title
         streamingDevice = nameOf(cert) ?: client.hostAddress
@@ -451,17 +489,12 @@ object StreamHost {
 
     // ---- Games ----
 
-    /** The games streamed: the games list's, cloud games left out (they stream to the Moonlight client's device directly). */
+    /** The games streamed: everything in the games list, Xbox cloud games included. */
     internal fun games(): List<Pair<Int, GameProfile>> = GamesActivity.games(app).map { it.first }
-        // Cloud games only once played in Flux Keyboard's own player (so they're known to work)
-        .filter { profile ->
-            val cloud = profile.packages.any { it == app.packageName || GameApps.appFor(it) == GameApps.XBOX_NAME }
-            !cloud || it.palsoftware.pastiera.gaming.XboxPlayActivity.played(app, profile)
-        }
         .map { appId(it) to it }
 
     /** The phone's own screen, listed first in Moonlight when that's on. */
-    const val PHONE_SCREEN_ID = 1
+    const val PHONE_SCREEN_ID = 2
 
     /**
      * A game's number for Moonlight: stable while the game and its art stay the same. Moonlight
@@ -483,12 +516,28 @@ object StreamHost {
     )
 
     /** The phone screen's art: Flux Keyboard's icon on a dark upright card. */
+    /** The phone's screen in Moonlight's list: its name on a dark grey gradient, like Flux Keyboard's key art. */
     private fun phoneScreenArt(): android.graphics.Bitmap? = runCatching {
-        val icon = app.packageManager.getApplicationIcon(app.packageName)
-        val square = android.graphics.Bitmap.createBitmap(512, 512, android.graphics.Bitmap.Config.ARGB_8888)
-        icon.setBounds(0, 0, 512, 512)
-        icon.draw(android.graphics.Canvas(square))
-        GameArt.portrait(square)
+        val width = 600; val height = 900
+        val bitmap = android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(bitmap)
+        canvas.drawPaint(android.graphics.Paint().apply {
+            shader = android.graphics.LinearGradient(0f, 0f, width * 0.4f, height.toFloat(),
+                0xFF4A4A4F.toInt(), 0xFF0B0B0D.toInt(), android.graphics.Shader.TileMode.CLAMP)
+        })
+        val paint = android.text.TextPaint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.WHITE
+            textSize = 76f
+            typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
+        }
+        val text = app.getString(it.palsoftware.pastiera.R.string.stream_phone_screen_art)
+        val layout = android.text.StaticLayout.Builder.obtain(text, 0, text.length, paint, width - 120)
+            .setAlignment(android.text.Layout.Alignment.ALIGN_CENTER).setLineSpacing(0f, 1.05f).build()
+        canvas.save()
+        canvas.translate(60f, (height - layout.height) / 2f)
+        layout.draw(canvas)
+        canvas.restore()
+        bitmap
     }.getOrNull()
 
     /** A game's upright box art, for Moonlight's game picker. */

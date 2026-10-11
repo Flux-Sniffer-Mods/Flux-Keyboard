@@ -125,7 +125,13 @@ class GamesActivity : ComponentActivity() {
         if (xboxMenu) androidx.compose.material3.AlertDialog(
             onDismissRequest = { xboxMenu = false },
             title = { Text(stringResource(R.string.games_app_xbox)) },
-            text = { Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out_description else R.string.game_mode_xbox_sign_in_description)) },
+            text = {
+                androidx.compose.foundation.layout.Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                    Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out_description else R.string.game_mode_xbox_sign_in_description))
+                    // The tile's own art
+                    it.palsoftware.pastiera.settings.GameArtworkRow(GameArt.XBOX_TILE)
+                }
+            },
             confirmButton = {
                 androidx.compose.material3.TextButton(onClick = { xboxMenu = false; xbox.click() }) {
                     Text(stringResource(if (xbox.signedIn) R.string.game_mode_xbox_sign_out else R.string.game_mode_xbox_sign_in))
@@ -212,22 +218,14 @@ class GamesActivity : ComponentActivity() {
             // The tile picked with keys (shown only once keys are used, not for touch)
             var selected by remember(page) { mutableStateOf(0) }
             var byKeys by remember { mutableStateOf(false) }
-            val focus = remember { androidx.compose.ui.focus.FocusRequester() }
-            LaunchedEffect(page, editing, importing, addingOwn, addingXbox) { runCatching { focus.requestFocus() } }
             LaunchedEffect(selected, byKeys) { if (byKeys && selected in tiles.indices) grid.animateScrollToItem(selected) }
-            val controllerKeys = remember { controllerKeys(this@GamesActivity) }
-            androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
-                state = grid,
-                columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(104.dp),
-                modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 12.dp)
-                    .focusRequester(focus)
-                    .onPreviewKeyEvent { event ->
-                        if (!controllerKeys) return@onPreviewKeyEvent false
-                        val native = event.nativeKeyEvent
-                        val action = navigation(native.keyCode) ?: return@onPreviewKeyEvent false
-                        if (native.action != android.view.KeyEvent.ACTION_DOWN) return@onPreviewKeyEvent true
-                        // Columns: how many tiles sit in the first row
-                        val columns = grid.layoutInfo.visibleItemsInfo.count { it.row == grid.layoutInfo.visibleItemsInfo.firstOrNull()?.row }.coerceAtLeast(1)
+            // Keys reach the window, not the grid: what each does, set afresh as the page changes
+            keyHandler = { native ->
+                navigation(native.keyCode)?.let { action ->
+                    if (native.action == android.view.KeyEvent.ACTION_DOWN && (native.repeatCount == 0 || action in MOVES)) {
+                        // Columns: how many tiles sit in the first row shown
+                        val first = grid.layoutInfo.visibleItemsInfo.firstOrNull()?.row
+                        val columns = grid.layoutInfo.visibleItemsInfo.count { it.row == first }.coerceAtLeast(1)
                         val wasByKeys = byKeys
                         byKeys = true
                         when (action) {
@@ -241,15 +239,21 @@ class GamesActivity : ComponentActivity() {
                             Nav.PAGE -> page = if (page == Page.GAMES) Page.APPS else Page.GAMES
                             Nav.SETTINGS -> settings = true
                         }
-                        true
                     }
-                    .focusable(),
+                    true
+                } ?: false
+            }
+            androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+                state = grid,
+                columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(104.dp),
+                modifier = Modifier.fillMaxSize().padding(inner).padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(tiles.size, key = { tiles[it].key }) { index ->
                     val tile = tiles[index]
-                    Tile(tile.name, tile.sub, tile.art, tile.onClick, tile.onLongClick, selected = byKeys && index == selected)
+                    Tile(tile.name, tile.sub, tile.art, tile.onClick, tile.onLongClick,
+                        selected = byKeys && index == selected, dimmed = byKeys && index != selected)
                 }
                 if (page == Page.GAMES && list != null && list.isEmpty()) item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(maxLineSpan) }) {
                     Text(stringResource(R.string.games_app_empty))
@@ -265,6 +269,25 @@ class GamesActivity : ComponentActivity() {
 
     /** What a key does in the Games app, in Flux Keyboard's controller layout (or a real controller's). */
     private enum class Nav { UP, DOWN, LEFT, RIGHT, OPEN, OPTIONS, BACK, PAGE, SETTINGS }
+    private val MOVES = setOf(Nav.UP, Nav.DOWN, Nav.LEFT, Nav.RIGHT)
+
+    /** What the page shown does with a key; false when it doesn't take it. */
+    private var keyHandler: ((android.view.KeyEvent) -> Boolean)? = null
+
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        if (controllerKeys(this) && keyHandler?.invoke(event) == true) return true
+        return super.dispatchKeyEvent(event)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        inFront = true
+    }
+
+    override fun onPause() {
+        inFront = false
+        super.onPause()
+    }
 
     private fun navigation(code: Int): Nav? = when (code) {
         android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_DPAD_UP -> Nav.UP
@@ -305,7 +328,8 @@ class GamesActivity : ComponentActivity() {
     /** One tile: an upright picture, its name beneath; long-press for its settings. */
     @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
     @Composable
-    private fun Tile(name: String, sub: String?, art: @Composable () -> Unit, onClick: () -> Unit, onLongClick: () -> Unit, selected: Boolean = false) {
+    private fun Tile(name: String, sub: String?, art: @Composable () -> Unit, onClick: () -> Unit, onLongClick: () -> Unit,
+                     selected: Boolean = false, dimmed: Boolean = false) {
         val shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
         androidx.compose.foundation.layout.Column(
             modifier = Modifier.fillMaxWidth().combinedClickable(onClick = onClick, onLongClick = onLongClick),
@@ -314,7 +338,12 @@ class GamesActivity : ComponentActivity() {
             Box(
                 modifier = Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(shape)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
-            ) { art() }
+            ) {
+                art()
+                // Picked with keys: a frame round it, the rest a little darker
+                if (dimmed) Box(Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f)))
+                if (selected) Box(Modifier.fillMaxSize().border(4.dp, MaterialTheme.colorScheme.primary, shape))
+            }
             Text(
                 name, style = MaterialTheme.typography.bodyMedium, maxLines = 2,
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
@@ -344,7 +373,8 @@ class GamesActivity : ComponentActivity() {
     /** Xbox Cloud Gaming's tile: Game Pass art, a cloud while there's none. */
     @Composable
     private fun XboxCover() {
-        val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null) {
+        val version = GameArt.version(this, GameArt.XBOX_TILE)
+        val art by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, version) {
             value = withContext(Dispatchers.IO) { runCatching { GameArt.xboxTile(this@GamesActivity)?.asImageBitmap() }.getOrNull() }
         }
         Cover(art) { Symbol("\u2601") }
@@ -397,6 +427,18 @@ class GamesActivity : ComponentActivity() {
         }
 
         private const val KEY_CONTROLLER_KEYS = "games_app_controller_keys"
+        @Volatile private var inFront = false
+
+        /** The Games app in front, moved through with keys: [event] is its, not the keyboard's. */
+        fun ownsKey(context: Context, event: android.view.KeyEvent?): Boolean =
+            inFront && event != null && controllerKeys(context) && event.keyCode in NAV_KEYS
+
+        private val NAV_KEYS = setOf(
+            android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_A, android.view.KeyEvent.KEYCODE_S, android.view.KeyEvent.KEYCODE_D,
+            android.view.KeyEvent.KEYCODE_L, android.view.KeyEvent.KEYCODE_K, android.view.KeyEvent.KEYCODE_P,
+            android.view.KeyEvent.KEYCODE_Q, android.view.KeyEvent.KEYCODE_E, android.view.KeyEvent.KEYCODE_SPACE,
+            android.view.KeyEvent.KEYCODE_ENTER
+        )
 
         /** The Games app moved through with gaming mode's keys (W A S D, L to open...). */
         fun controllerKeys(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_CONTROLLER_KEYS, true)
