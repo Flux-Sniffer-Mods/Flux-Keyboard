@@ -44,6 +44,7 @@ object GameArt {
      * where there is some, else its art over a dimmed, filled copy of itself.
      */
     fun loadPortrait(context: Context, profile: GameProfile): Bitmap? {
+        uprightFile(context, profile).takeIf { it.length() > 0 }?.let { file -> BitmapFactory.decodeFile(file.path)?.let { return it } }
         custom(context, profile)?.let { return portrait(it) }
         val file = File(dir(context), profile.id + "-portrait" + (if (key.isEmpty()) "" else "-sgdb") + ".img")
         if (file.exists()) return if (file.length() > 0) BitmapFactory.decodeFile(file.path) else load(context, profile)?.let(::portrait)
@@ -103,7 +104,70 @@ object GameArt {
     fun hasCustom(context: Context, profile: GameProfile): Boolean = customFile(context, profile).length() > 0
 
     /** Changes when [profile]'s art does, for redrawing it. */
-    fun version(context: Context, profile: GameProfile): Long = customFile(context, profile).lastModified()
+    fun version(context: Context, profile: GameProfile): Long =
+        maxOf(customFile(context, profile).lastModified(), uprightFile(context, profile).lastModified())
+
+    /** Upright art picked for Moonlight, apart from the list's. */
+    private fun uprightFile(context: Context, profile: GameProfile) = File(dir(context), profile.id + "-upright-custom.img")
+
+    // ---- Every art found, to pick from ----
+
+    /** One art found: a small copy to show, and the full one to keep. */
+    data class Choice(val thumb: String, val full: String)
+
+    /**
+     * Every art found for [profile] (blocking): icon-shaped ones for its list entry and shortcut,
+     * and upright ones for Moonlight. SteamGridDB's many, then Steam's, Xbox's, GameTDB's and
+     * libretro's.
+     */
+    fun choices(context: Context, profile: GameProfile): Pair<List<Choice>, List<Choice>> {
+        val icons = mutableListOf<Choice>()
+        val upright = mutableListOf<Choice>()
+        if (key.isNotEmpty()) {
+            val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+            sgdbGame(launch, profile)?.let { game ->
+                fun all(path: String) = api(path)?.optJSONArray("data")?.let { data ->
+                    List(data.length()) { data.optJSONObject(it) }.mapNotNull { item ->
+                        val full = item?.optString("url").orEmpty()
+                        if (!full.startsWith("https://") || full.endsWith(".ico")) null
+                        else Choice(item.optString("thumb").ifEmpty { full }, full)
+                    }
+                }.orEmpty()
+                icons += all("icons/game/$game")
+                icons += all("grids/game/$game?dimensions=512x512,1024x1024")
+                upright += all("grids/game/$game?dimensions=600x900")
+            }
+        }
+        for (url in urls(context, profile)) {
+            // Steam's header is wide (fine as an icon, cropped); the rest are covers
+            if (url.endsWith("header.jpg")) icons += Choice(url, url) else upright += Choice(url, url)
+        }
+        return icons.distinctBy { it.full }.take(40) to upright.distinctBy { it.full }.take(40)
+    }
+
+    private val thumbnails = android.util.LruCache<String, Bitmap>(80)
+
+    /** A small copy of the art at [url], to show (blocking); null when it can't be had. */
+    fun thumbnail(url: String): Bitmap? {
+        thumbnails.get(url)?.let { return it }
+        val bytes = fetch(url) ?: return null
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+        var sample = 1
+        while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= 320) sample *= 2
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = sample })
+            ?.also { thumbnails.put(url, it) }
+    }
+
+    /** Keeps the art at [url] as [profile]'s icon or, [uprightArt], its upright art for Moonlight. */
+    fun choose(context: Context, profile: GameProfile, url: String, uprightArt: Boolean): Boolean = runCatching {
+        val bytes = fetch(url) ?: return false
+        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return false
+        dir(context).mkdirs()
+        if (uprightArt) uprightFile(context, profile).outputStream().use { portrait(bitmap).compress(Bitmap.CompressFormat.JPEG, 90, it) }
+        else customFile(context, profile).outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        true
+    }.getOrDefault(false)
 
     /** Keeps the image at [uri] as [profile]'s art, at most 1200 px; false when it can't be read. */
     fun setCustom(context: Context, profile: GameProfile, uri: android.net.Uri): Boolean = runCatching {
@@ -122,6 +186,7 @@ object GameArt {
     /** Goes back to the art found for [profile]. */
     fun clearCustom(context: Context, profile: GameProfile) {
         customFile(context, profile).delete()
+        uprightFile(context, profile).delete()
     }
 
     /** Where [profile]'s game art may be, best first. */

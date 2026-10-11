@@ -535,4 +535,8 @@
     <string name="game_mode_resolution_full">Full</string>
     <string name="game_mode_resolution_stream">Resolution when streaming</string>
     <string name="game_mode_resolution_stream_default">As set for streaming</string>
+    <string name="game_mode_artwork_found">Found art</string>
+    <string name="game_mode_artwork_icons">Icons (the game list and shortcuts)</string>
+    <string name="game_mode_artwork_upright">Upright covers (Moonlight)</string>
+    <string name="game_mode_artwork_none">No art found for this game. Its name may need to match the game\'s real title.</string>
 </resources>

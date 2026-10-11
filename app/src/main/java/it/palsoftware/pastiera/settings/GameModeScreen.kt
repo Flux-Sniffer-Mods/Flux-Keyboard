@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.settings
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.size
@@ -888,6 +890,7 @@ private fun ResolutionChoices(profile: GameProfile, onChange: (GameProfile) -> U
 }
 
 /** A game's art, picked from the phone's pictures for its list entry and Moonlight, or the art found for it. */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 private fun GameArtworkRow(profile: GameProfile) {
     val context = LocalContext.current
@@ -916,7 +919,12 @@ private fun GameArtworkRow(profile: GameProfile) {
             Text(stringResource(R.string.game_mode_artwork_description), style = MaterialTheme.typography.bodySmall)
         }
     }
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    var choosing by remember { mutableStateOf(false) }
+    androidx.compose.foundation.layout.FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        androidx.compose.material3.OutlinedButton(onClick = { choosing = true }) { Text(stringResource(R.string.game_mode_artwork_found)) }
         androidx.compose.material3.OutlinedButton(onClick = {
             picker.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly))
         }) { Text(stringResource(R.string.game_mode_artwork_choose)) }
@@ -924,6 +932,83 @@ private fun GameArtworkRow(profile: GameProfile) {
             it.palsoftware.pastiera.gaming.GameArt.clearCustom(context, profile)
             changed()
         }) { Text(stringResource(R.string.game_mode_artwork_reset)) }
+    }
+    if (choosing) ArtChoicesDialog(profile, onDismiss = { choosing = false }) { url, upright ->
+        scope.launch {
+            val ok = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameArt.choose(context, profile, url, upright) }
+            if (ok) changed()
+            else android.widget.Toast.makeText(context, R.string.game_mode_artwork_failed, android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+}
+
+/**
+ * Every art the sources have for a game, to pick from: icons (its list entry and shortcut) and
+ * upright covers (Moonlight). Each tap keeps that one; the dialog stays open to pick the other.
+ */
+@Composable
+private fun ArtChoicesDialog(profile: GameProfile, onDismiss: () -> Unit, onPicked: (String, Boolean) -> Unit) {
+    val context = LocalContext.current
+    val found by androidx.compose.runtime.produceState<Pair<List<it.palsoftware.pastiera.gaming.GameArt.Choice>, List<it.palsoftware.pastiera.gaming.GameArt.Choice>>?>(null, profile.id) {
+        value = withContext(Dispatchers.IO) {
+            runCatching { it.palsoftware.pastiera.gaming.GameArt.choices(context, profile) }.getOrDefault(emptyList<it.palsoftware.pastiera.gaming.GameArt.Choice>() to emptyList())
+        }
+    }
+    var picked by remember { mutableStateOf(setOf<String>()) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.game_mode_artwork_found)) },
+        text = {
+            val choices = found
+            Column(
+                modifier = Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                when {
+                    choices == null -> Text(stringResource(R.string.game_mode_import_reading))
+                    choices.first.isEmpty() && choices.second.isEmpty() -> Text(stringResource(R.string.game_mode_artwork_none))
+                    else -> {
+                        for ((title, list, upright) in listOf(
+                            Triple(R.string.game_mode_artwork_icons, choices.first, false),
+                            Triple(R.string.game_mode_artwork_upright, choices.second, true)
+                        )) {
+                            if (list.isEmpty()) continue
+                            Text(stringResource(title), style = MaterialTheme.typography.titleSmall)
+                            androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                items(list.size) { index ->
+                                    val choice = list[index]
+                                    ArtThumbnail(choice, upright, choice.full in picked) {
+                                        picked = picked + choice.full
+                                        onPicked(choice.full, upright)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.ok)) } }
+    )
+}
+
+@Composable
+private fun ArtThumbnail(choice: it.palsoftware.pastiera.gaming.GameArt.Choice, upright: Boolean, picked: Boolean, onClick: () -> Unit) {
+    val image by androidx.compose.runtime.produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, choice.thumb) {
+        value = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameArt.thumbnail(choice.thumb)?.asImageBitmap() }
+    }
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+    val size = if (upright) Modifier.size(width = 80.dp, height = 120.dp) else Modifier.size(96.dp)
+    Box(
+        modifier = size.clip(shape)
+            .then(if (picked) Modifier.border(3.dp, MaterialTheme.colorScheme.primary, shape) else Modifier)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        image?.let {
+            androidx.compose.foundation.Image(bitmap = it, contentDescription = null,
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.matchParentSize())
+        } ?: androidx.compose.material3.CircularProgressIndicator(modifier = Modifier.size(24.dp))
     }
 }
 
