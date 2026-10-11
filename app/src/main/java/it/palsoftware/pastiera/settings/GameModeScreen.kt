@@ -201,84 +201,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         PhoneGameModeRow()
         // Streaming games to a Moonlight client
         SettingsSectionDivider(stringResource(R.string.stream_section))
-        var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(context)) }
-        var paired by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHost.pairedCount(context)) }
-        FluxSwitchRow(
-            linkId = null,
-            title = stringResource(R.string.stream_switch),
-            description = stringResource(R.string.stream_switch_description),
-            checked = streaming
-        ) { on ->
-            streaming = on
-            it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
-        }
-        // The phone's own screen as one more entry in Moonlight
-        if (streaming) {
-            var phoneScreen by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.phoneScreen(context)) }
-            FluxSwitchRow(
-                linkId = null,
-                title = stringResource(R.string.stream_phone_screen_switch),
-                description = stringResource(R.string.stream_phone_screen_description),
-                checked = phoneScreen
-            ) { on ->
-                phoneScreen = on
-                it.palsoftware.pastiera.streaming.StreamHostService.setPhoneScreen(context, on)
-            }
-        }
-        // The game's size for the Moonlight client: the phone's screen takes its shape while streaming
-        if (streaming) {
-            val resolutions = it.palsoftware.pastiera.streaming.StreamHostService.RESOLUTIONS
-            val names = listOf(
-                stringResource(R.string.stream_resolution_client), "720p", "1080p", "1440p"
-            )
-            var resolution by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.resolution(context)) }
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                ChoiceRow(stringResource(R.string.stream_resolution), names[resolutions.indexOf(resolution).coerceAtLeast(0)], names) { index ->
-                    resolution = resolutions[index]
-                    it.palsoftware.pastiera.streaming.StreamHostService.setResolution(context, resolution)
-                }
-                Text(stringResource(R.string.stream_resolution_description), style = MaterialTheme.typography.bodySmall)
-            }
-        }
-        // Where the game plays while it streams: the phone's screen mirrored, or one of its own
-        if (streaming) {
-            val modes = it.palsoftware.pastiera.streaming.StreamHostService.SCREEN_MODES
-            val names = listOf(
-                stringResource(R.string.stream_screen_mirror),
-                stringResource(R.string.stream_screen_separate),
-                stringResource(R.string.stream_screen_desktop)
-            )
-            var mode by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.screenMode(context)) }
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                ChoiceRow(stringResource(R.string.stream_screen), names[modes.indexOf(mode).coerceAtLeast(0)], names) { index ->
-                    mode = modes[index]
-                    it.palsoftware.pastiera.streaming.StreamHostService.setScreenMode(context, mode)
-                }
-                Text(stringResource(R.string.stream_screen_description), style = MaterialTheme.typography.bodySmall)
-            }
-            // Keyboards, mice and controllers plugged into the phone, for the game's own screen
-            if (mode != it.palsoftware.pastiera.streaming.StreamHostService.SCREEN_MIRROR) {
-                var passThrough by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.passThrough(context)) }
-                FluxSwitchRow(
-                    linkId = null,
-                    title = stringResource(R.string.stream_pass_through),
-                    description = stringResource(R.string.stream_pass_through_description),
-                    checked = passThrough
-                ) { on ->
-                    passThrough = on
-                    it.palsoftware.pastiera.streaming.StreamHostService.setPassThrough(context, on)
-                }
-            }
-        }
-        if (paired > 0) FluxActionRow(
-            linkId = null,
-            icon = "\u2715",
-            title = stringResource(R.string.stream_unpair),
-            description = stringResource(R.string.stream_unpair_description, paired)
-        ) {
-            it.palsoftware.pastiera.streaming.StreamHost.unpairAll(context)
-            paired = 0
-        }
+        StreamingSettings()
         // Where games are found: Flux Keyboard's folders, ES-DE's, and your own
         SettingsSectionDivider(stringResource(R.string.game_mode_folders_section))
         FluxActionRow(
@@ -1297,3 +1220,92 @@ internal fun PhoneGameModeRow() {
 }
 
 private const val PHONE_GAME_MODE = "com.agui.game"
+
+/**
+ * Streaming to Moonlight: on or off, and how games stream (the screen, resolution, devices,
+ * paired clients). In Gaming settings, and long-pressing Stream in the Games app.
+ */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
+    val context = LocalContext.current
+    var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(context)) }
+    var paired by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHost.pairedCount(context)) }
+    FluxSwitchRow(
+        linkId = null,
+        title = stringResource(R.string.stream_switch),
+        description = stringResource(R.string.stream_switch_description),
+        checked = streaming
+    ) { on ->
+        streaming = on
+        it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
+        onStreamingChanged(on)
+    }
+    // The phone's own screen as one more entry in Moonlight
+    if (streaming) {
+        var phoneScreen by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.phoneScreen(context)) }
+        FluxSwitchRow(
+            linkId = null,
+            title = stringResource(R.string.stream_phone_screen_switch),
+            description = stringResource(R.string.stream_phone_screen_description),
+            checked = phoneScreen
+        ) { on ->
+            phoneScreen = on
+            it.palsoftware.pastiera.streaming.StreamHostService.setPhoneScreen(context, on)
+        }
+    }
+    // The game's size for the Moonlight client: the phone's screen takes its shape while streaming
+    if (streaming) {
+        val resolutions = it.palsoftware.pastiera.streaming.StreamHostService.RESOLUTIONS
+        val names = listOf(
+            stringResource(R.string.stream_resolution_client), "720p", "1080p", "1440p"
+        )
+        var resolution by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.resolution(context)) }
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            ChoiceRow(stringResource(R.string.stream_resolution), names[resolutions.indexOf(resolution).coerceAtLeast(0)], names) { index ->
+                resolution = resolutions[index]
+                it.palsoftware.pastiera.streaming.StreamHostService.setResolution(context, resolution)
+            }
+            Text(stringResource(R.string.stream_resolution_description), style = MaterialTheme.typography.bodySmall)
+        }
+    }
+    // Where the game plays while it streams: the phone's screen mirrored, or one of its own
+    if (streaming) {
+        val modes = it.palsoftware.pastiera.streaming.StreamHostService.SCREEN_MODES
+        val names = listOf(
+            stringResource(R.string.stream_screen_mirror),
+            stringResource(R.string.stream_screen_separate),
+            stringResource(R.string.stream_screen_desktop)
+        )
+        var mode by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.screenMode(context)) }
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            ChoiceRow(stringResource(R.string.stream_screen), names[modes.indexOf(mode).coerceAtLeast(0)], names) { index ->
+                mode = modes[index]
+                it.palsoftware.pastiera.streaming.StreamHostService.setScreenMode(context, mode)
+            }
+            Text(stringResource(R.string.stream_screen_description), style = MaterialTheme.typography.bodySmall)
+        }
+        // Keyboards, mice and controllers plugged into the phone, for the game's own screen
+        if (mode != it.palsoftware.pastiera.streaming.StreamHostService.SCREEN_MIRROR) {
+            var passThrough by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.passThrough(context)) }
+            FluxSwitchRow(
+                linkId = null,
+                title = stringResource(R.string.stream_pass_through),
+                description = stringResource(R.string.stream_pass_through_description),
+                checked = passThrough
+            ) { on ->
+                passThrough = on
+                it.palsoftware.pastiera.streaming.StreamHostService.setPassThrough(context, on)
+            }
+        }
+    }
+    if (paired > 0) FluxActionRow(
+        linkId = null,
+        icon = "\u2715",
+        title = stringResource(R.string.stream_unpair),
+        description = stringResource(R.string.stream_unpair_description, paired)
+    ) {
+        it.palsoftware.pastiera.streaming.StreamHost.unpairAll(context)
+        paired = 0
+    }
+}

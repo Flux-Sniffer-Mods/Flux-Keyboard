@@ -597,6 +597,9 @@
     },
     {
       "text": "Games app: move through it with the same keys as in games (W A S D to move, L to open, K for a game's settings, P to go back, Q or E to switch pages, Space for gaming settings) or a controller. On by default, in Gaming settings."
+    },
+    {
+      "text": "Games app: long-press Stream for streaming settings (mirror or separate screen, resolution, devices, paired clients); a tap still turns it on or off."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -14,6 +14,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.border
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.focusable
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -65,7 +66,7 @@ class GamesActivity : ComponentActivity() {
 
     private data class Entry(val name: String, val profile: GameProfile, val intent: Intent)
 
-    @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+    @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
     @Composable
     private fun GamesList(editId: String?) {
         var entries by remember { mutableStateOf<List<Entry>?>(null) }
@@ -88,6 +89,18 @@ class GamesActivity : ComponentActivity() {
             return
         }
         var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(this)) }
+        // Streaming's settings, from a long-press on Stream
+        var streamSettings by remember { mutableStateOf(false) }
+        if (streamSettings) androidx.compose.material3.AlertDialog(
+            onDismissRequest = { streamSettings = false },
+            title = { Text(stringResource(R.string.stream_section)) },
+            text = {
+                androidx.compose.foundation.layout.Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                    it.palsoftware.pastiera.settings.StreamingSettings(onStreamingChanged = { on -> streaming = on })
+                }
+            },
+            confirmButton = { androidx.compose.material3.TextButton(onClick = { streamSettings = false }) { Text(stringResource(R.string.close)) } }
+        )
         if (importing) it.palsoftware.pastiera.settings.GameImportDialog(onPicked = pick, onByHand = { importing = false; addingOwn = true }, onDismiss = { importing = false })
         if (addingOwn) it.palsoftware.pastiera.settings.OwnGameDialog(onAdded = pick, onDismiss = { addingOwn = false })
         if (addingXbox) it.palsoftware.pastiera.settings.XboxCloudDialog(XboxCloud.app(this), onPicked = pick, onDismiss = { addingXbox = false })
@@ -149,16 +162,24 @@ class GamesActivity : ComponentActivity() {
                         label = { Text(stringResource(R.string.extra_screen_title)) },
                         modifier = Modifier.padding(end = 8.dp)
                     )
-                    // Streaming to Moonlight, on or off at a tap
-                    androidx.compose.material3.FilterChip(
-                        selected = streaming,
-                        onClick = {
-                            streaming = !streaming
-                            it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(this@GamesActivity, streaming)
-                        },
-                        label = { Text(stringResource(R.string.games_app_stream)) },
-                        leadingIcon = if (streaming) { { Text("\u2713") } } else null
-                    )
+                    // Streaming to Moonlight: on or off at a tap, its settings on a long-press
+                    androidx.compose.material3.Surface(
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
+                        color = if (streaming) MaterialTheme.colorScheme.secondaryContainer else androidx.compose.ui.graphics.Color.Transparent,
+                        border = if (streaming) null else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        modifier = Modifier.clip(androidx.compose.foundation.shape.RoundedCornerShape(8.dp)).combinedClickable(
+                            onClick = {
+                                streaming = !streaming
+                                it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(this@GamesActivity, streaming)
+                            },
+                            onLongClick = { streamSettings = true }
+                        )
+                    ) {
+                        Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                            if (streaming) Text("\u2713 ", style = MaterialTheme.typography.labelLarge)
+                            Text(stringResource(R.string.games_app_stream), style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
                 }
             }
         ) { inner ->
