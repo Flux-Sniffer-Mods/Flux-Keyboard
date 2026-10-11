@@ -1847,10 +1847,10 @@
     <string name="game_mode_xbox_none">Կատալոգը չհաջողվեց կարդալ։ Հեռախոսը առցանց է, իսկ անցանց ռեժիմն անջատվա՞ծ է։</string>
     <string name="game_mode_xbox_sign_in">Մուտք Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Xbox-ի մուտքը Flux Keyboard-ի նվագարկիչում, ստեղները տպում են ինչպես սովորաբար։ Մեկ անգամ մուտք գործելով՝ յուրաքանչյուր ամպային խաղ աշխատում է։</string>
-    <string name="games_app_xbox">Xbox ամպային խաղ</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Հեռարձակում</string>
     <string name="stream_switch">Հեռարձակել Moonlight</string>
-    <string name="stream_switch_description">Հեռախոսը երևում է Moonlight-ում նույն Wi-Fi-ի ցանկացած սարքում. զուգակցիր Moonlight-ի ցույց տված PIN-ով, և խաղերդ կհայտնվեն այնտեղ։ Xbox ամպային խաղերը կհայտնվեն, երբ դրանք խաղաս Flux Keyboard-ի նվագարկիչում։</string>
+    <string name="stream_switch_description">Ցույց է տալիս հեռախոսը Moonlight-ում նույն ցանցի ցանկացած սարքում։ Զուգակցիր Moonlight-ի ցույց տված PIN-ով, և խաղերդ կհայտնվեն այնտեղ, ներառյալ XCloud խաղերը։ Moonlight-ի Արթնացումը միացնում է հեռարձակումը հեռախոսում, եթե այն անջատված է։</string>
     <string name="stream_unpair">Մոռանալ զուգակցված սարքերը</string>
     <string name="stream_unpair_description">%1$d զուգակցված։ Յուրաքանչյուրը նորից կզուգակցվի PIN-ով։</string>
     <string name="stream_pin_title">Զուգակցել %1$s</string>
@@ -1937,4 +1937,5 @@
     <string name="stream_pass_through_description">Հեռախոսին միացված կամ Bluetooth-ով զուգակցված ստեղնաշարերը, մկները և կարգավարները հեռարձակման ժամանակ գնում են ուղիղ խաղի սեփական էկրանին, ոչ թե հեռախոսին։ Հեռարձակման ավարտին նրանք կրկին հեռախոսինն են։</string>
     <string name="games_app_controller_keys">Կարգավարի ստեղներ Խաղեր հավելվածում</string>
     <string name="games_app_controller_keys_description">Շարժվիր Խաղեր հավելվածում նույն ստեղներով, ինչ խաղերում․ W A S D՝ շարժվելու, L՝ բացելու, K՝ խաղի կարգավորումների, P՝ հետ գնալու, Q կամ E՝ խաղերի և գործարկիչների միջև անցնելու, Space՝ խաղային կարգավորումների համար։ Կարգավարն էլ է աշխատում։</string>
+    <string name="stream_phone_screen_art">Արտացոլել հեռախոսի էկրանը</string>
 </resources>

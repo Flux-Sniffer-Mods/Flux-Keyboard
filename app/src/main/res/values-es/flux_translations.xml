@@ -1853,10 +1853,10 @@
     <string name="game_mode_xbox_none">No se pudo leer el catálogo. ¿Está el móvil conectado y el modo sin conexión desactivado?</string>
     <string name="game_mode_xbox_sign_in">Iniciar sesión en Xbox</string>
     <string name="game_mode_xbox_sign_in_description">El inicio de sesión de Xbox en el reproductor de Flux Keyboard, con las teclas escribiendo como siempre. Con iniciar sesión una vez, se juega cualquier juego en la nube.</string>
-    <string name="games_app_xbox">Juego de Xbox Cloud</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Transmitir a Moonlight</string>
-    <string name="stream_switch_description">El teléfono aparece en Moonlight en cualquier dispositivo de la misma Wi-Fi: vincúlalo con el PIN que muestra Moonlight y tus juegos aparecen allí. Los juegos de Xbox en la nube aparecen cuando los has jugado en el reproductor de Flux Keyboard.</string>
+    <string name="stream_switch_description">Muestra el móvil en Moonlight en cualquier dispositivo de la misma red. Empareja con el PIN que muestra Moonlight y tus juegos aparecerán allí, incluidos los de XCloud. Despertar en Moonlight inicia la transmisión en el móvil si está apagada.</string>
     <string name="stream_unpair">Olvidar dispositivos vinculados</string>
     <string name="stream_unpair_description">%1$d vinculados. Cada uno se vuelve a vincular con un PIN.</string>
     <string name="stream_pin_title">Vincular %1$s</string>
@@ -1943,4 +1943,5 @@
     <string name="stream_pass_through_description">Los teclados, ratones y mandos conectados al móvil o emparejados por Bluetooth van directos a la pantalla propia del juego mientras se transmite, no al móvil. Vuelven al móvil al terminar la transmisión.</string>
     <string name="games_app_controller_keys">Teclas de mando en la app Juegos</string>
     <string name="games_app_controller_keys_description">Muévete por la app Juegos con las mismas teclas que en los juegos: W A S D para moverte, L para abrir, K para los ajustes de un juego, P para volver, Q o E para cambiar entre juegos y lanzadores, Espacio para los ajustes de juego. También funciona con un mando.</string>
+    <string name="stream_phone_screen_art">Reflejar la pantalla del móvil</string>
 </resources>

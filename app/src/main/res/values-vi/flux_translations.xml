@@ -1841,10 +1841,10 @@
     <string name="game_mode_xbox_none">Không đọc được danh mục. Điện thoại có trực tuyến và đã tắt chế độ ngoại tuyến chưa?</string>
     <string name="game_mode_xbox_sign_in">Đăng nhập Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Đăng nhập Xbox trong trình phát của Flux Keyboard, phím gõ như thường. Đăng nhập một lần là chơi được mọi game đám mây.</string>
-    <string name="games_app_xbox">Game Xbox Cloud</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Phát trực tuyến</string>
     <string name="stream_switch">Phát tới Moonlight</string>
-    <string name="stream_switch_description">Điện thoại hiện trong Moonlight trên mọi thiết bị cùng Wi-Fi: ghép nối bằng mã PIN Moonlight hiển thị, và game của bạn sẽ có ở đó. Game Xbox đám mây xuất hiện sau khi bạn chơi chúng trong trình phát của Flux Keyboard.</string>
+    <string name="stream_switch_description">Hiện điện thoại trong Moonlight trên mọi thiết bị cùng mạng. Ghép nối bằng mã PIN Moonlight hiển thị và trò chơi của bạn sẽ xuất hiện ở đó, kể cả trò chơi XCloud. Đánh thức trong Moonlight sẽ bật phát trực tuyến trên điện thoại nếu đang tắt.</string>
     <string name="stream_unpair">Quên thiết bị đã ghép nối</string>
     <string name="stream_unpair_description">Đã ghép %1$d. Mỗi thiết bị sẽ ghép lại bằng mã PIN.</string>
     <string name="stream_pin_title">Ghép nối %1$s</string>
@@ -1931,4 +1931,5 @@
     <string name="stream_pass_through_description">Bàn phím, chuột và tay cầm cắm vào điện thoại hoặc ghép qua Bluetooth đi thẳng tới màn hình riêng của trò chơi khi phát trực tuyến, không tới điện thoại. Chúng trở lại với điện thoại khi kết thúc phát.</string>
     <string name="games_app_controller_keys">Phím tay cầm trong ứng dụng Trò chơi</string>
     <string name="games_app_controller_keys_description">Di chuyển trong ứng dụng Trò chơi bằng cùng các phím như trong trò chơi: W A S D để di chuyển, L để mở, K cho cài đặt của trò chơi, P để quay lại, Q hoặc E để chuyển giữa trò chơi và trình khởi chạy, Space cho cài đặt chơi game. Tay cầm cũng dùng được.</string>
+    <string name="stream_phone_screen_art">Phản chiếu màn hình điện thoại</string>
 </resources>

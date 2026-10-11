@@ -1358,10 +1358,10 @@
     <string name="game_mode_xbox_none">Impossibile leggere il catalogo. Il telefono è online, con la modalità offline disattivata?</string>
     <string name="game_mode_xbox_sign_in">Accedi a Xbox</string>
     <string name="game_mode_xbox_sign_in_description">L\'accesso a Xbox nel lettore di Flux Keyboard, con i tasti che scrivono come sempre. Fatto l\'accesso una volta, ogni gioco cloud funziona.</string>
-    <string name="games_app_xbox">Gioco Xbox Cloud</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Trasmetti a Moonlight</string>
-    <string name="stream_switch_description">Il telefono compare in Moonlight su qualsiasi dispositivo della stessa Wi-Fi: associalo con il PIN mostrato da Moonlight e i tuoi giochi compaiono lì. I giochi Xbox cloud compaiono dopo averli giocati nel player di Flux Keyboard.</string>
+    <string name="stream_switch_description">Mostra il telefono in Moonlight su ogni dispositivo della stessa rete. Associalo con il PIN mostrato da Moonlight e i tuoi giochi compariranno lì, giochi XCloud inclusi. Il risveglio di Moonlight avvia lo streaming sul telefono se è spento.</string>
     <string name="stream_unpair">Dimentica i dispositivi associati</string>
     <string name="stream_unpair_description">%1$d associati. Ognuno si associa di nuovo con un PIN.</string>
     <string name="stream_pin_title">Associa %1$s</string>
@@ -1448,4 +1448,5 @@
     <string name="stream_pass_through_description">Tastiere, mouse e controller collegati al telefono o associati via Bluetooth vanno dritti allo schermo del gioco durante lo streaming, non al telefono. Tornano al telefono a fine streaming.</string>
     <string name="games_app_controller_keys">Tasti controller nell\'app Giochi</string>
     <string name="games_app_controller_keys_description">Muoviti nell\'app Giochi con gli stessi tasti dei giochi: W A S D per muoverti, L per aprire, K per le impostazioni di un gioco, P per tornare indietro, Q o E per passare tra giochi e launcher, Spazio per le impostazioni di gioco. Funziona anche un controller.</string>
+    <string name="stream_phone_screen_art">Duplica lo schermo del telefono</string>
 </resources>

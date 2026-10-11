@@ -1859,10 +1859,10 @@
     <string name="game_mode_xbox_none">Не вдалося прочитати каталог. Телефон у мережі, а автономний режим вимкнено?</string>
     <string name="game_mode_xbox_sign_in">Увійти в Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Вхід у Xbox у плеєрі Flux Keyboard, клавіші друкують як зазвичай. Увійшовши один раз, можна грати в будь-яку хмарну гру.</string>
-    <string name="games_app_xbox">Хмарна гра Xbox</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Стримінг</string>
     <string name="stream_switch">Стримити в Moonlight</string>
-    <string name="stream_switch_description">Телефон з\'являється в Moonlight на будь-якому пристрої в тій самій мережі Wi-Fi: виконайте сполучення за PIN-кодом із Moonlight, і ваші ігри з\'являться там. Хмарні ігри Xbox з\'являються після того, як ви зіграєте в них у плеєрі Flux Keyboard.</string>
+    <string name="stream_switch_description">Показує телефон у Moonlight на будь-якому пристрої в тій самій мережі. Під\'єднайте його за PIN-кодом із Moonlight, і ваші ігри з\'являться там, разом з іграми XCloud. Пробудження в Moonlight вмикає трансляцію на телефоні, якщо її вимкнено.</string>
     <string name="stream_unpair">Забути зв\'язані пристрої</string>
     <string name="stream_unpair_description">Зв\'язано: %1$d. Кожен знову зв\'яжеться PIN-кодом.</string>
     <string name="stream_pin_title">Зв\'язати %1$s</string>
@@ -1949,4 +1949,5 @@
     <string name="stream_pass_through_description">Клавіатури, миші й контролери, під\'єднані до телефона або через Bluetooth, під час трансляції йдуть просто на власний екран гри, а не на телефон. Коли трансляція закінчується, вони знову працюють із телефоном.</string>
     <string name="games_app_controller_keys">Клавіші контролера в застосунку «Ігри»</string>
     <string name="games_app_controller_keys_description">Переміщуйтеся застосунком «Ігри» тими самими клавішами, що й в іграх: W A S D — рух, L — відкрити, K — налаштування гри, P — назад, Q або E — перемикання між іграми та лаунчерами, Пробіл — ігрові налаштування. Контролер теж працює.</string>
+    <string name="stream_phone_screen_art">Дублювати екран телефона</string>
 </resources>

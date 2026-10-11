@@ -1221,10 +1221,10 @@
     <string name="game_mode_xbox_none">Ο κατάλογος δεν διαβάστηκε. Είναι το τηλέφωνο online, με τη λειτουργία εκτός σύνδεσης ανενεργή;</string>
     <string name="game_mode_xbox_sign_in">Σύνδεση στο Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Η σύνδεση του Xbox στο πρόγραμμα αναπαραγωγής του Flux Keyboard, με τα πλήκτρα να πληκτρολογούν κανονικά. Μία σύνδεση και παίζει κάθε παιχνίδι cloud.</string>
-    <string name="games_app_xbox">Παιχνίδι Xbox cloud</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Ροή</string>
     <string name="stream_switch">Ροή στο Moonlight</string>
-    <string name="stream_switch_description">Το τηλέφωνο εμφανίζεται στο Moonlight σε κάθε συσκευή στο ίδιο Wi-Fi: σύζευξε με το PIN που δείχνει το Moonlight και τα παιχνίδια σου εμφανίζονται εκεί. Τα παιχνίδια Xbox cloud εμφανίζονται αφού τα παίξεις στον player του Flux Keyboard.</string>
+    <string name="stream_switch_description">Εμφανίζει το τηλέφωνο στο Moonlight σε κάθε συσκευή στο ίδιο δίκτυο. Σύζευξε με το PIN που δείχνει το Moonlight και τα παιχνίδια σου εμφανίζονται εκεί, μαζί και τα παιχνίδια XCloud. Η Αφύπνιση του Moonlight ξεκινά τη μετάδοση στο τηλέφωνο αν είναι κλειστή.</string>
     <string name="stream_unpair">Διαγραφή συνδεδεμένων συσκευών</string>
     <string name="stream_unpair_description">%1$d συνδεδεμένες. Καθεμία συνδέεται ξανά με PIN.</string>
     <string name="stream_pin_title">Σύζευξη %1$s</string>
@@ -1311,4 +1311,5 @@
     <string name="stream_pass_through_description">Πληκτρολόγια, ποντίκια και χειριστήρια συνδεδεμένα στο τηλέφωνο ή μέσω Bluetooth πηγαίνουν κατευθείαν στη δική του οθόνη του παιχνιδιού κατά τη μετάδοση, όχι στο τηλέφωνο. Επιστρέφουν στο τηλέφωνο όταν τελειώσει η μετάδοση.</string>
     <string name="games_app_controller_keys">Πλήκτρα χειριστηρίου στην εφαρμογή Παιχνίδια</string>
     <string name="games_app_controller_keys_description">Κινήσου στην εφαρμογή Παιχνίδια με τα ίδια πλήκτρα όπως στα παιχνίδια: W A S D για κίνηση, L για άνοιγμα, K για τις ρυθμίσεις ενός παιχνιδιού, P για επιστροφή, Q ή E για εναλλαγή ανάμεσα σε παιχνίδια και εκκινητές, Space για τις ρυθμίσεις παιχνιδιού. Λειτουργεί και με χειριστήριο.</string>
+    <string name="stream_phone_screen_art">Καθρέφτης οθόνης τηλεφώνου</string>
 </resources>

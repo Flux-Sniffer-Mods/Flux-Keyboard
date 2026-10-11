@@ -1853,10 +1853,10 @@
     <string name="game_mode_xbox_none">Le catalogue n\'a pas pu être lu. Le téléphone est-il en ligne, avec le mode hors ligne désactivé ?</string>
     <string name="game_mode_xbox_sign_in">Se connecter à Xbox</string>
     <string name="game_mode_xbox_sign_in_description">La connexion Xbox dans le lecteur de Flux Keyboard, les touches tapant comme d\'habitude. Connecté une fois, chaque jeu cloud se lance.</string>
-    <string name="games_app_xbox">Jeu Xbox Cloud</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Diffuser vers Moonlight</string>
-    <string name="stream_switch_description">Le téléphone apparaît dans Moonlight sur tout appareil du même Wi-Fi : associe-le avec le code PIN qu\'affiche Moonlight, et tes jeux y sont listés. Les jeux Xbox cloud y apparaissent une fois joués dans le lecteur de Flux Keyboard.</string>
+    <string name="stream_switch_description">Affiche le téléphone dans Moonlight sur tout appareil du même réseau. Associez-le avec le code PIN affiché par Moonlight et vos jeux y apparaissent, jeux XCloud compris. Le réveil de Moonlight lance le streaming sur le téléphone s\'il est arrêté.</string>
     <string name="stream_unpair">Oublier les appareils associés</string>
     <string name="stream_unpair_description">%1$d associés. Chacun s\'associe à nouveau avec un code PIN.</string>
     <string name="stream_pin_title">Associer %1$s</string>
@@ -1943,4 +1943,5 @@
     <string name="stream_pass_through_description">Les claviers, souris et manettes branchés au téléphone ou appairés en Bluetooth vont directement à l\'écran du jeu pendant le stream, pas au téléphone. Ils reviennent au téléphone à la fin du stream.</string>
     <string name="games_app_controller_keys">Touches manette dans l\'app Jeux</string>
     <string name="games_app_controller_keys_description">Parcourez l\'app Jeux avec les mêmes touches qu\'en jeu : W A S D pour se déplacer, L pour ouvrir, K pour les réglages d\'un jeu, P pour revenir, Q ou E pour passer des jeux aux lanceurs, Espace pour les réglages de jeu. Une manette fonctionne aussi.</string>
+    <string name="stream_phone_screen_art">Dupliquer l\'écran du téléphone</string>
 </resources>

@@ -1859,10 +1859,10 @@
     <string name="game_mode_xbox_none">Nie udało się odczytać katalogu. Czy telefon jest online, a tryb offline wyłączony?</string>
     <string name="game_mode_xbox_sign_in">Zaloguj się do Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Logowanie do Xbox w odtwarzaczu Flux Keyboard, klawisze piszą jak zwykle. Po jednym zalogowaniu działa każda gra w chmurze.</string>
-    <string name="games_app_xbox">Gra Xbox Cloud</string>
+    <string name="games_app_xbox">XCloud Games</string>
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Streamuj do Moonlight</string>
-    <string name="stream_switch_description">Telefon pojawia się w Moonlight na każdym urządzeniu w tej samej sieci Wi-Fi: sparuj go PIN-em, który pokazuje Moonlight, a twoje gry pojawią się tam. Gry Xbox z chmury pojawiają się, gdy zagrasz w nie w odtwarzaczu Flux Keyboard.</string>
+    <string name="stream_switch_description">Pokazuje telefon w Moonlight na każdym urządzeniu w tej samej sieci. Sparuj kodem PIN wyświetlonym przez Moonlight, a twoje gry pojawią się tam, łącznie z grami XCloud. Wybudzenie w Moonlight włącza streaming na telefonie, jeśli jest wyłączony.</string>
     <string name="stream_unpair">Zapomnij sparowane urządzenia</string>
     <string name="stream_unpair_description">Sparowane: %1$d. Każde sparuje się ponownie PIN-em.</string>
     <string name="stream_pin_title">Sparuj %1$s</string>
@@ -1949,4 +1949,5 @@
     <string name="stream_pass_through_description">Klawiatury, myszy i kontrolery podłączone do telefonu lub sparowane przez Bluetooth trafiają podczas streamu prosto na własny ekran gry, nie do telefonu. Po zakończeniu streamu wracają do telefonu.</string>
     <string name="games_app_controller_keys">Klawisze kontrolera w aplikacji Gry</string>
     <string name="games_app_controller_keys_description">Poruszaj się po aplikacji Gry tymi samymi klawiszami co w grach: W A S D do ruchu, L aby otworzyć, K dla ustawień gry, P aby wrócić, Q lub E aby przełączać między grami a launcherami, Spacja dla ustawień grania. Kontroler też działa.</string>
+    <string name="stream_phone_screen_art">Odbij ekran telefonu</string>
 </resources>
