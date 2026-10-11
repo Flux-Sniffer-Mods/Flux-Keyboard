@@ -1860,4 +1860,17 @@
     <string name="game_mode_xbox_sign_in">Zaloguj się do Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Logowanie do Xbox w odtwarzaczu Flux Keyboard, klawisze piszą jak zwykle. Po jednym zalogowaniu działa każda gra w chmurze.</string>
     <string name="games_app_xbox">Gra Xbox Cloud</string>
+    <string name="stream_section">Streaming</string>
+    <string name="stream_switch">Streamuj do Moonlight</string>
+    <string name="stream_switch_description">Telefon pojawia się w Moonlight na telewizorze lub innym urządzeniu w tej samej sieci Wi-Fi: sparuj go PIN-em pokazanym przez Moonlight, a twoje gry pojawią się tam. Gry w chmurze nie: graj w nie w aplikacji Xbox lub przeglądarce telewizora, prosto z chmury. Streaming samej gry pojawi się wkrótce.</string>
+    <string name="stream_unpair">Zapomnij sparowane urządzenia</string>
+    <string name="stream_unpair_description">Sparowane: %1$d. Każde sparuje się ponownie PIN-em.</string>
+    <string name="stream_pin_title">Sparuj %1$s</string>
+    <string name="stream_pin_text">Wpisz PIN pokazany przez Moonlight.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Sparuj</string>
+    <string name="stream_pairing_channel">Parowanie Moonlight</string>
+    <string name="stream_host_channel">Streaming</string>
+    <string name="stream_host_title">Streaming do Moonlight</string>
+    <string name="stream_host_text">%1$s widać w Moonlight w tej sieci Wi-Fi.</string>
 </resources>

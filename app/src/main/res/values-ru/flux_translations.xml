@@ -1860,4 +1860,17 @@
     <string name="game_mode_xbox_sign_in">Войти в Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Вход в Xbox в плеере Flux Keyboard, клавиши печатают как обычно. Войдя один раз, можно играть в любую облачную игру.</string>
     <string name="games_app_xbox">Облачная игра Xbox</string>
+    <string name="stream_section">Стриминг</string>
+    <string name="stream_switch">Стримить в Moonlight</string>
+    <string name="stream_switch_description">Телефон появляется в Moonlight на телевизоре или другом устройстве в той же сети Wi-Fi: свяжите его PIN-кодом, который показывает Moonlight, и ваши игры появятся там. Облачные игры — нет: играйте в них в приложении Xbox или браузере телевизора, прямо из облака. Стриминг самой игры появится следующим.</string>
+    <string name="stream_unpair">Забыть связанные устройства</string>
+    <string name="stream_unpair_description">Связано: %1$d. Каждое снова свяжется по PIN-коду.</string>
+    <string name="stream_pin_title">Связать %1$s</string>
+    <string name="stream_pin_text">Введите PIN-код, который показывает Moonlight.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Связать</string>
+    <string name="stream_pairing_channel">Связывание Moonlight</string>
+    <string name="stream_host_channel">Стриминг</string>
+    <string name="stream_host_title">Стриминг в Moonlight</string>
+    <string name="stream_host_text">%1$s виден в Moonlight в этой сети Wi-Fi.</string>
 </resources>

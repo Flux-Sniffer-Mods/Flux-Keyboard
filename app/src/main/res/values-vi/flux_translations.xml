@@ -1842,4 +1842,17 @@
     <string name="game_mode_xbox_sign_in">Đăng nhập Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Đăng nhập Xbox trong trình phát của Flux Keyboard, phím gõ như thường. Đăng nhập một lần là chơi được mọi game đám mây.</string>
     <string name="games_app_xbox">Game Xbox Cloud</string>
+    <string name="stream_section">Phát trực tuyến</string>
+    <string name="stream_switch">Phát tới Moonlight</string>
+    <string name="stream_switch_description">Điện thoại hiện trong Moonlight trên TV hoặc thiết bị khác cùng Wi-Fi: ghép nối bằng mã PIN Moonlight hiển thị, và game của bạn sẽ có ở đó. Game đám mây thì không: chơi chúng trên ứng dụng Xbox hoặc trình duyệt của TV, thẳng từ đám mây. Phát chính game sẽ có tiếp theo.</string>
+    <string name="stream_unpair">Quên thiết bị đã ghép nối</string>
+    <string name="stream_unpair_description">Đã ghép %1$d. Mỗi thiết bị sẽ ghép lại bằng mã PIN.</string>
+    <string name="stream_pin_title">Ghép nối %1$s</string>
+    <string name="stream_pin_text">Nhập mã PIN Moonlight hiển thị.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Ghép nối</string>
+    <string name="stream_pairing_channel">Ghép nối Moonlight</string>
+    <string name="stream_host_channel">Phát trực tuyến</string>
+    <string name="stream_host_title">Đang phát tới Moonlight</string>
+    <string name="stream_host_text">%1$s có trong Moonlight trên Wi-Fi này.</string>
 </resources>

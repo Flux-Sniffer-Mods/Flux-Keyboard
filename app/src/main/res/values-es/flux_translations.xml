@@ -1854,4 +1854,17 @@
     <string name="game_mode_xbox_sign_in">Iniciar sesión en Xbox</string>
     <string name="game_mode_xbox_sign_in_description">El inicio de sesión de Xbox en el reproductor de Flux Keyboard, con las teclas escribiendo como siempre. Con iniciar sesión una vez, se juega cualquier juego en la nube.</string>
     <string name="games_app_xbox">Juego de Xbox Cloud</string>
+    <string name="stream_section">Streaming</string>
+    <string name="stream_switch">Transmitir a Moonlight</string>
+    <string name="stream_switch_description">El móvil aparece en Moonlight en tu tele u otro dispositivo de la misma Wi-Fi: vincúlalo con el PIN que muestra Moonlight y tus juegos aparecen allí. Los juegos en la nube no: juégalos en la app de Xbox o el navegador de la tele, directamente desde la nube. Transmitir un juego llega a continuación.</string>
+    <string name="stream_unpair">Olvidar dispositivos vinculados</string>
+    <string name="stream_unpair_description">%1$d vinculados. Cada uno se vuelve a vincular con un PIN.</string>
+    <string name="stream_pin_title">Vincular %1$s</string>
+    <string name="stream_pin_text">Escribe el PIN que muestra Moonlight.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Vincular</string>
+    <string name="stream_pairing_channel">Vinculación de Moonlight</string>
+    <string name="stream_host_channel">Streaming</string>
+    <string name="stream_host_title">Transmitiendo a Moonlight</string>
+    <string name="stream_host_text">%1$s aparece en Moonlight en esta Wi-Fi.</string>
 </resources>

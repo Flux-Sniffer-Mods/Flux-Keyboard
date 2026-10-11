@@ -1854,4 +1854,17 @@
     <string name="game_mode_xbox_sign_in">Se connecter à Xbox</string>
     <string name="game_mode_xbox_sign_in_description">La connexion Xbox dans le lecteur de Flux Keyboard, les touches tapant comme d\'habitude. Connecté une fois, chaque jeu cloud se lance.</string>
     <string name="games_app_xbox">Jeu Xbox Cloud</string>
+    <string name="stream_section">Streaming</string>
+    <string name="stream_switch">Diffuser vers Moonlight</string>
+    <string name="stream_switch_description">Le téléphone apparaît dans Moonlight sur votre TV ou un autre appareil du même Wi-Fi : associez-le avec le code PIN que Moonlight affiche, et vos jeux y sont listés. Pas les jeux cloud : jouez-y dans l\'appli Xbox ou le navigateur de la TV, directement depuis le cloud. La diffusion d\'un jeu arrive ensuite.</string>
+    <string name="stream_unpair">Oublier les appareils associés</string>
+    <string name="stream_unpair_description">%1$d associés. Chacun s\'associe à nouveau avec un code PIN.</string>
+    <string name="stream_pin_title">Associer %1$s</string>
+    <string name="stream_pin_text">Tapez le code PIN que Moonlight affiche.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Associer</string>
+    <string name="stream_pairing_channel">Association Moonlight</string>
+    <string name="stream_host_channel">Streaming</string>
+    <string name="stream_host_title">Diffusion vers Moonlight</string>
+    <string name="stream_host_text">%1$s est listé dans Moonlight sur ce Wi-Fi.</string>
 </resources>

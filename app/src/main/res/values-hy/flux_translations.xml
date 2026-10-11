@@ -1848,4 +1848,17 @@
     <string name="game_mode_xbox_sign_in">Մուտք Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Xbox-ի մուտքը Flux Keyboard-ի նվագարկիչում, ստեղները տպում են ինչպես սովորաբար։ Մեկ անգամ մուտք գործելով՝ յուրաքանչյուր ամպային խաղ աշխատում է։</string>
     <string name="games_app_xbox">Xbox ամպային խաղ</string>
+    <string name="stream_section">Հեռարձակում</string>
+    <string name="stream_switch">Հեռարձակել Moonlight</string>
+    <string name="stream_switch_description">Հեռախոսը երևում է Moonlight-ում ձեր հեռուստացույցում կամ նույն Wi-Fi-ի այլ սարքում. զուգակցեք այն Moonlight-ի ցույց տված PIN-ով, և ձեր խաղերը կհայտնվեն այնտեղ։ Ամպային խաղերը՝ ոչ. խաղացեք դրանք հեռուստացույցի Xbox հավելվածում կամ բրաուզերում՝ անմիջապես ամպից։ Խաղի հեռարձակումը հաջորդն է։</string>
+    <string name="stream_unpair">Մոռանալ զուգակցված սարքերը</string>
+    <string name="stream_unpair_description">%1$d զուգակցված։ Յուրաքանչյուրը նորից կզուգակցվի PIN-ով։</string>
+    <string name="stream_pin_title">Զուգակցել %1$s</string>
+    <string name="stream_pin_text">Մուտքագրեք Moonlight-ի ցույց տված PIN-ը։</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Զուգակցել</string>
+    <string name="stream_pairing_channel">Moonlight զուգակցում</string>
+    <string name="stream_host_channel">Հեռարձակում</string>
+    <string name="stream_host_title">Հեռարձակում Moonlight</string>
+    <string name="stream_host_text">%1$s-ը երևում է Moonlight-ում այս Wi-Fi-ում։</string>
 </resources>

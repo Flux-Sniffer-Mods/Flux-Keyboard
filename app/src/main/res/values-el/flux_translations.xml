@@ -1222,4 +1222,17 @@
     <string name="game_mode_xbox_sign_in">Σύνδεση στο Xbox</string>
     <string name="game_mode_xbox_sign_in_description">Η σύνδεση του Xbox στο πρόγραμμα αναπαραγωγής του Flux Keyboard, με τα πλήκτρα να πληκτρολογούν κανονικά. Μία σύνδεση και παίζει κάθε παιχνίδι cloud.</string>
     <string name="games_app_xbox">Παιχνίδι Xbox cloud</string>
+    <string name="stream_section">Ροή</string>
+    <string name="stream_switch">Ροή στο Moonlight</string>
+    <string name="stream_switch_description">Το τηλέφωνο εμφανίζεται στο Moonlight στην τηλεόρασή σας ή σε άλλη συσκευή στο ίδιο Wi-Fi: συνδέστε το με το PIN που δείχνει το Moonlight και τα παιχνίδια σας εμφανίζονται εκεί. Τα παιχνίδια cloud όχι: παίξτε τα στην εφαρμογή Xbox ή στον browser της τηλεόρασης, απευθείας από το cloud. Η ροή ενός παιχνιδιού έρχεται στη συνέχεια.</string>
+    <string name="stream_unpair">Διαγραφή συνδεδεμένων συσκευών</string>
+    <string name="stream_unpair_description">%1$d συνδεδεμένες. Καθεμία συνδέεται ξανά με PIN.</string>
+    <string name="stream_pin_title">Σύζευξη %1$s</string>
+    <string name="stream_pin_text">Πληκτρολογήστε το PIN που δείχνει το Moonlight.</string>
+    <string name="stream_pin_hint">PIN</string>
+    <string name="stream_pin_pair">Σύζευξη</string>
+    <string name="stream_pairing_channel">Σύζευξη Moonlight</string>
+    <string name="stream_host_channel">Ροή</string>
+    <string name="stream_host_title">Ροή στο Moonlight</string>
+    <string name="stream_host_text">Το %1$s εμφανίζεται στο Moonlight σε αυτό το Wi-Fi.</string>
 </resources>
