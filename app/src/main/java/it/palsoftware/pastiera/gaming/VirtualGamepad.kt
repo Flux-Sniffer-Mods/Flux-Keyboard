@@ -45,6 +45,14 @@ class VirtualGamepad private constructor(private val uhid: RandomAccessFile) {
     }
 
     companion object {
+        /** The controller's name, as apps (and Dolphin's profiles) see it. */
+        const val CONTROLLER = "Flux Keyboard controller"
+        /** The trackpad's own sticks, a device apart from the keys. */
+        const val TRACKPAD = "Flux Keyboard trackpad"
+
+        /** The trackpad's sticks as a controller of their own: keys stay keys. */
+        fun trackpad(): VirtualGamepad? = create(TRACKPAD, 0x5847)
+
         private const val UHID_DESTROY = 1
         private const val UHID_CREATE2 = 11
         private const val UHID_INPUT2 = 12
@@ -83,16 +91,16 @@ class VirtualGamepad private constructor(private val uhid: RandomAccessFile) {
         }
 
         /** Plugs the controller in (needs root to open /dev/uhid); null when it can't. */
-        fun create(): VirtualGamepad? = runCatching {
+        fun create(device: String = CONTROLLER, product: Int = 0x5846): VirtualGamepad? = runCatching {
             val uhid = RandomAccessFile("/dev/uhid", "rw")
-            val name = "Flux Keyboard controller".toByteArray()
+            val name = device.toByteArray()
             val event = ByteBuffer.allocate(4 + 128 + 64 + 64 + 2 + 2 + 4 + 4 + 4 + 4 + DESCRIPTOR.size).order(ByteOrder.LITTLE_ENDIAN)
             event.putInt(UHID_CREATE2)
             event.put(name.copyOf(128)).put(ByteArray(64)).put(ByteArray(64))
             event.putShort(DESCRIPTOR.size.toShort())
             event.putShort(0x03) // USB
             event.putInt(0x1209) // pid.codes: Android's generic controller layout applies
-            event.putInt(0x5846)
+            event.putInt(product)
             event.putInt(1)
             event.putInt(0)
             event.put(DESCRIPTOR)

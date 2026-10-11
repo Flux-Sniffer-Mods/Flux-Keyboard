@@ -525,4 +525,8 @@
     <string name="game_mode_xbox_sign_out">Log out of Xbox</string>
     <string name="game_mode_xbox_sign_out_description">Signed in to Xbox in Flux Keyboard\'s player.</string>
     <string name="game_mode_xbox_sign_out_confirm">Cloud games won\'t play in Flux Keyboard\'s player until you sign in again.</string>
+    <string name="game_mode_reset">Reset</string>
+    <string name="game_mode_reset_emulator">Reset %1$s\'s settings</string>
+    <string name="game_mode_reset_emulator_confirm">Everything Flux Keyboard set in %1$s (controls, graphics, each game\'s controller) goes back to how it was before. Settings changed by an older version of Flux Keyboard can\'t be put back.</string>
+    <string name="game_mode_reset_emulator_done">%1$s\'s settings are back to how they were before Flux Keyboard changed them.</string>
 </resources>

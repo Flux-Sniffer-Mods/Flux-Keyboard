@@ -127,8 +127,26 @@ object FluxLayout {
         GAMECUBE("Flux Keyboard")
     }
 
+    /**
+     * The trackpad's sticks in Dolphin: a device of their own (with root), named in each binding
+     * so one profile takes keys from the keyboard and sticks from the trackpad. Android's axes:
+     * X 0 and Y 1 the left stick, Z 11 and Rz 14 the right; up is negative.
+     */
+    private val TRACKPAD_DEVICE = "Android/0/${VirtualGamepad.TRACKPAD}"
+    private val STICK_AXES = mapOf(
+        Control.LS_UP to "Axis 1-", Control.LS_DOWN to "Axis 1+", Control.LS_LEFT to "Axis 0-", Control.LS_RIGHT to "Axis 0+",
+        Control.RS_UP to "Axis 14-", Control.RS_DOWN to "Axis 14+", Control.RS_LEFT to "Axis 11-", Control.RS_RIGHT to "Axis 11+"
+    )
+
+    /** The stick direction [keys] are bound to, if they're a stick's. */
+    private fun stickOf(keys: List<Int>): Control? = STICK_AXES.keys.firstOrNull { control -> keys(control) == keys }
+
     private fun dolphinLines(controls: List<Pair<String, List<Int>>>) =
-        controls.map { (control, keys) -> "$control = " + keys.joinToString(" | ") { "`${keyName(it)}`" } }
+        controls.map { (control, keys) ->
+            val bindings = keys.map { "`${keyName(it)}`" } +
+                listOfNotNull(stickOf(keys)?.let { STICK_AXES.getValue(it) }?.let { "`$TRACKPAD_DEVICE:$it`" })
+            "$control = " + bindings.joinToString(" | ")
+        }
 
     internal fun dolphinGameCube(keyboard: String): List<String> = listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE)
 
@@ -201,7 +219,32 @@ object FluxLayout {
 
     internal fun write(path: String, content: String): Boolean {
         val data = android.util.Base64.encodeToString(content.toByteArray(), android.util.Base64.NO_WRAP)
-        return AdbShell.run("mkdir -p \"${path.substringBeforeLast('/')}\" && echo '$data' | base64 -d > \"$path\"", 5_000) != null
+        // The file as it was before Flux Keyboard first changed it, kept to put back on a reset
+        // (or a mark that there was none, so a reset takes it away)
+        val keep = "p=\"$path\"; [ -e \"\$p$BACKUP\" ] || [ -e \"\$p$BACKUP_NONE\" ] || " +
+            "{ if [ -e \"\$p\" ]; then cp \"\$p\" \"\$p$BACKUP\"; else touch \"\$p$BACKUP_NONE\"; fi; }"
+        return AdbShell.run("mkdir -p \"${path.substringBeforeLast('/')}\" && $keep && echo '$data' | base64 -d > \"$path\"", 5_000) != null
+    }
+
+    private const val BACKUP = ".before-flux"
+    private const val BACKUP_NONE = ".before-flux.none"
+
+    /**
+     * Puts [pkg]'s settings back as they were before Flux Keyboard changed them (controls,
+     * graphics, per-game controllers): each file restored, the ones it added taken away. Blocking,
+     * through the shell, the emulator stopped first.
+     */
+    fun reset(pkg: String): Result {
+        if (!AdbShell.available()) return Result.FAILED
+        val dir = when (GameApps.emulator(pkg)) {
+            "Dolphin" -> dolphinDir(pkg)
+            "PPSSPP" -> ppssppDir(pkg)
+            else -> return Result.BY_HAND
+        } ?: return Result.NOT_FOUND
+        AdbShell.run("am force-stop $pkg", 3_000)
+        val script = "find \"$dir\" -name '*$BACKUP' -o -name '*$BACKUP_NONE' | while read -r b; do " +
+            "case \"\$b\" in *$BACKUP_NONE) rm -f \"\${b%$BACKUP_NONE}\" \"\$b\";; *) mv -f \"\$b\" \"\${b%$BACKUP}\";; esac; done; echo ok"
+        return if (AdbShell.run(script, 10_000)?.contains("ok") == true) Result.DONE else Result.FAILED
     }
 
     internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()

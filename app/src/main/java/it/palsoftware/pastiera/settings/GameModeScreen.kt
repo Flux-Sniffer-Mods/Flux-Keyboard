@@ -615,6 +615,30 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                         }
                     }
                 }) { Text(stringResource(R.string.game_mode_setup_controls, emulatorName)) }
+                // Everything Flux Keyboard set in the emulator, put back as it was
+                if (it.palsoftware.pastiera.gaming.GraphicsTuning.writable(emulatorPkg)) {
+                    var resetting by remember { mutableStateOf(false) }
+                    TextButton(onClick = { resetting = true }) { Text(stringResource(R.string.game_mode_reset_emulator, emulatorName)) }
+                    if (resetting) AlertDialog(
+                        onDismissRequest = { resetting = false },
+                        title = { Text(stringResource(R.string.game_mode_reset_emulator, emulatorName)) },
+                        text = { Text(stringResource(R.string.game_mode_reset_emulator_confirm, emulatorName)) },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                resetting = false
+                                setupScope.launch {
+                                    val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.reset(emulatorPkg) }
+                                    setupResult = when (result) {
+                                        it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE -> context.getString(R.string.game_mode_reset_emulator_done, emulatorName)
+                                        it.palsoftware.pastiera.gaming.FluxLayout.Result.NOT_FOUND -> context.getString(R.string.game_mode_setup_not_found, emulatorName)
+                                        else -> context.getString(R.string.adb_not_running)
+                                    }
+                                }
+                            }) { Text(stringResource(R.string.game_mode_reset)) }
+                        },
+                        dismissButton = { TextButton(onClick = { resetting = false }) { Text(stringResource(R.string.cancel)) } }
+                    )
+                }
                 setupResult?.let { message ->
                     AlertDialog(
                         onDismissRequest = { setupResult = null },
