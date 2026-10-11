@@ -31,13 +31,15 @@ class GameProfilesTest {
 
     @Test
     fun theTrackpadStartsAsTheGamesSticks() {
-        // Launchers' games: their on-screen sticks; emulators: direction keys they map themselves
+        // The left half the left stick (on-screen for launchers, arrow keys for emulators), J B N M the right
         val launcher = GameProfiles.newProfile("Stray", setOf("app.gamenative"))
         assertEquals(TrackpadRole.LEFT_STICK, launcher.leftHalf)
-        assertEquals(TrackpadRole.RIGHT_STICK, launcher.rightHalf)
+        assertEquals(TrackpadRole.NONE, launcher.rightHalf)
+        assertEquals(true, launcher.rightStickKeys)
         val emulator = GameProfiles.newProfile("Wind Waker", setOf("org.dolphinemu.dolphinemu"))
-        assertEquals(TrackpadRole.WASD_KEYS, emulator.leftHalf)
-        assertEquals(TrackpadRole.ARROW_KEYS, emulator.rightHalf)
+        assertEquals(TrackpadRole.ARROW_KEYS, emulator.leftHalf)
+        assertEquals(TrackpadRole.NONE, emulator.rightHalf)
+        assertEquals(false, emulator.rightStickKeys)
     }
 
     @Test

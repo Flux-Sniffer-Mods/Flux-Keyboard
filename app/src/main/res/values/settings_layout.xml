@@ -291,7 +291,7 @@
     <string name="root_backlight_fine_title">Fine dimming</string>
     <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
     <string name="game_mode_controller">Real controller</string>
-    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real: W A S D its d-pad, O K P L its Y X B A, Q E Z C its shoulders and triggers (and the volume keys the left ones), Enter Start, Backspace Select, F and J the stick presses, and the trackpad its sticks. Other keys reach the game as they are.</string>
+    <string name="game_mode_controller_description">With root, gaming mode plugs in a controller the game sees as real, with Flux Keyboard\'s layout: W A S D its d-pad, O K P L its Y X B A, Q E its shoulders and Z C its triggers (the volume keys the left ones), Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick and the trackpad\'s left half the left stick. Other keys reach the game as they are.</string>
     <string name="game_mode_apps_section">Apps</string>
     <string name="game_mode_games_section">Games</string>
     <string name="game_mode_own_settings">Own settings</string>
@@ -431,5 +431,9 @@
     <string name="game_mode_quick_launcher">Games in the quick launcher</string>
     <string name="game_mode_quick_launcher_description">The games found in the game folders and the games with a profile, started from the quick launcher as their home screen shortcuts start them.</string>
     <string name="game_mode_right_stick_keys">Right stick on keys</string>
-    <string name="game_mode_right_stick_keys_description">Y G H B move the right stick (up, left, right, down), and the trackpad\'s left half is the left stick. The trackpad follows one finger at a time, so two sticks on it can\'t move together.</string>
+    <string name="game_mode_right_stick_keys_description">J B N M move the right stick (up, left, down, right), and the trackpad\'s left half is the left stick. The trackpad follows one finger at a time, so two sticks on it can\'t move together.</string>
+    <string name="game_mode_setup_controls">Set up %1$s\'s controls</string>
+    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s layout: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick, and the trackpad\'s left half the left stick.\n\nDolphin: GameCube controller 1 and Wii Remote 1 (with Nunchuk) are set, and kept as the \"Flux Keyboard\" profiles too. PPSSPP: its controls are set for every game.</string>
+    <string name="game_mode_setup_not_found">%1$s\'s settings weren\'t found: open it once, then try again.</string>
+    <string name="game_mode_setup_by_hand">%1$s can\'t load controls from a file: in its Settings, Input (Controls), bind each button by pressing its key when asked:\n\n%2$s</string>
 </resources>

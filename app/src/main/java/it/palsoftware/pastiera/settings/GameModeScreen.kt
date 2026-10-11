@@ -518,6 +518,33 @@ private fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> Un
                     ?: stringResource(R.string.game_mode_keys_pass),
                 style = MaterialTheme.typography.bodySmall
             )
+            // An emulator: Flux Keyboard's layout written into its own controller settings
+            val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
+            if (!current.controller && emulatorPkg != null) {
+                val emulatorName = it.palsoftware.pastiera.gaming.GameApps.emulator(emulatorPkg).orEmpty()
+                var setupResult by remember { mutableStateOf<String?>(null) }
+                val setupScope = androidx.compose.runtime.rememberCoroutineScope()
+                TextButton(onClick = {
+                    setupScope.launch {
+                        val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.apply(emulatorPkg) }
+                        setupResult = when (result) {
+                            it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE -> context.getString(R.string.game_mode_setup_done, emulatorName)
+                            it.palsoftware.pastiera.gaming.FluxLayout.Result.NOT_FOUND -> context.getString(R.string.game_mode_setup_not_found, emulatorName)
+                            it.palsoftware.pastiera.gaming.FluxLayout.Result.BY_HAND ->
+                                context.getString(R.string.game_mode_setup_by_hand, emulatorName, it.palsoftware.pastiera.gaming.FluxLayout.bindList())
+                            it.palsoftware.pastiera.gaming.FluxLayout.Result.FAILED -> context.getString(R.string.adb_not_running)
+                        }
+                    }
+                }) { Text(stringResource(R.string.game_mode_setup_controls, emulatorName)) }
+                setupResult?.let { message ->
+                    AlertDialog(
+                        onDismissRequest = { setupResult = null },
+                        title = { Text(stringResource(R.string.game_mode_setup_controls, emulatorName)) },
+                        text = { Text(message) },
+                        confirmButton = { TextButton(onClick = { setupResult = null }) { Text(stringResource(android.R.string.ok)) } }
+                    )
+                }
+            }
             }
             val pinScope = androidx.compose.runtime.rememberCoroutineScope()
             if (current.isGame) TextButton(onClick = {

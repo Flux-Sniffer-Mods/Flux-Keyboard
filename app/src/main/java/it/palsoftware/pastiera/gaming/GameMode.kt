@@ -161,19 +161,14 @@ object GameMode {
     @Volatile private var pad = false
 
     /** Which of the controller's buttons each key is (see [VirtualGamepad.button]). */
-    private val PAD_BUTTONS = mapOf(
-        KeyEvent.KEYCODE_L to 0, KeyEvent.KEYCODE_P to 1, KeyEvent.KEYCODE_K to 3, KeyEvent.KEYCODE_O to 4,
-        KeyEvent.KEYCODE_Q to 6, KeyEvent.KEYCODE_E to 7, KeyEvent.KEYCODE_Z to 8, KeyEvent.KEYCODE_C to 9,
-        KeyEvent.KEYCODE_VOLUME_UP to 6, KeyEvent.KEYCODE_VOLUME_DOWN to 8,
-        KeyEvent.KEYCODE_DEL to 10, KeyEvent.KEYCODE_ENTER to 11, KeyEvent.KEYCODE_F to 13, KeyEvent.KEYCODE_J to 14
-    )
+    private val PAD_BUTTONS = FluxLayout.PAD_BUTTONS
     private val PAD_DPAD = setOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
     private val dpadHeld = mutableSetOf<Int>()
 
     /**
-     * A key, before the app sees it: a key placed on the screen taps there; with a real controller, the controller's own keys (W A S D
-     * the d-pad, O K P L its Y X B A, Q E Z C the shoulders and triggers, Enter Start, Backspace
-     * Select, F and J the stick presses) press its buttons; true when it took the key.
+     * A key, before the app sees it: a key placed on the screen taps there; J B N M move the
+     * right stick (with a real controller, or Right stick on keys); with a real controller, the
+     * rest of [FluxLayout] presses its buttons. True when it took the key.
      */
     fun onKeyEvent(event: KeyEvent): Boolean {
         if (!passesKeys()) return false
@@ -188,8 +183,8 @@ object GameMode {
             }
             return true
         }
-        // Right stick on keys: Y G H B push it
-        if (profile?.rightStickKeys == true && code in RIGHT_STICK_KEYS) {
+        // Right stick on keys: J B N M push it
+        if ((pad || profile?.rightStickKeys == true) && code in RIGHT_STICK_KEYS) {
             if (event.repeatCount == 0) rightStickKey(code, down)
             return true
         }
@@ -473,10 +468,10 @@ object GameMode {
     }
 
     /** The right stick's keys (up, left, right, down), with Right stick on keys. */
-    private val RIGHT_STICK_KEYS = intArrayOf(KeyEvent.KEYCODE_Y, KeyEvent.KEYCODE_G, KeyEvent.KEYCODE_H, KeyEvent.KEYCODE_B)
+    private val RIGHT_STICK_KEYS = FluxLayout.RIGHT_STICK
     private val rightKeysHeld = mutableSetOf<Int>()
 
-    /** Y G H B held: the right stick pushed their way (a diagonal no further than a straight push). */
+    /** J B N M held: the right stick pushed their way (a diagonal no further than a straight push). */
     private fun rightStickKey(code: Int, down: Boolean) {
         val changed = if (down) rightKeysHeld.add(code) else rightKeysHeld.remove(code)
         if (!changed) return

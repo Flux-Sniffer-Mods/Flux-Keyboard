@@ -61,7 +61,7 @@ data class GameProfile(
     /** How the screen turns while it runs. */
     val screen: ScreenMode = ScreenMode.UPRIGHT,
     /**
-     * Y G H B move the right stick, the trackpad's right half then no stick of its own: the
+     * J B N M move the right stick, the trackpad's right half then no stick of its own: the
      * Titan's trackpad follows one finger at a time, so two sticks on it don't move together.
      */
     val rightStickKeys: Boolean = false,
@@ -147,14 +147,17 @@ object GameProfiles {
      */
     fun newProfile(name: String, packages: Set<String>, controller: Boolean = false): GameProfile {
         val app = packages.firstOrNull()?.let { GameApps.appFor(it) }
-        // A real controller, or a launcher's on-screen sticks: the trackpad as sticks
+        // Flux Keyboard's layout: the trackpad's left half the left stick (a real controller's,
+        // a launcher's on-screen one, or for an emulator the arrow keys its controls map), J B N M
+        // the right stick
         val touch = controller || app == "GameHub" || app == "GameNative"
         return GameProfile(
             id = java.util.UUID.randomUUID().toString(),
             name = name,
             packages = packages,
-            leftHalf = if (touch) TrackpadRole.LEFT_STICK else TrackpadRole.WASD_KEYS,
-            rightHalf = if (touch) TrackpadRole.RIGHT_STICK else TrackpadRole.ARROW_KEYS,
+            leftHalf = if (touch) TrackpadRole.LEFT_STICK else TrackpadRole.ARROW_KEYS,
+            rightHalf = TrackpadRole.NONE,
+            rightStickKeys = app == "GameHub" || app == "GameNative",
             screen = ScreenMode.defaultFor(packages.firstOrNull()),
             controller = controller
         )

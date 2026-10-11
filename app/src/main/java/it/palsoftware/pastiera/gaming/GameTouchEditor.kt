@@ -180,7 +180,7 @@ object GameTouchEditor {
         val halves = listOf(profile.leftHalf, profile.rightHalf)
         val zones = buildMap {
             if (TrackpadRole.LEFT_STICK in halves) put(0, left)
-            if (TrackpadRole.RIGHT_STICK in halves) put(1, right)
+            if (TrackpadRole.RIGHT_STICK in halves || profile.rightStickKeys) put(1, right)
         }
         return profile.copy(stickZones = zones)
     }
