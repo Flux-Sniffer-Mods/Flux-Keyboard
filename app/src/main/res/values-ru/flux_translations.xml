@@ -1873,4 +1873,11 @@
     <string name="stream_host_channel">Стриминг</string>
     <string name="stream_host_title">Стриминг в Moonlight</string>
     <string name="stream_host_text">%1$s виден в Moonlight в этой сети Wi-Fi.</string>
+    <string name="game_mode_xbox_sign_in_first">Сначала войдите в Xbox: облачные игры запускаются, только когда Xbox знает, кто играет.</string>
+    <string name="crash_log">Сохранить журнал сбоев</string>
+    <string name="crash_log_description">Запись Android о последних сбоях Flux Keyboard, сохранённая в Download/Flux Keyboard/crash-log.txt, чтобы поделиться.</string>
+    <string name="crash_log_saved">Сохранено в Download/Flux Keyboard/crash-log.txt</string>
+    <string name="phone_game_mode">Собственный игровой режим телефона</string>
+    <string name="phone_game_mode_description">Игровое пространство телефона может стать главным экраном рядом с игровым режимом: отключите его приложения здесь или включите обратно.</string>
+    <string name="phone_game_mode_none">На этом телефоне не найдено приложений игрового режима.</string>
 </resources>

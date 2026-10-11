@@ -1235,4 +1235,11 @@
     <string name="stream_host_channel">Ροή</string>
     <string name="stream_host_title">Ροή στο Moonlight</string>
     <string name="stream_host_text">Το %1$s εμφανίζεται στο Moonlight σε αυτό το Wi-Fi.</string>
+    <string name="game_mode_xbox_sign_in_first">Συνδεθείτε πρώτα στο Xbox: τα παιχνίδια cloud παίζουν μόνο όταν το Xbox ξέρει ποιος παίζει.</string>
+    <string name="crash_log">Αποθήκευση αρχείου σφαλμάτων</string>
+    <string name="crash_log_description">Η καταγραφή του Android για τα τελευταία σφάλματα του Flux Keyboard, αποθηκευμένη στο Download/Flux Keyboard/crash-log.txt για κοινοποίηση.</string>
+    <string name="crash_log_saved">Αποθηκεύτηκε στο Download/Flux Keyboard/crash-log.txt</string>
+    <string name="phone_game_mode">Λειτουργία παιχνιδιού του τηλεφώνου</string>
+    <string name="phone_game_mode_description">Ο χώρος παιχνιδιών του τηλεφώνου μπορεί να γίνει αρχική οθόνη μαζί με τη λειτουργία παιχνιδιού: απενεργοποιήστε τις εφαρμογές του εδώ ή ενεργοποιήστε τις ξανά.</string>
+    <string name="phone_game_mode_none">Δεν βρέθηκαν εφαρμογές λειτουργίας παιχνιδιού σε αυτό το τηλέφωνο.</string>
 </resources>

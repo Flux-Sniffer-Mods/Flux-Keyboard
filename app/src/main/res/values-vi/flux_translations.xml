@@ -1855,4 +1855,11 @@
     <string name="stream_host_channel">Phát trực tuyến</string>
     <string name="stream_host_title">Đang phát tới Moonlight</string>
     <string name="stream_host_text">%1$s có trong Moonlight trên Wi-Fi này.</string>
+    <string name="game_mode_xbox_sign_in_first">Đăng nhập Xbox trước: game đám mây chỉ chạy khi Xbox biết ai đang chơi.</string>
+    <string name="crash_log">Lưu nhật ký sự cố</string>
+    <string name="crash_log_description">Bản ghi của Android về các sự cố gần nhất của Flux Keyboard, lưu vào Download/Flux Keyboard/crash-log.txt để chia sẻ.</string>
+    <string name="crash_log_saved">Đã lưu vào Download/Flux Keyboard/crash-log.txt</string>
+    <string name="phone_game_mode">Chế độ chơi game riêng của điện thoại</string>
+    <string name="phone_game_mode_description">Không gian game của điện thoại có thể chiếm màn hình chính cùng chế độ chơi game: tắt ứng dụng của nó ở đây, hoặc bật lại.</string>
+    <string name="phone_game_mode_none">Không tìm thấy ứng dụng chế độ game trên điện thoại này.</string>
 </resources>

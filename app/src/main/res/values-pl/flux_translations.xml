@@ -1873,4 +1873,11 @@
     <string name="stream_host_channel">Streaming</string>
     <string name="stream_host_title">Streaming do Moonlight</string>
     <string name="stream_host_text">%1$s widać w Moonlight w tej sieci Wi-Fi.</string>
+    <string name="game_mode_xbox_sign_in_first">Najpierw zaloguj się do Xbox: gry w chmurze działają dopiero, gdy Xbox wie, kto gra.</string>
+    <string name="crash_log">Zapisz dziennik awarii</string>
+    <string name="crash_log_description">Zapis Androida ostatnich awarii Flux Keyboard, zapisany w Download/Flux Keyboard/crash-log.txt do udostępnienia.</string>
+    <string name="crash_log_saved">Zapisano w Download/Flux Keyboard/crash-log.txt</string>
+    <string name="phone_game_mode">Własny tryb gry telefonu</string>
+    <string name="phone_game_mode_description">Przestrzeń gier telefonu może przejąć ekran główny obok trybu gry: wyłącz tu jej aplikacje albo włącz je z powrotem.</string>
+    <string name="phone_game_mode_none">Nie znaleziono aplikacji trybu gry na tym telefonie.</string>
 </resources>

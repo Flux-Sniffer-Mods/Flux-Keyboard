@@ -1326,4 +1326,11 @@
     <string name="stream_host_channel">Streaming</string>
     <string name="stream_host_title">Streaming zu Moonlight</string>
     <string name="stream_host_text">%1$s ist in Moonlight in diesem WLAN aufgeführt.</string>
+    <string name="game_mode_xbox_sign_in_first">Melde dich zuerst bei Xbox an: Cloud-Spiele laufen erst, wenn Xbox weiß, wer spielt.</string>
+    <string name="crash_log">Absturzprotokoll speichern</string>
+    <string name="crash_log_description">Androids Aufzeichnung der letzten Abstürze von Flux Keyboard, gespeichert unter Download/Flux Keyboard/crash-log.txt zum Teilen.</string>
+    <string name="crash_log_saved">Gespeichert unter Download/Flux Keyboard/crash-log.txt</string>
+    <string name="phone_game_mode">Eigener Spielmodus des Handys</string>
+    <string name="phone_game_mode_description">Der Spielbereich des Handys kann neben dem Spielmodus den Startbildschirm übernehmen: schalte seine Apps hier aus oder wieder ein.</string>
+    <string name="phone_game_mode_none">Keine Spielmodus-Apps auf diesem Handy gefunden.</string>
 </resources>

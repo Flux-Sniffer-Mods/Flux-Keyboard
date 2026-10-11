@@ -1861,4 +1861,11 @@
     <string name="stream_host_channel">Հեռարձակում</string>
     <string name="stream_host_title">Հեռարձակում Moonlight</string>
     <string name="stream_host_text">%1$s-ը երևում է Moonlight-ում այս Wi-Fi-ում։</string>
+    <string name="game_mode_xbox_sign_in_first">Նախ մուտք գործեք Xbox. ամպային խաղերն աշխատում են միայն երբ Xbox-ը գիտի, թե ով է խաղում։</string>
+    <string name="crash_log">Պահել խափանումների մատյանը</string>
+    <string name="crash_log_description">Android-ի գրառումը Flux Keyboard-ի վերջին խափանումների մասին՝ պահված Download/Flux Keyboard/crash-log.txt-ում՝ կիսվելու համար։</string>
+    <string name="crash_log_saved">Պահված է Download/Flux Keyboard/crash-log.txt-ում</string>
+    <string name="phone_game_mode">Հեռախոսի սեփական խաղային ռեժիմը</string>
+    <string name="phone_game_mode_description">Հեռախոսի խաղային տարածքը կարող է դառնալ գլխավոր էկրան խաղային ռեժիմի կողքին. անջատեք նրա հավելվածներն այստեղ կամ նորից միացրեք։</string>
+    <string name="phone_game_mode_none">Այս հեռախոսում խաղային ռեժիմի հավելվածներ չեն գտնվել։</string>
 </resources>
