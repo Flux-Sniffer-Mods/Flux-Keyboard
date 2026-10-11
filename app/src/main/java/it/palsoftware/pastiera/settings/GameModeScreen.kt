@@ -991,9 +991,13 @@ internal fun GameArtworkRow(profile: GameProfile) {
 @Composable
 private fun ArtChoicesDialog(profile: GameProfile, onDismiss: () -> Unit, onPicked: (String, Boolean) -> Unit) {
     val context = LocalContext.current
-    val found by androidx.compose.runtime.produceState<Pair<List<it.palsoftware.pastiera.gaming.GameArt.Choice>, List<it.palsoftware.pastiera.gaming.GameArt.Choice>>?>(null, profile.id) {
+    // A title of its own to look for, instead of renaming the game
+    var query by remember { mutableStateOf("") }
+    var searched by remember { mutableStateOf("") }
+    val found by androidx.compose.runtime.produceState<Pair<List<it.palsoftware.pastiera.gaming.GameArt.Choice>, List<it.palsoftware.pastiera.gaming.GameArt.Choice>>?>(null, profile.id, searched) {
+        value = null
         value = withContext(Dispatchers.IO) {
-            runCatching { it.palsoftware.pastiera.gaming.GameArt.choices(context, profile) }.getOrDefault(emptyList<it.palsoftware.pastiera.gaming.GameArt.Choice>() to emptyList())
+            runCatching { it.palsoftware.pastiera.gaming.GameArt.choices(context, profile, searched) }.getOrDefault(emptyList<it.palsoftware.pastiera.gaming.GameArt.Choice>() to emptyList())
         }
     }
     var picked by remember { mutableStateOf(setOf<String>()) }
@@ -1006,6 +1010,15 @@ private fun ArtChoicesDialog(profile: GameProfile, onDismiss: () -> Unit, onPick
                 modifier = Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                OutlinedTextField(
+                    value = query, onValueChange = { query = it }, singleLine = true,
+                    placeholder = { Text(profile.name) },
+                    label = { Text(stringResource(R.string.game_mode_artwork_search)) },
+                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
+                    keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSearch = { searched = query }),
+                    trailingIcon = { TextButton(onClick = { searched = query }) { Text("\u2192") } },
+                    modifier = Modifier.fillMaxWidth()
+                )
                 when {
                     choices == null -> Text(stringResource(R.string.game_mode_import_reading))
                     choices.first.isEmpty() && choices.second.isEmpty() -> Text(stringResource(R.string.game_mode_artwork_none))

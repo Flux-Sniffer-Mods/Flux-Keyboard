@@ -630,6 +630,9 @@
     },
     {
       "text": "Stream to Moonlight: Android desktop switches Developer options' desktop windowing on by itself (a restart may be needed the first time; the phone says so)."
+    },
+    {
+      "text": "Choosing artwork from the internet has a search box: look up any title for a game, launcher or emulator without renaming it."
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

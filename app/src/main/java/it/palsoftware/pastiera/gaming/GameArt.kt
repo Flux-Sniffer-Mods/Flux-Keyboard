@@ -260,13 +260,20 @@ object GameArt {
      * and upright ones for Moonlight. SteamGridDB's many, then Steam's, Xbox's, GameTDB's and
      * libretro's.
      */
-    fun choices(context: Context, profile: GameProfile): Pair<List<Choice>, List<Choice>> {
+    fun choices(context: Context, profile: GameProfile, search: String? = null): Pair<List<Choice>, List<Choice>> {
+        val query = search?.trim().orEmpty()
         val icons = mutableListOf<Choice>()
         val upright = mutableListOf<Choice>()
         if (key.isNotEmpty()) {
             val launch = profile.launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
             // A launcher or emulator (or the Xbox tile): its own entry, not a game of its name
-            val entry = if (profile.isGame) sgdbGame(launch, profile) else sgdbApp(appNames(profile, null))
+            // Or whatever title was searched for, its closest match
+            val entry = when {
+                query.isNotEmpty() -> api("search/autocomplete/" + java.net.URLEncoder.encode(query, "UTF-8").replace("+", "%20"))
+                    ?.optJSONArray("data")?.optJSONObject(0)?.optInt("id")?.takeIf { it > 0 }
+                profile.isGame -> sgdbGame(launch, profile)
+                else -> sgdbApp(appNames(profile, null))
+            }
             entry?.let { game ->
                 fun all(path: String) = api(path)?.optJSONArray("data")?.let { data ->
                     List(data.length()) { data.optJSONObject(it) }.mapNotNull { item ->
@@ -280,7 +287,7 @@ object GameArt {
                 upright += all("grids/game/$game?dimensions=600x900")
             }
         }
-        for (url in urls(context, profile)) {
+        if (query.isEmpty()) for (url in urls(context, profile)) {
             // Steam's header is wide (fine as an icon, cropped); the rest are covers
             if (url.endsWith("header.jpg")) icons += Choice(url, url) else upright += Choice(url, url)
         }

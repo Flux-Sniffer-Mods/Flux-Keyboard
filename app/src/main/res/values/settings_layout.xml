@@ -557,9 +557,10 @@
     <string name="game_mode_resolution_stream">Resolution when streaming</string>
     <string name="game_mode_resolution_stream_default">Same as streaming setting</string>
     <string name="game_mode_artwork_found">Choose artwork from the internet</string>
+    <string name="game_mode_artwork_search">Search for a title</string>
     <string name="game_mode_artwork_icons">Square artwork (games list and shortcuts)</string>
     <string name="game_mode_artwork_upright">Covers (Moonlight)</string>
-    <string name="game_mode_artwork_none">No artwork found online. Try renaming the game to its exact title.</string>
+    <string name="game_mode_artwork_none">No artwork found online. Try searching for its title above.</string>
     <string name="games_app_launchers">Launchers and emulators</string>
     <string name="games_app_stream">Stream</string>
 </resources>
