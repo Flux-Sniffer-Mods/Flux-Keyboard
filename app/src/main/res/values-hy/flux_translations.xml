@@ -1814,7 +1814,7 @@
     <string name="game_mode_quick_launcher_description">Խաղերի պանակներում գտնված խաղերը և պրոֆիլ ունեցող խաղերը գործարկվում են արագ գործարկիչից այնպես, ինչպես գլխավոր էկրանի դյուրանցումից։</string>
     <string name="game_mode_right_stick_keys">Աջ լծակը ստեղների վրա</string>
     <string name="game_mode_right_stick_keys_description">J B N M-ը շարժում են աջ լծակը։ Թաչփադը միաժամանակ հետևում է մեկ մատի, ուստի երկու լծակ միասին չի շարժում։</string>
-    <string name="game_mode_setup_controls">Կարգավորել %1$s-ի կառավարումը</string>
+    <string name="game_mode_setup_controls">Կարգավորել %1$s-ը այս հեռախոսի համար</string>
     <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Keyboard-ի դասավորությանը. W A S D՝ խաչաձև կոճակ, O K P L՝ գործողության կոճակներն իրենց տեղերում, Q E՝ վերին ձգանները, Z C՝ ստորինները, Space՝ Start, Enter՝ Select, Backspace՝ Home, F և H՝ լծակների սեղմումը, J B N M՝ աջ լծակը, թաչփադի ձախ կեսը՝ ձախ լծակը։\n\nDolphin. կարգավորված են GameCube կարգավորիչ 1-ը (L և R՝ ձայնի ստեղներին, Z՝ Z-ին) և Wii Remote 1-ը Nunchuk-ով, ցուցիչը հետևում է թաչփադի աջ կեսին (Dolphin-ի overlay-ի IR ռեժիմը դրեք Follow)։ PPSSPP. կառավարումը գործում է բոլոր խաղերի համար։</string>
     <string name="game_mode_setup_not_found">%1$s-ի կարգավորումները չգտնվեցին. բացեք այն մեկ անգամ, ապա կրկին փորձեք։</string>
     <string name="game_mode_setup_by_hand">%1$s-ը չի կարող կառավարումը բեռնել ֆայլից. նրա Կարգավորումներում, Մուտք (Կառավարում), կապեք յուրաքանչյուր կոճակ՝ սեղմելով դրա ստեղնը, երբ խնդրի.\n\n%2$s</string>
@@ -1875,4 +1875,17 @@
     <string name="game_mode_artwork_failed">Չհաջողվեց կարդալ պատկերը</string>
     <string name="stream_capture_title">Moonlight-ը ուզում է խաղալ</string>
     <string name="stream_capture_text">Հպիր՝ էկրանը տեսնելու թույլտվության համար։</string>
+    <string name="game_mode_tune_dolphin">Գրաֆիկա՝ %1$s, բնիկ լուծաչափ, shader-ները ստեղծվում են ֆոնում (առարկաները կարող են մի պահ ուշ հայտնվել կանգառների փոխարեն), dual core միացված, VSync անջատված։ Թեթև խաղերի համար բարձրացրու լուծաչափը Dolphin-ում։</string>
+    <string name="game_mode_tune_dolphin_strong">Գրաֆիկա՝ %1$s, 2× լուծաչափ, shader-ները ֆոնում, dual core միացված, VSync անջատված։</string>
+    <string name="game_mode_tune_ppsspp">Գրաֆիկա՝ %1$s, PSP-ի 2× լուծաչափ, առանց կադրեր բաց թողնելու, hardware transform և skinning միացված։</string>
+    <string name="game_mode_tune_ppsspp_strong">Գրաֆիկա՝ %1$s, PSP-ի 3× լուծաչափ, առանց կադրեր բաց թողնելու, hardware transform և skinning միացված։</string>
+    <string name="game_mode_advice">Լավագույն կարգավորումներ այս հեռախոսի համար</string>
+    <string name="game_mode_advice_description">Ինչ դնել նրա սեփական կարգավորումներում սահուն խաղի համար</string>
+    <string name="game_mode_advice_azahar">Azahar-ում՝ Կարգավորումներ, Գրաֆիկա. Graphics API %1$s, ներքին լուծաչափ 1×, Disk shader cache միացված, shader-ների ասինխրոն կոմպիլյացիա միացված։ Թեթև խաղերը կքաշեն 2×։</string>
+    <string name="game_mode_advice_eden">Eden-ում՝ Կարգավորումներ, Գրաֆիկա. լուծաչափ 0,75× (1× թեթև խաղերի համար), ճշգրտություն Normal, ասինխրոն shader-ներ միացված, Disk shader cache միացված։</string>
+    <string name="game_mode_advice_eden_mali">Eden-ում՝ Կարգավորումներ, Գրաֆիկա. լուծաչափ 0,5×, ճշգրտություն Normal, ասինխրոն shader-ներ միացված, Disk shader cache միացված։ Այս հեռախոսի Mali GPU-ն ավելի քիչ Switch խաղեր է աշխատեցնում, քան Adreno-ով հեռախոսները. նախ ստուգիր խաղի մասին հաշվետվությունները։</string>
+    <string name="game_mode_advice_windows">%1$s-ում՝ խաղի (կամ նրա կոնտեյների) կարգավորումներում. գրաֆիկական դրայվեր %2$s, DXVK DirectX 9–11 խաղերի համար (WineD3D, եթե որևէ մեկը չի մեկնարկում), VKD3D DirectX 12-ի համար, էկրանի չափ 1280×720, Box64 preset Performance։</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (ամենանորը)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip-ը միայն Adreno-ի համար է)</string>
+    <string name="game_mode_advice_game">Խաղի սեփական կարգավորումներում. գրաֆիկայի որակ Միջին կամ Ցածր, 60 fps սահմանաչափ միայն եթե կայուն է մնում (այլապես 30), և ռենդերի մասշտաբ կամ լուծաչափ 100%-ից ցածր, եթե առաջարկում է։</string>
 </resources>

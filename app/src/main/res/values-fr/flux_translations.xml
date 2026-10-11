@@ -1820,7 +1820,7 @@
     <string name="game_mode_quick_launcher_description">Les jeux trouvés dans les dossiers de jeux et ceux qui ont un profil, lancés depuis le lanceur rapide comme depuis leur raccourci d\'écran d\'accueil.</string>
     <string name="game_mode_right_stick_keys">Stick droit sur les touches</string>
     <string name="game_mode_right_stick_keys_description">J B N M bougent le stick droit. Le pavé tactile suit un doigt à la fois, il ne peut donc pas bouger deux sticks ensemble.</string>
-    <string name="game_mode_setup_controls">Configurer les commandes de %1$s</string>
+    <string name="game_mode_setup_controls">Configurer %1$s pour ce téléphone</string>
     <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant la disposition de Flux Keyboard : W A S D la croix, O K P L les boutons d\'action à leur place sur une manette, Q E les gâchettes hautes, Z C les basses, Espace Start, Entrée Select, Retour arrière Home, F et H l\'appui des sticks, J B N M le stick droit et la moitié gauche du pavé tactile le stick gauche.\n\nDolphin : la manette GameCube 1 (L et R sur les touches de volume, Z sur Z) et la Wii Remote 1 avec Nunchuk sont configurées, le pointeur suivant la moitié droite du pavé tactile (mettez le mode IR de la surcouche de Dolphin sur Suivre). PPSSPP : ses commandes valent pour tous les jeux.</string>
     <string name="game_mode_setup_not_found">Les réglages de %1$s sont introuvables : ouvrez-le une fois, puis réessayez.</string>
     <string name="game_mode_setup_by_hand">%1$s ne charge pas de commandes depuis un fichier : dans ses Paramètres, Entrée (Commandes), associez chaque bouton en appuyant sur sa touche quand il le demande :\n\n%2$s</string>
@@ -1881,4 +1881,17 @@
     <string name="game_mode_artwork_failed">Impossible de lire cette image</string>
     <string name="stream_capture_title">Moonlight veut jouer</string>
     <string name="stream_capture_text">Touche pour lui laisser voir l\'écran.</string>
+    <string name="game_mode_tune_dolphin">Graphismes : %1$s, résolution native, shaders compilés en arrière-plan (des éléments peuvent apparaître un instant plus tard au lieu de saccader), double cœur activé, VSync désactivée. Augmente la résolution dans Dolphin pour les jeux plus légers.</string>
+    <string name="game_mode_tune_dolphin_strong">Graphismes : %1$s, résolution 2×, shaders en arrière-plan, double cœur activé, VSync désactivée.</string>
+    <string name="game_mode_tune_ppsspp">Graphismes : %1$s, résolution PSP 2×, pas de saut d\'images, transformation et skinning matériels activés.</string>
+    <string name="game_mode_tune_ppsspp_strong">Graphismes : %1$s, résolution PSP 3×, pas de saut d\'images, transformation et skinning matériels activés.</string>
+    <string name="game_mode_advice">Meilleurs réglages pour ce téléphone</string>
+    <string name="game_mode_advice_description">Quoi régler dans ses propres paramètres pour jouer de façon fluide</string>
+    <string name="game_mode_advice_azahar">Dans Azahar, Paramètres, Graphismes : API graphique %1$s, résolution interne 1×, cache de shaders sur disque activé, compilation asynchrone des shaders activée. Les jeux plus légers supportent 2×.</string>
+    <string name="game_mode_advice_eden">Dans Eden, Paramètres, Graphismes : résolution 0,75× (1× pour les jeux plus légers), précision Normale, shaders asynchrones activés, cache de shaders sur disque activé.</string>
+    <string name="game_mode_advice_eden_mali">Dans Eden, Paramètres, Graphismes : résolution 0,5×, précision Normale, shaders asynchrones activés, cache de shaders sur disque activé. Le GPU Mali de ce téléphone fait tourner moins de jeux Switch que les téléphones Adreno : consulte d\'abord les retours sur le jeu.</string>
+    <string name="game_mode_advice_windows">Dans %1$s, réglages du jeu (ou de son conteneur) : pilote graphique %2$s, DXVK pour les jeux DirectX 9 à 11 (WineD3D si l\'un ne démarre pas), VKD3D pour DirectX 12, taille d\'écran 1280×720, préréglage Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (le plus récent)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip est réservé à Adreno)</string>
+    <string name="game_mode_advice_game">Dans les réglages du jeu : qualité graphique Moyenne ou Basse, limite de 60 i/s seulement si elle reste stable (sinon 30), et échelle de rendu ou résolution sous 100 % si proposée.</string>
 </resources>

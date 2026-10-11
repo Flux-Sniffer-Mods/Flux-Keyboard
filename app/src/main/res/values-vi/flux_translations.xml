@@ -1808,7 +1808,7 @@
     <string name="game_mode_quick_launcher_description">Các game tìm thấy trong thư mục game và các game có hồ sơ, mở từ trình khởi chạy nhanh giống như từ lối tắt trên màn hình chính.</string>
     <string name="game_mode_right_stick_keys">Cần analog phải trên phím</string>
     <string name="game_mode_right_stick_keys_description">J B N M di chuyển cần analog phải. Bàn di chuột chỉ theo một ngón mỗi lần, nên không di chuyển hai cần cùng lúc.</string>
-    <string name="game_mode_setup_controls">Thiết lập điều khiển của %1$s</string>
+    <string name="game_mode_setup_controls">Thiết lập %1$s cho điện thoại này</string>
     <string name="game_mode_setup_done">Điều khiển của %1$s giờ theo bố cục của Flux Keyboard: W A S D là D-pad, O K P L là các nút hành động đúng vị trí trên tay cầm, Q E là nút vai, Z C là cò, Space là Start, Enter là Select, Backspace là Home, F và H là nhấn cần analog, J B N M là cần phải và nửa trái bàn di chuột là cần trái.\n\nDolphin: tay cầm GameCube 1 (L và R trên phím âm lượng, Z trên Z) và Wii Remote 1 kèm Nunchuk đã được thiết lập, con trỏ theo nửa phải bàn di chuột (đặt chế độ IR của lớp phủ Dolphin thành Follow). PPSSPP: điều khiển áp dụng cho mọi game.</string>
     <string name="game_mode_setup_not_found">Không tìm thấy cài đặt của %1$s: mở nó một lần rồi thử lại.</string>
     <string name="game_mode_setup_by_hand">%1$s không tải điều khiển từ tệp: trong Cài đặt của nó, Đầu vào (Điều khiển), gán từng nút bằng cách nhấn phím tương ứng khi được hỏi:\n\n%2$s</string>
@@ -1869,4 +1869,17 @@
     <string name="game_mode_artwork_failed">Không đọc được ảnh</string>
     <string name="stream_capture_title">Moonlight muốn chơi</string>
     <string name="stream_capture_text">Chạm để cho phép xem màn hình.</string>
+    <string name="game_mode_tune_dolphin">Đồ họa: %1$s, độ phân giải gốc, shader dựng ở nền (vật thể có thể hiện trễ một chút thay vì giật), lõi kép bật, VSync tắt. Với game nhẹ hơn, tăng độ phân giải trong Dolphin.</string>
+    <string name="game_mode_tune_dolphin_strong">Đồ họa: %1$s, độ phân giải 2×, shader dựng ở nền, lõi kép bật, VSync tắt.</string>
+    <string name="game_mode_tune_ppsspp">Đồ họa: %1$s, độ phân giải PSP 2×, không bỏ khung hình, biến đổi và skinning bằng phần cứng bật.</string>
+    <string name="game_mode_tune_ppsspp_strong">Đồ họa: %1$s, độ phân giải PSP 3×, không bỏ khung hình, biến đổi và skinning bằng phần cứng bật.</string>
+    <string name="game_mode_advice">Cài đặt tốt nhất cho điện thoại này</string>
+    <string name="game_mode_advice_description">Những gì cần đặt trong cài đặt riêng của nó để chơi mượt</string>
+    <string name="game_mode_advice_azahar">Trong Azahar, Cài đặt, Đồ họa: Graphics API %1$s, độ phân giải nội bộ 1×, bộ nhớ đệm shader trên đĩa bật, biên dịch shader bất đồng bộ bật. Game nhẹ hơn chạy được 2×.</string>
+    <string name="game_mode_advice_eden">Trong Eden, Cài đặt, Đồ họa: độ phân giải 0,75× (1× cho game nhẹ hơn), độ chính xác Normal, shader bất đồng bộ bật, bộ nhớ đệm shader trên đĩa bật.</string>
+    <string name="game_mode_advice_eden_mali">Trong Eden, Cài đặt, Đồ họa: độ phân giải 0,5×, độ chính xác Normal, shader bất đồng bộ bật, bộ nhớ đệm shader trên đĩa bật. GPU Mali của điện thoại này chạy được ít game Switch hơn máy dùng Adreno: hãy xem đánh giá về game trước.</string>
+    <string name="game_mode_advice_windows">Trong %1$s, phần cài đặt của game (hoặc container của nó): trình điều khiển đồ họa %2$s, DXVK cho game DirectX 9 đến 11 (WineD3D nếu game nào không chạy), VKD3D cho DirectX 12, kích thước màn hình 1280×720, preset Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (bản mới nhất)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip chỉ dành cho Adreno)</string>
+    <string name="game_mode_advice_game">Trong cài đặt của chính game: chất lượng đồ họa Trung bình hoặc Thấp, giới hạn 60 fps chỉ khi giữ ổn định (nếu không thì 30), và tỉ lệ kết xuất hoặc độ phân giải dưới 100% nếu có.</string>
 </resources>

@@ -1826,7 +1826,7 @@
     <string name="game_mode_quick_launcher_description">Gry znalezione w folderach gier i gry z profilem, uruchamiane z szybkiego startu tak jak ze skrótu na ekranie głównym.</string>
     <string name="game_mode_right_stick_keys">Prawa gałka na klawiszach</string>
     <string name="game_mode_right_stick_keys_description">J B N M poruszają prawą gałką. Gładzik śledzi jeden palec naraz, więc nie poruszy dwóch gałek razem.</string>
-    <string name="game_mode_setup_controls">Skonfiguruj sterowanie %1$s</string>
+    <string name="game_mode_setup_controls">Ustaw %1$s dla tego telefonu</string>
     <string name="game_mode_setup_done">Sterowanie %1$s działa teraz według układu Flux Keyboard: W A S D krzyżak, O K P L przyciski akcji w miejscach z kontrolera, Q E przyciski barkowe, Z C spusty, Spacja Start, Enter Select, Backspace Home, F i H wciśnięcie gałek, J B N M prawa gałka, a lewa połowa gładzika lewa.\n\nDolphin: kontroler GameCube 1 (L i R na klawiszach głośności, Z na Z) i Wii Remote 1 z Nunchukiem są ustawione, a wskaźnik podąża za prawą połową gładzika (ustaw tryb IR nakładki Dolphina na Podążaj). PPSSPP: sterowanie działa w każdej grze.</string>
     <string name="game_mode_setup_not_found">Nie znaleziono ustawień %1$s: otwórz go raz, a potem spróbuj ponownie.</string>
     <string name="game_mode_setup_by_hand">%1$s nie wczytuje sterowania z pliku: w jego Ustawieniach, Wejście (Sterowanie), przypisz każdy przycisk, naciskając jego klawisz, gdy poprosi:\n\n%2$s</string>
@@ -1887,4 +1887,17 @@
     <string name="game_mode_artwork_failed">Nie udało się odczytać obrazu</string>
     <string name="stream_capture_title">Moonlight chce grać</string>
     <string name="stream_capture_text">Dotknij, aby udostępnić ekran.</string>
+    <string name="game_mode_tune_dolphin">Grafika: %1$s, natywna rozdzielczość, shadery budowane w tle (coś może pojawić się chwilę później zamiast przycinać), dwa rdzenie włączone, VSync wyłączony. W lżejszych grach podnieś rozdzielczość w Dolphinie.</string>
+    <string name="game_mode_tune_dolphin_strong">Grafika: %1$s, rozdzielczość 2×, shadery budowane w tle, dwa rdzenie włączone, VSync wyłączony.</string>
+    <string name="game_mode_tune_ppsspp">Grafika: %1$s, rozdzielczość PSP 2×, bez pomijania klatek, sprzętowa transformacja i skinning włączone.</string>
+    <string name="game_mode_tune_ppsspp_strong">Grafika: %1$s, rozdzielczość PSP 3×, bez pomijania klatek, sprzętowa transformacja i skinning włączone.</string>
+    <string name="game_mode_advice">Najlepsze ustawienia dla tego telefonu</string>
+    <string name="game_mode_advice_description">Co ustawić w jego własnych ustawieniach, by grało się płynnie</string>
+    <string name="game_mode_advice_azahar">W Azaharze, Ustawienia, Grafika: API grafiki %1$s, rozdzielczość wewnętrzna 1×, pamięć podręczna shaderów na dysku włączona, asynchroniczna kompilacja shaderów włączona. Lżejsze gry zniosą 2×.</string>
+    <string name="game_mode_advice_eden">W Edenie, Ustawienia, Grafika: rozdzielczość 0,75× (1× w lżejszych grach), dokładność Normalna, asynchroniczne shadery włączone, pamięć podręczna shaderów na dysku włączona.</string>
+    <string name="game_mode_advice_eden_mali">W Edenie, Ustawienia, Grafika: rozdzielczość 0,5×, dokładność Normalna, asynchroniczne shadery włączone, pamięć podręczna shaderów na dysku włączona. GPU Mali w tym telefonie uruchamia mniej gier ze Switcha niż telefony z Adreno: najpierw sprawdź opinie o grze.</string>
+    <string name="game_mode_advice_windows">W %1$s, w ustawieniach gry (lub jej kontenera): sterownik grafiki %2$s, DXVK dla gier z DirectX 9–11 (WineD3D, jeśli któraś się nie uruchamia), VKD3D dla DirectX 12, rozmiar ekranu 1280×720, preset Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (najnowszy)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip jest tylko dla Adreno)</string>
+    <string name="game_mode_advice_game">W ustawieniach gry: jakość grafiki Średnia lub Niska, limit 60 kl./s tylko jeśli jest stabilny (inaczej 30), a skala renderowania lub rozdzielczość poniżej 100%, jeśli jest dostępna.</string>
 </resources>

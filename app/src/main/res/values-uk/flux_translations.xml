@@ -1826,7 +1826,7 @@
     <string name="game_mode_quick_launcher_description">Ігри з тек ігор та ігри з профілем запускаються зі швидкого запуску так само, як з ярлика на головному екрані.</string>
     <string name="game_mode_right_stick_keys">Правий стік на клавішах</string>
     <string name="game_mode_right_stick_keys_description">J B N M рухають правий стік. Тачпад стежить за одним пальцем за раз, тож не рухає два стіки разом.</string>
-    <string name="game_mode_setup_controls">Налаштувати керування %1$s</string>
+    <string name="game_mode_setup_controls">Налаштувати %1$s для цього телефона</string>
     <string name="game_mode_setup_done">Керування %1$s тепер відповідає розкладці Flux Keyboard: W A S D — хрестовина, O K P L — кнопки дій на їхніх місцях на контролері, Q E — бампери, Z C — тригери, Пробіл — Start, Enter — Select, Backspace — Home, F і H — натискання стіків, J B N M — правий стік, ліва половина тачпада — лівий.\n\nDolphin: контролер GameCube 1 (L і R на клавішах гучності, Z на Z) і Wii Remote 1 з Nunchuk налаштовано, вказівник стежить за правою половиною тачпада (встановіть режим IR в оверлеї Dolphin на «Стежити»). PPSSPP: керування діє в усіх іграх.</string>
     <string name="game_mode_setup_not_found">Налаштування %1$s не знайдено: відкрийте його один раз і спробуйте знову.</string>
     <string name="game_mode_setup_by_hand">%1$s не завантажує керування з файлу: у його Налаштуваннях, Введення (Керування), призначте кожну кнопку, натискаючи її клавішу на запит:\n\n%2$s</string>
@@ -1887,4 +1887,17 @@
     <string name="game_mode_artwork_failed">Не вдалося прочитати зображення</string>
     <string name="stream_capture_title">Moonlight хоче грати</string>
     <string name="stream_capture_text">Торкніться, щоб показати йому екран.</string>
+    <string name="game_mode_tune_dolphin">Графіка: %1$s, рідна роздільність, шейдери збираються у фоні (щось може з\'явитися на мить пізніше замість ривків), двоядерний режим увімк., VSync вимк. Для легших ігор підвищте роздільність у Dolphin.</string>
+    <string name="game_mode_tune_dolphin_strong">Графіка: %1$s, роздільність 2×, шейдери у фоні, двоядерний режим увімк., VSync вимк.</string>
+    <string name="game_mode_tune_ppsspp">Графіка: %1$s, роздільність PSP 2×, без пропуску кадрів, апаратні трансформація і скінінг увімк.</string>
+    <string name="game_mode_tune_ppsspp_strong">Графіка: %1$s, роздільність PSP 3×, без пропуску кадрів, апаратні трансформація і скінінг увімк.</string>
+    <string name="game_mode_advice">Найкращі налаштування для цього телефона</string>
+    <string name="game_mode_advice_description">Що виставити в його власних налаштуваннях для плавної гри</string>
+    <string name="game_mode_advice_azahar">В Azahar, Налаштування, Графіка: графічний API %1$s, внутрішня роздільність 1×, кеш шейдерів на диску увімк., асинхронна компіляція шейдерів увімк. Легші ігри потягнуть 2×.</string>
+    <string name="game_mode_advice_eden">В Eden, Налаштування, Графіка: роздільність 0,75× (1× для легших ігор), точність Звичайна, асинхронні шейдери увімк., кеш шейдерів на диску увімк.</string>
+    <string name="game_mode_advice_eden_mali">В Eden, Налаштування, Графіка: роздільність 0,5×, точність Звичайна, асинхронні шейдери увімк., кеш шейдерів на диску увімк. GPU Mali цього телефона запускає менше ігор Switch, ніж телефони з Adreno: спершу перегляньте відгуки про гру.</string>
+    <string name="game_mode_advice_windows">У %1$s, у налаштуваннях гри (або її контейнера): графічний драйвер %2$s, DXVK для ігор на DirectX 9–11 (WineD3D, якщо якась не запускається), VKD3D для DirectX 12, розмір екрана 1280×720, пресет Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (найновіший)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip лише для Adreno)</string>
+    <string name="game_mode_advice_game">У налаштуваннях самої гри: якість графіки Середня або Низька, обмеження 60 fps лише якщо воно тримається стабільно (інакше 30), і масштаб рендерингу або роздільність нижче 100%, якщо є.</string>
 </resources>

@@ -1826,7 +1826,7 @@
     <string name="game_mode_quick_launcher_description">Игры из папок игр и игры с профилем запускаются из быстрого запуска так же, как с ярлыка на главном экране.</string>
     <string name="game_mode_right_stick_keys">Правый стик на клавишах</string>
     <string name="game_mode_right_stick_keys_description">J B N M двигают правый стик. Тачпад следит за одним пальцем за раз, поэтому не двигает два стика вместе.</string>
-    <string name="game_mode_setup_controls">Настроить управление %1$s</string>
+    <string name="game_mode_setup_controls">Настроить %1$s для этого телефона</string>
     <string name="game_mode_setup_done">Управление %1$s теперь следует раскладке Flux Keyboard: W A S D — крестовина, O K P L — кнопки действий на их местах на контроллере, Q E — бамперы, Z C — триггеры, Пробел — Start, Enter — Select, Backspace — Home, F и H — нажатие стиков, J B N M — правый стик, левая половина тачпада — левый.\n\nDolphin: контроллер GameCube 1 (L и R на клавишах громкости, Z на Z) и Wii Remote 1 с Nunchuk настроены, указатель следует за правой половиной тачпада (установите режим IR в оверлее Dolphin на «Следовать»). PPSSPP: управление действует во всех играх.</string>
     <string name="game_mode_setup_not_found">Настройки %1$s не найдены: откройте его один раз и попробуйте снова.</string>
     <string name="game_mode_setup_by_hand">%1$s не загружает управление из файла: в его Настройках, Ввод (Управление), назначьте каждую кнопку, нажимая её клавишу по запросу:\n\n%2$s</string>
@@ -1887,4 +1887,17 @@
     <string name="game_mode_artwork_failed">Не удалось прочитать изображение</string>
     <string name="stream_capture_title">Moonlight хочет играть</string>
     <string name="stream_capture_text">Нажмите, чтобы показать ему экран.</string>
+    <string name="game_mode_tune_dolphin">Графика: %1$s, родное разрешение, шейдеры собираются в фоне (что-то может появиться на миг позже вместо рывков), двухъядерный режим вкл., VSync выкл. Для лёгких игр повысьте разрешение в Dolphin.</string>
+    <string name="game_mode_tune_dolphin_strong">Графика: %1$s, разрешение 2×, шейдеры в фоне, двухъядерный режим вкл., VSync выкл.</string>
+    <string name="game_mode_tune_ppsspp">Графика: %1$s, разрешение PSP 2×, без пропуска кадров, аппаратные трансформация и скиннинг вкл.</string>
+    <string name="game_mode_tune_ppsspp_strong">Графика: %1$s, разрешение PSP 3×, без пропуска кадров, аппаратные трансформация и скиннинг вкл.</string>
+    <string name="game_mode_advice">Лучшие настройки для этого телефона</string>
+    <string name="game_mode_advice_description">Что выставить в его собственных настройках для плавной игры</string>
+    <string name="game_mode_advice_azahar">В Azahar, Настройки, Графика: графический API %1$s, внутреннее разрешение 1×, кэш шейдеров на диске вкл., асинхронная компиляция шейдеров вкл. Лёгкие игры потянут 2×.</string>
+    <string name="game_mode_advice_eden">В Eden, Настройки, Графика: разрешение 0,75× (1× для лёгких игр), точность Обычная, асинхронные шейдеры вкл., кэш шейдеров на диске вкл.</string>
+    <string name="game_mode_advice_eden_mali">В Eden, Настройки, Графика: разрешение 0,5×, точность Обычная, асинхронные шейдеры вкл., кэш шейдеров на диске вкл. GPU Mali этого телефона запускает меньше игр Switch, чем телефоны с Adreno: сначала посмотрите отзывы об игре.</string>
+    <string name="game_mode_advice_windows">В %1$s, в настройках игры (или её контейнера): графический драйвер %2$s, DXVK для игр на DirectX 9–11 (WineD3D, если какая-то не запускается), VKD3D для DirectX 12, размер экрана 1280×720, пресет Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (самый новый)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip только для Adreno)</string>
+    <string name="game_mode_advice_game">В настройках самой игры: качество графики Среднее или Низкое, ограничение 60 fps только если оно держится стабильно (иначе 30), и масштаб рендеринга или разрешение ниже 100%, если есть.</string>
 </resources>

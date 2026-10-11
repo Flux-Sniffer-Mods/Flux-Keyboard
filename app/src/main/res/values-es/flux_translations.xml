@@ -1820,7 +1820,7 @@
     <string name="game_mode_quick_launcher_description">Los juegos encontrados en las carpetas de juegos y los que tienen perfil, abiertos desde el lanzador rápido igual que desde su acceso directo en la pantalla de inicio.</string>
     <string name="game_mode_right_stick_keys">Stick derecho en teclas</string>
     <string name="game_mode_right_stick_keys_description">J B N M mueven el stick derecho. El trackpad sigue un dedo cada vez, así que no puede mover dos sticks a la vez.</string>
-    <string name="game_mode_setup_controls">Configurar los controles de %1$s</string>
+    <string name="game_mode_setup_controls">Configurar %1$s para este teléfono</string>
     <string name="game_mode_setup_done">Los controles de %1$s siguen ahora la disposición de Flux Keyboard: W A S D la cruceta, O K P L los botones de acción donde los tiene un mando, Q E los gatillos superiores, Z C los inferiores, Espacio Start, Enter Select, Retroceso Home, F y H la pulsación de los sticks, J B N M el stick derecho y la mitad izquierda del trackpad el izquierdo.\n\nDolphin: el mando de GameCube 1 (L y R en las teclas de volumen, Z en Z) y el Wii Remote 1 con Nunchuk quedan configurados, con el puntero siguiendo la mitad derecha del trackpad (pon el modo IR de la superposición de Dolphin en Seguir). PPSSPP: sus controles valen para todos los juegos.</string>
     <string name="game_mode_setup_not_found">No se encontraron los ajustes de %1$s: ábrelo una vez y vuelve a intentarlo.</string>
     <string name="game_mode_setup_by_hand">%1$s no carga controles desde un archivo: en sus Ajustes, Entrada (Controles), asigna cada botón pulsando su tecla cuando lo pida:\n\n%2$s</string>
@@ -1881,4 +1881,17 @@
     <string name="game_mode_artwork_failed">No se pudo leer la imagen</string>
     <string name="stream_capture_title">Moonlight quiere jugar</string>
     <string name="stream_capture_text">Toca para dejarle ver la pantalla.</string>
+    <string name="game_mode_tune_dolphin">Gráficos: %1$s, resolución nativa, shaders compilados en segundo plano (algo puede aparecer un instante tarde en vez de dar tirones), doble núcleo activado, VSync desactivado. Sube la resolución en Dolphin para juegos más ligeros.</string>
+    <string name="game_mode_tune_dolphin_strong">Gráficos: %1$s, resolución 2×, shaders en segundo plano, doble núcleo activado, VSync desactivado.</string>
+    <string name="game_mode_tune_ppsspp">Gráficos: %1$s, resolución PSP 2×, sin saltar fotogramas, transformación y skinning por hardware activados.</string>
+    <string name="game_mode_tune_ppsspp_strong">Gráficos: %1$s, resolución PSP 3×, sin saltar fotogramas, transformación y skinning por hardware activados.</string>
+    <string name="game_mode_advice">Mejores ajustes para este teléfono</string>
+    <string name="game_mode_advice_description">Qué poner en sus propios ajustes para jugar con fluidez</string>
+    <string name="game_mode_advice_azahar">En Azahar, Ajustes, Gráficos: API gráfica %1$s, resolución interna 1×, caché de shaders en disco activada, compilación asíncrona de shaders activada. Los juegos más ligeros aguantan 2×.</string>
+    <string name="game_mode_advice_eden">En Eden, Ajustes, Gráficos: resolución 0,75× (1× para juegos más ligeros), precisión Normal, shaders asíncronos activados, caché de shaders en disco activada.</string>
+    <string name="game_mode_advice_eden_mali">En Eden, Ajustes, Gráficos: resolución 0,5×, precisión Normal, shaders asíncronos activados, caché de shaders en disco activada. La GPU Mali de este teléfono mueve menos juegos de Switch que los teléfonos con Adreno: mira antes los informes del juego.</string>
+    <string name="game_mode_advice_windows">En %1$s, en los ajustes del juego (o de su contenedor): controlador gráfico %2$s, DXVK para juegos DirectX 9 a 11 (WineD3D si alguno no arranca), VKD3D para DirectX 12, tamaño de pantalla 1280×720, preajuste Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (el más reciente)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip es solo para Adreno)</string>
+    <string name="game_mode_advice_game">En los ajustes del propio juego: calidad gráfica Media o Baja, límite de 60 fps solo si se mantiene estable (si no, 30) y escala de renderizado o resolución por debajo del 100 % si la ofrece.</string>
 </resources>

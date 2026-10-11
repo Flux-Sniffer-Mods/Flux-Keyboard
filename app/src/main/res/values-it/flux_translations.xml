@@ -1325,7 +1325,7 @@
     <string name="game_mode_quick_launcher_description">I giochi trovati nelle cartelle dei giochi e quelli con un profilo, avviati dall\'avvio rapido come dalla loro scorciatoia nella schermata Home.</string>
     <string name="game_mode_right_stick_keys">Stick destro sui tasti</string>
     <string name="game_mode_right_stick_keys_description">J B N M muovono lo stick destro. Il trackpad segue un dito alla volta, quindi non può muovere due stick insieme.</string>
-    <string name="game_mode_setup_controls">Configura i comandi di %1$s</string>
+    <string name="game_mode_setup_controls">Configura %1$s per questo telefono</string>
     <string name="game_mode_setup_done">I comandi di %1$s ora seguono il layout di Flux Keyboard: W A S D la croce, O K P L i pulsanti d\'azione dove li ha un controller, Q E i dorsali, Z C i grilletti, Spazio Start, Invio Select, Backspace Home, F e H la pressione degli stick, J B N M lo stick destro e la metà sinistra del trackpad quello sinistro.\n\nDolphin: il controller GameCube 1 (L e R sui tasti del volume, Z su Z) e il Wii Remote 1 con Nunchuk sono configurati, con il puntatore che segue la metà destra del trackpad (imposta la modalità IR dell\'overlay di Dolphin su Segui). PPSSPP: i comandi valgono per tutti i giochi.</string>
     <string name="game_mode_setup_not_found">Impostazioni di %1$s non trovate: aprilo una volta, poi riprova.</string>
     <string name="game_mode_setup_by_hand">%1$s non carica i comandi da un file: nelle sue Impostazioni, Input (Comandi), assegna ogni pulsante premendo il suo tasto quando richiesto:\n\n%2$s</string>
@@ -1386,4 +1386,17 @@
     <string name="game_mode_artwork_failed">Impossibile leggere l\'immagine</string>
     <string name="stream_capture_title">Moonlight vuole giocare</string>
     <string name="stream_capture_text">Tocca per fargli vedere lo schermo.</string>
+    <string name="game_mode_tune_dolphin">Grafica: %1$s, risoluzione nativa, shader compilati in background (qualcosa può apparire un attimo dopo invece di scattare), dual core attivo, VSync disattivato. Alza la risoluzione in Dolphin per i giochi più leggeri.</string>
+    <string name="game_mode_tune_dolphin_strong">Grafica: %1$s, risoluzione 2×, shader in background, dual core attivo, VSync disattivato.</string>
+    <string name="game_mode_tune_ppsspp">Grafica: %1$s, risoluzione PSP 2×, nessun salto di fotogrammi, trasformazione e skinning hardware attivi.</string>
+    <string name="game_mode_tune_ppsspp_strong">Grafica: %1$s, risoluzione PSP 3×, nessun salto di fotogrammi, trasformazione e skinning hardware attivi.</string>
+    <string name="game_mode_advice">Impostazioni migliori per questo telefono</string>
+    <string name="game_mode_advice_description">Cosa impostare nelle sue impostazioni per giocare in modo fluido</string>
+    <string name="game_mode_advice_azahar">In Azahar, Impostazioni, Grafica: API grafica %1$s, risoluzione interna 1×, cache shader su disco attiva, compilazione asincrona degli shader attiva. I giochi più leggeri reggono 2×.</string>
+    <string name="game_mode_advice_eden">In Eden, Impostazioni, Grafica: risoluzione 0,75× (1× per i giochi più leggeri), precisione Normale, shader asincroni attivi, cache shader su disco attiva.</string>
+    <string name="game_mode_advice_eden_mali">In Eden, Impostazioni, Grafica: risoluzione 0,5×, precisione Normale, shader asincroni attivi, cache shader su disco attiva. La GPU Mali di questo telefono fa girare meno giochi Switch dei telefoni Adreno: controlla prima i resoconti sul gioco.</string>
+    <string name="game_mode_advice_windows">In %1$s, nelle impostazioni del gioco (o del suo container): driver grafico %2$s, DXVK per i giochi DirectX da 9 a 11 (WineD3D se uno non parte), VKD3D per DirectX 12, dimensione schermo 1280×720, preset Box64 Performance.</string>
+    <string name="game_mode_advice_driver_turnip">Turnip (il più recente)</string>
+    <string name="game_mode_advice_driver_system">System (Turnip è solo per Adreno)</string>
+    <string name="game_mode_advice_game">Nelle impostazioni del gioco: qualità grafica Media o Bassa, limite a 60 fps solo se resta stabile (altrimenti 30), e scala di rendering o risoluzione sotto il 100% se disponibile.</string>
 </resources>
