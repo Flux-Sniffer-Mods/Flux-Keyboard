@@ -943,6 +943,9 @@
     },
     {
       "text": "Placed keys tap in touch-only games again: their touches were numbered beyond what Android accepts (0 to 31), so it dropped them. The Game screen page's touches had the same fault."
+    },
+    {
+      "text": "Gaming mode: a trackpad stick pushes all the way down, measured from where your finger can actually reach on the keyboard"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

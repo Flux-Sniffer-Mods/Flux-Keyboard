@@ -649,6 +649,8 @@ object GameMode {
     // ---- The trackpad: sticks or a mouse ----
 
     @Volatile private var trackpadReader: TrackpadReader? = null
+    /** The trackpad rows fingers have reached (top, bottom), kept from game to game. */
+    @Volatile private var reachedRows: Pair<Float, Float>? = null
 
     /** Which trackpad reading is current: one started before gaming mode stopped or switched ends itself. */
     @Volatile private var trackpadRun = 0
@@ -668,6 +670,7 @@ object GameMode {
                 trackpad = process
                 val span = device.xRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 1440f)
                 val rows = device.yRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 600f)
+                Log.w(TAG, "trackpad ${device.path}: x ${span.first}..${span.second}, y ${rows.first}..${rows.second}")
                 val reader = TrackpadReader(span.first, span.second, rows.first, rows.second)
                 trackpadReader = reader
                 process.inputStream.bufferedReader().forEachLine { line -> reader.line(line) }
@@ -785,6 +788,8 @@ object GameMode {
         private val held = HashMap<Boolean, Finger>()
         private val mid = (min + max) / 2
         private val radius = (max - min) / 8f
+        private var reachedTop = reachedRows?.first ?: ((top + bottom) / 2)
+        private var reachedBottom = reachedRows?.second ?: ((top + bottom) / 2)
         private val slots = TouchSlots(::begin, ::move, ::up)
         private val lock = Any()
         private val handler = android.os.Handler(android.os.Looper.getMainLooper())
@@ -829,6 +834,7 @@ object GameMode {
             val left = x < mid
             var role = roleFor(current, left)
             if (role != TrackpadRole.NONE && (fingers.values + held.values).any { it.role == role }) role = TrackpadRole.NONE
+            reach(y)
             fingers[slot] = Finger(role, left, x.toFloat(), y.toFloat(), now)
         }
 
@@ -863,7 +869,8 @@ object GameMode {
             f.moved += abs(dx) + abs(dy)
             f.lastX = x.toFloat(); f.lastY = y.toFloat()
             val vx = push(x - f.originX, if (x < f.originX) f.originX - (if (f.left) min else mid) else (if (f.left) mid else max) - f.originX)
-            val vy = push(y - f.originY, if (y < f.originY) f.originY - top else bottom - f.originY)
+            reach(y)
+            val vy = push(y - f.originY, if (y < f.originY) f.originY - reachedTop else reachedBottom - f.originY)
             when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
@@ -880,6 +887,17 @@ object GameMode {
                 TrackpadRole.ARROW_KEYS -> directionKeys(f, vx, vy, ARROWS)
                 TrackpadRole.NONE -> Unit
             }
+        }
+
+        /**
+         * The rows a finger has actually reached: the trackpad reports more than a finger can
+         * get to (the bottom row runs past where the keys stop), so a stick pushed down by the
+         * reported edge never got there. Starts at the reported middle and grows with each report.
+         */
+        private fun reach(y: Int) {
+            if (y < reachedTop) reachedTop = y.toFloat()
+            if (y > reachedBottom) reachedBottom = y.toFloat()
+            reachedRows = reachedTop to reachedBottom
         }
 
         /**
