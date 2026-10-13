@@ -307,7 +307,9 @@ object ExtraScreen {
         val uri = Intent(launch).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).toUri(Intent.URI_INTENT_SCHEME).replace("'", "")
         // Filling the screen, not in a window of its own (Android's desktop keeps its windows)
         val fullscreen = current?.desktop != true
-        val started = AdbShell.run("am start --display $displayId" + (if (fullscreen) " --windowingMode $WINDOWING_FULLSCREEN" else "") + " '$uri'")
+        val said = AdbShell.run("am start --display $displayId" + (if (fullscreen) " --windowingMode $WINDOWING_FULLSCREEN" else "") + " '$uri'")
+        Log.w(TAG, "am start on screen $displayId: $uri -> ${said?.trim()}")
+        val started = said?.takeUnless { it.contains("Error", true) || it.contains("Exception") }
         if (started == null) runCatching {
             val options = ActivityOptions.makeBasic().setLaunchDisplayId(displayId)
             if (fullscreen) runCatching {
@@ -330,7 +332,9 @@ object ExtraScreen {
             it.palsoftware.pastiera.gaming.GameLibrary.Game(component.className.substringAfterLast('.'), component.packageName,
                 launch = intent.toUri(Intent.URI_INTENT_SCHEME)))
         val uri = Intent(launch).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).toUri(Intent.URI_INTENT_SCHEME).replace("'", "")
-        val started = AdbShell.available() && AdbShell.run("am start '$uri'") != null
+        val said = if (AdbShell.available()) AdbShell.run("am start '$uri'") else null
+        Log.w(TAG, "am start: $uri -> ${said?.trim()}")
+        val started = said != null && !said.contains("Error", true) && !said.contains("Exception")
         if (!started) runCatching { context.startActivity(Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
     }
 

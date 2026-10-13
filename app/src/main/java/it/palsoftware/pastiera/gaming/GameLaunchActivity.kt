@@ -32,11 +32,17 @@ class GameLaunchActivity : Activity() {
             return
         }
         profile?.let { p -> p.packages.forEach { GameProfiles.setActive(this, it, p.id) } }
-        val game = launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+        val parsed = launch?.let { runCatching { Intent.parseUri(it, Intent.URI_INTENT_SCHEME) }.getOrNull() }
+        val game = parsed
             ?.takeIf { (it.`package` ?: it.component?.packageName) in packages }
             // An activity that isn't there (another GameHub build): the app itself instead
             ?.takeIf { packageManager.resolveActivity(it, 0) != null }
             ?.let { withGameFile(it) }
+        if (launch != null && game == null) android.util.Log.w(TAG, when {
+            parsed == null -> "game's launch couldn't be read: $launch"
+            (parsed.`package` ?: parsed.component?.packageName) !in packages -> "game's launch is for another app ($packages): $launch"
+            else -> "game's activity isn't there (opening the app instead): $launch"
+        })
         val app = packages.firstNotNullOfOrNull { packageManager.getLaunchIntentForPackage(it) }
         val emulatorGame = game != null && (game.data != null || game.hasExtra("AutoStartFile"))
         val pkg = game?.`package` ?: game?.component?.packageName
@@ -76,7 +82,11 @@ class GameLaunchActivity : Activity() {
 
     /** The game, or the app when the game can't be started. */
     private fun start(game: Intent?, app: Intent?) {
-        val started = game?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }.isSuccess } == true
+        val started = game?.let {
+            runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                .onSuccess { _ -> android.util.Log.w(TAG, "game started: ${it.toUri(Intent.URI_INTENT_SCHEME)}") }
+                .onFailure { e -> android.util.Log.w(TAG, "game couldn't start (opening the app instead): $e") }.isSuccess
+        } == true
         if (!started) app?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
         finish()
     }
@@ -91,6 +101,7 @@ class GameLaunchActivity : Activity() {
     }
 
     companion object {
+        private const val TAG = "FluxGameLaunch"
         private const val EXTRA_PROFILE = "profile"
         private const val EXTRA_LAUNCH = "launch"
         private const val EXTRA_PACKAGE = "package"

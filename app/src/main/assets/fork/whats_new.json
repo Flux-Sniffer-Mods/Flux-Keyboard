@@ -948,7 +948,7 @@
       "text": "Gaming mode: a trackpad stick pushes all the way down, measured from where your finger can actually reach on the keyboard"
     },
     {
-      "text": "Crash log: now includes what gaming mode and streaming report, such as the trackpad sticks and Moonlight's wake"
+      "text": "Crash log: now includes what gaming mode and streaming report, such as the trackpad sticks, Moonlight's wake and why a game didn't start"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
