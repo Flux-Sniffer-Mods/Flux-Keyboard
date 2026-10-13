@@ -1953,6 +1953,7 @@
     <string name="game_mode_stick_dead_zone">Vùng chết %1$d%%</string>
     <string name="game_mode_stick_range">Phạm vi %1$d%%</string>
     <string name="game_mode_back_again">Nhấn Quay lại lần nữa để thoát trò chơi</string>
+    <string name="game_mode_key_locked">Đang giữ %1$s: nhấn lại để thả</string>
     <string name="game_mode_xbox_plan">Gói Game Pass</string>
     <string name="game_mode_xbox_plan_description">Danh mục XCloud chỉ hiện các trò chơi đám mây có trong gói của bạn, theo danh sách Game Pass của chính Microsoft.</string>
 </resources>

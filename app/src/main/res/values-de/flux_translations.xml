@@ -1425,6 +1425,7 @@
     <string name="game_mode_stick_dead_zone">Totzone %1$d%%</string>
     <string name="game_mode_stick_range">Reichweite %1$d%%</string>
     <string name="game_mode_back_again">Drücke Zurück erneut, um das Spiel zu verlassen</string>
+    <string name="game_mode_key_locked">%1$s gehalten: zum Loslassen erneut drücken</string>
     <string name="game_mode_xbox_plan">Game-Pass-Abo</string>
     <string name="game_mode_xbox_plan_description">Der XCloud-Katalog zeigt nur die Cloud-Spiele, die dein Abo enthält, laut Microsofts eigenen Game-Pass-Listen.</string>
 </resources>

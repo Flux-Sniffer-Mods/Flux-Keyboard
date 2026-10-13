@@ -1971,6 +1971,7 @@
     <string name="game_mode_stick_dead_zone">Martwa strefa %1$d%%</string>
     <string name="game_mode_stick_range">Zasięg %1$d%%</string>
     <string name="game_mode_back_again">Naciśnij Wstecz ponownie, aby wyjść z gry</string>
+    <string name="game_mode_key_locked">%1$s przytrzymany: naciśnij ponownie, aby puścić</string>
     <string name="game_mode_xbox_plan">Plan Game Pass</string>
     <string name="game_mode_xbox_plan_description">Katalog XCloud pokazuje tylko gry w chmurze z twojego planu, według list Game Pass od Microsoftu.</string>
 </resources>

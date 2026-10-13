@@ -1965,6 +1965,7 @@
     <string name="game_mode_stick_dead_zone">Zona muerta %1$d%%</string>
     <string name="game_mode_stick_range">Alcance %1$d%%</string>
     <string name="game_mode_back_again">Pulsa Atrás otra vez para salir del juego</string>
+    <string name="game_mode_key_locked">%1$s mantenido: púlsalo otra vez para soltarlo</string>
     <string name="game_mode_xbox_plan">Plan de Game Pass</string>
     <string name="game_mode_xbox_plan_description">El catálogo de XCloud solo muestra los juegos en la nube que incluye tu plan, según las listas de Game Pass de Microsoft.</string>
 </resources>
