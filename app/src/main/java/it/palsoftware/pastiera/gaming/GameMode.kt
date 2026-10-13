@@ -275,7 +275,10 @@ object GameMode {
             }
             return true
         }
-        if (FluxLayout.controlFor(code, FluxLayout.Modifiers()) == null) return false
+        if (FluxLayout.controlFor(code, FluxLayout.Modifiers()) == null) {
+            if (down && event.repeatCount == 0) FluxLog.w(TAG, "key $code isn't one of the layout's: passed on")
+            return false
+        }
         if (event.repeatCount == 0) {
             if (down) layoutKeysHeld += code else layoutKeysHeld -= code
             worker.execute { refreshControls() }
@@ -339,6 +342,7 @@ object GameMode {
             val sent = controlsDown.remove(control) ?: return
             "K 0 ${kotlin.math.abs(sent)} ${if (sent > 0) "k" else "g"}"
         }
+        if (down) FluxLog.w(TAG, "$control pressed: $line (${frontPackage}, helper ${if (input != null) "running" else "not running"})")
         send(line)
     }
 
