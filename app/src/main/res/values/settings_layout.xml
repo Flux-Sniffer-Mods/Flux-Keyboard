@@ -286,7 +286,7 @@
     <string name="shell_shortcuts_launcher">Or put them on keys pressed on the home screen.</string>
     <string name="shell_shortcuts_nav">Or on Ctrl keys in Nav Mode.</string>
     <string name="root_shell_title">Use root</string>
-    <string name="root_shell_description">On a rooted phone: shell commands run through su instead of the built-in shell or Shizuku, ready at boot without pairing or Wi-Fi, and gaming mode can be a real controller.</string>
+    <string name="root_shell_description">On a rooted phone: shell commands run through su instead of the built-in shell or Shizuku, ready at boot without pairing or Wi-Fi.</string>
     <string name="root_shell_denied">Root wasn\'t granted: the built-in shell or Shizuku is used instead.</string>
     <string name="root_backlight_fine_title">Fine dimming</string>
     <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
