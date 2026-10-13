@@ -675,6 +675,9 @@
     },
     {
       "text": "Gaming mode: hold SYM and press Volume Up or Down to change the volume, even in games that use the volume keys as buttons"
+    },
+    {
+      "text": "Gaming mode: Dolphin's on-screen controls are set up for the trackpad when a game starts: the stick centres where it's touched, and the controls are invisible (they still work). Settings you've changed yourself in Dolphin are kept"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -964,6 +967,9 @@
     },
     {
       "text": "Gaming mode: the volume keys work as triggers in Dolphin and PPSSPP"
+    },
+    {
+      "text": "Gaming mode: Back works normally in an emulator's file browser, menus and other apps; only the game itself asks you to press Back twice"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -280,7 +280,7 @@ object GameMode {
     fun onKeyEvent(event: KeyEvent): Boolean {
         if (!passesKeys()) return false
         val code = event.keyCode
-        if (code == KeyEvent.KEYCODE_BACK && backGuard(event)) return true
+        if (code == KeyEvent.KEYCODE_BACK && onGameScreen() && backGuard(event)) return true
         if (symVolume(event)) return true
         val down = event.action == KeyEvent.ACTION_DOWN
         if (down && event.repeatCount == 0) trackpadReader?.keyPressed()
@@ -359,6 +359,31 @@ object GameMode {
         audio.adjustStreamVolume(android.media.AudioManager.STREAM_MUSIC, direction, android.media.AudioManager.FLAG_SHOW_UI)
         return true
     }
+
+    /** The app screen in front: its app and its screen's class. */
+    @Volatile private var window: Pair<String, String?>? = null
+
+    /** An app's screen came to the front (from the accessibility helper). */
+    fun onWindow(pkg: String, className: String?) {
+        window = pkg to className
+    }
+
+    /**
+     * The game itself is in front, where a stray Back would end it: not its app's file browser,
+     * settings or a dialog, nor another app opened from it. An emulator or launcher plays on a
+     * screen of its own; any other game is its whole app.
+     */
+    private fun onGameScreen(): Boolean {
+        val (pkg, className) = window ?: return true
+        if (profile?.packages?.contains(pkg) != true) return false
+        if (GameApps.appFor(pkg) == null) return true
+        // Flux Keyboard's own player (Xbox Cloud Gaming), or an emulator's or launcher's play screen
+        val name = className ?: return true
+        return PLAY_SCREENS.any { name.contains(it, ignoreCase = true) }
+    }
+
+    /** Names of emulators' and launchers' play screens (their other screens are menus). */
+    private val PLAY_SCREENS = listOf("Emulation", "XServer", "PpssppActivity", "XboxPlay", "Wine", "Display", "Stream")
 
     /** When Back was last pressed in a game (the first press of two). */
     @Volatile private var backPressedAt = 0L

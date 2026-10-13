@@ -69,6 +69,9 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
             // dialog-style screen) keeps the screen size of the app beneath: switching would
             // flicker the app between the two
             val floating = confirmed && isFloating(pkg, event.className?.toString())
+            // Gaming mode's Back confirmation is for the game's own screen, not its app's menus or dialogs
+            // (a dialog over it isn't followed: Android doesn't always say when one closes)
+            if (!overlay && confirmed && !floating) it.palsoftware.pastiera.gaming.GameMode.onWindow(pkg, event.className?.toString())
             // Gaming mode goes the same way, once the app in front has settled
             if (!overlay && !floating) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
             // Keyboard swipes per app follow the app's own screens (the quick launcher, over

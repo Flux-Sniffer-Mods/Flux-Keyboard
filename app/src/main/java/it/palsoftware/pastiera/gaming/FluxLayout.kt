@@ -264,7 +264,30 @@ object FluxLayout {
             WiiPad.entries.all { pad ->
                 write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad)))
             }
+        dolphinOverlay(dir)
         return if (ok) Result.DONE else Result.FAILED
+    }
+
+    /**
+     * Dolphin's on-screen controls as gaming mode plays them: the stick centred where it's
+     * touched (so a stick placed near it still pushes every way) and the controls drawn
+     * invisible (they still take touches). Only what isn't set yet: your own choices are kept.
+     */
+    internal val DOLPHIN_OVERLAY = listOf("JoystickRelCenter" to "True", "ControlOpacity" to "0")
+
+    /** Writes [DOLPHIN_OVERLAY] into Dolphin's settings at [dir] (blocking; Dolphin not running). */
+    fun dolphinOverlay(dir: String) {
+        val path = "$dir/Config/Dolphin.ini"
+        val ini = read(path)
+        val updated = dolphinOverlayIni(ini)
+        if (updated != ini) write(path, updated)
+    }
+
+    internal fun dolphinOverlayIni(ini: String): String {
+        val section = Regex("(?ms)^\\[Android\\]\\R(.*?)(?=^\\[|\\z)").find(ini)?.groupValues?.get(1).orEmpty()
+        return DOLPHIN_OVERLAY.fold(ini) { text, (key, value) ->
+            if (Regex("(?m)^\\s*" + Regex.escape(key) + "\\s*=").containsMatchIn(section)) text else withKey(text, "Android", key, value)
+        }
     }
 
     internal fun dolphinDir(pkg: String): String? = AdbShell.run(

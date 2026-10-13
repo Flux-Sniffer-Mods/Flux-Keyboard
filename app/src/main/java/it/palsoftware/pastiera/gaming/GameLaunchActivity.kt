@@ -53,6 +53,8 @@ class GameLaunchActivity : Activity() {
             // as its screen is made, PPSSPP ignores a new one while running): stopped first
             Thread {
                 it.palsoftware.pastiera.adb.AdbShell.run("am force-stop $pkg", 3_000)
+                // Dolphin's on-screen controls set for gaming mode while it's stopped
+                if (GameApps.emulator(pkg) == "Dolphin") runCatching { FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir) } }
                 runOnUiThread { start(game, app) }
             }.start()
         } else {
