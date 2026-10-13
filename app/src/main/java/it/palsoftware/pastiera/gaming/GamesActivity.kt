@@ -337,15 +337,15 @@ class GamesActivity : ComponentActivity() {
     }
 
     private fun navigation(code: Int): Nav? = when (code) {
+        // The keyboard controls: W A Z D the stick, M the A button, J the X button, L the B button
         android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_DPAD_UP -> Nav.UP
-        android.view.KeyEvent.KEYCODE_S, android.view.KeyEvent.KEYCODE_DPAD_DOWN -> Nav.DOWN
+        android.view.KeyEvent.KEYCODE_Z, android.view.KeyEvent.KEYCODE_DPAD_DOWN -> Nav.DOWN
         android.view.KeyEvent.KEYCODE_A, android.view.KeyEvent.KEYCODE_DPAD_LEFT -> Nav.LEFT
         android.view.KeyEvent.KEYCODE_D, android.view.KeyEvent.KEYCODE_DPAD_RIGHT -> Nav.RIGHT
-        // L is the A button, K the X button, P the B button
-        android.view.KeyEvent.KEYCODE_L, android.view.KeyEvent.KEYCODE_BUTTON_A, android.view.KeyEvent.KEYCODE_DPAD_CENTER,
+        android.view.KeyEvent.KEYCODE_M, android.view.KeyEvent.KEYCODE_BUTTON_A, android.view.KeyEvent.KEYCODE_DPAD_CENTER,
         android.view.KeyEvent.KEYCODE_ENTER -> Nav.OPEN
-        android.view.KeyEvent.KEYCODE_K, android.view.KeyEvent.KEYCODE_BUTTON_X -> Nav.OPTIONS
-        android.view.KeyEvent.KEYCODE_P, android.view.KeyEvent.KEYCODE_BUTTON_B -> Nav.BACK
+        android.view.KeyEvent.KEYCODE_J, android.view.KeyEvent.KEYCODE_BUTTON_X -> Nav.OPTIONS
+        android.view.KeyEvent.KEYCODE_L, android.view.KeyEvent.KEYCODE_BUTTON_B -> Nav.BACK
         // Q E the bumpers: between games and launchers
         android.view.KeyEvent.KEYCODE_Q, android.view.KeyEvent.KEYCODE_E,
         android.view.KeyEvent.KEYCODE_BUTTON_L1, android.view.KeyEvent.KEYCODE_BUTTON_R1 -> Nav.PAGE
@@ -490,13 +490,13 @@ class GamesActivity : ComponentActivity() {
             inFront && event != null && controllerKeys(context) && event.keyCode in NAV_KEYS
 
         private val NAV_KEYS = setOf(
-            android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_A, android.view.KeyEvent.KEYCODE_S, android.view.KeyEvent.KEYCODE_D,
-            android.view.KeyEvent.KEYCODE_L, android.view.KeyEvent.KEYCODE_K, android.view.KeyEvent.KEYCODE_P,
+            android.view.KeyEvent.KEYCODE_W, android.view.KeyEvent.KEYCODE_A, android.view.KeyEvent.KEYCODE_Z, android.view.KeyEvent.KEYCODE_D,
+            android.view.KeyEvent.KEYCODE_M, android.view.KeyEvent.KEYCODE_J, android.view.KeyEvent.KEYCODE_L,
             android.view.KeyEvent.KEYCODE_Q, android.view.KeyEvent.KEYCODE_E, android.view.KeyEvent.KEYCODE_SPACE,
             android.view.KeyEvent.KEYCODE_ENTER
         )
 
-        /** The Games app moved through with gaming mode's keys (W A S D, L to open...). */
+        /** The Games app moved through with gaming mode's keys (W A Z D, M to open...). */
         fun controllerKeys(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_CONTROLLER_KEYS, true)
 
         fun setControllerKeys(context: Context, on: Boolean) =

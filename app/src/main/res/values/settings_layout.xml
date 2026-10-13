@@ -290,8 +290,6 @@
     <string name="root_shell_denied">Root wasn\'t granted: the built-in shell or Shizuku is used instead.</string>
     <string name="root_backlight_fine_title">Fine dimming</string>
     <string name="root_backlight_fine_description">Through root, the keyboard\'s LEDs are set in their own steps, much finer than the light\'s usual levels, so following the screen\'s brightness has no visible steps.</string>
-    <string name="game_mode_controller">Real controller</string>
-    <string name="game_mode_controller_description">With root, Flux Keyboard plugs in a virtual controller that games treat as real. W A S D are the d-pad, O K P L are Y X B A, Q E the bumpers, Z C the triggers, Volume Up and Down the left bumper and trigger, the red side key the right trigger (set its own action to none in the phone\'s settings), Space Start, Enter Select, Backspace the Home button, F and H the stick clicks, J B N M the right stick and the left half of the trackpad the left stick. Other keys act as normal keys.</string>
     <string name="game_mode_apps_section">Apps</string>
     <string name="game_mode_games_section">Games</string>
     <string name="game_mode_own_settings">Own settings</string>
@@ -309,8 +307,12 @@
     <string name="shizuku_request_no_question">Shizuku didn\'t show its question. In Shizuku, open Authorized applications and switch on Flux Keyboard.</string>
     <string name="adb_not_running">The built-in shell isn\'t running, and neither is Shizuku. Set up the built-in shell above, or start Shizuku, then come back.</string>
     <string name="game_mode_title">Gaming mode</string>
-    <string name="game_mode_switch_description">In games with a profile, your keys go to the game or tap its on-screen buttons, and the trackpad moves its sticks.</string>
-    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Keys reach the game as they are: map them in the emulator\'s or launcher\'s own controller settings. Typing into a game\'s text field works as usual. The trackpad follows one finger at a time: moving to the other half, it holds the first stick where it was. For both sticks at once, put the right stick on keys.</string>
+    <string name="game_mode_switch_description">In games with a profile, your keys play as a controller or tap the game\'s on-screen buttons.</string>
+    <string name="game_mode_disclaimer">The keyboard isn\'t a controller: it has no real sticks, and its keys and the volume keys do all the work, so gaming mode suits games that play on buttons. Your mileage may vary. For the best experience, use a controller over Bluetooth or USB, ideally one made for a phone held upright or one with a phone clip.</string>
+    <string name="game_mode_layout_title">Keyboard controls</string>
+    <string name="game_mode_layout_description">Which keys are which buttons</string>
+    <string name="game_mode_layout">Left stick: W A Z D (S clicks it)\nD-pad: SYM + W A Z D\nRight stick: Alt + I J M L, or right Shift + W A Z D (K clicks it)\nFace buttons: I (Y), J (X), M (A), L (B)\nBumpers: Q and E\nTriggers: Volume Up and Volume Down\nStart: Space\nSelect: Shift + Space\nXbox / Home: Alt + Space\nVolume: SYM + Volume Up or Down\n\nKeys placed on a game\'s screen tap there instead.</string>
+    <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Your keys play as a controller (see Keyboard controls). Typing into a game\'s text field works as usual.</string>
     <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add an app</string>
     <string name="game_mode_add_description">A launcher or emulator. Its games use these settings.</string>
@@ -349,8 +351,8 @@
     <string name="game_mode_remove">Remove</string>
     <string name="game_mode_save">Save</string>
     <string name="game_mode_gamenative_save">Set up GameNative</string>
-    <string name="game_mode_gamenative_save_description">GameNative\'s games only take sticks from a real controller or its on-screen controller, so the trackpad moves the on-screen sticks (kept invisible).</string>
-    <string name="game_mode_gamenative_steps">In GameNative, once per game:\n1. Start the game and open its menu (Back).\n2. Turn on the On-screen Controller, with its default layout.\n3. Set Control Opacity to 0.\n\nThe trackpad then moves its sticks. Your keys reach the game as a keyboard: map them in the game\'s own controls.\n\nTo play with the phone upright, turn on Portrait Mode in the game\'s settings, General.</string>
+    <string name="game_mode_gamenative_save_description">GameNative\'s games only take sticks from a real controller or its on-screen controller, so your keys move the on-screen sticks (kept invisible).</string>
+    <string name="game_mode_gamenative_steps">In GameNative, once per game:\n1. Start the game and open its menu (Back).\n2. Turn on the On-screen Controller, with its default layout.\n3. Set Control Opacity to 0.\n\nYour keys then move its sticks (W A Z D, and Alt with I J M L). To press its buttons, place keys on them from the gaming mode notification.\n\nTo play with the phone upright, turn on Portrait Mode in the game\'s settings, General.</string>
     <string name="game_mode_gamenative_open">Open GameNative</string>
     <string name="game_mode_home_screen">Add to the home screen</string>
     <string name="game_mode_home_screen_failed">Your home screen doesn\'t accept shortcuts.</string>
@@ -417,15 +419,14 @@
         <item quantity="one">%d of your settings differs from the recommended ones. Applying replaces it, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
         <item quantity="other">%d of your settings differ from the recommended ones. Applying replaces them, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
     </plurals>
-    <string name="game_mode_keys_pass">Your keys go to the game as normal keys: set them up in the game\'s own controls. For touch-only games, place keys on its buttons from the gaming mode notification.</string>
-    <string name="game_mode_keys_pass_app">Your keys go to %1$s as normal keys: set them up once in its controller settings. Keys you place on screen tap there instead.</string>
+    <string name="game_mode_keys_pass">Your keys play as a controller (see Keyboard controls). For touch-only games, place keys on its buttons from the gaming mode notification.</string>
+    <string name="game_mode_keys_pass_app">Your keys play as a controller in %1$s (see Keyboard controls). Keys you place on screen tap there instead.</string>
     <string name="game_mode_place_keys">Place keys on screen</string>
     <string name="game_mode_stick_smaller">Size \u2212</string>
     <string name="game_mode_stick_bigger">Size +</string>
     <string name="game_mode_stick_dead_zone">Dead zone %1$d%%</string>
     <string name="game_mode_stick_range">Range %1$d%%</string>
     <string name="game_mode_back_again">Press Back again to leave the game</string>
-    <string name="game_mode_key_locked">%1$s held: press it again to let go</string>
     <string name="game_mode_add_key">Add a key</string>
     <string name="game_mode_press_key">Pick a key below, or press it.</string>
     <string name="game_mode_trackpad_test">Record the trackpad</string>
@@ -434,10 +435,8 @@
     <string name="game_mode_trackpad_test_result">Most fingers seen at once: %1$d (%2$s).\n\nSaved to Download/Flux Keyboard/trackpad-test.txt.</string>
     <string name="game_mode_quick_launcher">Games in the quick launcher</string>
     <string name="game_mode_quick_launcher_description">Shows your games in the quick launcher, opening them the same way as their home screen shortcuts.</string>
-    <string name="game_mode_right_stick_keys">Right stick on keys</string>
-    <string name="game_mode_right_stick_keys_description">J B N M move the right stick. The trackpad only tracks one finger at a time, so it can\'t move both sticks together.</string>
     <string name="game_mode_setup_controls">Set up %1$s\'s controls</string>
-    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s layout: W A S D the d-pad, O K P L the face buttons where a controller has them, Q E the shoulders, Z C the triggers, Space Start, Enter Select, Backspace Home, F and H the stick presses, J B N M the right stick, and the trackpad\'s left half the left stick.\n\nDolphin: GameCube controller 1 (L and R on the volume keys, Z on Z) and Wii Remote 1 with Nunchuk are set, the pointer following the trackpad\'s right half (set Dolphin\'s overlay IR mode to Follow). PPSSPP: its controls are set for every game.</string>
+    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Keyboard\'s keyboard controls (see Keyboard controls).\n\nDolphin: GameCube controller 1 (L and R on the volume keys, Z on E) and Wii Remote 1 with Nunchuk are set, the pointer following the trackpad\'s right half (set Dolphin\'s overlay IR mode to Follow). PPSSPP: its controls are set for every game.</string>
     <string name="game_mode_setup_not_found">Couldn\'t find %1$s\'s settings. Open it once, then try again.</string>
     <string name="game_mode_setup_by_hand">%1$s can\'t load controls from a file. In its Settings, under Input (Controls), bind each button by pressing its key when asked:
 
@@ -459,14 +458,14 @@
     <string name="game_first_start_set_up">Set up</string>
     <string name="game_first_start_play">Play</string>
     <string name="games_app_controller_keys">Controller keys in the Games app</string>
-    <string name="games_app_controller_keys_description">Move through the Games app with the same keys as in games: W A S D to move, L to open, K for a game\'s settings, P to go back, Q or E to switch between games and launchers, Space for gaming settings. A controller works too.</string>
+    <string name="games_app_controller_keys_description">Move through the Games app with the same keys as in games: W A Z D to move, M to open, J for a game\'s settings, L to go back, Q or E to switch between games and launchers, Space for gaming settings. A controller works too.</string>
     <string name="games_app_new">New: not set up</string>
     <string name="game_mode_found_short">Uses %1$s\'s settings until you set it up</string>
     <string name="game_detect_channel">Games found</string>
     <string name="game_detect_title">%1$s looks like a game</string>
     <string name="game_detect_text">Set up gaming mode for it: controller, screen and sticks.</string>
     <string name="game_detect_not_game">Not now</string>
-    <string name="game_mode_xbox_note">Plays in Flux Keyboard\'s own player. Sign in once, then your keys and trackpad work as a controller in every game.</string>
+    <string name="game_mode_xbox_note">Plays in Flux Keyboard\'s own player. Sign in once, then your keys work as a controller in every game.</string>
     <string name="game_mode_xbox_add">Add an Xbox cloud game</string>
     <string name="game_mode_xbox_add_description">Play Xbox Cloud Gaming in Flux Keyboard\'s own player (the Xbox apps don\'t stream on phones). Pick a game from the catalogue: it gets its own settings and opens straight into the game.</string>
     <string name="game_mode_xbox_search">Search</string>

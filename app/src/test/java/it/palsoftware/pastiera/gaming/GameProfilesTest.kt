@@ -30,25 +30,13 @@ class GameProfilesTest {
     }
 
     @Test
-    fun theTrackpadStartsAsTheGamesSticks() {
-        // The left half the left stick (on-screen for launchers, arrow keys for emulators), J B N M the right
+    fun theKeysAreTheSticksAndTheTrackpadIsLeftAlone() {
         val launcher = GameProfiles.newProfile("Stray", setOf("app.gamenative"))
-        assertEquals(TrackpadRole.LEFT_STICK, launcher.leftHalf)
+        assertEquals(TrackpadRole.NONE, launcher.leftHalf)
         assertEquals(TrackpadRole.NONE, launcher.rightHalf)
-        assertEquals(true, launcher.rightStickKeys)
         val emulator = GameProfiles.newProfile("Wind Waker", setOf("org.dolphinemu.dolphinemu"))
-        // An emulator's left stick: the arrow keys its controls map, when there's no real controller
-        assertEquals(TrackpadRole.LEFT_STICK, emulator.leftHalf)
-        assertEquals(TrackpadRole.NONE, emulator.rightHalf)
-        assertEquals(true, emulator.rightStickKeys)
+        assertEquals(TrackpadRole.NONE, emulator.leftHalf)
         assertEquals(ScreenMode.SIDEWAYS, emulator.screen)
-    }
-
-    @Test
-    fun aControllerProfilePlaysTheSticksAndIsKept() {
-        val profile = GameProfiles.newProfile("Wind Waker", setOf("org.dolphinemu.dolphinemu"), controller = true)
-        assertEquals(TrackpadRole.LEFT_STICK, profile.leftHalf)
-        assertEquals(true, GameProfile.fromJson(profile.toJson())?.controller)
     }
 
     @Test

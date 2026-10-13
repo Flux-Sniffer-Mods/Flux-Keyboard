@@ -106,6 +106,21 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
 
     FluxScreenScaffold(stringResource(R.string.game_mode_title), onBack, modifier) {
         FluxNote(stringResource(R.string.game_mode_note))
+        // The keyboard's limits, and what plays best: a controller made for the phone
+        FluxNote(stringResource(R.string.game_mode_disclaimer))
+        var showingLayout by remember { mutableStateOf(false) }
+        FluxActionRow(
+            linkId = null,
+            icon = "\u2328",
+            title = stringResource(R.string.game_mode_layout_title),
+            description = stringResource(R.string.game_mode_layout_description)
+        ) { showingLayout = true }
+        if (showingLayout) AlertDialog(
+            onDismissRequest = { showingLayout = false },
+            title = { Text(stringResource(R.string.game_mode_layout_title)) },
+            text = { Text(stringResource(R.string.game_mode_layout)) },
+            confirmButton = { TextButton(onClick = { showingLayout = false }) { Text(stringResource(android.R.string.ok)) } }
+        )
         FluxSwitchRow(
             linkId = "main.root.game_mode",
             title = stringResource(R.string.game_mode_title),
@@ -492,7 +507,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                                 val app = withContext(Dispatchers.IO) { GameProfiles.effective(context, current.copy(own = false)) }
                                 current = current.copy(
                                     own = true, leftHalf = app.leftHalf, rightHalf = app.rightHalf, stickZones = app.stickZones, taps = app.taps,
-                                    screen = app.screen, controller = app.controller, rightStickKeys = app.rightStickKeys
+                                    screen = app.screen
                                 )
                             }
                         }
@@ -500,44 +515,11 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 }
             }
             if (!current.isGame || current.own) {
-            // With root: a real controller, its keys the controller's buttons
-            if (it.palsoftware.pastiera.adb.RootShell.active || current.controller) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(stringResource(R.string.game_mode_controller))
-                        Text(stringResource(R.string.game_mode_controller_description), style = MaterialTheme.typography.bodySmall)
-                    }
-                    androidx.compose.material3.Switch(
-                        checked = current.controller,
-                        onCheckedChange = { on ->
-                            // The trackpad as the controller's sticks, from direction keys
-                            fun stick(role: TrackpadRole, as_: TrackpadRole) =
-                                if (on && (role == TrackpadRole.WASD_KEYS || role == TrackpadRole.ARROW_KEYS)) as_ else role
-                            current = current.copy(
-                                controller = on,
-                                leftHalf = stick(current.leftHalf, TrackpadRole.LEFT_STICK),
-                                rightHalf = stick(current.rightHalf, TrackpadRole.RIGHT_STICK)
-                            )
-                        }
-                    )
-                }
-            }
             ChoiceRow(stringResource(R.string.game_mode_left_half), current.leftHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(leftHalf = TrackpadRole.entries[it])
             }
             ChoiceRow(stringResource(R.string.game_mode_right_half), current.rightHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(rightHalf = TrackpadRole.entries[it])
-            }
-            // The trackpad follows one finger at a time: the right stick on keys instead
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.game_mode_right_stick_keys))
-                    Text(stringResource(R.string.game_mode_right_stick_keys_description), style = MaterialTheme.typography.bodySmall)
-                }
-                androidx.compose.material3.Switch(
-                    checked = current.rightStickKeys,
-                    onCheckedChange = { on -> current = current.copy(rightStickKeys = on) }
-                )
             }
             // An app's screen choice (a game's sits with its art, below its name)
             if (!current.isGame) {
@@ -548,7 +530,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             // An emulator: Flux Keyboard's layout written into its own controller settings; other
             // apps map the keys themselves
             val emulatorPkg = current.packages.firstOrNull { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) != null }
-            if (!current.controller && emulatorPkg == null) Text(
+            if (emulatorPkg == null) Text(
                 when (val app = GameApps.appFor(current)) {
                     // Cloud gaming takes no keyboard: a real controller, or its touch controls
                     GameApps.XBOX_NAME -> stringResource(R.string.game_mode_xbox_note)
@@ -557,7 +539,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 },
                 style = MaterialTheme.typography.bodySmall
             )
-            if (!current.controller && emulatorPkg != null) {
+            if (emulatorPkg != null) {
                 val emulatorName = it.palsoftware.pastiera.gaming.GameApps.emulator(emulatorPkg).orEmpty()
                 var setupResult by remember { mutableStateOf<String?>(null) }
                 val setupScope = androidx.compose.runtime.rememberCoroutineScope()

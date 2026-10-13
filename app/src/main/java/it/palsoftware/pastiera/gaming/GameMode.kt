@@ -113,47 +113,6 @@ object GameMode {
         worker.execute { followGame(app, packageName) }
     }
 
-    // ---- The red side key: the real controller's right trigger, read straight from the keys ----
-
-    /** The Titan's red side key (scan code 249, beside the power button's). */
-    private const val SIDE_KEY_SCAN = 249
-    @Volatile private var sideKey: Process? = null
-
-    /**
-     * With root, the red side key reads as the right trigger: from its input device directly,
-     * since Android may take it first (set its own action to none in the phone's settings so it
-     * does nothing else). The volume keys are the left bumper and trigger.
-     */
-    private fun startSideKey() {
-        stopSideKey()
-        Thread {
-            runCatching {
-                val dump = AdbShell.run("getevent -p", 4_000) ?: return@Thread
-                val path = sideKeyDevice(dump) ?: return@Thread
-                val process = AdbShell.newProcess(arrayOf("getevent", "-l", path))
-                if (!pad) { process.destroy(); return@Thread }
-                sideKey = process
-                process.inputStream.bufferedReader().forEachLine { line ->
-                    if (!line.contains("EV_KEY") || !line.contains("00f9")) return@forEachLine
-                    val down = line.trimEnd().endsWith("DOWN")
-                    if (down || line.trimEnd().endsWith("UP")) worker.execute { send("P 9 ${if (down) 1 else 0}") }
-                }
-            }.onFailure { FluxLog.w(TAG, "side key couldn't be read: $it") }
-        }.apply { isDaemon = true; start() }
-    }
-
-    private fun stopSideKey() { sideKey?.destroy(); sideKey = null }
-
-    /** The input device with the red side key (key 00f9), from getevent -p. */
-    internal fun sideKeyDevice(dump: String): String? {
-        var device: String? = null
-        for (line in dump.lineSequence()) {
-            Regex("^add device \\d+:\\s+(\\S+)").find(line.trim())?.let { device = it.groupValues[1]; return@let }
-            if (device != null && Regex("\\b00f9\\b").containsMatchIn(line)) return device
-        }
-        return null
-    }
-
     // ---- Flux Keyboard's own player (Xbox Cloud Gaming in a web page) ----
 
     /** The player in front, taking the sticks (left x y, right x y) as they move. */
@@ -170,7 +129,7 @@ object GameMode {
             stickSink = sink
             val player = GameProfile(
                 id = "player", name = "player", packages = setOf(app.packageName),
-                leftHalf = TrackpadRole.LEFT_STICK, rightHalf = TrackpadRole.NONE, screen = screenMode
+                leftHalf = TrackpadRole.NONE, rightHalf = TrackpadRole.NONE, screen = screenMode
             )
             profile = player
             activeId = null
@@ -262,31 +221,42 @@ object GameMode {
      */
     fun passesKeys(): Boolean = profile != null && !typing && !GameTouchEditor.open
 
-    /** The profile plays as a real controller (root): its keys become the controller's buttons. */
-    @Volatile private var pad = false
-
-    /** Which of the controller's buttons each key is (see [VirtualGamepad.button]). */
-    private val PAD_BUTTONS = FluxLayout.PAD_BUTTONS
     /** Emulators whose controls Flux Keyboard writes its layout into. */
     private val LAYOUT_EMULATORS = setOf("Dolphin", "PPSSPP")
-    private val PAD_DPAD = setOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
-    private val dpadHeld = mutableSetOf<Int>()
+
+    /** Modifier keys held (SYM, Shift, Alt): they change what the layout's keys are. */
+    private val modifiersHeld = mutableSetOf<Int>()
+    /** The layout's keys held. */
+    private val layoutKeysHeld = mutableSetOf<Int>()
+    /** The controls pressed now (sent as pressed), and how: as keys, or as a controller's. */
+    private val controlsDown = mutableMapOf<FluxLayout.Control, Int>()
+    /** The sticks as the keys push them (left x y, right x y). */
+    private val keySticks = FloatArray(4)
 
     /**
-     * A key, before the app sees it: a key placed on the screen taps there; J B N M move the
-     * right stick (with a real controller, or Right stick on keys); with a real controller, the
-     * rest of [FluxLayout] presses its buttons. True when it took the key.
+     * A key, before the app sees it. A key placed on the screen taps there; the layout's keys
+     * ([FluxLayout]) are read with the modifiers held and sent as the controls they make: as
+     * the keys an emulator was given (and Flux Keyboard's own player takes), else as a
+     * controller's buttons and sticks, or an on-screen stick where one is placed. True when it
+     * took the key.
      */
     fun onKeyEvent(event: KeyEvent): Boolean {
         if (!passesKeys()) return false
+        // What gaming mode sends comes back through here (no scan code): passed on as it is
+        if (event.scanCode == 0) return false
         val code = event.keyCode
         if (code == KeyEvent.KEYCODE_BACK && onGameScreen() && backGuard(event)) return true
         if (symVolume(event)) return true
         val down = event.action == KeyEvent.ACTION_DOWN
         if (event.repeatCount == 0) trackpadReader?.let { if (down) it.keyPressed(code) else if (event.action == KeyEvent.ACTION_UP) it.keyReleased(code) }
-        if (lockKey(event)) return true
-        // The red side key: the right trigger, read from its device (its own action kept away)
-        if (pad && event.scanCode == SIDE_KEY_SCAN) return true
+        if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
+        if (code in FluxLayout.MODIFIER_KEYS) {
+            if (event.repeatCount == 0) {
+                if (down) modifiersHeld += code else modifiersHeld -= code
+                worker.execute { refreshControls() }
+            }
+            return true
+        }
         // A key placed on the screen touches its spot while held, whatever else it is
         val tap = if (inMenus) null else profile?.taps?.get(code)
         if (tap != null) {
@@ -296,42 +266,78 @@ object GameMode {
             }
             return true
         }
-        // Right stick on keys: J B N M push it (a real controller's, or an on-screen one; else
-        // they reach the app, whose own controls map them)
-        if ((pad || (profile?.rightStickKeys == true && profile?.stickZones?.containsKey(1) == true)) && code in RIGHT_STICK_KEYS) {
-            if (event.repeatCount == 0) rightStickKey(code, down)
-            return true
-        }
-        // An emulator given Flux Keyboard's layout only takes the keyboard's own keys, and the
-        // volume keys are another device's: sent as the keyboard keys for the same buttons
-        if (!pad && (code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN) &&
-            frontPackage?.let { GameApps.emulator(it) } in LAYOUT_EMULATORS) {
-            if (event.repeatCount == 0) {
-                // (Dolphin's GameCube has its R trigger, not Z, on Volume Down)
-                val key = when {
-                    code == KeyEvent.KEYCODE_VOLUME_UP -> KeyEvent.KEYCODE_Q
-                    profile?.variant == GameProfiles.VARIANT_GAMECUBE -> KeyEvent.KEYCODE_E
-                    else -> KeyEvent.KEYCODE_Z
-                }
-                worker.execute { send("K ${if (down) 1 else 0} $key k") }
-            }
-            return true
-        }
-        if (!pad) return false
-        val button = PAD_BUTTONS[code]
-        when {
-            button != null -> if (event.repeatCount == 0) worker.execute { send("P $button ${if (down) 1 else 0}") }
-            code in PAD_DPAD -> {
-                val changed = if (down) dpadHeld.add(code) else dpadHeld.remove(code)
-                if (changed) {
-                    fun held(key: Int) = if (key in dpadHeld) 1 else 0
-                    val line = "H ${held(KeyEvent.KEYCODE_W)} ${held(KeyEvent.KEYCODE_S)} ${held(KeyEvent.KEYCODE_A)} ${held(KeyEvent.KEYCODE_D)}"
-                    worker.execute { send(line) }
-                }
-            }
-            else -> return false
+        if (FluxLayout.controlFor(code, FluxLayout.Modifiers()) == null) return false
+        if (event.repeatCount == 0) {
+            if (down) layoutKeysHeld += code else layoutKeysHeld -= code
+            worker.execute { refreshControls() }
         }
         return true
+    }
+
+    /** How controls reach the app in front: as the layout's own keys, or as a controller's. */
+    private fun sendsKeys(): Boolean {
+        val front = frontPackage ?: return false
+        return front == appContext?.packageName || GameApps.emulator(front) != null
+    }
+
+    /** The controls the keys and modifiers held make, sent where they've changed (on [worker]). */
+    private fun refreshControls() {
+        val mods = FluxLayout.Modifiers(
+            sym = KeyEvent.KEYCODE_SYM in modifiersHeld,
+            rightShift = KeyEvent.KEYCODE_SHIFT_RIGHT in modifiersHeld,
+            shift = KeyEvent.KEYCODE_SHIFT_LEFT in modifiersHeld || KeyEvent.KEYCODE_SHIFT_RIGHT in modifiersHeld,
+            alt = KeyEvent.KEYCODE_ALT_LEFT in modifiersHeld || KeyEvent.KEYCODE_ALT_RIGHT in modifiersHeld
+        )
+        val wanted = layoutKeysHeld.mapNotNull { FluxLayout.controlFor(it, mods) }.toMutableSet()
+        val keys = sendsKeys()
+        val zones = profile?.stickZones.orEmpty()
+        // In a launcher's own screens the left stick moves around them as a d-pad does
+        if (!keys && inMenus) {
+            val dpad = mapOf(FluxLayout.Control.LS_UP to FluxLayout.Control.UP, FluxLayout.Control.LS_DOWN to FluxLayout.Control.DOWN,
+                FluxLayout.Control.LS_LEFT to FluxLayout.Control.LEFT, FluxLayout.Control.LS_RIGHT to FluxLayout.Control.RIGHT)
+            dpad.forEach { (stick, pad) -> if (wanted.remove(stick)) wanted += pad }
+        }
+        // The sticks: an on-screen stick where one is placed; as a controller's for a game that
+        // takes one; as their keys for an emulator (pressed like the buttons)
+        fun on(c: FluxLayout.Control) = if (c in wanted) 1f else 0f
+        for (stick in 0..1) {
+            val base = stick * 4
+            val dirs = FluxLayout.STICK_CONTROLS.subList(base, base + 4)
+            if (keys && !zones.containsKey(stick)) continue
+            wanted -= dirs.toSet()
+            var x = on(dirs[3]) - on(dirs[2]); var y = on(dirs[1]) - on(dirs[0])
+            if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }
+            val at = stick * 2
+            if (keySticks[at] == x && keySticks[at + 1] == y) continue
+            keySticks[at] = x; keySticks[at + 1] = y
+            sticks[at] = x; sticks[at + 1] = y
+            if (x == 0f && y == 0f) releaseStick(at) else pushStick(at)
+        }
+        // The buttons (and stick keys, for an emulator)
+        for (c in controlsDown.keys - wanted) sendControl(c, false)
+        for (c in wanted - controlsDown.keys) sendControl(c, true)
+    }
+
+    /** A control pressed or let go: as its layout key, or as a controller's own key. */
+    private fun sendControl(control: FluxLayout.Control, down: Boolean) {
+        val line = if (down) {
+            val keys = sendsKeys()
+            val code = if (keys) FluxLayout.keyOf(control) else FluxLayout.GAMEPAD_KEYS[control] ?: return
+            controlsDown[control] = if (keys) code else -code
+            "K 1 $code ${if (keys) "k" else "g"}"
+        } else {
+            // Let go as it was pressed, even if the app in front has changed since
+            val sent = controlsDown.remove(control) ?: return
+            "K 0 ${kotlin.math.abs(sent)} ${if (sent > 0) "k" else "g"}"
+        }
+        send(line)
+    }
+
+    /** Every control let go (the game ended, or another app came in front). */
+    private fun releaseControls() {
+        modifiersHeld.clear(); layoutKeysHeld.clear()
+        controlsDown.keys.toList().forEach { sendControl(it, false) }
+        keySticks.fill(0f)
     }
 
     /** SYM is held: the volume keys change the volume, whatever the game makes of them. */
@@ -386,62 +392,6 @@ object GameMode {
     /** Names of emulators' and launchers' play screens (their other screens are menus). */
     private val PLAY_SCREENS = listOf("Emulation", "XServer", "PpssppActivity", "XboxPlay", "Wine", "Display", "Stream")
 
-    /** Keys locked down with SYM, held for the game until pressed again. */
-    private val lockedKeys = mutableSetOf<Int>()
-    /** Locked keys being pressed to let them go: let go when that press ends. */
-    private val unlocking = mutableSetOf<Int>()
-
-    /**
-     * SYM with a key on the keyboard: the key held for the game until it's pressed again, so a
-     * button held all along (accelerate in a racing game) leaves the keyboard, and the trackpad
-     * that the keyboard is, free for the stick. True when the key is taken.
-     */
-    private fun lockKey(event: KeyEvent): Boolean {
-        val code = event.keyCode
-        val onKeyboard = code in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z ||
-            code == KeyEvent.KEYCODE_SPACE || code == KeyEvent.KEYCODE_ENTER || code == KeyEvent.KEYCODE_DEL
-        if (!onKeyboard) return false
-        when (event.action) {
-            KeyEvent.ACTION_DOWN -> {
-                if (event.repeatCount > 0) return code in lockedKeys
-                if (code in lockedKeys) { unlocking += code; return true }
-                if (!symHeld) return false
-                lockedKeys += code
-                pressFor(code, true)
-                appContext?.let { context ->
-                    android.os.Handler(android.os.Looper.getMainLooper()).post {
-                        android.widget.Toast.makeText(context, context.getString(R.string.game_mode_key_locked, FluxLayout.keyName(code)),
-                            android.widget.Toast.LENGTH_SHORT).show()
-                    }
-                }
-                return true
-            }
-            KeyEvent.ACTION_UP -> {
-                if (unlocking.remove(code)) { lockedKeys -= code; pressFor(code, false); return true }
-                return code in lockedKeys
-            }
-        }
-        return false
-    }
-
-    /** A key pressed (or let go) for the game as its press would be: a placed key's spot, the controller's button, or the key itself. */
-    private fun pressFor(code: Int, down: Boolean, now: Boolean = false) {
-        val tap = if (inMenus) null else profile?.taps?.get(code)
-        val line = when {
-            tap != null -> if (down) "T d ${100 + code} ${tap.first * screenW} ${tap.second * screenH}" else "T u ${100 + code}"
-            pad && PAD_BUTTONS[code] != null -> "P ${PAD_BUTTONS[code]} ${if (down) 1 else 0}"
-            else -> "K ${if (down) 1 else 0} $code k"
-        }
-        if (now) send(line) else worker.execute { send(line) }
-    }
-
-    /** Every locked key let go (the game ended). */
-    private fun unlockKeys() {
-        // Straight away: the input helper closes next
-        lockedKeys.toList().forEach { pressFor(it, false, now = true) }
-        lockedKeys.clear(); unlocking.clear()
-    }
-
     /** When Back was last pressed in a game (the first press of two). */
     @Volatile private var backPressedAt = 0L
     /** The Back now held was taken (its letting go is too). */
@@ -490,14 +440,8 @@ object GameMode {
         val next = GameProfiles.effective(context, chosen)
         // GameHub's and GameNative's games: their on-screen sticks, unless placed by hand
         profile = GameTouchEditor.withDefaults(next.forScreen(streamed()))
-        // With root, a profile can play as a real controller, plugged in while it's on
-        val wantsPad = next.controller && it.palsoftware.pastiera.adb.RootShell.active
-        if (wantsPad != pad) {
-            pad = wantsPad
-            dpadHeld.clear()
-            worker.execute { send(if (wantsPad) "G 1" else "G 0") }
-            if (wantsPad) startSideKey() else stopSideKey()
-        }
+        // Another game: nothing held over from the one before
+        releaseControls()
         // Each game's own screen choice (and size), also when switching game mid-way
         screen(context, next.screen, next.phoneHeight)
         startTrackpad(next)
@@ -506,12 +450,11 @@ object GameMode {
 
     private fun stop(context: Context) {
         if (profile == null) return
-        unlockKeys()
+        releaseControls()
         profile = null
         activeId = null
         trackpadRun++
-        sticks.fill(0f); stickHeld.fill(false); rightKeysHeld.clear()
-        if (pad) { pad = false; dpadHeld.clear(); send("G 0"); stopSideKey() }
+        sticks.fill(0f); stickHeld.fill(false)
         trackpad?.destroy(); trackpad = null; trackpadReader = null
         runCatching { input?.close() }
         input = null
@@ -857,7 +800,7 @@ object GameMode {
     @Synchronized
     private fun pushStick(at: Int) {
         val current = profile
-        if (current != null && !pad && !inMenus && current.stickZones.containsKey(at / 2)) dragStick(at) else sendSticks()
+        if (current != null && !inMenus && current.stickZones.containsKey(at / 2)) dragStick(at) else sendSticks()
     }
 
     @Synchronized
@@ -915,24 +858,10 @@ object GameMode {
         // Flux Keyboard's own player (Xbox Cloud Gaming) takes them itself
         stickSink?.let { sink -> val now = sticks.copyOf(); sink(now); return }
         // The real controller's sticks, with root; else stick events from the keyboard
-        val line = (if (pad) "A" else "J") + " ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
+        val line = "J ${sticks[0]} ${sticks[1]} ${sticks[2]} ${sticks[3]}"
         worker.execute { send(line) }
     }
 
-    /** The right stick's keys (up, left, right, down), with Right stick on keys. */
-    private val RIGHT_STICK_KEYS = FluxLayout.RIGHT_STICK
-    private val rightKeysHeld = mutableSetOf<Int>()
-
-    /** J B N M held: the right stick pushed their way (a diagonal no further than a straight push). */
-    private fun rightStickKey(code: Int, down: Boolean) {
-        val changed = if (down) rightKeysHeld.add(code) else rightKeysHeld.remove(code)
-        if (!changed) return
-        fun held(i: Int) = if (RIGHT_STICK_KEYS[i] in rightKeysHeld) 1f else 0f
-        var x = held(2) - held(1)
-        var y = held(3) - held(0)
-        if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }
-        if (x == 0f && y == 0f) releaseStick(2) else { sticks[2] = x; sticks[3] = y; pushStick(2) }
-    }
 
     /**
      * The trackpad as the game's controls: each finger plays the half it lands on (the left half
@@ -1048,7 +977,6 @@ object GameMode {
 
         private fun roleFor(current: GameProfile, left: Boolean): TrackpadRole = when {
             left -> current.leftHalf
-            current.rightStickKeys && current.rightHalf == TrackpadRole.RIGHT_STICK -> TrackpadRole.NONE
             else -> current.rightHalf
         }
 
@@ -1105,7 +1033,7 @@ object GameMode {
         }
 
         /** A stick with nowhere to go (no real controller, no on-screen stick): its keys instead. */
-        private fun byKeys(at: Int): Boolean = stickSink == null && !pad && profile?.stickZones?.containsKey(at / 2) != true
+        private fun byKeys(at: Int): Boolean = stickSink == null && profile?.stickZones?.containsKey(at / 2) != true
 
         private fun move(slot: Int, reportedX: Int, reportedY: Int) {
             keyStats?.let { k -> k.moves++; "$slot@$reportedX,$reportedY".let { if (k.firstMove.isEmpty()) k.firstMove = it; k.lastMove = it } }
@@ -1130,7 +1058,7 @@ object GameMode {
             when (f.role) {
                 TrackpadRole.LEFT_STICK, TrackpadRole.RIGHT_STICK -> {
                     val at = if (f.role == TrackpadRole.LEFT_STICK) 0 else 2
-                    if (byKeys(at)) directionKeys(f, vx, vy, if (at == 0) FluxLayout.LEFT_STICK else RIGHT_KEYS)
+                    if (byKeys(at)) directionKeys(f, vx, vy, if (at == 0) LEFT_KEYS else RIGHT_KEYS)
                     else {
                         sticks[at] = vx.coerceIn(-1f, 1f)
                         sticks[at + 1] = vy.coerceIn(-1f, 1f)
@@ -1223,7 +1151,7 @@ object GameMode {
                     "rows reached $reachedTop..$reachedBottom, on screen ${screenW}x$screenH; last touch: $lastDrag; " +
                     "profile ${profile?.id}, zones ${profile?.stickZones}")
             when (f.role) {
-                TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, FluxLayout.LEFT_STICK); releaseStick(0) }
+                TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, LEFT_KEYS); releaseStick(0) }
                 TrackpadRole.RIGHT_STICK -> { directionKeys(f, 0f, 0f, RIGHT_KEYS); releaseStick(2) }
                 // A tap clicks
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - f.downAt < 200 && f.moved < radius / 4) {
@@ -1240,7 +1168,15 @@ object GameMode {
             private val WASD = intArrayOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
             private val ARROWS = intArrayOf(KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)
             /** The right stick's keys in the same order: J, B, N, M. */
-            private val RIGHT_KEYS = intArrayOf(KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_B, KeyEvent.KEYCODE_N, KeyEvent.KEYCODE_M)
+            private val RIGHT_KEYS = intArrayOf(
+                FluxLayout.keyOf(FluxLayout.Control.RS_UP), FluxLayout.keyOf(FluxLayout.Control.RS_LEFT),
+                FluxLayout.keyOf(FluxLayout.Control.RS_DOWN), FluxLayout.keyOf(FluxLayout.Control.RS_RIGHT)
+            )
+            /** The left stick's keys in the same order. */
+            private val LEFT_KEYS = intArrayOf(
+                FluxLayout.keyOf(FluxLayout.Control.LS_UP), FluxLayout.keyOf(FluxLayout.Control.LS_LEFT),
+                FluxLayout.keyOf(FluxLayout.Control.LS_DOWN), FluxLayout.keyOf(FluxLayout.Control.LS_RIGHT)
+            )
             private const val POINTER_FINGER = 3
             /** A glide's report this close to the last is the finger at rest. */
             private const val GLIDE_STEP = 12f

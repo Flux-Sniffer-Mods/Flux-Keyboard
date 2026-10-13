@@ -415,7 +415,8 @@ object ExtraScreen {
 
     /** A key the phone got, sent to the screen instead when it has the phone's keys. True when it took it. */
     fun key(event: KeyEvent): Boolean {
-        if (!focused || !keysToScreen || current == null || event.keyCode in PHONE_KEYS) return false
+        // (keys gaming mode sends, with no scan code, are sent to the screen already)
+        if (!focused || !keysToScreen || current == null || event.keyCode in PHONE_KEYS || event.scanCode == 0) return false
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return true
         if (event.repeatCount > 0) return true
         val pad = event.isFromSource(InputDevice.SOURCE_GAMEPAD) || KeyEvent.isGamepadButton(event.keyCode)

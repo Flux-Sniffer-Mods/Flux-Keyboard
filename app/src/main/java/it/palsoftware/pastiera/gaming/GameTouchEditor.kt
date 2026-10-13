@@ -309,12 +309,8 @@ object GameTouchEditor {
             // Programs played by touch: the trackpad moves their own on-screen sticks
             else -> if (always || playedByTouch(profile)) TOUCH_GAME else return profile
         }
-        val halves = listOf(profile.leftHalf, profile.rightHalf)
-        val zones = buildMap {
-            if (TrackpadRole.LEFT_STICK in halves) put(0, left)
-            if (TrackpadRole.RIGHT_STICK in halves || profile.rightStickKeys) put(1, right)
-        }
-        return profile.copy(stickZones = zones)
+        // Both sticks: the keys move them (W A Z D, Alt with I J M L)
+        return profile.copy(stickZones = mapOf(0 to left, 1 to right))
     }
 
     private fun keyName(code: Int): String =

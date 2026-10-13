@@ -5,13 +5,13 @@ import android.view.KeyEvent
 import it.palsoftware.pastiera.adb.AdbShell
 
 /**
- * Flux Keyboard's controller layout, the same everywhere: W A S D the d-pad, O K P L the face
- * buttons where a controller has them (O top, K left, P right, L bottom), Q E the shoulders and
- * Z C the triggers (Volume Up the left shoulder, Volume Down the left trigger; with root, the
- * red side key the right trigger), Space Start, Enter Select, Backspace
- * Home, F and H the stick presses, J B N M the right stick and the arrow keys (the trackpad's
- * left half, pushed) the left stick. The real controller plays it, and it can be written into
- * an emulator's own controller settings, where keys reach the emulator as they are.
+ * Flux Keyboard's controller layout, the same everywhere. The left hand: W A Z D the left stick
+ * around S, its click; with SYM held they're the d-pad, with right Shift the right stick. The
+ * right hand: I J M L the face buttons around K, the right stick's click (I top, J left, M
+ * bottom, L right, as a controller has them); with Alt held they're the right stick. Q and E
+ * the shoulders, Volume Up and Down the triggers, Space Start (Shift+Space Select, Alt+Space the
+ * Xbox/Home button). Gaming mode reads the keys and modifiers ([controlFor]) and sends each
+ * control as one key of its own ([KEYS]), the one written into an emulator's controller settings.
  */
 object FluxLayout {
     enum class Control {
@@ -19,40 +19,77 @@ object FluxLayout {
         LS_UP, LS_DOWN, LS_LEFT, LS_RIGHT, RS_UP, RS_DOWN, RS_LEFT, RS_RIGHT
     }
 
+    /**
+     * The key each control is sent as (and so written into emulators as): the keys you press for
+     * it where they're its own, keys of their own for the rest.
+     */
     val KEYS: List<Pair<Int, Control>> = listOf(
-        KeyEvent.KEYCODE_W to Control.UP, KeyEvent.KEYCODE_S to Control.DOWN,
-        KeyEvent.KEYCODE_A to Control.LEFT, KeyEvent.KEYCODE_D to Control.RIGHT,
-        KeyEvent.KEYCODE_L to Control.A, KeyEvent.KEYCODE_P to Control.B,
-        KeyEvent.KEYCODE_K to Control.X, KeyEvent.KEYCODE_O to Control.Y,
+        KeyEvent.KEYCODE_W to Control.LS_UP, KeyEvent.KEYCODE_Z to Control.LS_DOWN,
+        KeyEvent.KEYCODE_A to Control.LS_LEFT, KeyEvent.KEYCODE_D to Control.LS_RIGHT,
+        KeyEvent.KEYCODE_S to Control.L3,
+        KeyEvent.KEYCODE_I to Control.Y, KeyEvent.KEYCODE_J to Control.X,
+        KeyEvent.KEYCODE_M to Control.A, KeyEvent.KEYCODE_L to Control.B,
+        KeyEvent.KEYCODE_K to Control.R3,
         KeyEvent.KEYCODE_Q to Control.L1, KeyEvent.KEYCODE_E to Control.R1,
-        KeyEvent.KEYCODE_Z to Control.L2, KeyEvent.KEYCODE_C to Control.R2,
-        KeyEvent.KEYCODE_VOLUME_UP to Control.L1, KeyEvent.KEYCODE_VOLUME_DOWN to Control.L2,
-        KeyEvent.KEYCODE_ENTER to Control.SELECT, KeyEvent.KEYCODE_SPACE to Control.START,
+        KeyEvent.KEYCODE_U to Control.L2, KeyEvent.KEYCODE_O to Control.R2,
+        KeyEvent.KEYCODE_SPACE to Control.START, KeyEvent.KEYCODE_ENTER to Control.SELECT,
         KeyEvent.KEYCODE_DEL to Control.HOME,
-        KeyEvent.KEYCODE_F to Control.L3, KeyEvent.KEYCODE_H to Control.R3,
-        // The left stick on R T Y and G (keys the keyboard really has: an emulator only takes a
-        // device's own keys, and the Titan's keyboard has no arrows), pressed by the trackpad
-        KeyEvent.KEYCODE_T to Control.LS_UP, KeyEvent.KEYCODE_G to Control.LS_DOWN,
-        KeyEvent.KEYCODE_R to Control.LS_LEFT, KeyEvent.KEYCODE_Y to Control.LS_RIGHT,
-        KeyEvent.KEYCODE_J to Control.RS_UP, KeyEvent.KEYCODE_N to Control.RS_DOWN,
-        KeyEvent.KEYCODE_B to Control.RS_LEFT, KeyEvent.KEYCODE_M to Control.RS_RIGHT
+        KeyEvent.KEYCODE_DPAD_UP to Control.UP, KeyEvent.KEYCODE_DPAD_DOWN to Control.DOWN,
+        KeyEvent.KEYCODE_DPAD_LEFT to Control.LEFT, KeyEvent.KEYCODE_DPAD_RIGHT to Control.RIGHT,
+        KeyEvent.KEYCODE_T to Control.RS_UP, KeyEvent.KEYCODE_V to Control.RS_DOWN,
+        KeyEvent.KEYCODE_F to Control.RS_LEFT, KeyEvent.KEYCODE_G to Control.RS_RIGHT
     )
 
-    /** The left stick's keys in the trackpad's order: up, left, down, right. */
-    val LEFT_STICK = intArrayOf(KeyEvent.KEYCODE_T, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_G, KeyEvent.KEYCODE_Y)
+    /** The key a control is sent as. */
+    fun keyOf(control: Control): Int = KEYS.first { it.second == control }.first
 
-    /** The right stick's keys: up, left, right, down. */
-    val RIGHT_STICK = intArrayOf(KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_B, KeyEvent.KEYCODE_M, KeyEvent.KEYCODE_N)
+    /** What the modifiers held make of the keys. */
+    data class Modifiers(val sym: Boolean = false, val rightShift: Boolean = false, val shift: Boolean = false, val alt: Boolean = false)
 
-    /** The real controller's button for each control that is one (see [VirtualGamepad.button]). */
-    val PAD_BUTTONS: Map<Int, Int> = KEYS.mapNotNull { (key, control) ->
-        when (control) {
-            Control.A -> 0; Control.B -> 1; Control.X -> 3; Control.Y -> 4
-            Control.L1 -> 6; Control.R1 -> 7; Control.L2 -> 8; Control.R2 -> 9
-            Control.SELECT -> 10; Control.START -> 11; Control.HOME -> 12; Control.L3 -> 13; Control.R3 -> 14
-            else -> null
-        }?.let { key to it }
-    }.toMap()
+    /** The modifier keys: held, not sent to the game. */
+    val MODIFIER_KEYS = setOf(
+        KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT,
+        KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT
+    )
+
+    /** The control a key pressed makes with [mods] held; null: not one of the layout's keys. */
+    fun controlFor(code: Int, mods: Modifiers): Control? = when (code) {
+        KeyEvent.KEYCODE_W -> if (mods.sym) Control.UP else if (mods.rightShift) Control.RS_UP else Control.LS_UP
+        KeyEvent.KEYCODE_Z -> if (mods.sym) Control.DOWN else if (mods.rightShift) Control.RS_DOWN else Control.LS_DOWN
+        KeyEvent.KEYCODE_A -> if (mods.sym) Control.LEFT else if (mods.rightShift) Control.RS_LEFT else Control.LS_LEFT
+        KeyEvent.KEYCODE_D -> if (mods.sym) Control.RIGHT else if (mods.rightShift) Control.RS_RIGHT else Control.LS_RIGHT
+        KeyEvent.KEYCODE_S -> if (mods.rightShift) Control.R3 else Control.L3
+        KeyEvent.KEYCODE_I -> if (mods.alt) Control.RS_UP else Control.Y
+        KeyEvent.KEYCODE_J -> if (mods.alt) Control.RS_LEFT else Control.X
+        KeyEvent.KEYCODE_M -> if (mods.alt) Control.RS_DOWN else Control.A
+        KeyEvent.KEYCODE_L -> if (mods.alt) Control.RS_RIGHT else Control.B
+        KeyEvent.KEYCODE_K -> Control.R3
+        KeyEvent.KEYCODE_Q -> Control.L1
+        KeyEvent.KEYCODE_E -> Control.R1
+        KeyEvent.KEYCODE_VOLUME_UP -> Control.L2
+        KeyEvent.KEYCODE_VOLUME_DOWN -> Control.R2
+        KeyEvent.KEYCODE_SPACE -> if (mods.alt) Control.HOME else if (mods.shift) Control.SELECT else Control.START
+        else -> null
+    }
+
+    /** The stick directions: left stick (up, down, left, right), then the right's. */
+    val STICK_CONTROLS = listOf(
+        Control.LS_UP, Control.LS_DOWN, Control.LS_LEFT, Control.LS_RIGHT,
+        Control.RS_UP, Control.RS_DOWN, Control.RS_LEFT, Control.RS_RIGHT
+    )
+
+    /** A controller's own key for each button, for games that take a controller. */
+    val GAMEPAD_KEYS: Map<Control, Int> = mapOf(
+        Control.A to KeyEvent.KEYCODE_BUTTON_A, Control.B to KeyEvent.KEYCODE_BUTTON_B,
+        Control.X to KeyEvent.KEYCODE_BUTTON_X, Control.Y to KeyEvent.KEYCODE_BUTTON_Y,
+        Control.L1 to KeyEvent.KEYCODE_BUTTON_L1, Control.R1 to KeyEvent.KEYCODE_BUTTON_R1,
+        Control.L2 to KeyEvent.KEYCODE_BUTTON_L2, Control.R2 to KeyEvent.KEYCODE_BUTTON_R2,
+        Control.SELECT to KeyEvent.KEYCODE_BUTTON_SELECT, Control.START to KeyEvent.KEYCODE_BUTTON_START,
+        Control.HOME to KeyEvent.KEYCODE_BUTTON_MODE,
+        Control.L3 to KeyEvent.KEYCODE_BUTTON_THUMBL, Control.R3 to KeyEvent.KEYCODE_BUTTON_THUMBR,
+        Control.UP to KeyEvent.KEYCODE_DPAD_UP, Control.DOWN to KeyEvent.KEYCODE_DPAD_DOWN,
+        Control.LEFT to KeyEvent.KEYCODE_DPAD_LEFT, Control.RIGHT to KeyEvent.KEYCODE_DPAD_RIGHT
+    )
 
     private fun keys(vararg controls: Control) = KEYS.filter { it.second in controls }.map { it.first }
 
@@ -68,13 +105,12 @@ object FluxLayout {
 
     // ---- Dolphin: GameCube controller and Wii Remote with Nunchuk ----
 
-    /** The GameCube's L and R on the volume keys (and Q E), its Z on Z (and C). */
+    /** The GameCube's L and R on the triggers (the volume keys), its Z on the right shoulder (E). */
     private val GAMECUBE = listOf(
         "Buttons/A" to keys(Control.A), "Buttons/B" to keys(Control.B),
         "Buttons/X" to keys(Control.X), "Buttons/Y" to keys(Control.Y),
-        "Buttons/Z" to listOf(KeyEvent.KEYCODE_Z, KeyEvent.KEYCODE_C), "Buttons/Start" to keys(Control.START),
-        "Triggers/L" to listOf(KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_Q),
-        "Triggers/R" to listOf(KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_E),
+        "Buttons/Z" to keys(Control.R1), "Buttons/Start" to keys(Control.START),
+        "Triggers/L" to keys(Control.L2), "Triggers/R" to keys(Control.R2),
         "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
         "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
         "Main Stick/Up" to keys(Control.LS_UP), "Main Stick/Down" to keys(Control.LS_DOWN),
@@ -179,18 +215,12 @@ object FluxLayout {
 
     /** The keys to bind by hand, for an emulator without a file to write: "A: L" lines. */
     fun bindList(): String = listOf(
-        "A" to Control.A, "B" to Control.B, "X" to Control.X, "Y" to Control.Y,
-        "L" to Control.L1, "R" to Control.R1, "ZL" to Control.L2, "ZR" to Control.R2,
-        "Start (+)" to Control.START, "Select (-)" to Control.SELECT, "Home" to Control.HOME,
-        "D-pad" to null, "Left stick" to null, "Right stick" to null, "L3" to Control.L3, "R3" to Control.R3
-    ).joinToString("\n") { (label, control) ->
-        label + ": " + when (label) {
-            "D-pad" -> "W A S D"
-            "Left stick" -> "↑ ← ↓ → (trackpad, left half)"
-            "Right stick" -> "J B N M"
-            else -> keys(control!!).joinToString(" / ") { keyName(it) }
-        }
-    }
+        "A" to "M", "B" to "L", "X" to "J", "Y" to "I",
+        "L" to "Q", "R" to "E", "ZL" to "Volume Up", "ZR" to "Volume Down",
+        "Start (+)" to "Space", "Select (-)" to "Shift + Space", "Home" to "Alt + Space",
+        "D-pad" to "SYM + W A Z D", "Left stick" to "W A Z D", "Right stick" to "Alt + I J M L (or right Shift + W A Z D)",
+        "L3" to "S", "R3" to "K"
+    ).joinToString("\n") { (label, keys) -> "$label: $keys" }
 
     // ---- Writing them ----
 

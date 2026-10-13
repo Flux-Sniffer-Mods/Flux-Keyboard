@@ -194,25 +194,16 @@ object GameProfiles {
     private const val KEY_ENABLED = "game_mode_enabled"
     private const val KEY_ACTIVE_PREFIX = "game_mode_active_"
 
-    /**
-     * A new profile for [packages]: the trackpad as the game's sticks. GameHub's and GameNative's
-     * games move their on-screen sticks; an emulator's get the direction keys (W A S D on the left,
-     * the arrows on the right), which it maps like any other key.
-     */
-    fun newProfile(name: String, packages: Set<String>, controller: Boolean = false): GameProfile {
-        val app = packages.firstOrNull()?.let { GameApps.appFor(it) }
-        // Flux Keyboard's layout: the trackpad's left half the left stick (a real controller's,
-        // a launcher's on-screen one, or for an emulator the arrow keys its controls map), J B N M
-        // the right stick
+    /** A new profile for [packages]: the keys play as a controller, the trackpad unused. */
+    fun newProfile(name: String, packages: Set<String>): GameProfile {
+        // The keys play as a controller ([FluxLayout]); the trackpad is left alone unless chosen
         return GameProfile(
             id = java.util.UUID.randomUUID().toString(),
             name = name,
             packages = packages,
-            leftHalf = TrackpadRole.LEFT_STICK,
+            leftHalf = TrackpadRole.NONE,
             rightHalf = TrackpadRole.NONE,
-            rightStickKeys = app != null,
-            screen = ScreenMode.defaultFor(packages.firstOrNull()),
-            controller = controller
+            screen = ScreenMode.defaultFor(packages.firstOrNull())
         )
     }
 
@@ -227,8 +218,24 @@ object GameProfiles {
 
     fun all(context: Context): List<GameProfile> = runCatching {
         val array = JSONArray(prefs(context).getString(KEY_PROFILES, "[]"))
-        List(array.length()) { GameProfile.fromJson(array.getJSONObject(it)) }.filterNotNull()
+        val profiles = List(array.length()) { GameProfile.fromJson(array.getJSONObject(it)) }.filterNotNull()
+        keysAsSticks(context, profiles)
     }.getOrDefault(emptyList())
+
+    private const val KEY_KEYS_AS_STICKS = "game_mode_keys_as_sticks"
+
+    /**
+     * Once, from the update where the keys became the sticks: the trackpad's sticks (and
+     * direction keys) set before are switched off. Its pointer and mouse stay (the Wii's pointer).
+     */
+    private fun keysAsSticks(context: Context, profiles: List<GameProfile>): List<GameProfile> {
+        val prefs = prefs(context)
+        if (prefs.getBoolean(KEY_KEYS_AS_STICKS, false)) return profiles
+        fun off(role: TrackpadRole) = if (role == TrackpadRole.POINTER || role == TrackpadRole.MOUSE) role else TrackpadRole.NONE
+        val updated = profiles.map { it.copy(leftHalf = off(it.leftHalf), rightHalf = off(it.rightHalf), controller = false, rightStickKeys = false) }
+        prefs.edit().putString(KEY_PROFILES, JSONArray(updated.map { it.toJson() }).toString()).putBoolean(KEY_KEYS_AS_STICKS, true).apply()
+        return updated
+    }
 
     private fun saveAll(context: Context, profiles: List<GameProfile>) {
         prefs(context).edit().putString(KEY_PROFILES, JSONArray(profiles.map { it.toJson() }).toString()).apply()
@@ -281,12 +288,11 @@ object GameProfiles {
      */
     fun ensureApp(context: Context, packageName: String, name: String): List<GameProfile> {
         appProfiles(context, packageName).takeIf { it.isNotEmpty() }?.let { return it }
-        val controller = it.palsoftware.pastiera.adb.RootShell.active
         val made = if (GameApps.appFor(packageName) == "Dolphin") listOf(
-            newProfile("$name (GameCube)", setOf(packageName), controller).copy(variant = VARIANT_GAMECUBE),
+            newProfile("$name (GameCube)", setOf(packageName)).copy(variant = VARIANT_GAMECUBE),
             // The right half the Wii pointer
-            newProfile("$name (Wii)", setOf(packageName), controller).copy(variant = VARIANT_WII, rightHalf = TrackpadRole.POINTER)
-        ) else listOf(newProfile(name, setOf(packageName), controller))
+            newProfile("$name (Wii)", setOf(packageName)).copy(variant = VARIANT_WII, rightHalf = TrackpadRole.POINTER)
+        ) else listOf(newProfile(name, setOf(packageName)))
         made.forEach { save(context, it) }
         return made
     }
@@ -348,7 +354,7 @@ object GameProfiles {
         }
         val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME)
         return all(context).firstOrNull { it.isGame && it.launch == launch }
-            ?: newProfile(game.name, setOf(game.packageName), controller = it.palsoftware.pastiera.adb.RootShell.active)
+            ?: newProfile(game.name, setOf(game.packageName))
                 .copy(launch = launch, own = false)
     }
 

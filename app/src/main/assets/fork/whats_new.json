@@ -680,7 +680,13 @@
       "text": "Gaming mode: Dolphin's on-screen controls are set up for the trackpad when a game starts: the stick centres where it's touched, and the controls are invisible (they still work). Settings you've changed yourself in Dolphin are kept"
     },
     {
-      "text": "Gaming mode: hold SYM and press a button to keep it held (accelerate in a racing game), so your finger can leave the keyboard and the trackpad stick keeps working. Press the button again to let go"
+      "text": "Gaming mode: new keyboard controls that work like a controller: W A Z D the left stick (SYM for the d-pad, right Shift for the right stick), I J M L the face buttons (Alt for the right stick), S and K the stick clicks, Q and E the bumpers, the volume keys the triggers, Space Start (Shift for Select, Alt for Xbox/Home). See Gaming settings > Keyboard controls"
+    },
+    {
+      "text": "Gaming mode: the trackpad no longer plays the sticks by default (the Wii pointer stays). Gaming settings now explain what the keyboard can and can't do, and recommend a phone controller for the best experience"
+    },
+    {
+      "text": "Gaming mode: the root-only controller mode is gone; the keyboard controls work without root"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

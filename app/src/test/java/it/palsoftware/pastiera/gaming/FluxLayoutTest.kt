@@ -8,9 +8,31 @@ import org.junit.Test
 class FluxLayoutTest {
     @Test
     fun theFaceButtonsSitWhereAControllersDo() {
-        assertEquals(0, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_L]) // A, bottom
-        assertEquals(4, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_O]) // Y, top
-        assertEquals(11, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_SPACE]) // Start
+        val none = FluxLayout.Modifiers()
+        assertEquals(FluxLayout.Control.A, FluxLayout.controlFor(KeyEvent.KEYCODE_M, none)) // bottom
+        assertEquals(FluxLayout.Control.Y, FluxLayout.controlFor(KeyEvent.KEYCODE_I, none)) // top
+        assertEquals(FluxLayout.Control.X, FluxLayout.controlFor(KeyEvent.KEYCODE_J, none)) // left
+        assertEquals(FluxLayout.Control.B, FluxLayout.controlFor(KeyEvent.KEYCODE_L, none)) // right
+        assertEquals(FluxLayout.Control.R3, FluxLayout.controlFor(KeyEvent.KEYCODE_K, none))
+    }
+
+    @Test
+    fun theModifiersChangeWhatTheKeysAre() {
+        assertEquals(FluxLayout.Control.LS_DOWN, FluxLayout.controlFor(KeyEvent.KEYCODE_Z, FluxLayout.Modifiers()))
+        assertEquals(FluxLayout.Control.DOWN, FluxLayout.controlFor(KeyEvent.KEYCODE_Z, FluxLayout.Modifiers(sym = true)))
+        assertEquals(FluxLayout.Control.RS_DOWN, FluxLayout.controlFor(KeyEvent.KEYCODE_Z, FluxLayout.Modifiers(rightShift = true, shift = true)))
+        assertEquals(FluxLayout.Control.RS_UP, FluxLayout.controlFor(KeyEvent.KEYCODE_I, FluxLayout.Modifiers(alt = true)))
+        assertEquals(FluxLayout.Control.L3, FluxLayout.controlFor(KeyEvent.KEYCODE_S, FluxLayout.Modifiers()))
+        assertEquals(FluxLayout.Control.START, FluxLayout.controlFor(KeyEvent.KEYCODE_SPACE, FluxLayout.Modifiers()))
+        assertEquals(FluxLayout.Control.SELECT, FluxLayout.controlFor(KeyEvent.KEYCODE_SPACE, FluxLayout.Modifiers(shift = true)))
+        assertEquals(FluxLayout.Control.HOME, FluxLayout.controlFor(KeyEvent.KEYCODE_SPACE, FluxLayout.Modifiers(alt = true)))
+        assertEquals(null, FluxLayout.controlFor(KeyEvent.KEYCODE_X, FluxLayout.Modifiers()))
+    }
+
+    @Test
+    fun everyControlIsSentAsAKeyOfItsOwn() {
+        val keys = FluxLayout.Control.entries.map { FluxLayout.keyOf(it) }
+        assertEquals(keys.size, keys.toSet().size)
     }
 
     @Test
@@ -18,10 +40,10 @@ class FluxLayoutTest {
         val lines = FluxLayout.dolphinGameCube("TitanKey")
         assertEquals("Device = Android/0/TitanKey", lines.first())
         assertTrue("Buttons/Start = `Space`" in lines)
-        assertTrue("Main Stick/Up = `T`" in lines)
-        assertTrue("C-Stick/Left = `B`" in lines)
-        assertTrue("Triggers/L = `Volume Up` | `Q`" in lines)
-        assertTrue("Buttons/Z = `Z` | `C`" in lines)
+        assertTrue("Main Stick/Up = `W`" in lines)
+        assertTrue("C-Stick/Left = `F`" in lines)
+        assertTrue("Triggers/L = `U`" in lines)
+        assertTrue("Buttons/Z = `E`" in lines)
     }
 
     @Test
@@ -35,17 +57,17 @@ class FluxLayoutTest {
     @Test
     fun ppssppReadsTheKeyboardsCodes() {
         assertTrue("Start = 1-${KeyEvent.KEYCODE_SPACE}" in FluxLayout.pspMapping())
-        assertTrue("Cross = 1-${KeyEvent.KEYCODE_L}" in FluxLayout.pspMapping())
+        assertTrue("Cross = 1-${KeyEvent.KEYCODE_M}" in FluxLayout.pspMapping())
     }
 
     @Test
     fun eachWiiControllerHasItsOwnSetUp() {
         val classic = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.CLASSIC)
         assertTrue("Extension = Classic" in classic)
-        assertTrue("Classic/Right Stick/Up = `J`" in classic)
+        assertTrue("Classic/Right Stick/Up = `T`" in classic)
         val sideways = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.SIDEWAYS)
         assertTrue("Options/Sideways Wiimote = True" in sideways)
-        assertTrue("Buttons/2 = `L`" in sideways)
+        assertTrue("Buttons/2 = `M`" in sideways)
     }
 
     @Test
@@ -64,25 +86,5 @@ class FluxLayoutTest {
         assertTrue("PadProfile1 = Flux Keyboard" in gc)
         // Back to the Nunchuk: nothing of it kept
         assertEquals("", FluxLayout.wiiPadSettings(gc, FluxLayout.WiiPad.NUNCHUK))
-    }
-
-    @Test
-    fun theVolumeKeysAreTheLeftShoulderAndTrigger() {
-        assertEquals(6, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_VOLUME_UP])
-        assertEquals(8, FluxLayout.PAD_BUTTONS[KeyEvent.KEYCODE_VOLUME_DOWN])
-    }
-
-    @Test
-    fun theRedSideKeysDeviceIsFound() {
-        val dump = """add device 7: /dev/input/event0
-  name:     "gpio-keys"
-  events:
-    KEY (0001): 0072  0073
-add device 8: /dev/input/event1
-  name:     "mtk-pmic-keys"
-  events:
-    KEY (0001): 002a  0074  00f9
-"""
-        assertEquals("/dev/input/event1", GameMode.sideKeyDevice(dump))
     }
 }
