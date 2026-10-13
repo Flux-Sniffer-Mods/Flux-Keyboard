@@ -1805,7 +1805,7 @@
     <string name="game_mode_keys_pass">Twoje klawisze działają jak kontroler (zobacz Sterowanie z klawiatury). W grach tylko dotykowych umieść klawisze na jej przyciskach z powiadomienia trybu gry.</string>
     <string name="game_mode_keys_pass_app">Twoje klawisze działają jak kontroler w %1$s (zobacz Sterowanie z klawiatury). Klawisze umieszczone na ekranie stukają tam zamiast tego.</string>
     <string name="root_shell_title">Używaj roota</string>
-    <string name="root_shell_description">Na telefonie z rootem: polecenia powłoki działają przez su zamiast wbudowanej powłoki lub Shizuku, gotowe przy starcie bez parowania i Wi-Fi, a tryb gry może być prawdziwym kontrolerem.</string>
+    <string name="root_shell_description">Na telefonie z rootem: polecenia powłoki działają przez su zamiast wbudowanej powłoki lub Shizuku, gotowe przy starcie bez parowania i Wi-Fi.</string>
     <string name="root_shell_denied">Nie przyznano roota: używana jest wbudowana powłoka lub Shizuku.</string>
     <string name="root_backlight_fine_title">Dokładne przyciemnianie</string>
     <string name="root_backlight_fine_description">Przez roota diody klawiatury są ustawiane w ich własnych krokach, dużo drobniejszych niż zwykłe poziomy podświetlenia, więc podążanie za jasnością ekranu nie ma widocznych skoków.</string>

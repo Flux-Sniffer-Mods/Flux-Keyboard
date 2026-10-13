@@ -1304,7 +1304,7 @@
     <string name="game_mode_keys_pass">I tuoi tasti funzionano come un controller (vedi Comandi da tastiera). Per i giochi solo touch, posiziona i tasti sui suoi pulsanti dalla notifica della modalità gioco.</string>
     <string name="game_mode_keys_pass_app">I tuoi tasti funzionano come un controller in %1$s (vedi Comandi da tastiera). I tasti posizionati sullo schermo toccano lì invece.</string>
     <string name="root_shell_title">Usa root</string>
-    <string name="root_shell_description">Su un telefono con root: i comandi shell passano da su invece che dalla shell integrata o da Shizuku, pronti all\'avvio senza abbinamento né Wi-Fi, e la modalità gioco può essere un controller vero.</string>
+    <string name="root_shell_description">Su un telefono con root: i comandi shell passano da su invece che dalla shell integrata o da Shizuku, pronti all\'avvio senza abbinamento né Wi-Fi.</string>
     <string name="root_shell_denied">Root non concesso: si usa la shell integrata o Shizuku.</string>
     <string name="root_backlight_fine_title">Regolazione fine</string>
     <string name="root_backlight_fine_description">Con root, i LED della tastiera vengono impostati nei loro passi, molto più fini dei normali livelli della luce, così seguire la luminosità dello schermo non ha scatti visibili.</string>

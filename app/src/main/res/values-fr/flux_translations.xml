@@ -1799,7 +1799,7 @@
     <string name="game_mode_keys_pass">Vos touches jouent comme une manette (voir Commandes au clavier). Pour les jeux uniquement tactiles, placez des touches sur ses boutons depuis la notification du mode jeu.</string>
     <string name="game_mode_keys_pass_app">Vos touches jouent comme une manette dans %1$s (voir Commandes au clavier). Les touches placées à l\'écran y tapent à la place.</string>
     <string name="root_shell_title">Utiliser le root</string>
-    <string name="root_shell_description">Sur un téléphone rooté : les commandes shell passent par su au lieu du shell intégré ou de Shizuku, prêtes au démarrage sans appairage ni Wi-Fi, et le mode jeu peut être une vraie manette.</string>
+    <string name="root_shell_description">Sur un téléphone rooté : les commandes shell passent par su au lieu du shell intégré ou de Shizuku, prêtes au démarrage sans appairage ni Wi-Fi.</string>
     <string name="root_shell_denied">Le root n\'a pas été accordé : le shell intégré ou Shizuku est utilisé.</string>
     <string name="root_backlight_fine_title">Gradation fine</string>
     <string name="root_backlight_fine_description">Avec le root, les LED du clavier sont réglées dans leurs propres pas, bien plus fins que les niveaux habituels de l\'éclairage, pour suivre la luminosité de l\'écran sans paliers visibles.</string>

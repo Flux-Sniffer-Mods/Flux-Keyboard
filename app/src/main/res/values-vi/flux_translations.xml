@@ -1787,7 +1787,7 @@
     <string name="game_mode_keys_pass">Các phím của bạn hoạt động như tay cầm (xem Điều khiển bằng bàn phím). Với game chỉ dùng cảm ứng, hãy đặt phím lên các nút của game từ thông báo chế độ chơi game.</string>
     <string name="game_mode_keys_pass_app">Các phím của bạn hoạt động như tay cầm trong %1$s (xem Điều khiển bằng bàn phím). Các phím bạn đặt trên màn hình sẽ chạm vào đó thay vào.</string>
     <string name="root_shell_title">Dùng root</string>
-    <string name="root_shell_description">Trên điện thoại đã root: lệnh shell chạy qua su thay vì shell tích hợp hoặc Shizuku, sẵn sàng khi khởi động mà không cần ghép nối hay Wi-Fi, và chế độ chơi game có thể là một tay cầm thật.</string>
+    <string name="root_shell_description">Trên điện thoại đã root: lệnh shell chạy qua su thay vì shell tích hợp hoặc Shizuku, sẵn sàng khi khởi động mà không cần ghép nối hay Wi-Fi.</string>
     <string name="root_shell_denied">Không được cấp root: dùng shell tích hợp hoặc Shizuku thay thế.</string>
     <string name="root_backlight_fine_title">Điều chỉnh độ sáng mịn</string>
     <string name="root_backlight_fine_description">Qua root, đèn LED bàn phím được đặt theo các bước riêng của chúng, mịn hơn nhiều so với các mức thông thường của đèn, nên khi theo độ sáng màn hình sẽ không có bậc nhảy thấy được.</string>

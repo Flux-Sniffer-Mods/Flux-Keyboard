@@ -1258,7 +1258,7 @@
     <string name="game_mode_keys_pass">Deine Tasten spielen wie ein Controller (siehe Tastatursteuerung). Bei reinen Touch-Spielen platziere Tasten über die Spielmodus-Benachrichtigung auf seinen Knöpfen.</string>
     <string name="game_mode_keys_pass_app">Deine Tasten spielen in %1$s wie ein Controller (siehe Tastatursteuerung). Auf dem Bildschirm platzierte Tasten tippen stattdessen dort.</string>
     <string name="root_shell_title">Root verwenden</string>
-    <string name="root_shell_description">Auf einem gerooteten Telefon: Shell-Befehle laufen über su statt über die eingebaute Shell oder Shizuku, bereit beim Start ohne Kopplung oder WLAN, und der Spielmodus kann ein echter Controller sein.</string>
+    <string name="root_shell_description">Auf einem gerooteten Telefon: Shell-Befehle laufen über su statt über die eingebaute Shell oder Shizuku, bereit beim Start ohne Kopplung oder WLAN.</string>
     <string name="root_shell_denied">Root wurde nicht gewährt: Stattdessen wird die eingebaute Shell oder Shizuku verwendet.</string>
     <string name="root_backlight_fine_title">Feines Dimmen</string>
     <string name="root_backlight_fine_description">Über Root werden die LEDs der Tastatur in ihren eigenen Stufen gesetzt, viel feiner als die üblichen Stufen der Beleuchtung, sodass das Folgen der Bildschirmhelligkeit keine sichtbaren Sprünge hat.</string>
