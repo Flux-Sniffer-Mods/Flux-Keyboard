@@ -994,6 +994,9 @@
     },
     {
       "text": "Updates: tapping the update notification downloads and installs the update, as the update dialog does, instead of opening the release page"
+    },
+    {
+      "text": "Gaming mode: Dolphin and PPSSPP set up with Flux Keyboard's older layout get the new one by themselves the next time a game starts from Games"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

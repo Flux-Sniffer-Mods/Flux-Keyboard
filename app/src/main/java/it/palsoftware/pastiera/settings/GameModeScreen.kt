@@ -546,6 +546,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 TextButton(onClick = {
                     setupScope.launch {
                         val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.apply(emulatorPkg) }
+                        if (result == it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE) it.palsoftware.pastiera.gaming.FluxLayout.markWritten(context, emulatorPkg)
                         // Its graphics too, where its settings can be written: suited to this phone's GPU
                         val graphics = withContext(Dispatchers.IO) {
                             if (it.palsoftware.pastiera.gaming.GraphicsTuning.writable(emulatorPkg) &&

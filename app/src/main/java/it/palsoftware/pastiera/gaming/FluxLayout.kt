@@ -266,6 +266,32 @@ object FluxLayout {
 
     internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
 
+    /** The layout's version: written again into emulators given an older one. */
+    private const val LAYOUT_VERSION = 2
+
+    /**
+     * An emulator given Flux Keyboard's layout before it changed: given the current one, once
+     * (blocking: through the shell, the emulator stopped). One never given it is left alone.
+     */
+    fun refreshIfOutdated(context: android.content.Context, pkg: String) {
+        val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
+        val key = "flux_layout_version_$pkg"
+        if (prefs.getInt(key, 0) == LAYOUT_VERSION || !AdbShell.available()) return
+        val given = when (GameApps.emulator(pkg)) {
+            "Dolphin" -> dolphinDir(pkg)?.let { dir ->
+                AdbShell.run("[ -f \"$dir/Config/Profiles/GCPad/Flux Keyboard.ini\" ] && echo yes; true", 3_000)?.contains("yes") == true
+            } == true
+            "PPSSPP" -> ppssppDir(pkg)?.let { dir -> read("$dir/SYSTEM/controls.ini").contains("Start = 1-${KeyEvent.KEYCODE_SPACE}") } == true
+            else -> false
+        }
+        if (!given) return
+        if (apply(pkg) == Result.DONE) prefs.edit().putInt(key, LAYOUT_VERSION).apply()
+    }
+
+    /** Remembers [pkg] has the current layout (just written by hand). */
+    fun markWritten(context: android.content.Context, pkg: String) =
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putInt("flux_layout_version_$pkg", LAYOUT_VERSION).apply()
+
     /** Writes the layout into [pkg]'s controller settings (blocking: through the shell, the emulator stopped first). */
     fun apply(pkg: String): Result {
         if (!AdbShell.available()) return Result.FAILED
