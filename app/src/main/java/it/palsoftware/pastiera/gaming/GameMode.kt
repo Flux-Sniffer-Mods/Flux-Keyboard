@@ -283,7 +283,7 @@ object GameMode {
         if (code == KeyEvent.KEYCODE_BACK && onGameScreen() && backGuard(event)) return true
         if (symVolume(event)) return true
         val down = event.action == KeyEvent.ACTION_DOWN
-        if (down && event.repeatCount == 0) trackpadReader?.keyPressed()
+        if (event.repeatCount == 0) trackpadReader?.let { if (down) it.keyPressed(code) else if (event.action == KeyEvent.ACTION_UP) it.keyReleased(code) }
         // The red side key: the right trigger, read from its device (its own action kept away)
         if (pad && event.scanCode == SIDE_KEY_SCAN) return true
         // A key placed on the screen touches its spot while held, whatever else it is
@@ -741,6 +741,37 @@ object GameMode {
     // ---- The trackpad: sticks or a mouse ----
 
     @Volatile private var trackpadReader: TrackpadReader? = null
+    /** Where keys are on the trackpad, learned from presses (each finger alone on it), kept from game to game. */
+    private val keyPlaces = HashMap<Int, Pair<Float, Float>>()
+
+    private fun learnKey(code: Int, x: Float, y: Float) {
+        if (keyGridPlace(code) == null) return
+        val before = keyPlaces[code]
+        keyPlaces[code] = if (before == null) x to y else (before.first * 0.7f + x * 0.3f) to (before.second * 0.7f + y * 0.3f)
+    }
+
+    /** A key's place on the trackpad (x min..max, y top..bottom): learned, else from the keyboard's rows. */
+    private fun keyPlace(code: Int, min: Float, max: Float, top: Float, bottom: Float): Pair<Float, Float>? {
+        keyPlaces[code]?.let { return it }
+        val (column, row) = keyGridPlace(code) ?: return null
+        return (min + (column + 0.5f) * (max - min) / 10f) to (top + (row + 0.5f) * (bottom - top) / 3f)
+    }
+
+    /** A letter key's column (of ten across) and row (of three), as the Titan's keyboard has them. */
+    internal fun keyGridPlace(code: Int): Pair<Float, Int>? {
+        if (code !in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z) return null
+        val letter = 'a' + (code - KeyEvent.KEYCODE_A)
+        KEY_ROWS.forEachIndexed { row, letters ->
+            val column = letters.indexOf(letter)
+            if (column >= 0) return (column + KEY_ROW_SHIFT[row]) to row
+        }
+        return null
+    }
+
+    private val KEY_ROWS = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
+    /** How far each row starts in from the left, in keys. */
+    private val KEY_ROW_SHIFT = listOf(0f, 0f, 1f)
+
     /** The trackpad rows fingers have reached (top, bottom), kept from game to game. */
     @Volatile private var reachedRows: Pair<Float, Float>? = null
 
@@ -879,6 +910,8 @@ object GameMode {
             var reorigin = false
             /** Touching the screen, as the pointer. */
             var pointing = false
+            /** Where the trackpad last put it, before held keys were taken out. */
+            var rawX = originX; var rawY = originY
             /** The furthest push each way (up, down), for the log. */
             var furthestUp = 0f; var furthestDown = 0f
         }
@@ -898,17 +931,62 @@ object GameMode {
 
         fun line(line: String) = synchronized(lock) { slots.line(line) }
 
+        /** Keys on the keyboard held now, each at its place on the trackpad. */
+        private val heldKeys = HashMap<Int, Pair<Float, Float>>()
+
         /**
          * A key went down: the keyboard is the trackpad, so a finger that landed just before is
-         * that key being pressed, not a stick or pointer: it does nothing from now.
+         * that key being pressed, not a stick or pointer: it does nothing from now (and shows
+         * where that key is). A stick's finger already down stays the stick: the trackpad then
+         * reports the middle of both fingers, so the key's finger is taken back out of it.
          */
-        fun keyPressed() = synchronized(lock) {
+        fun keyPressed(code: Int) = synchronized(lock) {
             val now = SystemClock.uptimeMillis()
-            for (f in fingers.values) {
+            var keySlot: Int? = null
+            for ((slot, f) in fingers) {
                 if (now - f.downAt > KEY_TOUCH_MS || f.role == TrackpadRole.NONE) continue
+                if (fingers.size == 1 && heldKeys.isEmpty() && held.isEmpty()) learnKey(code, f.rawX, f.rawY)
                 end(f)
                 f.role = TrackpadRole.NONE
+                keySlot = slot
             }
+            keyPlace(code, min, max, top, bottom)?.let { heldKeys[code] = it }
+            // The key's finger was taken for a handover, the stick held where it was: the stick
+            // takes the trackpad's reports back, the key's finger taken out of them
+            val stick = held.entries.firstOrNull { it.value.role == TrackpadRole.LEFT_STICK || it.value.role == TrackpadRole.RIGHT_STICK }
+            if (keySlot != null && stick != null && heldKeys.isNotEmpty()) {
+                held.remove(stick.key)
+                val reported = fingers.getValue(keySlot)
+                fingers[keySlot] = stick.value.apply { settleUntil = 0L; reorigin = false; rawX = reported.rawX; rawY = reported.rawY }
+            }
+            restick()
+        }
+
+        fun keyReleased(code: Int) = synchronized(lock) {
+            if (heldKeys.remove(code) != null) { keysLetGoAt = SystemClock.uptimeMillis(); restick() }
+        }
+
+        /** When the last key held was let go: the trackpad may lift and touch again as its finger leaves. */
+        private var keysLetGoAt = 0L
+
+        /** The sticks' fingers placed again, now the keys held have changed. */
+        private fun restick() {
+            for ((slot, f) in fingers.toList()) {
+                if (f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK) move(slot, f.rawX.toInt(), f.rawY.toInt())
+            }
+        }
+
+        /**
+         * Where a stick's finger is, from what the trackpad reports while keys are held: it
+         * reports one place, the middle of every finger on it, so the held keys' places are
+         * taken back out (kept on the trackpad).
+         */
+        private fun unmixed(x: Int, y: Int): Pair<Int, Int> {
+            if (heldKeys.isEmpty()) return x to y
+            val n = heldKeys.size + 1
+            val ux = n * x - heldKeys.values.sumOf { it.first.toDouble() }.toFloat()
+            val uy = n * y - heldKeys.values.sumOf { it.second.toDouble() }.toFloat()
+            return ux.coerceIn(min, max).toInt() to uy.coerceIn(top, bottom).toInt()
         }
 
         private fun roleFor(current: GameProfile, left: Boolean): TrackpadRole = when {
@@ -921,6 +999,13 @@ object GameMode {
             val current = profile ?: return
             val now = SystemClock.uptimeMillis()
             val gone = pendingUp?.let { handler.removeCallbacks(it); pendingUp = null; fingers.remove(pendingSlot) }
+            if (gone != null && (heldKeys.isNotEmpty() || now - keysLetGoAt < KEY_TOUCH_MS) && (gone.role == TrackpadRole.LEFT_STICK || gone.role == TrackpadRole.RIGHT_STICK)) {
+                // A key pressed while a stick is held: the trackpad lifted and touched again at
+                // the middle of both fingers. Still the same stick, wherever the key's finger is
+                fingers[slot] = gone
+                move(slot, x, y)
+                return
+            }
             if (gone != null) {
                 // A handover: the finger before is still down, and this one is on the other half
                 // (where it is isn't known yet: the trackpad glides there from the last spot)
@@ -935,7 +1020,7 @@ object GameMode {
             var role = roleFor(current, left)
             if (role != TrackpadRole.NONE && (fingers.values + held.values).any { it.role == role }) role = TrackpadRole.NONE
             reach(y)
-            fingers[slot] = Finger(role, left, x.toFloat(), y.toFloat(), now)
+            fingers[slot] = Finger(role, left, x.toFloat(), y.toFloat(), now).apply { rawX = x.toFloat(); rawY = y.toFloat() }
         }
 
         /**
@@ -956,9 +1041,12 @@ object GameMode {
         /** A stick with nowhere to go (no real controller, no on-screen stick): its keys instead. */
         private fun byKeys(at: Int): Boolean = stickSink == null && !pad && profile?.stickZones?.containsKey(at / 2) != true
 
-        private fun move(slot: Int, x: Int, y: Int) {
+        private fun move(slot: Int, reportedX: Int, reportedY: Int) {
             val f = fingers[slot] ?: return
-            if (gliding(f, x, y)) return
+            f.rawX = reportedX.toFloat(); f.rawY = reportedY.toFloat()
+            val stick = f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK
+            val (x, y) = if (stick) unmixed(reportedX, reportedY) else reportedX to reportedY
+            if (heldKeys.isEmpty() && gliding(f, x, y)) return
             if (f.reorigin) {
                 f.reorigin = false
                 f.originX = x.toFloat(); f.originY = y.toFloat()

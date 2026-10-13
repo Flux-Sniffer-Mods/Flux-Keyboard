@@ -970,6 +970,9 @@
     },
     {
       "text": "Gaming mode: Back works normally in an emulator's file browser, menus and other apps; only the game itself asks you to press Back twice"
+    },
+    {
+      "text": "Gaming mode: holding a button while using a trackpad stick no longer pulls the stick towards the button: the stick follows your thumb, worked out from where the button is"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
