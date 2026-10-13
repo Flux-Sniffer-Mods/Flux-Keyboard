@@ -1725,7 +1725,7 @@
     <string name="game_mode_disclaimer">Клавіатура — не геймпад: у неї немає справжніх стиків, і всю роботу виконують її клавіші та клавіші гучності, тому ігровий режим пасує іграм, у які грають кнопками. Результат може відрізнятися. Для найкращого досвіду використовуйте геймпад через Bluetooth або USB, найкраще створений для телефона у вертикальному положенні або з тримачем для телефона.</string>
     <string name="game_mode_layout_title">Керування з клавіатури</string>
     <string name="game_mode_layout_description">Яка клавіша яка кнопка</string>
-    <string name="game_mode_layout">Лівий стик: W A Z D (S — натискання)\nХрестовина: SYM + W A Z D\nПравий стик: Alt + I J M L або правий Shift + W A Z D (K — натискання)\nКнопки дій: I (Y), J (X), M (A), L (B)\nБампери: Q і E\nКурки: Гучніше і Тихіше\nStart: Пробіл\nSelect: Shift + Пробіл\nXbox / Home: Alt + Пробіл\nГучність: SYM + Гучніше або Тихіше\n\nКлавіші, розміщені на екрані гри, натискають там.</string>
+    <string name="game_mode_layout">Лівий стик: W A Z D (S — натискання)\nХрестовина: SYM + W A Z D\nПравий стик: Alt + I J M L або правий Shift + W A Z D (K — натискання)\nКнопки дій: I (Y), J (X), M (A), L (B)\nБампери: Q і E\nКурки: Гучніше і Тихіше (Alt + Гучність: натиснуті до кінця без клацання, для контролера GameCube)\nStart: Пробіл\nSelect: Shift + Пробіл\nXbox / Home: Alt + Пробіл\nГучність: SYM + Гучніше або Тихіше\n\nКлавіші, розміщені на екрані гри, натискають там.</string>
     <string name="game_mode_note">Ігровому режиму потрібні вбудована оболонка (або Shizuku) і помічник спеціальних можливостей клавіатури. Ваші клавіші працюють як геймпад (див. Керування з клавіатури). Введення тексту в поле гри працює як зазвичай.</string>
     <string name="game_mode_profile_name">Назва</string>
     <string name="game_mode_remove">Прибрати</string>
@@ -1978,4 +1978,18 @@
     <string name="crash_log_cleared">Журнали очищено</string>
     <string name="stream_always">Завжди доступний для Moonlight</string>
     <string name="stream_always_description">Залишає телефон у списку Moonlight за вимкненої трансляції, тож Wake не потрібен (деякі застосунки Moonlight, як-от для телевізорів LG, надсилають Wake туди, де телефон його не чує). Вибір гри вмикає трансляцію. Спершу один раз виконайте спарювання з увімкненою трансляцією.</string>
+    <string name="game_remap_row_description">Переглянути та змінити, які клавіші якими кнопками є</string>
+    <string name="game_remap_description">Кожна клавіша показує свою кнопку — окремо або з вибраним тут модифікатором. Торкніться клавіші, щоб змінити її.</string>
+    <string name="game_remap_hint">Змінені клавіші обведено. Для ігор лише з сенсорним керуванням клавіші також можна розмістити на екрані гри: «Розмістити клавіші на екрані» у сповіщенні ігрового режиму, поки гра відкрита. Розміщена клавіша торкається там.</string>
+    <string name="game_remap_alone">Окремо</string>
+    <string name="game_remap_right_shift">Правий Shift</string>
+    <string name="game_remap_left_stick">Лівий стік</string>
+    <string name="game_remap_right_stick">Правий стік</string>
+    <string name="game_remap_dpad">Хрестовина</string>
+    <string name="game_remap_analog">до кінця, без клацання</string>
+    <string name="game_remap_nothing">Нічого (йде в гру як є)</string>
+    <string name="game_remap_default">Типово: %1$s</string>
+    <string name="game_remap_list">Показати списком</string>
+    <string name="game_remap_reset">Скинути всі клавіші</string>
+    <string name="game_remap_reset_description">Кожна клавіша повертається до кнопки розкладки</string>
 </resources>

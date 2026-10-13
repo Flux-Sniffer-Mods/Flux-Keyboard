@@ -1719,7 +1719,7 @@
     <string name="game_mode_disclaimer">El teclado no es un mando: no tiene sticks de verdad, y sus teclas y las de volumen hacen todo el trabajo, así que el modo juego va bien con juegos que se juegan con botones. Los resultados pueden variar. Para la mejor experiencia, usa un mando por Bluetooth o USB, idealmente uno hecho para un teléfono en vertical o uno con pinza para el teléfono.</string>
     <string name="game_mode_layout_title">Controles del teclado</string>
     <string name="game_mode_layout_description">Qué tecla es cada botón</string>
-    <string name="game_mode_layout">Stick izquierdo: W A Z D (S lo pulsa)\nCruceta: SYM + W A Z D\nStick derecho: Alt + I J M L, o Mayús derecha + W A Z D (K lo pulsa)\nBotones frontales: I (Y), J (X), M (A), L (B)\nBotones superiores: Q y E\nGatillos: Subir volumen y Bajar volumen\nStart: Espacio\nSelect: Mayús + Espacio\nXbox / Inicio: Alt + Espacio\nVolumen: SYM + Subir o Bajar volumen\n\nLas teclas colocadas en la pantalla de un juego tocan ahí en su lugar.</string>
+    <string name="game_mode_layout">Stick izquierdo: W A Z D (S lo pulsa)\nCruceta: SYM + W A Z D\nStick derecho: Alt + I J M L, o Mayús derecha + W A Z D (K lo pulsa)\nBotones frontales: I (Y), J (X), M (A), L (B)\nBotones superiores: Q y E\nGatillos: Subir volumen y Bajar volumen (Alt + Volumen: pulsados a fondo sin el clic, para un mando de GameCube)\nStart: Espacio\nSelect: Mayús + Espacio\nXbox / Inicio: Alt + Espacio\nVolumen: SYM + Subir o Bajar volumen\n\nLas teclas colocadas en la pantalla de un juego tocan ahí en su lugar.</string>
     <string name="game_mode_note">El modo juego necesita el shell integrado (o Shizuku) y el asistente de accesibilidad del teclado. Tus teclas juegan como un mando (consulta Controles del teclado). Escribir en un campo de texto del juego funciona como siempre.</string>
     <string name="game_mode_profile_name">Nombre</string>
     <string name="game_mode_remove">Quitar</string>
@@ -1972,4 +1972,18 @@
     <string name="crash_log_cleared">Registros borrados</string>
     <string name="stream_always">Siempre disponible para Moonlight</string>
     <string name="stream_always_description">Mantiene el teléfono en la lista de Moonlight con la transmisión apagada, así no necesitas Wake (algunas apps de Moonlight, como la de los televisores LG, envían su Wake donde el teléfono no lo oye). Elegir un juego activa la transmisión. Vincula una vez antes con la transmisión activada.</string>
+    <string name="game_remap_row_description">Ver y cambiar qué tecla es cada botón</string>
+    <string name="game_remap_description">Cada tecla muestra el botón que es, sola o con el modificador elegido aquí pulsado. Toca una tecla para cambiarla.</string>
+    <string name="game_remap_hint">Las teclas cambiadas tienen contorno. Para juegos que solo se juegan tocando, también puedes colocar teclas en la pantalla del juego: Colocar teclas en pantalla, en la notificación del modo juego con el juego abierto. Una tecla colocada toca ahí.</string>
+    <string name="game_remap_alone">Sola</string>
+    <string name="game_remap_right_shift">Mayús derecha</string>
+    <string name="game_remap_left_stick">Stick izquierdo</string>
+    <string name="game_remap_right_stick">Stick derecho</string>
+    <string name="game_remap_dpad">Cruceta</string>
+    <string name="game_remap_analog">a fondo, sin clic</string>
+    <string name="game_remap_nothing">Nada (llega al juego tal cual)</string>
+    <string name="game_remap_default">Predeterminado: %1$s</string>
+    <string name="game_remap_list">Ver como lista</string>
+    <string name="game_remap_reset">Restablecer todas las teclas</string>
+    <string name="game_remap_reset_description">Cada tecla vuelve al botón del diseño</string>
 </resources>

@@ -1719,7 +1719,7 @@
     <string name="game_mode_disclaimer">Le clavier n\'est pas une manette : il n\'a pas de vrais sticks, et ses touches et les touches de volume font tout le travail, donc le mode jeu convient aux jeux qui se jouent aux boutons. Les résultats peuvent varier. Pour la meilleure expérience, utilisez une manette en Bluetooth ou USB, idéalement une conçue pour un téléphone tenu à la verticale ou une avec une pince pour téléphone.</string>
     <string name="game_mode_layout_title">Commandes au clavier</string>
     <string name="game_mode_layout_description">Quelle touche est quel bouton</string>
-    <string name="game_mode_layout">Stick gauche : W A Z D (S le clique)\nCroix directionnelle : SYM + W A Z D\nStick droit : Alt + I J M L, ou Maj droite + W A Z D (K le clique)\nBoutons d\'action : I (Y), J (X), M (A), L (B)\nGâchettes hautes : Q et E\nGâchettes : Volume + et Volume −\nStart : Espace\nSelect : Maj + Espace\nXbox / Accueil : Alt + Espace\nVolume : SYM + Volume + ou −\n\nLes touches placées sur l\'écran d\'un jeu y tapent à la place.</string>
+    <string name="game_mode_layout">Stick gauche : W A Z D (S le clique)\nCroix directionnelle : SYM + W A Z D\nStick droit : Alt + I J M L, ou Maj droite + W A Z D (K le clique)\nBoutons d\'action : I (Y), J (X), M (A), L (B)\nGâchettes hautes : Q et E\nGâchettes : Volume + et Volume − (Alt + Volume : enfoncées à fond sans le clic, pour une manette GameCube)\nStart : Espace\nSelect : Maj + Espace\nXbox / Accueil : Alt + Espace\nVolume : SYM + Volume + ou −\n\nLes touches placées sur l\'écran d\'un jeu y tapent à la place.</string>
     <string name="game_mode_note">Le mode jeu a besoin du shell intégré (ou de Shizuku) et de l\'assistant d\'accessibilité du clavier. Vos touches jouent comme une manette (voir Commandes au clavier). Écrire dans un champ de texte du jeu fonctionne comme d\'habitude.</string>
     <string name="game_mode_profile_name">Nom</string>
     <string name="game_mode_remove">Retirer</string>
@@ -1972,4 +1972,18 @@
     <string name="crash_log_cleared">Journaux effacés</string>
     <string name="stream_always">Toujours disponible pour Moonlight</string>
     <string name="stream_always_description">Garde le téléphone listé dans Moonlight quand le streaming est désactivé, pour ne pas avoir besoin de Wake (certaines applis Moonlight, comme celle des téléviseurs LG, envoient leur Wake là où le téléphone ne l\'entend pas). Choisir un jeu active le streaming. Associez une fois d\'abord avec le streaming activé.</string>
+    <string name="game_remap_row_description">Voir et changer quelle touche est quel bouton</string>
+    <string name="game_remap_description">Chaque touche montre le bouton qu\'elle est, seule ou avec le modificateur choisi ici maintenu. Touchez une touche pour la changer.</string>
+    <string name="game_remap_hint">Les touches changées sont entourées. Pour les jeux qui se jouent seulement au toucher, des touches peuvent aussi être placées sur l\'écran du jeu : Placer des touches à l\'écran, dans la notification du mode jeu pendant que le jeu est ouvert. Une touche placée touche cet endroit.</string>
+    <string name="game_remap_alone">Seule</string>
+    <string name="game_remap_right_shift">Maj droite</string>
+    <string name="game_remap_left_stick">Stick gauche</string>
+    <string name="game_remap_right_stick">Stick droit</string>
+    <string name="game_remap_dpad">Croix directionnelle</string>
+    <string name="game_remap_analog">à fond, sans clic</string>
+    <string name="game_remap_nothing">Rien (va au jeu telle quelle)</string>
+    <string name="game_remap_default">Par défaut : %1$s</string>
+    <string name="game_remap_list">Afficher en liste</string>
+    <string name="game_remap_reset">Réinitialiser toutes les touches</string>
+    <string name="game_remap_reset_description">Chaque touche revient au bouton de la disposition</string>
 </resources>

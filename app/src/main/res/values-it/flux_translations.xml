@@ -1224,7 +1224,7 @@
     <string name="game_mode_disclaimer">La tastiera non è un controller: non ha veri stick, e i suoi tasti e quelli del volume fanno tutto il lavoro, quindi la modalità gioco è adatta ai giochi che si giocano con i pulsanti. I risultati possono variare. Per un\'esperienza migliore, usa un controller via Bluetooth o USB, idealmente uno pensato per un telefono tenuto in verticale o uno con supporto a clip per il telefono.</string>
     <string name="game_mode_layout_title">Comandi da tastiera</string>
     <string name="game_mode_layout_description">Quale tasto è quale pulsante</string>
-    <string name="game_mode_layout">Stick sinistro: W A Z D (S lo preme)\nCroce direzionale: SYM + W A Z D\nStick destro: Alt + I J M L, o Maiusc destro + W A Z D (K lo preme)\nPulsanti frontali: I (Y), J (X), M (A), L (B)\nDorsali: Q ed E\nGrilletti: Volume su e Volume giù\nStart: Spazio\nSelect: Maiusc + Spazio\nXbox / Home: Alt + Spazio\nVolume: SYM + Volume su o giù\n\nI tasti posizionati sullo schermo di un gioco toccano lì invece.</string>
+    <string name="game_mode_layout">Stick sinistro: W A Z D (S lo preme)\nCroce direzionale: SYM + W A Z D\nStick destro: Alt + I J M L, o Maiusc destro + W A Z D (K lo preme)\nPulsanti frontali: I (Y), J (X), M (A), L (B)\nDorsali: Q ed E\nGrilletti: Volume su e Volume giù (Alt + Volume: premuti fino in fondo senza il clic, per un controller GameCube)\nStart: Spazio\nSelect: Maiusc + Spazio\nXbox / Home: Alt + Spazio\nVolume: SYM + Volume su o giù\n\nI tasti posizionati sullo schermo di un gioco toccano lì invece.</string>
     <string name="game_mode_note">La modalità gioco ha bisogno della shell integrata (o di Shizuku) e dell\'assistente di accessibilità della tastiera. I tuoi tasti funzionano come un controller (vedi Comandi da tastiera). Scrivere in un campo di testo del gioco funziona come al solito.</string>
     <string name="game_mode_profile_name">Nome</string>
     <string name="game_mode_remove">Rimuovi</string>
@@ -1477,4 +1477,18 @@
     <string name="crash_log_cleared">Log cancellati</string>
     <string name="stream_always">Sempre disponibile per Moonlight</string>
     <string name="stream_always_description">Tiene il telefono nell\'elenco di Moonlight a streaming spento, così Wake non serve (alcune app Moonlight, come quella per le TV LG, inviano il loro Wake dove il telefono non lo sente). Scegliere un gioco attiva lo streaming. Prima associa una volta con lo streaming attivo.</string>
+    <string name="game_remap_row_description">Vedi e cambia quali tasti sono quali pulsanti</string>
+    <string name="game_remap_description">Ogni tasto mostra il pulsante che è, da solo o con il modificatore scelto qui tenuto premuto. Tocca un tasto per cambiarlo.</string>
+    <string name="game_remap_hint">I tasti cambiati sono contornati. Per i giochi solo a tocco, i tasti si possono anche posizionare sullo schermo del gioco: Posiziona tasti sullo schermo, nella notifica della modalità gioco con il gioco aperto. Un tasto posizionato tocca lì.</string>
+    <string name="game_remap_alone">Da solo</string>
+    <string name="game_remap_right_shift">Maiusc destro</string>
+    <string name="game_remap_left_stick">Stick sinistro</string>
+    <string name="game_remap_right_stick">Stick destro</string>
+    <string name="game_remap_dpad">Croce direzionale</string>
+    <string name="game_remap_analog">fino in fondo, senza clic</string>
+    <string name="game_remap_nothing">Niente (va al gioco così com\'è)</string>
+    <string name="game_remap_default">Predefinito: %1$s</string>
+    <string name="game_remap_list">Mostra come elenco</string>
+    <string name="game_remap_reset">Ripristina tutti i tasti</string>
+    <string name="game_remap_reset_description">Ogni tasto torna al pulsante del layout</string>
 </resources>

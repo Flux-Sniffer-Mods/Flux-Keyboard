@@ -1725,7 +1725,7 @@
     <string name="game_mode_disclaimer">Klawiatura nie jest kontrolerem: nie ma prawdziwych gałek, a całą pracę wykonują jej klawisze i klawisze głośności, więc tryb gry pasuje do gier sterowanych przyciskami. Efekty mogą się różnić. Najlepiej graj kontrolerem przez Bluetooth lub USB, najlepiej takim stworzonym do telefonu trzymanego pionowo albo z uchwytem na telefon.</string>
     <string name="game_mode_layout_title">Sterowanie z klawiatury</string>
     <string name="game_mode_layout_description">Który klawisz jest którym przyciskiem</string>
-    <string name="game_mode_layout">Lewa gałka: W A Z D (S ją wciska)\nKrzyżak: SYM + W A Z D\nPrawa gałka: Alt + I J M L lub prawy Shift + W A Z D (K ją wciska)\nPrzyciski akcji: I (Y), J (X), M (A), L (B)\nBumpery: Q i E\nSpusty: Głośniej i Ciszej\nStart: Spacja\nSelect: Shift + Spacja\nXbox / Home: Alt + Spacja\nGłośność: SYM + Głośniej lub Ciszej\n\nKlawisze umieszczone na ekranie gry stukają tam zamiast tego.</string>
+    <string name="game_mode_layout">Lewa gałka: W A Z D (S ją wciska)\nKrzyżak: SYM + W A Z D\nPrawa gałka: Alt + I J M L lub prawy Shift + W A Z D (K ją wciska)\nPrzyciski akcji: I (Y), J (X), M (A), L (B)\nBumpery: Q i E\nSpusty: Głośniej i Ciszej (Alt + Głośność: wciśnięte do końca bez kliknięcia, dla kontrolera GameCube)\nStart: Spacja\nSelect: Shift + Spacja\nXbox / Home: Alt + Spacja\nGłośność: SYM + Głośniej lub Ciszej\n\nKlawisze umieszczone na ekranie gry stukają tam zamiast tego.</string>
     <string name="game_mode_note">Tryb gry wymaga wbudowanej powłoki (lub Shizuku) i asystenta ułatwień dostępu klawiatury. Twoje klawisze działają jak kontroler (zobacz Sterowanie z klawiatury). Pisanie w polu tekstowym gry działa jak zwykle.</string>
     <string name="game_mode_profile_name">Nazwa</string>
     <string name="game_mode_remove">Usuń</string>
@@ -1978,4 +1978,18 @@
     <string name="crash_log_cleared">Logi wyczyszczone</string>
     <string name="stream_always">Zawsze dostępny dla Moonlight</string>
     <string name="stream_always_description">Utrzymuje telefon na liście Moonlight przy wyłączonym strumieniowaniu, więc Wake nie jest potrzebne (niektóre aplikacje Moonlight, np. ta na telewizory LG, wysyłają Wake tam, gdzie telefon go nie słyszy). Wybranie gry włącza strumieniowanie. Najpierw sparuj raz przy włączonym strumieniowaniu.</string>
+    <string name="game_remap_row_description">Zobacz i zmień, które klawisze są którymi przyciskami</string>
+    <string name="game_remap_description">Każdy klawisz pokazuje przycisk, którym jest, sam lub z przytrzymanym wybranym tu modyfikatorem. Dotknij klawisza, aby go zmienić.</string>
+    <string name="game_remap_hint">Zmienione klawisze mają obramowanie. W grach obsługiwanych tylko dotykiem klawisze można też umieścić na ekranie gry: Umieść klawisze na ekranie, w powiadomieniu trybu gry, gdy gra jest otwarta. Umieszczony klawisz dotyka tego miejsca.</string>
+    <string name="game_remap_alone">Sam</string>
+    <string name="game_remap_right_shift">Prawy Shift</string>
+    <string name="game_remap_left_stick">Lewa gałka</string>
+    <string name="game_remap_right_stick">Prawa gałka</string>
+    <string name="game_remap_dpad">Krzyżak</string>
+    <string name="game_remap_analog">do końca, bez kliknięcia</string>
+    <string name="game_remap_nothing">Nic (trafia do gry bez zmian)</string>
+    <string name="game_remap_default">Domyślnie: %1$s</string>
+    <string name="game_remap_list">Pokaż jako listę</string>
+    <string name="game_remap_reset">Przywróć wszystkie klawisze</string>
+    <string name="game_remap_reset_description">Każdy klawisz wraca do przycisku z układu</string>
 </resources>

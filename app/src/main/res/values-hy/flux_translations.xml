@@ -1713,7 +1713,7 @@
     <string name="game_mode_disclaimer">Ստեղնաշարը կարգավարիչ չէ. այն իրական լծակներ չունի, և ամբողջ աշխատանքն անում են նրա ստեղներն ու ձայնի ստեղները, ուստի խաղի ռեժիմը հարմար է կոճակներով խաղացվող խաղերի համար։ Արդյունքը կարող է տարբեր լինել։ Լավագույն փորձի համար օգտագործիր կարգավարիչ Bluetooth-ով կամ USB-ով, իդեալում՝ ուղղահայաց պահվող հեռախոսի համար նախատեսված կամ հեռախոսի սեղմակով։</string>
     <string name="game_mode_layout_title">Ստեղնաշարի կառավարում</string>
     <string name="game_mode_layout_description">Որ ստեղնը որ կոճակն է</string>
-    <string name="game_mode_layout">Ձախ լծակ՝ W A Z D (S-ը սեղմում է այն)\nՈւղղորդող խաչ՝ SYM + W A Z D\nԱջ լծակ՝ Alt + I J M L կամ աջ Shift + W A Z D (K-ն սեղմում է այն)\nԳործողության կոճակներ՝ I (Y), J (X), M (A), L (B)\nՈւսային կոճակներ՝ Q և E\nՁգաններ՝ Ձայնն ուժեղացնել և Ձայնը թուլացնել\nStart՝ Բացատ\nSelect՝ Shift + Բացատ\nXbox / Home՝ Alt + Բացատ\nՁայն՝ SYM + Ձայնն ուժեղացնել կամ թուլացնել\n\nԽաղի էկրանին տեղադրված ստեղները սեղմում են այնտեղ։</string>
+    <string name="game_mode_layout">Ձախ լծակ՝ W A Z D (S-ը սեղմում է այն)\nՈւղղորդող խաչ՝ SYM + W A Z D\nԱջ լծակ՝ Alt + I J M L կամ աջ Shift + W A Z D (K-ն սեղմում է այն)\nԳործողության կոճակներ՝ I (Y), J (X), M (A), L (B)\nՈւսային կոճակներ՝ Q և E\nՁգաններ՝ Ձայնն ուժեղացնել և Ձայնը թուլացնել (Alt + Ձայն՝ մինչև վերջ սեղմված առանց կտտոցի, GameCube կարգավարի համար)\nStart՝ Բացատ\nSelect՝ Shift + Բացատ\nXbox / Home՝ Alt + Բացատ\nՁայն՝ SYM + Ձայնն ուժեղացնել կամ թուլացնել\n\nԽաղի էկրանին տեղադրված ստեղները սեղմում են այնտեղ։</string>
     <string name="game_mode_note">Խաղի ռեժիմին անհրաժեշտ են ներկառուցված shell-ը (կամ Shizuku-ն) և ստեղնաշարի մատչելիության օգնականը։ Քո ստեղները խաղում են որպես կարգավարիչ (տես Ստեղնաշարի կառավարում)։ Խաղի տեքստային դաշտում գրելն աշխատում է սովորականի պես։</string>
     <string name="game_mode_profile_name">Անուն</string>
     <string name="game_mode_remove">Հեռացնել</string>
@@ -1966,4 +1966,18 @@
     <string name="crash_log_cleared">Մատյանները մաքրված են</string>
     <string name="stream_always">Միշտ հասանելի Moonlight-ին</string>
     <string name="stream_always_description">Հեռախոսը պահում է Moonlight-ի ցանկում, երբ հեռարձակումն անջատված է, որպեսզի Wake պետք չլինի (որոշ Moonlight հավելվածներ, օրինակ LG հեռուստացույցներինը, ուղարկում են Wake այնտեղ, որտեղ հեռախոսը չի լսում)։ Խաղ ընտրելը միացնում է հեռարձակումը։ Նախ մեկ անգամ զուգակցեք՝ հեռարձակումը միացված։</string>
+    <string name="game_remap_row_description">Տեսնել և փոխել, թե որ ստեղնը որ կոճակն է</string>
+    <string name="game_remap_description">Յուրաքանչյուր ստեղն ցույց է տալիս իր կոճակը՝ միայնակ կամ այստեղ ընտրված մոդիֆիկատորը սեղմած։ Հպեք ստեղնին՝ այն փոխելու համար։</string>
+    <string name="game_remap_hint">Փոխված ստեղները եզրագծված են։ Միայն հպումով խաղերի համար ստեղները կարելի է տեղադրել նաև խաղի էկրանին՝ Տեղադրել ստեղները էկրանին, խաղային ռեժիմի ծանուցման մեջ, երբ խաղը բաց է։ Տեղադրված ստեղնը հպում է այնտեղ։</string>
+    <string name="game_remap_alone">Միայնակ</string>
+    <string name="game_remap_right_shift">Աջ Shift</string>
+    <string name="game_remap_left_stick">Ձախ լծակ</string>
+    <string name="game_remap_right_stick">Աջ լծակ</string>
+    <string name="game_remap_dpad">D-pad</string>
+    <string name="game_remap_analog">մինչև վերջ, առանց կտտոցի</string>
+    <string name="game_remap_nothing">Ոչինչ (գնում է խաղին ինչպես կա)</string>
+    <string name="game_remap_default">Լռելյայն՝ %1$s</string>
+    <string name="game_remap_list">Ցույց տալ ցանկով</string>
+    <string name="game_remap_reset">Վերակայել բոլոր ստեղները</string>
+    <string name="game_remap_reset_description">Յուրաքանչյուր ստեղն վերադառնում է դասավորության կոճակին</string>
 </resources>

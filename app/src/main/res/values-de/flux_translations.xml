@@ -1178,7 +1178,7 @@
     <string name="game_mode_disclaimer">Die Tastatur ist kein Controller: Sie hat keine echten Sticks, und ihre Tasten und die Lautstärketasten machen die ganze Arbeit, daher eignet sich der Spielmodus für Spiele, die mit Tasten gespielt werden. Wie gut es klappt, ist unterschiedlich. Am besten spielst du mit einem Controller über Bluetooth oder USB, idealerweise einem für aufrecht gehaltene Telefone oder einem mit Telefonhalterung.</string>
     <string name="game_mode_layout_title">Tastatursteuerung</string>
     <string name="game_mode_layout_description">Welche Taste welcher Knopf ist</string>
-    <string name="game_mode_layout">Linker Stick: W A Z D (S klickt ihn)\nSteuerkreuz: SYM + W A Z D\nRechter Stick: Alt + I J M L oder rechte Umschalttaste + W A Z D (K klickt ihn)\nAktionstasten: I (Y), J (X), M (A), L (B)\nSchultertasten: Q und E\nTrigger: Lauter und Leiser\nStart: Leertaste\nSelect: Umschalt + Leertaste\nXbox / Home: Alt + Leertaste\nLautstärke: SYM + Lauter oder Leiser\n\nTasten, die auf dem Bildschirm eines Spiels platziert sind, tippen stattdessen dort.</string>
+    <string name="game_mode_layout">Linker Stick: W A Z D (S klickt ihn)\nSteuerkreuz: SYM + W A Z D\nRechter Stick: Alt + I J M L oder rechte Umschalttaste + W A Z D (K klickt ihn)\nAktionstasten: I (Y), J (X), M (A), L (B)\nSchultertasten: Q und E\nTrigger: Lauter und Leiser (Alt + Lautstärke: ganz durchgedrückt ohne Klick, für einen GameCube-Controller)\nStart: Leertaste\nSelect: Umschalt + Leertaste\nXbox / Home: Alt + Leertaste\nLautstärke: SYM + Lauter oder Leiser\n\nTasten, die auf dem Bildschirm eines Spiels platziert sind, tippen stattdessen dort.</string>
     <string name="game_mode_note">Der Spielmodus braucht die integrierte Shell (oder Shizuku) und die Bedienungshilfe der Tastatur. Deine Tasten spielen wie ein Controller (siehe Tastatursteuerung). Tippen in ein Textfeld des Spiels funktioniert wie gewohnt.</string>
     <string name="game_mode_profile_name">Name</string>
     <string name="game_mode_remove">Entfernen</string>
@@ -1432,4 +1432,18 @@
     <string name="crash_log_cleared">Logs geleert</string>
     <string name="stream_always">Immer für Moonlight verfügbar</string>
     <string name="stream_always_description">Hält das Telefon in Moonlight sichtbar, auch wenn Streaming aus ist, sodass du Wake nicht brauchst (manche Moonlight-Apps, etwa die für LG-Fernseher, senden ihr Wake dorthin, wo das Telefon es nicht hört). Ein gewähltes Spiel schaltet Streaming ein. Vorher einmal mit eingeschaltetem Streaming koppeln.</string>
+    <string name="game_remap_row_description">Sehen und ändern, welche Tasten welche Knöpfe sind</string>
+    <string name="game_remap_description">Jede Taste zeigt den Knopf, der sie ist, allein oder mit dem hier gewählten Modifikator gehalten. Tippe auf eine Taste, um sie zu ändern.</string>
+    <string name="game_remap_hint">Geänderte Tasten sind umrandet. Für Spiele, die nur per Touch gespielt werden, lassen sich Tasten auch auf dem Spielbildschirm platzieren: Tasten auf dem Bildschirm platzieren, in der Benachrichtigung des Spielmodus, während das Spiel offen ist. Eine platzierte Taste tippt stattdessen dort.</string>
+    <string name="game_remap_alone">Allein</string>
+    <string name="game_remap_right_shift">Rechte Umschalttaste</string>
+    <string name="game_remap_left_stick">Linker Stick</string>
+    <string name="game_remap_right_stick">Rechter Stick</string>
+    <string name="game_remap_dpad">Steuerkreuz</string>
+    <string name="game_remap_analog">ganz durchgedrückt, ohne Klick</string>
+    <string name="game_remap_nothing">Nichts (geht unverändert an das Spiel)</string>
+    <string name="game_remap_default">Standard: %1$s</string>
+    <string name="game_remap_list">Als Liste zeigen</string>
+    <string name="game_remap_reset">Alle Tasten zurücksetzen</string>
+    <string name="game_remap_reset_description">Jede Taste zurück auf den Knopf des Layouts</string>
 </resources>
