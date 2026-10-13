@@ -741,22 +741,6 @@ object GameMode {
     // ---- The trackpad: sticks or a mouse ----
 
     @Volatile private var trackpadReader: TrackpadReader? = null
-    /** Where keys are on the trackpad, learned from presses (each finger alone on it), kept from game to game. */
-    private val keyPlaces = HashMap<Int, Pair<Float, Float>>()
-
-    private fun learnKey(code: Int, x: Float, y: Float) {
-        if (keyGridPlace(code) == null) return
-        val before = keyPlaces[code]
-        keyPlaces[code] = if (before == null) x to y else (before.first * 0.7f + x * 0.3f) to (before.second * 0.7f + y * 0.3f)
-    }
-
-    /** A key's place on the trackpad (x min..max, y top..bottom): learned, else from the keyboard's rows. */
-    private fun keyPlace(code: Int, min: Float, max: Float, top: Float, bottom: Float): Pair<Float, Float>? {
-        keyPlaces[code]?.let { return it }
-        val (column, row) = keyGridPlace(code) ?: return null
-        return (min + (column + 0.5f) * (max - min) / 10f) to (top + (row + 0.5f) * (bottom - top) / 3f)
-    }
-
     /** A letter key's column (of ten across) and row (of three), as the Titan's keyboard has them. */
     internal fun keyGridPlace(code: Int): Pair<Float, Int>? {
         if (code !in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z) return null
@@ -910,8 +894,11 @@ object GameMode {
             var reorigin = false
             /** Touching the screen, as the pointer. */
             var pointing = false
-            /** Where the trackpad last put it, before held keys were taken out. */
+            /** Where the trackpad last put it. */
             var rawX = originX; var rawY = originY
+            /** A stick kept where it was while a key is held (the trackpad isn't following its thumb). */
+            var frozen = false
+            fun isStick() = role == TrackpadRole.LEFT_STICK || role == TrackpadRole.RIGHT_STICK
             /** The furthest push each way (up, down), for the log. */
             var furthestUp = 0f; var furthestDown = 0f
         }
@@ -931,48 +918,52 @@ object GameMode {
 
         fun line(line: String) = synchronized(lock) { slots.line(line) }
 
-        /** Keys on the keyboard held now, each at its place on the trackpad. */
-        private val heldKeys = HashMap<Int, Pair<Float, Float>>()
+        /** Keys on the keyboard (the trackpad) held now. */
+        private val heldKeys = HashSet<Int>()
+
+        /**
+         * Sticks whose finger the trackpad stopped reporting, by half (left true), kept where
+         * they were pushed: the trackpad follows only one finger, so pressing a key drops the
+         * stick's thumb (or stops reporting it) until the key is let go. Picked up again by
+         * the next touch on its half, from where it first landed.
+         */
+        private val parked = HashMap<Boolean, Finger>()
+        private var parkEnd: Runnable? = null
+
+        /** A key on the keyboard itself, where a finger pressing it touches the trackpad. */
+        private fun onKeyboard(code: Int) = keyGridPlace(code) != null ||
+            code == KeyEvent.KEYCODE_SPACE || code == KeyEvent.KEYCODE_ENTER || code == KeyEvent.KEYCODE_DEL
 
         /**
          * A key went down: the keyboard is the trackpad, so a finger that landed just before is
-         * that key being pressed, not a stick or pointer: it does nothing from now (and shows
-         * where that key is). A stick's finger already down stays the stick: the trackpad then
-         * reports the middle of both fingers, so the key's finger is taken back out of it.
+         * that key being pressed, not a stick or pointer: it does nothing from now. The sticks
+         * stay where they're pushed until the key is let go.
          */
         fun keyPressed(code: Int) = synchronized(lock) {
+            if (!onKeyboard(code)) return@synchronized
             val now = SystemClock.uptimeMillis()
-            var keySlot: Int? = null
-            for ((slot, f) in fingers) {
+            for (f in fingers.values) {
                 if (now - f.downAt > KEY_TOUCH_MS || f.role == TrackpadRole.NONE) continue
-                if (fingers.size == 1 && heldKeys.isEmpty() && held.isEmpty()) learnKey(code, f.rawX, f.rawY)
                 end(f)
                 f.role = TrackpadRole.NONE
-                keySlot = slot
             }
-            keyPlace(code, min, max, top, bottom)?.let { heldKeys[code] = it }
-            if (heldKeys.isNotEmpty()) {
-                keyStats = KeyStats(code, now, fingers.entries.joinToString { "${it.key}:${it.value.role}@${it.value.rawX.toInt()},${it.value.rawY.toInt()}" }, held.size)
-            }
-            // The key's finger was taken for a handover, the stick held where it was: the stick
-            // takes the trackpad's reports back, the key's finger taken out of them
-            val stick = held.entries.firstOrNull { it.value.role == TrackpadRole.LEFT_STICK || it.value.role == TrackpadRole.RIGHT_STICK }
-            if (keySlot != null && stick != null && heldKeys.isNotEmpty()) {
-                held.remove(stick.key)
-                val reported = fingers.getValue(keySlot)
-                fingers[keySlot] = stick.value.apply { settleUntil = 0L; reorigin = false; rawX = reported.rawX; rawY = reported.rawY }
-            }
-            restick()
+            heldKeys += code
+            parkEnd?.let { handler.removeCallbacks(it); parkEnd = null }
+            for (f in fingers.values) if (f.isStick()) f.frozen = true
+            keyStats = KeyStats(code, now, fingers.entries.joinToString { "${it.key}:${it.value.role}@${it.value.rawX.toInt()},${it.value.rawY.toInt()}" }, held.size + parked.size)
         }
 
         fun keyReleased(code: Int) = synchronized(lock) {
-            if (heldKeys.remove(code) != null) { keysLetGoAt = SystemClock.uptimeMillis(); restick() }
+            if (!heldKeys.remove(code)) return@synchronized
             keyStats?.takeIf { it.code == code }?.let { k ->
                 FluxLog.w(TAG, "key $code held ${SystemClock.uptimeMillis() - k.at} ms: trackpad sent ${k.moves} moves " +
-                    "(${k.firstMove} to ${k.lastMove}), ${k.downs} touches, ${k.ups} lifts; fingers at the press: ${k.fingers}, held ${k.held}; " +
-                    "key at ${heldKeysPlace(code)}")
+                    "(${k.firstMove} to ${k.lastMove}), ${k.downs} touches, ${k.ups} lifts; fingers at the press: ${k.fingers}, kept ${k.held}")
                 keyStats = null
             }
+            if (heldKeys.isNotEmpty()) return@synchronized
+            for (f in fingers.values) f.frozen = false
+            // The thumb has a moment to be found again before a kept stick lets go
+            if (parked.isNotEmpty()) endParked(RETURN_MS)
         }
 
         /** What the trackpad did while a key was held, for the log. */
@@ -982,29 +973,19 @@ object GameMode {
         }
         private var keyStats: KeyStats? = null
 
-        private fun heldKeysPlace(code: Int) = keyPlace(code, min, max, top, bottom)?.let { "${it.first.toInt()},${it.second.toInt()}" }
-
-        /** When the last key held was let go: the trackpad may lift and touch again as its finger leaves. */
-        private var keysLetGoAt = 0L
-
-        /** The sticks' fingers placed again, now the keys held have changed. */
-        private fun restick() {
-            for ((slot, f) in fingers.toList()) {
-                if (f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK) move(slot, f.rawX.toInt(), f.rawY.toInt())
+        /** The kept sticks let go after [delay], unless a key is pressed or their thumb comes back first. */
+        private fun endParked(delay: Long) {
+            parkEnd?.let { handler.removeCallbacks(it) }
+            val ending = Runnable {
+                synchronized(lock) {
+                    parkEnd = null
+                    if (heldKeys.isNotEmpty()) return@synchronized
+                    parked.values.forEach { end(it) }
+                    parked.clear()
+                }
             }
-        }
-
-        /**
-         * Where a stick's finger is, from what the trackpad reports while keys are held: it
-         * reports one place, the middle of every finger on it, so the held keys' places are
-         * taken back out (kept on the trackpad).
-         */
-        private fun unmixed(x: Int, y: Int): Pair<Int, Int> {
-            if (heldKeys.isEmpty()) return x to y
-            val n = heldKeys.size + 1
-            val ux = n * x - heldKeys.values.sumOf { it.first.toDouble() }.toFloat()
-            val uy = n * y - heldKeys.values.sumOf { it.second.toDouble() }.toFloat()
-            return ux.coerceIn(min, max).toInt() to uy.coerceIn(top, bottom).toInt()
+            parkEnd = ending
+            handler.postDelayed(ending, delay)
         }
 
         private fun roleFor(current: GameProfile, left: Boolean): TrackpadRole = when {
@@ -1017,14 +998,22 @@ object GameMode {
             keyStats?.let { it.downs++ }
             val current = profile ?: return
             val now = SystemClock.uptimeMillis()
-            val gone = pendingUp?.let { handler.removeCallbacks(it); pendingUp = null; fingers.remove(pendingSlot) }
-            if (gone != null && (heldKeys.isNotEmpty() || now - keysLetGoAt < KEY_TOUCH_MS) && (gone.role == TrackpadRole.LEFT_STICK || gone.role == TrackpadRole.RIGHT_STICK)) {
-                // A key pressed while a stick is held: the trackpad lifted and touched again at
-                // the middle of both fingers. Still the same stick, wherever the key's finger is
-                fingers[slot] = gone
+            // A key held: this touch is its finger (the trackpad left the thumb for it); the
+            // finger before is kept where it was
+            if (heldKeys.isNotEmpty()) {
+                pendingUp?.let { handler.removeCallbacks(it); it.run() }
+                fingers[slot] = Finger(TrackpadRole.NONE, x < mid, x.toFloat(), y.toFloat(), now)
+                return
+            }
+            // A kept stick's thumb found again: the same stick, from where it first landed
+            parked.remove(x < mid)?.let { back ->
+                pendingUp?.let { handler.removeCallbacks(it); it.run() }
+                if (parked.isEmpty()) parkEnd?.let { handler.removeCallbacks(it); parkEnd = null }
+                fingers[slot] = back.apply { frozen = false; settleUntil = 0L; lastX = x.toFloat(); lastY = y.toFloat() }
                 move(slot, x, y)
                 return
             }
+            val gone = pendingUp?.let { handler.removeCallbacks(it); pendingUp = null; fingers.remove(pendingSlot) }
             if (gone != null) {
                 // A handover: the finger before is still down, and this one is on the other half
                 // (where it is isn't known yet: the trackpad glides there from the last spot)
@@ -1037,7 +1026,7 @@ object GameMode {
             }
             val left = x < mid
             var role = roleFor(current, left)
-            if (role != TrackpadRole.NONE && (fingers.values + held.values).any { it.role == role }) role = TrackpadRole.NONE
+            if (role != TrackpadRole.NONE && (fingers.values + held.values + parked.values).any { it.role == role }) role = TrackpadRole.NONE
             reach(y)
             fingers[slot] = Finger(role, left, x.toFloat(), y.toFloat(), now).apply { rawX = x.toFloat(); rawY = y.toFloat() }
         }
@@ -1064,9 +1053,10 @@ object GameMode {
             keyStats?.let { k -> k.moves++; "$slot@$reportedX,$reportedY".let { if (k.firstMove.isEmpty()) k.firstMove = it; k.lastMove = it } }
             val f = fingers[slot] ?: return
             f.rawX = reportedX.toFloat(); f.rawY = reportedY.toFloat()
-            val stick = f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK
-            val (x, y) = if (stick) unmixed(reportedX, reportedY) else reportedX to reportedY
-            if (heldKeys.isEmpty() && gliding(f, x, y)) return
+            // While a key is held the trackpad isn't following the thumb: the stick stays put
+            if (f.frozen) return
+            val x = reportedX; val y = reportedY
+            if (gliding(f, x, y)) return
             if (f.reorigin) {
                 f.reorigin = false
                 f.originX = x.toFloat(); f.originY = y.toFloat()
@@ -1145,9 +1135,24 @@ object GameMode {
             val lifted = Runnable {
                 synchronized(lock) {
                     pendingUp = null
-                    fingers.remove(slot)?.let { end(it) }
+                    fingers.remove(slot)?.let { f ->
+                        // A stick's thumb dropped: kept a moment, as a key's finger may be why
+                        // (and kept while a key is held)
+                        if (f.isStick() && f.role != TrackpadRole.NONE) {
+                            parked[f.left]?.let { end(it) }
+                            parked[f.left] = f.apply { frozen = false }
+                            if (heldKeys.isEmpty()) endParked(PARK_MS)
+                        } else end(f)
+                    }
                     // Every finger off: the ones the trackpad had stopped reporting too
-                    if (fingers.isEmpty()) { held.values.forEach { end(it) }; held.clear() }
+                    // (a stick among them kept a moment for its thumb to be found again)
+                    if (fingers.isEmpty() && heldKeys.isEmpty()) {
+                        for (f in held.values) {
+                            if (f.isStick() && parked[f.left] == null) parked[f.left] = f.apply { frozen = false } else end(f)
+                        }
+                        held.clear()
+                        if (parked.isNotEmpty()) endParked(RETURN_MS)
+                    }
                 }
             }
             pendingUp = lifted
@@ -1181,6 +1186,10 @@ object GameMode {
             private const val POINTER_FINGER = 3
             /** A glide's report this close to the last is the finger at rest. */
             private const val GLIDE_STEP = 12f
+            /** How long a stick whose thumb dropped is kept, in case a key's finger is why. */
+            private const val PARK_MS = 150L
+            /** How long a stick kept while a key was held waits for its thumb once the key is let go. */
+            private const val RETURN_MS = 400L
             /** A finger landing this soon before a key goes down is that key. */
             private const val KEY_TOUCH_MS = 150L
         }
