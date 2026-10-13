@@ -1230,6 +1230,9 @@ internal fun CrashLogRow() {
                         "echo '== crashes =='; logcat -d -b crash -t 400; " +
                         "echo '== warnings and errors =='; logcat -d -b main,system '*:W' 'ActivityTaskManager:I' | " +
                         "grep -i -E '$app|gamehub|egggame|Permission Denial|FluxGameMode|FluxGameLaunch|FluxExtraScreen|Stream(Wake|Host|Session|Input|Audio|Control)|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | grep -v 'Changing focus' | tail -n 400; " +
+                        // The official GameHub's ways in (its activities, actions and links), to start its games directly
+                        "for p in com.xiaoji.egggame gamehub.lite; do pm path \$p >/dev/null 2>&1 && { echo \"== \$p ==\"; " +
+                        "dumpsys package \$p | grep -E 'Activity|Action:|Scheme:|Authority:|Path' | grep -v -i 'permission' | head -n 150; }; done; " +
                         // Flux Keyboard's own record of gaming mode, streaming and game launches (the phone's turns over in seconds)
                         "echo '== gaming and streaming =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${it.palsoftware.pastiera.FluxLog.FILE_NAME}'; " +
                         (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +
