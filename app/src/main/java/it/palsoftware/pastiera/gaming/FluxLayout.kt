@@ -9,14 +9,17 @@ import it.palsoftware.pastiera.adb.AdbShell
  * around S, its click; with SYM held they're the d-pad, with right Shift the right stick. The
  * right hand: I J M L the face buttons around K, the right stick's click (I top, J left, M
  * bottom, L right, as a controller has them); with Alt held they're the right stick. Q and E
- * the shoulders, Volume Up and Down the triggers, Space Start (Shift+Space Select, Alt+Space the
- * Xbox/Home button). Gaming mode reads the keys and modifiers ([controlFor]) and sends each
+ * the shoulders, Volume Up and Down the triggers (with Alt, pressed fully without their click, for
+ * a GameCube controller), Space Start (Shift+Space Select, Alt+Space the Xbox/Home button). Any
+ * key can be changed, alone or with a modifier held ([overrides]). Gaming mode reads the keys and modifiers ([controlFor]) and sends each
  * control as one key of its own ([KEYS]), the one written into an emulator's controller settings.
  */
 object FluxLayout {
     enum class Control {
         UP, DOWN, LEFT, RIGHT, A, B, X, Y, L1, R1, L2, R2, SELECT, START, HOME, L3, R3,
-        LS_UP, LS_DOWN, LS_LEFT, LS_RIGHT, RS_UP, RS_DOWN, RS_LEFT, RS_RIGHT
+        LS_UP, LS_DOWN, LS_LEFT, LS_RIGHT, RS_UP, RS_DOWN, RS_LEFT, RS_RIGHT,
+        /** The triggers pressed all the way without their click (a GameCube controller's). */
+        L2_ANALOG, R2_ANALOG
     }
 
     /**
@@ -37,7 +40,8 @@ object FluxLayout {
         KeyEvent.KEYCODE_DPAD_UP to Control.UP, KeyEvent.KEYCODE_DPAD_DOWN to Control.DOWN,
         KeyEvent.KEYCODE_DPAD_LEFT to Control.LEFT, KeyEvent.KEYCODE_DPAD_RIGHT to Control.RIGHT,
         KeyEvent.KEYCODE_T to Control.RS_UP, KeyEvent.KEYCODE_V to Control.RS_DOWN,
-        KeyEvent.KEYCODE_F to Control.RS_LEFT, KeyEvent.KEYCODE_G to Control.RS_RIGHT
+        KeyEvent.KEYCODE_F to Control.RS_LEFT, KeyEvent.KEYCODE_G to Control.RS_RIGHT,
+        KeyEvent.KEYCODE_C to Control.L2_ANALOG, KeyEvent.KEYCODE_N to Control.R2_ANALOG
     )
 
     /** The key a control is sent as. */
@@ -52,8 +56,61 @@ object FluxLayout {
         KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT
     )
 
-    /** The control a key pressed makes with [mods] held; null: not one of the layout's keys. */
-    fun controlFor(code: Int, mods: Modifiers): Control? = when (code) {
+    /** The modifier held that a key is read with: the first of SYM, right Shift, Alt, Shift. */
+    enum class Layer { NONE, SYM, RIGHT_SHIFT, ALT, SHIFT }
+
+    fun layerOf(mods: Modifiers): Layer = when {
+        mods.sym -> Layer.SYM; mods.rightShift -> Layer.RIGHT_SHIFT; mods.alt -> Layer.ALT; mods.shift -> Layer.SHIFT
+        else -> Layer.NONE
+    }
+
+    fun modifiersOf(layer: Layer): Modifiers = when (layer) {
+        Layer.NONE -> Modifiers(); Layer.SYM -> Modifiers(sym = true)
+        Layer.RIGHT_SHIFT -> Modifiers(rightShift = true, shift = true)
+        Layer.ALT -> Modifiers(alt = true); Layer.SHIFT -> Modifiers(shift = true)
+    }
+
+    /**
+     * Keys changed from the layout, with the modifier they're pressed with: the control each
+     * makes, or null for none (the key goes to the game as it is).
+     */
+    @Volatile var overrides: Map<Pair<Layer, Int>, Control?> = emptyMap()
+        private set
+
+    private const val KEY_OVERRIDES = "game_layout_overrides"
+
+    fun loadOverrides(context: android.content.Context) {
+        val text = it.palsoftware.pastiera.SettingsManager.getPreferences(context).getString(KEY_OVERRIDES, "").orEmpty()
+        overrides = parseOverrides(text)
+    }
+
+    fun setOverrides(context: android.content.Context, changed: Map<Pair<Layer, Int>, Control?>) {
+        overrides = changed
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putString(KEY_OVERRIDES, formatOverrides(changed)).apply()
+    }
+
+    /** "ALT:41=A,NONE:45=-": layer, key, control (or - for none). */
+    internal fun formatOverrides(map: Map<Pair<Layer, Int>, Control?>): String =
+        map.entries.joinToString(",") { (key, control) -> "${key.first}:${key.second}=${control?.name ?: "-"}" }
+
+    internal fun parseOverrides(text: String): Map<Pair<Layer, Int>, Control?> = text.split(',').mapNotNull { entry ->
+        val layer = runCatching { Layer.valueOf(entry.substringBefore(':')) }.getOrNull() ?: return@mapNotNull null
+        val code = entry.substringAfter(':').substringBefore('=').toIntOrNull() ?: return@mapNotNull null
+        val name = entry.substringAfter('=', "")
+        if (name.isEmpty()) return@mapNotNull null
+        val control = if (name == "-") null else runCatching { Control.valueOf(name) }.getOrNull() ?: return@mapNotNull null
+        (layer to code) to control
+    }.toMap()
+
+    /** The control a key pressed makes with [mods] held, as changed; null: not one of the layout's keys. */
+    fun controlFor(code: Int, mods: Modifiers): Control? {
+        val key = layerOf(mods) to code
+        val changed = overrides
+        return if (key in changed) changed[key] else defaultControlFor(code, mods)
+    }
+
+    /** The control a key makes with [mods] held, as the layout has it. */
+    fun defaultControlFor(code: Int, mods: Modifiers): Control? = when (code) {
         KeyEvent.KEYCODE_W -> if (mods.sym) Control.UP else if (mods.rightShift) Control.RS_UP else Control.LS_UP
         KeyEvent.KEYCODE_Z -> if (mods.sym) Control.DOWN else if (mods.rightShift) Control.RS_DOWN else Control.LS_DOWN
         KeyEvent.KEYCODE_A -> if (mods.sym) Control.LEFT else if (mods.rightShift) Control.RS_LEFT else Control.LS_LEFT
@@ -66,8 +123,8 @@ object FluxLayout {
         KeyEvent.KEYCODE_K -> Control.R3
         KeyEvent.KEYCODE_Q -> Control.L1
         KeyEvent.KEYCODE_E -> Control.R1
-        KeyEvent.KEYCODE_VOLUME_UP -> Control.L2
-        KeyEvent.KEYCODE_VOLUME_DOWN -> Control.R2
+        KeyEvent.KEYCODE_VOLUME_UP -> if (mods.alt) Control.L2_ANALOG else Control.L2
+        KeyEvent.KEYCODE_VOLUME_DOWN -> if (mods.alt) Control.R2_ANALOG else Control.R2
         KeyEvent.KEYCODE_SPACE -> if (mods.alt) Control.HOME else if (mods.shift) Control.SELECT else Control.START
         else -> null
     }
@@ -84,6 +141,7 @@ object FluxLayout {
         Control.X to KeyEvent.KEYCODE_BUTTON_X, Control.Y to KeyEvent.KEYCODE_BUTTON_Y,
         Control.L1 to KeyEvent.KEYCODE_BUTTON_L1, Control.R1 to KeyEvent.KEYCODE_BUTTON_R1,
         Control.L2 to KeyEvent.KEYCODE_BUTTON_L2, Control.R2 to KeyEvent.KEYCODE_BUTTON_R2,
+        Control.L2_ANALOG to KeyEvent.KEYCODE_BUTTON_L2, Control.R2_ANALOG to KeyEvent.KEYCODE_BUTTON_R2,
         Control.SELECT to KeyEvent.KEYCODE_BUTTON_SELECT, Control.START to KeyEvent.KEYCODE_BUTTON_START,
         Control.HOME to KeyEvent.KEYCODE_BUTTON_MODE,
         Control.L3 to KeyEvent.KEYCODE_BUTTON_THUMBL, Control.R3 to KeyEvent.KEYCODE_BUTTON_THUMBR,
@@ -105,12 +163,16 @@ object FluxLayout {
 
     // ---- Dolphin: GameCube controller and Wii Remote with Nunchuk ----
 
-    /** The GameCube's L and R on the triggers (the volume keys), its Z on the right shoulder (E). */
+    /**
+     * The GameCube's L and R on the triggers (the volume keys), clicked and pressed all the way;
+     * with Alt, pressed all the way without the click. Its Z on the right shoulder (E).
+     */
     private val GAMECUBE = listOf(
         "Buttons/A" to keys(Control.A), "Buttons/B" to keys(Control.B),
         "Buttons/X" to keys(Control.X), "Buttons/Y" to keys(Control.Y),
         "Buttons/Z" to keys(Control.R1), "Buttons/Start" to keys(Control.START),
         "Triggers/L" to keys(Control.L2), "Triggers/R" to keys(Control.R2),
+        "Triggers/L-Analog" to keys(Control.L2, Control.L2_ANALOG), "Triggers/R-Analog" to keys(Control.R2, Control.R2_ANALOG),
         "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
         "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
         "Main Stick/Up" to keys(Control.LS_UP), "Main Stick/Down" to keys(Control.LS_DOWN),
@@ -267,7 +329,7 @@ object FluxLayout {
     internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
 
     /** The layout's version: written again into emulators given an older one. */
-    private const val LAYOUT_VERSION = 2
+    private const val LAYOUT_VERSION = 3
 
     /**
      * An emulator given Flux Keyboard's layout before it changed: given the current one, once

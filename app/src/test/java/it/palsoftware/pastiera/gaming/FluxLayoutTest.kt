@@ -88,4 +88,24 @@ class FluxLayoutTest {
         // Back to the Nunchuk: nothing of it kept
         assertEquals("", FluxLayout.wiiPadSettings(gc, FluxLayout.WiiPad.NUNCHUK))
     }
+
+    @Test
+    fun altVolumeIsTheTriggerWithoutItsClick() {
+        val alt = FluxLayout.Modifiers(alt = true)
+        assertEquals(FluxLayout.Control.L2_ANALOG, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_UP, alt))
+        assertEquals(FluxLayout.Control.R2, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_DOWN, FluxLayout.Modifiers()))
+        val gc = FluxLayout.dolphinGameCube("Keys")
+        assertTrue("Triggers/L = `U`" in gc)
+        assertTrue("Triggers/L-Analog = `U` | `C`" in gc)
+    }
+
+    @Test
+    fun changedKeysRoundTrip() {
+        val map = mapOf(
+            (FluxLayout.Layer.ALT to KeyEvent.KEYCODE_Q) to FluxLayout.Control.A,
+            (FluxLayout.Layer.NONE to KeyEvent.KEYCODE_E) to null
+        )
+        assertEquals(map, FluxLayout.parseOverrides(FluxLayout.formatOverrides(map)))
+        assertEquals(emptyMap<Any, Any>(), FluxLayout.parseOverrides(""))
+    }
 }

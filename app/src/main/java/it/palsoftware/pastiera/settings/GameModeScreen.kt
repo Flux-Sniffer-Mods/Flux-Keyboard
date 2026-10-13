@@ -89,6 +89,13 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         refresh()
     }
 
+    var remapping by remember { mutableStateOf(false) }
+    if (remapping) {
+        androidx.activity.compose.BackHandler { remapping = false }
+        GameLayoutRemapper(modifier) { remapping = false }
+        return
+    }
+
     editing?.let { profile ->
         GameProfileEditor(profile, onDone = { saved ->
             // A found game, looked at: set up from now on
@@ -108,19 +115,12 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         FluxNote(stringResource(R.string.game_mode_note))
         // The keyboard's limits, and what plays best: a controller made for the phone
         FluxNote(stringResource(R.string.game_mode_disclaimer))
-        var showingLayout by remember { mutableStateOf(false) }
         FluxActionRow(
             linkId = null,
             icon = "\u2328",
             title = stringResource(R.string.game_mode_layout_title),
-            description = stringResource(R.string.game_mode_layout_description)
-        ) { showingLayout = true }
-        if (showingLayout) AlertDialog(
-            onDismissRequest = { showingLayout = false },
-            title = { Text(stringResource(R.string.game_mode_layout_title)) },
-            text = { Text(stringResource(R.string.game_mode_layout)) },
-            confirmButton = { TextButton(onClick = { showingLayout = false }) { Text(stringResource(android.R.string.ok)) } }
-        )
+            description = stringResource(R.string.game_remap_row_description)
+        ) { remapping = true }
         FluxSwitchRow(
             linkId = "main.root.game_mode",
             title = stringResource(R.string.game_mode_title),

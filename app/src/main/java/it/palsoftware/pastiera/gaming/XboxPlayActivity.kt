@@ -386,7 +386,7 @@ class XboxPlayActivity : Activity() {
             FluxLayout.Control.L1 to 4, FluxLayout.Control.R1 to 5, FluxLayout.Control.L2 to 6, FluxLayout.Control.R2 to 7,
             FluxLayout.Control.SELECT to 8, FluxLayout.Control.START to 9, FluxLayout.Control.L3 to 10, FluxLayout.Control.R3 to 11,
             FluxLayout.Control.UP to 12, FluxLayout.Control.DOWN to 13, FluxLayout.Control.LEFT to 14, FluxLayout.Control.RIGHT to 15,
-            FluxLayout.Control.HOME to 16
+            FluxLayout.Control.HOME to 16, FluxLayout.Control.L2_ANALOG to 6, FluxLayout.Control.R2_ANALOG to 7
         )
 
         /**

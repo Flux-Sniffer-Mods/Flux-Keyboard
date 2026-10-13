@@ -696,6 +696,12 @@
     },
     {
       "text": "Streaming: Always available to Moonlight keeps the phone listed while streaming is off, for Moonlight apps whose Wake can't reach the phone (like the one for LG TVs); picking a game turns streaming on"
+    },
+    {
+      "text": "Gaming mode: Keyboard controls shows the keyboard with the button each key is, alone or with SYM, Shift, right Shift or Alt held; tap a key to change it"
+    },
+    {
+      "text": "Gaming mode: for a GameCube controller in Dolphin, the volume keys press L and R all the way with their click; Alt + Volume presses them all the way without it"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

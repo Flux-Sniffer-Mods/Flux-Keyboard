@@ -128,6 +128,7 @@ object GameMode {
     fun attachPlayer(context: Context, screenMode: ScreenMode, sink: (FloatArray) -> Unit) {
         val app = context.applicationContext
         appContext = app
+        FluxLayout.loadOverrides(app)
         worker.execute {
             stickSink = sink
             val player = GameProfile(
@@ -476,6 +477,7 @@ object GameMode {
 
     private fun start(context: Context, chosen: GameProfile) {
         appContext = context.applicationContext
+        FluxLayout.loadOverrides(context)
         if (profile == null) {
             if (!AdbShell.available()) return
             startInput(context)
