@@ -1356,4 +1356,7 @@
     <string name="game_remap_list">Εμφάνιση ως λίστα</string>
     <string name="game_remap_reset">Επαναφορά όλων των πλήκτρων</string>
     <string name="game_remap_reset_description">Κάθε πλήκτρο πίσω στο κουμπί της διάταξης</string>
+    <string name="game_mode_screen_upright">Κράτα το παιχνίδι όρθιο</string>
+    <string name="game_mode_screen_upright_description">Κρατά το τηλέφωνο και το παιχνίδι όρθια, ό,τι κι αν ζητά το παιχνίδι. Για εξομοιωτές DS και 3DS: οι δύο οθόνες τους η μία πάνω από την άλλη.</string>
+    <string name="game_mode_bottom_screen">Κάτω οθόνη</string>
 </resources>

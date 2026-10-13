@@ -1992,4 +1992,7 @@
     <string name="game_remap_list">Показати списком</string>
     <string name="game_remap_reset">Скинути всі клавіші</string>
     <string name="game_remap_reset_description">Кожна клавіша повертається до кнопки розкладки</string>
+    <string name="game_mode_screen_upright">Тримати гру вертикально</string>
+    <string name="game_mode_screen_upright_description">Тримає телефон і гру вертикально, хоч би що запитувала гра. Для емуляторів DS і 3DS: їхні два екрани один над одним.</string>
+    <string name="game_mode_bottom_screen">Нижній екран</string>
 </resources>

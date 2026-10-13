@@ -1974,4 +1974,7 @@
     <string name="game_remap_list">Hiện dạng danh sách</string>
     <string name="game_remap_reset">Đặt lại tất cả phím</string>
     <string name="game_remap_reset_description">Mỗi phím trở về nút của bố cục</string>
+    <string name="game_mode_screen_upright">Giữ trò chơi thẳng đứng</string>
+    <string name="game_mode_screen_upright_description">Giữ điện thoại và trò chơi thẳng đứng, bất kể trò chơi yêu cầu gì. Với trình giả lập DS và 3DS: hai màn hình xếp chồng lên nhau.</string>
+    <string name="game_mode_bottom_screen">Màn hình dưới</string>
 </resources>
