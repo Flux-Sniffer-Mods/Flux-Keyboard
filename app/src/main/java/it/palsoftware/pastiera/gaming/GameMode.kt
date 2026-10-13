@@ -232,6 +232,8 @@ object GameMode {
 
     /** Modifier keys held (SYM, Shift, Alt): they change what the layout's keys are. */
     private val modifiersHeld = mutableSetOf<Int>()
+    /** The layout's keys that went to the app as they are (held now). */
+    private val passedThrough = java.util.Collections.synchronizedSet(mutableSetOf<Int>())
     /** The layout's keys held. */
     private val layoutKeysHeld = mutableSetOf<Int>()
     /** The controls pressed now (sent as pressed), and how: as keys, or as a controller's. */
@@ -281,10 +283,22 @@ object GameMode {
             }
             return true
         }
-        if (FluxLayout.controlFor(code, FluxLayout.Modifiers()) == null) {
+        val plain = FluxLayout.controlFor(code, FluxLayout.Modifiers())
+        if (plain == null) {
             if (down && event.repeatCount == 0) FluxLog.w(TAG, "key $code isn't one of the layout's: passed on")
             return false
         }
+        // A key that went to the app as it is lets go the same way
+        if (code in passedThrough) {
+            if (event.action == KeyEvent.ACTION_UP) passedThrough -= code
+            return false
+        }
+        // For an app given the layout's keys, a key that is its control's own key goes to it as
+        // it is (no modifier held, none of it on an on-screen stick): only combinations are sent
+        if (down && event.repeatCount == 0 && sendsKeys() && modifiersHeld.isEmpty() && FluxLayout.keyOf(plain) == code &&
+            code !in layoutKeysHeld && (plain !in FluxLayout.STICK_CONTROLS || !profile?.stickZones.orEmpty().containsKey(
+                if (FluxLayout.STICK_CONTROLS.indexOf(plain) < 4) 0 else 1))
+        ) { passedThrough += code; return false }
         // Kept on the worker, where they're read
         if (event.repeatCount == 0) worker.execute {
             if (down) {
@@ -299,6 +313,8 @@ object GameMode {
 
     /** How controls reach the app in front: as the layout's own keys, or as a controller's. */
     internal fun sendsKeys(): Boolean {
+        // Flux Keyboard's own player (which isn't followed as the app in front)
+        if (stickSink != null || profile?.id == "player") return true
         val front = frontPackage ?: return false
         return front == appContext?.packageName || GameApps.emulator(front) != null
     }
@@ -359,7 +375,7 @@ object GameMode {
 
     /** Every control let go (the game ended, or another app came in front). */
     private fun releaseControls() {
-        modifiersHeld.clear(); layoutKeysHeld.clear()
+        modifiersHeld.clear(); layoutKeysHeld.clear(); passedThrough.clear()
         symHeld = false; volumeTaken.clear()
         controlsDown.keys.toList().forEach { sendControl(it, false) }
         keySticks.fill(0f)

@@ -1006,6 +1006,12 @@
     },
     {
       "text": "Gaming mode: a Dolphin Wii game set to a GameCube controller gets it again each time it starts from Games"
+    },
+    {
+      "text": "Gaming mode: in Dolphin, PPSSPP and the Xbox player, a key that is its own button goes to the game as it is; only combinations (SYM, Alt, right Shift, Shift+Space, Alt+Space) and the volume keys are sent for you"
+    },
+    {
+      "text": "Gaming mode: in the Xbox player, L is the B button again rather than Android's Back"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -57,6 +57,14 @@ class GameLaunchActivity : Activity() {
                 if (GameApps.emulator(pkg) == "Dolphin") runCatching { FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir) } }
                 // Its controls given the current layout, if they had an older one
                 runCatching { FluxLayout.refreshIfOutdated(this, pkg) }
+                // What Dolphin was given, for the crash log
+                if (GameApps.emulator(pkg) == "Dolphin") runCatching {
+                    FluxLayout.dolphinDir(pkg)?.let { dir ->
+                        val lines = it.palsoftware.pastiera.adb.AdbShell.run(
+                            "cd \"$dir/Config\" && grep -H -E '^\\[|Device|Source|Buttons/A |Main Stick/Up|Triggers/L|Nunchuk/Stick/Up|PadType|WiimoteSource|PadProfile' GCPadNew.ini WiimoteNew.ini Dolphin.ini 2>/dev/null | head -n 40", 3_000)
+                        FluxLog.w("FluxGameLaunch", "Dolphin's controls: " + lines.orEmpty().replace("\n", " | "))
+                    }
+                }
                 // A Wii game's own controller (a GameCube controller, say) set again as it starts
                 val wiiPad = profile?.wiiPad?.let { name -> FluxLayout.WiiPad.entries.firstOrNull { it.name == name } }
                 if (wiiPad != null && GameApps.emulator(pkg) == "Dolphin") runCatching {
