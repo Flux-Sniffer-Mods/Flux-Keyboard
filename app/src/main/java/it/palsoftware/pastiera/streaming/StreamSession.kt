@@ -63,7 +63,17 @@ internal class StreamSession(
     private var packetMs = 5
     private var audioEncrypted = false
 
+    /** The Wi-Fi kept at its quickest while streaming: its power saving delays packets by tens of milliseconds. */
+    private var wifiLock: android.net.wifi.WifiManager.WifiLock? = null
+
     fun start() {
+        wifiLock = runCatching {
+            val wifi = context.applicationContext.getSystemService(android.net.wifi.WifiManager::class.java)
+            @Suppress("DEPRECATION")
+            val mode = if (android.os.Build.VERSION.SDK_INT >= 29) android.net.wifi.WifiManager.WIFI_MODE_FULL_LOW_LATENCY
+                else android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF
+            wifi?.createWifiLock(mode, "Flux:stream")?.apply { setReferenceCounted(false); acquire() }
+        }.onFailure { FluxLog.w(TAG, "no low-latency Wi-Fi: $it") }.getOrNull()
         videoPort = StreamPort(VIDEO_PORT, client)
         audioPort = StreamPort(AUDIO_PORT, client)
         control = StreamControl(StreamProtocol.ControlCipher(key), ::message) { end(notify = false) }.also { it.start() }
@@ -114,6 +124,7 @@ internal class StreamSession(
         runCatching { control?.stop() }; control = null
         runCatching { rtsp?.close() }; rtsp = null
         videoPort?.close(); audioPort?.close()
+        runCatching { wifiLock?.release() }; wifiLock = null
         worker.shutdown()
         onEnded(this)
     }

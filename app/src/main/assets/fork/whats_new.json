@@ -687,6 +687,9 @@
     },
     {
       "text": "Gaming mode: the root-only controller mode is gone; the keyboard controls work without root"
+    },
+    {
+      "text": "Streaming: lower latency: the phone's Wi-Fi is kept out of power saving while streaming, the stream is marked as real-time traffic for routers that honour it, and the video encoder never waits on later frames"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -982,6 +985,12 @@
     },
     {
       "text": "Gaming mode: pressing a button while using a trackpad stick no longer stops or recentres the stick: it stays where it was pushed while the button is held, then follows your thumb again from where it first landed"
+    },
+    {
+      "text": "Gaming mode: if its key sender stops (as it could while streaming), it starts again by itself, and keys reach the game as they are meanwhile instead of being lost"
+    },
+    {
+      "text": "Streaming: a controller on the Moonlight device now works in Dolphin, PPSSPP and the Xbox player, pressed as the keys their controls were given"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

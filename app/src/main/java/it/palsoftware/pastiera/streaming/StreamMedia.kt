@@ -28,7 +28,11 @@ import java.net.InetAddress
  * client says where to send.
  */
 internal class StreamPort(port: Int, private val client: InetAddress) {
-    private val socket = DatagramSocket(null).apply { reuseAddress = true; bind(java.net.InetSocketAddress(port)); sendBufferSize = 1 shl 20 }
+    private val socket = DatagramSocket(null).apply {
+        reuseAddress = true; bind(java.net.InetSocketAddress(port)); sendBufferSize = 1 shl 20
+        // Marked as real-time (DSCP EF): routers that honour it send it ahead of other traffic
+        runCatching { trafficClass = 0xB8 }
+    }
     @Volatile var target: Pair<InetAddress, Int>? = null
         private set
     @Volatile private var open = true
@@ -99,6 +103,8 @@ internal class StreamVideo(
             setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1_000_000L / fps)
             setInteger(MediaFormat.KEY_PRIORITY, 0)
             if (android.os.Build.VERSION.SDK_INT >= 30) setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
+            // No frames that wait on later ones
+            if (android.os.Build.VERSION.SDK_INT >= 29) setInteger(MediaFormat.KEY_MAX_B_FRAMES, 0)
             setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
         }
         val encoder = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)

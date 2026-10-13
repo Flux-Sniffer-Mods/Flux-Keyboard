@@ -250,6 +250,15 @@ object GameMode {
         val down = event.action == KeyEvent.ACTION_DOWN
         if (event.repeatCount == 0) trackpadReader?.let { if (down) it.keyPressed(code) else if (event.action == KeyEvent.ACTION_UP) it.keyReleased(code) }
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
+        // Nothing to send them through (the input helper isn't running): the keys go to the
+        // game as they are rather than nowhere, and the helper is started again
+        if (input == null) {
+            if (down && event.repeatCount == 0) {
+                FluxLog.w(TAG, "keys passed on as they are: the input helper isn't running")
+                appContext?.let { context -> worker.execute { if (input == null && profile != null) restartInput(context) } }
+            }
+            return false
+        }
         if (code in FluxLayout.MODIFIER_KEYS) {
             if (event.repeatCount == 0) {
                 if (down) modifiersHeld += code else modifiersHeld -= code
@@ -275,7 +284,7 @@ object GameMode {
     }
 
     /** How controls reach the app in front: as the layout's own keys, or as a controller's. */
-    private fun sendsKeys(): Boolean {
+    internal fun sendsKeys(): Boolean {
         val front = frontPackage ?: return false
         return front == appContext?.packageName || GameApps.emulator(front) != null
     }
@@ -469,6 +478,18 @@ object GameMode {
         !device.isVirtual && device.keyboardType == android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC
     }
 
+    /** The input helper started again where it ended, aimed where the game is. */
+    private fun restartInput(context: Context) {
+        val w = screenW; val h = screenH
+        runCatching { inputProcess?.destroy() }
+        startInput(context)
+        if (input == null) return
+        extra?.let { send("Z ${it.id}") }
+        screenW = w; screenH = h
+        send("S ${w.toInt()} ${h.toInt()}")
+        FluxLog.w(TAG, "input helper started again")
+    }
+
     private fun startInput(context: Context) {
         val apk = context.applicationInfo.sourceDir
         runCatching {
@@ -481,6 +502,14 @@ object GameMode {
             }
             inputProcess = process
             input = process.outputStream.bufferedWriter()
+            // It ending by itself (the shell restarted): known straight away, so keys aren't lost
+            Thread {
+                runCatching { process.waitFor() }
+                if (inputProcess === process) {
+                    FluxLog.w(TAG, "input helper ended (exit ${runCatching { process.exitValue() }.getOrNull()})")
+                    input = null
+                }
+            }.apply { isDaemon = true; start() }
             val size = android.graphics.Point()
             @Suppress("DEPRECATION")
             context.getSystemService(android.view.WindowManager::class.java)?.defaultDisplay?.getRealSize(size)

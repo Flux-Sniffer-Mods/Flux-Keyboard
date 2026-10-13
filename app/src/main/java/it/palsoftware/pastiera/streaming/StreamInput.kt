@@ -9,6 +9,7 @@ import android.view.Display
 import android.view.KeyEvent
 import it.palsoftware.pastiera.adb.AdbShell
 import it.palsoftware.pastiera.adb.RootShell
+import it.palsoftware.pastiera.gaming.FluxLayout
 import it.palsoftware.pastiera.gaming.GameInputServer
 import it.palsoftware.pastiera.streaming.StreamProtocol.Input
 import java.io.Writer
@@ -121,6 +122,23 @@ internal class StreamInput(private val context: Context, private val streamWidth
                 send("H ${bit(b, StreamProtocol.PAD_UP)} ${bit(b, StreamProtocol.PAD_DOWN)} ${bit(b, StreamProtocol.PAD_LEFT)} ${bit(b, StreamProtocol.PAD_RIGHT)}")
             }
             send("A $lx $ly $rx $ry")
+        } else if (it.palsoftware.pastiera.gaming.GameMode.sendsKeys()) {
+            // An emulator given Flux Keyboard's layout (or its own player) takes only those keys:
+            // the controller pressed as them, the sticks as their direction keys
+            fun press(control: FluxLayout.Control, now: Boolean, was: Boolean) {
+                if (now != was) send("K ${if (now) 1 else 0} ${FluxLayout.keyOf(control)} k")
+            }
+            for ((flag, control) in KEY_CONTROLS) press(control, event.buttons and flag != 0, before.buttons and flag != 0)
+            press(FluxLayout.Control.L2, l2, l2Before)
+            press(FluxLayout.Control.R2, r2, r2Before)
+            fun ax(v: Int) = (v / 32767f).coerceIn(-1f, 1f)
+            val was = floatArrayOf(ax(before.lx), -ax(before.ly), ax(before.rx), -ax(before.ry))
+            val now = floatArrayOf(lx, ly, rx, ry)
+            for ((i, dirs) in STICK_DIRS.withIndex()) {
+                val (neg, pos) = dirs
+                press(neg, now[i] < -STICK_PUSH, was[i] < -STICK_PUSH)
+                press(pos, now[i] > STICK_PUSH, was[i] > STICK_PUSH)
+            }
         } else {
             for ((flag, code) in KEY_BUTTONS) if (changed and flag != 0) send("K ${if (event.buttons and flag != 0) 1 else 0} $code g")
             if (l2 != l2Before) send("K ${if (l2) 1 else 0} ${KeyEvent.KEYCODE_BUTTON_L2} g")
@@ -156,6 +174,27 @@ internal class StreamInput(private val context: Context, private val streamWidth
             StreamProtocol.PAD_UP to KeyEvent.KEYCODE_DPAD_UP, StreamProtocol.PAD_DOWN to KeyEvent.KEYCODE_DPAD_DOWN,
             StreamProtocol.PAD_LEFT to KeyEvent.KEYCODE_DPAD_LEFT, StreamProtocol.PAD_RIGHT to KeyEvent.KEYCODE_DPAD_RIGHT
         )
+
+        /** The controller's buttons as Flux Keyboard's controls, for an emulator given its layout. */
+        private val KEY_CONTROLS = listOf(
+            StreamProtocol.PAD_A to FluxLayout.Control.A, StreamProtocol.PAD_B to FluxLayout.Control.B,
+            StreamProtocol.PAD_X to FluxLayout.Control.X, StreamProtocol.PAD_Y to FluxLayout.Control.Y,
+            StreamProtocol.PAD_LB to FluxLayout.Control.L1, StreamProtocol.PAD_RB to FluxLayout.Control.R1,
+            StreamProtocol.PAD_BACK to FluxLayout.Control.SELECT, StreamProtocol.PAD_START to FluxLayout.Control.START,
+            StreamProtocol.PAD_HOME to FluxLayout.Control.HOME, StreamProtocol.PAD_LS to FluxLayout.Control.L3,
+            StreamProtocol.PAD_RS to FluxLayout.Control.R3,
+            StreamProtocol.PAD_UP to FluxLayout.Control.UP, StreamProtocol.PAD_DOWN to FluxLayout.Control.DOWN,
+            StreamProtocol.PAD_LEFT to FluxLayout.Control.LEFT, StreamProtocol.PAD_RIGHT to FluxLayout.Control.RIGHT
+        )
+
+        /** Each stick axis (left x, y, right x, y): its negative and positive direction. */
+        private val STICK_DIRS = listOf(
+            FluxLayout.Control.LS_LEFT to FluxLayout.Control.LS_RIGHT, FluxLayout.Control.LS_UP to FluxLayout.Control.LS_DOWN,
+            FluxLayout.Control.RS_LEFT to FluxLayout.Control.RS_RIGHT, FluxLayout.Control.RS_UP to FluxLayout.Control.RS_DOWN
+        )
+
+        /** How far a stick goes before its direction key is pressed. */
+        private const val STICK_PUSH = 0.5f
 
         /** A Windows virtual key (what Moonlight sends) as Android's key. */
         internal fun keyCode(vk: Int): Int? = when (vk) {
