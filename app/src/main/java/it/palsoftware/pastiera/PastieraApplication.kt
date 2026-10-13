@@ -16,6 +16,7 @@ import it.palsoftware.pastiera.settings.RecommendedSettings
 class PastieraApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        FluxLog.init(this)
         // A fresh install starts from the default configuration, before anything writes settings
         if (RecommendedSettings.applyIfFreshInstall(this)) {
             // A language edition opens in its language

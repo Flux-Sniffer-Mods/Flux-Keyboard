@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.display
 
 import android.app.ActivityOptions
+import it.palsoftware.pastiera.FluxLog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -101,7 +102,7 @@ object ExtraScreen {
                     "${server.localPort} $token $w $h ${dpiFor(h)} $fps $kbps ${if (desktop) 1 else 0} ${if (passthrough) 1 else 0}"))
             Thread { runCatching { started.inputStream.readBytes() } }.apply { isDaemon = true; start() }
             Thread {
-                runCatching { started.errorStream.bufferedReader().forEachLine { Log.w(TAG, it) } }
+                runCatching { started.errorStream.bufferedReader().forEachLine { FluxLog.w(TAG, it) } }
             }.apply { isDaemon = true; start() }
             val accepted = server.accept()
             connection = accepted
@@ -130,7 +131,7 @@ object ExtraScreen {
             watchers.forEach { runCatching { it() } }
             return screen
         } catch (e: Exception) {
-            Log.w(TAG, "screen couldn't open: $e")
+            FluxLog.w(TAG, "screen couldn't open: $e")
             if (freeformScreens != null && restoreFreeform) AdbShell.run("settings put global force_desktop_mode_on_external_displays 1")
             runCatching { connection?.close() }
             started?.destroy()
@@ -308,7 +309,7 @@ object ExtraScreen {
         // Filling the screen, not in a window of its own (Android's desktop keeps its windows)
         val fullscreen = current?.desktop != true
         val said = AdbShell.run("am start --display $displayId" + (if (fullscreen) " --windowingMode $WINDOWING_FULLSCREEN" else "") + " '$uri'")
-        Log.w(TAG, "am start on screen $displayId: $uri -> ${said?.trim()}")
+        FluxLog.w(TAG, "am start on screen $displayId: $uri -> ${said?.trim()}")
         val started = said?.takeUnless { it.contains("Error", true) || it.contains("Exception") }
         if (started == null) runCatching {
             val options = ActivityOptions.makeBasic().setLaunchDisplayId(displayId)
@@ -333,7 +334,7 @@ object ExtraScreen {
                 launch = intent.toUri(Intent.URI_INTENT_SCHEME)))
         val uri = Intent(launch).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).toUri(Intent.URI_INTENT_SCHEME).replace("'", "")
         val said = if (AdbShell.available()) AdbShell.run("am start '$uri'") else null
-        Log.w(TAG, "am start: $uri -> ${said?.trim()}")
+        FluxLog.w(TAG, "am start: $uri -> ${said?.trim()}")
         val started = said != null && !said.contains("Error", true) && !said.contains("Exception")
         if (!started) runCatching { context.startActivity(Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
     }
@@ -382,7 +383,7 @@ object ExtraScreen {
             send("Z ${screen.id}")
             send("S ${screen.width} ${screen.height}")
             keyboardDevice()?.let { send("D $it") }
-        }.onFailure { Log.w(TAG, "no input for the screen: $it") }
+        }.onFailure { FluxLog.w(TAG, "no input for the screen: $it") }
     }
 
     private fun stopInput() {

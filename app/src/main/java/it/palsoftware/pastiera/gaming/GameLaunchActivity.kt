@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.gaming
 
 import android.app.Activity
+import it.palsoftware.pastiera.FluxLog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
@@ -38,7 +39,7 @@ class GameLaunchActivity : Activity() {
             // An activity that isn't there (another GameHub build): the app itself instead
             ?.takeIf { packageManager.resolveActivity(it, 0) != null }
             ?.let { withGameFile(it) }
-        if (launch != null && game == null) android.util.Log.w(TAG, when {
+        if (launch != null && game == null) FluxLog.w(TAG, when {
             parsed == null -> "game's launch couldn't be read: $launch"
             (parsed.`package` ?: parsed.component?.packageName) !in packages -> "game's launch is for another app ($packages): $launch"
             else -> "game's activity isn't there (opening the app instead): $launch"
@@ -84,8 +85,8 @@ class GameLaunchActivity : Activity() {
     private fun start(game: Intent?, app: Intent?) {
         val started = game?.let {
             runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
-                .onSuccess { _ -> android.util.Log.w(TAG, "game started: ${it.toUri(Intent.URI_INTENT_SCHEME)}") }
-                .onFailure { e -> android.util.Log.w(TAG, "game couldn't start (opening the app instead): $e") }.isSuccess
+                .onSuccess { _ -> FluxLog.w(TAG, "game started: ${it.toUri(Intent.URI_INTENT_SCHEME)}") }
+                .onFailure { e -> FluxLog.w(TAG, "game couldn't start (opening the app instead): $e") }.isSuccess
         } == true
         if (!started) app?.let { runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
         finish()

@@ -1228,8 +1228,10 @@ internal fun CrashLogRow() {
                         // Why Android last ended the app: a crash, its web page's renderer dying, memory running low
                         "echo '== why it stopped =='; dumpsys activity exit-info $app | head -n 120; " +
                         "echo '== crashes =='; logcat -d -b crash -t 400; " +
-                        "echo '== warnings and errors =='; logcat -d -b main,system -t 8000 '*:W' 'ActivityTaskManager:I' | " +
-                        "grep -i -E '$app|gamehub|egggame|Permission Denial|FluxGameMode|FluxGameLaunch|FluxExtraScreen|Stream(Wake|Host|Session|Input|Audio|Control)|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | tail -n 400; " +
+                        "echo '== warnings and errors =='; logcat -d -b main,system '*:W' 'ActivityTaskManager:I' | " +
+                        "grep -i -E '$app|gamehub|egggame|Permission Denial|FluxGameMode|FluxGameLaunch|FluxExtraScreen|Stream(Wake|Host|Session|Input|Audio|Control)|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | grep -v 'Changing focus' | tail -n 400; " +
+                        // Flux Keyboard's own record of gaming mode, streaming and game launches (the phone's turns over in seconds)
+                        "echo '== gaming and streaming =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${it.palsoftware.pastiera.FluxLog.FILE_NAME}'; " +
                         (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +
                         "} > \"\$f\" 2>&1; echo ok",
                     15_000

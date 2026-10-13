@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.streaming
 
 import android.content.Context
+import it.palsoftware.pastiera.FluxLog
 import android.graphics.Point
 import android.hardware.display.DisplayManager
 import android.util.Log
@@ -46,7 +47,7 @@ internal class StreamInput(private val context: Context, private val streamWidth
             val (w, h) = screen()
             send("S $w $h")
             keyboardDevice()?.let { send("D $it") }
-        }.onFailure { Log.w(TAG, "no input: $it") }
+        }.onFailure { FluxLog.w(TAG, "no input: $it") }
     }
 
     fun stop() {

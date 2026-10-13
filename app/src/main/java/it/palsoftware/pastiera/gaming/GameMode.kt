@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.gaming
 
 import android.app.NotificationChannel
+import it.palsoftware.pastiera.FluxLog
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -131,7 +132,7 @@ object GameMode {
                     val down = line.trimEnd().endsWith("DOWN")
                     if (down || line.trimEnd().endsWith("UP")) worker.execute { send("P 9 ${if (down) 1 else 0}") }
                 }
-            }.onFailure { Log.w(TAG, "side key couldn't be read: $it") }
+            }.onFailure { FluxLog.w(TAG, "side key couldn't be read: $it") }
         }.apply { isDaemon = true; start() }
     }
 
@@ -338,7 +339,7 @@ object GameMode {
     private fun send(line: String) {
         val writer = input ?: return
         runCatching { writer.write(line); writer.write("\n"); writer.flush() }
-            .onFailure { Log.w(TAG, "input helper gone: $it"); input = null }
+            .onFailure { FluxLog.w(TAG, "input helper gone: $it"); input = null }
     }
 
     /** The profile chosen for the app in front (a game, or the app's own); [profile] is what it plays with. */
@@ -412,7 +413,7 @@ object GameMode {
             send("S ${screenW.toInt()} ${screenH.toInt()}")
             // The sticks come from the keyboard, as a controller's would from the controller
             keyboardDevice()?.let { send("D $it") }
-        }.onFailure { Log.w(TAG, "input helper couldn't start: $it") }
+        }.onFailure { FluxLog.w(TAG, "input helper couldn't start: $it") }
     }
 
     // ---- The screen stays upright while a game runs ----
@@ -670,11 +671,11 @@ object GameMode {
                 trackpad = process
                 val span = device.xRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 1440f)
                 val rows = device.yRange?.takeIf { it.isValid }?.let { it.min to it.max } ?: (0f to 600f)
-                Log.w(TAG, "trackpad ${device.path}: x ${span.first}..${span.second}, y ${rows.first}..${rows.second}")
+                FluxLog.w(TAG, "trackpad ${device.path}: x ${span.first}..${span.second}, y ${rows.first}..${rows.second}")
                 val reader = TrackpadReader(span.first, span.second, rows.first, rows.second)
                 trackpadReader = reader
                 process.inputStream.bufferedReader().forEachLine { line -> reader.line(line) }
-            }.onFailure { Log.w(TAG, "trackpad couldn't be read: $it") }
+            }.onFailure { FluxLog.w(TAG, "trackpad couldn't be read: $it") }
         }.apply { isDaemon = true; start() }
     }
 
@@ -948,7 +949,7 @@ object GameMode {
         }
 
         private fun end(f: Finger) {
-            if (f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK) Log.w(TAG,
+            if (f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK) FluxLog.w(TAG,
                 "trackpad stick: landed at y ${f.originY}, furthest up ${f.furthestUp}, down ${f.furthestDown}, " +
                     "rows reached $reachedTop..$reachedBottom, on screen ${screenW}x$screenH")
             when (f.role) {

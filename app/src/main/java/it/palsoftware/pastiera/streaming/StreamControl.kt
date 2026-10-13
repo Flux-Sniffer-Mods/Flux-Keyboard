@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.streaming
 
 import android.util.Log
+import it.palsoftware.pastiera.FluxLog
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -40,7 +41,7 @@ internal class StreamControl(
                 }
                 lastHeard = System.currentTimeMillis()
                 runCatching { receive(buffer.copyOf(packet.length), packet.address, packet.port) }
-                    .onFailure { Log.w(TAG, "control packet: $it") }
+                    .onFailure { FluxLog.w(TAG, "control packet: $it") }
             }
         }, "StreamControl").apply { isDaemon = true; start() }
     }

@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.gaming
 
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.FluxLog
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -74,6 +75,14 @@ class XboxPlayActivity : Activity() {
             // straight from the Games app ends when the page leaves the game's screen
             override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
                 if (signingIn || !startedInGame || url == null) return
+                FluxLog.w("XboxPlay", "page: $url")
+                // Some games open on their page first (a game also sold, playable with the
+                // subscription): its Play button pressed, once, as the tile asked to play it
+                if (!pressedPlay && url.contains("/play/games/", ignoreCase = true) &&
+                    intent.dataString?.let { XboxCloud.idOf(it) }?.let { url.contains(it, ignoreCase = true) } == true) {
+                    pressedPlay = true
+                    view.evaluateJavascript(PRESS_PLAY_SCRIPT, null)
+                }
                 val inGame = isGameUrl(url)
                 if (inGame) { if (reachedGameAt == 0L) reachedGameAt = android.os.SystemClock.uptimeMillis(); return }
                 // Only once the game has had time to play: the site passing through the launch
@@ -84,7 +93,7 @@ class XboxPlayActivity : Activity() {
             }
 
             override fun onRenderProcessGone(view: WebView, detail: android.webkit.RenderProcessGoneDetail): Boolean {
-                android.util.Log.w("XboxPlay", "renderer gone (crashed: ${detail.didCrash()})")
+                FluxLog.w("XboxPlay", "renderer gone (crashed: ${detail.didCrash()})")
                 (view.parent as? android.view.ViewGroup)?.removeView(view)
                 view.destroy()
                 if (!isFinishing) recreate()
@@ -229,6 +238,9 @@ class XboxPlayActivity : Activity() {
     }
 
     private val startedInGame by lazy { intent.dataString?.let(::isGameUrl) == true }
+    /** The game's Play button has been pressed for the tile. */
+    private var pressedPlay = false
+
     /** When the page reached the game's own screen (0: it hasn't). */
     private var reachedGameAt = 0L
 
@@ -345,6 +357,21 @@ class XboxPlayActivity : Activity() {
         /** Each control's button in the web's standard gamepad. */
         /** A game's own screen on xbox.com/play (its launch page, any language). */
         internal fun isGameUrl(url: String) = Regex("xbox\\.com/([a-z]{2}-[a-z]{2}/)?play/launch/", RegexOption.IGNORE_CASE).containsMatchIn(url)
+
+        /** Presses the game page's Play button once it's there (looked for over ten seconds). */
+        private const val PRESS_PLAY_SCRIPT = """
+            (function () {
+              var tries = 0;
+              var timer = setInterval(function () {
+                tries++;
+                var found = Array.prototype.slice.call(document.querySelectorAll('button, a')).filter(function (b) {
+                  return /^\s*(play now\b|play\s*$)/i.test(b.innerText || '') && b.offsetParent !== null;
+                })[0];
+                if (found) { clearInterval(timer); found.click(); }
+                else if (tries > 20) clearInterval(timer);
+              }, 500);
+            })();
+        """
 
         /** How long the page stays on the game's screen before leaving it counts as the game ending. */
         private const val GAME_SETTLE_MS = 20_000L

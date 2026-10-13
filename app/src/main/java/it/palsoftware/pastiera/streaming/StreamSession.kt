@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.streaming
 
 import android.content.Context
+import it.palsoftware.pastiera.FluxLog
 import android.media.projection.MediaProjection
 import android.util.Log
 import it.palsoftware.pastiera.display.ExtraScreen
@@ -72,7 +73,7 @@ internal class StreamSession(
         Thread({
             while (!ended && !server.isClosed) {
                 val socket = runCatching { server.accept() }.getOrNull() ?: continue
-                runCatching { rtsp(socket) }.onFailure { Log.w(TAG, "rtsp: $it") }
+                runCatching { rtsp(socket) }.onFailure { FluxLog.w(TAG, "rtsp: $it") }
                 runCatching { socket.close() }
             }
         }, "StreamRtsp").apply { isDaemon = true; start() }
@@ -194,7 +195,7 @@ internal class StreamSession(
             input = StreamInput(context, width, height).also { it.start() }
             applyScreen()
         }.onFailure {
-            Log.w(TAG, "stream couldn't start: $it")
+            FluxLog.w(TAG, "stream couldn't start: $it")
             end()
         }
     }
@@ -213,7 +214,7 @@ internal class StreamSession(
                 ?: ExtraScreen.open(context, width, height, fps, bitrateKbps,
                     desktopOnly || StreamHostService.screenMode(context) == StreamHostService.SCREEN_DESKTOP, StreamHostService.passThrough(context))
             if (screen == null) {
-                Log.w(TAG, "no screen of its own: mirroring")
+                FluxLog.w(TAG, "no screen of its own: mirroring")
                 separate = false
                 stream.start(dpi)
                 GameMode.streaming(context, phoneSize)

@@ -948,10 +948,13 @@
       "text": "Gaming mode: a trackpad stick pushes all the way down, measured from where your finger can actually reach on the keyboard"
     },
     {
-      "text": "Crash log: now includes what gaming mode and streaming report, such as the trackpad sticks, Moonlight's wake and why a game didn't start"
+      "text": "Crash log: includes Flux Keyboard's own record of gaming mode, streaming and game launches, kept even after the phone's log has moved on"
     },
     {
       "text": "XCloud Games: games with an apostrophe or accent in their name (like Crash Bandicoot 4: It's About Time) start again, and the player no longer returns to Games while a game is still loading"
+    },
+    {
+      "text": "XCloud Games: a game that opens on its own page first (like Crash Bandicoot 4) is started with its Play button for you"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

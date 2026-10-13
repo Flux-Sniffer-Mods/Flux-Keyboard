@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.streaming
 
 import android.content.Context
+import it.palsoftware.pastiera.FluxLog
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.os.Build
@@ -96,7 +97,7 @@ object StreamHost {
                 }.also { serve(it, secure = true) }
                 announce()
             }.onFailure {
-                Log.w(TAG, "host couldn't start: $it")
+                FluxLog.w(TAG, "host couldn't start: $it")
                 stop()
             }
         }.apply { isDaemon = true; start() }
@@ -121,7 +122,7 @@ object StreamHost {
         }
         val listener = object : NsdManager.RegistrationListener {
             override fun onServiceRegistered(info: NsdServiceInfo) = Unit
-            override fun onRegistrationFailed(info: NsdServiceInfo, error: Int) { Log.w(TAG, "announcing failed: $error") }
+            override fun onRegistrationFailed(info: NsdServiceInfo, error: Int) { FluxLog.w(TAG, "announcing failed: $error") }
             override fun onServiceUnregistered(info: NsdServiceInfo) = Unit
             override fun onUnregistrationFailed(info: NsdServiceInfo, error: Int) = Unit
         }
@@ -148,7 +149,7 @@ object StreamHost {
         Thread {
             while (running && !server.isClosed) {
                 val socket = runCatching { server.accept() }.getOrNull() ?: continue
-                Thread { runCatching { handle(socket, secure) }.onFailure { Log.w(TAG, "request failed: $it") }; runCatching { socket.close() } }
+                Thread { runCatching { handle(socket, secure) }.onFailure { FluxLog.w(TAG, "request failed: $it") }; runCatching { socket.close() } }
                     .apply { isDaemon = true; start() }
             }
         }.apply { isDaemon = true; start() }
@@ -365,7 +366,7 @@ object StreamHost {
             }
         }
         runCatching { started.start() }.onFailure {
-            Log.w(TAG, "session couldn't start: $it")
+            FluxLog.w(TAG, "session couldn't start: $it")
             started.end(notify = false)
             return root("", 503, "Streaming couldn't start")
         }

@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.streaming
 
 import android.annotation.SuppressLint
+import it.palsoftware.pastiera.FluxLog
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.AudioAttributes
@@ -204,7 +205,7 @@ internal class StreamAudio(
         val recorder = runCatching {
             AudioRecord.Builder().setAudioFormat(format).setAudioPlaybackCaptureConfig(capture)
                 .setBufferSizeInBytes(RATE / 1000 * 4 * 100).build()
-        }.onFailure { Log.w(TAG, "sound can't be captured: $it") }.getOrNull() ?: return false
+        }.onFailure { FluxLog.w(TAG, "sound can't be captured: $it") }.getOrNull() ?: return false
         record = recorder
         running = true
         recorder.startRecording()
@@ -227,7 +228,7 @@ internal class StreamAudio(
     }
 
     private fun run(recorder: AudioRecord) {
-        val encoder = runCatching { encoder() }.getOrElse { Log.w(TAG, "no Opus encoder: $it"); return }
+        val encoder = runCatching { encoder() }.getOrElse { FluxLog.w(TAG, "no Opus encoder: $it"); return }
         val frame = RATE / 1000 * packetMs
         val stereo = ShortArray(frame * 2)
         val pcm = if (channels == 2) stereo else ShortArray(frame * channels)
