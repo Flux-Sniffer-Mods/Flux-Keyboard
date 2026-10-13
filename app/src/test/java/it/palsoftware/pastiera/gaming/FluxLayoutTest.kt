@@ -108,4 +108,14 @@ class FluxLayoutTest {
         assertEquals(map, FluxLayout.parseOverrides(FluxLayout.formatOverrides(map)))
         assertEquals(emptyMap<Any, Any>(), FluxLayout.parseOverrides(""))
     }
+
+    @Test
+    fun swapIsWrittenIntoTheEmulator() {
+        val gc = FluxLayout.dolphinGameCube("Keys", swap = true)
+        assertTrue("Buttons/A = `L`" in gc)
+        assertTrue("Buttons/B = `M`" in gc)
+        assertTrue("Buttons/X = `I`" in gc)
+        assertTrue("Buttons/Y = `J`" in gc)
+        assertTrue("Buttons/A = `M`" in FluxLayout.dolphinGameCube("Keys"))
+    }
 }

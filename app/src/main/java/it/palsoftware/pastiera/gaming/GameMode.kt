@@ -337,7 +337,8 @@ object GameMode {
     /** The control a key makes with [mods] held, A and B (X and Y) swapped for a game that wants them so. */
     private fun controlOf(code: Int, mods: FluxLayout.Modifiers): FluxLayout.Control? {
         val control = FluxLayout.controlFor(code, mods)
-        if (profile?.swapsFace != true) return control
+        // An emulator given the layout has the swap written into its own settings: its keys go as they are
+        if (profile?.swapsFace != true || frontPackage?.let { GameApps.emulator(it) } in LAYOUT_EMULATORS) return control
         return when (control) {
             FluxLayout.Control.A -> FluxLayout.Control.B; FluxLayout.Control.B -> FluxLayout.Control.A
             FluxLayout.Control.X -> FluxLayout.Control.Y; FluxLayout.Control.Y -> FluxLayout.Control.X

@@ -230,17 +230,31 @@ object FluxLayout {
         GAMECUBE("Flux Keyboard")
     }
 
-    private fun dolphinLines(controls: List<Pair<String, List<Int>>>) =
-        controls.map { (control, keys) -> "$control = " + keys.joinToString(" | ") { "`${keyName(it)}`" } }
+    /**
+     * A key list with A and B (X and Y) the other way round, Nintendo's: the key in each
+     * button's place presses it. Written into the emulator, so the keys reach it as they are.
+     */
+    internal fun swapFace(keys: List<Int>): List<Int> {
+        val a = keyOf(Control.A); val b = keyOf(Control.B); val x = keyOf(Control.X); val y = keyOf(Control.Y)
+        return keys.map { when (it) { a -> b; b -> a; x -> y; y -> x; else -> it } }
+    }
 
-    internal fun dolphinGameCube(keyboard: String): List<String> = listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE)
+    private fun dolphinLines(controls: List<Pair<String, List<Int>>>, swap: Boolean) =
+        controls.map { (control, keys) -> "$control = " + (if (swap) swapFace(keys) else keys).joinToString(" | ") { "`${keyName(it)}`" } }
 
-    internal fun dolphinWii(keyboard: String, pad: WiiPad = WiiPad.NUNCHUK): List<String> =
+    internal fun dolphinGameCube(keyboard: String, swap: Boolean = false): List<String> =
+        listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE, swap)
+
+    internal fun dolphinWii(keyboard: String, pad: WiiPad = WiiPad.NUNCHUK, swap: Boolean = false): List<String> =
         listOf("Device = Android/0/$keyboard", "Source = 1") + when (pad) {
-            WiiPad.NUNCHUK, WiiPad.GAMECUBE -> listOf("Extension = Nunchuk") + dolphinLines(WII)
-            WiiPad.CLASSIC -> listOf("Extension = Classic") + dolphinLines(CLASSIC)
-            WiiPad.SIDEWAYS -> listOf("Extension = None", "Options/Sideways Wiimote = True") + dolphinLines(SIDEWAYS)
+            WiiPad.NUNCHUK, WiiPad.GAMECUBE -> listOf("Extension = Nunchuk") + dolphinLines(WII, swap)
+            WiiPad.CLASSIC -> listOf("Extension = Classic") + dolphinLines(CLASSIC, swap)
+            WiiPad.SIDEWAYS -> listOf("Extension = None", "Options/Sideways Wiimote = True") + dolphinLines(SIDEWAYS, swap)
         }
+
+    /** Whether [pkg]'s A and B (X and Y) are swapped: as its app's settings have it, else as suits it. */
+    fun swapFor(context: android.content.Context, pkg: String): Boolean =
+        GameProfiles.all(context).firstOrNull { !it.isGame && pkg in it.packages }?.swapsFace ?: GameApps.nintendo(pkg)
 
     /** [ini] with [key] in [section] set to [value] (null: taken out), the rest kept. */
     internal fun withKey(ini: String, section: String, key: String, value: String?): String {
@@ -273,7 +287,8 @@ object FluxLayout {
         "RightAn.Left" to keys(Control.RS_LEFT), "RightAn.Right" to keys(Control.RS_RIGHT)
     )
 
-    internal fun pspMapping(): List<String> = PSP.map { (button, keys) -> "$button = " + keys.joinToString(",") { "1-$it" } }
+    internal fun pspMapping(swap: Boolean = false): List<String> =
+        PSP.map { (button, keys) -> "$button = " + (if (swap) swapFace(keys) else keys).joinToString(",") { "1-$it" } }
 
     /** The keys to bind by hand, for an emulator without a file to write: "A: L" lines. */
     fun bindList(): String = listOf(
@@ -338,7 +353,9 @@ object FluxLayout {
     fun refreshIfOutdated(context: android.content.Context, pkg: String) {
         val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
         val key = "flux_layout_version_$pkg"
-        if (prefs.getInt(key, 0) == LAYOUT_VERSION || !AdbShell.available()) return
+        val swap = swapFor(context, pkg)
+        // Written already, with A and B the way round they're wanted
+        if ((prefs.getInt(key, 0) == LAYOUT_VERSION && prefs.getBoolean(KEY_SWAP + pkg, false) == swap) || !AdbShell.available()) return
         val given = when (GameApps.emulator(pkg)) {
             "Dolphin" -> dolphinDir(pkg)?.let { dir ->
                 AdbShell.run("[ -f \"$dir/Config/Profiles/GCPad/Flux Keyboard.ini\" ] && echo yes; true", 3_000)?.contains("yes") == true
@@ -347,26 +364,32 @@ object FluxLayout {
             else -> false
         }
         if (!given) return
-        if (apply(pkg) == Result.DONE) prefs.edit().putInt(key, LAYOUT_VERSION).apply()
+        if (apply(pkg, swap) == Result.DONE) prefs.edit().putInt(key, LAYOUT_VERSION).putBoolean(KEY_SWAP + pkg, swap).apply()
     }
 
-    /** Remembers [pkg] has the current layout (just written by hand). */
-    fun markWritten(context: android.content.Context, pkg: String) =
-        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putInt("flux_layout_version_$pkg", LAYOUT_VERSION).apply()
+    private const val KEY_SWAP = "flux_layout_swap_"
 
-    /** Writes the layout into [pkg]'s controller settings (blocking: through the shell, the emulator stopped first). */
-    fun apply(pkg: String): Result {
+    /** Remembers [pkg] has the current layout (just written by hand, A and B as [swapFor] has them). */
+    fun markWritten(context: android.content.Context, pkg: String) =
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putInt("flux_layout_version_$pkg", LAYOUT_VERSION)
+            .putBoolean(KEY_SWAP + pkg, swapFor(context, pkg)).apply()
+
+    /**
+     * Writes the layout into [pkg]'s controller settings, A and B (X and Y) swapped when [swap]
+     * (blocking: through the shell, the emulator stopped first).
+     */
+    fun apply(pkg: String, swap: Boolean = false): Result {
         if (!AdbShell.available()) return Result.FAILED
         return when (GameApps.emulator(pkg)) {
-            "Dolphin" -> dolphin(pkg)
-            "PPSSPP" -> ppsspp(pkg)
+            "Dolphin" -> dolphin(pkg, swap)
+            "PPSSPP" -> ppsspp(pkg, swap)
             null -> Result.FAILED
             // The others: the keys bound in their own settings
             else -> Result.BY_HAND
         }
     }
 
-    private fun dolphin(pkg: String): Result {
+    private fun dolphin(pkg: String, swap: Boolean): Result {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = AdbShell.run(
             "for d in \"/storage/emulated/0/Android/data/$pkg/files\" /storage/emulated/0/dolphin-emu; do " +
@@ -374,14 +397,14 @@ object FluxLayout {
         )?.trim()?.ifEmpty { null } ?: return Result.NOT_FOUND
         // It writes its settings back as it closes: stopped first
         AdbShell.run("am force-stop $pkg", 3_000)
-        val gc = dolphinGameCube(keyboard)
-        val wii = dolphinWii(keyboard)
+        val gc = dolphinGameCube(keyboard, swap)
+        val wii = dolphinWii(keyboard, swap = swap)
         val ok = write("$dir/Config/GCPadNew.ini", withSection(read("$dir/Config/GCPadNew.ini"), "GCPad1", gc)) &&
             write("$dir/Config/WiimoteNew.ini", withSection(read("$dir/Config/WiimoteNew.ini"), "Wiimote1", wii)) &&
             // Also as profiles, to load again after changing them
             write("$dir/Config/Profiles/GCPad/Flux Keyboard.ini", withSection("", "Profile", gc)) &&
             WiiPad.entries.all { pad ->
-                write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad)))
+                write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad, swap)))
             }
         dolphinOverlay(dir)
         return if (ok) Result.DONE else Result.FAILED
@@ -418,13 +441,13 @@ object FluxLayout {
      * One Wii game's controller: its own Dolphin settings (GameSettings/<game ID>.ini) load the
      * matching profile as it starts; a Wii Remote with Nunchuk is everyone's, so nothing is kept.
      */
-    fun setWiiPad(pkg: String, gameId: String, pad: WiiPad): Result {
+    fun setWiiPad(pkg: String, gameId: String, pad: WiiPad, swap: Boolean = false): Result {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
         val written = if (pad == WiiPad.GAMECUBE) {
-            write("$dir/Config/Profiles/GCPad/${pad.profile}.ini", withSection("", "Profile", dolphinGameCube(keyboard)))
+            write("$dir/Config/Profiles/GCPad/${pad.profile}.ini", withSection("", "Profile", dolphinGameCube(keyboard, swap)))
         } else {
-            write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad)))
+            write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad, swap)))
         }
         if (!written) return Result.FAILED
         val file = "$dir/GameSettings/$gameId.ini"
@@ -452,10 +475,10 @@ object FluxLayout {
             "[ -d \"\$d/SYSTEM\" ] && { echo \"\$d\"; break; }; done; true", 3_000
     )?.trim()?.ifEmpty { null }
 
-    private fun ppsspp(pkg: String): Result {
+    private fun ppsspp(pkg: String, swap: Boolean): Result {
         val dir = ppssppDir(pkg) ?: return Result.NOT_FOUND
         AdbShell.run("am force-stop $pkg", 3_000)
         val file = "$dir/SYSTEM/controls.ini"
-        return if (write(file, withSection(read(file), "ControlMapping", pspMapping()))) Result.DONE else Result.FAILED
+        return if (write(file, withSection(read(file), "ControlMapping", pspMapping(swap)))) Result.DONE else Result.FAILED
     }
 }

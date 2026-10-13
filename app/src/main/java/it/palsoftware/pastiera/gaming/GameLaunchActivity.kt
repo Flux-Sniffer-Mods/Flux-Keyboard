@@ -70,7 +70,7 @@ class GameLaunchActivity : Activity() {
                 if (wiiPad != null && GameApps.emulator(pkg) == "Dolphin") runCatching {
                     val path = launch?.let { GameFiles.gameFile(it) }
                     val id = path?.takeIf { GameFiles.isWii(it) }?.let { GameIds.id(this, "Dolphin", it) }
-                    val result = if (id != null) FluxLayout.setWiiPad(pkg, id, wiiPad) else null
+                    val result = if (id != null) FluxLayout.setWiiPad(pkg, id, wiiPad, FluxLayout.swapFor(this, pkg)) else null
                     val ini = id?.let { gameId -> FluxLayout.dolphinDir(pkg)?.let { dir ->
                         it.palsoftware.pastiera.adb.AdbShell.run("cat \"$dir/GameSettings/$gameId.ini\" 2>&1 | head -n 20", 3_000)
                     } }

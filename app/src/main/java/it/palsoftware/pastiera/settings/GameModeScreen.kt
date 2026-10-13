@@ -100,6 +100,14 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         GameProfileEditor(profile, onDone = { saved ->
             // A found game, looked at: set up from now on
             if (saved != null) { if (saved.pending) GameProfiles.confirm(context, saved) else GameProfiles.save(context, saved) }
+            // An emulator given the layout: written again if A and B are now the other way round
+            if (saved != null && !saved.isGame) {
+                val app = context.applicationContext
+                Thread {
+                    saved.packages.filter { pkg -> it.palsoftware.pastiera.gaming.GameApps.emulator(pkg) in setOf("Dolphin", "PPSSPP") }
+                        .forEach { pkg -> runCatching { it.palsoftware.pastiera.gaming.FluxLayout.refreshIfOutdated(app, pkg) } }
+                }.start()
+            }
             editing = null
             refresh()
         }, onDelete = {
@@ -553,7 +561,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 val setupScope = androidx.compose.runtime.rememberCoroutineScope()
                 TextButton(onClick = {
                     setupScope.launch {
-                        val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.apply(emulatorPkg) }
+                        val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.apply(emulatorPkg, it.palsoftware.pastiera.gaming.FluxLayout.swapFor(context, emulatorPkg)) }
                         if (result == it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE) it.palsoftware.pastiera.gaming.FluxLayout.markWritten(context, emulatorPkg)
                         // Its graphics too, where its settings can be written: suited to this phone's GPU
                         val graphics = withContext(Dispatchers.IO) {
@@ -713,7 +721,7 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
         val pad = FluxLayout.WiiPad.entries[index]
         onPicked(pad.name.takeIf { pad != FluxLayout.WiiPad.NUNCHUK })
         scope.launch {
-            val result = withContext(Dispatchers.IO) { FluxLayout.setWiiPad(pkg, id, pad) }
+            val result = withContext(Dispatchers.IO) { FluxLayout.setWiiPad(pkg, id, pad, FluxLayout.swapFor(context, pkg)) }
             android.widget.Toast.makeText(
                 context,
                 when (result) {
