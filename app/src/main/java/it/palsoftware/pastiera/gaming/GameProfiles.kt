@@ -106,8 +106,16 @@ data class GameProfile(
      * Where a DS or 3DS's bottom screen is (left, top, right, bottom, shares of the screen), for
      * the trackpad's [TrackpadRole.BOTTOM_SCREEN]; null: where its emulator draws it by default.
      */
-    val touchArea: List<Float>? = null
+    val touchArea: List<Float>? = null,
+    /**
+     * A and B, and X and Y, the other way round (Nintendo's), so the key where a button sits
+     * presses it; null: on for Nintendo emulators.
+     */
+    val swapFace: Boolean? = null
 ) {
+    /** Whether A and B (X and Y) are swapped, as set or as suits its app. */
+    val swapsFace: Boolean get() = swapFace ?: packages.any { GameApps.nintendo(it) }
+
     /** A stick's dead zone and range. */
     fun tuning(stick: Int): Pair<Float, Float> = stickTuning[stick] ?: DEFAULT_TUNING
 
@@ -141,6 +149,7 @@ data class GameProfile(
         if (streamStickZones.isNotEmpty()) put("streamStickZones", zonesJson(streamStickZones))
         if (streamTaps.isNotEmpty()) put("streamTaps", tapsJson(streamTaps))
         touchArea?.let { put("touchArea", JSONArray(it.map { v -> v.toDouble() })) }
+        swapFace?.let { put("swapFace", it) }
         if (stickTuning.isNotEmpty()) put("stickTuning", JSONObject().apply {
             stickTuning.forEach { (stick, t) -> put(stick.toString(), JSONArray(listOf(t.first.toDouble(), t.second.toDouble()))) }
         })
@@ -186,6 +195,7 @@ data class GameProfile(
                 streamStickZones = zonesFrom(json.optJSONObject("streamStickZones")),
                 streamTaps = tapsFrom(json.optJSONObject("streamTaps")),
                 stickTuning = tapsFrom(json.optJSONObject("stickTuning")),
+                swapFace = if (json.has("swapFace")) json.optBoolean("swapFace") else null,
                 touchArea = json.optJSONArray("touchArea")?.let { array -> (0 until array.length()).map { array.optDouble(it).toFloat() } }
                     ?.takeIf { it.size == 4 && it.none { v -> v.isNaN() } },
                 launch = json.optString("launch").ifEmpty { null },

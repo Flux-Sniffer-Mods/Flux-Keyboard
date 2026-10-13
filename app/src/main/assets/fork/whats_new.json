@@ -711,6 +711,9 @@
     },
     {
       "text": "Gaming mode: Bottom screen (touch), a trackpad choice that touches a DS or 3DS's bottom screen like a stylus; both halves set to it use the whole trackpad, and the area can be moved and sized in Place keys on screen"
+    },
+    {
+      "text": "Gaming mode: Swap A/B and X/Y, on by default for Nintendo emulators (Dolphin, Eden, Azahar, melonDS and others), so each key presses the button in its place"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1048,6 +1051,9 @@
     },
     {
       "text": "Crash log: the screen and window settings section no longer shows \"Failed transaction\" errors"
+    },
+    {
+      "text": "Automatic Shift: the capital after a full stop no longer goes missing when an app is slow to show the space after it"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

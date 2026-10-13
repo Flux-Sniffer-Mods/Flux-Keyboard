@@ -507,7 +507,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                                 val app = withContext(Dispatchers.IO) { GameProfiles.effective(context, current.copy(own = false)) }
                                 current = current.copy(
                                     own = true, leftHalf = app.leftHalf, rightHalf = app.rightHalf, stickZones = app.stickZones, taps = app.taps,
-                                    screen = app.screen
+                                    screen = app.screen, swapFace = app.swapFace
                                 )
                             }
                         }
@@ -520,6 +520,14 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             }
             ChoiceRow(stringResource(R.string.game_mode_right_half), current.rightHalf.label, TrackpadRole.entries.map { it.label }) {
                 current = current.copy(rightHalf = TrackpadRole.entries[it])
+            }
+            // Nintendo's A and B (X and Y) where they sit on its controllers
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.game_mode_swap_face))
+                    Text(stringResource(R.string.game_mode_swap_face_description), style = MaterialTheme.typography.bodySmall)
+                }
+                androidx.compose.material3.Switch(checked = current.swapsFace, onCheckedChange = { on -> current = current.copy(swapFace = on) })
             }
             // An app's screen choice (a game's sits with its art, below its name)
             if (!current.isGame) {

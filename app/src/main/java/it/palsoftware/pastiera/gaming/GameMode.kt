@@ -307,7 +307,7 @@ object GameMode {
             }
             return true
         }
-        val plain = FluxLayout.controlFor(code, FluxLayout.Modifiers())
+        val plain = controlOf(code, FluxLayout.Modifiers())
         if (plain == null) {
             if (down && event.repeatCount == 0) FluxLog.w(TAG, "key $code isn't one of the layout's: passed on")
             return false
@@ -320,7 +320,7 @@ object GameMode {
         // For an app given the layout's keys, a key that is its control's own key goes to it as
         // it is, as long as the modifiers held don't change it: only combinations are sent
         if (down && event.repeatCount == 0 && sendsKeys() && FluxLayout.keyOf(plain) == code &&
-            FluxLayout.controlFor(code, modifiers()) == plain && code !in layoutKeysHeld
+            controlOf(code, modifiers()) == plain && code !in layoutKeysHeld
         ) { passedThrough += code; return false }
         // Kept on the worker, where they're read
         if (event.repeatCount == 0) worker.execute {
@@ -332,6 +332,17 @@ object GameMode {
             refreshControls()
         }
         return true
+    }
+
+    /** The control a key makes with [mods] held, A and B (X and Y) swapped for a game that wants them so. */
+    private fun controlOf(code: Int, mods: FluxLayout.Modifiers): FluxLayout.Control? {
+        val control = FluxLayout.controlFor(code, mods)
+        if (profile?.swapsFace != true) return control
+        return when (control) {
+            FluxLayout.Control.A -> FluxLayout.Control.B; FluxLayout.Control.B -> FluxLayout.Control.A
+            FluxLayout.Control.X -> FluxLayout.Control.Y; FluxLayout.Control.Y -> FluxLayout.Control.X
+            else -> control
+        }
     }
 
     /** How controls reach the app in front: as the layout's own keys, or as a controller's. */
@@ -356,7 +367,7 @@ object GameMode {
 
     private fun refreshControls() {
         val mods = modifiers()
-        val wanted = layoutKeysHeld.mapNotNull { FluxLayout.controlFor(it, mods) }.toMutableSet()
+        val wanted = layoutKeysHeld.mapNotNull { controlOf(it, mods) }.toMutableSet()
         val keys = sendsKeys()
         // In a launcher's own screens the left stick moves around them as a d-pad does
         if (!keys && inMenus) {

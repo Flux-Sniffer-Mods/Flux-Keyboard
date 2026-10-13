@@ -40,6 +40,14 @@ object GameApps {
     private val TWO_SCREENS_3DS = setOf("Azahar", "Panda3DS", "Mandarine")
     private val TWO_SCREENS_DS = setOf("melonDS", "DraStic")
 
+    /** Emulators of Nintendo's consoles: their A and B (X and Y) sit the other way round from Xbox's. */
+    private val NINTENDO = setOf(
+        "Dolphin", "Azahar", "Eden", "Panda3DS", "Mandarine", "melonDS", "DraStic", "Cemu", "Kenji-NX", "Ryujinx",
+        "My Boy!", "My OldBoy!", "Pizza Boy", "Snes9x EX+", "GBA.emu", "GBC.emu", "NES.emu"
+    )
+
+    fun nintendo(packageName: String): Boolean = emulator(packageName) in NINTENDO
+
     /** A DS or 3DS emulator: "3DS", "DS", or null. */
     fun twoScreens(packageName: String): String? = when (emulator(packageName)) {
         in TWO_SCREENS_3DS -> "3DS"

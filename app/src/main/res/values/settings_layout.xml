@@ -352,6 +352,8 @@
     <string name="game_mode_screen_sideways_description">Gives the game a landscape resolution so it draws sideways while you hold the phone upright, slightly shorter to stay clear of the camera.</string>
     <string name="game_mode_screen_upright">Keep the game upright</string>
     <string name="game_mode_screen_upright_description">Keeps the phone and the game upright, whatever the game asks for. For DS and 3DS emulators: their two screens one above the other.</string>
+    <string name="game_mode_swap_face">Swap A/B and X/Y</string>
+    <string name="game_mode_swap_face_description">Nintendo\'s layout: M presses B, L presses A, I presses X and J presses Y, so each key presses the button in its place. On by default for Nintendo emulators.</string>
     <string name="game_mode_bottom_screen">Bottom screen</string>
     <string name="game_mode_seen_title">Add %1$s to a profile</string>
     <string name="game_mode_seen_description">The last app a game ran in (%1$s) has no profile. Some launchers run games in a separate app: add it to the launcher\'s profile so gaming mode stays on during play.</string>
