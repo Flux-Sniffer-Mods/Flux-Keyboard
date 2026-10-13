@@ -244,10 +244,19 @@ object ExtraScreen {
     private val WINDOWING = listOf("force_resizable_activities", "enable_non_resizable_multi_window", "enable_freeform_support")
     /** Newer Android's desktop windowing switches, where the phone has them (harmless where it doesn't). */
     private val DESKTOP_FEATURES = listOf("override_desktop_mode_features", "override_desktop_experience_features")
+    private const val KEY_FEATURES_RESTORE = "extra_screen_features_restore"
+    private const val KEY_FEATURES_CLEARED = "extra_screen_features_cleared"
 
     private fun windowing(context: Context) {
         val now = AdbShell.run(WINDOWING.joinToString("; ") { "settings get global $it" }).orEmpty().lines().map { it.trim() }
         val wasOn = WINDOWING.indices.all { now.getOrNull(it) == "1" }
+        // The desktop switches act on the phone's own screen too (its Recents among them): what
+        // they were is kept, to put back when the desktop ends
+        val prefs = SettingsManager.getPreferences(context)
+        if (!prefs.contains(KEY_FEATURES_RESTORE)) {
+            val features = AdbShell.run(DESKTOP_FEATURES.joinToString("; ") { "settings get global $it" }).orEmpty().lines().map { it.trim() }
+            prefs.edit().putString(KEY_FEATURES_RESTORE, DESKTOP_FEATURES.indices.joinToString(",") { features.getOrNull(it) ?: "null" }).apply()
+        }
         AdbShell.run((WINDOWING + DESKTOP_FEATURES).joinToString("; ") { "settings put global $it 1" })
         if (wasOn) return
         android.os.Handler(android.os.Looper.getMainLooper()).post {
@@ -264,6 +273,7 @@ object ExtraScreen {
             if (!prefs.contains(KEY_DESKTOP_RESTORE)) prefs.edit().putString(KEY_DESKTOP_RESTORE, before).apply()
             AdbShell.run("settings put global force_desktop_mode_on_external_displays 1")
         } else {
+            restoreFeatures(context)
             val before = prefs.getString(KEY_DESKTOP_RESTORE, null) ?: return
             when (before) {
                 "1" -> Unit
@@ -274,9 +284,31 @@ object ExtraScreen {
         }
     }
 
+    /** The desktop switches put back as they were before the desktop turned them on. */
+    private fun restoreFeatures(context: Context) {
+        val prefs = SettingsManager.getPreferences(context)
+        val saved = prefs.getString(KEY_FEATURES_RESTORE, null) ?: return
+        val values = saved.split(",")
+        AdbShell.run(DESKTOP_FEATURES.mapIndexed { i, key ->
+            val was = values.getOrNull(i)
+            if (was == null || was == "null" || was.isEmpty()) "settings delete global $key" else "settings put global $key $was"
+        }.joinToString("; "))
+        prefs.edit().remove(KEY_FEATURES_RESTORE).apply()
+    }
+
     /** Android's desktop setting back as it was, after Flux Keyboard ended with a screen open (blocking). */
     fun recover(context: Context) {
-        if (current == null) desktopMode(context.applicationContext, false)
+        if (current != null) return
+        val app = context.applicationContext
+        val prefs = SettingsManager.getPreferences(app)
+        // Once: the desktop switches earlier versions left on (they changed the phone's own
+        // Recents) taken away, unless a desktop is keeping them
+        if (!prefs.getBoolean(KEY_FEATURES_CLEARED, false) && !prefs.contains(KEY_FEATURES_RESTORE)) {
+            val on = AdbShell.run(DESKTOP_FEATURES.joinToString("; ") { "settings get global $it" }) ?: return
+            if (on.lines().any { it.trim() == "1" }) AdbShell.run(DESKTOP_FEATURES.joinToString("; ") { "settings delete global $it" })
+            prefs.edit().putBoolean(KEY_FEATURES_CLEARED, true).apply()
+        }
+        desktopMode(app, false)
     }
 
     // ---- Apps on the screen ----

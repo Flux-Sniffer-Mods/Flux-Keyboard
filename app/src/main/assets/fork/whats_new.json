@@ -1012,6 +1012,9 @@
     },
     {
       "text": "Gaming mode: in the Xbox player, L is the B button again rather than Android's Back"
+    },
+    {
+      "text": "Android desktop: its desktop windowing switches, which also changed the phone's own screen (breaking Recents after a restart), are put back when the desktop ends; ones left on by earlier versions are cleared once. Restart the phone afterwards"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
