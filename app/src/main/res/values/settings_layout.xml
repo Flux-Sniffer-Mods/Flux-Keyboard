@@ -425,6 +425,7 @@
     <string name="game_mode_stick_dead_zone">Dead zone %1$d%%</string>
     <string name="game_mode_stick_range">Range %1$d%%</string>
     <string name="game_mode_back_again">Press Back again to leave the game</string>
+    <string name="game_mode_key_locked">%1$s held: press it again to let go</string>
     <string name="game_mode_add_key">Add a key</string>
     <string name="game_mode_press_key">Pick a key below, or press it.</string>
     <string name="game_mode_trackpad_test">Record the trackpad</string>

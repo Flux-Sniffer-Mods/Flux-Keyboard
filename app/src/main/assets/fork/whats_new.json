@@ -678,6 +678,9 @@
     },
     {
       "text": "Gaming mode: Dolphin's on-screen controls are set up for the trackpad when a game starts: the stick centres where it's touched, and the controls are invisible (they still work). Settings you've changed yourself in Dolphin are kept"
+    },
+    {
+      "text": "Gaming mode: hold SYM and press a button to keep it held (accelerate in a racing game), so your finger can leave the keyboard and the trackpad stick keeps working. Press the button again to let go"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -284,6 +284,7 @@ object GameMode {
         if (symVolume(event)) return true
         val down = event.action == KeyEvent.ACTION_DOWN
         if (event.repeatCount == 0) trackpadReader?.let { if (down) it.keyPressed(code) else if (event.action == KeyEvent.ACTION_UP) it.keyReleased(code) }
+        if (lockKey(event)) return true
         // The red side key: the right trigger, read from its device (its own action kept away)
         if (pad && event.scanCode == SIDE_KEY_SCAN) return true
         // A key placed on the screen touches its spot while held, whatever else it is
@@ -385,6 +386,62 @@ object GameMode {
     /** Names of emulators' and launchers' play screens (their other screens are menus). */
     private val PLAY_SCREENS = listOf("Emulation", "XServer", "PpssppActivity", "XboxPlay", "Wine", "Display", "Stream")
 
+    /** Keys locked down with SYM, held for the game until pressed again. */
+    private val lockedKeys = mutableSetOf<Int>()
+    /** Locked keys being pressed to let them go: let go when that press ends. */
+    private val unlocking = mutableSetOf<Int>()
+
+    /**
+     * SYM with a key on the keyboard: the key held for the game until it's pressed again, so a
+     * button held all along (accelerate in a racing game) leaves the keyboard, and the trackpad
+     * that the keyboard is, free for the stick. True when the key is taken.
+     */
+    private fun lockKey(event: KeyEvent): Boolean {
+        val code = event.keyCode
+        val onKeyboard = code in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z ||
+            code == KeyEvent.KEYCODE_SPACE || code == KeyEvent.KEYCODE_ENTER || code == KeyEvent.KEYCODE_DEL
+        if (!onKeyboard) return false
+        when (event.action) {
+            KeyEvent.ACTION_DOWN -> {
+                if (event.repeatCount > 0) return code in lockedKeys
+                if (code in lockedKeys) { unlocking += code; return true }
+                if (!symHeld) return false
+                lockedKeys += code
+                pressFor(code, true)
+                appContext?.let { context ->
+                    android.os.Handler(android.os.Looper.getMainLooper()).post {
+                        android.widget.Toast.makeText(context, context.getString(R.string.game_mode_key_locked, FluxLayout.keyName(code)),
+                            android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                }
+                return true
+            }
+            KeyEvent.ACTION_UP -> {
+                if (unlocking.remove(code)) { lockedKeys -= code; pressFor(code, false); return true }
+                return code in lockedKeys
+            }
+        }
+        return false
+    }
+
+    /** A key pressed (or let go) for the game as its press would be: a placed key's spot, the controller's button, or the key itself. */
+    private fun pressFor(code: Int, down: Boolean, now: Boolean = false) {
+        val tap = if (inMenus) null else profile?.taps?.get(code)
+        val line = when {
+            tap != null -> if (down) "T d ${100 + code} ${tap.first * screenW} ${tap.second * screenH}" else "T u ${100 + code}"
+            pad && PAD_BUTTONS[code] != null -> "P ${PAD_BUTTONS[code]} ${if (down) 1 else 0}"
+            else -> "K ${if (down) 1 else 0} $code k"
+        }
+        if (now) send(line) else worker.execute { send(line) }
+    }
+
+    /** Every locked key let go (the game ended). */
+    private fun unlockKeys() {
+        // Straight away: the input helper closes next
+        lockedKeys.toList().forEach { pressFor(it, false, now = true) }
+        lockedKeys.clear(); unlocking.clear()
+    }
+
     /** When Back was last pressed in a game (the first press of two). */
     @Volatile private var backPressedAt = 0L
     /** The Back now held was taken (its letting go is too). */
@@ -449,6 +506,7 @@ object GameMode {
 
     private fun stop(context: Context) {
         if (profile == null) return
+        unlockKeys()
         profile = null
         activeId = null
         trackpadRun++
