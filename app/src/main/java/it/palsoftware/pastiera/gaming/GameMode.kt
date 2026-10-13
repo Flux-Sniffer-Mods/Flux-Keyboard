@@ -64,12 +64,35 @@ object GameMode {
     fun active(): Boolean = profile != null
 
     /** The placer saved new spots: play with them from now on. */
+    /**
+     * Where [profile]'s bottom screen is on a [w] x [h] screen (left, top, right, bottom, shares
+     * of it): as placed, else where its emulator draws it upright by default (a 3DS's at the
+     * top, its bottom screen narrower; a DS's in the middle), else the screen's lower half.
+     */
+    internal fun touchArea(profile: GameProfile?, w: Float, h: Float): List<Float> {
+        profile?.touchArea?.let { return it }
+        if (w <= 0f || h <= 0f) return listOf(0f, 0.5f, 1f, 1f)
+        return when (profile?.packages?.firstNotNullOfOrNull { GameApps.twoScreens(it) }) {
+            "3DS" -> {
+                val s = minOf(w / 400f, h / 480f)
+                val x0 = (w - 400f * s) / 2
+                listOf((x0 + 40f * s) / w, 240f * s / h, (x0 + 360f * s) / w, 480f * s / h)
+            }
+            "DS" -> {
+                val s = minOf(w / 256f, h / 384f)
+                val x0 = (w - 256f * s) / 2; val y0 = (h - 384f * s) / 2
+                listOf(x0 / w, (y0 + 192f * s) / h, (x0 + 256f * s) / w, (y0 + 384f * s) / h)
+            }
+            else -> listOf(0f, 0.5f, 1f, 1f)
+        }
+    }
+
     internal fun placed(context: Context, updated: GameProfile) {
         // Placed while streaming: kept apart from the phone's own placing
         val stored = GameProfiles.all(context).firstOrNull { it.id == updated.id } ?: updated
         // Only the placing is kept: the profile in use may carry a game's own screen over its app's
         val saved = (if (streamed()) stored.copy(streamStickZones = updated.stickZones, streamTaps = updated.taps)
-            else stored.copy(stickZones = updated.stickZones, taps = updated.taps)).copy(stickTuning = updated.stickTuning)
+            else stored.copy(stickZones = updated.stickZones, taps = updated.taps)).copy(stickTuning = updated.stickTuning, touchArea = updated.touchArea)
         GameProfiles.save(context, saved)
         if (profile?.id == updated.id) profile = GameTouchEditor.withDefaults(updated)
     }
@@ -1136,6 +1159,7 @@ object GameMode {
                 }
                 TrackpadRole.MOUSE -> worker.execute { send("M ${dx * 1.5f} ${dy * 1.5f}") }
                 TrackpadRole.POINTER -> point(f, x, y)
+                TrackpadRole.BOTTOM_SCREEN -> stylus(f, x, y)
                 TrackpadRole.WASD_KEYS -> directionKeys(f, vx, vy, WASD)
                 TrackpadRole.ARROW_KEYS -> directionKeys(f, vx, vy, ARROWS)
                 TrackpadRole.NONE -> Unit
@@ -1165,6 +1189,22 @@ object GameMode {
             val from = if (f.left) min else mid
             val px = ((x - from) / (mid - min)).coerceIn(0f, 1f) * screenW
             val py = ((y - top) / (bottom - top)).coerceIn(0f, 1f) * screenH
+            val first = !f.pointing
+            f.pointing = true
+            worker.execute { send(if (first) "T d $POINTER_FINGER $px $py" else "T m $POINTER_FINGER $px $py") }
+        }
+
+        /**
+         * The stylus: the finger's place on the trackpad (its half, or all of it when both halves
+         * are the bottom screen) as a place on the DS or 3DS's bottom screen, touched.
+         */
+        private fun stylus(f: Finger, x: Int, y: Int) {
+            val whole = profile?.let { it.leftHalf == TrackpadRole.BOTTOM_SCREEN && it.rightHalf == TrackpadRole.BOTTOM_SCREEN } == true
+            val from = if (whole || f.left) min else mid
+            val to = if (whole || !f.left) max else mid
+            val area = touchArea(profile, screenW, screenH)
+            val px = (area[0] + ((x - from) / (to - from)).coerceIn(0f, 1f) * (area[2] - area[0])) * screenW
+            val py = (area[1] + ((y - top) / (bottom - top)).coerceIn(0f, 1f) * (area[3] - area[1])) * screenH
             val first = !f.pointing
             f.pointing = true
             worker.execute { send(if (first) "T d $POINTER_FINGER $px $py" else "T m $POINTER_FINGER $px $py") }
@@ -1225,7 +1265,7 @@ object GameMode {
                 TrackpadRole.MOUSE -> if (SystemClock.uptimeMillis() - f.downAt < 200 && f.moved < radius / 4) {
                     worker.execute { send("B 1 1"); send("B 0 1") }
                 }
-                TrackpadRole.POINTER -> if (f.pointing) { f.pointing = false; worker.execute { send("T u $POINTER_FINGER") } }
+                TrackpadRole.POINTER, TrackpadRole.BOTTOM_SCREEN -> if (f.pointing) { f.pointing = false; worker.execute { send("T u $POINTER_FINGER") } }
                 TrackpadRole.WASD_KEYS -> directionKeys(f, 0f, 0f, WASD)
                 TrackpadRole.ARROW_KEYS -> directionKeys(f, 0f, 0f, ARROWS)
                 TrackpadRole.NONE -> Unit

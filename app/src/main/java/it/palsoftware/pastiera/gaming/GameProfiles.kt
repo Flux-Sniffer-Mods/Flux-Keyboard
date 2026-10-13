@@ -13,6 +13,11 @@ enum class TrackpadRole(val label: String) {
     MOUSE("Mouse"),
     /** The half spread over the whole screen, touching where the finger is (Dolphin's Wii pointer, its IR mode on Follow). */
     POINTER("Pointer (touch)"),
+    /**
+     * Spread over a DS or 3DS's bottom screen (the area placed for it), touching where the finger
+     * is: the stylus. Both halves set to it: the whole trackpad.
+     */
+    BOTTOM_SCREEN("Bottom screen (touch)"),
     /** Pushed past the centre: W A S D held, for emulators that bind keys to a stick. */
     WASD_KEYS("Direction keys: W A S D"),
     /** The same with the arrow keys. */
@@ -24,12 +29,18 @@ enum class ScreenMode {
     /** As the app asks (GameNative: its own Portrait mode per game keeps it upright). */
     APP,
     /** Kept upright: a landscape-shaped resolution forced, so the game draws sideways with the phone upright. */
-    SIDEWAYS;
+    SIDEWAYS,
+    /** Kept upright, drawn upright too: a DS or 3DS emulator's screens one above the other. */
+    UPRIGHT;
 
     companion object {
-        /** What suits [packageName] when nothing's been chosen: kept upright for game apps. */
-        fun defaultFor(packageName: String?): ScreenMode =
-            if (packageName != null && GameApps.appFor(packageName) != null) SIDEWAYS else APP
+        /** What suits [packageName] when nothing's been chosen: kept upright for game apps (drawn upright for a DS or 3DS). */
+        fun defaultFor(packageName: String?): ScreenMode = when {
+            packageName == null -> APP
+            GameApps.twoScreens(packageName) != null -> UPRIGHT
+            GameApps.appFor(packageName) != null -> SIDEWAYS
+            else -> APP
+        }
     }
 }
 
@@ -90,7 +101,12 @@ data class GameProfile(
      * Each placed stick's dead zone (the share of a push ignored, 0 to 0.5) and range (how far
      * a full push reaches, a share of its circle); missing: [DEFAULT_TUNING].
      */
-    val stickTuning: Map<Int, Pair<Float, Float>> = emptyMap()
+    val stickTuning: Map<Int, Pair<Float, Float>> = emptyMap(),
+    /**
+     * Where a DS or 3DS's bottom screen is (left, top, right, bottom, shares of the screen), for
+     * the trackpad's [TrackpadRole.BOTTOM_SCREEN]; null: where its emulator draws it by default.
+     */
+    val touchArea: List<Float>? = null
 ) {
     /** A stick's dead zone and range. */
     fun tuning(stick: Int): Pair<Float, Float> = stickTuning[stick] ?: DEFAULT_TUNING
@@ -124,6 +140,7 @@ data class GameProfile(
         put("taps", tapsJson(taps))
         if (streamStickZones.isNotEmpty()) put("streamStickZones", zonesJson(streamStickZones))
         if (streamTaps.isNotEmpty()) put("streamTaps", tapsJson(streamTaps))
+        touchArea?.let { put("touchArea", JSONArray(it.map { v -> v.toDouble() })) }
         if (stickTuning.isNotEmpty()) put("stickTuning", JSONObject().apply {
             stickTuning.forEach { (stick, t) -> put(stick.toString(), JSONArray(listOf(t.first.toDouble(), t.second.toDouble()))) }
         })
@@ -169,6 +186,8 @@ data class GameProfile(
                 streamStickZones = zonesFrom(json.optJSONObject("streamStickZones")),
                 streamTaps = tapsFrom(json.optJSONObject("streamTaps")),
                 stickTuning = tapsFrom(json.optJSONObject("stickTuning")),
+                touchArea = json.optJSONArray("touchArea")?.let { array -> (0 until array.length()).map { array.optDouble(it).toFloat() } }
+                    ?.takeIf { it.size == 4 && it.none { v -> v.isNaN() } },
                 launch = json.optString("launch").ifEmpty { null },
                 // Before one screen choice: "sideways", and a keep-upright switch for every game
                 screen = json.optString("screen").let { name -> ScreenMode.entries.firstOrNull { it.name == name } }

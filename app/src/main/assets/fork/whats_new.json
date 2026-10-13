@@ -702,6 +702,15 @@
     },
     {
       "text": "Gaming mode: for a GameCube controller in Dolphin, the volume keys press L and R all the way with their click; Alt + Volume presses them all the way without it"
+    },
+    {
+      "text": "Gaming mode: more emulators recognised (RetroArch, Lemuroid, DuckStation, AetherSX2, melonDS, DraStic, Panda3DS, Mupen64Plus, Flycast and others), so their games start the right way up; keys are bound in their own settings"
+    },
+    {
+      "text": "Gaming mode: Keep the game upright, a screen choice for DS and 3DS emulators (their two screens one above the other), the default for them"
+    },
+    {
+      "text": "Gaming mode: Bottom screen (touch), a trackpad choice that touches a DS or 3DS's bottom screen like a stylus; both halves set to it use the whole trackpad, and the area can be moved and sized in Place keys on screen"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -360,8 +360,9 @@ object FluxLayout {
         return when (GameApps.emulator(pkg)) {
             "Dolphin" -> dolphin(pkg)
             "PPSSPP" -> ppsspp(pkg)
-            "Azahar", "Eden" -> Result.BY_HAND
-            else -> Result.FAILED
+            null -> Result.FAILED
+            // The others: the keys bound in their own settings
+            else -> Result.BY_HAND
         }
     }
 

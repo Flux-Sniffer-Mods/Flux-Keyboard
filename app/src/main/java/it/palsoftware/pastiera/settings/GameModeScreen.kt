@@ -882,7 +882,8 @@ private fun ScreenChoice(profile: GameProfile, onChange: (GameProfile) -> Unit) 
     val names = listOfNotNull(
         if (follows) stringResource(R.string.game_mode_screen_follow) else null,
         stringResource(R.string.game_mode_screen_app),
-        stringResource(R.string.game_mode_screen_sideways)
+        stringResource(R.string.game_mode_screen_sideways),
+        stringResource(R.string.game_mode_screen_upright)
     )
     val chosen = if (follows && !profile.ownScreen) 0 else profile.screen.ordinal + if (follows) 1 else 0
     Column {
@@ -899,6 +900,7 @@ private fun ScreenChoice(profile: GameProfile, onChange: (GameProfile) -> Unit) 
                 when (profile.screen) {
                     it.palsoftware.pastiera.gaming.ScreenMode.APP -> R.string.game_mode_screen_app_description
                     it.palsoftware.pastiera.gaming.ScreenMode.SIDEWAYS -> R.string.game_mode_screen_sideways_description
+                    it.palsoftware.pastiera.gaming.ScreenMode.UPRIGHT -> R.string.game_mode_screen_upright_description
                 }
             ),
             style = MaterialTheme.typography.bodySmall

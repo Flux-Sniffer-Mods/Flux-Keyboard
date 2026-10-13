@@ -108,6 +108,58 @@ object GameTouchEditor {
         }
         taps.forEach { (code, at) -> addKey(code, at) }
 
+        // A DS or 3DS's bottom screen, where the trackpad touches: a box to drag, and size below
+        val usesArea = profile.leftHalf == TrackpadRole.BOTTOM_SCREEN || profile.rightHalf == TrackpadRole.BOTTOM_SCREEN
+        val screenW = if (screen != null) screen.width.toFloat() else metrics.widthPixels.toFloat()
+        val screenH = if (screen != null) screen.height.toFloat() else metrics.heightPixels.toFloat()
+        var area: List<Float>? = if (usesArea) GameMode.touchArea(profile, screenW, screenH) else null
+        var areaBox: View? = null
+        fun drawArea() {
+            val a = area ?: return
+            areaBox?.let { frame.removeView(it) }
+            val boxW = ((a[2] - a[0]) * width).toInt().coerceAtLeast(1)
+            val boxH = ((a[3] - a[1]) * height).toInt().coerceAtLeast(1)
+            val box = TextView(context).apply {
+                text = context.getString(R.string.game_mode_bottom_screen)
+                setTextColor(Color.WHITE)
+                gravity = Gravity.CENTER
+                textSize = 13f
+                background = GradientDrawable().apply {
+                    setColor(0x553D5AFE)
+                    setStroke((2 * density).toInt(), Color.WHITE)
+                }
+                layoutParams = FrameLayout.LayoutParams(boxW, boxH)
+                x = left + a[0] * width
+                y = top + a[1] * height
+                var grabX = 0f; var grabY = 0f
+                setOnTouchListener { view, event ->
+                    when (event.actionMasked) {
+                        MotionEvent.ACTION_DOWN -> { grabX = event.rawX - view.x; grabY = event.rawY - view.y }
+                        MotionEvent.ACTION_MOVE -> {
+                            view.x = event.rawX - grabX; view.y = event.rawY - grabY
+                            val l = (view.x - left) / width; val t = (view.y - top) / height
+                            val cur = area ?: return@setOnTouchListener true
+                            area = listOf(l, t, l + (cur[2] - cur[0]), t + (cur[3] - cur[1]))
+                        }
+                    }
+                    true
+                }
+            }
+            // Under the keys and sticks (over the live picture, where there is one)
+            frame.addView(box, if (screen != null) 1 else 0)
+            areaBox = box
+        }
+        fun resizeArea(by: Float) {
+            val a = area ?: return
+            val cx = (a[0] + a[2]) / 2; val cy = (a[1] + a[3]) / 2
+            val f = (1 + by).coerceAtLeast(0.1f)
+            val hw = (a[2] - a[0]) / 2 * f; val hh = (a[3] - a[1]) / 2 * f
+            if (hw * 2 > 1.2f || hw * 2 < 0.1f) return
+            area = listOf(cx - hw, cy - hh, cx + hw, cy + hh)
+            drawArea()
+        }
+        drawArea()
+
         // The bar: a key, a stick, clear, save or cancel
         val hint = TextView(context).apply {
             setTextColor(Color.WHITE)
@@ -151,7 +203,8 @@ object GameTouchEditor {
                     refreshStickRow()
                 })
                 addView(button(R.string.game_mode_save) {
-                    GameMode.placed(context, profile.copy(stickZones = zones.toMap(), taps = taps.toMap(), stickTuning = tuning.toMap()))
+                    GameMode.placed(context, profile.copy(stickZones = zones.toMap(), taps = taps.toMap(), stickTuning = tuning.toMap(),
+                        touchArea = area ?: profile.touchArea))
                     close(windows)
                 })
                 addView(button(R.string.cancel) { close(windows) })
@@ -200,6 +253,12 @@ object GameTouchEditor {
             }
         }
         refreshStickRow()
+        if (area != null) bar.addView(LinearLayout(context).apply {
+            addView(TextView(context).apply { text = context.getString(R.string.game_mode_bottom_screen); setTextColor(Color.WHITE); textSize = 13f
+                setPadding((8 * density).toInt(), 0, (4 * density).toInt(), 0) })
+            addView(button(R.string.game_mode_stick_smaller) { resizeArea(-0.05f) })
+            addView(button(R.string.game_mode_stick_bigger) { resizeArea(0.05f) })
+        })
         frame.addView(bar)
 
         // Back closes it, as Cancel does; the key pressed after Add a key gets a box in the
