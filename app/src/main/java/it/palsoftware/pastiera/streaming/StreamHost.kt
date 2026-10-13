@@ -307,6 +307,9 @@ object StreamHost {
 
     private fun launch(query: Map<String, String>, connection: Socket, cert: X509Certificate, resume: Boolean): String {
         val client = connection.inetAddress
+        // Listed with streaming off (always available): a game picked turns it on, with its notification
+        if (!StreamHostService.enabled(app)) runCatching { StreamHostService.setEnabled(app, true) }
+            .onFailure { FluxLog.w(TAG, "the streaming service couldn't start ($it): streaming without it") }
         val key = query["rikey"]?.let { runCatching { StreamPairing.unhex(it) }.getOrNull() }?.takeIf { it.size == 16 }
             ?: return root("", 400, "No key")
         val keyId = query["rikeyid"]?.toLongOrNull()?.toInt() ?: 0

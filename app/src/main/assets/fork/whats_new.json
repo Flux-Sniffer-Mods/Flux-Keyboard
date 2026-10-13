@@ -693,6 +693,9 @@
     },
     {
       "text": "Crash log: a Clear logs option empties the logs so the next crash log saves quickly and holds only what happened since"
+    },
+    {
+      "text": "Streaming: Always available to Moonlight keeps the phone listed while streaming is off, for Moonlight apps whose Wake can't reach the phone (like the one for LG TVs); picking a game turns streaming on"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

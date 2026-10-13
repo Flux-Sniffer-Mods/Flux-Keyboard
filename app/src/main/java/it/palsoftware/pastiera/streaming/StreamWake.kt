@@ -29,6 +29,11 @@ object StreamWake {
         if (started) return
         started = true
         val app = context.applicationContext
+        // Listed in Moonlight with streaming off, so its Wake isn't needed
+        if (StreamHostService.alwaysAvailable(app) && !StreamHostService.enabled(app)) {
+            FluxLog.w(TAG, "always available to Moonlight: answering with streaming off")
+            StreamHost.start(app)
+        }
         // Moonlight's wake is mostly a broadcast: let through while a Moonlight client is paired
         if (StreamHost.pairedCount(app) > 0) runCatching {
             multicast = app.getSystemService(android.net.wifi.WifiManager::class.java)

@@ -1321,6 +1321,17 @@ internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
         it.palsoftware.pastiera.streaming.StreamHostService.setEnabled(context, on)
         onStreamingChanged(on)
     }
+    // Listed in Moonlight with streaming off, for clients whose Wake can't reach the phone
+    var always by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.alwaysAvailable(context)) }
+    FluxSwitchRow(
+        linkId = null,
+        title = stringResource(R.string.stream_always),
+        description = stringResource(R.string.stream_always_description),
+        checked = always
+    ) { on ->
+        always = on
+        it.palsoftware.pastiera.streaming.StreamHostService.setAlwaysAvailable(context, on)
+    }
     // The phone's own screen as one more entry in Moonlight
     if (streaming) {
         var phoneScreen by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.phoneScreen(context)) }

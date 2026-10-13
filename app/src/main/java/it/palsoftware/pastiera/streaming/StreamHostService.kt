@@ -55,6 +55,8 @@ class StreamHostService : Service() {
 
     override fun onDestroy() {
         StreamHost.stop()
+        // Still answering Moonlight from the keyboard, when the phone is always listed
+        if (alwaysAvailable(this)) StreamHost.start(applicationContext)
         super.onDestroy()
     }
 
@@ -171,6 +173,21 @@ class StreamHostService : Service() {
 
         fun setPhoneScreen(context: Context, on: Boolean) =
             SettingsManager.getPreferences(context).edit().putBoolean(KEY_PHONE_SCREEN, on).apply()
+
+        private const val KEY_ALWAYS = "stream_always_available"
+
+        /**
+         * The phone listed in Moonlight even with streaming off, for clients whose Wake can't
+         * reach it: picking a game there turns streaming on. Answered from the keyboard, which
+         * is always running; nothing streams until a game is picked.
+         */
+        fun alwaysAvailable(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_ALWAYS, false)
+
+        fun setAlwaysAvailable(context: Context, on: Boolean) {
+            SettingsManager.getPreferences(context).edit().putBoolean(KEY_ALWAYS, on).apply()
+            if (enabled(context)) return
+            if (on) StreamHost.start(context) else StreamHost.stop()
+        }
 
         fun enabled(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_ENABLED, false)
 

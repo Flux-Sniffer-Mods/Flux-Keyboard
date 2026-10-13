@@ -487,6 +487,8 @@
     <string name="stream_section">Streaming</string>
     <string name="stream_switch">Stream to Moonlight</string>
     <string name="stream_switch_description">Lists the phone in Moonlight on any device on the same network. Pair with the PIN Moonlight shows, and your games appear there, XCloud games included. Moonlight\'s Wake starts streaming on the phone if it\'s off.</string>
+    <string name="stream_always">Always available to Moonlight</string>
+    <string name="stream_always_description">Keeps the phone listed in Moonlight while streaming is off, so you don\'t need Wake (some Moonlight apps, like the one for LG TVs, send their Wake where the phone can\'t hear it). Picking a game turns streaming on. Pair once with streaming on first.</string>
     <string name="stream_unpair">Forget paired devices</string>
     <string name="stream_unpair_description">%1$d paired. Each will need the PIN again.</string>
     <string name="stream_pin_title">Pair %1$s</string>
