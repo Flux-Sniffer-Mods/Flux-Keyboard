@@ -1959,5 +1959,5 @@
     <string name="crash_log_clear_description">Xóa nhật ký của điện thoại và nhật ký riêng của Flux Keyboard, để nhật ký sự cố tiếp theo chỉ chứa những gì xảy ra từ bây giờ và lưu nhanh.</string>
     <string name="crash_log_cleared">Đã xóa nhật ký</string>
     <string name="stream_always">Luôn sẵn sàng cho Moonlight</string>
-    <string name="stream_always_description">Giữ điện thoại trong danh sách Moonlight khi tắt phát trực tuyến, nên không cần Wake (một số ứng dụng Moonlight, như ứng dụng cho TV LG, gửi Wake đến nơi điện thoại không nghe được). Chọn một trò chơi sẽ bật phát trực tuyến. Hãy ghép nối một lần trước khi bật phát trực tuyến.</string>
+    <string name="stream_always_description">Giữ điện thoại trong danh sách Moonlight khi tắt phát trực tuyến, nên không cần Wake (một số ứng dụng Moonlight, như ứng dụng cho TV LG, gửi Wake đến nơi điện thoại không nghe được). Chọn một trò chơi sẽ bật phát trực tuyến. Trước tiên hãy ghép nối một lần khi đang bật phát trực tuyến.</string>
 </resources>
