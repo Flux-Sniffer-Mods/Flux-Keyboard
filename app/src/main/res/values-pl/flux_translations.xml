@@ -1976,4 +1976,6 @@
     <string name="crash_log_clear">Wyczyść logi</string>
     <string name="crash_log_clear_description">Czyści logi telefonu i własny zapis Flux Keyboard, aby następny dziennik awarii zawierał tylko to, co stanie się od teraz, i zapisywał się szybko.</string>
     <string name="crash_log_cleared">Logi wyczyszczone</string>
+    <string name="stream_always">Zawsze dostępny dla Moonlight</string>
+    <string name="stream_always_description">Utrzymuje telefon na liście Moonlight przy wyłączonym strumieniowaniu, więc Wake nie jest potrzebne (niektóre aplikacje Moonlight, np. ta na telewizory LG, wysyłają Wake tam, gdzie telefon go nie słyszy). Wybranie gry włącza strumieniowanie. Najpierw sparuj raz przy włączonym strumieniowaniu.</string>
 </resources>

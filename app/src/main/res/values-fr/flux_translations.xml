@@ -1970,4 +1970,6 @@
     <string name="crash_log_clear">Effacer les journaux</string>
     <string name="crash_log_clear_description">Vide les journaux du téléphone et celui de Flux Keyboard, pour que le prochain journal de plantage ne contienne que ce qui se passe désormais et s\'enregistre vite.</string>
     <string name="crash_log_cleared">Journaux effacés</string>
+    <string name="stream_always">Toujours disponible pour Moonlight</string>
+    <string name="stream_always_description">Garde le téléphone listé dans Moonlight quand le streaming est désactivé, pour ne pas avoir besoin de Wake (certaines applis Moonlight, comme celle des téléviseurs LG, envoient leur Wake là où le téléphone ne l\'entend pas). Choisir un jeu active le streaming. Associez une fois d\'abord avec le streaming activé.</string>
 </resources>

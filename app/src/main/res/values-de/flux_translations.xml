@@ -1430,4 +1430,6 @@
     <string name="crash_log_clear">Logs leeren</string>
     <string name="crash_log_clear_description">Leert die Logs des Telefons und die eigene Aufzeichnung von Flux Keyboard, damit das nächste Absturzprotokoll nur Neues enthält und schnell gespeichert wird.</string>
     <string name="crash_log_cleared">Logs geleert</string>
+    <string name="stream_always">Immer für Moonlight verfügbar</string>
+    <string name="stream_always_description">Hält das Telefon in Moonlight sichtbar, auch wenn Streaming aus ist, sodass du Wake nicht brauchst (manche Moonlight-Apps, etwa die für LG-Fernseher, senden ihr Wake dorthin, wo das Telefon es nicht hört). Ein gewähltes Spiel schaltet Streaming ein. Vorher einmal mit eingeschaltetem Streaming koppeln.</string>
 </resources>

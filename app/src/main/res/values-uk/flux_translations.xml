@@ -1976,4 +1976,6 @@
     <string name="crash_log_clear">Очистити журнали</string>
     <string name="crash_log_clear_description">Очищує журнали телефона та власний журнал Flux Keyboard, щоб наступний журнал збоїв містив лише те, що станеться відтепер, і зберігався швидко.</string>
     <string name="crash_log_cleared">Журнали очищено</string>
+    <string name="stream_always">Завжди доступний для Moonlight</string>
+    <string name="stream_always_description">Залишає телефон у списку Moonlight за вимкненої трансляції, тож Wake не потрібен (деякі застосунки Moonlight, як-от для телевізорів LG, надсилають Wake туди, де телефон його не чує). Вибір гри вмикає трансляцію. Спершу один раз виконайте спарювання з увімкненою трансляцією.</string>
 </resources>

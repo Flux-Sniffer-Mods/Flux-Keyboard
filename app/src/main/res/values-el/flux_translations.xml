@@ -1340,4 +1340,6 @@
     <string name="crash_log_clear">Εκκαθάριση αρχείων καταγραφής</string>
     <string name="crash_log_clear_description">Αδειάζει τα αρχεία καταγραφής του τηλεφώνου και του Flux Keyboard, ώστε το επόμενο αρχείο σφαλμάτων να περιέχει μόνο ό,τι συμβαίνει από τώρα και να αποθηκεύεται γρήγορα.</string>
     <string name="crash_log_cleared">Τα αρχεία καταγραφής εκκαθαρίστηκαν</string>
+    <string name="stream_always">Πάντα διαθέσιμο στο Moonlight</string>
+    <string name="stream_always_description">Κρατά το τηλέφωνο στη λίστα του Moonlight ενώ η ροή είναι απενεργοποιημένη, ώστε να μη χρειάζεσαι το Wake (μερικές εφαρμογές Moonlight, όπως αυτή για τηλεοράσεις LG, στέλνουν το Wake εκεί που το τηλέφωνο δεν το ακούει). Η επιλογή παιχνιδιού ενεργοποιεί τη ροή. Κάνε σύζευξη μία φορά με τη ροή ενεργή πρώτα.</string>
 </resources>

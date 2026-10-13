@@ -1970,4 +1970,6 @@
     <string name="crash_log_clear">Borrar registros</string>
     <string name="crash_log_clear_description">Vacía los registros del teléfono y el propio registro de Flux Keyboard, para que el siguiente registro de fallos contenga solo lo que ocurra a partir de ahora y se guarde rápido.</string>
     <string name="crash_log_cleared">Registros borrados</string>
+    <string name="stream_always">Siempre disponible para Moonlight</string>
+    <string name="stream_always_description">Mantiene el teléfono en la lista de Moonlight con la transmisión apagada, así no necesitas Wake (algunas apps de Moonlight, como la de los televisores LG, envían su Wake donde el teléfono no lo oye). Elegir un juego activa la transmisión. Vincula una vez antes con la transmisión activada.</string>
 </resources>

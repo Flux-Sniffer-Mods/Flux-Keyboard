@@ -1475,4 +1475,6 @@
     <string name="crash_log_clear">Cancella log</string>
     <string name="crash_log_clear_description">Svuota i log del telefono e quello di Flux Keyboard, così il prossimo registro dei crash contiene solo ciò che accade da ora e si salva in fretta.</string>
     <string name="crash_log_cleared">Log cancellati</string>
+    <string name="stream_always">Sempre disponibile per Moonlight</string>
+    <string name="stream_always_description">Tiene il telefono nell\'elenco di Moonlight a streaming spento, così Wake non serve (alcune app Moonlight, come quella per le TV LG, inviano il loro Wake dove il telefono non lo sente). Scegliere un gioco attiva lo streaming. Prima associa una volta con lo streaming attivo.</string>
 </resources>

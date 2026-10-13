@@ -1964,4 +1964,6 @@
     <string name="crash_log_clear">Մաքրել մատյանները</string>
     <string name="crash_log_clear_description">Դատարկում է հեռախոսի և Flux Keyboard-ի մատյանները, որպեսզի հաջորդ վթարի մատյանը պարունակի միայն այսուհետ կատարվածը և արագ պահպանվի։</string>
     <string name="crash_log_cleared">Մատյանները մաքրված են</string>
+    <string name="stream_always">Միշտ հասանելի Moonlight-ին</string>
+    <string name="stream_always_description">Հեռախոսը պահում է Moonlight-ի ցանկում, երբ հեռարձակումն անջատված է, որպեսզի Wake պետք չլինի (որոշ Moonlight հավելվածներ, օրինակ LG հեռուստացույցներինը, ուղարկում են Wake այնտեղ, որտեղ հեռախոսը չի լսում)։ Խաղ ընտրելը միացնում է հեռարձակումը։ Նախ մեկ անգամ զուգակցեք՝ հեռարձակումը միացված։</string>
 </resources>
