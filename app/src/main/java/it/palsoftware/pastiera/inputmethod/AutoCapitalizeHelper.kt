@@ -61,10 +61,24 @@ object AutoCapitalizeHelper {
      */
     @Volatile var cursorAtStart = false
 
+    /**
+     * Text the keyboard has just committed (the space after a full stop), counted as there even
+     * when the app hasn't applied it yet: read too soon, "word." would get no capital.
+     */
+    @Volatile private var justCommitted: String? = null
+
     private fun readContext(inputConnection: InputConnection): CursorContext? =
         (runCatching { readRawContext(inputConnection) }.getOrNull()
             ?: if (cursorAtStart) CursorContext("", "") else null)
-            ?.let { CursorContext(visible(it.before), visible(it.after)) }
+            ?.let { CursorContext(justCommitted?.let { text -> withCommitted(visible(it.before), text) } ?: visible(it.before), visible(it.after)) }
+
+    /** [before] with [committed] at its end: whatever of it the app hasn't applied yet added. */
+    internal fun withCommitted(before: CharSequence, committed: String): CharSequence {
+        for (k in committed.length downTo 1) {
+            if (before.endsWith(committed.substring(0, k))) return if (k == committed.length) before else before.toString() + committed.substring(k)
+        }
+        return before.toString() + committed
+    }
 
     private fun readRawContext(inputConnection: InputConnection): CursorContext? {
         val extracted = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
@@ -213,7 +227,25 @@ object AutoCapitalizeHelper {
         enableShift: () -> Boolean,
         disableShift: () -> Boolean = { false },
         onUpdateStatusBar: () -> Unit,
-        inputContextState: InputContextState? = null
+        inputContextState: InputContextState? = null,
+        committed: String? = null
+    ) {
+        justCommitted = committed
+        try {
+            decideSmartShift(context, inputConnection, shouldDisableAutoCapitalize, enableShift, disableShift, onUpdateStatusBar, inputContextState)
+        } finally {
+            justCommitted = null
+        }
+    }
+
+    private fun decideSmartShift(
+        context: android.content.Context,
+        inputConnection: InputConnection?,
+        shouldDisableAutoCapitalize: Boolean,
+        enableShift: () -> Boolean,
+        disableShift: () -> Boolean,
+        onUpdateStatusBar: () -> Unit,
+        inputContextState: InputContextState?
     ) {
         fun on(reason: String, cursor: CursorContext? = null) {
             val took = enableShift()
@@ -427,7 +459,8 @@ object AutoCapitalizeHelper {
         shouldDisableAutoCapitalize: Boolean,
         onEnableShift: () -> Boolean,
         disableShift: () -> Boolean,
-        onUpdateStatusBar: () -> Unit
+        onUpdateStatusBar: () -> Unit,
+        committed: String? = null
     ) {
         maybeEnableSmartShift(
             context = context,
@@ -435,7 +468,8 @@ object AutoCapitalizeHelper {
             shouldDisableAutoCapitalize = shouldDisableAutoCapitalize,
             enableShift = onEnableShift,
             disableShift = disableShift,
-            onUpdateStatusBar = onUpdateStatusBar
+            onUpdateStatusBar = onUpdateStatusBar,
+            committed = committed
         )
     }
 
@@ -585,7 +619,9 @@ object AutoCapitalizeHelper {
                 return false
             }
             
-            val cursorContext = readContext(inputConnection) ?: return false
+            // The space just typed, whether or not the app has applied it yet
+            justCommitted = if (isSpace) " " else null
+            val cursorContext = try { readContext(inputConnection) } finally { justCommitted = null } ?: return false
             val before = cursorContext.before
             // Use hasSentenceEndingPunctuation to properly check for ". " or "! " or "? "
             return hasSentenceEndingPunctuation(before, requireWhitespaceAfter = true)

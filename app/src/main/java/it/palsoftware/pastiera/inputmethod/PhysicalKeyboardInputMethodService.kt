@@ -6780,7 +6780,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                             shouldDisableAutoCapitalize = shouldDisableAutoCapitalize,
                             onEnableShift = { modifierStateController.requestShiftOneShotFromAutoCap() },
                             disableShift = { modifierStateController.consumeShiftOneShot() },
-                            onUpdateStatusBar = { updateStatusBarText() }
+                            onUpdateStatusBar = { updateStatusBarText() },
+                            // The space just put in, whether or not the app has applied it yet
+                            committed = " "
                         )
                     }
                 }

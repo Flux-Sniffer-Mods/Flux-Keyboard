@@ -119,7 +119,8 @@ class TextInputController(
             shouldDisableAutoCapitalize = shouldDisableAutoCapitalize,
             onEnableShift = { modifierStateController.requestShiftOneShotFromAutoCap() },
             disableShift = { modifierStateController.consumeShiftOneShot() },
-            onUpdateStatusBar = onStatusBarUpdate
+            onUpdateStatusBar = onStatusBarUpdate,
+            committed = ". "
         )
         lastSpacePressTime = 0
         return true
@@ -144,7 +145,8 @@ class TextInputController(
                 shouldDisableAutoCapitalize = shouldDisableAutoCapitalize,
                 onEnableShift = { modifierStateController.requestShiftOneShotFromAutoCap() },
                 disableShift = { modifierStateController.consumeShiftOneShot() },
-                onUpdateStatusBar = onStatusBarUpdate
+                onUpdateStatusBar = onStatusBarUpdate,
+                committed = " "
             )
         }
     }
