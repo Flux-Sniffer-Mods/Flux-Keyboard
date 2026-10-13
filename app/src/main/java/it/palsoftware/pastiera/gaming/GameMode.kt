@@ -951,6 +951,9 @@ object GameMode {
                 keySlot = slot
             }
             keyPlace(code, min, max, top, bottom)?.let { heldKeys[code] = it }
+            if (heldKeys.isNotEmpty()) {
+                keyStats = KeyStats(code, now, fingers.entries.joinToString { "${it.key}:${it.value.role}@${it.value.rawX.toInt()},${it.value.rawY.toInt()}" }, held.size)
+            }
             // The key's finger was taken for a handover, the stick held where it was: the stick
             // takes the trackpad's reports back, the key's finger taken out of them
             val stick = held.entries.firstOrNull { it.value.role == TrackpadRole.LEFT_STICK || it.value.role == TrackpadRole.RIGHT_STICK }
@@ -964,7 +967,22 @@ object GameMode {
 
         fun keyReleased(code: Int) = synchronized(lock) {
             if (heldKeys.remove(code) != null) { keysLetGoAt = SystemClock.uptimeMillis(); restick() }
+            keyStats?.takeIf { it.code == code }?.let { k ->
+                FluxLog.w(TAG, "key $code held ${SystemClock.uptimeMillis() - k.at} ms: trackpad sent ${k.moves} moves " +
+                    "(${k.firstMove} to ${k.lastMove}), ${k.downs} touches, ${k.ups} lifts; fingers at the press: ${k.fingers}, held ${k.held}; " +
+                    "key at ${heldKeysPlace(code)}")
+                keyStats = null
+            }
         }
+
+        /** What the trackpad did while a key was held, for the log. */
+        private class KeyStats(val code: Int, val at: Long, val fingers: String, val held: Int) {
+            var moves = 0; var downs = 0; var ups = 0
+            var firstMove = ""; var lastMove = ""
+        }
+        private var keyStats: KeyStats? = null
+
+        private fun heldKeysPlace(code: Int) = keyPlace(code, min, max, top, bottom)?.let { "${it.first.toInt()},${it.second.toInt()}" }
 
         /** When the last key held was let go: the trackpad may lift and touch again as its finger leaves. */
         private var keysLetGoAt = 0L
@@ -996,6 +1014,7 @@ object GameMode {
         }
 
         private fun begin(slot: Int, x: Int, y: Int) {
+            keyStats?.let { it.downs++ }
             val current = profile ?: return
             val now = SystemClock.uptimeMillis()
             val gone = pendingUp?.let { handler.removeCallbacks(it); pendingUp = null; fingers.remove(pendingSlot) }
@@ -1042,6 +1061,7 @@ object GameMode {
         private fun byKeys(at: Int): Boolean = stickSink == null && !pad && profile?.stickZones?.containsKey(at / 2) != true
 
         private fun move(slot: Int, reportedX: Int, reportedY: Int) {
+            keyStats?.let { k -> k.moves++; "$slot@$reportedX,$reportedY".let { if (k.firstMove.isEmpty()) k.firstMove = it; k.lastMove = it } }
             val f = fingers[slot] ?: return
             f.rawX = reportedX.toFloat(); f.rawY = reportedY.toFloat()
             val stick = f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK
@@ -1119,6 +1139,7 @@ object GameMode {
 
         /** Lifted, or a handover: which, is known when the next finger comes (or doesn't) soon after. */
         private fun up(slot: Int) {
+            keyStats?.let { it.ups++ }
             pendingUp?.let { handler.removeCallbacks(it); it.run() }
             pendingSlot = slot
             val lifted = Runnable {
