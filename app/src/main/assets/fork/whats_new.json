@@ -690,6 +690,9 @@
     },
     {
       "text": "Streaming: lower latency: the phone's Wi-Fi is kept out of power saving while streaming, the stream is marked as real-time traffic for routers that honour it, and the video encoder never waits on later frames"
+    },
+    {
+      "text": "Crash log: a Clear logs option empties the logs so the next crash log saves quickly and holds only what happened since"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1024,6 +1027,9 @@
     },
     {
       "text": "Gaming mode: a Dolphin Wii game set to a GameCube controller turns its Wii Remote off for that game in every way Dolphin reads it"
+    },
+    {
+      "text": "Crash log: the screen and window settings section no longer shows \"Failed transaction\" errors"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

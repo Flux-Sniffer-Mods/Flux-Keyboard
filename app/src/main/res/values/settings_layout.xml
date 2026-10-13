@@ -501,6 +501,9 @@
     <string name="crash_log">Save crash log</string>
     <string name="crash_log_description">Android\'s record of Flux Keyboard\'s last crashes, saved to Download/Flux Keyboard/crash-log.txt to share.</string>
     <string name="crash_log_saved">Saved to Download/Flux Keyboard/crash-log.txt</string>
+    <string name="crash_log_clear">Clear logs</string>
+    <string name="crash_log_clear_description">Empties the phone\'s logs and Flux Keyboard\'s own record, so the next crash log holds only what happens from now and saves quickly.</string>
+    <string name="crash_log_cleared">Logs cleared</string>
     <string name="phone_game_mode">Phone\'s own game mode</string>
     <string name="phone_game_mode_description">Unihertz\'s Game Mode can take over as the home screen alongside gaming mode. Turn it off here.</string>
     <string name="game_mode_artwork">Artwork</string>
