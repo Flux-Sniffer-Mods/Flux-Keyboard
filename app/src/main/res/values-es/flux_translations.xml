@@ -1989,4 +1989,6 @@
     <string name="game_mode_screen_upright">Mantener el juego en vertical</string>
     <string name="game_mode_screen_upright_description">Mantiene el teléfono y el juego en vertical, pida lo que pida el juego. Para emuladores de DS y 3DS: sus dos pantallas una encima de la otra.</string>
     <string name="game_mode_bottom_screen">Pantalla inferior</string>
+    <string name="game_mode_swap_face">Intercambiar A/B y X/Y</string>
+    <string name="game_mode_swap_face_description">La disposición de Nintendo: M pulsa B, L pulsa A, I pulsa X y J pulsa Y, así cada tecla pulsa el botón de su posición. Activado por defecto en emuladores de Nintendo.</string>
 </resources>

@@ -1995,4 +1995,6 @@
     <string name="game_mode_screen_upright">Держать игру вертикально</string>
     <string name="game_mode_screen_upright_description">Держит телефон и игру вертикально, что бы ни запрашивала игра. Для эмуляторов DS и 3DS: их два экрана один над другим.</string>
     <string name="game_mode_bottom_screen">Нижний экран</string>
+    <string name="game_mode_swap_face">Поменять A/B и X/Y</string>
+    <string name="game_mode_swap_face_description">Раскладка Nintendo: M нажимает B, L — A, I — X, J — Y, так что каждая клавиша нажимает кнопку на своём месте. По умолчанию включено для эмуляторов Nintendo.</string>
 </resources>

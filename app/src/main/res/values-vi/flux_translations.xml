@@ -1977,4 +1977,6 @@
     <string name="game_mode_screen_upright">Giữ trò chơi thẳng đứng</string>
     <string name="game_mode_screen_upright_description">Giữ điện thoại và trò chơi thẳng đứng, bất kể trò chơi yêu cầu gì. Với trình giả lập DS và 3DS: hai màn hình xếp chồng lên nhau.</string>
     <string name="game_mode_bottom_screen">Màn hình dưới</string>
+    <string name="game_mode_swap_face">Đổi A/B và X/Y</string>
+    <string name="game_mode_swap_face_description">Bố cục của Nintendo: M bấm B, L bấm A, I bấm X và J bấm Y, để mỗi phím bấm nút ở đúng vị trí của nó. Bật mặc định cho trình giả lập Nintendo.</string>
 </resources>

@@ -1359,4 +1359,6 @@
     <string name="game_mode_screen_upright">Κράτα το παιχνίδι όρθιο</string>
     <string name="game_mode_screen_upright_description">Κρατά το τηλέφωνο και το παιχνίδι όρθια, ό,τι κι αν ζητά το παιχνίδι. Για εξομοιωτές DS και 3DS: οι δύο οθόνες τους η μία πάνω από την άλλη.</string>
     <string name="game_mode_bottom_screen">Κάτω οθόνη</string>
+    <string name="game_mode_swap_face">Εναλλαγή A/B και X/Y</string>
+    <string name="game_mode_swap_face_description">Η διάταξη της Nintendo: το M πατά B, το L πατά A, το I πατά X και το J πατά Y, ώστε κάθε πλήκτρο να πατά το κουμπί στη θέση του. Ενεργό από προεπιλογή για εξομοιωτές Nintendo.</string>
 </resources>

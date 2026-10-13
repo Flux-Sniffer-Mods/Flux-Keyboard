@@ -1983,4 +1983,6 @@
     <string name="game_mode_screen_upright">Խաղը պահել ուղղահայաց</string>
     <string name="game_mode_screen_upright_description">Հեռախոսը և խաղը պահում է ուղղահայաց՝ անկախ խաղի պահանջից։ DS և 3DS էմուլյատորների համար՝ նրանց երկու էկրանները մեկը մյուսի վրա։</string>
     <string name="game_mode_bottom_screen">Ներքևի էկրան</string>
+    <string name="game_mode_swap_face">Փոխանակել A/B և X/Y</string>
+    <string name="game_mode_swap_face_description">Nintendo-ի դասավորությունը՝ M-ը սեղմում է B, L-ը՝ A, I-ն՝ X, J-ն՝ Y, որպեսզի ամեն ստեղն սեղմի իր տեղում գտնվող կոճակը։ Nintendo էմուլյատորների համար միացված է լռելյայն։</string>
 </resources>
