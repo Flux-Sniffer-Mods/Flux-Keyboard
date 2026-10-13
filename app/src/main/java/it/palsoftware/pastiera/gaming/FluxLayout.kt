@@ -168,56 +168,56 @@ object FluxLayout {
      * with Alt, pressed all the way without the click. Its Z on the right shoulder (E).
      */
     private val GAMECUBE = listOf(
-        "Buttons/A" to keys(Control.A), "Buttons/B" to keys(Control.B),
-        "Buttons/X" to keys(Control.X), "Buttons/Y" to keys(Control.Y),
-        "Buttons/Z" to keys(Control.R1), "Buttons/Start" to keys(Control.START),
-        "Triggers/L" to keys(Control.L2), "Triggers/R" to keys(Control.R2),
-        "Triggers/L-Analog" to keys(Control.L2, Control.L2_ANALOG), "Triggers/R-Analog" to keys(Control.R2, Control.R2_ANALOG),
-        "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
-        "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
-        "Main Stick/Up" to keys(Control.LS_UP), "Main Stick/Down" to keys(Control.LS_DOWN),
-        "Main Stick/Left" to keys(Control.LS_LEFT), "Main Stick/Right" to keys(Control.LS_RIGHT),
-        "C-Stick/Up" to keys(Control.RS_UP), "C-Stick/Down" to keys(Control.RS_DOWN),
-        "C-Stick/Left" to keys(Control.RS_LEFT), "C-Stick/Right" to keys(Control.RS_RIGHT)
+        "Buttons/A" to ctl(Control.A), "Buttons/B" to ctl(Control.B),
+        "Buttons/X" to ctl(Control.X), "Buttons/Y" to ctl(Control.Y),
+        "Buttons/Z" to ctl(Control.R1), "Buttons/Start" to ctl(Control.START),
+        "Triggers/L" to ctl(Control.L2), "Triggers/R" to ctl(Control.R2),
+        "Triggers/L-Analog" to ctl(Control.L2, Control.L2_ANALOG), "Triggers/R-Analog" to ctl(Control.R2, Control.R2_ANALOG),
+        "D-Pad/Up" to ctl(Control.UP), "D-Pad/Down" to ctl(Control.DOWN),
+        "D-Pad/Left" to ctl(Control.LEFT), "D-Pad/Right" to ctl(Control.RIGHT),
+        "Main Stick/Up" to ctl(Control.LS_UP), "Main Stick/Down" to ctl(Control.LS_DOWN),
+        "Main Stick/Left" to ctl(Control.LS_LEFT), "Main Stick/Right" to ctl(Control.LS_RIGHT),
+        "C-Stick/Up" to ctl(Control.RS_UP), "C-Stick/Down" to ctl(Control.RS_DOWN),
+        "C-Stick/Left" to ctl(Control.RS_LEFT), "C-Stick/Right" to ctl(Control.RS_RIGHT)
     )
 
     private val WII = listOf(
-        "Buttons/A" to keys(Control.A), "Buttons/B" to keys(Control.B, Control.R2),
-        "Buttons/1" to keys(Control.X), "Buttons/2" to keys(Control.Y),
-        "Buttons/-" to keys(Control.SELECT), "Buttons/+" to keys(Control.START), "Buttons/Home" to keys(Control.HOME),
-        "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
-        "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
-        "IR/Up" to keys(Control.RS_UP), "IR/Down" to keys(Control.RS_DOWN),
-        "IR/Left" to keys(Control.RS_LEFT), "IR/Right" to keys(Control.RS_RIGHT),
-        "Shake/X" to keys(Control.R1), "Shake/Y" to keys(Control.R1), "Shake/Z" to keys(Control.R1),
-        "Nunchuk/Buttons/C" to keys(Control.L1), "Nunchuk/Buttons/Z" to keys(Control.L2),
-        "Nunchuk/Stick/Up" to keys(Control.LS_UP), "Nunchuk/Stick/Down" to keys(Control.LS_DOWN),
-        "Nunchuk/Stick/Left" to keys(Control.LS_LEFT), "Nunchuk/Stick/Right" to keys(Control.LS_RIGHT)
+        "Buttons/A" to ctl(Control.A), "Buttons/B" to ctl(Control.B, Control.R2),
+        "Buttons/1" to ctl(Control.X), "Buttons/2" to ctl(Control.Y),
+        "Buttons/-" to ctl(Control.SELECT), "Buttons/+" to ctl(Control.START), "Buttons/Home" to ctl(Control.HOME),
+        "D-Pad/Up" to ctl(Control.UP), "D-Pad/Down" to ctl(Control.DOWN),
+        "D-Pad/Left" to ctl(Control.LEFT), "D-Pad/Right" to ctl(Control.RIGHT),
+        "IR/Up" to ctl(Control.RS_UP), "IR/Down" to ctl(Control.RS_DOWN),
+        "IR/Left" to ctl(Control.RS_LEFT), "IR/Right" to ctl(Control.RS_RIGHT),
+        "Shake/X" to ctl(Control.R1), "Shake/Y" to ctl(Control.R1), "Shake/Z" to ctl(Control.R1),
+        "Nunchuk/Buttons/C" to ctl(Control.L1), "Nunchuk/Buttons/Z" to ctl(Control.L2),
+        "Nunchuk/Stick/Up" to ctl(Control.LS_UP), "Nunchuk/Stick/Down" to ctl(Control.LS_DOWN),
+        "Nunchuk/Stick/Left" to ctl(Control.LS_LEFT), "Nunchuk/Stick/Right" to ctl(Control.LS_RIGHT)
     )
 
     private val CLASSIC = listOf(
-        "Classic/Buttons/A" to keys(Control.A), "Classic/Buttons/B" to keys(Control.B),
-        "Classic/Buttons/X" to keys(Control.X), "Classic/Buttons/Y" to keys(Control.Y),
-        "Classic/Triggers/L" to keys(Control.L1), "Classic/Triggers/R" to keys(Control.R1),
-        "Classic/Buttons/ZL" to keys(Control.L2), "Classic/Buttons/ZR" to keys(Control.R2),
-        "Classic/Buttons/-" to keys(Control.SELECT), "Classic/Buttons/+" to keys(Control.START),
-        "Classic/Buttons/Home" to keys(Control.HOME),
-        "Classic/D-Pad/Up" to keys(Control.UP), "Classic/D-Pad/Down" to keys(Control.DOWN),
-        "Classic/D-Pad/Left" to keys(Control.LEFT), "Classic/D-Pad/Right" to keys(Control.RIGHT),
-        "Classic/Left Stick/Up" to keys(Control.LS_UP), "Classic/Left Stick/Down" to keys(Control.LS_DOWN),
-        "Classic/Left Stick/Left" to keys(Control.LS_LEFT), "Classic/Left Stick/Right" to keys(Control.LS_RIGHT),
-        "Classic/Right Stick/Up" to keys(Control.RS_UP), "Classic/Right Stick/Down" to keys(Control.RS_DOWN),
-        "Classic/Right Stick/Left" to keys(Control.RS_LEFT), "Classic/Right Stick/Right" to keys(Control.RS_RIGHT)
+        "Classic/Buttons/A" to ctl(Control.A), "Classic/Buttons/B" to ctl(Control.B),
+        "Classic/Buttons/X" to ctl(Control.X), "Classic/Buttons/Y" to ctl(Control.Y),
+        "Classic/Triggers/L" to ctl(Control.L1), "Classic/Triggers/R" to ctl(Control.R1),
+        "Classic/Buttons/ZL" to ctl(Control.L2), "Classic/Buttons/ZR" to ctl(Control.R2),
+        "Classic/Buttons/-" to ctl(Control.SELECT), "Classic/Buttons/+" to ctl(Control.START),
+        "Classic/Buttons/Home" to ctl(Control.HOME),
+        "Classic/D-Pad/Up" to ctl(Control.UP), "Classic/D-Pad/Down" to ctl(Control.DOWN),
+        "Classic/D-Pad/Left" to ctl(Control.LEFT), "Classic/D-Pad/Right" to ctl(Control.RIGHT),
+        "Classic/Left Stick/Up" to ctl(Control.LS_UP), "Classic/Left Stick/Down" to ctl(Control.LS_DOWN),
+        "Classic/Left Stick/Left" to ctl(Control.LS_LEFT), "Classic/Left Stick/Right" to ctl(Control.LS_RIGHT),
+        "Classic/Right Stick/Up" to ctl(Control.RS_UP), "Classic/Right Stick/Down" to ctl(Control.RS_DOWN),
+        "Classic/Right Stick/Left" to ctl(Control.RS_LEFT), "Classic/Right Stick/Right" to ctl(Control.RS_RIGHT)
     )
 
     /** Held sideways, as for NES-style games: 2 (right-hand) on A, 1 on X and B, the remote's A and B on Y and R2. */
     private val SIDEWAYS = listOf(
-        "Buttons/2" to keys(Control.A), "Buttons/1" to keys(Control.X, Control.B),
-        "Buttons/A" to keys(Control.Y), "Buttons/B" to keys(Control.R2),
-        "Buttons/-" to keys(Control.SELECT), "Buttons/+" to keys(Control.START), "Buttons/Home" to keys(Control.HOME),
-        "D-Pad/Up" to keys(Control.UP), "D-Pad/Down" to keys(Control.DOWN),
-        "D-Pad/Left" to keys(Control.LEFT), "D-Pad/Right" to keys(Control.RIGHT),
-        "Shake/X" to keys(Control.R1), "Shake/Y" to keys(Control.R1), "Shake/Z" to keys(Control.R1)
+        "Buttons/2" to ctl(Control.A), "Buttons/1" to ctl(Control.X, Control.B),
+        "Buttons/A" to ctl(Control.Y), "Buttons/B" to ctl(Control.R2),
+        "Buttons/-" to ctl(Control.SELECT), "Buttons/+" to ctl(Control.START), "Buttons/Home" to ctl(Control.HOME),
+        "D-Pad/Up" to ctl(Control.UP), "D-Pad/Down" to ctl(Control.DOWN),
+        "D-Pad/Left" to ctl(Control.LEFT), "D-Pad/Right" to ctl(Control.RIGHT),
+        "Shake/X" to ctl(Control.R1), "Shake/Y" to ctl(Control.R1), "Shake/Z" to ctl(Control.R1)
     )
 
     /**
@@ -239,8 +239,46 @@ object FluxLayout {
         return keys.map { when (it) { a -> b; b -> a; x -> y; y -> x; else -> it } }
     }
 
-    private fun dolphinLines(controls: List<Pair<String, List<Int>>>, swap: Boolean) =
-        controls.map { (control, keys) -> "$control = " + (if (swap) swapFace(keys) else keys).joinToString(" | ") { "`${keyName(it)}`" } }
+    private fun ctl(vararg controls: Control) = controls.toList()
+
+    /** The keys gaming mode reads as the layout's (with a modifier or not). */
+    private val READ_KEYS = (KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z).toList() + listOf(
+        KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN
+    )
+
+    /** Each modifier layer as Dolphin reads it: the modifier keys held, as [layerOf] picks the layer. */
+    private val LAYER_CONDITION = mapOf(
+        Layer.NONE to "!`Sym` & !`Right Shift` & !`Left Alt` & !`Right Alt` & !`Left Shift`",
+        Layer.SYM to "`Sym`",
+        Layer.RIGHT_SHIFT to "`Right Shift` & !`Sym`",
+        Layer.ALT to "(`Left Alt` | `Right Alt`) & !`Sym` & !`Right Shift`",
+        Layer.SHIFT to "`Left Shift` & !`Sym` & !`Right Shift` & !`Left Alt` & !`Right Alt`"
+    )
+
+    /** A control with A and B (X and Y) the other way round, Nintendo's. */
+    internal fun swapped(control: Control?): Control? = when (control) {
+        Control.A -> Control.B; Control.B -> Control.A; Control.X -> Control.Y; Control.Y -> Control.X
+        else -> control
+    }
+
+    /**
+     * What presses [controls] as an expression Dolphin reads from the keyboard itself: each key
+     * with the modifier layer it makes the control in (the layout, keys changed in Keyboard
+     * controls, A and B swapped when [swap]). Dolphin only takes keys from the keyboard, not
+     * ones sent for it, so every combination is its own.
+     */
+    internal fun dolphinExpression(controls: List<Control>, swap: Boolean): String {
+        val parts = Layer.entries.mapNotNull { layer ->
+            val mods = modifiersOf(layer)
+            val keys = READ_KEYS.filter { key -> controlFor(key, mods).let { if (swap) swapped(it) else it } in controls }
+            if (keys.isEmpty()) null
+            else "((" + LAYER_CONDITION.getValue(layer) + ") & (" + keys.joinToString(" | ") { "`${keyName(it)}`" } + "))"
+        }
+        return parts.joinToString(" | ")
+    }
+
+    private fun dolphinLines(controls: List<Pair<String, List<Control>>>, swap: Boolean) =
+        controls.map { (name, wanted) -> "$name = " + dolphinExpression(wanted, swap) }
 
     internal fun dolphinGameCube(keyboard: String, swap: Boolean = false): List<String> =
         listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE, swap)
@@ -344,7 +382,7 @@ object FluxLayout {
     internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
 
     /** The layout's version: written again into emulators given an older one. */
-    private const val LAYOUT_VERSION = 3
+    private const val LAYOUT_VERSION = 4
 
     /**
      * An emulator given Flux Keyboard's layout before it changed: given the current one, once
@@ -354,8 +392,9 @@ object FluxLayout {
         val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
         val key = "flux_layout_version_$pkg"
         val swap = swapFor(context, pkg)
-        // Written already, with A and B the way round they're wanted
-        if ((prefs.getInt(key, 0) == LAYOUT_VERSION && prefs.getBoolean(KEY_SWAP + pkg, false) == swap) || !AdbShell.available()) return
+        val state = layoutState(context, pkg)
+        // Written already, with A and B and any changed keys as they're wanted
+        if ((prefs.getInt(key, 0) == LAYOUT_VERSION && prefs.getString(KEY_STATE + pkg, null) == state) || !AdbShell.available()) return
         val given = when (GameApps.emulator(pkg)) {
             "Dolphin" -> dolphinDir(pkg)?.let { dir ->
                 AdbShell.run("[ -f \"$dir/Config/Profiles/GCPad/Flux Keyboard.ini\" ] && echo yes; true", 3_000)?.contains("yes") == true
@@ -364,15 +403,21 @@ object FluxLayout {
             else -> false
         }
         if (!given) return
-        if (apply(pkg, swap) == Result.DONE) prefs.edit().putInt(key, LAYOUT_VERSION).putBoolean(KEY_SWAP + pkg, swap).apply()
+        if (apply(pkg, swap) == Result.DONE) prefs.edit().putInt(key, LAYOUT_VERSION).putString(KEY_STATE + pkg, state).apply()
     }
 
-    private const val KEY_SWAP = "flux_layout_swap_"
+    private const val KEY_STATE = "flux_layout_state_"
 
-    /** Remembers [pkg] has the current layout (just written by hand, A and B as [swapFor] has them). */
+    /** What a written layout depends on besides its version: A and B swapped, and keys changed in Keyboard controls. */
+    private fun layoutState(context: android.content.Context, pkg: String): String {
+        loadOverrides(context)
+        return "${swapFor(context, pkg)}|${formatOverrides(overrides)}"
+    }
+
+    /** Remembers [pkg] has the current layout (just written by hand, as [layoutState] has it). */
     fun markWritten(context: android.content.Context, pkg: String) =
         it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putInt("flux_layout_version_$pkg", LAYOUT_VERSION)
-            .putBoolean(KEY_SWAP + pkg, swapFor(context, pkg)).apply()
+            .putString(KEY_STATE + pkg, layoutState(context, pkg)).apply()
 
     /**
      * Writes the layout into [pkg]'s controller settings, A and B (X and Y) swapped when [swap]

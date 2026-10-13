@@ -291,6 +291,10 @@ object GameMode {
             }
             return false
         }
+        // Dolphin reads only the keyboard itself (not keys sent for it): every key goes to it as
+        // it is, the layout's combinations written into its controls (keys placed on the screen
+        // still tap there)
+        if (readsKeyboard() && (inMenus || profile?.taps?.get(code) == null)) return false
         if (code in FluxLayout.MODIFIER_KEYS) {
             if (event.repeatCount == 0) worker.execute {
                 if (down) modifiersHeld += code else modifiersHeld -= code
@@ -345,6 +349,12 @@ object GameMode {
             else -> control
         }
     }
+
+    /** The app in front reads the layout from the keyboard itself, its combinations written into its controls (Dolphin). */
+    private fun readsKeyboard(): Boolean = frontPackage?.let { GameApps.emulator(it) } == "Dolphin"
+
+    /** In a game that reads the keyboard itself, with nothing being typed: keys go to it as they are. */
+    fun readsKeyboardNow(): Boolean = passesKeys() && readsKeyboard()
 
     /** How controls reach the app in front: as the layout's own keys, or as a controller's. */
     internal fun sendsKeys(): Boolean {

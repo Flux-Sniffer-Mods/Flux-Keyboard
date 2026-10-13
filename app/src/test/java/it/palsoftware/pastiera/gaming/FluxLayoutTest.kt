@@ -39,11 +39,12 @@ class FluxLayoutTest {
     fun dolphinGetsTheKeysByName() {
         val lines = FluxLayout.dolphinGameCube("TitanKey")
         assertEquals("Device = Android/0/TitanKey", lines.first())
-        assertTrue("Buttons/Start = `Space`" in lines)
-        assertTrue("Main Stick/Up = `W`" in lines)
-        assertTrue("C-Stick/Left = `F`" in lines)
-        assertTrue("Triggers/L = `U`" in lines)
-        assertTrue("Buttons/Z = `E`" in lines)
+        fun line(name: String) = lines.first { it.startsWith("$name = ") }
+        assertTrue(line("Buttons/Start"), "`Space`" in line("Buttons/Start"))
+        assertTrue(line("Main Stick/Up"), "`W`" in line("Main Stick/Up"))
+        // The right stick: Alt with J, or right Shift with A
+        assertTrue(line("C-Stick/Left"), "`J`" in line("C-Stick/Left") && "`Right Shift`" in line("C-Stick/Left"))
+        assertTrue(line("Buttons/Z"), "`E`" in line("Buttons/Z"))
     }
 
     @Test
@@ -64,10 +65,12 @@ class FluxLayoutTest {
     fun eachWiiControllerHasItsOwnSetUp() {
         val classic = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.CLASSIC)
         assertTrue("Extension = Classic" in classic)
-        assertTrue("Classic/Right Stick/Up = `T`" in classic)
+        val rightUp = classic.first { it.startsWith("Classic/Right Stick/Up = ") }
+        assertTrue(rightUp, "`I`" in rightUp && "`W`" in rightUp)
         val sideways = FluxLayout.dolphinWii("TitanKey", FluxLayout.WiiPad.SIDEWAYS)
         assertTrue("Options/Sideways Wiimote = True" in sideways)
-        assertTrue("Buttons/2 = `M`" in sideways)
+        val two = sideways.first { it.startsWith("Buttons/2 = ") }
+        assertTrue(two, "`M`" in two)
     }
 
     @Test
@@ -95,8 +98,11 @@ class FluxLayoutTest {
         assertEquals(FluxLayout.Control.L2_ANALOG, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_UP, alt))
         assertEquals(FluxLayout.Control.R2, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_DOWN, FluxLayout.Modifiers()))
         val gc = FluxLayout.dolphinGameCube("Keys")
-        assertTrue("Triggers/L = `U`" in gc)
-        assertTrue("Triggers/L-Analog = `U` | `C`" in gc)
+        val l = gc.first { it.startsWith("Triggers/L = ") }
+        val analog = gc.first { it.startsWith("Triggers/L-Analog = ") }
+        // The click only without Alt; all the way with or without
+        assertTrue(l, "`Volume Up`" in l && "(`Left Alt` | `Right Alt`)" !in l)
+        assertTrue(analog, "(`Left Alt` | `Right Alt`)" in analog)
     }
 
     @Test
@@ -112,10 +118,20 @@ class FluxLayoutTest {
     @Test
     fun swapIsWrittenIntoTheEmulator() {
         val gc = FluxLayout.dolphinGameCube("Keys", swap = true)
-        assertTrue("Buttons/A = `L`" in gc)
-        assertTrue("Buttons/B = `M`" in gc)
-        assertTrue("Buttons/X = `I`" in gc)
-        assertTrue("Buttons/Y = `J`" in gc)
-        assertTrue("Buttons/A = `M`" in FluxLayout.dolphinGameCube("Keys"))
+        val a = gc.first { it.startsWith("Buttons/A = ") }
+        assertTrue(a, "`L`" in a && "`M`" !in a)
+        val plain = FluxLayout.dolphinGameCube("Keys").first { it.startsWith("Buttons/A = ") }
+        assertTrue(plain, "`M`" in plain)
+    }
+
+    @Test
+    fun combinationsAreWrittenForDolphin() {
+        val gc = FluxLayout.dolphinGameCube("Keys")
+        val up = gc.first { it.startsWith("D-Pad/Up = ") }
+        assertTrue(up, "`Sym`" in up && "`W`" in up)
+        val start = gc.first { it.startsWith("Buttons/Start = ") }
+        assertTrue(start, "`Space`" in start && "!`Left Shift`" in start)
+        val l = gc.first { it.startsWith("Triggers/L = ") }
+        assertTrue(l, "`Volume Up`" in l)
     }
 }

@@ -1057,6 +1057,9 @@
     },
     {
       "text": "Gaming mode: in Dolphin and PPSSPP, Swap A/B and X/Y is written into the emulator's own controller settings, so the face keys reach it as they are and work again"
+    },
+    {
+      "text": "Gaming mode: in Dolphin, every control works: Dolphin only reads the keyboard itself, so the whole layout (SYM, Shift and Alt combinations, the volume triggers, changed keys and the A/B swap) is written into its controls and every key goes to it as it is"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
