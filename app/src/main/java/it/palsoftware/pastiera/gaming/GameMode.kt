@@ -96,6 +96,9 @@ object GameMode {
         val app = context.applicationContext
         if (packageName == app.packageName || packageName == "com.android.systemui") return
         val previous = frontPackage
+        // Another app in front: keys and modifiers let go there were never seen, so nothing is
+        // kept as held
+        if (previous != packageName) worker.execute { releaseControls() }
         if (previous != null && previous != packageName && GameProfiles.forPackage(app, previous).isNotEmpty() &&
             GameProfiles.forPackage(app, packageName).isEmpty() && !isHomeApp(app, packageName)
         ) openedFromGame = packageName
@@ -131,6 +134,9 @@ object GameMode {
                 id = "player", name = "player", packages = setOf(app.packageName),
                 leftHalf = TrackpadRole.NONE, rightHalf = TrackpadRole.NONE, screen = screenMode
             )
+            // Its keys sent through the input helper like any game's (started if it isn't)
+            if (input == null && AdbShell.available()) startInput(app)
+            releaseControls()
             profile = player
             activeId = null
             screen(app, screenMode)
@@ -260,9 +266,9 @@ object GameMode {
             return false
         }
         if (code in FluxLayout.MODIFIER_KEYS) {
-            if (event.repeatCount == 0) {
+            if (event.repeatCount == 0) worker.execute {
                 if (down) modifiersHeld += code else modifiersHeld -= code
-                worker.execute { refreshControls() }
+                refreshControls()
             }
             return true
         }
@@ -279,9 +285,14 @@ object GameMode {
             if (down && event.repeatCount == 0) FluxLog.w(TAG, "key $code isn't one of the layout's: passed on")
             return false
         }
-        if (event.repeatCount == 0) {
-            if (down) layoutKeysHeld += code else layoutKeysHeld -= code
-            worker.execute { refreshControls() }
+        // Kept on the worker, where they're read
+        if (event.repeatCount == 0) worker.execute {
+            if (down) {
+                // Already held (its letting go wasn't seen): let go first, so this press is one
+                if (code in layoutKeysHeld) { layoutKeysHeld -= code; refreshControls() }
+                layoutKeysHeld += code
+            } else layoutKeysHeld -= code
+            refreshControls()
         }
         return true
     }
@@ -349,6 +360,7 @@ object GameMode {
     /** Every control let go (the game ended, or another app came in front). */
     private fun releaseControls() {
         modifiersHeld.clear(); layoutKeysHeld.clear()
+        symHeld = false; volumeTaken.clear()
         controlsDown.keys.toList().forEach { sendControl(it, false) }
         keySticks.fill(0f)
     }

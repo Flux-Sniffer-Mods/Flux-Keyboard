@@ -997,6 +997,15 @@
     },
     {
       "text": "Gaming mode: Dolphin and PPSSPP set up with Flux Keyboard's older layout get the new one by themselves the next time a game starts from Games"
+    },
+    {
+      "text": "Gaming mode: Flux Keyboard's own Xbox player gets the keyboard controls too (the volume keys as triggers)"
+    },
+    {
+      "text": "Gaming mode: leaving a game and coming back no longer leaves keys or SYM counted as held (which turned the volume keys into volume, or ignored a button's next press)"
+    },
+    {
+      "text": "Gaming mode: a Dolphin Wii game set to a GameCube controller gets it again each time it starts from Games"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

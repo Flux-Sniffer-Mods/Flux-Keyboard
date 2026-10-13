@@ -57,6 +57,13 @@ class GameLaunchActivity : Activity() {
                 if (GameApps.emulator(pkg) == "Dolphin") runCatching { FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir) } }
                 // Its controls given the current layout, if they had an older one
                 runCatching { FluxLayout.refreshIfOutdated(this, pkg) }
+                // A Wii game's own controller (a GameCube controller, say) set again as it starts
+                val wiiPad = profile?.wiiPad?.let { name -> FluxLayout.WiiPad.entries.firstOrNull { it.name == name } }
+                if (wiiPad != null && GameApps.emulator(pkg) == "Dolphin") runCatching {
+                    val path = launch?.let { GameFiles.gameFile(it) }
+                    val id = path?.takeIf { GameFiles.isWii(it) }?.let { GameIds.id(this, "Dolphin", it) }
+                    if (id != null) FluxLayout.setWiiPad(pkg, id, wiiPad)
+                }
                 runOnUiThread { start(game, app) }
             }.start()
         } else {
