@@ -781,6 +781,8 @@ object GameMode {
             var reorigin = false
             /** Touching the screen, as the pointer. */
             var pointing = false
+            /** The furthest push each way (up, down), for the log. */
+            var furthestUp = 0f; var furthestDown = 0f
         }
 
         private val fingers = HashMap<Int, Finger>()
@@ -878,6 +880,7 @@ object GameMode {
                     else {
                         sticks[at] = vx.coerceIn(-1f, 1f)
                         sticks[at + 1] = vy.coerceIn(-1f, 1f)
+                        f.furthestUp = maxOf(f.furthestUp, -vy); f.furthestDown = maxOf(f.furthestDown, vy)
                         pushStick(at)
                     }
                 }
@@ -945,6 +948,9 @@ object GameMode {
         }
 
         private fun end(f: Finger) {
+            if (f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK) Log.w(TAG,
+                "trackpad stick: landed at y ${f.originY}, furthest up ${f.furthestUp}, down ${f.furthestDown}, " +
+                    "rows reached $reachedTop..$reachedBottom, on screen ${screenW}x$screenH")
             when (f.role) {
                 TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, FluxLayout.LEFT_STICK); releaseStick(0) }
                 TrackpadRole.RIGHT_STICK -> { directionKeys(f, 0f, 0f, RIGHT_KEYS); releaseStick(2) }
