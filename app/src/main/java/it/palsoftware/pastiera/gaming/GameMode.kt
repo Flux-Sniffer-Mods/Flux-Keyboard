@@ -267,6 +267,8 @@ object GameMode {
 
     /** Which of the controller's buttons each key is (see [VirtualGamepad.button]). */
     private val PAD_BUTTONS = FluxLayout.PAD_BUTTONS
+    /** Emulators whose controls Flux Keyboard writes its layout into. */
+    private val LAYOUT_EMULATORS = setOf("Dolphin", "PPSSPP")
     private val PAD_DPAD = setOf(KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_D)
     private val dpadHeld = mutableSetOf<Int>()
 
@@ -297,6 +299,21 @@ object GameMode {
         // they reach the app, whose own controls map them)
         if ((pad || (profile?.rightStickKeys == true && profile?.stickZones?.containsKey(1) == true)) && code in RIGHT_STICK_KEYS) {
             if (event.repeatCount == 0) rightStickKey(code, down)
+            return true
+        }
+        // An emulator given Flux Keyboard's layout only takes the keyboard's own keys, and the
+        // volume keys are another device's: sent as the keyboard keys for the same buttons
+        if (!pad && (code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN) &&
+            frontPackage?.let { GameApps.emulator(it) } in LAYOUT_EMULATORS) {
+            if (event.repeatCount == 0) {
+                // (Dolphin's GameCube has its R trigger, not Z, on Volume Down)
+                val key = when {
+                    code == KeyEvent.KEYCODE_VOLUME_UP -> KeyEvent.KEYCODE_Q
+                    profile?.variant == GameProfiles.VARIANT_GAMECUBE -> KeyEvent.KEYCODE_E
+                    else -> KeyEvent.KEYCODE_Z
+                }
+                worker.execute { send("K ${if (down) 1 else 0} $key k") }
+            }
             return true
         }
         if (!pad) return false

@@ -961,6 +961,9 @@
     },
     {
       "text": "Gaming mode: an on-screen stick near the edge of a game drawn smaller than the screen (Dolphin and other emulators, or while streaming) is pushed into the black bars around it, as a finger would, so it reaches all the way"
+    },
+    {
+      "text": "Gaming mode: the volume keys work as triggers in Dolphin and PPSSPP again"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
