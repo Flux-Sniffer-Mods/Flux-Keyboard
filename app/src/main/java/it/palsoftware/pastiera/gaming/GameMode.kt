@@ -755,6 +755,9 @@ object GameMode {
         } else sendSticks()
     }
 
+    /** The last on-screen stick touch, for the log. */
+    @Volatile private var lastDrag = ""
+
     /** An on-screen stick: a finger on its place, pushed as far as the stick goes. */
     private fun dragStick(at: Int) {
         val current = profile ?: return
@@ -774,6 +777,7 @@ object GameMode {
         val (barX, barY) = edges
         val x = (cx + sx * reach).coerceIn(1f - barX, screenW + barX - 2f)
         val y = (cy + sy * reach).coerceIn(1f - barY, screenH + barY - 2f)
+        lastDrag = "stick ${at / 2} from ${cx.toInt()},${cy.toInt()} reach ${reach.toInt()} to ${x.toInt()},${y.toInt()} (bars ${barX.toInt()},${barY.toInt()})"
         worker.execute {
             if (first) send("T d $finger $cx $cy")
             send("T m $finger $x $y")
@@ -1002,7 +1006,8 @@ object GameMode {
         private fun end(f: Finger) {
             if (f.role == TrackpadRole.LEFT_STICK || f.role == TrackpadRole.RIGHT_STICK) FluxLog.w(TAG,
                 "trackpad stick: landed at y ${f.originY}, furthest up ${f.furthestUp}, down ${f.furthestDown}, " +
-                    "rows reached $reachedTop..$reachedBottom, on screen ${screenW}x$screenH")
+                    "rows reached $reachedTop..$reachedBottom, on screen ${screenW}x$screenH; last touch: $lastDrag; " +
+                    "profile ${profile?.id}, zones ${profile?.stickZones}")
             when (f.role) {
                 TrackpadRole.LEFT_STICK -> { directionKeys(f, 0f, 0f, FluxLayout.LEFT_STICK); releaseStick(0) }
                 TrackpadRole.RIGHT_STICK -> { directionKeys(f, 0f, 0f, RIGHT_KEYS); releaseStick(2) }
