@@ -1015,6 +1015,9 @@
     },
     {
       "text": "Android desktop: its desktop windowing switches, which also changed the phone's own screen (breaking Recents after a restart), are put back when the desktop ends; ones left on by earlier versions are cleared once. Restart the phone afterwards"
+    },
+    {
+      "text": "Streaming: Moonlight's Wake is listened for on the ports Moonlight sends it to, and its broadcast is let through to the phone while a Moonlight client is paired"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

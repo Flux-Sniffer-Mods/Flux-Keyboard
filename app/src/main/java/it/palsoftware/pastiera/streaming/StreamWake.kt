@@ -15,18 +15,30 @@ import java.net.InetSocketAddress
  */
 object StreamWake {
     private const val TAG = "StreamWake"
-    /** Moonlight for PCs sends to 47009, Moonlight for Android to 48002 (among ports apps can't open). */
-    private val PORTS = listOf(47009, 48002)
+    /**
+     * Moonlight sends its wake to 7, 9, 47998, 47999, 48000, 48002 and 48010: of those, the ones
+     * an app can open and streaming doesn't use itself by UDP (48010 is its RTSP, over TCP).
+     * 47009 kept for older clients.
+     */
+    private val PORTS = listOf(48002, 48010, 47009)
+    /** Broadcasts let through to the phone (Android drops them to save battery otherwise). */
+    private var multicast: android.net.wifi.WifiManager.MulticastLock? = null
     @Volatile private var started = false
 
     fun start(context: Context) {
         if (started) return
         started = true
         val app = context.applicationContext
+        // Moonlight's wake is mostly a broadcast: let through while a Moonlight client is paired
+        if (StreamHost.pairedCount(app) > 0) runCatching {
+            multicast = app.getSystemService(android.net.wifi.WifiManager::class.java)
+                ?.createMulticastLock("Flux:wake")?.apply { setReferenceCounted(false); acquire() }
+        }.onFailure { FluxLog.w(TAG, "broadcasts can't be let through: $it") }
         for (port in PORTS) Thread({
             val socket = runCatching {
-                DatagramSocket(null).apply { reuseAddress = true; bind(InetSocketAddress(port)) }
+                DatagramSocket(null).apply { reuseAddress = true; broadcast = true; bind(InetSocketAddress(port)) }
             }.onFailure { FluxLog.w(TAG, "can't listen on $port: $it") }.getOrNull() ?: return@Thread
+            FluxLog.w(TAG, "listening for Moonlight's wake on $port (broadcasts ${if (multicast?.isHeld == true) "let through" else "not let through"})")
             val buffer = ByteArray(256)
             while (true) {
                 val packet = DatagramPacket(buffer, buffer.size)

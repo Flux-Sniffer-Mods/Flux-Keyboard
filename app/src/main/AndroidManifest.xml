@@ -16,6 +16,7 @@
 
     <!-- Restarts the screen timeout after a key press -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     
     <!-- Voice input -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
