@@ -85,13 +85,13 @@ object GameArt {
             "dev.eden.eden_emulator" to eden, "dev.legacy.eden_emulator" to eden,
             "com.retroarch" to listOf("RetroArch"), "com.retroarch.aarch64" to listOf("RetroArch"),
             "org.es_de.frontend" to listOf("ES-DE", "EmulationStation Desktop Edition", "EmulationStation"),
-            "xyz.aethersx2.android" to ps2, "xyz.nethersx2.android" to ps2,
+            "xyz.aethersx2.android" to ps2, "xyz.aethersx2.tturnip" to ps2, "xyz.aethersx2.cturnip" to ps2,
             "com.github.stenzek.duckstation" to listOf("DuckStation"),
             "me.magnum.melonds" to listOf("melonDS"), "org.vita3k.emulator" to listOf("Vita3K"),
             "com.swordfish.lemuroid" to listOf("Lemuroid"), "org.mupen64plusae.v3.fzurita" to listOf("Mupen64Plus FZ", "Mupen64Plus"),
-            "info.cemu.cemu" to listOf("Cemu"), "org.flycast.emulator" to listOf("Flycast"),
+            "info.cemu.cemu" to listOf("Cemu"), "com.flycast.emulator" to listOf("Flycast"),
             "com.explusalpha.Snes9xPlus" to listOf("Snes9x EX+", "Snes9x"), "com.winlator" to listOf("Winlator"),
-            "org.ryujinx.android" to listOf("Ryujinx")
+            "org.kenjinx.android" to listOf("Kenji-NX", "Ryujinx")
         )
     }
 
