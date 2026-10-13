@@ -991,6 +991,9 @@
     },
     {
       "text": "Streaming: a controller on the Moonlight device now works in Dolphin, PPSSPP and the Xbox player, pressed as the keys their controls were given"
+    },
+    {
+      "text": "Updates: tapping the update notification downloads and installs the update, as the update dialog does, instead of opening the release page"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

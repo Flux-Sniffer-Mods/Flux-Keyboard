@@ -66,7 +66,8 @@ class UpdateCheckWorker(
                     releasePageUrl = announcement.releasePageUrl,
                     isNightlyUpdate = announcement.isNightlyUpdate,
                     isPastieraStableUpdate = announcement.isPastieraStableUpdate,
-                    isForkUpdate = announcement.isForkUpdate
+                    isForkUpdate = announcement.isForkUpdate,
+                    downloadUrl = announcement.downloadUrl
                 )
             }
             announcement = announcement.followUpAnnouncement

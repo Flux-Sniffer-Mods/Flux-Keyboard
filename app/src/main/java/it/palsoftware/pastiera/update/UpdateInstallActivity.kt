@@ -14,6 +14,13 @@ class UpdateInstallActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         leftForSettings = savedInstanceState?.getBoolean(KEY_LEFT) ?: false
+        // From the update notification: downloaded and installed here, not opened on GitHub
+        val apkUrl = intent.getStringExtra(EXTRA_APK_URL)
+        if (savedInstanceState == null && apkUrl != null) {
+            ForkUpdateInstaller.downloadAndInstall(this, apkUrl, intent.getStringExtra(EXTRA_PAGE_URL))
+            finish()
+            return
+        }
         if (savedInstanceState == null) {
             runCatching { startActivity(ForkUpdateInstaller.allowInstallsIntent(this)) }
                 .onFailure { finish() }
@@ -38,7 +45,15 @@ class UpdateInstallActivity : Activity() {
         outState.putBoolean(KEY_LEFT, true)
     }
 
-    private companion object {
-        const val KEY_LEFT = "left_for_settings"
+    companion object {
+        private const val KEY_LEFT = "left_for_settings"
+        private const val EXTRA_APK_URL = "apk_url"
+        private const val EXTRA_PAGE_URL = "page_url"
+
+        /** Downloads and installs the update at [apkUrl] (its release page the fallback). */
+        fun downloadIntent(context: android.content.Context, apkUrl: String, pageUrl: String?): android.content.Intent =
+            android.content.Intent(context, UpdateInstallActivity::class.java)
+                .putExtra(EXTRA_APK_URL, apkUrl).putExtra(EXTRA_PAGE_URL, pageUrl)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 }
