@@ -955,6 +955,9 @@
     },
     {
       "text": "XCloud Games: a game that opens on its own page first (like Crash Bandicoot 4) is started with its Play button for you"
+    },
+    {
+      "text": "Gaming mode: an on-screen stick near the edge of a game drawn smaller than the screen (Dolphin and other emulators, or while streaming) is pushed into the black bars around it, as a finger would, so it reaches all the way"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

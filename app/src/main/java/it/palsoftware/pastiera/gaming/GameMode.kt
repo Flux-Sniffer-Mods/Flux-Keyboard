@@ -51,6 +51,12 @@ object GameMode {
     private var savedSize: String? = null
     @Volatile private var screenW = 1080f
     @Volatile private var screenH = 1080f
+    /**
+     * How far past the game's screen a touch can still go (x, y), in its pixels: a game drawn
+     * smaller than the phone's screen has black bars around it, and a finger (and so a stick)
+     * can reach into them.
+     */
+    @Volatile private var edges = 0f to 0f
 
     /** A text field of the game has the keyboard open: keys type, not play. */
     @Volatile var typing = false
@@ -594,6 +600,7 @@ object GameMode {
                     savedSize = restoredSize ?: Regex("Override size: (\\d+x\\d+)").find(state)?.groupValues?.get(1) ?: ""
                     prefs.edit().putString(KEY_RESTORE_SIZE, savedSize).apply()
                     sideways = stream ?: scaled(sidewaysSize(w, h, cutoutTop(context)), size)
+                    physicalSize = w to h
                     commands += "wm size ${sideways.first}x${sideways.second}"
                     // The density in step with the size, so the game's screen holds as much as the
                     // phone's own does (else a shorter screen at the same density cuts things off)
@@ -611,6 +618,7 @@ object GameMode {
         // Taps follow the screen's shape
         val shape = sideways
         val own = extra
+        edges = if (own == null && shape != null) physicalSize?.let { bars(shape, it) } ?: (0f to 0f) else 0f to 0f
         if (own != null) {
             screenW = own.width.toFloat(); screenH = own.height.toFloat()
             send("S ${own.width} ${own.height}")
@@ -625,6 +633,19 @@ object GameMode {
             }
         }
         if (shape != null || restoredSize != null) send("S ${screenW.toInt()} ${screenH.toInt()}")
+    }
+
+    /** The phone's screen (short side, long side) when gaming mode last changed its shape. */
+    private var physicalSize: Pair<Int, Int>? = null
+
+    /**
+     * The black bars around a screen [size] shown on a [physical] one (upright, as gaming mode
+     * holds it): how far each side reaches past it, in [size]'s pixels.
+     */
+    internal fun bars(size: Pair<Int, Int>, physical: Pair<Int, Int>): Pair<Float, Float> {
+        val scale = minOf(physical.first.toFloat() / size.first, physical.second.toFloat() / size.second)
+        if (scale <= 0f) return 0f to 0f
+        return ((physical.first / scale - size.first) / 2).coerceAtLeast(0f) to ((physical.second / scale - size.second) / 2).coerceAtLeast(0f)
     }
 
     /** The density for a sideways [size] on a screen [physicalShort] pixels across at [physical] dpi: its shorter side as many dp as the phone's. */
@@ -720,9 +741,11 @@ object GameMode {
         val first = !stickHeld[at / 2]
         stickHeld[at / 2] = true
         val (sx, sy) = stickShape(sticks[at], sticks[at + 1], deadZone)
-        // Never off the screen: a touch there is dropped, and the stick wouldn't move that way
-        val x = (cx + sx * reach).coerceIn(1f, screenW - 2f)
-        val y = (cy + sy * reach).coerceIn(1f, screenH - 2f)
+        // Never off the phone's screen: a touch there is dropped, and the stick wouldn't move
+        // that way. Into the black bars around a smaller game screen is fine, as a finger can
+        val (barX, barY) = edges
+        val x = (cx + sx * reach).coerceIn(1f - barX, screenW + barX - 2f)
+        val y = (cy + sy * reach).coerceIn(1f - barY, screenH + barY - 2f)
         worker.execute {
             if (first) send("T d $finger $cx $cy")
             send("T m $finger $x $y")
