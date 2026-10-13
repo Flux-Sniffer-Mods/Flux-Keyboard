@@ -141,11 +141,22 @@ object XboxCloud {
 
     /** What starts [game]: its play link, in Flux Keyboard's player ([pkg]). */
     fun launchFor(game: CloudGame, pkg: String): String {
-        val slug = game.name.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-').ifEmpty { "game" }
+        val slug = slugOf(game.name)
         val url = if (game.id.isEmpty()) XboxPlayActivity.HOME else "https://www.xbox.com/play/launch/$slug/${game.id}"
         return Intent(Intent.ACTION_VIEW, Uri.parse(url)).setClassName(pkg, XboxPlayActivity::class.java.name)
             .toUri(Intent.URI_INTENT_SCHEME)
     }
+
+    /**
+     * A game's name as Xbox writes it in play links: apostrophes and ™ ® © dropped (it's → its),
+     * accents taken off, anything else between words a hyphen.
+     */
+    internal fun slugOf(name: String): String =
+        java.text.Normalizer.normalize(name, java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{Mn}+"), "")
+            .lowercase()
+            .replace(Regex("['’‘`´™®©]"), "")
+            .replace(Regex("[^a-z0-9]+"), "-").trim('-').ifEmpty { "game" }
 
     /** The cloud game a launch starts, by its play link's product ID. */
     internal fun idOf(launch: String): String? = Regex("xbox\\.com/play/launch/[^/]+/([A-Z0-9]{12})", RegexOption.IGNORE_CASE).find(launch)?.groupValues?.get(1)

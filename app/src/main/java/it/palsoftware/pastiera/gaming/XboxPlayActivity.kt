@@ -75,7 +75,11 @@ class XboxPlayActivity : Activity() {
             override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
                 if (signingIn || !startedInGame || url == null) return
                 val inGame = isGameUrl(url)
-                if (inGame) { reachedGame = true; return }
+                if (inGame) { if (reachedGameAt == 0L) reachedGameAt = android.os.SystemClock.uptimeMillis(); return }
+                // Only once the game has had time to play: the site passing through the launch
+                // page on its way somewhere else isn't a game ending
+                val reachedGame = reachedGameAt != 0L && android.os.SystemClock.uptimeMillis() - reachedGameAt > GAME_SETTLE_MS
+                if (!reachedGame) reachedGameAt = 0L
                 if (reachedGame && Regex("^https://www\\.xbox\\.com/").containsMatchIn(url) && url.contains("/play")) leaveToGames()
             }
 
@@ -98,7 +102,7 @@ class XboxPlayActivity : Activity() {
                 request.grant(request.resources.filter { it == PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID }.toTypedArray())
             }
         }
-        web.loadUrl(if (signingIn) SIGN_IN else intent.dataString?.takeIf { it.startsWith("https://www.xbox.com/") } ?: HOME)
+        web.loadUrl(if (signingIn) SIGN_IN else intent.dataString?.takeIf { it.startsWith("https://www.xbox.com/") }?.let(::current) ?: HOME)
         // The page may be rebuilt as it moves between screens: the controller kept in it
         // (not while signing in: the sign-in pages have no controller to keep)
         if (!signingIn) web.postDelayed(reinject, 2_000)
@@ -215,9 +219,18 @@ class XboxPlayActivity : Activity() {
     }
 
     /** Opened straight into a game (not the library): leaving the game leaves the player. */
+    /** A play link saved before its name was written as Xbox writes it: written again. */
+    private fun current(url: String): String {
+        val id = XboxCloud.idOf(url) ?: return url
+        val game = XboxCloud.kept(this, id) ?: return url
+        return runCatching {
+            android.content.Intent.parseUri(XboxCloud.launchFor(game, packageName), android.content.Intent.URI_INTENT_SCHEME).dataString
+        }.getOrNull() ?: url
+    }
+
     private val startedInGame by lazy { intent.dataString?.let(::isGameUrl) == true }
-    /** The page has been on the game's own screen. */
-    private var reachedGame = false
+    /** When the page reached the game's own screen (0: it hasn't). */
+    private var reachedGameAt = 0L
 
     /** The game ended (back to Xbox's library): back to the Games app, as a console would go home. */
     private fun leaveToGames() {
@@ -332,6 +345,9 @@ class XboxPlayActivity : Activity() {
         /** Each control's button in the web's standard gamepad. */
         /** A game's own screen on xbox.com/play (its launch page, any language). */
         internal fun isGameUrl(url: String) = Regex("xbox\\.com/([a-z]{2}-[a-z]{2}/)?play/launch/", RegexOption.IGNORE_CASE).containsMatchIn(url)
+
+        /** How long the page stays on the game's screen before leaving it counts as the game ending. */
+        private const val GAME_SETTLE_MS = 20_000L
 
         /** The Xbox button, in the page's controller. */
         private const val XBOX_BUTTON = 16

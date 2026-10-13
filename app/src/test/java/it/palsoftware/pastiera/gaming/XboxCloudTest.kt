@@ -28,4 +28,11 @@ class XboxCloudTest {
         assertEquals("9NPDN9R45JX4", XboxCloud.idOf(launch))
         assert(launch.contains("1000xresist")) { launch }
     }
+
+    @Test
+    fun slugsFollowXbox() {
+        assertEquals("crash-bandicoot-4-its-about-time", XboxCloud.slugOf("Crash Bandicoot™ 4: It’s About Time"))
+        assertEquals("lego-star-wars-the-skywalker-saga", XboxCloud.slugOf("LEGO® Star Wars™: The Skywalker Saga"))
+        assertEquals("pokemon-like", XboxCloud.slugOf("Pokémon-like"))
+    }
 }
