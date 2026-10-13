@@ -279,6 +279,7 @@ object GameMode {
         if (!passesKeys()) return false
         val code = event.keyCode
         if (code == KeyEvent.KEYCODE_BACK && backGuard(event)) return true
+        if (symVolume(event)) return true
         val down = event.action == KeyEvent.ACTION_DOWN
         if (down && event.repeatCount == 0) trackpadReader?.keyPressed()
         // The red side key: the right trigger, read from its device (its own action kept away)
@@ -312,6 +313,33 @@ object GameMode {
             }
             else -> return false
         }
+        return true
+    }
+
+    /** SYM is held: the volume keys change the volume, whatever the game makes of them. */
+    @Volatile private var symHeld = false
+    /** Volume keys taken for the volume while SYM was held (their letting go is too). */
+    private val volumeTaken = mutableSetOf<Int>()
+
+    /**
+     * SYM with Volume Up or Down: the phone's volume, with its slider shown, as games take the
+     * volume keys as triggers. SYM itself still reaches the game. True when the key is taken.
+     */
+    private fun symVolume(event: KeyEvent): Boolean {
+        val code = event.keyCode
+        if (code == KeyEvent.KEYCODE_SYM) {
+            if (event.action == KeyEvent.ACTION_DOWN) symHeld = true
+            else if (event.action == KeyEvent.ACTION_UP) symHeld = false
+            return false
+        }
+        if (code != KeyEvent.KEYCODE_VOLUME_UP && code != KeyEvent.KEYCODE_VOLUME_DOWN) return false
+        if (event.action == KeyEvent.ACTION_UP) return volumeTaken.remove(code)
+        if (!symHeld && code !in volumeTaken) return false
+        volumeTaken += code
+        val audio = appContext?.getSystemService(android.media.AudioManager::class.java) ?: return true
+        val direction = if (code == KeyEvent.KEYCODE_VOLUME_UP) android.media.AudioManager.ADJUST_RAISE else android.media.AudioManager.ADJUST_LOWER
+        // Held down, it keeps going, as the volume keys do
+        audio.adjustStreamVolume(android.media.AudioManager.STREAM_MUSIC, direction, android.media.AudioManager.FLAG_SHOW_UI)
         return true
     }
 

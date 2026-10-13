@@ -672,6 +672,9 @@
     },
     {
       "text": "XCloud Games: choose your Game Pass plan (Ultimate, Premium or Essential) and the catalogue lists only the cloud games it includes, from Microsoft's own Game Pass lists."
+    },
+    {
+      "text": "Gaming mode: hold SYM and press Volume Up or Down to change the volume, even in games that use the volume keys as buttons"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
