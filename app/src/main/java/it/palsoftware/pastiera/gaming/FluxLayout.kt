@@ -378,7 +378,10 @@ object FluxLayout {
         var out = withKey(ini, "Controls", "WiimoteProfile1", pad.profile.takeIf { pad == WiiPad.CLASSIC || pad == WiiPad.SIDEWAYS })
         out = withKey(out, "Controls", "PadType0", if (gc) "6" else null)
         out = withKey(out, "Controls", "PadProfile1", if (gc) pad.profile else null)
-        return withKey(out, "Controls", "WiimoteSource0", if (gc) "0" else null)
+        out = withKey(out, "Controls", "WiimoteSource0", if (gc) "0" else null)
+        // Also as Dolphin's newer settings name the GameCube port and the Wii Remote
+        out = withKey(out, "Core", "SIDevice0", if (gc) "6" else null)
+        return withKey(out, "Wiimote1", "Source", if (gc) "0" else null)
     }
 
     internal fun ppssppDir(pkg: String): String? = AdbShell.run(

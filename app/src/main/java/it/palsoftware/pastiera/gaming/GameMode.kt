@@ -231,7 +231,7 @@ object GameMode {
     private val LAYOUT_EMULATORS = setOf("Dolphin", "PPSSPP")
 
     /** Modifier keys held (SYM, Shift, Alt): they change what the layout's keys are. */
-    private val modifiersHeld = mutableSetOf<Int>()
+    private val modifiersHeld = java.util.Collections.synchronizedSet(mutableSetOf<Int>())
     /** The layout's keys that went to the app as they are (held now). */
     private val passedThrough = java.util.Collections.synchronizedSet(mutableSetOf<Int>())
     /** The layout's keys held. */
@@ -294,10 +294,9 @@ object GameMode {
             return false
         }
         // For an app given the layout's keys, a key that is its control's own key goes to it as
-        // it is (no modifier held, none of it on an on-screen stick): only combinations are sent
-        if (down && event.repeatCount == 0 && sendsKeys() && modifiersHeld.isEmpty() && FluxLayout.keyOf(plain) == code &&
-            code !in layoutKeysHeld && (plain !in FluxLayout.STICK_CONTROLS || !profile?.stickZones.orEmpty().containsKey(
-                if (FluxLayout.STICK_CONTROLS.indexOf(plain) < 4) 0 else 1))
+        // it is, as long as the modifiers held don't change it: only combinations are sent
+        if (down && event.repeatCount == 0 && sendsKeys() && FluxLayout.keyOf(plain) == code &&
+            FluxLayout.controlFor(code, modifiers()) == plain && code !in layoutKeysHeld
         ) { passedThrough += code; return false }
         // Kept on the worker, where they're read
         if (event.repeatCount == 0) worker.execute {
@@ -320,16 +319,21 @@ object GameMode {
     }
 
     /** The controls the keys and modifiers held make, sent where they've changed (on [worker]). */
-    private fun refreshControls() {
-        val mods = FluxLayout.Modifiers(
-            sym = KeyEvent.KEYCODE_SYM in modifiersHeld,
-            rightShift = KeyEvent.KEYCODE_SHIFT_RIGHT in modifiersHeld,
-            shift = KeyEvent.KEYCODE_SHIFT_LEFT in modifiersHeld || KeyEvent.KEYCODE_SHIFT_RIGHT in modifiersHeld,
-            alt = KeyEvent.KEYCODE_ALT_LEFT in modifiersHeld || KeyEvent.KEYCODE_ALT_RIGHT in modifiersHeld
+    /** What the modifiers held now make of the keys. */
+    private fun modifiers(): FluxLayout.Modifiers {
+        val held = synchronized(modifiersHeld) { modifiersHeld.toSet() }
+        return FluxLayout.Modifiers(
+            sym = KeyEvent.KEYCODE_SYM in held,
+            rightShift = KeyEvent.KEYCODE_SHIFT_RIGHT in held,
+            shift = KeyEvent.KEYCODE_SHIFT_LEFT in held || KeyEvent.KEYCODE_SHIFT_RIGHT in held,
+            alt = KeyEvent.KEYCODE_ALT_LEFT in held || KeyEvent.KEYCODE_ALT_RIGHT in held
         )
+    }
+
+    private fun refreshControls() {
+        val mods = modifiers()
         val wanted = layoutKeysHeld.mapNotNull { FluxLayout.controlFor(it, mods) }.toMutableSet()
         val keys = sendsKeys()
-        val zones = profile?.stickZones.orEmpty()
         // In a launcher's own screens the left stick moves around them as a d-pad does
         if (!keys && inMenus) {
             val dpad = mapOf(FluxLayout.Control.LS_UP to FluxLayout.Control.UP, FluxLayout.Control.LS_DOWN to FluxLayout.Control.DOWN,
@@ -342,7 +346,8 @@ object GameMode {
         for (stick in 0..1) {
             val base = stick * 4
             val dirs = FluxLayout.STICK_CONTROLS.subList(base, base + 4)
-            if (keys && !zones.containsKey(stick)) continue
+            // (an app given the layout takes its stick keys, whatever on-screen sticks were placed)
+            if (keys) continue
             wanted -= dirs.toSet()
             var x = on(dirs[3]) - on(dirs[2]); var y = on(dirs[1]) - on(dirs[0])
             if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }

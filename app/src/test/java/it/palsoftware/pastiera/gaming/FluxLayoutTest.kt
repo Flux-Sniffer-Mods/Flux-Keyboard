@@ -84,6 +84,7 @@ class FluxLayoutTest {
         assertTrue("PadType0 = 6" in gc)
         assertTrue("WiimoteSource0 = 0" in gc)
         assertTrue("PadProfile1 = Flux Keyboard" in gc)
+        assertTrue("SIDevice0 = 6" in gc)
         // Back to the Nunchuk: nothing of it kept
         assertEquals("", FluxLayout.wiiPadSettings(gc, FluxLayout.WiiPad.NUNCHUK))
     }
