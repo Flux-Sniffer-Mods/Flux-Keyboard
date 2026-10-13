@@ -1967,4 +1967,7 @@
     <string name="game_mode_back_again">Pulsa Atrás otra vez para salir del juego</string>
     <string name="game_mode_xbox_plan">Plan de Game Pass</string>
     <string name="game_mode_xbox_plan_description">El catálogo de XCloud solo muestra los juegos en la nube que incluye tu plan, según las listas de Game Pass de Microsoft.</string>
+    <string name="crash_log_clear">Borrar registros</string>
+    <string name="crash_log_clear_description">Vacía los registros del teléfono y el propio registro de Flux Keyboard, para que el siguiente registro de fallos contenga solo lo que ocurra a partir de ahora y se guarde rápido.</string>
+    <string name="crash_log_cleared">Registros borrados</string>
 </resources>

@@ -1973,4 +1973,7 @@
     <string name="game_mode_back_again">Naciśnij Wstecz ponownie, aby wyjść z gry</string>
     <string name="game_mode_xbox_plan">Plan Game Pass</string>
     <string name="game_mode_xbox_plan_description">Katalog XCloud pokazuje tylko gry w chmurze z twojego planu, według list Game Pass od Microsoftu.</string>
+    <string name="crash_log_clear">Wyczyść logi</string>
+    <string name="crash_log_clear_description">Czyści logi telefonu i własny zapis Flux Keyboard, aby następny dziennik awarii zawierał tylko to, co stanie się od teraz, i zapisywał się szybko.</string>
+    <string name="crash_log_cleared">Logi wyczyszczone</string>
 </resources>

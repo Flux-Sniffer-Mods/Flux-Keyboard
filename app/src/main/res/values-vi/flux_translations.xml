@@ -1955,4 +1955,7 @@
     <string name="game_mode_back_again">Nhấn Quay lại lần nữa để thoát trò chơi</string>
     <string name="game_mode_xbox_plan">Gói Game Pass</string>
     <string name="game_mode_xbox_plan_description">Danh mục XCloud chỉ hiện các trò chơi đám mây có trong gói của bạn, theo danh sách Game Pass của chính Microsoft.</string>
+    <string name="crash_log_clear">Xóa nhật ký</string>
+    <string name="crash_log_clear_description">Xóa nhật ký của điện thoại và nhật ký riêng của Flux Keyboard, để nhật ký sự cố tiếp theo chỉ chứa những gì xảy ra từ bây giờ và lưu nhanh.</string>
+    <string name="crash_log_cleared">Đã xóa nhật ký</string>
 </resources>

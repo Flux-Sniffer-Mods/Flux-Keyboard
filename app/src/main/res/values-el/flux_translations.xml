@@ -1337,4 +1337,7 @@
     <string name="game_mode_back_again">Πάτησε ξανά Πίσω για να βγεις από το παιχνίδι</string>
     <string name="game_mode_xbox_plan">Συνδρομή Game Pass</string>
     <string name="game_mode_xbox_plan_description">Ο κατάλογος XCloud δείχνει μόνο τα παιχνίδια cloud που περιλαμβάνει η συνδρομή σου, από τις λίστες Game Pass της ίδιας της Microsoft.</string>
+    <string name="crash_log_clear">Εκκαθάριση αρχείων καταγραφής</string>
+    <string name="crash_log_clear_description">Αδειάζει τα αρχεία καταγραφής του τηλεφώνου και του Flux Keyboard, ώστε το επόμενο αρχείο σφαλμάτων να περιέχει μόνο ό,τι συμβαίνει από τώρα και να αποθηκεύεται γρήγορα.</string>
+    <string name="crash_log_cleared">Τα αρχεία καταγραφής εκκαθαρίστηκαν</string>
 </resources>

@@ -1961,4 +1961,7 @@
     <string name="game_mode_back_again">Կրկին սեղմիր Հետ՝ խաղից դուրս գալու համար</string>
     <string name="game_mode_xbox_plan">Game Pass բաժանորդագրություն</string>
     <string name="game_mode_xbox_plan_description">XCloud կատալոգը ցույց է տալիս միայն քո բաժանորդագրության մեջ մտնող ամպային խաղերը՝ Microsoft-ի Game Pass ցանկերից։</string>
+    <string name="crash_log_clear">Մաքրել մատյանները</string>
+    <string name="crash_log_clear_description">Դատարկում է հեռախոսի և Flux Keyboard-ի մատյանները, որպեսզի հաջորդ վթարի մատյանը պարունակի միայն այսուհետ կատարվածը և արագ պահպանվի։</string>
+    <string name="crash_log_cleared">Մատյանները մաքրված են</string>
 </resources>

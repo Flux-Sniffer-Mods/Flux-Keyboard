@@ -1472,4 +1472,7 @@
     <string name="game_mode_back_again">Premi di nuovo Indietro per uscire dal gioco</string>
     <string name="game_mode_xbox_plan">Abbonamento Game Pass</string>
     <string name="game_mode_xbox_plan_description">Il catalogo XCloud mostra solo i giochi cloud inclusi nel tuo abbonamento, secondo gli elenchi Game Pass di Microsoft.</string>
+    <string name="crash_log_clear">Cancella log</string>
+    <string name="crash_log_clear_description">Svuota i log del telefono e quello di Flux Keyboard, così il prossimo registro dei crash contiene solo ciò che accade da ora e si salva in fretta.</string>
+    <string name="crash_log_cleared">Log cancellati</string>
 </resources>

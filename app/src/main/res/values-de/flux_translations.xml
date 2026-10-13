@@ -1427,4 +1427,7 @@
     <string name="game_mode_back_again">Drücke Zurück erneut, um das Spiel zu verlassen</string>
     <string name="game_mode_xbox_plan">Game-Pass-Abo</string>
     <string name="game_mode_xbox_plan_description">Der XCloud-Katalog zeigt nur die Cloud-Spiele, die dein Abo enthält, laut Microsofts eigenen Game-Pass-Listen.</string>
+    <string name="crash_log_clear">Logs leeren</string>
+    <string name="crash_log_clear_description">Leert die Logs des Telefons und die eigene Aufzeichnung von Flux Keyboard, damit das nächste Absturzprotokoll nur Neues enthält und schnell gespeichert wird.</string>
+    <string name="crash_log_cleared">Logs geleert</string>
 </resources>

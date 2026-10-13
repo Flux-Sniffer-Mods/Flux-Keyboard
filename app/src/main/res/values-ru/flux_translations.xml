@@ -1973,4 +1973,7 @@
     <string name="game_mode_back_again">Нажмите «Назад» ещё раз, чтобы выйти из игры</string>
     <string name="game_mode_xbox_plan">Подписка Game Pass</string>
     <string name="game_mode_xbox_plan_description">Каталог XCloud показывает только облачные игры, входящие в вашу подписку, по спискам Game Pass от Microsoft.</string>
+    <string name="crash_log_clear">Очистить журналы</string>
+    <string name="crash_log_clear_description">Очищает журналы телефона и собственный журнал Flux Keyboard, чтобы следующий журнал сбоев содержал только происходящее с этого момента и сохранялся быстро.</string>
+    <string name="crash_log_cleared">Журналы очищены</string>
 </resources>

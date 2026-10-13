@@ -1967,4 +1967,7 @@
     <string name="game_mode_back_again">Appuyez de nouveau sur Retour pour quitter le jeu</string>
     <string name="game_mode_xbox_plan">Abonnement Game Pass</string>
     <string name="game_mode_xbox_plan_description">Le catalogue XCloud n\'affiche que les jeux cloud inclus dans votre abonnement, d\'après les listes Game Pass de Microsoft.</string>
+    <string name="crash_log_clear">Effacer les journaux</string>
+    <string name="crash_log_clear_description">Vide les journaux du téléphone et celui de Flux Keyboard, pour que le prochain journal de plantage ne contienne que ce qui se passe désormais et s\'enregistre vite.</string>
+    <string name="crash_log_cleared">Journaux effacés</string>
 </resources>
