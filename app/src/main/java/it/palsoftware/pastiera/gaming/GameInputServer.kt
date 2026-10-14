@@ -9,9 +9,11 @@ import android.view.MotionEvent
 /**
  * Gaming mode's input, started as the ADB shell user (`app_process`, through the built-in
  * shell or Shizuku): controller buttons and sticks, keys and the mouse, injected as Android's
- * own input. One command a line on its input:
+ * own input. Android hands every event injected this way to apps as its own virtual
+ * keyboard's (device -1), whatever device it names: an app that reads only a real device
+ * (Dolphin) never sees them. One command a line on its input:
  *
- * - `D id`: the device the events come from (the keyboard's)
+ * - `D id`: the device the events name (Android replaces it with its virtual keyboard's)
  * - `S width height`: the screen, for the mouse
  * - `K 1|0 keyCode g|k`: a key down or up, as a controller button (g) or a keyboard key (k)
  * - `J lx ly rx ry [lt rt]`: both sticks, -1 to 1 (and the triggers, 0 to 1)

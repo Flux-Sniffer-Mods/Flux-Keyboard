@@ -714,6 +714,9 @@
     },
     {
       "text": "Gaming mode: Swap A/B and X/Y, on by default for Nintendo emulators (Dolphin, Eden, Azahar, melonDS and others), so each key presses the button in its place"
+    },
+    {
+      "text": "Gaming mode: keys handled one way per game. Dolphin reads the keyboard itself, so it gets every key untouched and the whole layout lives in its controls. Every other game has each of the layout's keys taken and the one key for its control sent, or a controller's buttons and sticks for a game that takes a controller. Keys outside the layout always reach the game as they are"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1060,6 +1063,12 @@
     },
     {
       "text": "Gaming mode: in Dolphin, every control works: Dolphin only reads the keyboard itself, so the whole layout (SYM, Shift and Alt combinations, the volume triggers, changed keys and the A/B swap) is written into its controls and every key goes to it as it is"
+    },
+    {
+      "text": "Gaming mode: in Dolphin the volume keys are the triggers again and no longer change the volume: they're read from the phone's side buttons, a device of their own"
+    },
+    {
+      "text": "Gaming mode: a modifier pressed just before a key is always read with it, and the keyboard's typing stays out of the way of every key in a game"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -246,88 +246,111 @@ object GameMode {
     }
 
     /**
-     * In a game (a profile on, nothing being typed, the placer shut): keys go to it as they
-     * are, past the keyboard's own handling. Each launcher or emulator maps them itself.
+     * In a game (a profile on, nothing being typed, the placer shut): its keys are gaming mode's
+     * ([onKeyEvent]), and the keyboard's own typing leaves every key alone.
      */
     fun passesKeys(): Boolean = profile != null && !typing && !GameTouchEditor.open
 
-    /** Emulators whose controls Flux Keyboard writes its layout into. */
-    private val LAYOUT_EMULATORS = setOf("Dolphin", "PPSSPP")
+    // ---- The keys: what each one does in the game in front ----
 
-    /** Modifier keys held (SYM, Shift, Alt): they change what the layout's keys are. */
+    /**
+     * How the game in front reads its controls, which decides what happens to every key.
+     * Android hands keys sent through the input helper to apps as its own virtual keyboard's,
+     * never the phone's keyboard, so a game that reads only the keyboard itself can't be sent
+     * any: it is given the layout in its own controls instead.
+     */
+    internal enum class Route {
+        /** It reads the keyboard itself, the layout written into its controls (Dolphin): every key goes to it untouched. */
+        NATIVE,
+        /** It reads keys from any keyboard (PPSSPP, the other emulators, Flux Keyboard's own player): each of the layout's keys is taken and its control's own key sent. */
+        KEYS,
+        /** It takes a controller: the layout's keys are taken and a controller's buttons and sticks sent. */
+        PAD,
+        /** A launcher's own screens: as [PAD], the left stick moving round them as the d-pad. */
+        MENUS
+    }
+
+    internal fun route(): Route {
+        // Flux Keyboard's own player (which isn't followed as the app in front)
+        if (stickSink != null || profile?.id == "player") return Route.KEYS
+        val front = frontPackage ?: return Route.PAD
+        val emulator = GameApps.emulator(front)
+        return when {
+            front == appContext?.packageName -> Route.KEYS
+            emulator == "Dolphin" -> Route.NATIVE
+            emulator != null -> Route.KEYS
+            inMenus -> Route.MENUS
+            else -> Route.PAD
+        }
+    }
+
+    /** The game in front takes the layout's keys (or reads them itself), rather than a controller's. */
+    internal fun sendsKeys(): Boolean = route().let { it == Route.KEYS || it == Route.NATIVE }
+
+    /** Modifier keys held (SYM, Shift, Alt): they change what the layout's keys are. Kept as they're pressed. */
     private val modifiersHeld = java.util.Collections.synchronizedSet(mutableSetOf<Int>())
-    /** The layout's keys that went to the app as they are (held now). */
-    private val passedThrough = java.util.Collections.synchronizedSet(mutableSetOf<Int>())
-    /** The layout's keys held. */
+    /** The layout's keys held (on [worker]). */
     private val layoutKeysHeld = mutableSetOf<Int>()
-    /** The controls pressed now (sent as pressed), and how: as keys, or as a controller's. */
+    /** The controls pressed now, and how they were sent: as a key (its code) or a controller's button (minus its code). */
     private val controlsDown = mutableMapOf<FluxLayout.Control, Int>()
     /** The sticks as the keys push them (left x y, right x y). */
     private val keySticks = FloatArray(4)
 
     /**
-     * A key, before the app sees it. A key placed on the screen taps there; the layout's keys
-     * ([FluxLayout]) are read with the modifiers held and sent as the controls they make: as
-     * the keys an emulator was given (and Flux Keyboard's own player takes), else as a
-     * controller's buttons and sticks, or an on-screen stick where one is placed. True when it
-     * took the key.
+     * A key, before the app sees it; true when gaming mode takes it. In order: the phone's own
+     * keys (Back asks again in a game, SYM with a volume key is the volume), keys placed on the
+     * screen (they tap there), then the [route]: a game reading the keyboard itself gets every
+     * key untouched; otherwise the modifiers and the layout's keys are taken and their controls
+     * sent, and any other key goes to the game as it is.
      */
     fun onKeyEvent(event: KeyEvent): Boolean {
         if (!passesKeys()) return false
-        // What gaming mode sends comes back through here (no scan code): passed on as it is
+        // What gaming mode sends comes back through here (it has no scan code): on to the game
         if (event.scanCode == 0) return false
-        val code = event.keyCode
-        if (code == KeyEvent.KEYCODE_BACK && onGameScreen() && backGuard(event)) return true
-        if (symVolume(event)) return true
-        val down = event.action == KeyEvent.ACTION_DOWN
-        if (event.repeatCount == 0) trackpadReader?.let { if (down) it.keyPressed(code) else if (event.action == KeyEvent.ACTION_UP) it.keyReleased(code) }
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
-        // Nothing to send them through (the input helper isn't running): the keys go to the
-        // game as they are rather than nowhere, and the helper is started again
+        val code = event.keyCode
+        val down = event.action == KeyEvent.ACTION_DOWN
+        val first = event.repeatCount == 0
+        // A key pressed on the keyboard is no finger on the trackpad (it is the trackpad)
+        if (first) trackpadReader?.let { if (down) it.keyPressed(code) else it.keyReleased(code) }
+        // The volume keys' own device (the phone's side buttons), for writing Dolphin's controls
+        if (first && down && (code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+            val device = event.device?.name
+            appContext?.let { context -> worker.execute { FluxLayout.volumeSeenFrom(context, device) } }
+        }
+        if (code == KeyEvent.KEYCODE_BACK) return onGameScreen() && backGuard(event)
+        if (symVolume(event)) return true
+        // A key placed on the screen touches its spot while held, whatever else it is
+        val tap = if (inMenus) null else profile?.taps?.get(code)
+        val isModifier = code in FluxLayout.MODIFIER_KEYS
+        if (tap == null) {
+            // A game reading the keyboard itself has the layout in its own controls
+            if (route() == Route.NATIVE) return false
+            // Not the layout's with any modifier: the game gets it as it is
+            if (!isModifier && !FluxLayout.isLayoutKey(code)) return false
+        }
+        // Nothing to send through (the input helper isn't running): the keys go to the game as
+        // they are rather than nowhere, and the helper is started again
         if (input == null) {
-            if (down && event.repeatCount == 0) {
+            if (down && first) {
                 FluxLog.w(TAG, "keys passed on as they are: the input helper isn't running")
                 appContext?.let { context -> worker.execute { if (input == null && profile != null) restartInput(context) } }
             }
             return false
         }
-        // Dolphin reads only the keyboard itself (not keys sent for it): every key goes to it as
-        // it is, the layout's combinations written into its controls (keys placed on the screen
-        // still tap there)
-        if (readsKeyboard() && (inMenus || profile?.taps?.get(code) == null)) return false
-        if (code in FluxLayout.MODIFIER_KEYS) {
-            if (event.repeatCount == 0) worker.execute {
-                if (down) modifiersHeld += code else modifiersHeld -= code
-                refreshControls()
-            }
-            return true
-        }
-        // A key placed on the screen touches its spot while held, whatever else it is
-        val tap = if (inMenus) null else profile?.taps?.get(code)
+        if (!first) return true
         if (tap != null) {
-            if (event.repeatCount == 0) {
-                val finger = 100 + code
-                worker.execute { if (down) send("T d $finger ${tap.first * screenW} ${tap.second * screenH}") else send("T u $finger") }
-            }
+            val finger = 100 + code
+            worker.execute { if (down) send("T d $finger ${tap.first * screenW} ${tap.second * screenH}") else send("T u $finger") }
             return true
         }
-        val plain = controlOf(code, FluxLayout.Modifiers())
-        if (plain == null) {
-            if (down && event.repeatCount == 0) FluxLog.w(TAG, "key $code isn't one of the layout's: passed on")
-            return false
+        if (isModifier) {
+            // Kept straight away, so a key pressed right after is read with it
+            if (down) modifiersHeld += code else modifiersHeld -= code
+            worker.execute { refreshControls() }
+            return true
         }
-        // A key that went to the app as it is lets go the same way
-        if (code in passedThrough) {
-            if (event.action == KeyEvent.ACTION_UP) passedThrough -= code
-            return false
-        }
-        // For an app given the layout's keys, a key that is its control's own key goes to it as
-        // it is, as long as the modifiers held don't change it: only combinations are sent
-        if (down && event.repeatCount == 0 && sendsKeys() && FluxLayout.keyOf(plain) == code &&
-            controlOf(code, modifiers()) == plain && code !in layoutKeysHeld
-        ) { passedThrough += code; return false }
-        // Kept on the worker, where they're read
-        if (event.repeatCount == 0) worker.execute {
+        worker.execute {
             if (down) {
                 // Already held (its letting go wasn't seen): let go first, so this press is one
                 if (code in layoutKeysHeld) { layoutKeysHeld -= code; refreshControls() }
@@ -338,33 +361,16 @@ object GameMode {
         return true
     }
 
-    /** The control a key makes with [mods] held, A and B (X and Y) swapped for a game that wants them so. */
-    private fun controlOf(code: Int, mods: FluxLayout.Modifiers): FluxLayout.Control? {
+    /**
+     * The control a key makes with [mods] held: the layout's (as changed in Keyboard controls),
+     * A and B (X and Y) swapped for a game that wants them so. Dolphin has both written into
+     * its own controls instead.
+     */
+    private fun controlOf(code: Int, mods: FluxLayout.Modifiers, route: Route): FluxLayout.Control? {
         val control = FluxLayout.controlFor(code, mods)
-        // An emulator given the layout has the swap written into its own settings: its keys go as they are
-        if (profile?.swapsFace != true || frontPackage?.let { GameApps.emulator(it) } in LAYOUT_EMULATORS) return control
-        return when (control) {
-            FluxLayout.Control.A -> FluxLayout.Control.B; FluxLayout.Control.B -> FluxLayout.Control.A
-            FluxLayout.Control.X -> FluxLayout.Control.Y; FluxLayout.Control.Y -> FluxLayout.Control.X
-            else -> control
-        }
+        return if (profile?.swapsFace == true && route != Route.NATIVE) FluxLayout.swapped(control) else control
     }
 
-    /** The app in front reads the layout from the keyboard itself, its combinations written into its controls (Dolphin). */
-    private fun readsKeyboard(): Boolean = frontPackage?.let { GameApps.emulator(it) } == "Dolphin"
-
-    /** In a game that reads the keyboard itself, with nothing being typed: keys go to it as they are. */
-    fun readsKeyboardNow(): Boolean = passesKeys() && readsKeyboard()
-
-    /** How controls reach the app in front: as the layout's own keys, or as a controller's. */
-    internal fun sendsKeys(): Boolean {
-        // Flux Keyboard's own player (which isn't followed as the app in front)
-        if (stickSink != null || profile?.id == "player") return true
-        val front = frontPackage ?: return false
-        return front == appContext?.packageName || GameApps.emulator(front) != null
-    }
-
-    /** The controls the keys and modifiers held make, sent where they've changed (on [worker]). */
     /** What the modifiers held now make of the keys. */
     private fun modifiers(): FluxLayout.Modifiers {
         val held = synchronized(modifiersHeld) { modifiersHeld.toSet() }
@@ -376,42 +382,41 @@ object GameMode {
         )
     }
 
+    /** The controls the keys and modifiers held make, sent where they've changed (on [worker]). */
     private fun refreshControls() {
+        val route = route()
         val mods = modifiers()
-        val wanted = layoutKeysHeld.mapNotNull { controlOf(it, mods) }.toMutableSet()
-        val keys = sendsKeys()
-        // In a launcher's own screens the left stick moves around them as a d-pad does
-        if (!keys && inMenus) {
+        val wanted = layoutKeysHeld.mapNotNull { controlOf(it, mods, route) }.toMutableSet()
+        // In a launcher's own screens the left stick moves round them as the d-pad does
+        if (route == Route.MENUS) {
             val dpad = mapOf(FluxLayout.Control.LS_UP to FluxLayout.Control.UP, FluxLayout.Control.LS_DOWN to FluxLayout.Control.DOWN,
                 FluxLayout.Control.LS_LEFT to FluxLayout.Control.LEFT, FluxLayout.Control.LS_RIGHT to FluxLayout.Control.RIGHT)
             dpad.forEach { (stick, pad) -> if (wanted.remove(stick)) wanted += pad }
         }
-        // The sticks: an on-screen stick where one is placed; as a controller's for a game that
-        // takes one; as their keys for an emulator (pressed like the buttons)
-        fun on(c: FluxLayout.Control) = if (c in wanted) 1f else 0f
-        for (stick in 0..1) {
-            val base = stick * 4
-            val dirs = FluxLayout.STICK_CONTROLS.subList(base, base + 4)
-            // (an app given the layout takes its stick keys, whatever on-screen sticks were placed)
-            if (keys) continue
-            wanted -= dirs.toSet()
-            var x = on(dirs[3]) - on(dirs[2]); var y = on(dirs[1]) - on(dirs[0])
-            if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }
-            val at = stick * 2
-            if (keySticks[at] == x && keySticks[at + 1] == y) continue
-            keySticks[at] = x; keySticks[at + 1] = y
-            sticks[at] = x; sticks[at + 1] = y
-            if (x == 0f && y == 0f) releaseStick(at) else pushStick(at)
+        // A game taking a controller: the stick directions are its sticks (or on-screen sticks
+        // where placed). A game taking keys gets the stick keys, pressed like the buttons
+        if (route == Route.PAD || route == Route.MENUS) {
+            fun on(c: FluxLayout.Control) = if (c in wanted) 1f else 0f
+            for (stick in 0..1) {
+                val dirs = FluxLayout.STICK_CONTROLS.subList(stick * 4, stick * 4 + 4)
+                wanted -= dirs.toSet()
+                var x = on(dirs[3]) - on(dirs[2]); var y = on(dirs[1]) - on(dirs[0])
+                if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }
+                val at = stick * 2
+                if (keySticks[at] == x && keySticks[at + 1] == y) continue
+                keySticks[at] = x; keySticks[at + 1] = y
+                sticks[at] = x; sticks[at + 1] = y
+                if (x == 0f && y == 0f) releaseStick(at) else pushStick(at)
+            }
         }
-        // The buttons (and stick keys, for an emulator)
-        for (c in controlsDown.keys - wanted) sendControl(c, false)
-        for (c in wanted - controlsDown.keys) sendControl(c, true)
+        for (c in controlsDown.keys - wanted) sendControl(c, false, route)
+        for (c in wanted - controlsDown.keys) sendControl(c, true, route)
     }
 
-    /** A control pressed or let go: as its layout key, or as a controller's own key. */
-    private fun sendControl(control: FluxLayout.Control, down: Boolean) {
+    /** A control pressed or let go: as its key for a game taking keys, else as a controller's button. */
+    private fun sendControl(control: FluxLayout.Control, down: Boolean, route: Route) {
         val line = if (down) {
-            val keys = sendsKeys()
+            val keys = route == Route.KEYS
             val code = if (keys) FluxLayout.keyOf(control) else FluxLayout.GAMEPAD_KEYS[control] ?: return
             controlsDown[control] = if (keys) code else -code
             "K 1 $code ${if (keys) "k" else "g"}"
@@ -420,15 +425,15 @@ object GameMode {
             val sent = controlsDown.remove(control) ?: return
             "K 0 ${kotlin.math.abs(sent)} ${if (sent > 0) "k" else "g"}"
         }
-        if (down) FluxLog.w(TAG, "$control pressed: $line (${frontPackage}, helper ${if (input != null) "running" else "not running"})")
+        if (down) FluxLog.w(TAG, "$control pressed: $line (${frontPackage}, ${route.name.lowercase()}, helper ${if (input != null) "running" else "not running"})")
         send(line)
     }
 
     /** Every control let go (the game ended, or another app came in front). */
     private fun releaseControls() {
-        modifiersHeld.clear(); layoutKeysHeld.clear(); passedThrough.clear()
+        modifiersHeld.clear(); layoutKeysHeld.clear()
         symHeld = false; volumeTaken.clear()
-        controlsDown.keys.toList().forEach { sendControl(it, false) }
+        controlsDown.keys.toList().forEach { sendControl(it, false, Route.KEYS) }
         keySticks.fill(0f)
     }
 
@@ -556,11 +561,6 @@ object GameMode {
         context.getSystemService(NotificationManager::class.java)?.cancel(NOTIFICATION_ID)
     }
 
-    /** The phone's own keyboard. */
-    private fun keyboardDevice(): Int? = android.view.InputDevice.getDeviceIds().firstOrNull { id ->
-        val device = android.view.InputDevice.getDevice(id) ?: return@firstOrNull false
-        !device.isVirtual && device.keyboardType == android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC
-    }
 
     /** The input helper started again where it ended, aimed where the game is. */
     private fun restartInput(context: Context) {
@@ -601,8 +601,6 @@ object GameMode {
             screenW = minOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
             screenH = maxOf(size.x, size.y).toFloat().takeIf { it > 0 } ?: 1080f
             send("S ${screenW.toInt()} ${screenH.toInt()}")
-            // The sticks come from the keyboard, as a controller's would from the controller
-            keyboardDevice()?.let { send("D $it") }
         }.onFailure { FluxLog.w(TAG, "input helper couldn't start: $it") }
     }
 
@@ -1145,8 +1143,9 @@ object GameMode {
             return false
         }
 
-        /** A stick with nowhere to go (no real controller, no on-screen stick): its keys instead. */
-        private fun byKeys(at: Int): Boolean = stickSink == null && profile?.stickZones?.containsKey(at / 2) != true
+        /** A stick for a game taking keys, with no on-screen stick placed: its direction keys. */
+        private fun byKeys(at: Int): Boolean =
+            stickSink == null && profile?.stickZones?.containsKey(at / 2) != true && route() == Route.KEYS
 
         private fun move(slot: Int, reportedX: Int, reportedY: Int) {
             keyStats?.let { k -> k.moves++; "$slot@$reportedX,$reportedY".let { if (k.firstMove.isEmpty()) k.firstMove = it; k.lastMove = it } }

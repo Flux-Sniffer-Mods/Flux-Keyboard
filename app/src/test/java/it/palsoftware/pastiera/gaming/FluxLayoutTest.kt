@@ -134,4 +134,23 @@ class FluxLayoutTest {
         val l = gc.first { it.startsWith("Triggers/L = ") }
         assertTrue(l, "`Volume Up`" in l)
     }
+
+    @Test
+    fun theLayoutsKeysAreKnownWhateverTheModifier() {
+        assertTrue(FluxLayout.isLayoutKey(KeyEvent.KEYCODE_W))
+        assertTrue(FluxLayout.isLayoutKey(KeyEvent.KEYCODE_VOLUME_UP))
+        // Keys the layout doesn't use go to the game as they are
+        assertTrue(!FluxLayout.isLayoutKey(KeyEvent.KEYCODE_P))
+        assertTrue(!FluxLayout.isLayoutKey(KeyEvent.KEYCODE_ENTER))
+    }
+
+    @Test
+    fun dolphinReadsTheVolumeKeysFromTheirOwnDevice() {
+        val gc = FluxLayout.dolphinGameCube("TitanKey", volume = listOf("Android/0/mtk-kpd"))
+        val l = gc.first { it.startsWith("Triggers/L = ") }
+        assertTrue(l, "`Android/0/mtk-kpd:Volume Up`" in l)
+        // The keyboard's own keys stay unnamed (its device is the profile's)
+        val a = gc.first { it.startsWith("Buttons/A = ") }
+        assertTrue(a, ":" !in a)
+    }
 }

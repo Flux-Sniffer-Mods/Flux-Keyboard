@@ -5952,8 +5952,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     private fun playerOwnsInput(info: EditorInfo? = currentInputEditorInfo): Boolean =
         playerEditor || (playerInFront() && info?.packageName == packageName) ||
-            // A game reading the keyboard itself (Dolphin): every key reaches it untouched
-            it.palsoftware.pastiera.gaming.GameMode.readsKeyboardNow()
+            // In a game (nothing being typed): its keys are gaming mode's, the typing leaves them alone
+            it.palsoftware.pastiera.gaming.GameMode.passesKeys()
 
     /** Flux Keyboard's own player, or its page for a game's own screen, is in front. */
     private fun playerInFront(): Boolean =
