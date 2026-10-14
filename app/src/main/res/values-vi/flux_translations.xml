@@ -1812,6 +1812,10 @@
     <string name="dolphin_pad_hint">Chạm vào một nút để gán phím cho nó, riêng lẻ hoặc kèm phím bổ trợ. Các nút có phím riêng cho trò chơi này được viền, và phím gán ở đây chỉ bấm nút đó.</string>
     <string name="dolphin_pad_no_key">Không có phím</string>
     <string name="dolphin_pad_saved">Đã lưu trong Dolphin cho trò chơi này.</string>
+    <string name="dolphin_overlay_title">Điều khiển trên màn hình của Dolphin</string>
+    <string name="dolphin_overlay_off">Ẩn</string>
+    <string name="dolphin_overlay_invisible">Vô hình (cho cần và phím đặt lên đó)</string>
+    <string name="dolphin_overlay_shown">Hiện</string>
     <string name="game_keys_row">Phím cho trò chơi này</string>
     <string name="game_keys_row_app">Phím cho ứng dụng này</string>
     <string name="game_keys_description">Chỉ đổi ở đây phím nào là nút nào, chồng lên điều khiển bàn phím. Hoạt động trong mọi trình giả lập hay trình khởi chạy mà chế độ chơi game gửi nút tới.</string>

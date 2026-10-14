@@ -1830,6 +1830,10 @@
     <string name="dolphin_pad_hint">Dotknij przycisku, aby przypisać mu klawisz, sam lub z modyfikatorem. Przyciski z własnym klawiszem dla tej gry są obramowane, a klawisz przypisany tutaj naciska tylko ten przycisk.</string>
     <string name="dolphin_pad_no_key">Brak klawisza</string>
     <string name="dolphin_pad_saved">Zapisano w Dolphin dla tej gry.</string>
+    <string name="dolphin_overlay_title">Sterowanie ekranowe Dolphin</string>
+    <string name="dolphin_overlay_off">Ukryte</string>
+    <string name="dolphin_overlay_invisible">Niewidoczne (dla umieszczonych na nim gałek i klawiszy)</string>
+    <string name="dolphin_overlay_shown">Widoczne</string>
     <string name="game_keys_row">Klawisze dla tej gry</string>
     <string name="game_keys_row_app">Klawisze dla tej aplikacji</string>
     <string name="game_keys_description">Zmień tylko tutaj, który klawisz jest którym przyciskiem, ponad sterowaniem klawiatury. Działa w każdym emulatorze lub launcherze, do którego tryb gry wysyła przyciski.</string>

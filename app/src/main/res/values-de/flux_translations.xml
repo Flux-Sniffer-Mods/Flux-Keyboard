@@ -1285,6 +1285,10 @@
     <string name="dolphin_pad_hint">Tippe auf eine Taste, um ihr eine Taste der Tastatur zu geben, allein oder mit einer Zusatztaste. Tasten mit eigener Belegung für dieses Spiel sind umrandet, und eine hier vergebene Taste drückt nur diese Taste.</string>
     <string name="dolphin_pad_no_key">Keine Taste</string>
     <string name="dolphin_pad_saved">In Dolphin für dieses Spiel gespeichert.</string>
+    <string name="dolphin_overlay_title">Bildschirmsteuerung von Dolphin</string>
+    <string name="dolphin_overlay_off">Ausgeblendet</string>
+    <string name="dolphin_overlay_invisible">Unsichtbar (für darauf platzierte Sticks und Tasten)</string>
+    <string name="dolphin_overlay_shown">Angezeigt</string>
     <string name="game_keys_row">Tasten für dieses Spiel</string>
     <string name="game_keys_row_app">Tasten für diese App</string>
     <string name="game_keys_description">Ändere hier allein, welche Taste welcher Knopf ist, zusätzlich zu den Tastatursteuerungen. Funktioniert in jedem Emulator und Launcher, an den der Spielmodus Knöpfe sendet.</string>

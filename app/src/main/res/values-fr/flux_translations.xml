@@ -1824,6 +1824,10 @@
     <string name="dolphin_pad_hint">Touche un bouton pour lui donner une touche, seule ou avec un modificateur. Les boutons ayant une touche propre à ce jeu sont entourés, et une touche donnée ici n’appuie que sur ce bouton.</string>
     <string name="dolphin_pad_no_key">Aucune touche</string>
     <string name="dolphin_pad_saved">Enregistré dans Dolphin pour ce jeu.</string>
+    <string name="dolphin_overlay_title">Commandes à l’écran de Dolphin</string>
+    <string name="dolphin_overlay_off">Masquées</string>
+    <string name="dolphin_overlay_invisible">Invisibles (pour les sticks et touches placés dessus)</string>
+    <string name="dolphin_overlay_shown">Affichées</string>
     <string name="game_keys_row">Touches pour ce jeu</string>
     <string name="game_keys_row_app">Touches pour cette appli</string>
     <string name="game_keys_description">Change ici seulement quelle touche est quel bouton, en plus des commandes du clavier. Fonctionne dans tout émulateur ou lanceur auquel le mode jeu envoie des boutons.</string>

@@ -1330,6 +1330,10 @@
     <string name="dolphin_pad_hint">Tocca un tasto per assegnargli un tasto della tastiera, da solo o con un modificatore. I tasti con un tasto proprio di questo gioco sono evidenziati, e un tasto assegnato qui preme solo quel tasto.</string>
     <string name="dolphin_pad_no_key">Nessun tasto</string>
     <string name="dolphin_pad_saved">Salvato in Dolphin per questo gioco.</string>
+    <string name="dolphin_overlay_title">Comandi a schermo di Dolphin</string>
+    <string name="dolphin_overlay_off">Nascosti</string>
+    <string name="dolphin_overlay_invisible">Invisibili (per stick e tasti posizionati sopra)</string>
+    <string name="dolphin_overlay_shown">Visibili</string>
     <string name="game_keys_row">Tasti per questo gioco</string>
     <string name="game_keys_row_app">Tasti per questa app</string>
     <string name="game_keys_description">Cambia quale tasto è quale pulsante solo qui, oltre ai controlli della tastiera. Funziona in ogni emulatore o launcher a cui la modalità gioco invia pulsanti.</string>

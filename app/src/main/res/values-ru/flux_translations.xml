@@ -1830,6 +1830,10 @@
     <string name="dolphin_pad_hint">Нажмите на кнопку, чтобы назначить ей клавишу, отдельно или с модификатором. Кнопки с собственной клавишей для этой игры обведены, а назначенная здесь клавиша нажимает только эту кнопку.</string>
     <string name="dolphin_pad_no_key">Без клавиши</string>
     <string name="dolphin_pad_saved">Сохранено в Dolphin для этой игры.</string>
+    <string name="dolphin_overlay_title">Экранное управление Dolphin</string>
+    <string name="dolphin_overlay_off">Скрыто</string>
+    <string name="dolphin_overlay_invisible">Невидимо (для размещённых на нём стиков и клавиш)</string>
+    <string name="dolphin_overlay_shown">Показано</string>
     <string name="game_keys_row">Клавиши для этой игры</string>
     <string name="game_keys_row_app">Клавиши для этого приложения</string>
     <string name="game_keys_description">Измените только здесь, какая клавиша какой кнопкой является, поверх управления с клавиатуры. Работает в любом эмуляторе или лаунчере, которому игровой режим отправляет кнопки.</string>
