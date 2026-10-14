@@ -1785,9 +1785,9 @@
     <string name="game_mode_own_game_none">Nie zainstalowano żadnego launchera ani emulatora, w którym Flux Keyboard może uruchamiać gry (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Ekran</string>
     <string name="game_mode_screen_app">Decyduje gra</string>
-    <string name="game_mode_screen_sideways">Trzymaj telefon pionowo</string>
+    <string name="game_mode_screen_sideways">Poziomo</string>
     <string name="game_mode_screen_app_description">Aplikacja obraca ekran po swojemu. W GameNative włącz tryb pionowy w ustawieniach gry (Ogólne), by grać z telefonem pionowo.</string>
-    <string name="game_mode_screen_sideways_description">Wymusza rozdzielczość poziomą, by gra rysowała się bokiem przy telefonie trzymanym pionowo, nieco niższą, by nie zasłaniać aparatu.</string>
+    <string name="game_mode_screen_sideways_description">Gra dostaje poziomy ekran, gdy trzymasz telefon pionowo, a ekran się nie obraca. Najlepsze dla większości gier. Jest nieco krótszy, by omijać aparat.</string>
     <string name="game_mode_seen_title">Dodaj %1$s do profilu</string>
     <string name="game_mode_seen_description">Ostatnia aplikacja, w której działała gra (%1$s), nie ma profilu: launcher może uruchamiać gry we własnej części. Dodaj ją do profilu launchera, by tryb gry działał w grze.</string>
     <string name="shell_elsewhere_section">Gdzie indziej</string>
@@ -2005,8 +2005,8 @@
     <string name="game_remap_view_keyboard">Klawiatura</string>
     <string name="game_remap_view_controller">Kontroler</string>
     <string name="game_remap_controller_description">Każdy przycisk pokazuje klawisze, które go naciskają. Dotknij przycisku, aby wybrać jego klawisz, sam lub z modyfikatorem: klawisze, które naciskały go wcześniej, nie naciskają już niczego.</string>
-    <string name="game_mode_screen_upright">Trzymaj grę pionowo</string>
-    <string name="game_mode_screen_upright_description">Utrzymuje telefon i grę w pionie, niezależnie od tego, czego chce gra. Dla emulatorów DS i 3DS: ich dwa ekrany jeden nad drugim.</string>
+    <string name="game_mode_screen_upright">Pionowo</string>
+    <string name="game_mode_screen_upright_description">Gra dostaje cały pionowy ekran, czegokolwiek żąda. Dla emulatorów DS i 3DS (ich dwa ekrany jeden nad drugim), gier na telefon zrobionych do pionu i pionowych gier arcade.</string>
     <string name="game_mode_bottom_screen">Dolny ekran</string>
     <string name="game_mode_swap_face">Zamień A/B i X/Y</string>
     <string name="game_mode_swap_face_description">Układ Nintendo: M naciska B, L naciska A, I naciska X, a J naciska Y, więc każdy klawisz naciska przycisk w swoim miejscu. Domyślnie włączone dla emulatorów Nintendo.</string>

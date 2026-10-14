@@ -1151,9 +1151,9 @@
     <string name="game_mode_own_game_none">Δεν είναι εγκατεστημένος κανένας από τους εκκινητές ή εξομοιωτές όπου το Flux Keyboard μπορεί να ξεκινά παιχνίδια (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Οθόνη</string>
     <string name="game_mode_screen_app">Αποφασίζει το παιχνίδι</string>
-    <string name="game_mode_screen_sideways">Τηλέφωνο σε όρθια θέση</string>
+    <string name="game_mode_screen_sideways">Οριζόντια</string>
     <string name="game_mode_screen_app_description">Η εφαρμογή γυρίζει την οθόνη όπως θέλει. Για το GameNative, ενεργοποιήστε την κατακόρυφη λειτουργία στις ρυθμίσεις του παιχνιδιού (Γενικά) για να παίζετε με όρθιο τηλέφωνο.</string>
-    <string name="game_mode_screen_sideways_description">Επιβάλλει οριζόντια ανάλυση ώστε το παιχνίδι να σχεδιάζεται πλάγια με το τηλέφωνο όρθιο, λίγο πιο κοντή ώστε να αφήνει ελεύθερη την κάμερα.</string>
+    <string name="game_mode_screen_sideways_description">Το παιχνίδι παίρνει οριζόντια οθόνη ενώ κρατάς το τηλέφωνο όρθιο, και η οθόνη δεν περιστρέφεται. Καλύτερο για τα περισσότερα παιχνίδια. Είναι λίγο πιο κοντή, για να μένει μακριά από την κάμερα.</string>
     <string name="game_mode_seen_title">Προσθήκη του %1$s σε προφίλ</string>
     <string name="game_mode_seen_description">Η τελευταία εφαρμογή όπου έτρεξε παιχνίδι (%1$s) δεν έχει προφίλ: ένας εκκινητής μπορεί να τρέχει παιχνίδια σε δικό του μέρος. Προσθέστε τη στο προφίλ του εκκινητή ώστε η λειτουργία παιχνιδιού να μένει ενεργή.</string>
     <string name="shell_elsewhere_section">Αλλού</string>
@@ -1373,8 +1373,8 @@
     <string name="game_remap_view_keyboard">Πληκτρολόγιο</string>
     <string name="game_remap_view_controller">Χειριστήριο</string>
     <string name="game_remap_controller_description">Κάθε κουμπί δείχνει τα πλήκτρα που το πατούν. Πάτησε ένα κουμπί για να διαλέξεις το πλήκτρο του, μόνο του ή με πλήκτρο τροποποίησης: τα πλήκτρα που το πατούσαν πριν δεν πατούν πια τίποτα.</string>
-    <string name="game_mode_screen_upright">Κράτα το παιχνίδι όρθιο</string>
-    <string name="game_mode_screen_upright_description">Κρατά το τηλέφωνο και το παιχνίδι όρθια, ό,τι κι αν ζητά το παιχνίδι. Για εξομοιωτές DS και 3DS: οι δύο οθόνες τους η μία πάνω από την άλλη.</string>
+    <string name="game_mode_screen_upright">Κατακόρυφα</string>
+    <string name="game_mode_screen_upright_description">Το παιχνίδι παίρνει όλη την όρθια οθόνη, ό,τι κι αν ζητά. Για εξομοιωτές DS και 3DS (οι δύο οθόνες τους η μία πάνω από την άλλη), παιχνίδια τηλεφώνου φτιαγμένα για κατακόρυφη χρήση και κάθετα παιχνίδια arcade.</string>
     <string name="game_mode_bottom_screen">Κάτω οθόνη</string>
     <string name="game_mode_swap_face">Εναλλαγή A/B και X/Y</string>
     <string name="game_mode_swap_face_description">Η διάταξη της Nintendo: το M πατά B, το L πατά A, το I πατά X και το J πατά Y, ώστε κάθε πλήκτρο να πατά το κουμπί στη θέση του. Ενεργό από προεπιλογή για εξομοιωτές Nintendo.</string>

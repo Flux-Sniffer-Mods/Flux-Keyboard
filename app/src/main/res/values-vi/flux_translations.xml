@@ -1767,9 +1767,9 @@
     <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Màn hình</string>
     <string name="game_mode_screen_app">Để trò chơi quyết định</string>
-    <string name="game_mode_screen_sideways">Giữ điện thoại dọc</string>
+    <string name="game_mode_screen_sideways">Ngang</string>
     <string name="game_mode_screen_app_description">Ứng dụng xoay màn hình theo ý nó. Với GameNative, bật chế độ dọc trong cài đặt trò chơi (Chung) để chơi với điện thoại đứng.</string>
-    <string name="game_mode_screen_sideways_description">Ép độ phân giải ngang để game hiển thị nằm ngang trong khi điện thoại vẫn dọc, thấp hơn một chút để tránh camera.</string>
+    <string name="game_mode_screen_sideways_description">Trò chơi nhận màn hình ngang trong khi bạn cầm điện thoại dọc, và màn hình không xoay. Tốt nhất cho hầu hết trò chơi. Nó hơi ngắn hơn để tránh camera.</string>
     <string name="game_mode_seen_title">Thêm %1$s vào hồ sơ</string>
     <string name="game_mode_seen_description">Ứng dụng gần nhất có trò chơi chạy (%1$s) chưa có hồ sơ: trình khởi chạy có thể chạy trò chơi trong một phần riêng. Thêm nó vào hồ sơ của trình khởi chạy để chế độ chơi game vẫn bật trong trò chơi.</string>
     <string name="shell_elsewhere_section">Ở nơi khác</string>
@@ -1987,8 +1987,8 @@
     <string name="game_remap_view_keyboard">Bàn phím</string>
     <string name="game_remap_view_controller">Tay cầm</string>
     <string name="game_remap_controller_description">Mỗi nút hiện các phím bấm nó. Chạm vào một nút để chọn phím cho nó, riêng lẻ hoặc kèm phím bổ trợ: các phím từng bấm nó sẽ không bấm gì nữa.</string>
-    <string name="game_mode_screen_upright">Giữ trò chơi thẳng đứng</string>
-    <string name="game_mode_screen_upright_description">Giữ điện thoại và trò chơi thẳng đứng, bất kể trò chơi yêu cầu gì. Với trình giả lập DS và 3DS: hai màn hình xếp chồng lên nhau.</string>
+    <string name="game_mode_screen_upright">Dọc</string>
+    <string name="game_mode_screen_upright_description">Trò chơi nhận toàn bộ màn hình dọc, bất kể nó yêu cầu gì. Dành cho trình giả lập DS và 3DS (hai màn hình xếp chồng), trò chơi điện thoại làm cho chiều dọc và trò chơi arcade dọc.</string>
     <string name="game_mode_bottom_screen">Màn hình dưới</string>
     <string name="game_mode_swap_face">Đổi A/B và X/Y</string>
     <string name="game_mode_swap_face_description">Bố cục của Nintendo: M bấm B, L bấm A, I bấm X và J bấm Y, để mỗi phím bấm nút ở đúng vị trí của nó. Bật mặc định cho trình giả lập Nintendo.</string>

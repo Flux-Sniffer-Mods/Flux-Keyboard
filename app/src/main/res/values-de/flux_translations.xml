@@ -1240,9 +1240,9 @@
     <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
     <string name="game_mode_screen">Bildschirm</string>
     <string name="game_mode_screen_app">Das Spiel entscheidet</string>
-    <string name="game_mode_screen_sideways">Handy aufrecht halten</string>
+    <string name="game_mode_screen_sideways">Querformat</string>
     <string name="game_mode_screen_app_description">Die App dreht den Bildschirm, wie sie will. Für GameNative schalte in den Spieleinstellungen (Allgemein) den Hochformatmodus ein, um mit aufrechtem Telefon zu spielen.</string>
-    <string name="game_mode_screen_sideways_description">Erzwingt eine Querformat-Auflösung, damit das Spiel quer gezeichnet wird, während das Handy aufrecht bleibt, etwas niedriger, damit die Kamera frei bleibt.</string>
+    <string name="game_mode_screen_sideways_description">Das Spiel bekommt einen Bildschirm im Querformat, während du das Handy aufrecht hältst, und der Bildschirm dreht sich nicht. Am besten für die meisten Spiele. Er ist etwas kürzer, um die Kamera freizulassen.</string>
     <string name="game_mode_seen_title">%1$s zu einem Profil hinzufügen</string>
     <string name="game_mode_seen_description">Die App, in der zuletzt ein Spiel lief (%1$s), hat kein Profil: Ein Launcher kann Spiele in einem eigenen Teil spielen. Füge sie dem Profil ihres Launchers hinzu, damit der Spielmodus im Spiel an bleibt.</string>
     <string name="shell_elsewhere_section">Anderswo</string>
@@ -1461,8 +1461,8 @@
     <string name="game_remap_view_keyboard">Tastatur</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Jeder Knopf zeigt die Tasten, die ihn drücken. Tippe auf einen Knopf, um seine Taste zu wählen, allein oder mit einer Zusatztaste: Die Tasten, die ihn vorher gedrückt haben, drücken dann nichts mehr.</string>
-    <string name="game_mode_screen_upright">Spiel aufrecht halten</string>
-    <string name="game_mode_screen_upright_description">Hält Telefon und Spiel aufrecht, egal was das Spiel verlangt. Für DS- und 3DS-Emulatoren: ihre zwei Bildschirme übereinander.</string>
+    <string name="game_mode_screen_upright">Hochformat</string>
+    <string name="game_mode_screen_upright_description">Das Spiel bekommt den ganzen aufrechten Bildschirm, egal was es verlangt. Für DS- und 3DS-Emulatoren (ihre zwei Bildschirme übereinander), Handyspiele im Hochformat und vertikale Arcade-Spiele.</string>
     <string name="game_mode_bottom_screen">Unterer Bildschirm</string>
     <string name="game_mode_swap_face">A/B und X/Y tauschen</string>
     <string name="game_mode_swap_face_description">Nintendos Anordnung: M drückt B, L drückt A, I drückt X und J drückt Y, sodass jede Taste den Knopf an ihrer Stelle drückt. Für Nintendo-Emulatoren standardmäßig an.</string>

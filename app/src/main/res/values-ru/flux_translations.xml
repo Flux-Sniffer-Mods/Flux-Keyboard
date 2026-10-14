@@ -1785,9 +1785,9 @@
     <string name="game_mode_own_game_none">Не установлен ни один лаунчер или эмулятор, в которых Flux Keyboard может запускать игры (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Экран</string>
     <string name="game_mode_screen_app">Решает игра</string>
-    <string name="game_mode_screen_sideways">Держать телефон вертикально</string>
+    <string name="game_mode_screen_sideways">Альбомная</string>
     <string name="game_mode_screen_app_description">Приложение поворачивает экран как хочет. Для GameNative включите портретный режим в настройках игры (Общие), чтобы играть с вертикальным телефоном.</string>
-    <string name="game_mode_screen_sideways_description">Задаёт горизонтальное разрешение, чтобы игра рисовалась боком, а телефон оставался вертикально, чуть ниже, чтобы не закрывать камеру.</string>
+    <string name="game_mode_screen_sideways_description">Игра получает альбомный экран, пока вы держите телефон вертикально, и экран не поворачивается. Лучше всего для большинства игр. Он немного короче, чтобы не заходить на камеру.</string>
     <string name="game_mode_seen_title">Добавить %1$s в профиль</string>
     <string name="game_mode_seen_description">Последнее приложение, где шла игра (%1$s), без профиля: лаунчер может запускать игры в своей отдельной части. Добавьте его в профиль лаунчера, чтобы игровой режим работал в игре.</string>
     <string name="shell_elsewhere_section">В других разделах</string>
@@ -2005,8 +2005,8 @@
     <string name="game_remap_view_keyboard">Клавиатура</string>
     <string name="game_remap_view_controller">Контроллер</string>
     <string name="game_remap_controller_description">Каждая кнопка показывает клавиши, которые её нажимают. Нажмите на кнопку, чтобы выбрать её клавишу, отдельно или с модификатором: клавиши, которые нажимали её раньше, больше ничего не нажимают.</string>
-    <string name="game_mode_screen_upright">Держать игру вертикально</string>
-    <string name="game_mode_screen_upright_description">Держит телефон и игру вертикально, что бы ни запрашивала игра. Для эмуляторов DS и 3DS: их два экрана один над другим.</string>
+    <string name="game_mode_screen_upright">Портретная</string>
+    <string name="game_mode_screen_upright_description">Игра получает весь вертикальный экран, что бы она ни запрашивала. Для эмуляторов DS и 3DS (их два экрана один над другим), мобильных игр для вертикальной ориентации и вертикальных аркад.</string>
     <string name="game_mode_bottom_screen">Нижний экран</string>
     <string name="game_mode_swap_face">Поменять A/B и X/Y</string>
     <string name="game_mode_swap_face_description">Раскладка Nintendo: M нажимает B, L — A, I — X, J — Y, так что каждая клавиша нажимает кнопку на своём месте. По умолчанию включено для эмуляторов Nintendo.</string>

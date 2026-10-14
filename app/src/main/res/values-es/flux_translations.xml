@@ -1779,9 +1779,9 @@
     <string name="game_mode_own_game_none">No está instalado ninguno de los lanzadores o emuladores en los que Flux Keyboard puede iniciar juegos (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Pantalla</string>
     <string name="game_mode_screen_app">Lo decide el juego</string>
-    <string name="game_mode_screen_sideways">Mantener el móvil en vertical</string>
+    <string name="game_mode_screen_sideways">Horizontal</string>
     <string name="game_mode_screen_app_description">La app gira la pantalla como quiera. Para GameNative, activa su modo vertical en los ajustes del juego (General) para jugar con el teléfono vertical.</string>
-    <string name="game_mode_screen_sideways_description">Fuerza una resolución horizontal para que el juego se dibuje de lado con el móvil en vertical, un poco más corta para dejar libre la cámara.</string>
+    <string name="game_mode_screen_sideways_description">El juego recibe una pantalla horizontal mientras sostienes el teléfono en vertical, y la pantalla no gira. Lo mejor para la mayoría de juegos. Es algo más corta, para no tapar la cámara.</string>
     <string name="game_mode_seen_title">Añadir %1$s a un perfil</string>
     <string name="game_mode_seen_description">La última app en la que se ejecutó un juego (%1$s) no tiene perfil: un lanzador puede ejecutar sus juegos en una parte propia. Añádela al perfil de su lanzador para que el modo juego siga activo en el juego.</string>
     <string name="shell_elsewhere_section">En otros sitios</string>
@@ -1999,8 +1999,8 @@
     <string name="game_remap_view_keyboard">Teclado</string>
     <string name="game_remap_view_controller">Mando</string>
     <string name="game_remap_controller_description">Cada botón muestra las teclas que lo pulsan. Toca un botón para elegir su tecla, sola o con un modificador: las teclas que lo pulsaban antes dejan de pulsar nada.</string>
-    <string name="game_mode_screen_upright">Mantener el juego en vertical</string>
-    <string name="game_mode_screen_upright_description">Mantiene el teléfono y el juego en vertical, pida lo que pida el juego. Para emuladores de DS y 3DS: sus dos pantallas una encima de la otra.</string>
+    <string name="game_mode_screen_upright">Vertical</string>
+    <string name="game_mode_screen_upright_description">El juego recibe toda la pantalla en vertical, pida lo que pida. Para emuladores de DS y 3DS (sus dos pantallas una sobre otra), juegos de móvil hechos para vertical y juegos arcade verticales.</string>
     <string name="game_mode_bottom_screen">Pantalla inferior</string>
     <string name="game_mode_swap_face">Intercambiar A/B y X/Y</string>
     <string name="game_mode_swap_face_description">La disposición de Nintendo: M pulsa B, L pulsa A, I pulsa X y J pulsa Y, así cada tecla pulsa el botón de su posición. Activado por defecto en emuladores de Nintendo.</string>

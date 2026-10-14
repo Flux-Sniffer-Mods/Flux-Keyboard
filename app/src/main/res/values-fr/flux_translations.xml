@@ -1779,9 +1779,9 @@
     <string name="game_mode_own_game_none">Aucun des lanceurs ou émulateurs où Flux Keyboard peut lancer des jeux (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) n\'est installé.</string>
     <string name="game_mode_screen">Écran</string>
     <string name="game_mode_screen_app">Le jeu décide</string>
-    <string name="game_mode_screen_sideways">Garder le téléphone droit</string>
+    <string name="game_mode_screen_sideways">Paysage</string>
     <string name="game_mode_screen_app_description">L\'app tourne l\'écran comme elle veut. Pour GameNative, activez son mode portrait dans les réglages du jeu (Général) pour jouer téléphone droit.</string>
-    <string name="game_mode_screen_sideways_description">Force une résolution paysage pour que le jeu s\'affiche de côté avec le téléphone à la verticale, un peu plus courte pour dégager la caméra.</string>
+    <string name="game_mode_screen_sideways_description">Le jeu reçoit un écran en paysage pendant que vous tenez le téléphone droit, et l\'écran ne pivote pas. Idéal pour la plupart des jeux. Il est un peu plus court, pour éviter la caméra.</string>
     <string name="game_mode_seen_title">Ajouter %1$s à un profil</string>
     <string name="game_mode_seen_description">La dernière app où un jeu a tourné (%1$s) n\'a pas de profil : un lanceur peut faire tourner ses jeux dans une partie à lui. Ajoutez-la au profil de son lanceur pour que le mode jeu reste actif en jeu.</string>
     <string name="shell_elsewhere_section">Ailleurs</string>
@@ -1999,8 +1999,8 @@
     <string name="game_remap_view_keyboard">Clavier</string>
     <string name="game_remap_view_controller">Manette</string>
     <string name="game_remap_controller_description">Chaque bouton montre les touches qui l’actionnent. Touche un bouton pour choisir sa touche, seule ou avec un modificateur : les touches qui l’actionnaient avant n’actionnent alors plus rien.</string>
-    <string name="game_mode_screen_upright">Garder le jeu à la verticale</string>
-    <string name="game_mode_screen_upright_description">Garde le téléphone et le jeu à la verticale, quoi que demande le jeu. Pour les émulateurs DS et 3DS : leurs deux écrans l\'un au-dessus de l\'autre.</string>
+    <string name="game_mode_screen_upright">Portrait</string>
+    <string name="game_mode_screen_upright_description">Le jeu reçoit tout l\'écran vertical, quoi qu\'il demande. Pour les émulateurs DS et 3DS (leurs deux écrans l\'un au-dessus de l\'autre), les jeux mobiles faits pour le portrait et les jeux d\'arcade verticaux.</string>
     <string name="game_mode_bottom_screen">Écran du bas</string>
     <string name="game_mode_swap_face">Inverser A/B et X/Y</string>
     <string name="game_mode_swap_face_description">La disposition de Nintendo : M appuie sur B, L sur A, I sur X et J sur Y, pour que chaque touche appuie sur le bouton à sa place. Activé par défaut pour les émulateurs Nintendo.</string>

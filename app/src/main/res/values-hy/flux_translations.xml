@@ -1773,9 +1773,9 @@
     <string name="game_mode_own_game_none">Տեղադրված չէ գործարկիչներից կամ էմուլյատորներից ոչ մեկը, որտեղ Flux Keyboard-ը կարող է խաղեր գործարկել (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden)։</string>
     <string name="game_mode_screen">Էկրան</string>
     <string name="game_mode_screen_app">Որոշում է խաղը</string>
-    <string name="game_mode_screen_sideways">Պահել հեռախոսը ուղղահայաց</string>
+    <string name="game_mode_screen_sideways">Հորիզոնական</string>
     <string name="game_mode_screen_app_description">Հավելվածը պտտում է էկրանն ինչպես ուզում է։ GameNative-ի համար խաղի կարգավորումներում (Ընդհանուր) միացրեք ուղղահայաց ռեժիմը՝ ուղիղ հեռախոսով խաղալու համար։</string>
-    <string name="game_mode_screen_sideways_description">Պարտադրում է հորիզոնական լուծաչափ, որպեսզի խաղը նկարվի կողքից, իսկ հեռախոսը մնա ուղղահայաց, մի փոքր ավելի կարճ՝ տեսախցիկը ազատ թողնելու համար։</string>
+    <string name="game_mode_screen_sideways_description">Խաղը ստանում է հորիզոնական էկրան, մինչ հեռախոսը պահում եք ուղղահայաց, և էկրանը չի պտտվում։ Լավագույնն է խաղերի մեծ մասի համար։ Այն մի փոքր ավելի կարճ է, որպեսզի տեսախցիկից հեռու մնա։</string>
     <string name="game_mode_seen_title">Ավելացնել %1$s-ը պրոֆիլին</string>
     <string name="game_mode_seen_description">Վերջին հավելվածը, որտեղ խաղ էր աշխատում (%1$s), պրոֆիլ չունի․ գործարկիչը կարող է խաղերը գործարկել իր առանձին մասում։ Ավելացրեք այն գործարկչի պրոֆիլին, որ խաղային ռեժիմը միացված մնա խաղում։</string>
     <string name="shell_elsewhere_section">Այլ տեղերում</string>
@@ -1993,8 +1993,8 @@
     <string name="game_remap_view_keyboard">Ստեղնաշար</string>
     <string name="game_remap_view_controller">Կարգավար</string>
     <string name="game_remap_controller_description">Յուրաքանչյուր կոճակ ցույց է տալիս այն սեղմող ստեղները։ Հպիր կոճակին՝ նրա ստեղնն ընտրելու համար, միայնակ կամ փոփոխիչով․ նախկինում այն սեղմող ստեղներն այլևս ոչինչ չեն սեղմում։</string>
-    <string name="game_mode_screen_upright">Խաղը պահել ուղղահայաց</string>
-    <string name="game_mode_screen_upright_description">Հեռախոսը և խաղը պահում է ուղղահայաց՝ անկախ խաղի պահանջից։ DS և 3DS էմուլյատորների համար՝ նրանց երկու էկրանները մեկը մյուսի վրա։</string>
+    <string name="game_mode_screen_upright">Ուղղահայաց</string>
+    <string name="game_mode_screen_upright_description">Խաղը ստանում է ամբողջ ուղղահայաց էկրանը, ինչ էլ որ խնդրի։ DS և 3DS էմուլյատորների (նրանց երկու էկրանները մեկը մյուսի վրա), ուղղահայաց հեռախոսային խաղերի և ուղղահայաց արկադային խաղերի համար։</string>
     <string name="game_mode_bottom_screen">Ներքևի էկրան</string>
     <string name="game_mode_swap_face">Փոխանակել A/B և X/Y</string>
     <string name="game_mode_swap_face_description">Nintendo-ի դասավորությունը՝ M-ը սեղմում է B, L-ը՝ A, I-ն՝ X, J-ն՝ Y, որպեսզի ամեն ստեղն սեղմի իր տեղում գտնվող կոճակը։ Nintendo էմուլյատորների համար միացված է լռելյայն։</string>
