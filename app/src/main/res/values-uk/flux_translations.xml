@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Клавіатури й розкладки</string>
     <string name="settings_keyboards_layouts_description">Мови введення, клавіатури й пристрої, показ клавіатури</string>
     <string name="settings_typing_title">Введення</string>
+    <string name="quick_settings_title">Швидкі налаштування</string>
+    <string name="quick_settings_row_description">Найуживаніші перемикачі, згруповані за призначенням</string>
+    <string name="quick_settings_description">Ті самі налаштування, що й на їхніх сторінках, зібрані за призначенням. Усе інше — в розділах налаштувань.</string>
+    <string name="quick_settings_keyboard_light">Підсвічування клавіатури</string>
     <string name="settings_typing_description">Підказки й автовиправлення, великі літери й пунктуація, розгортання тексту, варіанти, клавіші редагування, режим навігації</string>
     <string name="settings_modifiers_sym_title">Модифікатори й SYM</string>
     <string name="settings_modifiers_sym_description">Натискання, фіксація й довге натискання, сторінки SYM, сполучення клавіш, режим навігації</string>

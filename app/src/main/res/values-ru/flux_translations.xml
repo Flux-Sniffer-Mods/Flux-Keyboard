@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Клавиатуры и раскладки</string>
     <string name="settings_keyboards_layouts_description">Языки ввода, клавиатуры и устройства, показ клавиатуры</string>
     <string name="settings_typing_title">Ввод</string>
+    <string name="quick_settings_title">Быстрые настройки</string>
+    <string name="quick_settings_row_description">Самые используемые переключатели, сгруппированные по назначению</string>
+    <string name="quick_settings_description">Те же настройки, что и на их собственных страницах, собранные по назначению. Всё остальное — в разделах настроек.</string>
+    <string name="quick_settings_keyboard_light">Подсветка клавиатуры</string>
     <string name="settings_typing_description">Подсказки и автоисправление, заглавные и пунктуация, расширение текста, варианты, клавиши редактирования, режим навигации</string>
     <string name="settings_modifiers_sym_title">Модификаторы и SYM</string>
     <string name="settings_modifiers_sym_description">Нажатие, фиксация и долгое нажатие, страницы SYM, сочетания клавиш, режим навигации</string>

@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Klawiatury i układy</string>
     <string name="settings_keyboards_layouts_description">Języki wprowadzania, klawiatury i urządzenia, wyświetlanie klawiatury</string>
     <string name="settings_typing_title">Pisanie</string>
+    <string name="quick_settings_title">Szybkie ustawienia</string>
+    <string name="quick_settings_row_description">Najczęściej używane przełączniki, pogrupowane według przeznaczenia</string>
+    <string name="quick_settings_description">Te same ustawienia co na ich własnych stronach, zebrane według przeznaczenia. Wszystko inne jest w sekcjach Ustawień.</string>
+    <string name="quick_settings_keyboard_light">Podświetlenie klawiatury</string>
     <string name="settings_typing_description">Podpowiedzi i autokorekta, wielkie litery i interpunkcja, rozwijanie tekstu, warianty, klawisze edycji, tryb nawigacji</string>
     <string name="settings_modifiers_sym_title">Modyfikatory i SYM</string>
     <string name="settings_modifiers_sym_description">Dotknięcie, blokada i długie naciśnięcie, strony SYM, skróty klawiszowe, tryb nawigacji</string>

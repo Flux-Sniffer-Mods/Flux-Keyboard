@@ -339,6 +339,10 @@
     <string name="settings_keyboards_layouts_title">Tastaturen &amp; Layouts</string>
     <string name="settings_keyboards_layouts_description">Eingabesprachen, Tastaturen und Geräte, Anzeige der Tastatur</string>
     <string name="settings_typing_title">Tippen</string>
+    <string name="quick_settings_title">Schnelleinstellungen</string>
+    <string name="quick_settings_row_description">Die meistgenutzten Schalter, nach ihrem Zweck geordnet</string>
+    <string name="quick_settings_description">Dieselben Einstellungen wie auf ihren eigenen Seiten, nach ihrem Zweck zusammengefasst. Alles andere steht in den Bereichen der Einstellungen.</string>
+    <string name="quick_settings_keyboard_light">Tastaturbeleuchtung</string>
     <string name="settings_typing_description">Vorschläge und Autokorrektur, Großschreibung und Satzzeichen, Textersetzung, Varianten, Bearbeitungstasten, Nav-Modus</string>
     <string name="settings_modifiers_sym_title">Modifikatoren &amp; SYM</string>
     <string name="settings_modifiers_sym_description">Tippen, Sperren und langes Drücken, SYM-Seiten, Tastenkürzel, Nav-Modus</string>

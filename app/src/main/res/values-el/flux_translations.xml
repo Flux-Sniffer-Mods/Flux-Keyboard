@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Πληκτρολόγια και διατάξεις</string>
     <string name="settings_keyboards_layouts_description">Γλώσσες εισαγωγής, πληκτρολόγια και συσκευές, εμφάνιση του πληκτρολογίου</string>
     <string name="settings_typing_title">Πληκτρολόγηση</string>
+    <string name="quick_settings_title">Γρήγορες ρυθμίσεις</string>
+    <string name="quick_settings_row_description">Οι διακόπτες που χρησιμοποιούνται περισσότερο, ομαδοποιημένοι κατά σκοπό</string>
+    <string name="quick_settings_description">Οι ίδιες ρυθμίσεις με τις σελίδες τους, συγκεντρωμένες κατά σκοπό. Όλα τα υπόλοιπα βρίσκονται στις ενότητες των Ρυθμίσεων.</string>
+    <string name="quick_settings_keyboard_light">Φωτισμός πληκτρολογίου</string>
     <string name="settings_typing_description">Προτάσεις και αυτόματη διόρθωση, κεφαλαία και στίξη, επέκταση κειμένου, παραλλαγές, πλήκτρα επεξεργασίας, λειτουργία πλοήγησης</string>
     <string name="settings_modifiers_sym_title">Τροποποιητές &amp; SYM</string>
     <string name="settings_modifiers_sym_description">Πάτημα, κλείδωμα και παρατεταμένο πάτημα, σελίδες SYM, συντομεύσεις πλήκτρων, λειτουργία πλοήγησης</string>

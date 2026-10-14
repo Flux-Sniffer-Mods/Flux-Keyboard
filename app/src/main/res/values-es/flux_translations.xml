@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Teclados y distribuciones</string>
     <string name="settings_keyboards_layouts_description">Idiomas de entrada, teclados y dispositivos, mostrar el teclado</string>
     <string name="settings_typing_title">Escritura</string>
+    <string name="quick_settings_title">Ajustes rápidos</string>
+    <string name="quick_settings_row_description">Los interruptores más usados, agrupados por para qué sirven</string>
+    <string name="quick_settings_description">Los mismos ajustes que en sus propias páginas, reunidos por para qué sirven. Todo lo demás está en las secciones de Ajustes.</string>
+    <string name="quick_settings_keyboard_light">Luz del teclado</string>
     <string name="settings_typing_description">Sugerencias y autocorrección, mayúsculas y puntuación, expansión de texto, variaciones, teclas de edición, modo de navegación</string>
     <string name="settings_modifiers_sym_title">Modificadores y SYM</string>
     <string name="settings_modifiers_sym_description">Toque, bloqueo y pulsación larga, páginas SYM, atajos de teclado, modo de navegación</string>

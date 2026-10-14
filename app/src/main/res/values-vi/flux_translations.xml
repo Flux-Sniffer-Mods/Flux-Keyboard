@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Bàn phím &amp; bố cục</string>
     <string name="settings_keyboards_layouts_description">Ngôn ngữ nhập, bàn phím và thiết bị, hiển thị bàn phím</string>
     <string name="settings_typing_title">Gõ phím</string>
+    <string name="quick_settings_title">Cài đặt nhanh</string>
+    <string name="quick_settings_row_description">Các công tắc dùng nhiều nhất, nhóm theo mục đích</string>
+    <string name="quick_settings_description">Cùng các cài đặt như trên trang riêng của chúng, gom theo mục đích. Mọi thứ khác nằm trong các mục của Cài đặt.</string>
+    <string name="quick_settings_keyboard_light">Đèn bàn phím</string>
     <string name="settings_typing_description">Gợi ý và tự sửa, chữ hoa và dấu câu, mở rộng văn bản, biến thể, phím chỉnh sửa, chế độ điều hướng</string>
     <string name="settings_modifiers_sym_title">Phím bổ trợ &amp; SYM</string>
     <string name="settings_modifiers_sym_description">Chạm, khóa và nhấn giữ, trang SYM, phím tắt, chế độ điều hướng</string>

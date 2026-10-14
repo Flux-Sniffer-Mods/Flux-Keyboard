@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Ստեղնաշարեր և դասավորություններ</string>
     <string name="settings_keyboards_layouts_description">Մուտքագրման լեզուներ, ստեղնաշարեր և սարքեր, ստեղնաշարի ցուցադրում</string>
     <string name="settings_typing_title">Մուտքագրում</string>
+    <string name="quick_settings_title">Արագ կարգավորումներ</string>
+    <string name="quick_settings_row_description">Ամենաշատ օգտագործվող անջատիչները՝ խմբավորված ըստ նպատակի</string>
+    <string name="quick_settings_description">Նույն կարգավորումները, ինչ իրենց էջերում, հավաքված ըստ նպատակի։ Մնացածը Կարգավորումների բաժիններում է։</string>
+    <string name="quick_settings_keyboard_light">Ստեղնաշարի լույս</string>
     <string name="settings_typing_description">Առաջարկներ և ինքնաշտկում, մեծատառեր և կետադրություն, տեքստի ընդլայնում, տարբերակներ, խմբագրման ստեղներ, նավիգացիայի ռեժիմ</string>
     <string name="settings_modifiers_sym_title">Փոփոխիչներ և SYM</string>
     <string name="settings_modifiers_sym_description">Հպում, կողպում և երկար սեղմում, SYM էջեր, ստեղնային դյուրանցումներ, նավիգացիայի ռեժիմ</string>

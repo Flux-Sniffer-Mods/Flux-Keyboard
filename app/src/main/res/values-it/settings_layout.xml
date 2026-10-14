@@ -3,6 +3,10 @@
     <string name="settings_keyboards_layouts_title">Tastiere e layout</string>
     <string name="settings_keyboards_layouts_description">Lingue di input, tastiere e dispositivi, mostrare la tastiera</string>
     <string name="settings_typing_title">Digitazione</string>
+    <string name="quick_settings_title">Impostazioni rapide</string>
+    <string name="quick_settings_row_description">Gli interruttori più usati, raggruppati per scopo</string>
+    <string name="quick_settings_description">Le stesse impostazioni delle loro pagine, raccolte per scopo. Tutto il resto è nelle sezioni delle Impostazioni.</string>
+    <string name="quick_settings_keyboard_light">Luce della tastiera</string>
     <string name="settings_typing_description">Suggerimenti e correzione automatica, maiuscole e punteggiatura, espansione testo, varianti, tasti di modifica, Nav Mode</string>
     <string name="settings_modifiers_sym_title">Modificatori e SYM</string>
     <string name="settings_modifiers_sym_description">Tocco, blocco e pressione lunga, pagine SYM, scorciatoie, Nav Mode</string>

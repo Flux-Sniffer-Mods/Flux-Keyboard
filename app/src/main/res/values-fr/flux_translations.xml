@@ -388,6 +388,10 @@
     <string name="settings_keyboards_layouts_title">Claviers et dispositions</string>
     <string name="settings_keyboards_layouts_description">Langues de saisie, claviers et appareils, affichage du clavier</string>
     <string name="settings_typing_title">Saisie</string>
+    <string name="quick_settings_title">Réglages rapides</string>
+    <string name="quick_settings_row_description">Les interrupteurs les plus utilisés, regroupés selon leur usage</string>
+    <string name="quick_settings_description">Les mêmes réglages que sur leurs propres pages, regroupés selon leur usage. Tout le reste se trouve dans les sections des Réglages.</string>
+    <string name="quick_settings_keyboard_light">Éclairage du clavier</string>
     <string name="settings_typing_description">Suggestions et correction automatique, majuscules et ponctuation, expansion de texte, variantes, touches d’édition, mode navigation</string>
     <string name="settings_modifiers_sym_title">Modificateurs et SYM</string>
     <string name="settings_modifiers_sym_description">Appui, verrouillage et appui long, pages SYM, raccourcis clavier, mode navigation</string>
