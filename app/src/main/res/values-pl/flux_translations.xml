@@ -2025,4 +2025,9 @@
     <string name="dual_screens_note_other">%1$s trzyma układ ekranów w swoich prywatnych ustawieniach, do których Flux Keyboard nie sięga: ustaw go w ustawieniach lub menu gry %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu pokazuje ekran Wii U GamePada z menu w grze (Show pad), tam gdzie mówią jego ustawienia (General). Trzyma oba w prywatnych ustawieniach, więc Flux Keyboard nie może ich ustawić dla każdej gry.</string>
     <string name="game_remap_tap_to_clear">Klawisze teraz (dotknij jednego, by go usunąć):</string>
+    <string name="stream_quiet">Dźwięk telefonu podczas strumieniowania</string>
+    <string name="stream_quiet_off">Gra jak zwykle</string>
+    <string name="stream_quiet_game">Bez dźwięku gry</string>
+    <string name="stream_quiet_all">Wszystko wyciszone</string>
+    <string name="stream_quiet_description">Telewizor dostaje dźwięk gry niezależnie od tego ustawienia. Bez dźwięku gry ustawia głośność multimediów telefonu na zero podczas strumieniowania; Wszystko wyciszone wycisza też powiadomienia, dzwonek i dźwięki systemowe (połączenia i wiadomości wibrują). Alarmy nadal dzwonią. Po zakończeniu wszystko wraca do poprzedniego stanu.</string>
 </resources>

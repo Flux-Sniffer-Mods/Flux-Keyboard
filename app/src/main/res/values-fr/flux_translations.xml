@@ -2019,4 +2019,9 @@
     <string name="dual_screens_note_other">%1$s garde la disposition de ses écrans dans ses réglages privés, que Flux Keyboard ne peut pas atteindre : réglez-la dans les réglages ou le menu en jeu de %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu affiche l\'écran du Wii U GamePad depuis son menu en jeu (Show pad), placé selon ses réglages (General). Il garde les deux dans ses réglages privés, donc Flux Keyboard ne peut pas les régler par jeu.</string>
     <string name="game_remap_tap_to_clear">Touches actuelles (touchez-en une pour la retirer) :</string>
+    <string name="stream_quiet">Son du téléphone pendant le stream</string>
+    <string name="stream_quiet_off">Joue comme d\'habitude</string>
+    <string name="stream_quiet_game">Son du jeu coupé</string>
+    <string name="stream_quiet_all">Tous les sons coupés</string>
+    <string name="stream_quiet_description">La télé reçoit le son du jeu quel que soit ce réglage. Son du jeu coupé met le volume multimédia du téléphone à zéro pendant un stream ; Tous les sons coupés coupe aussi les notifications, la sonnerie et les sons système (appels et messages vibrent). Les alarmes sonnent toujours. Tout revient comme avant à la fin du stream.</string>
 </resources>

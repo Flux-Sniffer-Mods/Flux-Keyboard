@@ -1481,4 +1481,9 @@
     <string name="dual_screens_note_other">%1$s speichert sein Bildschirmlayout in eigenen privaten Einstellungen, die Flux Keyboard nicht erreicht: Stelle es in den Einstellungen oder im Spielmenü von %1$s ein.</string>
     <string name="dual_screens_note_cemu">Cemu zeigt den Bildschirm des Wii U GamePads über sein Spielmenü (Show pad), dort platziert, wo seine Einstellungen (General) es sagen. Beides liegt in seinen privaten Einstellungen, daher kann Flux Keyboard es nicht pro Spiel setzen.</string>
     <string name="game_remap_tap_to_clear">Tasten darauf (tippe eine an, um sie zu entfernen):</string>
+    <string name="stream_quiet">Ton des Handys beim Streamen</string>
+    <string name="stream_quiet_off">Spielt wie gewohnt</string>
+    <string name="stream_quiet_game">Spielton aus</string>
+    <string name="stream_quiet_all">Alle Töne aus</string>
+    <string name="stream_quiet_description">Der Fernseher bekommt den Spielton unabhängig von dieser Einstellung. Spielton aus dreht die Medienlautstärke des Handys während eines Streams auf null; Alle Töne aus stummt auch Benachrichtigungen, Klingelton und Systemtöne (Anrufe und Nachrichten vibrieren). Wecker klingeln weiterhin. Nach dem Stream ist alles wieder wie vorher.</string>
 </resources>

@@ -2025,4 +2025,9 @@
     <string name="dual_screens_note_other">%1$s зберігає розташування екранів у своїх закритих налаштуваннях, до яких Flux Keyboard не дістає: задайте його в налаштуваннях або ігровому меню %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu показує екран Wii U GamePad з ігрового меню (Show pad), там, де вказано в його налаштуваннях (General). Обидва параметри зберігаються в його закритих налаштуваннях, тож Flux Keyboard не може задати їх для кожної гри.</string>
     <string name="game_remap_tap_to_clear">Клавіші зараз (торкніться однієї, щоб прибрати її):</string>
+    <string name="stream_quiet">Звук телефона під час трансляції</string>
+    <string name="stream_quiet_off">Грає як зазвичай</string>
+    <string name="stream_quiet_game">Звук гри вимкнено</string>
+    <string name="stream_quiet_all">Усі звуки вимкнено</string>
+    <string name="stream_quiet_description">Телевізор отримує звук гри за будь-якого налаштування. «Звук гри вимкнено» знижує гучність медіа на телефоні до нуля під час трансляції; «Усі звуки вимкнено» також глушить сповіщення, дзвінок і системні звуки (дзвінки й повідомлення вібрують). Будильники звучать. Після трансляції все повертається як було.</string>
 </resources>

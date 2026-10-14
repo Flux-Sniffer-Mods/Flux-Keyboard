@@ -1521,4 +1521,9 @@
     <string name="dual_screens_note_other">%1$s tiene la disposizione degli schermi nelle sue impostazioni private, che Flux Keyboard non raggiunge: impostala nelle impostazioni o nel menu di gioco di %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu mostra lo schermo del Wii U GamePad dal suo menu di gioco (Show pad), dove dicono le sue impostazioni (General). Tiene entrambi nelle impostazioni private, quindi Flux Keyboard non può impostarli per gioco.</string>
     <string name="game_remap_tap_to_clear">Tasti assegnati (toccane uno per toglierlo):</string>
+    <string name="stream_quiet">Audio del telefono durante lo streaming</string>
+    <string name="stream_quiet_off">Suona come sempre</string>
+    <string name="stream_quiet_game">Audio del gioco spento</string>
+    <string name="stream_quiet_all">Tutto in silenzio</string>
+    <string name="stream_quiet_description">La TV riceve l\'audio del gioco qualunque sia questa impostazione. Audio del gioco spento porta a zero il volume multimediale del telefono durante uno stream; Tutto in silenzio silenzia anche notifiche, suoneria e suoni di sistema (chiamate e messaggi vibrano). Le sveglie suonano comunque. Tutto torna com\'era alla fine dello stream.</string>
 </resources>

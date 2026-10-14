@@ -2007,4 +2007,9 @@
     <string name="dual_screens_note_other">%1$s giữ bố cục màn hình trong cài đặt riêng tư của nó, mà Flux Keyboard không với tới được: hãy đặt trong cài đặt hoặc menu trong trò chơi của %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu hiển thị màn hình của Wii U GamePad từ menu trong trò chơi (Show pad), đặt ở vị trí theo cài đặt của nó (General). Nó giữ cả hai trong cài đặt riêng tư, nên Flux Keyboard không thể đặt theo từng trò chơi.</string>
     <string name="game_remap_tap_to_clear">Các phím hiện tại (chạm vào một phím để gỡ):</string>
+    <string name="stream_quiet">Âm thanh điện thoại khi phát trực tiếp</string>
+    <string name="stream_quiet_off">Phát như bình thường</string>
+    <string name="stream_quiet_game">Tắt âm thanh trò chơi</string>
+    <string name="stream_quiet_all">Tắt mọi âm thanh</string>
+    <string name="stream_quiet_description">TV vẫn nhận âm thanh trò chơi dù đặt thế nào. Tắt âm thanh trò chơi đưa âm lượng đa phương tiện của điện thoại về 0 khi đang phát; Tắt mọi âm thanh còn tắt cả thông báo, chuông và âm thanh hệ thống (cuộc gọi và tin nhắn rung). Báo thức vẫn kêu. Mọi thứ trở lại như cũ khi kết thúc phát.</string>
 </resources>
