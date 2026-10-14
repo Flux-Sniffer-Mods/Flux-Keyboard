@@ -1989,6 +1989,9 @@
     <string name="game_remap_list">Показать списком</string>
     <string name="game_remap_reset">Сбросить все клавиши</string>
     <string name="game_remap_reset_description">Каждая клавиша возвращается к кнопке раскладки</string>
+    <string name="game_remap_view_keyboard">Клавиатура</string>
+    <string name="game_remap_view_controller">Контроллер</string>
+    <string name="game_remap_controller_description">Каждая кнопка показывает клавиши, которые её нажимают. Нажмите на кнопку, чтобы выбрать её клавишу, отдельно или с модификатором: клавиши, которые нажимали её раньше, больше ничего не нажимают.</string>
     <string name="game_mode_screen_upright">Держать игру вертикально</string>
     <string name="game_mode_screen_upright_description">Держит телефон и игру вертикально, что бы ни запрашивала игра. Для эмуляторов DS и 3DS: их два экрана один над другим.</string>
     <string name="game_mode_bottom_screen">Нижний экран</string>

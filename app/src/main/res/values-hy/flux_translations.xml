@@ -1977,6 +1977,9 @@
     <string name="game_remap_list">Ցույց տալ ցանկով</string>
     <string name="game_remap_reset">Վերակայել բոլոր ստեղները</string>
     <string name="game_remap_reset_description">Յուրաքանչյուր ստեղն վերադառնում է դասավորության կոճակին</string>
+    <string name="game_remap_view_keyboard">Ստեղնաշար</string>
+    <string name="game_remap_view_controller">Կարգավար</string>
+    <string name="game_remap_controller_description">Յուրաքանչյուր կոճակ ցույց է տալիս այն սեղմող ստեղները։ Հպիր կոճակին՝ նրա ստեղնն ընտրելու համար, միայնակ կամ փոփոխիչով․ նախկինում այն սեղմող ստեղներն այլևս ոչինչ չեն սեղմում։</string>
     <string name="game_mode_screen_upright">Խաղը պահել ուղղահայաց</string>
     <string name="game_mode_screen_upright_description">Հեռախոսը և խաղը պահում է ուղղահայաց՝ անկախ խաղի պահանջից։ DS և 3DS էմուլյատորների համար՝ նրանց երկու էկրանները մեկը մյուսի վրա։</string>
     <string name="game_mode_bottom_screen">Ներքևի էկրան</string>

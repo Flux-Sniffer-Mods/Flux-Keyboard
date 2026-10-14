@@ -1445,6 +1445,9 @@
     <string name="game_remap_list">Als Liste zeigen</string>
     <string name="game_remap_reset">Alle Tasten zurücksetzen</string>
     <string name="game_remap_reset_description">Jede Taste zurück auf den Knopf des Layouts</string>
+    <string name="game_remap_view_keyboard">Tastatur</string>
+    <string name="game_remap_view_controller">Controller</string>
+    <string name="game_remap_controller_description">Jeder Knopf zeigt die Tasten, die ihn drücken. Tippe auf einen Knopf, um seine Taste zu wählen, allein oder mit einer Zusatztaste: Die Tasten, die ihn vorher gedrückt haben, drücken dann nichts mehr.</string>
     <string name="game_mode_screen_upright">Spiel aufrecht halten</string>
     <string name="game_mode_screen_upright_description">Hält Telefon und Spiel aufrecht, egal was das Spiel verlangt. Für DS- und 3DS-Emulatoren: ihre zwei Bildschirme übereinander.</string>
     <string name="game_mode_bottom_screen">Unterer Bildschirm</string>

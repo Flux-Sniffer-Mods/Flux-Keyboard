@@ -1983,6 +1983,9 @@
     <string name="game_remap_list">Afficher en liste</string>
     <string name="game_remap_reset">Réinitialiser toutes les touches</string>
     <string name="game_remap_reset_description">Chaque touche revient au bouton de la disposition</string>
+    <string name="game_remap_view_keyboard">Clavier</string>
+    <string name="game_remap_view_controller">Manette</string>
+    <string name="game_remap_controller_description">Chaque bouton montre les touches qui l’actionnent. Touche un bouton pour choisir sa touche, seule ou avec un modificateur : les touches qui l’actionnaient avant n’actionnent alors plus rien.</string>
     <string name="game_mode_screen_upright">Garder le jeu à la verticale</string>
     <string name="game_mode_screen_upright_description">Garde le téléphone et le jeu à la verticale, quoi que demande le jeu. Pour les émulateurs DS et 3DS : leurs deux écrans l\'un au-dessus de l\'autre.</string>
     <string name="game_mode_bottom_screen">Écran du bas</string>

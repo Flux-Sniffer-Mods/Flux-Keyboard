@@ -1989,6 +1989,9 @@
     <string name="game_remap_list">Pokaż jako listę</string>
     <string name="game_remap_reset">Przywróć wszystkie klawisze</string>
     <string name="game_remap_reset_description">Każdy klawisz wraca do przycisku z układu</string>
+    <string name="game_remap_view_keyboard">Klawiatura</string>
+    <string name="game_remap_view_controller">Kontroler</string>
+    <string name="game_remap_controller_description">Każdy przycisk pokazuje klawisze, które go naciskają. Dotknij przycisku, aby wybrać jego klawisz, sam lub z modyfikatorem: klawisze, które naciskały go wcześniej, nie naciskają już niczego.</string>
     <string name="game_mode_screen_upright">Trzymaj grę pionowo</string>
     <string name="game_mode_screen_upright_description">Utrzymuje telefon i grę w pionie, niezależnie od tego, czego chce gra. Dla emulatorów DS i 3DS: ich dwa ekrany jeden nad drugim.</string>
     <string name="game_mode_bottom_screen">Dolny ekran</string>
