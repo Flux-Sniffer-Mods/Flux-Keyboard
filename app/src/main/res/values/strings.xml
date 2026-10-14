@@ -1644,7 +1644,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="flux_gifs_offline_note">Offline mode is on, so GIF search is off (Settings → Privacy &amp; system → Offline mode).</string>
     <string name="search_key_title">Search key</string>
     <string name="search_key_description">On the emoji layer and the symbols pages this key opens search; in the emoji picker and GIF search it puts typing into the search. A unless you change it; it can’t be the Recents or GIF key.</string>
-    <string name="root_backlight_brightness_not_kept">This phone doesn\'t keep a keyboard brightness set through Shizuku: the light still goes on and off with the screen, at the brightness in the phone\'s own settings.</string>
+    <string name="root_backlight_brightness_not_kept">This phone doesn\'t keep a keyboard brightness set through Shell access: the light still goes on and off with the screen, at the brightness in the phone\'s own settings.</string>
     <string name="density_section">Screen size</string>
     <string name="density_default_title">Default screen size</string>
     <string name="density_tablet_title">Tablet screen size</string>

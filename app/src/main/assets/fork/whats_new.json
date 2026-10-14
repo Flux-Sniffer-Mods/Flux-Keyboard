@@ -792,6 +792,9 @@
     },
     {
       "text": "README, changelog and settings text brought up to date: streaming described as it works now, the official GameHub's Export for frontend explained where the game folders are made, and GameHub Lite named among the launchers"
+    },
+    {
+      "text": "Keyboard swipes' and the keyboard light's notes say Shell access rather than Shizuku, and Install Shizuku only shows when the built-in shell isn't set up"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

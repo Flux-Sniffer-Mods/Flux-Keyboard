@@ -23,7 +23,7 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 ## Only in Flux Keyboard
 
 ### The trackpad picks your words
-- **Swipe on the keys to pick a suggestion**: left, up or right for each of the three, down to delete a word. It learns how far you swipe, and with Shizuku it works in every app, not only the ones the phone's Scroll assistant scrolls.
+- **Swipe on the keys to pick a suggestion**: left, up or right for each of the three, down to delete a word. It learns how far you swipe, and with Shell access it works in every app, not only the ones the phone's Scroll assistant scrolls.
 
 <p align="center">
   <img src="docs/cards/suggestions.webp" alt="Suggestions as you type. In the bar above the keys, picked with a swipe on the trackpad." width="840">
@@ -65,7 +65,7 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 - **Keyboard light that follows the screen**: on and off with it, following its brightness as it changes, or flashing for notifications.
 
 <p align="center">
-  <img src="docs/cards/keyboard-light.webp" alt="The keyboard light, no root. On and off with the screen, following its brightness as it changes, or flashing for notifications, through Shizuku." width="840">
+  <img src="docs/cards/keyboard-light.webp" alt="The keyboard light, no root. On and off with the screen, following its brightness as it changes, or flashing for notifications, through the built-in shell." width="840">
 </p>
 
 - **Shortcuts the phone hides away**: force-stop the app in front, toggle Battery Saver or cut an app off the network, from a key.
@@ -117,7 +117,7 @@ development continues as [Plektra](https://github.com/pkb-rocks/plektra).
   <img src="docs/cards/themes.webp" alt="Themes. One for light mode and one for dark, colours from your wallpaper, and every colour editable." width="840">
 </p>
 
-- **Recommended settings**: the setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates as a "from → to" list, with a tutorial that walks through permissions, Shizuku and the rest.
+- **Recommended settings**: the setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates as a "from → to" list, with a tutorial that walks through permissions, Shell access and the rest.
 
 <p align="center">
   <img src="docs/cards/recommended.webp" alt="Recommended settings. The setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates." width="840">
@@ -255,7 +255,7 @@ and in the [upstream repository](https://github.com/palsoftware/pastiera). Third
 are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and the fork's changes in
 [FORK_CHANGES.md](FORK_CHANGES.md).
 
-The Titan 2 Elite's keyboard light through Shizuku (the vendor service's timeout, the
+The Titan 2 Elite's keyboard light through Shell access (the vendor service's timeout, the
 never-off value and the broadcast that turns the light off) follows what
 [PhysiBoard](https://github.com/brobata/physiboard) by brobata found and documented on the
 phone. Thank you to brobata.
