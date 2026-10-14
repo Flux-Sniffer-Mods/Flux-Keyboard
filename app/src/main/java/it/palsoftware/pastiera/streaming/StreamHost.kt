@@ -84,10 +84,24 @@ object StreamHost {
         return (listOf(0x02) + (0 until 5).map { digest[it].toInt() and 0xFF }).joinToString(":") { "%02x".format(it) }
     }
 
-    fun start(context: Context) {
-        if (running) return
+    fun start(context: Context) = start(context, 0)
+
+    /** Started again from scratch: the phone's address changed, or Moonlight's Wake arrived. */
+    fun restart(context: Context) {
+        if (session != null) return
+        Thread {
+            stop()
+            Thread.sleep(500)
+            start(context)
+        }.apply { isDaemon = true; start() }
+    }
+
+    private fun start(context: Context, attempt: Int) {
+        // Running only counts while it still answers (its server open, or still opening)
+        if (running && http?.isClosed != true) return
         app = context.applicationContext
         running = true
+        watchNetwork(app)
         Thread {
             runCatching {
                 identity = StreamCert.load(dir(app))
@@ -97,8 +111,10 @@ object StreamHost {
                 }.also { serve(it, secure = true) }
                 announce()
             }.onFailure {
-                FluxLog.w(TAG, "host couldn't start: $it")
+                FluxLog.w(TAG, "host couldn't start (try ${attempt + 1}): $it")
                 stop()
+                // Its ports a moment from free (streaming just turned off): tried again
+                if (attempt < 5) { Thread.sleep(3_000L); start(app, attempt + 1) }
             }
         }.apply { isDaemon = true; start() }
     }
@@ -110,6 +126,32 @@ object StreamHost {
         runCatching { http?.close() }; http = null
         runCatching { https?.close() }; https = null
         pin?.cancel(true); pin = null; pairing = null; pairingDevice = null
+    }
+
+    @Volatile private var watching = false
+    @Volatile private var addresses = ""
+
+    /**
+     * The phone's address watched: when Wi-Fi comes back or the address changes, the host starts
+     * again and is announced again, so Moonlight finds it without streaming turned off and on.
+     */
+    private fun watchNetwork(context: Context) {
+        if (watching) return
+        watching = true
+        runCatching {
+            context.getSystemService(android.net.ConnectivityManager::class.java)?.registerDefaultNetworkCallback(
+                object : android.net.ConnectivityManager.NetworkCallback() {
+                    override fun onLinkPropertiesChanged(network: android.net.Network, properties: android.net.LinkProperties) {
+                        val now = properties.linkAddresses.joinToString { it.address.hostAddress.orEmpty() }
+                        val before = addresses
+                        addresses = now
+                        if (before.isNotEmpty() && before != now && running) {
+                            FluxLog.w(TAG, "the phone's address changed ($before -> $now): host started again")
+                            restart(context)
+                        }
+                    }
+                })
+        }.onFailure { FluxLog.w(TAG, "the network can't be watched: $it") }
     }
 
     /** On the network as a GameStream host, so Moonlight lists it by itself. */

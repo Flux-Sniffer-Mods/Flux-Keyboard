@@ -42,7 +42,7 @@ object StreamWake {
         }.onFailure { FluxLog.w(TAG, "broadcasts can't be let through: $it") }
         // Android's battery saving (Doze) cuts an app off the network while the phone sleeps, so a
         // wake would never arrive: Flux Keyboard let through, once the shell is up
-        if (StreamHost.pairedCount(app) > 0) Thread({
+        if (StreamHost.pairedCount(app) > 0 || StreamHostService.alwaysAvailable(app)) Thread({
             repeat(30) {
                 if (AdbShell.available()) {
                     val out = AdbShell.run("cmd deviceidle whitelist +${app.packageName} 2>&1", 5_000)
@@ -73,8 +73,10 @@ object StreamWake {
     private fun wake(context: Context) {
         // Only for a phone that streams at all: paired with a Moonlight client before
         if (StreamHost.pairedCount(context) == 0) { FluxLog.w(TAG, "woken, but no Moonlight client is paired"); return }
-        // Its service, with its notification; when Android won't start a service from the
+        // The host started afresh, so Moonlight sees it at once (a host left from before may no
+        // longer answer), then its service, with its notification; when Android won't start a service from the
         // background, the streaming itself starts here, in the keyboard's process
+        StreamHost.restart(context)
         runCatching { StreamHostService.setEnabled(context, true) }.onFailure {
             FluxLog.w(TAG, "the streaming service couldn't start ($it): streaming without it")
             StreamHost.start(context)

@@ -1147,6 +1147,9 @@
     },
     {
       "text": "Gaming mode: a game from the Play Store takes W A Z D as a controller's stick, the way it takes the buttons (games such as Infinity Nikki hide their on-screen stick once a controller is used, so a finger dragged there did nothing); on-screen sticks are for games with keys placed on their screen, or placed by hand"
+    },
+    {
+      "text": "Stream to Moonlight: the phone starts answering again by itself when its Wi-Fi comes back or its address changes, when streaming is turned off with Always available on, and when Moonlight's Wake arrives, so it no longer shows offline until streaming is turned off and on"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

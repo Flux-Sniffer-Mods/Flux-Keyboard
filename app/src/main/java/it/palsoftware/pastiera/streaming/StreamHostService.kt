@@ -54,9 +54,9 @@ class StreamHostService : Service() {
     }
 
     override fun onDestroy() {
-        StreamHost.stop()
-        // Still answering Moonlight from the keyboard, when the phone is always listed
-        if (alwaysAvailable(this)) StreamHost.start(applicationContext)
+        // Still answering Moonlight from the keyboard, when the phone is always listed (started
+        // again, so it answers as freshly as when streaming is turned on)
+        if (alwaysAvailable(this)) StreamHost.restart(applicationContext) else StreamHost.stop()
         super.onDestroy()
     }
 
