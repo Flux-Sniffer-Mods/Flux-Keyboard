@@ -2030,4 +2030,24 @@
     <string name="stream_quiet_game">Звук гри вимкнено</string>
     <string name="stream_quiet_all">Усі звуки вимкнено</string>
     <string name="stream_quiet_description">Телевізор отримує звук гри за будь-якого налаштування. «Звук гри вимкнено» знижує гучність медіа на телефоні до нуля під час трансляції; «Усі звуки вимкнено» також глушить сповіщення, дзвінок і системні звуки (дзвінки й повідомлення вібрують). Будильники звучать. Після трансляції все повертається як було.</string>
+    <string name="tv_title">Телевізор</string>
+    <string name="tv_description_none">Знайдіть телевізор LG у мережі Wi-Fi. Flux Keyboard зможе вмикати його й відкривати Moonlight одразу в грі, вибраній на телефоні.</string>
+    <string name="tv_description_set">%1$s: гра, вибрана під час трансляції, запускається там. Торкніться, щоб знайти знову або забути.</string>
+    <string name="tv_finding">Шукаю телевізори у Wi-Fi…</string>
+    <string name="tv_none_found">Телевізор LG не знайдено. Він має бути увімкнений і в тій самій мережі Wi-Fi.</string>
+    <string name="tv_pick">Виберіть телевізор</string>
+    <string name="tv_connecting">Підключаюся до %1$s…</string>
+    <string name="tv_accept">Дозвольте Flux Keyboard на %1$s</string>
+    <string name="tv_waking">Вмикаю %1$s…</string>
+    <string name="tv_set_up">%1$s налаштовано. Один раз з\'єднайте на ньому Moonlight з цим телефоном, якщо ще не зробили.</string>
+    <string name="tv_setup_failed">Не вдалося налаштувати %1$s. Перевірте, що він увімкнений, і спробуйте знову.</string>
+    <string name="tv_forget">Забути</string>
+    <string name="tv_find_again">Знайти знову</string>
+    <string name="tv_menu_description">Flux Keyboard вмикає цей телевізор і відкриває на ньому Moonlight у вибраній грі. Щоб вмикати його, у налаштуваннях телевізора потрібна опція «Увімкнення через Wi-Fi» (або Mobile TV On).</string>
+    <string name="tv_games_on_tv">Запускати ігри на телевізорі</string>
+    <string name="tv_games_on_tv_description">Коли трансляція увімкнена, гра, вибрана тут, запускається на телевізорі через Moonlight. Без трансляції ігри йдуть на телефоні.</string>
+    <string name="tv_starting">Запускаю %1$s на %2$s…</string>
+    <string name="tv_no_answer">%1$s не відповів. Увімкніть його або увімкніть «Увімкнення через Wi-Fi» (Mobile TV On) у його налаштуваннях.</string>
+    <string name="tv_refused">%1$s не дозволив Flux Keyboard. Підтвердьте на телевізорі, коли він запитає.</string>
+    <string name="tv_failed">Не вдалося відкрити Moonlight на %1$s. Він там встановлений?</string>
 </resources>

@@ -2024,4 +2024,24 @@
     <string name="stream_quiet_game">Son du jeu coupé</string>
     <string name="stream_quiet_all">Tous les sons coupés</string>
     <string name="stream_quiet_description">La télé reçoit le son du jeu quel que soit ce réglage. Son du jeu coupé met le volume multimédia du téléphone à zéro pendant un stream ; Tous les sons coupés coupe aussi les notifications, la sonnerie et les sons système (appels et messages vibrent). Les alarmes sonnent toujours. Tout revient comme avant à la fin du stream.</string>
+    <string name="tv_title">Télé</string>
+    <string name="tv_description_none">Trouvez une télé LG sur le Wi-Fi. Flux Keyboard pourra ensuite l\'allumer et ouvrir Moonlight directement dans un jeu choisi sur le téléphone.</string>
+    <string name="tv_description_set">%1$s : choisir un jeu pendant le stream le lance là-bas. Touchez pour la rechercher à nouveau ou l\'oublier.</string>
+    <string name="tv_finding">Recherche de télés sur le Wi-Fi…</string>
+    <string name="tv_none_found">Aucune télé LG trouvée. Elle doit être allumée et sur le même Wi-Fi.</string>
+    <string name="tv_pick">Choisissez votre télé</string>
+    <string name="tv_connecting">Connexion à %1$s…</string>
+    <string name="tv_accept">Acceptez Flux Keyboard sur %1$s</string>
+    <string name="tv_waking">Allumage de %1$s…</string>
+    <string name="tv_set_up">%1$s est configurée. Associez Moonlight dessus avec ce téléphone une fois, si ce n\'est pas fait.</string>
+    <string name="tv_setup_failed">Impossible de configurer %1$s. Vérifiez qu\'elle est allumée, puis réessayez.</string>
+    <string name="tv_forget">Oublier</string>
+    <string name="tv_find_again">Rechercher à nouveau</string>
+    <string name="tv_menu_description">Flux Keyboard allume cette télé et y ouvre Moonlight dans le jeu choisi. Pour l\'allumer, la télé doit avoir « Allumer via le Wi-Fi » (ou Mobile TV On) dans ses réglages.</string>
+    <string name="tv_games_on_tv">Lancer les jeux sur la télé</string>
+    <string name="tv_games_on_tv_description">Stream activé, un jeu choisi ici démarre sur la télé via Moonlight. Stream désactivé, les jeux se jouent sur le téléphone.</string>
+    <string name="tv_starting">Lancement de %1$s sur %2$s…</string>
+    <string name="tv_no_answer">%1$s n\'a pas répondu. Allumez-la ou activez « Allumer via le Wi-Fi » (Mobile TV On) dans ses réglages.</string>
+    <string name="tv_refused">%1$s n\'a pas autorisé Flux Keyboard. Acceptez sur la télé quand c\'est demandé.</string>
+    <string name="tv_failed">Moonlight n\'a pas pu s\'ouvrir sur %1$s. Est-il installé dessus ?</string>
 </resources>

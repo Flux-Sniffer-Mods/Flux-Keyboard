@@ -2030,4 +2030,24 @@
     <string name="stream_quiet_game">Bez dźwięku gry</string>
     <string name="stream_quiet_all">Wszystko wyciszone</string>
     <string name="stream_quiet_description">Telewizor dostaje dźwięk gry niezależnie od tego ustawienia. Bez dźwięku gry ustawia głośność multimediów telefonu na zero podczas strumieniowania; Wszystko wyciszone wycisza też powiadomienia, dzwonek i dźwięki systemowe (połączenia i wiadomości wibrują). Alarmy nadal dzwonią. Po zakończeniu wszystko wraca do poprzedniego stanu.</string>
+    <string name="tv_title">Telewizor</string>
+    <string name="tv_description_none">Znajdź telewizor LG w sieci Wi-Fi. Flux Keyboard będzie mógł go włączać i otwierać Moonlight od razu w grze wybranej na telefonie.</string>
+    <string name="tv_description_set">%1$s: wybranie gry podczas strumieniowania uruchamia ją tam. Dotknij, by wyszukać ponownie lub zapomnieć.</string>
+    <string name="tv_finding">Szukam telewizorów w Wi-Fi…</string>
+    <string name="tv_none_found">Nie znaleziono telewizora LG. Musi być włączony i w tej samej sieci Wi-Fi.</string>
+    <string name="tv_pick">Wybierz swój telewizor</string>
+    <string name="tv_connecting">Łączenie z %1$s…</string>
+    <string name="tv_accept">Zaakceptuj Flux Keyboard na %1$s</string>
+    <string name="tv_waking">Włączam %1$s…</string>
+    <string name="tv_set_up">%1$s jest skonfigurowany. Sparuj na nim Moonlight z tym telefonem raz, jeśli jeszcze tego nie zrobiono.</string>
+    <string name="tv_setup_failed">Nie udało się skonfigurować %1$s. Sprawdź, czy jest włączony, i spróbuj ponownie.</string>
+    <string name="tv_forget">Zapomnij</string>
+    <string name="tv_find_again">Szukaj ponownie</string>
+    <string name="tv_menu_description">Flux Keyboard włącza ten telewizor i otwiera na nim Moonlight w wybranej grze. Aby go włączać, telewizor potrzebuje opcji „Włącz przez Wi-Fi” (lub Mobile TV On) w ustawieniach.</string>
+    <string name="tv_games_on_tv">Uruchamiaj gry na telewizorze</string>
+    <string name="tv_games_on_tv_description">Przy włączonym strumieniowaniu gra wybrana tutaj uruchamia się na telewizorze przez Moonlight. Bez strumieniowania gry działają na telefonie.</string>
+    <string name="tv_starting">Uruchamiam %1$s na %2$s…</string>
+    <string name="tv_no_answer">%1$s nie odpowiada. Włącz go lub włącz „Włącz przez Wi-Fi” (Mobile TV On) w jego ustawieniach.</string>
+    <string name="tv_refused">%1$s nie zezwolił na Flux Keyboard. Zaakceptuj na telewizorze, gdy zapyta.</string>
+    <string name="tv_failed">Nie udało się otworzyć Moonlight na %1$s. Czy jest tam zainstalowany?</string>
 </resources>

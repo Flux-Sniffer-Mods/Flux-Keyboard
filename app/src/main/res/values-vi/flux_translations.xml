@@ -2012,4 +2012,24 @@
     <string name="stream_quiet_game">Tắt âm thanh trò chơi</string>
     <string name="stream_quiet_all">Tắt mọi âm thanh</string>
     <string name="stream_quiet_description">TV vẫn nhận âm thanh trò chơi dù đặt thế nào. Tắt âm thanh trò chơi đưa âm lượng đa phương tiện của điện thoại về 0 khi đang phát; Tắt mọi âm thanh còn tắt cả thông báo, chuông và âm thanh hệ thống (cuộc gọi và tin nhắn rung). Báo thức vẫn kêu. Mọi thứ trở lại như cũ khi kết thúc phát.</string>
+    <string name="tv_title">TV</string>
+    <string name="tv_description_none">Tìm TV LG trong mạng Wi-Fi. Flux Keyboard sẽ có thể bật nó và mở Moonlight thẳng vào trò chơi bạn chọn trên điện thoại.</string>
+    <string name="tv_description_set">%1$s: chọn trò chơi khi đang phát sẽ bắt đầu nó ở đó. Chạm để tìm lại hoặc quên TV.</string>
+    <string name="tv_finding">Đang tìm TV trong Wi-Fi…</string>
+    <string name="tv_none_found">Không tìm thấy TV LG. TV cần được bật và cùng mạng Wi-Fi.</string>
+    <string name="tv_pick">Chọn TV của bạn</string>
+    <string name="tv_connecting">Đang kết nối với %1$s…</string>
+    <string name="tv_accept">Chấp nhận Flux Keyboard trên %1$s</string>
+    <string name="tv_waking">Đang bật %1$s…</string>
+    <string name="tv_set_up">Đã thiết lập %1$s. Ghép đôi Moonlight trên TV với điện thoại này một lần, nếu bạn chưa làm.</string>
+    <string name="tv_setup_failed">Không thể thiết lập %1$s. Kiểm tra TV đang bật rồi thử lại.</string>
+    <string name="tv_forget">Quên</string>
+    <string name="tv_find_again">Tìm lại</string>
+    <string name="tv_menu_description">Flux Keyboard bật TV này và mở Moonlight trên đó vào trò chơi bạn chọn. Để bật được, TV cần bật \"Bật qua Wi-Fi\" (hoặc Mobile TV On) trong cài đặt.</string>
+    <string name="tv_games_on_tv">Bắt đầu trò chơi trên TV</string>
+    <string name="tv_games_on_tv_description">Khi đang phát, trò chơi chọn ở đây sẽ bắt đầu trên TV qua Moonlight. Khi không phát, trò chơi chạy trên điện thoại.</string>
+    <string name="tv_starting">Đang bắt đầu %1$s trên %2$s…</string>
+    <string name="tv_no_answer">%1$s không phản hồi. Hãy bật TV hoặc bật \"Bật qua Wi-Fi\" (Mobile TV On) trong cài đặt của nó.</string>
+    <string name="tv_refused">%1$s không cho phép Flux Keyboard. Hãy chấp nhận trên TV khi được hỏi.</string>
+    <string name="tv_failed">Không thể mở Moonlight trên %1$s. Moonlight đã được cài trên đó chưa?</string>
 </resources>

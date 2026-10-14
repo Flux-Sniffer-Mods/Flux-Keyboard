@@ -1486,4 +1486,24 @@
     <string name="stream_quiet_game">Spielton aus</string>
     <string name="stream_quiet_all">Alle Töne aus</string>
     <string name="stream_quiet_description">Der Fernseher bekommt den Spielton unabhängig von dieser Einstellung. Spielton aus dreht die Medienlautstärke des Handys während eines Streams auf null; Alle Töne aus stummt auch Benachrichtigungen, Klingelton und Systemtöne (Anrufe und Nachrichten vibrieren). Wecker klingeln weiterhin. Nach dem Stream ist alles wieder wie vorher.</string>
+    <string name="tv_title">Fernseher</string>
+    <string name="tv_description_none">Finde einen LG-Fernseher im WLAN. Flux Keyboard kann ihn dann einschalten und Moonlight direkt mit einem Spiel öffnen, das du am Handy auswählst.</string>
+    <string name="tv_description_set">%1$s: Wählst du beim Streamen ein Spiel, startet es dort. Tippen, um ihn neu zu suchen oder zu vergessen.</string>
+    <string name="tv_finding">Suche Fernseher im WLAN…</string>
+    <string name="tv_none_found">Kein LG-Fernseher gefunden. Er muss eingeschaltet und im selben WLAN sein.</string>
+    <string name="tv_pick">Wähle deinen Fernseher</string>
+    <string name="tv_connecting">Verbinde mit %1$s…</string>
+    <string name="tv_accept">Erlaube Flux Keyboard auf %1$s</string>
+    <string name="tv_waking">Schalte %1$s ein…</string>
+    <string name="tv_set_up">%1$s ist eingerichtet. Kopple Moonlight darauf einmal mit diesem Handy, falls noch nicht geschehen.</string>
+    <string name="tv_setup_failed">%1$s konnte nicht eingerichtet werden. Prüfe, ob er an ist, und versuche es erneut.</string>
+    <string name="tv_forget">Vergessen</string>
+    <string name="tv_find_again">Neu suchen</string>
+    <string name="tv_menu_description">Flux Keyboard schaltet diesen Fernseher ein und öffnet darauf Moonlight mit dem gewählten Spiel. Zum Einschalten braucht der Fernseher „Über WLAN einschalten“ (oder „Mobile TV On“) in seinen Einstellungen.</string>
+    <string name="tv_games_on_tv">Spiele auf dem Fernseher starten</string>
+    <string name="tv_games_on_tv_description">Bei eingeschaltetem Streaming startet ein hier gewähltes Spiel über Moonlight auf dem Fernseher. Ohne Streaming laufen Spiele auf dem Handy.</string>
+    <string name="tv_starting">Starte %1$s auf %2$s…</string>
+    <string name="tv_no_answer">%1$s antwortet nicht. Schalte ihn ein oder aktiviere „Über WLAN einschalten“ (Mobile TV On) in seinen Einstellungen.</string>
+    <string name="tv_refused">%1$s hat Flux Keyboard nicht erlaubt. Bestätige es auf dem Fernseher, wenn gefragt.</string>
+    <string name="tv_failed">Moonlight konnte auf %1$s nicht geöffnet werden. Ist Moonlight dort installiert?</string>
 </resources>

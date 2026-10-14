@@ -1398,4 +1398,24 @@
     <string name="stream_quiet_game">Χωρίς ήχο παιχνιδιού</string>
     <string name="stream_quiet_all">Όλοι οι ήχοι κλειστοί</string>
     <string name="stream_quiet_description">Η τηλεόραση παίρνει τον ήχο του παιχνιδιού ό,τι κι αν ορίσεις εδώ. Χωρίς ήχο παιχνιδιού μηδενίζει την ένταση πολυμέσων του τηλεφώνου όσο παίζει μια ροή· Όλοι οι ήχοι κλειστοί σιγάζει και ειδοποιήσεις, κουδούνισμα και ήχους συστήματος (κλήσεις και μηνύματα δονούνται). Τα ξυπνητήρια ακούγονται κανονικά. Όλα επανέρχονται όταν τελειώσει η ροή.</string>
+    <string name="tv_title">Τηλεόραση</string>
+    <string name="tv_description_none">Βρες μια τηλεόραση LG στο Wi-Fi. Το Flux Keyboard μπορεί μετά να την ανοίγει και να ανοίγει το Moonlight κατευθείαν σε ένα παιχνίδι που επιλέγεις στο τηλέφωνο.</string>
+    <string name="tv_description_set">%1$s: όταν επιλέγεις παιχνίδι κατά τη ροή, ξεκινά εκεί. Πάτησε για νέα αναζήτηση ή για διαγραφή.</string>
+    <string name="tv_finding">Αναζήτηση τηλεοράσεων στο Wi-Fi…</string>
+    <string name="tv_none_found">Δεν βρέθηκε τηλεόραση LG. Πρέπει να είναι ανοιχτή και στο ίδιο Wi-Fi.</string>
+    <string name="tv_pick">Διάλεξε την τηλεόρασή σου</string>
+    <string name="tv_connecting">Σύνδεση με %1$s…</string>
+    <string name="tv_accept">Αποδέξου το Flux Keyboard στην %1$s</string>
+    <string name="tv_waking">Ενεργοποίηση της %1$s…</string>
+    <string name="tv_set_up">Η %1$s ρυθμίστηκε. Σύζευξε το Moonlight σε αυτήν με αυτό το τηλέφωνο μία φορά, αν δεν το έχεις κάνει.</string>
+    <string name="tv_setup_failed">Δεν ήταν δυνατή η ρύθμιση της %1$s. Έλεγξε ότι είναι ανοιχτή και δοκίμασε ξανά.</string>
+    <string name="tv_forget">Διαγραφή</string>
+    <string name="tv_find_again">Νέα αναζήτηση</string>
+    <string name="tv_menu_description">Το Flux Keyboard ανοίγει αυτή την τηλεόραση και το Moonlight σε αυτήν στο παιχνίδι που διαλέγεις. Για να ανοίγει, η τηλεόραση χρειάζεται το «Ενεργοποίηση μέσω Wi-Fi» (ή Mobile TV On) στις ρυθμίσεις της.</string>
+    <string name="tv_games_on_tv">Έναρξη παιχνιδιών στην τηλεόραση</string>
+    <string name="tv_games_on_tv_description">Με τη ροή ενεργή, ένα παιχνίδι που διαλέγεις εδώ ξεκινά στην τηλεόραση μέσω Moonlight. Χωρίς ροή, τα παιχνίδια παίζουν στο τηλέφωνο.</string>
+    <string name="tv_starting">Έναρξη του %1$s στην %2$s…</string>
+    <string name="tv_no_answer">Η %1$s δεν απάντησε. Άνοιξέ την ή ενεργοποίησε το «Ενεργοποίηση μέσω Wi-Fi» (Mobile TV On) στις ρυθμίσεις της.</string>
+    <string name="tv_refused">Η %1$s δεν επέτρεψε το Flux Keyboard. Αποδέξου το στην τηλεόραση όταν ερωτηθείς.</string>
+    <string name="tv_failed">Δεν ήταν δυνατό να ανοίξει το Moonlight στην %1$s. Είναι εγκατεστημένο εκεί;</string>
 </resources>
