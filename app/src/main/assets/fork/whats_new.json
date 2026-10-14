@@ -756,6 +756,9 @@
     },
     {
       "text": "Gaming mode: the screen choices are now called Landscape and Portrait; game apps stay on Landscape, DS and 3DS emulators on Portrait"
+    },
+    {
+      "text": "Gaming mode: a Screens choice for DS and 3DS games: both screens either way up, one big and one small, side by side, or one alone, written into Azahar (and the Citra builds) as the game starts, and into NooDS for all its games; Screen follows it, and so does the trackpad's bottom-screen area. melonDS, DraStic, Panda3DS and Cemu keep theirs private, so a note says where to set them"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

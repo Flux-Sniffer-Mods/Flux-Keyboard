@@ -71,12 +71,14 @@ object GameMode {
     /** The placer saved new spots: play with them from now on. */
     /**
      * Where [profile]'s bottom screen is on a [w] x [h] screen (left, top, right, bottom, shares
-     * of it): as placed, else where its emulator draws it upright by default (a 3DS's at the
+     * of it): as placed, else where the layout set for it puts it, else where its emulator draws it upright by default (a 3DS's at the
      * top, its bottom screen narrower; a DS's in the middle), else the screen's lower half.
      */
     internal fun touchArea(profile: GameProfile?, w: Float, h: Float): List<Float> {
         profile?.touchArea?.let { return it }
         if (w <= 0f || h <= 0f) return listOf(0f, 0.5f, 1f, 1f)
+        // Where Flux Keyboard put it, for a layout it set
+        DualScreens.bottomArea(profile, w, h)?.let { return it }
         return when (profile?.packages?.firstNotNullOfOrNull { GameApps.twoScreens(it) }) {
             "3DS" -> {
                 val s = minOf(w / 400f, h / 480f)
@@ -872,7 +874,7 @@ object GameMode {
         (physical.toLong() * minOf(size.first, size.second) / physicalShort).toInt().coerceIn(physical / 3, physical)
 
     /** The camera cutout's depth at the top of the upright screen, in pixels (0 without one). */
-    private fun cutoutTop(context: Context): Int = runCatching {
+    internal fun cutoutTop(context: Context): Int = runCatching {
         val display = context.getSystemService(android.hardware.display.DisplayManager::class.java)
             ?.getDisplay(android.view.Display.DEFAULT_DISPLAY)
         display?.cutout?.let { maxOf(it.safeInsetTop, it.safeInsetBottom, it.safeInsetLeft, it.safeInsetRight) } ?: 0

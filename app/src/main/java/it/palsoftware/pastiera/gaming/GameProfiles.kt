@@ -128,6 +128,8 @@ data class GameProfile(
     val keyOverrides: String? = null,
     /** Dolphin: its on-screen controls for this game ([FluxLayout.DolphinOverlay]'s name); null: as suits it. */
     val dolphinOverlay: String? = null,
+    /** A DS or 3DS game's screens ([DualScreens.Layout]'s name); null: as set in the emulator. */
+    val screens: String? = null,
     /** Dolphin: a profile chosen for the game in Dolphin itself kept, rather than Flux Keyboard's controls. */
     val keepDolphinProfile: Boolean = false
 ) {
@@ -167,6 +169,7 @@ data class GameProfile(
         if (padControls.isNotEmpty()) put("padControls", JSONObject(padControls))
         keyOverrides?.let { put("keyOverrides", it) }
         dolphinOverlay?.let { put("dolphinOverlay", it) }
+        screens?.let { put("screens", it) }
         if (keepDolphinProfile) put("keepDolphinProfile", true)
         if (pending) put("pending", true)
         if (ownScreen) put("ownScreen", true)
@@ -243,6 +246,7 @@ data class GameProfile(
                 wiiPad = json.optString("wiiPad").ifEmpty { null },
                 keyOverrides = json.optString("keyOverrides").ifEmpty { null },
                 dolphinOverlay = json.optString("dolphinOverlay").ifEmpty { null },
+                screens = json.optString("screens").ifEmpty { null },
                 keepDolphinProfile = json.optBoolean("keepDolphinProfile", false),
                 padControls = json.optJSONObject("padControls")?.let { o -> o.keys().asSequence().associateWith { o.optString(it) } }
                     ?.filterValues { it.isNotEmpty() }.orEmpty(),
@@ -378,7 +382,7 @@ object GameProfiles {
             (if (profile.ownScreen) app.copy(screen = profile.screen) else app)
                 .copy(phoneHeight = profile.phoneHeight ?: app.phoneHeight, streamHeight = profile.streamHeight ?: app.streamHeight,
                     // The game's own keys, whatever else comes from its app
-                    keyOverrides = profile.keyOverrides ?: app.keyOverrides)
+                    keyOverrides = profile.keyOverrides ?: app.keyOverrides, screens = profile.screens ?: app.screens)
         }
     }
 

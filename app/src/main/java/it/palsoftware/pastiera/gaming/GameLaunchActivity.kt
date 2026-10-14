@@ -59,6 +59,15 @@ class GameLaunchActivity : Activity() {
                 if (GameApps.emulator(pkg) == "Dolphin") runCatching {
                     FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir, profile?.takeIf { it.isGame }?.let { game -> GameProfiles.effective(this, game).copy(dolphinOverlay = game.dolphinOverlay).overlayMode }) }
                 }
+                // A DS or 3DS game's screens, as set for it (Azahar reads them as the game starts)
+                if (DualScreens.layouts(pkg).isNotEmpty()) runCatching {
+                    val effective = profile?.let { GameProfiles.effective(this, it) }
+                    DualScreens.layout(effective?.screens)?.let { layout ->
+                        val window = DualScreens.window(this, layout.landscape, effective?.phoneHeight)
+                        val ok = window != null && DualScreens.apply(pkg, layout, window)
+                        FluxLog.w("FluxGameLaunch", "screens $layout for a ${window?.first}x${window?.second} screen: ${if (ok) "written" else "settings file not found"}")
+                    }
+                }
                 // Its controls given the current layout, if they had an older one
                 runCatching { FluxLayout.refreshIfOutdated(this, pkg) }
                 // What Dolphin was given, for the crash log

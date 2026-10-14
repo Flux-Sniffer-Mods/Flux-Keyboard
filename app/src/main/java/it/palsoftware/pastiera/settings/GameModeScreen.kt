@@ -56,6 +56,7 @@ import it.palsoftware.pastiera.gaming.GameProfile
 import it.palsoftware.pastiera.gaming.GameProfiles
 import it.palsoftware.pastiera.gaming.GameApps
 import it.palsoftware.pastiera.gaming.FluxLayout
+import it.palsoftware.pastiera.gaming.DualScreens
 import it.palsoftware.pastiera.gaming.DolphinPads
 import it.palsoftware.pastiera.gaming.GameFiles
 import it.palsoftware.pastiera.gaming.GameIds
@@ -496,6 +497,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             if (current.isGame) {
                 GameArtworkRow(current)
                 ScreenChoice(current) { current = it }
+                DualScreenRows(current) { current = it }
                 ResolutionChoices(current) { current = it }
             }
             // A Dolphin Wii game: the Wii controller that suits it, set in its own Dolphin settings
@@ -550,6 +552,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 // Its tile in the Games app
                 GameArtworkRow(current)
                 ScreenChoice(current) { current = it }
+                DualScreenRows(current) { current = it }
             }
             // An emulator: Flux Keyboard's layout written into its own controller settings; other
             // apps map the keys themselves
@@ -713,6 +716,58 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
  * Nunchuk, Classic Controller, held sideways or a GameCube controller; and for any game, keys of
  * its own for that controller's buttons, drawn as the controller ([DolphinPadRemapper]).
  */
+/**
+ * A DS, 3DS or Wii U emulator's screens: which shows, which is bigger, which comes first, written
+ * into the emulator where its settings can be reached (choosing one sets Screen to suit it), else
+ * a note on where to set them.
+ */
+@Composable
+private fun DualScreenRows(profile: GameProfile, onChanged: (GameProfile) -> Unit) {
+    val context = LocalContext.current
+    val pkg = profile.packages.firstOrNull { p -> GameApps.twoScreens(p) != null || GameApps.emulator(p) == "Cemu" } ?: return
+    val appName = context.appLabel(pkg)
+    val layouts = DualScreens.layouts(pkg)
+    if (layouts.isEmpty()) {
+        Text(
+            if (GameApps.emulator(pkg) == "Cemu") stringResource(R.string.dual_screens_note_cemu)
+            else stringResource(R.string.dual_screens_note_other, appName),
+            style = MaterialTheme.typography.bodySmall
+        )
+        return
+    }
+    val labels = mapOf(
+        DualScreens.Layout.STACKED to R.string.dual_screens_stacked,
+        DualScreens.Layout.STACKED_BOTTOM_FIRST to R.string.dual_screens_stacked_bottom_first,
+        DualScreens.Layout.TOP_LARGE to R.string.dual_screens_top_large,
+        DualScreens.Layout.BOTTOM_LARGE to R.string.dual_screens_bottom_large,
+        DualScreens.Layout.SIDE_BY_SIDE to R.string.dual_screens_side_by_side,
+        DualScreens.Layout.TOP_ONLY to R.string.dual_screens_top_only,
+        DualScreens.Layout.BOTTOM_ONLY to R.string.dual_screens_bottom_only
+    ).mapValues { stringResource(it.value) }
+    val names = listOf(stringResource(R.string.dual_screens_as_set, appName)) + layouts.map { labels.getValue(it) }
+    val chosen = DualScreens.layout(profile.screens)
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    ChoiceRow(stringResource(R.string.dual_screens_title), chosen?.let { labels[it] } ?: names[0], names) { index ->
+        val layout = layouts.getOrNull(index - 1)
+        // The screen that suits it: one above the other upright, the rest landscape
+        val changed = if (layout == null) profile.copy(screens = null)
+            else profile.copy(screens = layout.name, screen = layout.screen, ownScreen = profile.isGame || profile.ownScreen)
+        onChanged(changed)
+        // An app's layout written now (a game's as it starts), for games started from the emulator itself
+        if (layout != null && !profile.isGame) scope.launch {
+            val ok = withContext(Dispatchers.IO) {
+                val window = DualScreens.window(context, layout.landscape, profile.phoneHeight)
+                window != null && DualScreens.apply(pkg, layout, window)
+            }
+            if (!ok) android.widget.Toast.makeText(context, context.getString(R.string.game_mode_setup_not_found, appName), android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+    Text(
+        stringResource(if (DualScreens.appliesAtNextStart(pkg)) R.string.dual_screens_note_noods else R.string.dual_screens_note_written, appName),
+        style = MaterialTheme.typography.bodySmall
+    )
+}
+
 @Composable
 private fun DolphinControllerRows(profile: GameProfile, onChanged: (GameProfile) -> Unit) {
     val context = LocalContext.current

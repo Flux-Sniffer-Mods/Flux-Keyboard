@@ -62,9 +62,9 @@
     <string name="developer_options_note">Dev-build updates and tools for calibrating, debugging and previewing the keyboard. Most people never need them.</string>
     <string name="terminal_mode_title">Terminal mode</string>
     <string name="terminal_mode_description">Termux and other terminals: Alt and SYM type symbols, Ctrl stays Ctrl</string>
-    <string name="terminal_mode_note">A terminal tells keyboards it has no text field, so Alt and SYM would go to the terminal and Pastiera’s symbols wouldn’t work. In terminal mode Pastiera types into it like a text field without suggestions, corrections or automatic capitals: Alt and SYM type Pastiera’s symbols, and Ctrl, held, tapped or latched, reaches the terminal as a real Ctrl (Ctrl+C, Ctrl+D…). Enter, Backspace, Tab, Esc and the arrows go to the terminal as they are.</string>
+    <string name="terminal_mode_note">A terminal tells keyboards it has no text field, so Alt and SYM would go to the terminal and Pastiera\'s symbols wouldn\'t work. In terminal mode Pastiera types into it like a text field without suggestions, corrections or automatic capitals: Alt and SYM type Pastiera\'s symbols, and Ctrl, held, tapped or latched, reaches the terminal as a real Ctrl (Ctrl+C, Ctrl+D…). Enter, Backspace, Tab, Esc and the arrows go to the terminal as they are.</string>
     <string name="terminal_mode_enabled_title">Terminal mode</string>
-    <string name="terminal_mode_enabled_description">In the apps below: Alt and SYM type Pastiera’s symbols, Ctrl stays Ctrl</string>
+    <string name="terminal_mode_enabled_description">In the apps below: Alt and SYM type Pastiera\'s symbols, Ctrl stays Ctrl</string>
     <string name="terminal_mode_apps">Terminal apps</string>
     <string name="terminal_mode_remove_app">%1$s · Tap to remove</string>
     <string name="terminal_mode_add_app">Add a terminal app</string>
@@ -627,4 +627,17 @@
     <string name="games_app_launchers">Launchers and emulators</string>
     <string name="games_app_stream">Stream</string>
     <string name="game_mode_gamehub_lite_note">The official GameHub can only be opened, not told which game to start: its games open GameHub and you pick from there. GameHub Lite starts each game straight away, so it\'s the one to use with Flux Keyboard.</string>
+    <string name="dual_screens_title">Screens</string>
+    <string name="dual_screens_as_set">As set in %1$s</string>
+    <string name="dual_screens_stacked">Both, top screen first</string>
+    <string name="dual_screens_stacked_bottom_first">Both, bottom screen first</string>
+    <string name="dual_screens_top_large">Top screen big, bottom small</string>
+    <string name="dual_screens_bottom_large">Bottom screen big, top small</string>
+    <string name="dual_screens_side_by_side">Side by side</string>
+    <string name="dual_screens_top_only">Top screen only</string>
+    <string name="dual_screens_bottom_only">Bottom screen only</string>
+    <string name="dual_screens_note_written">Written into %1$s\'s settings as a game starts from Games (an app\'s also now, for games started in %1$s itself). Screen is set to suit it: Portrait for one above the other, Landscape for the rest. The trackpad\'s bottom-screen area follows it. Catch: if you\'ve used Swap Screens in %1$s, the screens come out the other way round, so swap them back there.</string>
+    <string name="dual_screens_note_noods">Written into NooDS\'s settings now. NooDS reads them when it opens, for every game: it has no settings per game. Screen is set to suit it.</string>
+    <string name="dual_screens_note_other">%1$s keeps its screen layout in its own private settings, which Flux Keyboard can\'t reach: set it in %1$s\'s settings or in-game menu.</string>
+    <string name="dual_screens_note_cemu">Cemu shows the Wii U GamePad\'s screen from its in-game menu (Show pad), placed where its settings say (General). It keeps both in its private settings, so Flux Keyboard can\'t set them per game.</string>
 </resources>
