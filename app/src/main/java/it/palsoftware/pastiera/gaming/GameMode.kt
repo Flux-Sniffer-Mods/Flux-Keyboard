@@ -567,6 +567,7 @@ object GameMode {
         screen(context, next.screen, next.phoneHeight)
         startTrackpad(next)
         notify(context, next)
+        FluxLog.w(TAG, "${chosen.name}: sticks ${if (profile?.stickZones.isNullOrEmpty()) "as a controller's" else "on its screen at ${profile?.stickZones}"}, buttons by ${route()}")
     }
 
     private fun stop(context: Context) {

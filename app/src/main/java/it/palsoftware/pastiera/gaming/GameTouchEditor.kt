@@ -346,17 +346,11 @@ object GameTouchEditor {
     private val TOUCH_GAME = Triple(0.17f, 0.72f, 0.17f) to Triple(0.78f, 0.55f, 0.2f)
 
     /**
-     * A program played by touch: keys placed on its screen, or a game that is an app of its own,
-     * set up as a game or as an app (not an emulator's or launcher's game, nor a cloud game,
-     * which take a controller).
+     * A program played by touch: keys placed on its screen. Any other game takes the sticks as a
+     * controller's, as it takes the buttons (a touch game that reads a controller, as most do,
+     * hides its on-screen stick once one is used); its own on-screen sticks can still be placed.
      */
-    private fun playedByTouch(profile: GameProfile): Boolean {
-        if (profile.taps.isNotEmpty()) return true
-        val pkg = profile.packages.firstOrNull() ?: return false
-        // A game added as one, or an app set up as a game (from the notification): both played by touch
-        return GameApps.appFor(profile) == null && GameApps.emulator(pkg) == null &&
-            pkg != it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
-    }
+    private fun playedByTouch(profile: GameProfile): Boolean = profile.taps.isNotEmpty()
 
     /**
      * [profile] with the trackpad's sticks on its launcher's on-screen sticks, when none have
