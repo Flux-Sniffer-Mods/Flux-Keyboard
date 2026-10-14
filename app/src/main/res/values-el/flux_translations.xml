@@ -910,7 +910,7 @@
     <string name="flux_tutorial_typing_bullet_private">Συντομεύσεις πλήκτρων για ιδιωτική λειτουργία (Ανώνυμη πληκτρολόγηση και Λειτουργία εκτός σύνδεσης μαζί) και επιλογή από τον δρομέα: ορίστε τις στην Προσαρμογή πλήκτρων.</string>
     <string name="flux_tutorial_extras_shizuku_button">Άνοιγμα πρόσβασης στο shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Θέματα πληκτρολογίου: η σελίδα θεμάτων δείχνει ποιο θέμα χρησιμοποιείται σε φωτεινή και σκοτεινή λειτουργία και το ορίζει με ένα πάτημα.</string>
-    <string name="root_backlight_brightness_not_kept">Αυτό το τηλέφωνο δεν κρατά φωτεινότητα πληκτρολογίου που ορίζεται μέσω Shizuku: ο φωτισμός ανάβει και σβήνει με την οθόνη, στη φωτεινότητα των ρυθμίσεων του τηλεφώνου.</string>
+    <string name="root_backlight_brightness_not_kept">Αυτό το τηλέφωνο δεν κρατά φωτεινότητα πληκτρολογίου που ορίζεται μέσω της πρόσβασης στο shell: ο φωτισμός ανάβει και σβήνει με την οθόνη, στη φωτεινότητα των ρυθμίσεων του τηλεφώνου.</string>
     <string name="density_section">Μέγεθος οθόνης</string>
     <string name="density_default_title">Προεπιλεγμένο μέγεθος οθόνης</string>
     <string name="density_tablet_title">Μέγεθος οθόνης tablet</string>
@@ -1007,7 +1007,7 @@
     <string name="extra_keys_button_description">Επιπλέον πλήκτρα: Esc, Tab, Ctrl, Alt και βέλη στη θέση της γραμμής</string>
     <string name="extra_keys_command_subtitle">Εμφάνιση ή απόκρυψη της σειράς επιπλέον πλήκτρων</string>
     <string name="extra_keys_close">Κλείσιμο των επιπλέον πλήκτρων</string>
-    <string name="trackpad_apps_note_shizuku">Το Flux Keyboard διαβάζει τις σαρώσεις στο πληκτρολόγιο μέσω Shizuku, οπότε δουλεύουν ενώ πληκτρολογείτε σε κάθε εφαρμογή. Ποιες εφαρμογές κυλούν το αποφασίζει ο βοηθός κύλισης: αποεπιλέξτε στη λίστα του όσες δεν θέλετε να κυλούν.</string>
+    <string name="trackpad_apps_note_shizuku">Το Flux Keyboard διαβάζει τις σαρώσεις στο πληκτρολόγιο μέσω της πρόσβασης στο shell, οπότε δουλεύουν ενώ πληκτρολογείτε σε κάθε εφαρμογή. Ποιες εφαρμογές κυλούν το αποφασίζει ο βοηθός κύλισης: αποεπιλέξτε στη λίστα του όσες δεν θέλετε να κυλούν.</string>
     <string name="trackpad_apps_open_scroll_assistant">Επιλογή εφαρμογών στον βοηθό κύλισης</string>
     <string name="trackpad_apps_open_scroll_assistant_description">Η λίστα του τηλεφώνου με τις εφαρμογές που κυλούν οι σαρώσεις στο πληκτρολόγιο</string>
     <string name="flux_tutorial_permissions_title">Άδειες</string>
@@ -1119,8 +1119,8 @@
     <string name="sym_pick_kaomoji_title">Επιλέξτε kaomoji</string>
     <string name="trackpad_delete_swipe_haptic_description">Μια σύντομη δόνηση όταν ένα σύρσιμο προς τα κάτω σβήνει μια λέξη, όπως όταν ένα σύρσιμο επιλέγει πρόταση.</string>
     <string name="trackpad_delete_swipe_haptic_title">Δόνηση όταν το σύρσιμο σβήνει</string>
-    <string name="trackpad_shizuku_fallback_description">Με το Shizuku επιλεγμένο αλλά όχι ακόμη ενεργό (χωρίς Wi-Fi στην εκκίνηση), τα συρσίματα στο πληκτρολόγιο έρχονται από το Android στις εφαρμογές που κυλά ο Βοηθός κύλισης, μέχρι να επιστρέψει το Shizuku.</string>
-    <string name="trackpad_shizuku_fallback_title">Συρσίματα του Android όσο το Shizuku είναι κλειστό</string>
+    <string name="trackpad_shizuku_fallback_description">Με την πρόσβαση στο shell επιλεγμένη αλλά όχι ακόμη ενεργή (χωρίς Wi-Fi στην εκκίνηση), τα συρσίματα στο πληκτρολόγιο έρχονται από το Android στις εφαρμογές που κυλά ο Βοηθός κύλισης, μέχρι να επιστρέψει.</string>
+    <string name="trackpad_shizuku_fallback_title">Συρσίματα του Android όσο η πρόσβαση στο shell είναι κλειστή</string>
     <string name="sym_start_from_recents">Έναρξη από τα πρόσφατά μου</string>
     <string name="sym_start_most_popular">Έναρξη από τα πιο δημοφιλή</string>
     <string name="game_mode_gamenative_save">Ρύθμιση του GameNative</string>

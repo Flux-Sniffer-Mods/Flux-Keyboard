@@ -1526,7 +1526,7 @@
     <string name="flux_tutorial_typing_bullet_private">Phím tắt cho chế độ riêng tư (gõ ẩn danh và chế độ ngoại tuyến cùng lúc) và chọn từ con trỏ: đặt trong Tùy chỉnh phím.</string>
     <string name="flux_tutorial_extras_shizuku_button">Mở Truy cập shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Giao diện bàn phím: trang giao diện cho biết giao diện nào đang dùng ở chế độ sáng và tối, và đặt nó bằng một lần chạm.</string>
-    <string name="root_backlight_brightness_not_kept">Điện thoại này không giữ độ sáng bàn phím đặt qua Shizuku: đèn vẫn bật và tắt cùng màn hình, theo độ sáng trong cài đặt của điện thoại.</string>
+    <string name="root_backlight_brightness_not_kept">Điện thoại này không giữ độ sáng bàn phím đặt qua truy cập shell: đèn vẫn bật và tắt cùng màn hình, theo độ sáng trong cài đặt của điện thoại.</string>
     <string name="density_section">Kích thước màn hình</string>
     <string name="density_default_title">Kích thước màn hình mặc định</string>
     <string name="density_tablet_title">Kích thước màn hình máy tính bảng</string>
@@ -1623,7 +1623,7 @@
     <string name="extra_keys_button_description">Phím bổ sung: Esc, Tab, Ctrl, Alt và mũi tên thay cho thanh</string>
     <string name="extra_keys_command_subtitle">Hiện hoặc ẩn hàng phím bổ sung</string>
     <string name="extra_keys_close">Đóng phím bổ sung</string>
-    <string name="trackpad_apps_note_shizuku">Flux Keyboard đọc thao tác vuốt bàn phím qua Shizuku, nên chúng hoạt động khi bạn gõ trong mọi ứng dụng. Ứng dụng nào được cuộn là do Trợ lý cuộn quyết định: bỏ chọn trong danh sách của nó những ứng dụng bạn không muốn cuộn.</string>
+    <string name="trackpad_apps_note_shizuku">Flux Keyboard đọc thao tác vuốt bàn phím qua truy cập shell, nên chúng hoạt động khi bạn gõ trong mọi ứng dụng. Ứng dụng nào được cuộn là do Trợ lý cuộn quyết định: bỏ chọn trong danh sách của nó những ứng dụng bạn không muốn cuộn.</string>
     <string name="trackpad_apps_open_scroll_assistant">Chọn ứng dụng trong Trợ lý cuộn</string>
     <string name="trackpad_apps_open_scroll_assistant_description">Danh sách ứng dụng của điện thoại mà thao tác vuốt bàn phím cuộn được</string>
     <string name="flux_tutorial_permissions_title">Quyền</string>
@@ -1735,8 +1735,8 @@
     <string name="sym_pick_kaomoji_title">Chọn một kaomoji</string>
     <string name="trackpad_delete_swipe_haptic_description">Rung ngắn khi vuốt xuống xóa một từ, giống như khi vuốt để chọn gợi ý.</string>
     <string name="trackpad_delete_swipe_haptic_title">Rung khi vuốt để xóa</string>
-    <string name="trackpad_shizuku_fallback_description">Khi đã chọn Shizuku nhưng nó chưa chạy (không có Wi-Fi lúc khởi động), thao tác vuốt bàn phím đến từ Android trong các ứng dụng mà Trợ lý cuộn cuộn, cho đến khi Shizuku chạy lại.</string>
-    <string name="trackpad_shizuku_fallback_title">Vuốt của Android khi Shizuku tắt</string>
+    <string name="trackpad_shizuku_fallback_description">Khi đã chọn truy cập shell nhưng nó chưa chạy (không có Wi-Fi lúc khởi động), thao tác vuốt bàn phím đến từ Android trong các ứng dụng mà Trợ lý cuộn cuộn, cho đến khi nó chạy lại.</string>
+    <string name="trackpad_shizuku_fallback_title">Vuốt của Android khi truy cập shell tắt</string>
     <string name="sym_start_from_recents">Bắt đầu từ mục gần đây của tôi</string>
     <string name="sym_start_most_popular">Bắt đầu với những mục phổ biến nhất</string>
     <string name="game_mode_gamenative_save">Thiết lập GameNative</string>

@@ -1544,7 +1544,7 @@
     <string name="flux_tutorial_typing_bullet_private">Сполучення клавіш для приватного режиму (інкогніто-введення та автономний режим разом) і виділення від курсора: задайте їх у Налаштуванні клавіш.</string>
     <string name="flux_tutorial_extras_shizuku_button">Відкрити доступ до оболонки</string>
     <string name="flux_tutorial_personalise_bullet_theme">Теми клавіатури: сторінка тем показує, яка тема використовується у світлому й темному режимі, і задає її одним дотиком.</string>
-    <string name="root_backlight_brightness_not_kept">Цей телефон не зберігає яскравість клавіатури, задану через Shizuku: підсвічування все одно вмикається й вимикається з екраном, з яскравістю з налаштувань телефона.</string>
+    <string name="root_backlight_brightness_not_kept">Цей телефон не зберігає яскравість клавіатури, задану через доступ до оболонки: підсвічування все одно вмикається й вимикається з екраном, з яскравістю з налаштувань телефона.</string>
     <string name="density_section">Розмір екрана</string>
     <string name="density_default_title">Типовий розмір екрана</string>
     <string name="density_tablet_title">Розмір екрана планшета</string>
@@ -1641,7 +1641,7 @@
     <string name="extra_keys_button_description">Дод. клавіші: Esc, Tab, Ctrl, Alt і стрілки замість панелі</string>
     <string name="extra_keys_command_subtitle">Показати або сховати ряд додаткових клавіш</string>
     <string name="extra_keys_close">Закрити додаткові клавіші</string>
-    <string name="trackpad_apps_note_shizuku">Flux Keyboard читає свайпи по клавіатурі через Shizuku, тож вони працюють під час набору в будь-якому застосунку. Які застосунки вони прокручують, вирішує помічник прокручування: зніміть у його списку позначки з тих, які не треба прокручувати.</string>
+    <string name="trackpad_apps_note_shizuku">Flux Keyboard читає свайпи по клавіатурі через доступ до оболонки, тож вони працюють під час набору в будь-якому застосунку. Які застосунки вони прокручують, вирішує помічник прокручування: зніміть у його списку позначки з тих, які не треба прокручувати.</string>
     <string name="trackpad_apps_open_scroll_assistant">Вибрати застосунки в помічнику прокручування</string>
     <string name="trackpad_apps_open_scroll_assistant_description">Список застосунків телефона, які прокручують свайпи по клавіатурі</string>
     <string name="flux_tutorial_permissions_title">Дозволи</string>
@@ -1753,8 +1753,8 @@
     <string name="sym_pick_kaomoji_title">Виберіть каомодзі</string>
     <string name="trackpad_delete_swipe_haptic_description">Коротка вібрація, коли свайп униз видаляє слово, як під час вибору підказки свайпом.</string>
     <string name="trackpad_delete_swipe_haptic_title">Вібрація під час видалення свайпом</string>
-    <string name="trackpad_shizuku_fallback_description">Якщо вибрано Shizuku, але він ще не запущений (не було Wi-Fi під час увімкнення), свайпи по клавіатурі надходять від Android у застосунках, які прокручує помічник прокручування, доки Shizuku не повернеться.</string>
-    <string name="trackpad_shizuku_fallback_title">Свайпи Android, поки Shizuku вимкнено</string>
+    <string name="trackpad_shizuku_fallback_description">Якщо вибрано доступ до оболонки, але він ще не запущений (не було Wi-Fi під час увімкнення), свайпи по клавіатурі надходять від Android у застосунках, які прокручує помічник прокручування, доки він не повернеться.</string>
+    <string name="trackpad_shizuku_fallback_title">Свайпи Android, поки доступ до оболонки вимкнено</string>
     <string name="sym_start_from_recents">Почати з моїх нещодавніх</string>
     <string name="sym_start_most_popular">Почати з найпопулярніших</string>
     <string name="game_mode_gamenative_save">Налаштувати GameNative</string>

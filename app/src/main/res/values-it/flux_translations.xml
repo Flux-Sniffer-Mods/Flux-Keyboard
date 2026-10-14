@@ -1040,7 +1040,7 @@
     <string name="flux_tutorial_typing_bullet_private">Scorciatoie da tastiera per la modalità privata (digitazione in incognito e modalità offline insieme) e per selezionare dal cursore: impostale in Personalizza tasti.</string>
     <string name="flux_tutorial_extras_shizuku_button">Apri Accesso alla shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Temi della tastiera: la pagina dei temi mostra quale tema è in uso in modalità chiara e scura, e lo imposta con un tocco.</string>
-    <string name="root_backlight_brightness_not_kept">Questo telefono non mantiene una luminosità della tastiera impostata tramite Shizuku: la luce si accende e si spegne comunque con lo schermo, alla luminosità delle impostazioni del telefono.</string>
+    <string name="root_backlight_brightness_not_kept">Questo telefono non mantiene una luminosità della tastiera impostata tramite l\'accesso alla shell: la luce si accende e si spegne comunque con lo schermo, alla luminosità delle impostazioni del telefono.</string>
     <string name="density_section">Dimensioni schermo</string>
     <string name="density_default_title">Dimensioni schermo predefinite</string>
     <string name="density_tablet_title">Dimensioni schermo tablet</string>
@@ -1137,7 +1137,7 @@
     <string name="extra_keys_button_description">Tasti extra: Esc, Tab, Ctrl, Alt e frecce al posto della barra</string>
     <string name="extra_keys_command_subtitle">Mostra o nascondi la fila dei tasti extra</string>
     <string name="extra_keys_close">Chiudi i tasti extra</string>
-    <string name="trackpad_apps_note_shizuku">Flux Keyboard legge gli scorrimenti sulla tastiera tramite Shizuku, quindi funzionano mentre scrivi in qualsiasi app. Quali app fanno scorrere lo decide l\'Assistente di scorrimento: togli la spunta nel suo elenco a quelle che non vuoi far scorrere.</string>
+    <string name="trackpad_apps_note_shizuku">Flux Keyboard legge gli scorrimenti sulla tastiera tramite l\'accesso alla shell, quindi funzionano mentre scrivi in qualsiasi app. Quali app fanno scorrere lo decide l\'Assistente di scorrimento: togli la spunta nel suo elenco a quelle che non vuoi far scorrere.</string>
     <string name="trackpad_apps_open_scroll_assistant">Scegli le app nell\'Assistente di scorrimento</string>
     <string name="trackpad_apps_open_scroll_assistant_description">L\'elenco del telefono delle app che gli scorrimenti sulla tastiera fanno scorrere</string>
     <string name="flux_tutorial_permissions_title">Permessi</string>
@@ -1249,8 +1249,8 @@
     <string name="sym_pick_kaomoji_title">Scegli un kaomoji</string>
     <string name="trackpad_delete_swipe_haptic_description">Una breve vibrazione quando uno scorrimento verso il basso cancella una parola, come quando uno scorrimento sceglie un suggerimento.</string>
     <string name="trackpad_delete_swipe_haptic_title">Vibra quando uno scorrimento cancella</string>
-    <string name="trackpad_shizuku_fallback_description">Con Shizuku scelto ma non ancora attivo (niente Wi-Fi all\'avvio del telefono), gli scorrimenti sulla tastiera arrivano da Android nelle app che l\'Assistente di scorrimento fa scorrere, finché Shizuku non torna.</string>
-    <string name="trackpad_shizuku_fallback_title">Scorrimenti di Android mentre Shizuku è spento</string>
+    <string name="trackpad_shizuku_fallback_description">Con l\'accesso alla shell scelto ma non ancora attivo (niente Wi-Fi all\'avvio del telefono), gli scorrimenti sulla tastiera arrivano da Android nelle app che l\'Assistente di scorrimento fa scorrere, finché non torna.</string>
+    <string name="trackpad_shizuku_fallback_title">Scorrimenti di Android mentre l\'accesso alla shell è spento</string>
     <string name="sym_start_from_recents">Inizia dai miei recenti</string>
     <string name="sym_start_most_popular">Inizia dai più popolari</string>
     <string name="game_mode_gamenative_save">Configura GameNative</string>

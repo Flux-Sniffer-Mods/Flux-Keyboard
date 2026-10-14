@@ -1538,7 +1538,7 @@
     <string name="flux_tutorial_typing_bullet_private">Raccourcis clavier pour le mode privé (saisie incognito et mode hors ligne ensemble) et la sélection depuis le curseur : à définir dans Personnaliser les touches.</string>
     <string name="flux_tutorial_extras_shizuku_button">Ouvrir Accès au shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Thèmes du clavier : la page des thèmes montre le thème utilisé en mode clair et sombre, et le change d\'un toucher.</string>
-    <string name="root_backlight_brightness_not_kept">Ce téléphone ne garde pas une luminosité du clavier réglée via Shizuku : la lumière s\'allume et s\'éteint toujours avec l\'écran, à la luminosité des réglages du téléphone.</string>
+    <string name="root_backlight_brightness_not_kept">Ce téléphone ne garde pas une luminosité du clavier réglée via l\'accès au shell : la lumière s\'allume et s\'éteint toujours avec l\'écran, à la luminosité des réglages du téléphone.</string>
     <string name="density_section">Taille d\'écran</string>
     <string name="density_default_title">Taille d\'écran par défaut</string>
     <string name="density_tablet_title">Taille d\'écran tablette</string>
@@ -1635,7 +1635,7 @@
     <string name="extra_keys_button_description">Touches supplémentaires : Échap, Tab, Ctrl, Alt et flèches à la place de la barre</string>
     <string name="extra_keys_command_subtitle">Afficher ou masquer la rangée de touches supplémentaires</string>
     <string name="extra_keys_close">Fermer les touches supplémentaires</string>
-    <string name="trackpad_apps_note_shizuku">Flux Keyboard lit les balayages sur le clavier via Shizuku, ils fonctionnent donc pendant la saisie dans toutes les apps. Les apps qu\'ils font défiler dépendent de l\'assistant de défilement : décochez dans sa liste celles que vous ne voulez pas faire défiler.</string>
+    <string name="trackpad_apps_note_shizuku">Flux Keyboard lit les balayages sur le clavier via l\'accès au shell, ils fonctionnent donc pendant la saisie dans toutes les apps. Les apps qu\'ils font défiler dépendent de l\'assistant de défilement : décochez dans sa liste celles que vous ne voulez pas faire défiler.</string>
     <string name="trackpad_apps_open_scroll_assistant">Choisir les apps dans l\'assistant de défilement</string>
     <string name="trackpad_apps_open_scroll_assistant_description">La liste du téléphone des apps que les balayages sur le clavier font défiler</string>
     <string name="flux_tutorial_permissions_title">Autorisations</string>
@@ -1747,8 +1747,8 @@
     <string name="sym_pick_kaomoji_title">Choisir un kaomoji</string>
     <string name="trackpad_delete_swipe_haptic_description">Une courte vibration quand un balayage vers le bas efface un mot, comme quand un balayage choisit une suggestion.</string>
     <string name="trackpad_delete_swipe_haptic_title">Vibrer quand un balayage efface</string>
-    <string name="trackpad_shizuku_fallback_description">Quand Shizuku est choisi mais ne tourne pas encore (pas de Wi-Fi au démarrage), les balayages du clavier viennent d\'Android dans les applis que l\'Assistant de défilement fait défiler, jusqu\'au retour de Shizuku.</string>
-    <string name="trackpad_shizuku_fallback_title">Balayages d\'Android tant que Shizuku est arrêté</string>
+    <string name="trackpad_shizuku_fallback_description">Quand l\'accès au shell est choisi mais ne tourne pas encore (pas de Wi-Fi au démarrage), les balayages du clavier viennent d\'Android dans les applis que l\'Assistant de défilement fait défiler, jusqu\'à son retour.</string>
+    <string name="trackpad_shizuku_fallback_title">Balayages d\'Android tant que l\'accès au shell est arrêté</string>
     <string name="sym_start_from_recents">Commencer par mes récents</string>
     <string name="sym_start_most_popular">Commencer par les plus populaires</string>
     <string name="game_mode_gamenative_save">Configurer GameNative</string>
