@@ -1824,6 +1824,10 @@
     <string name="dolphin_pad_hint">Toca un botón para darle una tecla, sola o con un modificador. Los botones con tecla propia de este juego aparecen remarcados, y una tecla asignada aquí solo pulsa ese botón.</string>
     <string name="dolphin_pad_no_key">Ninguna tecla</string>
     <string name="dolphin_pad_saved">Guardado en Dolphin para este juego.</string>
+    <string name="game_keys_row">Teclas para este juego</string>
+    <string name="game_keys_row_app">Teclas para esta app</string>
+    <string name="game_keys_description">Cambia qué tecla es cada botón solo aquí, sobre los controles del teclado. Funciona en cualquier emulador o lanzador al que el modo juego envía botones.</string>
+    <string name="game_keys_note">Las teclas cambiadas aquí solo se aplican mientras se juega a esto, sobre los controles del teclado. Cada tecla muestra su botón, sola o con el modificador elegido aquí. Toca una tecla para cambiarla.</string>
     <string name="games_app_title">Juegos</string>
     <string name="games_app_empty">Aún no hay juegos: añádelos en el modo juego de Flux Keyboard o crea las carpetas de juegos.</string>
     <string name="games_app_switch">Juegos en la lista de apps</string>

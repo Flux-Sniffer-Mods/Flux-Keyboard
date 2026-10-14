@@ -1812,6 +1812,10 @@
     <string name="dolphin_pad_hint">Chạm vào một nút để gán phím cho nó, riêng lẻ hoặc kèm phím bổ trợ. Các nút có phím riêng cho trò chơi này được viền, và phím gán ở đây chỉ bấm nút đó.</string>
     <string name="dolphin_pad_no_key">Không có phím</string>
     <string name="dolphin_pad_saved">Đã lưu trong Dolphin cho trò chơi này.</string>
+    <string name="game_keys_row">Phím cho trò chơi này</string>
+    <string name="game_keys_row_app">Phím cho ứng dụng này</string>
+    <string name="game_keys_description">Chỉ đổi ở đây phím nào là nút nào, chồng lên điều khiển bàn phím. Hoạt động trong mọi trình giả lập hay trình khởi chạy mà chế độ chơi game gửi nút tới.</string>
+    <string name="game_keys_note">Các phím đổi ở đây chỉ áp dụng khi chơi trò này, chồng lên điều khiển bàn phím. Mỗi phím hiện nút của nó, riêng lẻ hoặc kèm phím bổ trợ chọn ở đây. Chạm vào một phím để đổi nó.</string>
     <string name="games_app_title">Game</string>
     <string name="games_app_empty">Chưa có game: thêm chúng trong chế độ chơi game của Flux Keyboard, hoặc tạo thư mục game.</string>
     <string name="games_app_switch">Game trong danh sách ứng dụng</string>

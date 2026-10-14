@@ -1830,6 +1830,10 @@
     <string name="dolphin_pad_hint">Торкніться кнопки, щоб призначити їй клавішу, окремо або з модифікатором. Кнопки з власною клавішею для цієї гри обведені, а призначена тут клавіша натискає лише цю кнопку.</string>
     <string name="dolphin_pad_no_key">Без клавіші</string>
     <string name="dolphin_pad_saved">Збережено в Dolphin для цієї гри.</string>
+    <string name="game_keys_row">Клавіші для цієї гри</string>
+    <string name="game_keys_row_app">Клавіші для цього застосунку</string>
+    <string name="game_keys_description">Змініть лише тут, яка клавіша якою кнопкою є, поверх керування з клавіатури. Працює в будь-якому емуляторі чи лаунчері, якому ігровий режим надсилає кнопки.</string>
+    <string name="game_keys_note">Клавіші, змінені тут, діють лише поки запущено це, поверх керування з клавіатури. Кожна клавіша показує свою кнопку, окремо або з обраним тут модифікатором. Торкніться клавіші, щоб змінити її.</string>
     <string name="games_app_title">Ігри</string>
     <string name="games_app_empty">Ігор ще немає: додайте їх в ігровому режимі Flux Keyboard або створіть теки ігор.</string>
     <string name="games_app_switch">Ігри у списку застосунків</string>

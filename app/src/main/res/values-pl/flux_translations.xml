@@ -1830,6 +1830,10 @@
     <string name="dolphin_pad_hint">Dotknij przycisku, aby przypisać mu klawisz, sam lub z modyfikatorem. Przyciski z własnym klawiszem dla tej gry są obramowane, a klawisz przypisany tutaj naciska tylko ten przycisk.</string>
     <string name="dolphin_pad_no_key">Brak klawisza</string>
     <string name="dolphin_pad_saved">Zapisano w Dolphin dla tej gry.</string>
+    <string name="game_keys_row">Klawisze dla tej gry</string>
+    <string name="game_keys_row_app">Klawisze dla tej aplikacji</string>
+    <string name="game_keys_description">Zmień tylko tutaj, który klawisz jest którym przyciskiem, ponad sterowaniem klawiatury. Działa w każdym emulatorze lub launcherze, do którego tryb gry wysyła przyciski.</string>
+    <string name="game_keys_note">Klawisze zmienione tutaj działają tylko podczas gry w to, ponad sterowaniem klawiatury. Każdy klawisz pokazuje swój przycisk, sam lub z wybranym tutaj modyfikatorem. Dotknij klawisza, aby go zmienić.</string>
     <string name="games_app_title">Gry</string>
     <string name="games_app_empty">Brak gier: dodaj je w trybie gry Flux Keyboard albo utwórz foldery gier.</string>
     <string name="games_app_switch">Gry na liście aplikacji</string>

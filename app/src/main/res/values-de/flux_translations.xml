@@ -1285,6 +1285,10 @@
     <string name="dolphin_pad_hint">Tippe auf eine Taste, um ihr eine Taste der Tastatur zu geben, allein oder mit einer Zusatztaste. Tasten mit eigener Belegung für dieses Spiel sind umrandet, und eine hier vergebene Taste drückt nur diese Taste.</string>
     <string name="dolphin_pad_no_key">Keine Taste</string>
     <string name="dolphin_pad_saved">In Dolphin für dieses Spiel gespeichert.</string>
+    <string name="game_keys_row">Tasten für dieses Spiel</string>
+    <string name="game_keys_row_app">Tasten für diese App</string>
+    <string name="game_keys_description">Ändere hier allein, welche Taste welcher Knopf ist, zusätzlich zu den Tastatursteuerungen. Funktioniert in jedem Emulator und Launcher, an den der Spielmodus Knöpfe sendet.</string>
+    <string name="game_keys_note">Hier geänderte Tasten gelten nur, solange dies läuft, zusätzlich zu den Tastatursteuerungen. Jede Taste zeigt ihren Knopf, allein oder mit der hier gewählten Zusatztaste. Tippe auf eine Taste, um sie zu ändern.</string>
     <string name="games_app_title">Spiele</string>
     <string name="games_app_empty">Noch keine Spiele: füge sie im Spielmodus von Flux Keyboard hinzu oder lege die Spieleordner an.</string>
     <string name="games_app_switch">Spiele in der App-Liste</string>

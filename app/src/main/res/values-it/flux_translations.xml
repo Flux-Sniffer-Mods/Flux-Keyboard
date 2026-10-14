@@ -1330,6 +1330,10 @@
     <string name="dolphin_pad_hint">Tocca un tasto per assegnargli un tasto della tastiera, da solo o con un modificatore. I tasti con un tasto proprio di questo gioco sono evidenziati, e un tasto assegnato qui preme solo quel tasto.</string>
     <string name="dolphin_pad_no_key">Nessun tasto</string>
     <string name="dolphin_pad_saved">Salvato in Dolphin per questo gioco.</string>
+    <string name="game_keys_row">Tasti per questo gioco</string>
+    <string name="game_keys_row_app">Tasti per questa app</string>
+    <string name="game_keys_description">Cambia quale tasto è quale pulsante solo qui, oltre ai controlli della tastiera. Funziona in ogni emulatore o launcher a cui la modalità gioco invia pulsanti.</string>
+    <string name="game_keys_note">I tasti cambiati qui valgono solo mentre questo è in esecuzione, oltre ai controlli della tastiera. Ogni tasto mostra il suo pulsante, da solo o con il modificatore scelto qui. Tocca un tasto per cambiarlo.</string>
     <string name="games_app_title">Giochi</string>
     <string name="games_app_empty">Ancora nessun gioco: aggiungili nella modalità gioco di Flux Keyboard, o crea le cartelle dei giochi.</string>
     <string name="games_app_switch">Giochi nell\'elenco app</string>

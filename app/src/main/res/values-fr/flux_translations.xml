@@ -1824,6 +1824,10 @@
     <string name="dolphin_pad_hint">Touche un bouton pour lui donner une touche, seule ou avec un modificateur. Les boutons ayant une touche propre à ce jeu sont entourés, et une touche donnée ici n’appuie que sur ce bouton.</string>
     <string name="dolphin_pad_no_key">Aucune touche</string>
     <string name="dolphin_pad_saved">Enregistré dans Dolphin pour ce jeu.</string>
+    <string name="game_keys_row">Touches pour ce jeu</string>
+    <string name="game_keys_row_app">Touches pour cette appli</string>
+    <string name="game_keys_description">Change ici seulement quelle touche est quel bouton, en plus des commandes du clavier. Fonctionne dans tout émulateur ou lanceur auquel le mode jeu envoie des boutons.</string>
+    <string name="game_keys_note">Les touches changées ici ne s’appliquent que pendant que ceci est en cours, en plus des commandes du clavier. Chaque touche montre son bouton, seule ou avec le modificateur choisi ici. Touche une touche pour la changer.</string>
     <string name="games_app_title">Jeux</string>
     <string name="games_app_empty">Pas encore de jeux : ajoutez-les dans le mode jeu de Flux Keyboard, ou créez les dossiers de jeux.</string>
     <string name="games_app_switch">Jeux dans la liste des applis</string>
