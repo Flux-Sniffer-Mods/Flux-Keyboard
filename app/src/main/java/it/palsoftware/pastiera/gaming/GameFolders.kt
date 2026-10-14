@@ -31,7 +31,7 @@ object GameFolders {
             listOf("app.gamenative" to "app.gamenative.MainActivity")),
         GAMEHUB("GameHub", listOf("GameHub"),
             setOf("steam", "local"),
-            listOf("gamehub.lite", "emuready.gamehub.lite", "com.xiaoji.egggame").map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
+            listOf("gamehub.lite", "emuready.gamehub.lite", GAMEHUB_OFFICIAL).map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
         DOLPHIN("Dolphin", listOf("Dolphin", "gc", "wii"),
             setOf("iso", "gcm", "ciso", "rvz", "wbfs", "wia", "tgc", "gcz", "dol", "elf", "wad"),
             listOf("org.dolphinemu.dolphinemu", "org.dolphinemu.mmjr").map { it to "org.dolphinemu.dolphinemu.ui.main.TvMainActivity" }),
@@ -60,6 +60,15 @@ object GameFolders {
             } ?: pm.getLaunchIntentForPackage(app.packageName)?.component?.className ?: return null
             return app.packageName to activity
         }
+    }
+
+    /** The official GameHub: no way in to start one of its games, so it's opened instead (GameHub Lite has one). */
+    const val GAMEHUB_OFFICIAL = "com.xiaoji.egggame"
+
+    /** The official GameHub is installed and GameHub Lite isn't: worth recommending Lite. */
+    fun gameHubLiteMissing(context: Context): Boolean {
+        fun has(pkg: String) = runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
+        return has(GAMEHUB_OFFICIAL) && Player.GAMEHUB.activities.none { (pkg, _) -> pkg != GAMEHUB_OFFICIAL && has(pkg) }
     }
 
     /** A folder of the user's own (the one set in a launcher or emulator), and who plays it (null: by its names). */
@@ -267,7 +276,7 @@ object GameFolders {
             Player.GAMENATIVE -> Intent("app.gamenative.LAUNCH_GAME")
                 .putExtra("app_id", id?.toIntOrNull() ?: return null).putExtra("game_source", source ?: "STEAM")
             Player.GAMEHUB -> Intent("gamehub.lite.LAUNCH_GAME").putExtra("autoStartGame", true).apply {
-                if (id.isNullOrEmpty()) return null
+                if (id.isNullOrEmpty() || pkg == GAMEHUB_OFFICIAL) return null
                 if (source == "LOCAL") putExtra("localGameId", id) else putExtra("steamAppId", id)
             }
             Player.DOLPHIN -> Intent(Intent.ACTION_MAIN).addCategory("android.intent.category.LEANBACK_LAUNCHER")

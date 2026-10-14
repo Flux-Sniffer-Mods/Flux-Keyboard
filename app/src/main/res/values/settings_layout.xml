@@ -626,4 +626,5 @@
     <string name="game_mode_artwork_none">No artwork found online. Try searching for its title above.</string>
     <string name="games_app_launchers">Launchers and emulators</string>
     <string name="games_app_stream">Stream</string>
+    <string name="game_mode_gamehub_lite_note">The official GameHub can only be opened, not told which game to start: its games open GameHub and you pick from there. GameHub Lite starts each game straight away, so it\'s the one to use with Flux Keyboard.</string>
 </resources>

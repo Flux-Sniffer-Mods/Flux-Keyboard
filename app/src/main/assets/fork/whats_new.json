@@ -750,6 +750,9 @@
     },
     {
       "text": "Dolphin: each game uses Flux Keyboard's controls even if a profile was chosen for it in Dolphin; a switch in the game's settings keeps Dolphin's own profile instead"
+    },
+    {
+      "text": "Gaming mode: with the official GameHub installed, a note recommends GameHub Lite, which starts each game straight away; the official app's games now just open it"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

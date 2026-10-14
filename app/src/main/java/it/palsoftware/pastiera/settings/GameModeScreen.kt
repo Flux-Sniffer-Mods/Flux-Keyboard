@@ -210,6 +210,9 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_import),
             description = stringResource(R.string.game_mode_import_description)
         ) { importing = true }
+        // The official GameHub can only be opened; GameHub Lite starts the game itself
+        val gameHubLite = remember { it.palsoftware.pastiera.gaming.GameFolders.gameHubLiteMissing(context) }
+        if (gameHubLite) FluxNote(stringResource(R.string.game_mode_gamehub_lite_note))
         // Xbox Cloud Gaming's games, from its catalogue, each a game of its own
         if (xboxApp != null) FluxActionRow(
             linkId = null,
