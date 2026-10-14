@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.TextFields
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Code
@@ -421,6 +422,13 @@ private fun SettingsMainScreen(
     onBackClick: () -> Unit,
     onOpenSettingEntry: (SettingEntry) -> Unit
 ) {
+    // The switches used most, grouped by what they're for: a page of its own over this one
+    var quick by rememberSaveable { mutableStateOf(false) }
+    if (quick) {
+        androidx.activity.compose.BackHandler { quick = false }
+        QuickSettingsScreen(modifier) { quick = false }
+        return
+    }
     var searchQuery by rememberSaveable { mutableStateOf("") }
     // Both lists keep their place while the other is shown, and when you come back from a page
     val resultsScrollState = rememberScrollState()
@@ -507,6 +515,13 @@ private fun SettingsMainScreen(
                         .fillMaxWidth()
                         .verticalScroll(categoriesScrollState)
                 ) {
+                    SettingsCategoryRow(
+                        icon = Icons.Filled.Tune,
+                        title = stringResource(R.string.quick_settings_title),
+                        description = stringResource(R.string.quick_settings_row_description),
+                        linkId = "main.quick",
+                        onClick = { quick = true }
+                    )
                     SettingsCategoryRow(
                         icon = Icons.Filled.TextFields,
                         title = stringResource(R.string.settings_typing_title),

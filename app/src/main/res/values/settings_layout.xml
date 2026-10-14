@@ -4,6 +4,10 @@
     <string name="settings_keyboards_layouts_title">Keyboards &amp; layouts</string>
     <string name="settings_keyboards_layouts_description">Input languages, keyboards and devices, showing the keyboard</string>
     <string name="settings_typing_title">Typing</string>
+    <string name="quick_settings_title">Quick settings</string>
+    <string name="quick_settings_row_description">The switches used most, grouped by what they\'re for</string>
+    <string name="quick_settings_description">The same settings as on their own pages, gathered by what they\'re for. Everything else is in the sections of Settings.</string>
+    <string name="quick_settings_keyboard_light">Keyboard light</string>
     <string name="settings_typing_description">Suggestions and auto-correction, capitals and punctuation, text expansion, variations, editing keys, Nav Mode</string>
     <string name="settings_modifiers_sym_title">Modifiers &amp; SYM</string>
     <string name="settings_modifiers_sym_description">Tap, lock and long press, SYM pages, key shortcuts, Nav Mode</string>
