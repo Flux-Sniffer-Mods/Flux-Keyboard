@@ -478,6 +478,8 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
     val context = LocalContext.current
     var current by remember { mutableStateOf(profile) }
     var addingApp by remember { mutableStateOf(false) }
+    // The phone's Back keeps the changes too, as the arrow does
+    androidx.activity.compose.BackHandler { onDone(current) }
     FluxScreenScaffold(current.name, { onDone(current) }, Modifier) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedTextField(

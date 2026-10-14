@@ -635,7 +635,11 @@ object FluxLayout {
         val file = "$dir/GameSettings/$gameId.ini"
         val ini = read(file)
         val set = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { own })
-        val updated = withoutOtherFluxProfiles(set, keep = if (gc) "PadProfile1" else "WiimoteProfile1")
+        val key = if (gc) "PadProfile1" else "WiimoteProfile1"
+        // A profile chosen in Dolphin itself (not one of Flux Keyboard's) is kept, unless the game has keys of its own here
+        val chosen = Regex("(?m)^\\s*" + key + "\\s*=\\s*(.*)$").find(ini)?.groupValues?.get(1)?.trim()
+        val kept = if (!own && !chosen.isNullOrEmpty() && !chosen.startsWith("Flux Keyboard")) withKey(set, "Controls", key, chosen) else set
+        val updated = withoutOtherFluxProfiles(kept, keep = key)
         return if (updated == ini || write(file, updated)) Result.DONE else Result.FAILED
     }
 

@@ -122,7 +122,17 @@ object GameMode {
     /** The app in front changed (from the accessibility helper). */
     fun onAppInFront(context: Context, packageName: String) {
         val app = context.applicationContext
-        if (packageName == app.packageName || packageName == "com.android.systemui") return
+        if (packageName == "com.android.systemui") return
+        if (packageName == app.packageName) {
+            // Flux Keyboard's own player is a game; its other screens (Games, settings) aren't:
+            // gaming mode ends there, as in any other app, rather than staying on until the game closes
+            val player = stickSink != null || window?.let { it.first == app.packageName && it.second?.contains("XboxPlayActivity") == true } == true
+            if (!player && profile != null) {
+                frontPackage = packageName
+                worker.execute { releaseControls(); stop(app); recover(app) }
+            }
+            return
+        }
         val previous = frontPackage
         // Another app in front: keys and modifiers let go there were never seen, so nothing is
         // kept as held

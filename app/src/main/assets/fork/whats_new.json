@@ -1114,6 +1114,15 @@
     },
     {
       "text": "Dolphin: no more \"No profiles found for game setting\" as a game starts: each game's own profile is named for its controller (GameCube or Wii Remote), and settings left by a controller chosen before are taken away"
+    },
+    {
+      "text": "Gaming mode: going from a game to the Games app or Flux Keyboard's settings ends gaming mode there, and it starts again when you go back to the game"
+    },
+    {
+      "text": "Games: the phone's Back keeps a game's changed settings, as the back arrow does (keys changed for Dolphin were lost before)"
+    },
+    {
+      "text": "Dolphin: a profile you chose for a game in Dolphin itself is kept, unless the game has keys of its own set in Flux Keyboard"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
