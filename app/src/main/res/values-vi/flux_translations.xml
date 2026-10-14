@@ -2032,4 +2032,6 @@
     <string name="tv_no_answer">%1$s không phản hồi. Hãy bật TV hoặc bật \"Bật qua Wi-Fi\" (Mobile TV On) trong cài đặt của nó.</string>
     <string name="tv_refused">%1$s không cho phép Flux Keyboard. Hãy chấp nhận trên TV khi được hỏi.</string>
     <string name="tv_failed">Không thể mở Moonlight trên %1$s. Moonlight đã được cài trên đó chưa?</string>
+    <string name="game_gone">Trò chơi này không còn trên điện thoại</string>
+    <string name="game_gone_short">Không còn trên điện thoại: được giữ cùng cài đặt phòng khi quay lại</string>
 </resources>

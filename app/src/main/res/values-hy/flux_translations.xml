@@ -2038,4 +2038,6 @@
     <string name="tv_no_answer">%1$s-ը չպատասխանեց։ Միացրեք այն կամ միացրեք «Միացնել Wi-Fi-ով» (Mobile TV On) դրա կարգավորումներում։</string>
     <string name="tv_refused">%1$s-ը չթույլատրեց Flux Keyboard-ը։ Հաստատեք հեռուստացույցում, երբ հարցնի։</string>
     <string name="tv_failed">Moonlight-ը չբացվեց %1$s-ում։ Արդյո՞ք այն տեղադրված է այնտեղ։</string>
+    <string name="game_gone">Այս խաղն այլևս հեռախոսում չէ</string>
+    <string name="game_gone_short">Այլևս հեռախոսում չէ. պահվում է իր կարգավորումներով, եթե վերադառնա</string>
 </resources>

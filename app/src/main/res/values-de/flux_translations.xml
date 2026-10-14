@@ -1506,4 +1506,6 @@
     <string name="tv_no_answer">%1$s antwortet nicht. Schalte ihn ein oder aktiviere „Über WLAN einschalten“ (Mobile TV On) in seinen Einstellungen.</string>
     <string name="tv_refused">%1$s hat Flux Keyboard nicht erlaubt. Bestätige es auf dem Fernseher, wenn gefragt.</string>
     <string name="tv_failed">Moonlight konnte auf %1$s nicht geöffnet werden. Ist Moonlight dort installiert?</string>
+    <string name="game_gone">Dieses Spiel ist nicht mehr auf dem Handy</string>
+    <string name="game_gone_short">Nicht mehr auf dem Handy: mit seinen Einstellungen behalten, falls es zurückkommt</string>
 </resources>

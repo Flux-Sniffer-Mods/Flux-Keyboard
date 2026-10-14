@@ -1418,4 +1418,6 @@
     <string name="tv_no_answer">Η %1$s δεν απάντησε. Άνοιξέ την ή ενεργοποίησε το «Ενεργοποίηση μέσω Wi-Fi» (Mobile TV On) στις ρυθμίσεις της.</string>
     <string name="tv_refused">Η %1$s δεν επέτρεψε το Flux Keyboard. Αποδέξου το στην τηλεόραση όταν ερωτηθείς.</string>
     <string name="tv_failed">Δεν ήταν δυνατό να ανοίξει το Moonlight στην %1$s. Είναι εγκατεστημένο εκεί;</string>
+    <string name="game_gone">Αυτό το παιχνίδι δεν είναι πια στο τηλέφωνο</string>
+    <string name="game_gone_short">Δεν είναι πια στο τηλέφωνο: κρατιέται με τις ρυθμίσεις του για αν επιστρέψει</string>
 </resources>

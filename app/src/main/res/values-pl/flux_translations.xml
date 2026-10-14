@@ -2050,4 +2050,6 @@
     <string name="tv_no_answer">%1$s nie odpowiada. Włącz go lub włącz „Włącz przez Wi-Fi” (Mobile TV On) w jego ustawieniach.</string>
     <string name="tv_refused">%1$s nie zezwolił na Flux Keyboard. Zaakceptuj na telewizorze, gdy zapyta.</string>
     <string name="tv_failed">Nie udało się otworzyć Moonlight na %1$s. Czy jest tam zainstalowany?</string>
+    <string name="game_gone">Tej gry nie ma już na telefonie</string>
+    <string name="game_gone_short">Nie ma jej już na telefonie: zachowana z ustawieniami na wypadek powrotu</string>
 </resources>
