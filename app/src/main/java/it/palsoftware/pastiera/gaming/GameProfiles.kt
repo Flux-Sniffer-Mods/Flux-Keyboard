@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.Context
 import it.palsoftware.pastiera.SettingsManager
 import org.json.JSONArray
@@ -377,8 +378,7 @@ object GameProfiles {
      */
     fun profileFor(context: Context, game: GameLibrary.Game): GameProfile {
         if (game.packageName != context.packageName) {
-            val pm = context.packageManager
-            val label = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(game.packageName, 0)).toString() }.getOrDefault(game.packageName)
+            val label = context.appLabel(game.packageName)
             ensureApp(context, game.packageName, label)
         }
         val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME)
@@ -394,7 +394,7 @@ object GameProfiles {
         val pkg = profile.packages.firstOrNull()?.takeIf { it != context.packageName }
         val player = pkg?.let { GameApps.appFor(it) }
         if (pkg != null && player != null) {
-            val label = runCatching { context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
+            val label = context.appLabel(pkg)
             ensureApp(context, pkg, label)
         }
         return profile.copy(pending = false, own = profile.own || (pkg != null && player == null)).also { save(context, it) }

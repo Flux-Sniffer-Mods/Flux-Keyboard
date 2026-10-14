@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -29,7 +30,7 @@ class GameEditActivity : ComponentActivity() {
     private fun forApp(pkg: String, profiles: List<GameProfile>): GameProfile? {
         GameDetect.dismiss(this, pkg)
         profiles.firstOrNull { it.pending && it.isGame && pkg in it.packages && GameApps.appFor(pkg) == null }?.let { return it }
-        val label = runCatching { packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
+        val label = appLabel(pkg)
         return GameProfiles.ensureApp(this, pkg, label).firstOrNull()
     }
 

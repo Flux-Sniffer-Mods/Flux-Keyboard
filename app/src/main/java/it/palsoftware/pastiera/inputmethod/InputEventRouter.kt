@@ -1128,7 +1128,7 @@ class InputEventRouter(
         }
         // Punctuation straight after a picked suggestion goes next to the word (its space after)
         if (
-            isPunctuation && typedChar != null && inputConnection != null &&
+            isPunctuation && inputConnection != null &&
             !SettingsManager.shouldApplyFrenchPunctuationSpacing(context) &&
             (typedChar in SettingsManager.getAutoSpacePunctuation(context) || typedChar in it.palsoftware.pastiera.core.Punctuation.NEXT_TO_PICKED_WORD) &&
             AutoSpaceTracker.replaceAutoSpaceWithPunctuation(inputConnection, typedChar.toString())

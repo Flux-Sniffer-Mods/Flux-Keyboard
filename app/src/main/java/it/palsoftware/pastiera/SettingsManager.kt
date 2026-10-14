@@ -480,8 +480,6 @@ object SettingsManager {
     internal const val DEFAULT_TRACKPAD_GESTURES_ENABLED = false
     internal const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     internal const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
-    private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 40f
     internal const val MIN_TRACKPAD_SWIPE_THRESHOLD = 40f
     /** Flux Keyboard: a deliberate swipe, so scrolling past the suggestions doesn't pick one. */
     internal const val DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = 100f
@@ -620,8 +618,13 @@ object SettingsManager {
     /**
      * Returns the SharedPreferences instance for the keyboard.
      */
+    /** The settings file, kept open for the app it belongs to: settings are read on every key. */
+    @Volatile private var cachedPreferences: Pair<Context, SharedPreferences>? = null
+
     fun getPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val app = context.applicationContext ?: context
+        cachedPreferences?.let { (owner, prefs) -> if (owner === app) return prefs }
+        return app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).also { cachedPreferences = app to it }
     }
 
     fun getAppLanguageTag(context: Context): String? {

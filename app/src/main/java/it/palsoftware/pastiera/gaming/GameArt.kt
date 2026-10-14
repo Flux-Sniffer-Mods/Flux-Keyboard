@@ -243,9 +243,6 @@ object GameArt {
     private fun custom(context: Context, profile: GameProfile): Bitmap? =
         customFile(context, profile).takeIf { it.length() > 0 }?.let { BitmapFactory.decodeFile(it.path) }
 
-    /** Whether [profile] has art the user picked. */
-    fun hasCustom(context: Context, profile: GameProfile): Boolean = customFile(context, profile).length() > 0
-
     /** Changes when [profile]'s art does, for redrawing it. */
     fun version(context: Context, profile: GameProfile): Long =
         maxOf(customFile(context, profile).lastModified(), uprightFile(context, profile).lastModified())

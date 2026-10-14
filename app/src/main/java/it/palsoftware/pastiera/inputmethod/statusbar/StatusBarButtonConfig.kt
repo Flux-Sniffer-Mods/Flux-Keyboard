@@ -55,15 +55,6 @@ data class StatusBarButtonConfig(
 )
 
 /**
- * Callbacks for button interactions.
- * All callbacks are optional - pass null for unused ones.
- */
-data class ButtonCallbacks(
-    val onClick: (() -> Unit)? = null,
-    val onLongClick: (() -> Boolean)? = null
-)
-
-/**
  * Container for all status bar callbacks.
  * Each button factory will use only the callbacks it needs.
  * This allows VariationBarView to pass a single callbacks object

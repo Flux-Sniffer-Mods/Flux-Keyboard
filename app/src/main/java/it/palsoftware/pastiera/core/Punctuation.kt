@@ -13,7 +13,6 @@ object Punctuation {
     // default so ASCII smileys and quotes stay easy to type.
     const val AUTO_SPACE_CANDIDATES: String = ".,;:!?\\/\")]}"
     const val DEFAULT_AUTO_SPACE: String = ""
-    const val AUTO_SPACE: String = DEFAULT_AUTO_SPACE
 
     // Goes next to a picked suggestion's word, its space moved after (not ":" or ";", which
     // start emoticons)

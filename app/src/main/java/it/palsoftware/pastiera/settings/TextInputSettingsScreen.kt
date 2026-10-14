@@ -91,16 +91,8 @@ fun TextInputSettingsScreen(
         mutableStateOf(SettingsManager.getAutoCapitalizeFirstLetter(context))
     }
 
-    var autoCapitalizeAfterPeriod by remember {
-        mutableStateOf(SettingsManager.getAutoCapitalizeAfterPeriod(context))
-    }
-
     var autoCapitalizeRespectManualShiftOff by remember {
         mutableStateOf(SettingsManager.getAutoCapitalizeRespectManualShiftOff(context))
-    }
-
-    var autoCapitalizeRestrictedFields by remember {
-        mutableStateOf(SettingsManager.getAutoCapitalizeRestrictedFields(context))
     }
 
     var doubleSpaceToPeriod by remember {

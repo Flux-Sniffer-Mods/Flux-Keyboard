@@ -1272,12 +1272,7 @@ private fun isPackageInstalled(context: Context, packageName: String): Boolean {
     }.getOrDefault(false)
 }
 
-private fun getApplicationLabel(context: Context, packageName: String): String? {
-    return runCatching {
-        val info: ApplicationInfo = context.packageManager.getApplicationInfo(packageName, 0)
-        context.packageManager.getApplicationLabel(info).toString()
-    }.getOrNull()
-}
+private fun getApplicationLabel(context: Context, packageName: String): String? = context.appLabelOrNull(packageName)
 
 private fun getApplicationIcon(context: Context, packageName: String): Drawable? {
     return runCatching {

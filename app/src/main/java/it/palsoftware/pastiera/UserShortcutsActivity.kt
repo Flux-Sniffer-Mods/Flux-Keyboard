@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -151,13 +152,7 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
         if (shortcuts.isNotEmpty()) {
             SettingsSectionDivider(stringResource(R.string.user_shortcuts_yours))
             shortcuts.forEach { shortcut ->
-                val appName = remember(shortcut.packageName) {
-                    runCatching {
-                        context.packageManager.getApplicationLabel(
-                            context.packageManager.getApplicationInfo(shortcut.packageName, 0)
-                        ).toString()
-                    }.getOrDefault(shortcut.packageName)
-                }
+                val appName = remember(shortcut.packageName) { context.appLabel(shortcut.packageName) }
                 val icon = remember(shortcut.id) { UserShortcuts.icon(context, shortcut) }
                 ShortcutRow(icon = icon, title = shortcut.label, description = appName, onClick = null) {
                     IconButton(onClick = {

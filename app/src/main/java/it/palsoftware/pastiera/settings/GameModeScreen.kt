@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.settings
 
+import it.palsoftware.pastiera.apps.appLabel
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.border
@@ -146,13 +147,13 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             FluxActionRow(
                 linkId = null,
                 icon = "+",
-                title = stringResource(R.string.game_mode_seen_title, appLabel(context, seen)),
+                title = stringResource(R.string.game_mode_seen_title, context.appLabel(seen)),
                 description = stringResource(R.string.game_mode_seen_description, seen)
             ) { addingSeen = true }
             if (addingSeen) {
                 AlertDialog(
                     onDismissRequest = { addingSeen = false },
-                    title = { Text(stringResource(R.string.game_mode_seen_title, appLabel(context, seen))) },
+                    title = { Text(stringResource(R.string.game_mode_seen_title, context.appLabel(seen))) },
                     text = {
                         Column {
                             profiles.filter { !it.isGame }.forEach { profile ->
@@ -187,7 +188,7 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         // The games: home screen shortcuts, art and detection, their app's settings unless their own
         SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
         profiles.filter { it.isGame }.forEach { profile ->
-            val appName = profile.packages.firstOrNull()?.let { pkg -> appLabel(context, pkg) }.orEmpty()
+            val appName = profile.packages.firstOrNull()?.let { pkg -> context.appLabel(pkg) }.orEmpty()
             FluxActionRow(
                 linkId = null,
                 title = profile.name,
@@ -423,9 +424,6 @@ private fun CustomGameFolders() {
     ) { runCatching { picker.launch(null) } }
 }
 
-internal fun appLabel(context: android.content.Context, pkg: String): String = runCatching {
-    context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0)).toString()
-}.getOrDefault(pkg)
 
 /** The games of the game launchers installed, one tap making a profile for it. */
 @Composable
@@ -458,7 +456,7 @@ internal fun GameImportDialog(onPicked: (GameLibrary.Game) -> Unit, onByHand: ()
                     list.isEmpty() -> Text(stringResource(R.string.game_mode_import_none))
                     else -> list.forEach { game ->
                         Text(
-                            "${game.name}  (${appLabel(context, game.packageName)})",
+                            "${game.name}  (${context.appLabel(game.packageName)})",
                             modifier = Modifier.fillMaxWidth().clickable { onPicked(game) }.padding(vertical = 10.dp)
                         )
                     }
@@ -497,7 +495,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             // A game plays with its app's settings, unless it needs its own (sticks elsewhere)
             if (current.isGame) {
                 val ownScope = androidx.compose.runtime.rememberCoroutineScope()
-                val appName = current.packages.firstOrNull()?.let { pkg -> appLabel(context, pkg) }.orEmpty()
+                val appName = current.packages.firstOrNull()?.let { pkg -> context.appLabel(pkg) }.orEmpty()
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(stringResource(R.string.game_mode_own_settings))
@@ -666,7 +664,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             if (!current.isGame) Text(stringResource(R.string.game_mode_apps), style = MaterialTheme.typography.titleMedium)
             if (!current.isGame) current.packages.forEach { pkg ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(appLabel(context, pkg), modifier = Modifier.weight(1f))
+                    Text(context.appLabel(pkg), modifier = Modifier.weight(1f))
                     TextButton(onClick = { current = current.copy(packages = current.packages - pkg) }) {
                         Text(stringResource(R.string.game_mode_remove))
                     }

@@ -9,8 +9,6 @@ import androidx.compose.runtime.MutableState
  */
 object KeyboardEventTracker {
     private var _keyEventState: MutableState<KeyEventInfo?>? = null
-    val keyEventState: MutableState<KeyEventInfo?>?
-        get() = _keyEventState
     
     data class KeyEventInfo(
         val keyCode: Int,

@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.apps.appLabelOrNull
 import android.app.Activity
 import it.palsoftware.pastiera.FluxLog
 import android.content.Context
@@ -87,7 +88,7 @@ class GameLaunchActivity : Activity() {
     /** Set up first (Games, at its settings), or played with its app's settings from now on. */
     private fun ask(profile: GameProfile) {
         val app = profile.packages.firstOrNull()?.let { pkg ->
-            runCatching { packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrNull()
+            appLabelOrNull(pkg)
         } ?: ""
         android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
             .setTitle(getString(it.palsoftware.pastiera.R.string.game_first_start_title, profile.name))

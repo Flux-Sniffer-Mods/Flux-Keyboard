@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.Intent
 import it.palsoftware.pastiera.adb.AdbShell
 
@@ -98,9 +99,7 @@ object GameDetect {
     fun offer(context: android.content.Context, packageName: String) {
         if (packageName in asked(context) || !looksLikeGame(context, packageName)) return
         val manager = context.getSystemService(android.app.NotificationManager::class.java) ?: return
-        val label = runCatching {
-            context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(packageName, 0)).toString()
-        }.getOrDefault(packageName)
+        val label = context.appLabel(packageName)
         manager.createNotificationChannel(
             android.app.NotificationChannel(CHANNEL, context.getString(it.palsoftware.pastiera.R.string.game_detect_channel), android.app.NotificationManager.IMPORTANCE_DEFAULT)
         )

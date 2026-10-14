@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -253,7 +254,7 @@ class GamesActivity : ComponentActivity() {
                 tiles += TileSpec("apps", stringResource(R.string.games_app_launchers), null, { Symbol("\u25A6") }, { page = Page.APPS }, { page = Page.APPS })
             } else {
                 launchers().forEach { (pkg, profile) ->
-                    val label = profile?.name ?: it.palsoftware.pastiera.settings.appLabel(this@GamesActivity, pkg)
+                    val label = profile?.name ?: this@GamesActivity.appLabel(pkg)
                     tiles += TileSpec(pkg, label, null,
                         { AppCover(profile ?: GameProfiles.newProfile(label, setOf(pkg)).copy(id = "app:$pkg"), pkg) },
                         { packageManager.getLaunchIntentForPackage(pkg)?.let { launch -> runCatching { startActivity(launch) } } },

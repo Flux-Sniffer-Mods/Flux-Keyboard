@@ -47,7 +47,6 @@ internal class StreamInput(private val context: Context, private val streamWidth
             input = started.outputStream.bufferedWriter()
             val (w, h) = screen()
             send("S $w $h")
-            keyboardDevice()?.let { send("D $it") }
         }.onFailure { FluxLog.w(TAG, "no input: $it") }
     }
 
@@ -148,11 +147,6 @@ internal class StreamInput(private val context: Context, private val streamWidth
     }
 
     private fun bit(buttons: Int, flag: Int) = if (buttons and flag != 0) 1 else 0
-
-    private fun keyboardDevice(): Int? = android.view.InputDevice.getDeviceIds().firstOrNull { id ->
-        val device = android.view.InputDevice.getDevice(id) ?: return@firstOrNull false
-        !device.isVirtual && device.keyboardType == android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC
-    }
 
     companion object {
         private const val TAG = "StreamInput"

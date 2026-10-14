@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.commands
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.Context
 import android.content.Intent
 import it.palsoftware.pastiera.SettingsManager
@@ -29,8 +30,7 @@ class AppShortcutCommandSource : CommandSource {
         val pm = context.packageManager
         val updatedAt = runCatching { pm.getPackageInfo(packageName, 0).lastUpdateTime }.getOrNull() ?: return emptyList()
         cache[packageName]?.takeIf { it.updatedAt == updatedAt }?.let { return it.commands }
-        val appName = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString() }
-            .getOrDefault(packageName)
+        val appName = context.appLabel(packageName)
         val icon = runCatching { pm.getApplicationIcon(packageName) }.getOrNull()
         val commands = AppActionDiscovery.discover(context, packageName).launcherShortcuts.map { action ->
             CommandTarget(

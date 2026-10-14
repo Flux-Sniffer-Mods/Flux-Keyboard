@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.commands
 
+import it.palsoftware.pastiera.apps.appLabel
 import android.content.Context
 import android.content.Intent
 import it.palsoftware.pastiera.SettingsManager
@@ -24,7 +25,7 @@ class GameCommandSource : CommandSource {
         return entries(context) + games.map { (name, pkg, intent) ->
             // An Xbox cloud game plays in Flux Keyboard's player: XCloud Games, not Flux Keyboard
             val appName = if (pkg == context.packageName) context.getString(it.palsoftware.pastiera.R.string.games_app_xbox)
-                else runCatching { pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
+                else context.appLabel(pkg)
             CommandTarget(
                 id = "game:$pkg:$name",
                 source = id,

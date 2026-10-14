@@ -27,11 +27,6 @@ class ClipboardButtonFactory : StatusBarButtonFactory {
     
     companion object {
         private const val FLASH_DURATION_MS = 350L
-        
-        // Tag keys for storing auxiliary views
-        private const val TAG_BADGE = "clipboard_badge"
-        private const val TAG_FLASH_OVERLAY = "clipboard_flash"
-        private const val TAG_ANIMATOR = "clipboard_animator"
     }
     
     override fun create(context: Context, size: Int, callbacks: StatusBarCallbacks): ButtonCreationResult {

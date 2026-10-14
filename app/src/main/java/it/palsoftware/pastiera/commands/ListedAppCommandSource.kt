@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.commands
 
+import it.palsoftware.pastiera.apps.appLabelOrNull
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -52,8 +53,7 @@ class ListedAppCommandSource : CommandSource {
                 ?: android.content.pm.ApplicationInfo.CATEGORY_UNDEFINED
         } else null
 
-        val appName = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString() }
-            .getOrDefault(preset?.appName ?: packageName)
+        val appName = context.appLabelOrNull(packageName) ?: preset?.appName ?: packageName
         val icon = runCatching { pm.getApplicationIcon(packageName) }.getOrNull()
 
         // What "new" is in this app, and the ways into it (the first the app accepts is used)

@@ -327,13 +327,6 @@ class StatusBarController(
             variationBarView?.onSoftwareKeyboardModeToggleRequested = value
         }
     
-    // Callback for speech recognition state changes (active/inactive)
-    var onSpeechRecognitionStateChanged: ((Boolean) -> Unit)? = null
-        set(value) {
-            field = value
-            // Note: VariationBarView doesn't need this directly, but we can add it if needed
-        }
-    
     fun invalidateStaticVariations() {
         variationBarView?.invalidateStaticVariations()
     }
@@ -489,8 +482,6 @@ class StatusBarController(
     private var wasSymActive: Boolean = false
     private var isTitan2Layout: Boolean = false
 
-    // Trackpad debug
-    private var trackpadDebugLaunched = false
     private var symShown: Boolean = false
     private var lastSymHeight: Int = 0
     private val defaultSymHeightPx: Int

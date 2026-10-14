@@ -37,7 +37,6 @@ import kotlin.math.min
 import android.content.res.AssetManager
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonHost
-import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarAnimator
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonId
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonPosition
 import it.palsoftware.pastiera.inputmethod.statusbar.StatusBarCallbacks
@@ -142,7 +141,6 @@ class VariationBarView(
     private var isTitan2Layout: Boolean = false
     
     // New modular components
-    private val statusBarAnimator = StatusBarAnimator()
     private val buttonHost = buttonRegistry?.let { StatusBarButtonHost(context, it) }
     var forceVariationAreaVisible: Boolean = false
         set(value) {
@@ -1086,9 +1084,7 @@ class VariationBarView(
             typeface = android.graphics.Typeface.DEFAULT_BOLD
         }
         val textWidth = paint.measureText(variation).toInt()
-        val horizontalPadding = 0 // Testing with 0 padding
-        val requiredWidth = textWidth + horizontalPadding
-        
+
         // Keep status bar layout stable; long labels are clipped instead of resizing the row.
         val calculatedWidth = buttonWidth
         

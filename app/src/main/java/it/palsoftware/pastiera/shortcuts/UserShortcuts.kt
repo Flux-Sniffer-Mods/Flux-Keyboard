@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.shortcuts
 
+import it.palsoftware.pastiera.apps.appLabel
 import it.palsoftware.pastiera.legacy.LegacyShortcutExtras
 import android.content.Context
 import android.content.Intent
@@ -106,7 +107,7 @@ object UserShortcuts {
         val target = intent ?: return null
         val shortcut = UserShortcut(
             id = UUID.randomUUID().toString(),
-            label = label?.takeIf { it.isNotBlank() } ?: appLabel(context, packageName),
+            label = label?.takeIf { it.isNotBlank() } ?: context.appLabel(packageName),
             packageName = packageName,
             intentUri = target.toUri(Intent.URI_INTENT_SCHEME)
         )
@@ -149,8 +150,4 @@ object UserShortcuts {
             .putExtra("com.termux.RUN_COMMAND_BACKGROUND", background)
             .apply { arguments?.let { putExtra("com.termux.RUN_COMMAND_ARGUMENTS", it) } }
 
-    private fun appLabel(context: Context, packageName: String): String = runCatching {
-        val pm = context.packageManager
-        pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString()
-    }.getOrDefault(packageName)
 }

@@ -258,9 +258,6 @@ object AutoCorrector {
             return correctedWord
         }
 
-        val originalLower = originalWord.lowercase()
-        val correctedLower = correctedWord.lowercase()
-
         // If original word was all uppercase, apply uppercase to entire correction
         if (originalWord == originalWord.uppercase() && originalWord.any { it.isLetter() }) {
             // Find first alphabetic letter in correction (might be after apostrophes)

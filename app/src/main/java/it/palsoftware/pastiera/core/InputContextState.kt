@@ -97,14 +97,8 @@ data class InputContextState(
     val isPasswordField: Boolean
         get() = restrictedReason == RestrictedReason.PASSWORD
 
-    val isUriField: Boolean
-        get() = restrictedReason == RestrictedReason.URI
-
     val isEmailField: Boolean
         get() = restrictedReason == RestrictedReason.EMAIL
-
-    val isFilterField: Boolean
-        get() = restrictedReason == RestrictedReason.FILTER
 
     enum class RestrictedReason {
         PASSWORD,

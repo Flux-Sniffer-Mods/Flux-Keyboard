@@ -175,7 +175,7 @@ object StreamHost {
             "/unpair" -> { if (client != null) unpair(client); xml(out, root("")) }
             "/applist" -> xml(out, if (paired) appList() else root("", 401, "The device isn't paired"))
             "/appasset" -> if (paired) asset(out, query["appid"]) else xml(out, root("", 401, "The device isn't paired"))
-            "/launch", "/resume" -> xml(out, if (paired && client != null) launch(query, socket, client, path == "/resume") else root("", 401, "The device isn't paired"))
+            "/launch", "/resume" -> xml(out, if (paired) launch(query, socket, client, path == "/resume") else root("", 401, "The device isn't paired"))
             "/cancel" -> { if (paired) { session?.end(); currentGame = 0 }; xml(out, root("<cancel>1</cancel>")) }
             else -> xml(out, root("", 404, "Not found"))
         }

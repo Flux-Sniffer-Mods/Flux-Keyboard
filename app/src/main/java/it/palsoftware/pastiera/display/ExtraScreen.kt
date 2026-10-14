@@ -414,7 +414,6 @@ object ExtraScreen {
             input = started.outputStream.bufferedWriter()
             send("Z ${screen.id}")
             send("S ${screen.width} ${screen.height}")
-            keyboardDevice()?.let { send("D $it") }
         }.onFailure { FluxLog.w(TAG, "no input for the screen: $it") }
     }
 
@@ -432,11 +431,6 @@ object ExtraScreen {
     private fun send(line: String) = worker.execute {
         val writer = input ?: return@execute
         runCatching { writer.write(line); writer.write("\n"); writer.flush() }
-    }
-
-    private fun keyboardDevice(): Int? = InputDevice.getDeviceIds().firstOrNull { id ->
-        val device = InputDevice.getDevice(id) ?: return@firstOrNull false
-        !device.isVirtual && device.keyboardType == InputDevice.KEYBOARD_TYPE_ALPHABETIC
     }
 
     /** Keys the phone keeps while its keys go to the screen. */

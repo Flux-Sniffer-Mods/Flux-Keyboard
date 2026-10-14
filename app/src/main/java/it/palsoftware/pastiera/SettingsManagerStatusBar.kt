@@ -74,15 +74,6 @@ fun SettingsManager.resetStatusBarSlotsToDefault(context: Context): StatusBarSlo
 @Suppress("UNUSED_PARAMETER")
 fun SettingsManager.defaultMenuBarButtons(context: Context): List<String> = MENU_BAR_DEFAULT
 
-/** Whether only one input language is on for this keyboard (false when it can't tell). */
-fun SettingsManager.hasSingleInputLanguage(context: Context): Boolean = runCatching {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE)
-        as? android.view.inputmethod.InputMethodManager ?: return false
-    val ime = imm.enabledInputMethodList.firstOrNull { it.packageName == context.packageName }
-        ?: return false
-    imm.getEnabledInputMethodSubtypeList(ime, true).size <= 1
-}.getOrDefault(false)
-
 /** The menu bar's buttons, in order (its close button always comes first). */
 fun SettingsManager.getMenuBarButtons(context: Context): List<String> {
     val stored = getPreferences(context).getString(KEY_MENU_BAR_BUTTONS, null)
