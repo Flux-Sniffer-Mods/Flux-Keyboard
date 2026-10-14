@@ -564,7 +564,13 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 val setupScope = androidx.compose.runtime.rememberCoroutineScope()
                 TextButton(onClick = {
                     setupScope.launch {
-                        val result = withContext(Dispatchers.IO) { it.palsoftware.pastiera.gaming.FluxLayout.apply(context, emulatorPkg) }
+                        val result = withContext(Dispatchers.IO) {
+                            it.palsoftware.pastiera.gaming.FluxLayout.apply(context, emulatorPkg).also { done ->
+                                // The games' own Dolphin profiles built on the layout just written
+                                if (done == it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE && GameApps.emulator(emulatorPkg) == "Dolphin")
+                                    it.palsoftware.pastiera.gaming.FluxLayout.refreshGames(context, emulatorPkg)
+                            }
+                        }
                         if (result == it.palsoftware.pastiera.gaming.FluxLayout.Result.DONE) it.palsoftware.pastiera.gaming.FluxLayout.markWritten(context, emulatorPkg)
                         // Its graphics too, where its settings can be written: suited to this phone's GPU
                         val graphics = withContext(Dispatchers.IO) {

@@ -483,7 +483,10 @@ object FluxLayout {
             else -> false
         }
         if (!given) return
-        if (apply(context, pkg) == Result.DONE) prefs.edit().putInt(key, LAYOUT_VERSION).putString(KEY_STATE + pkg, state).apply()
+        if (apply(context, pkg) != Result.DONE) return
+        // The games' own profiles are built on the layout too
+        if (GameApps.emulator(pkg) == "Dolphin") refreshGames(context, pkg)
+        prefs.edit().putInt(key, LAYOUT_VERSION).putString(KEY_STATE + pkg, state).apply()
     }
 
     private const val KEY_STATE = "flux_layout_state_"
@@ -583,20 +586,56 @@ object FluxLayout {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
         loadOverrides(context)
-        val swap = swapFor(context, pkg)
-        val volume = volumeDevices(context, keyboard)
         val gc = pad == WiiPad.GAMECUBE || !wii
-        val profile = if (remap.isEmpty()) pad.profile else "${pad.profile} $gameId"
-        val written = if (gc) {
-            write("$dir/Config/Profiles/GCPad/$profile.ini", withSection("", "Profile", dolphinGameCube(keyboard, swap, volume, remap)))
-        } else {
-            write("$dir/Config/Profiles/Wiimote/$profile.ini", withSection("", "Profile", dolphinWii(keyboard, pad, swap, volume, remap)))
+        val own = remap.isNotEmpty()
+        val profile = if (own) gameProfileName(pad, gameId) else pad.profile
+        val folder = if (gc) "GCPad" else "Wiimote"
+        // The game's own profile; a shared one comes with the layout, written here only if it's missing
+        val path = "$dir/Config/Profiles/$folder/$profile.ini"
+        if (own || read(path).isEmpty()) {
+            val swap = swapFor(context, pkg)
+            val volume = volumeDevices(context, keyboard)
+            val lines = if (gc) dolphinGameCube(keyboard, swap, volume, remap) else dolphinWii(keyboard, pad, swap, volume, remap)
+            if (!writeIfChanged(path, withSection("", "Profile", lines))) return Result.FAILED
         }
-        if (!written) return Result.FAILED
+        // The game's other profiles (another controller chosen, or its keys reset) taken away
+        removeGameProfiles(dir, gameId, keep = "$folder/$profile.ini".takeIf { own })
         val file = "$dir/GameSettings/$gameId.ini"
         val ini = read(file)
-        val updated = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { remap.isNotEmpty() })
-        return if (write(file, updated)) Result.DONE else Result.FAILED
+        val updated = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { own })
+        return if (updated == ini || write(file, updated)) Result.DONE else Result.FAILED
+    }
+
+    /** A game's own profile in Dolphin's list: "Flux Keyboard RMCE01", "Flux Keyboard (sideways) RMCE01". */
+    internal fun gameProfileName(pad: WiiPad, gameId: String) = "${pad.profile} $gameId"
+
+    /** [gameId]'s own Flux Keyboard profiles but [keep] ("GCPad/<name>.ini"), with their backup marks. */
+    private fun removeGameProfiles(dir: String, gameId: String, keep: String?) {
+        AdbShell.run(
+            "cd \"$dir/Config/Profiles\" 2>/dev/null || exit 0; for f in GCPad/'Flux Keyboard'*' $gameId.ini' Wiimote/'Flux Keyboard'*' $gameId.ini'; do " +
+                "[ -e \"\$f\" ] || continue; [ \"\$f\" = \"${keep.orEmpty()}\" ] && continue; rm -f \"\$f\" \"\$f$BACKUP_NONE\"; " +
+                "[ -e \"\$f$BACKUP\" ] && mv -f \"\$f$BACKUP\" \"\$f\"; done; true", 3_000
+        )
+    }
+
+    /** [write], unless the file already holds [content] (nothing rewritten each time a game starts). */
+    internal fun writeIfChanged(path: String, content: String): Boolean = read(path) == content || write(path, content)
+
+    /**
+     * The games of [pkg] with a controller or keys of their own given the current layout again
+     * (it changed, or keys were changed in Keyboard controls). Blocking: through the shell.
+     */
+    fun refreshGames(context: android.content.Context, pkg: String) {
+        GameProfiles.all(context).filter { it.isGame && pkg in it.packages && (it.wiiPad != null || it.padControls.isNotEmpty()) }.forEach { game ->
+            runCatching {
+                val path = game.launch?.let { GameFiles.gameFile(it) } ?: return@runCatching
+                val id = GameIds.id(context, "Dolphin", path) ?: return@runCatching
+                val wii = GameFiles.isWii(path)
+                val pad = game.wiiPad?.let { name -> WiiPad.entries.firstOrNull { it.name == name } }
+                    ?: if (wii) WiiPad.NUNCHUK else WiiPad.GAMECUBE
+                setGamePad(context, pkg, id, wii, pad, game.padRemap(pad))
+            }
+        }
     }
 
     /**

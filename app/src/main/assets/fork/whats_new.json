@@ -1105,6 +1105,9 @@
     },
     {
       "text": "Gaming mode: Recents opens again after a game changed the screen's size or turning, with another home app such as Niagara"
+    },
+    {
+      "text": "Dolphin: a game's own controller settings are tidier: its old profiles are taken away when its controller or keys change, nothing is rewritten when unchanged (quicker starts), and its profiles follow layout changes even when Dolphin is opened on its own"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
