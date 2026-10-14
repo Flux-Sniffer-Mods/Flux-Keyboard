@@ -1416,8 +1416,13 @@
     <string name="tv_forget">Διαγραφή</string>
     <string name="tv_find_again">Νέα αναζήτηση</string>
     <string name="tv_menu_description">Το Flux Keyboard ανοίγει αυτή την τηλεόραση και το Moonlight σε αυτήν στο παιχνίδι που διαλέγεις. Για να ανοίγει, η τηλεόραση χρειάζεται το «Ενεργοποίηση μέσω Wi-Fi» (ή Mobile TV On) στις ρυθμίσεις της.</string>
-    <string name="tv_games_on_tv">Έναρξη παιχνιδιών στην τηλεόραση</string>
-    <string name="tv_games_on_tv_description">Με τη ροή ενεργή, ένα παιχνίδι που διαλέγεις εδώ ξεκινά στην τηλεόραση μέσω Moonlight. Χωρίς ροή, τα παιχνίδια παίζουν στο τηλέφωνο.</string>
+    <string name="tv_games_on_tv">Παιχνίδια που ανοίγουν κατά τη ροή</string>
+    <string name="tv_games_on_tv_description">Ερώτηση κάθε φορά: ένα παιχνίδι που ανοίγει κατά τη ροή ρωτά αν θα παιχτεί στην τηλεόραση (ανοίγει, το Moonlight ανοίγει κατευθείαν στο παιχνίδι) ή στο τηλέφωνο. Χωρίς ροή, τα παιχνίδια παίζονται στο τηλέφωνο.</string>
+    <string name="tv_games_ask">Ερώτηση κάθε φορά</string>
+    <string name="tv_play_on_tv">Στην τηλεόραση</string>
+    <string name="tv_play_on_phone">Στο τηλέφωνο</string>
+    <string name="tv_play_title">Να παιχτεί το %1$s στην τηλεόραση;</string>
+    <string name="tv_play_message">Η ροή είναι ενεργή. Στην τηλεόραση: η %1$s ανοίγει και το Moonlight ανοίγει εκεί, κατευθείαν στο παιχνίδι.</string>
     <string name="tv_starting">Έναρξη του %1$s στην %2$s…</string>
     <string name="tv_no_answer">Η %1$s δεν απάντησε. Άνοιξέ την ή ενεργοποίησε το «Ενεργοποίηση μέσω Wi-Fi» (Mobile TV On) στις ρυθμίσεις της.</string>
     <string name="tv_refused">Η %1$s δεν επέτρεψε το Flux Keyboard. Αποδέξου το στην τηλεόραση όταν ερωτηθείς.</string>

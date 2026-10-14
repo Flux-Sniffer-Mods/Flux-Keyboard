@@ -2048,8 +2048,13 @@
     <string name="tv_forget">Забыть</string>
     <string name="tv_find_again">Найти заново</string>
     <string name="tv_menu_description">Flux Keyboard включает этот телевизор и открывает на нём Moonlight в выбранной игре. Чтобы включать его, в настройках телевизора нужна опция «Включение через Wi-Fi» (или Mobile TV On).</string>
-    <string name="tv_games_on_tv">Запускать игры на телевизоре</string>
-    <string name="tv_games_on_tv_description">При включённой трансляции игра, выбранная здесь, запускается на телевизоре через Moonlight. Без трансляции игры идут на телефоне.</string>
+    <string name="tv_games_on_tv">Игры, открытые во время трансляции</string>
+    <string name="tv_games_on_tv_description">Спрашивать каждый раз: при открытии игры во время трансляции спрашивается, играть на телевизоре (включается, Moonlight открывается сразу в игре) или на телефоне. Без трансляции игры идут на телефоне.</string>
+    <string name="tv_games_ask">Спрашивать каждый раз</string>
+    <string name="tv_play_on_tv">На телевизоре</string>
+    <string name="tv_play_on_phone">На телефоне</string>
+    <string name="tv_play_title">Играть в %1$s на телевизоре?</string>
+    <string name="tv_play_message">Трансляция включена. На телевизоре: %1$s включается, и Moonlight открывается там сразу в игре.</string>
     <string name="tv_starting">Запускаю %1$s на %2$s…</string>
     <string name="tv_no_answer">%1$s не ответил. Включите его или включите «Включение через Wi-Fi» (Mobile TV On) в его настройках.</string>
     <string name="tv_refused">%1$s не разрешил Flux Keyboard. Подтвердите на телевизоре, когда он спросит.</string>

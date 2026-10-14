@@ -2036,8 +2036,13 @@
     <string name="tv_forget">Մոռանալ</string>
     <string name="tv_find_again">Նորից գտնել</string>
     <string name="tv_menu_description">Flux Keyboard-ը միացնում է այս հեռուստացույցը և բացում Moonlight-ը ձեր ընտրած խաղով։ Միացնելու համար հեռուստացույցի կարգավորումներում պետք է լինի «Միացնել Wi-Fi-ով» (կամ Mobile TV On)։</string>
-    <string name="tv_games_on_tv">Սկսել խաղերը հեռուստացույցում</string>
-    <string name="tv_games_on_tv_description">Հոսքը միացված լինելու դեպքում այստեղ ընտրած խաղը սկսվում է հեռուստացույցում Moonlight-ի միջոցով։ Հոսքն անջատված լինելու դեպքում խաղերը խաղում են հեռախոսում։</string>
+    <string name="tv_games_on_tv">Հոսքի ժամանակ բացված խաղեր</string>
+    <string name="tv_games_on_tv_description">Ամեն անգամ հարցնել․ հոսքի ժամանակ բացված խաղը հարցնում է՝ խաղալ հեռուստացույցով (միանում է, Moonlight-ը բացվում է անմիջապես խաղում), թե հեռախոսով։ Առանց հոսքի խաղերը խաղացվում են հեռախոսով։</string>
+    <string name="tv_games_ask">Ամեն անգամ հարցնել</string>
+    <string name="tv_play_on_tv">Հեռուստացույցով</string>
+    <string name="tv_play_on_phone">Հեռախոսով</string>
+    <string name="tv_play_title">Խաղա՞լ %1$s-ը հեռուստացույցով</string>
+    <string name="tv_play_message">Հոսքը միացված է։ Հեռուստացույցով՝ %1$s-ը միանում է, և Moonlight-ը բացվում է այնտեղ՝ անմիջապես խաղում։</string>
     <string name="tv_starting">Սկսում եմ %1$s-ը %2$s-ում…</string>
     <string name="tv_no_answer">%1$s-ը չպատասխանեց։ Միացրեք այն կամ միացրեք «Միացնել Wi-Fi-ով» (Mobile TV On) դրա կարգավորումներում։</string>
     <string name="tv_refused">%1$s-ը չթույլատրեց Flux Keyboard-ը։ Հաստատեք հեռուստացույցում, երբ հարցնի։</string>

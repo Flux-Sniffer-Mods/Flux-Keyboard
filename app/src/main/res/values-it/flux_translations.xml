@@ -1544,8 +1544,13 @@
     <string name="tv_forget">Dimentica</string>
     <string name="tv_find_again">Cerca di nuovo</string>
     <string name="tv_menu_description">Flux Keyboard accende questa TV e vi apre Moonlight nel gioco che scegli. Per accenderla, la TV deve avere «Accendi tramite Wi-Fi» (o Mobile TV On) nelle impostazioni.</string>
-    <string name="tv_games_on_tv">Avvia i giochi sulla TV</string>
-    <string name="tv_games_on_tv_description">Con lo streaming attivo, un gioco scelto qui parte sulla TV tramite Moonlight. Senza streaming, i giochi si giocano sul telefono.</string>
+    <string name="tv_games_on_tv">Giochi aperti durante lo streaming</string>
+    <string name="tv_games_on_tv_description">Chiedi ogni volta: un gioco aperto durante lo streaming chiede se giocarlo sulla TV (accesa, Moonlight aperto direttamente nel gioco) o sul telefono. Senza streaming, i giochi si giocano sul telefono.</string>
+    <string name="tv_games_ask">Chiedi ogni volta</string>
+    <string name="tv_play_on_tv">Sulla TV</string>
+    <string name="tv_play_on_phone">Sul telefono</string>
+    <string name="tv_play_title">Giocare a %1$s sulla TV?</string>
+    <string name="tv_play_message">Lo streaming è attivo. Sulla TV: %1$s si accende e Moonlight si apre lì, direttamente nel gioco.</string>
     <string name="tv_starting">Avvio di %1$s su %2$s…</string>
     <string name="tv_no_answer">%1$s non ha risposto. Accendila o attiva «Accendi tramite Wi-Fi» (Mobile TV On) nelle sue impostazioni.</string>
     <string name="tv_refused">%1$s non ha autorizzato Flux Keyboard. Accetta sulla TV quando richiesto.</string>

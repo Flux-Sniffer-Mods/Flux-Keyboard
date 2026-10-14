@@ -2048,8 +2048,13 @@
     <string name="tv_forget">Забути</string>
     <string name="tv_find_again">Знайти знову</string>
     <string name="tv_menu_description">Flux Keyboard вмикає цей телевізор і відкриває на ньому Moonlight у вибраній грі. Щоб вмикати його, у налаштуваннях телевізора потрібна опція «Увімкнення через Wi-Fi» (або Mobile TV On).</string>
-    <string name="tv_games_on_tv">Запускати ігри на телевізорі</string>
-    <string name="tv_games_on_tv_description">Коли трансляція увімкнена, гра, вибрана тут, запускається на телевізорі через Moonlight. Без трансляції ігри йдуть на телефоні.</string>
+    <string name="tv_games_on_tv">Ігри, відкриті під час трансляції</string>
+    <string name="tv_games_on_tv_description">Питати щоразу: під час відкриття гри під час трансляції запитується, грати на телевізорі (вмикається, Moonlight відкривається одразу в грі) чи на телефоні. Без трансляції ігри йдуть на телефоні.</string>
+    <string name="tv_games_ask">Питати щоразу</string>
+    <string name="tv_play_on_tv">На телевізорі</string>
+    <string name="tv_play_on_phone">На телефоні</string>
+    <string name="tv_play_title">Грати в %1$s на телевізорі?</string>
+    <string name="tv_play_message">Трансляцію ввімкнено. На телевізорі: %1$s вмикається, і Moonlight відкривається там одразу в грі.</string>
     <string name="tv_starting">Запускаю %1$s на %2$s…</string>
     <string name="tv_no_answer">%1$s не відповів. Увімкніть його або увімкніть «Увімкнення через Wi-Fi» (Mobile TV On) у його налаштуваннях.</string>
     <string name="tv_refused">%1$s не дозволив Flux Keyboard. Підтвердьте на телевізорі, коли він запитає.</string>
