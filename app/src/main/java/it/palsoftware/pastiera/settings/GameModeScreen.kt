@@ -737,7 +737,7 @@ private fun DolphinControllerRows(profile: GameProfile, onChanged: (GameProfile)
         val chosen = if (!wii) FluxLayout.WiiPad.GAMECUBE
             else FluxLayout.WiiPad.entries.firstOrNull { it.name == changed.wiiPad } ?: FluxLayout.WiiPad.NUNCHUK
         scope.launch {
-            val result = withContext(Dispatchers.IO) { FluxLayout.setGamePad(context, pkg, id, wii, chosen, changed.padRemap(chosen), activate = false) }
+            val result = withContext(Dispatchers.IO) { FluxLayout.setGamePad(context, pkg, id, wii, chosen, changed.padRemap(chosen), activate = false, keepChosen = changed.keepDolphinProfile) }
             android.widget.Toast.makeText(
                 context,
                 when (result) {
@@ -757,6 +757,17 @@ private fun DolphinControllerRows(profile: GameProfile, onChanged: (GameProfile)
     }
     // When it all takes effect, and what doesn't follow
     FluxNote(stringResource(R.string.dolphin_game_applied_note))
+    // Flux Keyboard's controls, or a profile chosen for the game in Dolphin itself
+    FluxSwitchRow(
+        linkId = null,
+        title = stringResource(R.string.dolphin_use_flux_title),
+        description = stringResource(R.string.dolphin_use_flux_description),
+        checked = !profile.keepDolphinProfile
+    ) { on ->
+        val changed = profile.copy(keepDolphinProfile = !on)
+        onChanged(changed)
+        apply(changed, context.getString(R.string.dolphin_pad_saved))
+    }
     // Dolphin's on-screen controls in this game, set as it starts from Games
     val overlays = listOf(
         stringResource(R.string.dolphin_overlay_off),

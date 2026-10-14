@@ -605,7 +605,9 @@ object FluxLayout {
         context: android.content.Context, pkg: String, gameId: String, wii: Boolean, pad: WiiPad,
         remap: Map<String, List<DolphinPads.Binding>> = emptyMap(),
         /** Also the controller Dolphin starts with (as the game starts); not when refreshing every game. */
-        activate: Boolean = true
+        activate: Boolean = true,
+        /** A profile chosen for the game in Dolphin itself kept (Flux Keyboard's controls otherwise). */
+        keepChosen: Boolean = false
     ): Result {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
@@ -622,23 +624,24 @@ object FluxLayout {
         if ((own || read(path).isEmpty()) && !writeIfChanged(path, withSection("", "Profile", lines))) return Result.FAILED
         // Dolphin says it can't find a profile a game names: never name one that isn't there
         if (read(path).isEmpty()) return Result.FAILED
+        val file = "$dir/GameSettings/$gameId.ini"
+        val ini = read(file)
+        val key = if (gc) "PadProfile1" else "WiimoteProfile1"
+        // A profile chosen in Dolphin itself (not one of Flux Keyboard's) is replaced, unless the game is set to keep it
+        val chosen = Regex("(?m)^\\s*" + key + "\\s*=\\s*(.*)$").find(ini)?.groupValues?.get(1)?.trim()
+        val keepIt = keepChosen && !chosen.isNullOrEmpty() && !chosen.startsWith("Flux Keyboard")
         // Also as the controller Dolphin starts with, so the game plays with it without loading
         // the profile in Dolphin (and the next game puts its own back)
         val active = if (gc) "$dir/Config/GCPadNew.ini" to "GCPad1" else "$dir/Config/WiimoteNew.ini" to "Wiimote1"
-        if (activate) {
+        if (activate && !keepIt) {
             val now = read(active.first)
             val started = withSection(now, active.second, lines)
             if (started != now && !write(active.first, started)) return Result.FAILED
         }
         // The game's other profiles (another controller chosen, or its keys reset) taken away
         removeGameProfiles(dir, gameId, keep = "$folder/$profile.ini".takeIf { own })
-        val file = "$dir/GameSettings/$gameId.ini"
-        val ini = read(file)
         val set = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { own })
-        val key = if (gc) "PadProfile1" else "WiimoteProfile1"
-        // A profile chosen in Dolphin itself (not one of Flux Keyboard's) is kept, unless the game has keys of its own here
-        val chosen = Regex("(?m)^\\s*" + key + "\\s*=\\s*(.*)$").find(ini)?.groupValues?.get(1)?.trim()
-        val kept = if (!own && !chosen.isNullOrEmpty() && !chosen.startsWith("Flux Keyboard")) withKey(set, "Controls", key, chosen) else set
+        val kept = if (keepIt) withKey(set, "Controls", key, chosen) else set
         val updated = withoutOtherFluxProfiles(kept, keep = key)
         return if (updated == ini || write(file, updated)) Result.DONE else Result.FAILED
     }
@@ -690,7 +693,7 @@ object FluxLayout {
                 val wii = GameFiles.isWii(path)
                 val pad = game.wiiPad?.let { name -> WiiPad.entries.firstOrNull { it.name == name } }
                     ?: if (wii) WiiPad.NUNCHUK else WiiPad.GAMECUBE
-                setGamePad(context, pkg, id, wii, pad, game.padRemap(pad), activate = false)
+                setGamePad(context, pkg, id, wii, pad, game.padRemap(pad), activate = false, keepChosen = game.keepDolphinProfile)
             }
         }
     }

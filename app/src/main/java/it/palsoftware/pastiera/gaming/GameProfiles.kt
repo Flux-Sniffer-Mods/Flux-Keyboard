@@ -124,7 +124,9 @@ data class GameProfile(
      */
     val keyOverrides: String? = null,
     /** Dolphin: its on-screen controls for this game ([FluxLayout.DolphinOverlay]'s name); null: as suits it. */
-    val dolphinOverlay: String? = null
+    val dolphinOverlay: String? = null,
+    /** Dolphin: a profile chosen for the game in Dolphin itself kept, rather than Flux Keyboard's controls. */
+    val keepDolphinProfile: Boolean = false
 ) {
     /**
      * Dolphin's on-screen controls for this game, as chosen; else invisible when sticks or keys
@@ -162,6 +164,7 @@ data class GameProfile(
         if (padControls.isNotEmpty()) put("padControls", JSONObject(padControls))
         keyOverrides?.let { put("keyOverrides", it) }
         dolphinOverlay?.let { put("dolphinOverlay", it) }
+        if (keepDolphinProfile) put("keepDolphinProfile", true)
         if (pending) put("pending", true)
         if (ownScreen) put("ownScreen", true)
         phoneHeight?.let { put("phoneHeight", it) }
@@ -237,6 +240,7 @@ data class GameProfile(
                 wiiPad = json.optString("wiiPad").ifEmpty { null },
                 keyOverrides = json.optString("keyOverrides").ifEmpty { null },
                 dolphinOverlay = json.optString("dolphinOverlay").ifEmpty { null },
+                keepDolphinProfile = json.optBoolean("keepDolphinProfile", false),
                 padControls = json.optJSONObject("padControls")?.let { o -> o.keys().asSequence().associateWith { o.optString(it) } }
                     ?.filterValues { it.isNotEmpty() }.orEmpty(),
                 pending = json.optBoolean("pending", false),

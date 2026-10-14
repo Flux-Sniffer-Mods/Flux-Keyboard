@@ -78,7 +78,7 @@ class GameLaunchActivity : Activity() {
                     val pad = profile?.wiiPad?.let { name -> FluxLayout.WiiPad.entries.firstOrNull { it.name == name } }
                         ?: if (wii) FluxLayout.WiiPad.NUNCHUK else FluxLayout.WiiPad.GAMECUBE
                     val remap = profile?.padRemap(pad).orEmpty()
-                    val result = if (id != null) FluxLayout.setGamePad(this, pkg, id, wii, pad, remap) else null
+                    val result = if (id != null) FluxLayout.setGamePad(this, pkg, id, wii, pad, remap, keepChosen = profile?.keepDolphinProfile == true) else null
                     val ini = id?.let { gameId -> FluxLayout.dolphinDir(pkg)?.let { dir ->
                         it.palsoftware.pastiera.adb.AdbShell.run("cat \"$dir/GameSettings/$gameId.ini\" 2>&1 | head -n 20", 3_000)
                     } }

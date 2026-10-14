@@ -747,6 +747,9 @@
     },
     {
       "text": "Dolphin: a game started from Games plays with its own controller and keys straight away, with nothing to load in Dolphin's game settings, and each game can hide Dolphin's on-screen controls, keep them invisible for sticks and keys placed on them, or show them"
+    },
+    {
+      "text": "Dolphin: each game uses Flux Keyboard's controls even if a profile was chosen for it in Dolphin; a switch in the game's settings keeps Dolphin's own profile instead"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1120,9 +1123,6 @@
     },
     {
       "text": "Games: the phone's Back keeps a game's changed settings, as the back arrow does (keys changed for Dolphin were lost before)"
-    },
-    {
-      "text": "Dolphin: a profile you chose for a game in Dolphin itself is kept, unless the game has keys of its own set in Flux Keyboard"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -475,6 +475,8 @@
     <string name="dolphin_pad_no_key">No key</string>
     <string name="dolphin_pad_saved">Saved. Dolphin uses it from the next time this game starts from Games.</string>
     <string name="dolphin_game_applied_note">Applied each time this game starts from Games: its controller, keys and on-screen controls go into Dolphin then, with nothing to set in Dolphin. Opened from Dolphin itself, a game plays with the controls of the last game started from Games. Invisible on-screen controls are needed for sticks and keys placed on the screen.</string>
+    <string name="dolphin_use_flux_title">Use Flux Keyboard\'s controls</string>
+    <string name="dolphin_use_flux_description">This game plays with the controls set here, even if a profile was chosen for it in Dolphin. Off: a profile chosen in Dolphin is kept.</string>
     <string name="dolphin_overlay_title">Dolphin\'s on-screen controls</string>
     <string name="dolphin_overlay_off">Hidden</string>
     <string name="dolphin_overlay_invisible">Invisible (for sticks and keys placed on them)</string>
