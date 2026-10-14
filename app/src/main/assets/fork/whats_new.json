@@ -776,7 +776,7 @@
       "text": "Stream to Moonlight: an LG TV can be set up (found on the Wi-Fi, accepted once on the TV); with streaming on, picking a game in the Games app turns the TV on and opens Moonlight there straight into the game"
     },
     {
-      "text": "Game folders: GameHub Lite has a folder of its own (Download/Flux Keyboard/Games/GameHub Lite) for its Export for frontend, apart from GameHub's; games already exported to GameHub's folder still start in GameHub Lite when it's installed"
+      "text": "Game folders: GameHub Lite has a folder of its own (Download/Flux Keyboard/Games/GameHub Lite) for its Steam library, apart from GameHub's; games already found in GameHub's folder still start in GameHub Lite when it's installed"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
