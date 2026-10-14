@@ -5,7 +5,6 @@ import android.content.res.AssetManager
 import android.util.Log
 import it.palsoftware.pastiera.inputmethod.subtype.AdditionalSubtypeUtils.localeString
 import org.json.JSONObject
-import java.text.Normalizer
 import it.palsoftware.pastiera.getAutoCorrectEnabledLanguages
 import it.palsoftware.pastiera.getCustomAutoCorrections
 
@@ -330,11 +329,8 @@ object AutoCorrector {
     }
 
     private fun isOrthographicReplacement(original: String, replacement: String): Boolean {
-        fun normalize(text: String): String {
-            return Normalizer.normalize(text.lowercase(), Normalizer.Form.NFD)
-                .replace("\\p{Mn}".toRegex(), "")
-                .filter { it.isLetterOrDigit() }
-        }
+        fun normalize(text: String): String =
+            it.palsoftware.pastiera.core.suggestions.WordNormalization.stripAccents(text.lowercase()).filter { it.isLetterOrDigit() }
         return normalize(original) == normalize(replacement)
     }
 

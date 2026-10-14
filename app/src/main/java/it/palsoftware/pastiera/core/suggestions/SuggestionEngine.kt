@@ -1,7 +1,6 @@
 package it.palsoftware.pastiera.core.suggestions
 
 import kotlin.math.min
-import java.text.Normalizer
 import java.util.Locale
 
 data class SuggestionResult(
@@ -699,9 +698,6 @@ class SuggestionEngine(
     }
 
     private fun stripAccents(input: String): String {
-        return accentCache.getOrPut(input) {
-            Normalizer.normalize(input, Normalizer.Form.NFD)
-                .replace("\\p{Mn}".toRegex(), "")
-        }
+        return accentCache.getOrPut(input) { WordNormalization.stripAccents(input) }
     }
 }

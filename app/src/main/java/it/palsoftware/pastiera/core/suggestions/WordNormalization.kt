@@ -55,6 +55,10 @@ object WordNormalization {
         return out?.toString() ?: input
     }
 
+    /** [input] without its accents (combining marks taken off after decomposing). */
+    fun stripAccents(input: String): String =
+        Normalizer.normalize(input, Normalizer.Form.NFD).replace(combiningMarksRegex, "")
+
     fun normalizeForDictionary(word: String, locale: Locale): String {
         val withAsciiCompat = foldCompatibilityLetters(normalizeApostrophes(word).lowercase(locale))
         val normalized = Normalizer.normalize(withAsciiCompat, Normalizer.Form.NFD)

@@ -47,6 +47,18 @@ class AutoCorrectionSubstitutionStoreTest {
     }
 
     @Test
+    fun customCorrections_changedOnesAreReadAgain() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.saveCustomAutoCorrections(context, "en", mapOf("brb" to "be right back"))
+        assertEquals("be right back", SettingsManager.getCustomAutoCorrections(context, "en")["brb"])
+
+        SettingsManager.saveCustomAutoCorrections(context, "en", mapOf("brb" to "back soon"))
+        assertEquals("back soon", SettingsManager.getCustomAutoCorrections(context, "en")["brb"])
+        // Unchanged: the same corrections, without reading them again
+        assertTrue(SettingsManager.getCustomAutoCorrections(context, "en") === SettingsManager.getCustomAutoCorrections(context, "en"))
+    }
+
+    @Test
     fun addCustomSubstitution_rejectsBlankValues() {
         val context = RuntimeEnvironment.getApplication()
 

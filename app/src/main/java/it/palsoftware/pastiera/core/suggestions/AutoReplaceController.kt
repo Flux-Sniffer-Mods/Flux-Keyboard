@@ -5,7 +5,6 @@ import android.view.inputmethod.InputConnection
 import it.palsoftware.pastiera.core.AutoSpaceTracker
 import it.palsoftware.pastiera.core.Punctuation
 import android.util.Log
-import java.text.Normalizer
 import java.util.Locale
 import it.palsoftware.pastiera.inputmethod.DebugCaptureStore
 
@@ -46,10 +45,7 @@ class AutoReplaceController(
             return WordNormalization.normalizeApostrophes(input)
         }
 
-        internal fun stripAccents(input: String): String {
-            return Normalizer.normalize(input, Normalizer.Form.NFD)
-                .replace("\\p{Mn}".toRegex(), "")
-        }
+        internal fun stripAccents(input: String): String = WordNormalization.stripAccents(input)
 
         /**
          * Split a word with a single apostrophe into prefix (with apostrophe) and root.

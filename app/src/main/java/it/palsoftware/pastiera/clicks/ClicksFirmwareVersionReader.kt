@@ -132,6 +132,7 @@ object ClicksFirmwareVersionReader {
             handler.post { onResult(version) }
         }
 
+        @SuppressLint("MissingPermission")
         override fun close() {
             if (completed) return
             completed = true

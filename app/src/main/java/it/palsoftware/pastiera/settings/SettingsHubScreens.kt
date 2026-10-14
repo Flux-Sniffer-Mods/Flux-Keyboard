@@ -362,7 +362,7 @@ internal fun SwipePadThresholdRow() {
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "${String.format("%.1f", threshold)} ${stringResource(R.string.dip_unit)}",
+                    text = "${String.format(java.util.Locale.getDefault(), "%.1f", threshold)} ${stringResource(R.string.dip_unit)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

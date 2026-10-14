@@ -281,11 +281,16 @@ fun SettingsManager.setAutoCorrectEnabledLanguages(context: Context, languages: 
 /**
  * Returns custom corrections for a language.
  */
+/** Custom corrections by language as last parsed, with the saved text they came from. */
+private val customCorrectionsParsed = java.util.concurrent.ConcurrentHashMap<String, Pair<String, Map<String, String>>>()
+
 fun SettingsManager.getCustomAutoCorrections(context: Context, languageCode: String): Map<String, String> {
     val prefs = getPreferences(context)
     val key = "auto_correct_custom_$languageCode"
     val jsonString = prefs.getString(key, null) ?: return emptyMap()
-    
+    // Read on every word, in every language: parsed again only once the saved text changes
+    customCorrectionsParsed[languageCode]?.let { (text, parsed) -> if (text == jsonString) return parsed }
+
     return try {
         val jsonObject = JSONObject(jsonString)
         val corrections = mutableMapOf<String, String>()
@@ -298,7 +303,7 @@ fun SettingsManager.getCustomAutoCorrections(context: Context, languageCode: Str
                 corrections[correctionKey] = value
             }
         }
-        corrections
+        corrections.also { customCorrectionsParsed[languageCode] = jsonString to it }
     } catch (e: Exception) {
         Log.e(TAG, "Error loading custom corrections for $languageCode", e)
         emptyMap()

@@ -1860,7 +1860,7 @@ fun TutorialReadyPageContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = contentOffset)
+                .offset { androidx.compose.ui.unit.IntOffset(0, contentOffset.roundToPx()) }
                 .alpha(contentAlpha),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

@@ -180,9 +180,10 @@ class TrackpadGestureDetector(
     }
 
     private fun axisValue(line: String): Int? =
-        line.trim().split(Regex("\\s+")).takeIf { it.size >= 3 }?.last()?.toIntOrNull(16)
+        line.trim().split(SPACES).takeIf { it.size >= 3 }?.last()?.toIntOrNull(16)
 
     companion object {
+        private val SPACES = Regex("\\s+")
         const val DEFAULT_TRACKPAD_MAX_X = 1440
         const val DEFAULT_EVENT_DEVICE = TrackpadEventDeviceResolver.LEGACY_EVENT_DEVICE
         const val AUTO_EVENT_DEVICE = "auto"

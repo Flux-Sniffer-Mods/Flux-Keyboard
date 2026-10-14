@@ -254,7 +254,7 @@ class CommandExecutor(
             return brightnessWithoutShell(keyCode) ?: fail("Shizuku required")
         }
         it.palsoftware.pastiera.adb.AdbShell.runAsync("input keyevent $keyCode") { output ->
-            if (output == null) Log.w(TAG, "Shell keyevent $keyCode failed")
+            if (output == null) android.os.Handler(android.os.Looper.getMainLooper()).post { fail("Command failed") }
         }
         return CommandExecutionResult.Success
     }

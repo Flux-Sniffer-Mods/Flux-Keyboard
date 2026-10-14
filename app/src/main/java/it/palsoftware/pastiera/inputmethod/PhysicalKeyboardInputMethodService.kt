@@ -245,6 +245,8 @@ import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibilityKeyBridge.Target {
 
     companion object {
+        /** Words in a field's hint, name or label that mark it as one for a one-time code. */
+        private val ONE_TIME_CODE_WORDS = Regex("code|otp|one.?time|verif|2fa|pin|token|passcode|sms|codice|código|kod|код|mã")
         /** A terminal swipe: a character per half a key's width, a line per key's height or so. */
         private const val TERMINAL_SWIPE_CHARACTER_KEYS = 1.0f
         private const val TERMINAL_SWIPE_LINE_KEYS = 1.6f
@@ -2531,6 +2533,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         symLayoutController = SymLayoutController(this, prefs, alternateCharacterManager)
+        expansionAssetScope.launch {
+            runCatching { it.palsoftware.pastiera.data.emoji.EmojiRepository.getEmojiCategories(applicationContext) }
+        }
         // Emoji layer's GIF key (physical): the same as its on-screen GIF key
         symLayoutController.onEmojiLayerGifKey = {
             uiHandler.post { candidatesBarController.onEmojiLayerGifRequested?.invoke() }
@@ -5413,7 +5418,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         ) return false
         val words = (info.hintText?.toString().orEmpty() + " " + info.fieldName.orEmpty() + " " +
             (info.label?.toString().orEmpty()) + " " + info.privateImeOptions.orEmpty()).lowercase()
-        return Regex("code|otp|one.?time|verif|2fa|pin|token|passcode|sms|codice|código|kod|код|mã").containsMatchIn(words)
+        return ONE_TIME_CODE_WORDS.containsMatchIn(words)
     }
 
     private fun offerOneTimeCode() {

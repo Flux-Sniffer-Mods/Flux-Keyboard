@@ -723,6 +723,9 @@
     },
     {
       "text": "A smaller app: unused text, colours and icon images taken out, in every language"
+    },
+    {
+      "text": "Typing and trackpad swipes do less work per key: your own corrections are read once until you change them, accents and swipe readings no longer rebuild their patterns each time, and the emoji layer opens straight away the first time"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

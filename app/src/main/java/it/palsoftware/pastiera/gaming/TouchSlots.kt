@@ -128,5 +128,7 @@ internal class TouchSlots(
     }
 
     /** The last field, in hex (ffffffff for a lifted finger's tracking ID). */
-    private fun value(line: String): Long? = line.trim().split(Regex("\\s+")).lastOrNull()?.toLongOrNull(16)
+    private fun value(line: String): Long? = line.trim().split(SPACES).lastOrNull()?.toLongOrNull(16)
 }
+
+private val SPACES = Regex("\\s+")
