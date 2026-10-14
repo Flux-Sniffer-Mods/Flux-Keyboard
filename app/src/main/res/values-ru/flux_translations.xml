@@ -2024,4 +2024,5 @@
     <string name="dual_screens_note_noods">Записывается в настройки NooDS сейчас. NooDS читает их при открытии, для всех игр: настроек для отдельных игр у него нет. Экран выставляется под это.</string>
     <string name="dual_screens_note_other">%1$s хранит расположение экранов в своих закрытых настройках, до которых Flux Keyboard не дотягивается: задайте его в настройках или игровом меню %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu показывает экран Wii U GamePad из игрового меню (Show pad), там, где указано в его настройках (General). Оба параметра хранятся в его закрытых настройках, поэтому Flux Keyboard не может задать их для каждой игры.</string>
+    <string name="game_remap_tap_to_clear">Клавиши сейчас (нажмите на одну, чтобы убрать её):</string>
 </resources>

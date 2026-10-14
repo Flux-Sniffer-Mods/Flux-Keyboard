@@ -2006,4 +2006,5 @@
     <string name="dual_screens_note_noods">Được ghi vào cài đặt của NooDS ngay bây giờ. NooDS đọc chúng khi mở, cho mọi trò chơi: nó không có cài đặt riêng cho từng trò chơi. Màn hình được đặt cho phù hợp.</string>
     <string name="dual_screens_note_other">%1$s giữ bố cục màn hình trong cài đặt riêng tư của nó, mà Flux Keyboard không với tới được: hãy đặt trong cài đặt hoặc menu trong trò chơi của %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu hiển thị màn hình của Wii U GamePad từ menu trong trò chơi (Show pad), đặt ở vị trí theo cài đặt của nó (General). Nó giữ cả hai trong cài đặt riêng tư, nên Flux Keyboard không thể đặt theo từng trò chơi.</string>
+    <string name="game_remap_tap_to_clear">Các phím hiện tại (chạm vào một phím để gỡ):</string>
 </resources>

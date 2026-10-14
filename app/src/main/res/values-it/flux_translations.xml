@@ -1520,4 +1520,5 @@
     <string name="dual_screens_note_noods">Scritto ora nelle impostazioni di NooDS. NooDS le legge all\'apertura, per tutti i giochi: non ha impostazioni per gioco. Schermo viene impostato di conseguenza.</string>
     <string name="dual_screens_note_other">%1$s tiene la disposizione degli schermi nelle sue impostazioni private, che Flux Keyboard non raggiunge: impostala nelle impostazioni o nel menu di gioco di %1$s.</string>
     <string name="dual_screens_note_cemu">Cemu mostra lo schermo del Wii U GamePad dal suo menu di gioco (Show pad), dove dicono le sue impostazioni (General). Tiene entrambi nelle impostazioni private, quindi Flux Keyboard non può impostarli per gioco.</string>
+    <string name="game_remap_tap_to_clear">Tasti assegnati (toccane uno per toglierlo):</string>
 </resources>

@@ -1392,4 +1392,5 @@
     <string name="dual_screens_note_noods">Γράφεται τώρα στις ρυθμίσεις του NooDS. Το NooDS τις διαβάζει όταν ανοίγει, για κάθε παιχνίδι: δεν έχει ρυθμίσεις ανά παιχνίδι. Η Οθόνη ρυθμίζεται ανάλογα.</string>
     <string name="dual_screens_note_other">Το %1$s κρατά τη διάταξη οθονών στις ιδιωτικές του ρυθμίσεις, που το Flux Keyboard δεν φτάνει: όρισέ τη στις ρυθμίσεις ή στο μενού παιχνιδιού του %1$s.</string>
     <string name="dual_screens_note_cemu">Το Cemu δείχνει την οθόνη του Wii U GamePad από το μενού παιχνιδιού (Show pad), εκεί που λένε οι ρυθμίσεις του (General). Κρατά και τα δύο στις ιδιωτικές του ρυθμίσεις, οπότε το Flux Keyboard δεν μπορεί να τα ορίσει ανά παιχνίδι.</string>
+    <string name="game_remap_tap_to_clear">Πλήκτρα τώρα (πάτησε ένα για να το αφαιρέσεις):</string>
 </resources>
