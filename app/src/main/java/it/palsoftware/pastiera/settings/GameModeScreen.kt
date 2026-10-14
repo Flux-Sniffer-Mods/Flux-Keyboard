@@ -1241,6 +1241,10 @@ internal fun CrashLogRow() {
                         "force_desktop_mode_on_external_displays override_desktop_mode_features override_desktop_experience_features; do " +
                         "echo \"\$k=\$(settings get global \$k | cat)\"; done; " +
                         "echo \"rotation=\$(settings get system user_rotation | cat) auto=\$(settings get system accelerometer_rotation | cat)\"; " +
+                        // Recents: whether apps' turning is ignored, and what Recents and its screen are doing
+                        "echo \"ignore orientation=\$(cmd window get-ignore-orientation-request | cat)\"; " +
+                        "echo '== recents =='; dumpsys activity recents | head -n 12; " +
+                        "dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity|RecentsActivity|quickstep' | head -n 10; " +
                         // The official GameHub's ways in (its activities, actions and links), to start its games directly
                         "for p in com.xiaoji.egggame gamehub.lite; do pm path \$p >/dev/null 2>&1 && { echo \"== \$p ==\"; " +
                         "dumpsys package \$p | grep -E 'Activity|Action:|Scheme:|Authority:|Path' | grep -v -i 'permission' | head -n 150; }; done; " +
