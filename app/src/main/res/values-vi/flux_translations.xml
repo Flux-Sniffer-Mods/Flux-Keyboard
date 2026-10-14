@@ -1752,7 +1752,7 @@
     <string name="game_mode_home_screen_failed">Màn hình chính không nhận lối tắt.</string>
     <string name="game_mode_folders">Tạo thư mục trò chơi</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mỗi launcher và trình giả lập một thư mục. Thư mục ROMs của ES-DE cũng được đọc.</string>
-    <string name="game_mode_folders_made">Đã tạo trong Download/Flux Keyboard/Games. GameNative: Cài đặt > Giao diện > Frontend Sync, rồi chọn thư mục GameNative ở đó.</string>
+    <string name="game_mode_folders_made">Đã tạo trong Download/Flux Keyboard/Games. GameNative: Cài đặt > Giao diện > Frontend Sync, rồi chọn thư mục GameNative ở đó. GameHub chính thức: đặt tính năng xuất cho frontend của nó vào thư mục GameHub.</string>
     <string name="game_mode_folder_add">Thêm thư mục của bạn</string>
     <string name="game_mode_folder_add_description">Thư mục đã đặt trong launcher hoặc trình giả lập.</string>
     <string name="game_mode_folder_games_of">Trò chơi trong đó dành cho</string>
@@ -1764,7 +1764,7 @@
     <string name="game_mode_own_game_id">ID trò chơi (tùy chọn)</string>
     <string name="game_mode_own_game_store">Cửa hàng</string>
     <string name="game_mode_own_game_custom_store">Trò chơi tùy chỉnh</string>
-    <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="game_mode_own_game_none">Chưa cài trình khởi chạy hay trình giả lập nào mà Flux Keyboard có thể khởi động trò chơi (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Màn hình</string>
     <string name="game_mode_screen_app">Để trò chơi quyết định</string>
     <string name="game_mode_screen_sideways">Ngang</string>

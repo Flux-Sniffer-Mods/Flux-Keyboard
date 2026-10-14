@@ -1136,7 +1136,7 @@
     <string name="game_mode_home_screen_failed">Η αρχική οθόνη δεν δέχεται συντομεύσεις.</string>
     <string name="game_mode_folders">Δημιουργία φακέλων παιχνιδιών</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, με φάκελο για κάθε launcher και εξομοιωτή. Διαβάζεται και ο φάκελος ROMs του ES-DE.</string>
-    <string name="game_mode_folders_made">Δημιουργήθηκαν στο Download/Flux Keyboard/Games. GameNative: Ρυθμίσεις > Διεπαφή > Frontend Sync, και επιλέξτε εκεί τον φάκελο GameNative.</string>
+    <string name="game_mode_folders_made">Δημιουργήθηκαν στο Download/Flux Keyboard/Games. GameNative: Ρυθμίσεις > Διεπαφή > Frontend Sync, και επιλέξτε εκεί τον φάκελο GameNative. Επίσημο GameHub: ορίστε την εξαγωγή του για frontend στον φάκελο GameHub.</string>
     <string name="game_mode_folder_add">Προσθήκη δικού σου φακέλου</string>
     <string name="game_mode_folder_add_description">Ένας ορισμένος σε launcher ή εξομοιωτή.</string>
     <string name="game_mode_folder_games_of">Τα παιχνίδιά του είναι για</string>
@@ -1148,7 +1148,7 @@
     <string name="game_mode_own_game_id">ID παιχνιδιού (προαιρετικό)</string>
     <string name="game_mode_own_game_store">Κατάστημα</string>
     <string name="game_mode_own_game_custom_store">Προσαρμοσμένο παιχνίδι</string>
-    <string name="game_mode_own_game_none">Δεν είναι εγκατεστημένος κανένας από τους εκκινητές ή εξομοιωτές όπου το Flux Keyboard μπορεί να ξεκινά παιχνίδια (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="game_mode_own_game_none">Δεν είναι εγκατεστημένος κανένας από τους εκκινητές ή εξομοιωτές όπου το Flux Keyboard μπορεί να ξεκινά παιχνίδια (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Οθόνη</string>
     <string name="game_mode_screen_app">Αποφασίζει το παιχνίδι</string>
     <string name="game_mode_screen_sideways">Οριζόντια</string>

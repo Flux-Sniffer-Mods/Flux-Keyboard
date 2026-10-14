@@ -1758,7 +1758,7 @@
     <string name="game_mode_home_screen_failed">Գլխավոր էկրանը դյուրանցումներ չի ընդունում։</string>
     <string name="game_mode_folders">Ստեղծել խաղերի թղթապանակներ</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games՝ յուրաքանչյուր գործարկիչի և էմուլյատորի համար թղթապանակով։ ES-DE-ի ROMs թղթապանակը նույնպես կարդացվում է։</string>
-    <string name="game_mode_folders_made">Ստեղծված է Download/Flux Keyboard/Games-ում։ GameNative․ Կարգավորումներ > Ինտերֆեյս > Frontend Sync, ապա ընտրեք այնտեղ GameNative թղթապանակը։</string>
+    <string name="game_mode_folders_made">Ստեղծված է Download/Flux Keyboard/Games-ում։ GameNative․ Կարգավորումներ > Ինտերֆեյս > Frontend Sync, ապա ընտրեք այնտեղ GameNative թղթապանակը։ Պաշտոնական GameHub․ դրա frontend-ի արտահանումը սահմանեք GameHub թղթապանակին։</string>
     <string name="game_mode_folder_add">Ավելացնել քո թղթապանակը</string>
     <string name="game_mode_folder_add_description">Գործարկիչում կամ էմուլյատորում նշված թղթապանակ։</string>
     <string name="game_mode_folder_games_of">Դրա խաղերը նախատեսված են</string>
@@ -1770,7 +1770,7 @@
     <string name="game_mode_own_game_id">Խաղի ID (ըստ ցանկության)</string>
     <string name="game_mode_own_game_store">Խանութ</string>
     <string name="game_mode_own_game_custom_store">Սեփական խաղ</string>
-    <string name="game_mode_own_game_none">Տեղադրված չէ գործարկիչներից կամ էմուլյատորներից ոչ մեկը, որտեղ Flux Keyboard-ը կարող է խաղեր գործարկել (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden)։</string>
+    <string name="game_mode_own_game_none">Տեղադրված չէ գործարկիչներից կամ էմուլյատորներից ոչ մեկը, որտեղ Flux Keyboard-ը կարող է խաղեր գործարկել (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden)։</string>
     <string name="game_mode_screen">Էկրան</string>
     <string name="game_mode_screen_app">Որոշում է խաղը</string>
     <string name="game_mode_screen_sideways">Հորիզոնական</string>

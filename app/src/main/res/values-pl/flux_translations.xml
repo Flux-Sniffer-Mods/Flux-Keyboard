@@ -1770,7 +1770,7 @@
     <string name="game_mode_home_screen_failed">Ekran główny nie przyjmuje skrótów.</string>
     <string name="game_mode_folders">Utwórz foldery gier</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, z folderem dla każdego launchera i emulatora. Czytany jest też folder ROMs z ES-DE.</string>
-    <string name="game_mode_folders_made">Utworzono w Download/Flux Keyboard/Games. GameNative: Ustawienia > Interfejs > Frontend Sync, i wybierz tam folder GameNative.</string>
+    <string name="game_mode_folders_made">Utworzono w Download/Flux Keyboard/Games. GameNative: Ustawienia > Interfejs > Frontend Sync, i wybierz tam folder GameNative. Oficjalny GameHub: ustaw jego eksport dla frontendu na folder GameHub.</string>
     <string name="game_mode_folder_add">Dodaj własny folder</string>
     <string name="game_mode_folder_add_description">Folder ustawiony w launcherze lub emulatorze.</string>
     <string name="game_mode_folder_games_of">Jego gry są dla</string>
@@ -1782,7 +1782,7 @@
     <string name="game_mode_own_game_id">ID gry (opcjonalnie)</string>
     <string name="game_mode_own_game_store">Sklep</string>
     <string name="game_mode_own_game_custom_store">Własna gra</string>
-    <string name="game_mode_own_game_none">Nie zainstalowano żadnego launchera ani emulatora, w którym Flux Keyboard może uruchamiać gry (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="game_mode_own_game_none">Nie zainstalowano żadnego launchera ani emulatora, w którym Flux Keyboard może uruchamiać gry (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Ekran</string>
     <string name="game_mode_screen_app">Decyduje gra</string>
     <string name="game_mode_screen_sideways">Poziomo</string>

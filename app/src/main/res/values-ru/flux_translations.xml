@@ -1770,7 +1770,7 @@
     <string name="game_mode_home_screen_failed">Главный экран не принимает ярлыки.</string>
     <string name="game_mode_folders">Создать папки для игр</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, с папкой для каждого лаунчера и эмулятора. Папка ROMs из ES-DE тоже читается.</string>
-    <string name="game_mode_folders_made">Созданы в Download/Flux Keyboard/Games. GameNative: Настройки > Интерфейс > Frontend Sync, затем выберите там папку GameNative.</string>
+    <string name="game_mode_folders_made">Созданы в Download/Flux Keyboard/Games. GameNative: Настройки > Интерфейс > Frontend Sync, затем выберите там папку GameNative. Официальный GameHub: настройте его экспорт для фронтенда в папку GameHub.</string>
     <string name="game_mode_folder_add">Добавить свою папку</string>
     <string name="game_mode_folder_add_description">Заданную в лаунчере или эмуляторе.</string>
     <string name="game_mode_folder_games_of">Её игры для</string>
@@ -1782,7 +1782,7 @@
     <string name="game_mode_own_game_id">ID игры (необязательно)</string>
     <string name="game_mode_own_game_store">Магазин</string>
     <string name="game_mode_own_game_custom_store">Своя игра</string>
-    <string name="game_mode_own_game_none">Не установлен ни один лаунчер или эмулятор, в которых Flux Keyboard может запускать игры (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="game_mode_own_game_none">Не установлен ни один лаунчер или эмулятор, в которых Flux Keyboard может запускать игры (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Экран</string>
     <string name="game_mode_screen_app">Решает игра</string>
     <string name="game_mode_screen_sideways">Альбомная</string>

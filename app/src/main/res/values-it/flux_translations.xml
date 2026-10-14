@@ -1266,7 +1266,7 @@
     <string name="game_mode_home_screen_failed">La schermata Home non accetta scorciatoie.</string>
     <string name="game_mode_folders">Crea le cartelle dei giochi</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, con una cartella per ogni launcher ed emulatore. Viene letta anche la cartella ROMs di ES-DE.</string>
-    <string name="game_mode_folders_made">Create in Download/Flux Keyboard/Games. GameNative: Impostazioni > Interfaccia > Frontend Sync, poi scegli lì la cartella GameNative.</string>
+    <string name="game_mode_folders_made">Create in Download/Flux Keyboard/Games. GameNative: Impostazioni > Interfaccia > Frontend Sync, poi scegli lì la cartella GameNative. GameHub ufficiale: imposta la sua esportazione per frontend sulla cartella GameHub.</string>
     <string name="game_mode_folder_add">Aggiungi una tua cartella</string>
     <string name="game_mode_folder_add_description">Una impostata in un launcher o emulatore.</string>
     <string name="game_mode_folder_games_of">I suoi giochi sono per</string>
@@ -1278,7 +1278,7 @@
     <string name="game_mode_own_game_id">ID del gioco (facoltativo)</string>
     <string name="game_mode_own_game_store">Negozio</string>
     <string name="game_mode_own_game_custom_store">Gioco personalizzato</string>
-    <string name="game_mode_own_game_none">Nessuno dei launcher o emulatori in cui Flux Keyboard può avviare giochi (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden) è installato.</string>
+    <string name="game_mode_own_game_none">Nessuno dei launcher o emulatori in cui Flux Keyboard può avviare giochi (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden) è installato.</string>
     <string name="game_mode_screen">Schermo</string>
     <string name="game_mode_screen_app">Decide il gioco</string>
     <string name="game_mode_screen_sideways">Orizzontale</string>

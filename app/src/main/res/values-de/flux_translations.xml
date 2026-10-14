@@ -1225,7 +1225,7 @@
     <string name="game_mode_home_screen_failed">Der Startbildschirm nimmt keine Verknüpfungen an.</string>
     <string name="game_mode_folders">Spielordner anlegen</string>
     <string name="game_mode_folders_description">Download/Flux Keyboard/Games, mit einem Ordner je Launcher und Emulator. Der ROMs-Ordner von ES-DE wird ebenfalls gelesen.</string>
-    <string name="game_mode_folders_made">Angelegt in Download/Flux Keyboard/Games. GameNative: Einstellungen > Oberfläche > Frontend Sync, dann dort den Ordner GameNative wählen.</string>
+    <string name="game_mode_folders_made">Angelegt in Download/Flux Keyboard/Games. GameNative: Einstellungen > Oberfläche > Frontend Sync, dann dort den Ordner GameNative wählen. Offizielles GameHub: seinen Export für Frontends auf den Ordner GameHub stellen.</string>
     <string name="game_mode_folder_add">Eigenen Ordner hinzufügen</string>
     <string name="game_mode_folder_add_description">Einer, der in einem Launcher oder Emulator eingestellt ist.</string>
     <string name="game_mode_folder_games_of">Seine Spiele sind für</string>
@@ -1237,7 +1237,7 @@
     <string name="game_mode_own_game_id">Spiel-ID (optional)</string>
     <string name="game_mode_own_game_store">Store</string>
     <string name="game_mode_own_game_custom_store">Eigenes Spiel</string>
-    <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
+    <string name="game_mode_own_game_none">Keiner der Launcher oder Emulatoren, in denen Flux Keyboard Spiele starten kann (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden), ist installiert.</string>
     <string name="game_mode_screen">Bildschirm</string>
     <string name="game_mode_screen_app">Das Spiel entscheidet</string>
     <string name="game_mode_screen_sideways">Querformat</string>
