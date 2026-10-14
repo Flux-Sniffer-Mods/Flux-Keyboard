@@ -1233,6 +1233,8 @@ internal fun CrashLogRow() {
                         "grep -i -E '$app|gamehub|egggame|Permission Denial|FluxGameMode|FluxGameLaunch|FluxExtraScreen|Stream(Wake|Host|Session|Input|Audio|Control)|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | grep -v 'Changing focus' | tail -n 400; " +
                         // The screen and window settings gaming mode and the desktop change
                         // (through a pipe: Android's services can't write into a file in Download)
+                        // The input devices (the keyboard, the side buttons): which one each key comes from
+                        "echo '== input devices =='; dumpsys input | grep -E '^ +Device -?[0-9]+:' | head -30; " +
                         "echo '== screen and window settings =='; wm size | cat; wm density | cat; " +
                         "for k in force_resizable_activities enable_non_resizable_multi_window enable_freeform_support " +
                         "force_desktop_mode_on_external_displays override_desktop_mode_features override_desktop_experience_features; do " +
