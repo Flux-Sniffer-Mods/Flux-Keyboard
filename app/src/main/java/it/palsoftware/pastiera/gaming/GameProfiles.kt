@@ -122,8 +122,18 @@ data class GameProfile(
      * Keys changed from the keyboard layout for this game or app alone ([FluxLayout.formatOverrides]'s
      * text, on top of the layout as changed in Keyboard controls); null: none of its own.
      */
-    val keyOverrides: String? = null
+    val keyOverrides: String? = null,
+    /** Dolphin: its on-screen controls for this game ([FluxLayout.DolphinOverlay]'s name); null: as suits it. */
+    val dolphinOverlay: String? = null
 ) {
+    /**
+     * Dolphin's on-screen controls for this game, as chosen; else invisible when sticks or keys
+     * are placed on them (they still take the touches), otherwise off.
+     */
+    val overlayMode: FluxLayout.DolphinOverlay
+        get() = FluxLayout.DolphinOverlay.entries.firstOrNull { it.name == dolphinOverlay }
+            ?: if (stickZones.isNotEmpty() || taps.isNotEmpty()) FluxLayout.DolphinOverlay.INVISIBLE else FluxLayout.DolphinOverlay.OFF
+
     /** The game's own keys for Dolphin's [pad] (empty: the layout's). */
     fun padRemap(pad: FluxLayout.WiiPad): Map<String, List<DolphinPads.Binding>> = DolphinPads.parse(padControls[pad.name])
     /** Whether A and B (X and Y) are swapped, as set or as suits its app. */
@@ -151,6 +161,7 @@ data class GameProfile(
         wiiPad?.let { put("wiiPad", it) }
         if (padControls.isNotEmpty()) put("padControls", JSONObject(padControls))
         keyOverrides?.let { put("keyOverrides", it) }
+        dolphinOverlay?.let { put("dolphinOverlay", it) }
         if (pending) put("pending", true)
         if (ownScreen) put("ownScreen", true)
         phoneHeight?.let { put("phoneHeight", it) }
@@ -225,6 +236,7 @@ data class GameProfile(
                 variant = json.optString("variant").ifEmpty { null },
                 wiiPad = json.optString("wiiPad").ifEmpty { null },
                 keyOverrides = json.optString("keyOverrides").ifEmpty { null },
+                dolphinOverlay = json.optString("dolphinOverlay").ifEmpty { null },
                 padControls = json.optJSONObject("padControls")?.let { o -> o.keys().asSequence().associateWith { o.optString(it) } }
                     ?.filterValues { it.isNotEmpty() }.orEmpty(),
                 pending = json.optBoolean("pending", false),

@@ -55,7 +55,10 @@ class GameLaunchActivity : Activity() {
             Thread {
                 it.palsoftware.pastiera.adb.AdbShell.run("am force-stop $pkg", 3_000)
                 // Dolphin's on-screen controls set for gaming mode while it's stopped
-                if (GameApps.emulator(pkg) == "Dolphin") runCatching { FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir) } }
+                // (a game's own: off, invisible or shown, as set for it)
+                if (GameApps.emulator(pkg) == "Dolphin") runCatching {
+                    FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir, profile?.takeIf { it.isGame }?.let { game -> GameProfiles.effective(this, game).copy(dolphinOverlay = game.dolphinOverlay).overlayMode }) }
+                }
                 // Its controls given the current layout, if they had an older one
                 runCatching { FluxLayout.refreshIfOutdated(this, pkg) }
                 // What Dolphin was given, for the crash log

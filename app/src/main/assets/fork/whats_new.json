@@ -744,6 +744,9 @@
     },
     {
       "text": "Gaming mode: give a controller button its key by pressing the key itself (with a modifier held if you like), on the controller drawings and Dolphin's"
+    },
+    {
+      "text": "Dolphin: a game started from Games plays with its own controller and keys straight away, with nothing to load in Dolphin's game settings, and each game can hide Dolphin's on-screen controls, keep them invisible for sticks and keys placed on them, or show them"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

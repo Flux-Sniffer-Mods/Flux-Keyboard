@@ -26,4 +26,17 @@ class DolphinOverlayTest {
         val out = FluxLayout.dolphinOverlayIni("")
         assertTrue(out, out.startsWith("[Android]"))
     }
+
+    @Test
+    fun aGamesOnScreenControlsAreSetAsItStarts() {
+        val off = FluxLayout.dolphinOverlayIni("", FluxLayout.DolphinOverlay.OFF)
+        assertTrue(off, "ShowInputOverlay = False" in off)
+        val invisible = FluxLayout.dolphinOverlayIni(off, FluxLayout.DolphinOverlay.INVISIBLE)
+        assertTrue(invisible, "ShowInputOverlay = True" in invisible && "ControlOpacity = 0" in invisible)
+        val shown = FluxLayout.dolphinOverlayIni(invisible, FluxLayout.DolphinOverlay.SHOWN)
+        assertTrue(shown, "ShowInputOverlay = True" in shown && "ControlOpacity = 65" in shown)
+        // A visible opacity of the person's own is kept
+        val own = FluxLayout.dolphinOverlayIni("[Android]\nControlOpacity = 40\n", FluxLayout.DolphinOverlay.SHOWN)
+        assertTrue(own, "ControlOpacity = 40" in own)
+    }
 }

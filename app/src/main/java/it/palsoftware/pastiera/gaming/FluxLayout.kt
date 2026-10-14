@@ -553,12 +553,34 @@ object FluxLayout {
      */
     internal val DOLPHIN_OVERLAY = listOf("JoystickRelCenter" to "True", "ControlOpacity" to "0")
 
-    /** Writes [DOLPHIN_OVERLAY] into Dolphin's settings at [dir] (blocking; Dolphin not running). */
-    fun dolphinOverlay(dir: String) {
+    /**
+     * Dolphin's on-screen controls for one game: off (the keyboard plays it), invisible but still
+     * taking touches (for sticks and keys placed on them), or shown.
+     */
+    enum class DolphinOverlay { OFF, INVISIBLE, SHOWN }
+
+    /** Writes [DOLPHIN_OVERLAY], and a game's [mode], into Dolphin's settings at [dir] (blocking; Dolphin not running). */
+    fun dolphinOverlay(dir: String, mode: DolphinOverlay? = null) {
         val path = "$dir/Config/Dolphin.ini"
         val ini = read(path)
-        val updated = dolphinOverlayIni(ini)
+        val updated = dolphinOverlayIni(ini, mode)
         if (updated != ini) write(path, updated)
+    }
+
+    /** [ini] with the on-screen controls as [mode] has them (null: only what isn't set yet). */
+    internal fun dolphinOverlayIni(ini: String, mode: DolphinOverlay?): String {
+        val base = dolphinOverlayIni(ini)
+        return when (mode) {
+            null -> base
+            DolphinOverlay.OFF -> withKey(base, "Android", "ShowInputOverlay", "False")
+            DolphinOverlay.INVISIBLE -> withKey(withKey(base, "Android", "ShowInputOverlay", "True"), "Android", "ControlOpacity", "0")
+            DolphinOverlay.SHOWN -> {
+                val opacity = Regex("(?m)^\\s*ControlOpacity\\s*=\\s*(\\d+)").find(base)?.groupValues?.get(1)?.toIntOrNull()
+                // Dolphin's own opacity when it was made invisible
+                val shown = if (opacity == null || opacity == 0) withKey(base, "Android", "ControlOpacity", "65") else base
+                withKey(shown, "Android", "ShowInputOverlay", "True")
+            }
+        }
     }
 
     internal fun dolphinOverlayIni(ini: String): String {
@@ -581,7 +603,9 @@ object FluxLayout {
      */
     fun setGamePad(
         context: android.content.Context, pkg: String, gameId: String, wii: Boolean, pad: WiiPad,
-        remap: Map<String, List<DolphinPads.Binding>> = emptyMap()
+        remap: Map<String, List<DolphinPads.Binding>> = emptyMap(),
+        /** Also the controller Dolphin starts with (as the game starts); not when refreshing every game. */
+        activate: Boolean = true
     ): Result {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
@@ -592,11 +616,17 @@ object FluxLayout {
         val folder = if (gc) "GCPad" else "Wiimote"
         // The game's own profile; a shared one comes with the layout, written here only if it's missing
         val path = "$dir/Config/Profiles/$folder/$profile.ini"
-        if (own || read(path).isEmpty()) {
-            val swap = swapFor(context, pkg)
-            val volume = volumeDevices(context, keyboard)
-            val lines = if (gc) dolphinGameCube(keyboard, swap, volume, remap) else dolphinWii(keyboard, pad, swap, volume, remap)
-            if (!writeIfChanged(path, withSection("", "Profile", lines))) return Result.FAILED
+        val swap = swapFor(context, pkg)
+        val volume = volumeDevices(context, keyboard)
+        val lines = if (gc) dolphinGameCube(keyboard, swap, volume, remap) else dolphinWii(keyboard, pad, swap, volume, remap)
+        if ((own || read(path).isEmpty()) && !writeIfChanged(path, withSection("", "Profile", lines))) return Result.FAILED
+        // Also as the controller Dolphin starts with, so the game plays with it without loading
+        // the profile in Dolphin (and the next game puts its own back)
+        val active = if (gc) "$dir/Config/GCPadNew.ini" to "GCPad1" else "$dir/Config/WiimoteNew.ini" to "Wiimote1"
+        if (activate) {
+            val now = read(active.first)
+            val started = withSection(now, active.second, lines)
+            if (started != now && !write(active.first, started)) return Result.FAILED
         }
         // The game's other profiles (another controller chosen, or its keys reset) taken away
         removeGameProfiles(dir, gameId, keep = "$folder/$profile.ini".takeIf { own })
@@ -633,7 +663,7 @@ object FluxLayout {
                 val wii = GameFiles.isWii(path)
                 val pad = game.wiiPad?.let { name -> WiiPad.entries.firstOrNull { it.name == name } }
                     ?: if (wii) WiiPad.NUNCHUK else WiiPad.GAMECUBE
-                setGamePad(context, pkg, id, wii, pad, game.padRemap(pad))
+                setGamePad(context, pkg, id, wii, pad, game.padRemap(pad), activate = false)
             }
         }
     }

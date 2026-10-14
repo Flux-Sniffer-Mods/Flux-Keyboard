@@ -473,6 +473,10 @@
     <string name="dolphin_pad_hint">Tap a button to give it a key, alone or with a modifier. Buttons with this game\'s own key are outlined, and a key given here presses only that button.</string>
     <string name="dolphin_pad_no_key">No key</string>
     <string name="dolphin_pad_saved">Saved in Dolphin for this game.</string>
+    <string name="dolphin_overlay_title">Dolphin\'s on-screen controls</string>
+    <string name="dolphin_overlay_off">Hidden</string>
+    <string name="dolphin_overlay_invisible">Invisible (for sticks and keys placed on them)</string>
+    <string name="dolphin_overlay_shown">Shown</string>
     <string name="game_keys_row">Keys for this game</string>
     <string name="game_keys_row_app">Keys for this app</string>
     <string name="game_keys_description">Change which key is which button here alone, on top of Keyboard controls. Works in any emulator or launcher gaming mode sends buttons to.</string>
