@@ -35,10 +35,13 @@ enum class ScreenMode {
     UPRIGHT;
 
     companion object {
-        /** What suits [packageName] when nothing's been chosen: kept upright for game apps (drawn upright for a DS or 3DS). */
+        /**
+         * What suits [packageName] when nothing's been chosen: the game kept upright for apps with an
+         * upright layout of their own, the phone upright (the game sideways) for other game apps.
+         */
         fun defaultFor(packageName: String?): ScreenMode = when {
             packageName == null -> APP
-            GameApps.twoScreens(packageName) != null -> UPRIGHT
+            GameApps.playsUpright(packageName) -> UPRIGHT
             GameApps.appFor(packageName) != null -> SIDEWAYS
             else -> APP
         }
@@ -282,8 +285,26 @@ object GameProfiles {
     fun all(context: Context): List<GameProfile> = runCatching {
         val array = JSONArray(prefs(context).getString(KEY_PROFILES, "[]"))
         val profiles = List(array.length()) { GameProfile.fromJson(array.getJSONObject(it)) }.filterNotNull()
-        keysAsSticks(context, profiles)
+        gameUpright(context, keysAsSticks(context, profiles))
     }.getOrDefault(emptyList())
+
+    private const val KEY_GAME_UPRIGHT = "game_mode_game_upright"
+
+    /**
+     * Once, from the update where apps with an upright layout keep the game upright by default:
+     * those left on the old default (the phone upright, the game sideways) move to it. Games' own
+     * choices stay.
+     */
+    private fun gameUpright(context: Context, profiles: List<GameProfile>): List<GameProfile> {
+        val prefs = prefs(context)
+        if (prefs.getBoolean(KEY_GAME_UPRIGHT, false)) return profiles
+        val updated = profiles.map {
+            if (!it.isGame && it.screen == ScreenMode.SIDEWAYS && ScreenMode.defaultFor(it.packages.firstOrNull()) == ScreenMode.UPRIGHT)
+                it.copy(screen = ScreenMode.UPRIGHT) else it
+        }
+        prefs.edit().putString(KEY_PROFILES, JSONArray(updated.map { it.toJson() }).toString()).putBoolean(KEY_GAME_UPRIGHT, true).apply()
+        return updated
+    }
 
     private const val KEY_KEYS_AS_STICKS = "game_mode_keys_as_sticks"
 

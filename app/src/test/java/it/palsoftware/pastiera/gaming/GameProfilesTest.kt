@@ -36,7 +36,7 @@ class GameProfilesTest {
         assertEquals(TrackpadRole.NONE, launcher.rightHalf)
         val emulator = GameProfiles.newProfile("Wind Waker", setOf("org.dolphinemu.dolphinemu"))
         assertEquals(TrackpadRole.NONE, emulator.leftHalf)
-        assertEquals(ScreenMode.SIDEWAYS, emulator.screen)
+        assertEquals(ScreenMode.UPRIGHT, emulator.screen)
     }
 
     @Test

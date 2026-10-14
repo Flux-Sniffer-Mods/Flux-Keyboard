@@ -753,6 +753,9 @@
     },
     {
       "text": "Gaming mode: with the official GameHub installed, a note recommends GameHub Lite, which starts each game straight away; the official app's games now just open it"
+    },
+    {
+      "text": "Gaming mode: GameNative, GameHub and emulators with an upright layout (Dolphin, PPSSPP, RetroArch, Cemu, DS and 3DS and more) keep the game upright by default; those left on the old default move over once, and games you set yourself stay as they are"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
