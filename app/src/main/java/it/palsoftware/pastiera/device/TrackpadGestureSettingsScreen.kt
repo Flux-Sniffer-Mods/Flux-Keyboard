@@ -95,13 +95,13 @@ fun TrackpadGestureSettingsScreen(
         mutableStateOf(SettingsManager.getTrackpadGestureAddWordFullWidthEnabled(context))
     }
     var suggestionSwipeThreshold by remember {
-        mutableStateOf(SettingsManager.getTrackpadSuggestionSwipeThreshold(context))
+        mutableFloatStateOf(SettingsManager.getTrackpadSuggestionSwipeThreshold(context))
     }
     var deleteSwipeThreshold by remember {
-        mutableStateOf(SettingsManager.getTrackpadDeleteSwipeThreshold(context))
+        mutableFloatStateOf(SettingsManager.getTrackpadDeleteSwipeThreshold(context))
     }
     var sideSwipeThreshold by remember {
-        mutableStateOf(SettingsManager.getTrackpadSideSwipeThreshold(context))
+        mutableFloatStateOf(SettingsManager.getTrackpadSideSwipeThreshold(context))
     }
     var showTutorialDialog by remember { mutableStateOf(false) }
     // The sensitivity sliders are on the main page now; an old link to their page lands there
@@ -914,7 +914,7 @@ private fun SuggestionSwipeLearningSettings() {
     val context = androidx.compose.ui.platform.LocalContext.current
     val learning = it.palsoftware.pastiera.core.SuggestionSwipeLearning
     var learn by remember { mutableStateOf(learning.enabled(context)) }
-    var idle by remember { mutableStateOf(learning.idleSeconds(context)) }
+    var idle by remember { mutableIntStateOf(learning.idleSeconds(context)) }
     FluxSwitchRow(
         linkId = "trackpad.swipe_learning",
         title = stringResource(R.string.suggestion_swipe_learning_title),
@@ -1014,7 +1014,7 @@ private fun TrackpadSensitivitySlider(
 fun TrackpadTutorialDialog(
     onDismiss: () -> Unit
 ) {
-    var currentPage by remember { mutableStateOf(0) }
+    var currentPage by remember { mutableIntStateOf(0) }
     val pages = listOf(
         TutorialPage(
             title = stringResource(R.string.trackpad_tutorial_welcome_title),

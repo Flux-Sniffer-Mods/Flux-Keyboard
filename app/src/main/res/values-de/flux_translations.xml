@@ -1351,7 +1351,7 @@
     <string name="game_mode_advice_windows">In %1$s, in den Einstellungen des Spiels (oder seines Containers): Grafiktreiber %2$s, DXVK für DirectX-9- bis -11-Spiele (WineD3D, falls eines nicht startet), VKD3D für DirectX 12, Bildschirmgröße 1280×720, Box64-Preset Performance.</string>
     <string name="game_mode_advice_driver_turnip">Turnip (der neueste)</string>
     <string name="game_mode_advice_driver_system">System (Turnip gibt es nur für Adreno)</string>
-    <string name="game_mode_advice_game">In den Einstellungen des Spiels: Grafikqualität Mittel oder Niedrig, 60-fps-Limit nur wenn es stabil bleibt (sonst 30), und Renderskalierung bzw. Auflösung unter 100 %, falls angeboten.</string>
+    <string name="game_mode_advice_game" formatted="false">In den Einstellungen des Spiels: Grafikqualität Mittel oder Niedrig, 60-fps-Limit nur wenn es stabil bleibt (sonst 30), und Renderskalierung bzw. Auflösung unter 100 %, falls angeboten.</string>
     <string name="stream_resolution">Streaming-Auflösung</string>
     <string name="stream_resolution_client">Wie Moonlight es verlangt</string>
     <string name="stream_resolution_description">Beim Streamen übernimmt der Handybildschirm die Form des Moonlight-Clients. Automatisch läuft genau in der Auflösung, die der Client verlangt (in Moonlights Einstellungen festgelegt), 4K eingeschlossen. Eine hier gewählte Größe lässt das Spiel stattdessen in dieser Größe laufen, auf die des Clients hochskaliert: schonender für das Handy.</string>

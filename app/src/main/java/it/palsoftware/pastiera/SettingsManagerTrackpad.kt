@@ -86,7 +86,7 @@ fun SettingsManager.setSwipeToDeleteProvider(context: Context, provider: String)
     }
     getPreferences(context).edit()
         .putString(KEY_SWIPE_TO_DELETE_PROVIDER, normalized)
-        .commit()
+        .apply()
 }
 
 /** Password managers' chips (logins, one-time codes) in the suggestion bar, Android 11+. */
@@ -141,7 +141,7 @@ fun SettingsManager.getTrackpadGesturesEnabled(context: Context): Boolean {
 fun SettingsManager.setTrackpadGesturesEnabled(context: Context, enabled: Boolean) {
     getPreferences(context).edit()
         .putBoolean(KEY_TRACKPAD_GESTURES_ENABLED, enabled)
-        .commit()  // Use commit() instead of apply() to ensure synchronous write
+        .apply()
 }
 
 fun SettingsManager.getTrackpadGestureAddWordEnabled(context: Context): Boolean {
@@ -154,7 +154,7 @@ fun SettingsManager.getTrackpadGestureAddWordEnabled(context: Context): Boolean 
 fun SettingsManager.setTrackpadGestureAddWordEnabled(context: Context, enabled: Boolean) {
     getPreferences(context).edit()
         .putBoolean(KEY_TRACKPAD_GESTURE_ADD_WORD_ENABLED, enabled)
-        .commit()
+        .apply()
 }
 
 fun SettingsManager.getTrackpadGestureAddWordFullWidthEnabled(context: Context): Boolean {
@@ -167,7 +167,7 @@ fun SettingsManager.getTrackpadGestureAddWordFullWidthEnabled(context: Context):
 fun SettingsManager.setTrackpadGestureAddWordFullWidthEnabled(context: Context, enabled: Boolean) {
     getPreferences(context).edit()
         .putBoolean(KEY_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED, enabled)
-        .commit()
+        .apply()
 }
 
 fun SettingsManager.getMinTrackpadSwipeThreshold(): Float = MIN_TRACKPAD_SWIPE_THRESHOLD
@@ -186,7 +186,7 @@ fun SettingsManager.setTrackpadSuggestionSwipeThreshold(context: Context, thresh
     val clamped = threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     getPreferences(context).edit()
         .putFloat(KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD, clamped)
-        .commit()
+        .apply()
 }
 
 /**
@@ -217,7 +217,7 @@ fun SettingsManager.setTrackpadDeleteSwipeThreshold(context: Context, threshold:
     val clamped = threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     getPreferences(context).edit()
         .putFloat(KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD, clamped)
-        .commit()
+        .apply()
 }
 
 fun SettingsManager.getTrackpadProvider(context: Context): String {
@@ -231,7 +231,7 @@ fun SettingsManager.setTrackpadProvider(context: Context, provider: String) {
     getPreferences(context).edit()
         .putString(KEY_TRACKPAD_PROVIDER, normalized)
         .putBoolean(KEY_TRACKPAD_PROVIDER_CHOSEN, true)
-        .commit()
+        .apply()
 }
 
 /**

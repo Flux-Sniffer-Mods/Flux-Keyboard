@@ -64,6 +64,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -169,15 +171,15 @@ fun ClicksPowerKeyboardSettingsScreen(
     var lastKnownDeviceName by remember { mutableStateOf<String?>(null) }
     var phoneBatteryPercent by remember { mutableStateOf<Int?>(null) }
     var socCalibration by remember { mutableStateOf<ClicksPowerSocCalibrationStatus?>(null) }
-    var manualChargingUntil by remember { mutableStateOf(0L) }
+    var manualChargingUntil by remember { mutableLongStateOf(0L) }
     var chargingAutomation by remember {
         mutableStateOf(SettingsManager.isClicksChargingAutomationEnabled(context))
     }
     var chargingStartSlider by remember {
-        mutableStateOf(SettingsManager.getClicksChargingStartPercent(context).toFloat())
+        mutableFloatStateOf(SettingsManager.getClicksChargingStartPercent(context).toFloat())
     }
     var chargingStopSlider by remember {
-        mutableStateOf(SettingsManager.getClicksChargingStopPercent(context).toFloat())
+        mutableFloatStateOf(SettingsManager.getClicksChargingStopPercent(context).toFloat())
     }
     var clicksOverlappingKeysMode by remember {
         mutableStateOf(SettingsManager.getClicksOverlappingKeysMode(context))
@@ -215,8 +217,8 @@ fun ClicksPowerKeyboardSettingsScreen(
             SettingsManager.getClicksDesiredButtonBinding(context, ClicksButtonBindingTarget.MICROPHONE)
         )
     }
-    var backlightSlider by remember { mutableStateOf(100f) }
-    var reserveSlider by remember { mutableStateOf(0f) }
+    var backlightSlider by remember { mutableFloatStateOf(100f) }
+    var reserveSlider by remember { mutableFloatStateOf(0f) }
     var mappingPage by remember { mutableStateOf<ClicksMappingPage?>(null) }
     val settingHighlight = LocalSettingHighlightId.current
     var showRequestedHostSlots by remember { mutableStateOf(settingHighlight == "clicks.host_slots") }

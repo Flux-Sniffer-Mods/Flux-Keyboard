@@ -298,9 +298,7 @@ object ShellSetup {
     private fun manager(context: Context): AbsAdbConnectionManager {
         manager?.let { return it }
         // Android's own TLS library does the pairing; its key export is hidden API
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            runCatching { HiddenApiBypass.addHiddenApiExemptions("L") }
-        }
+        runCatching { HiddenApiBypass.addHiddenApiExemptions("L") }
         val (key, cert) = loadOrCreateKey(context)
         return object : AbsAdbConnectionManager() {
             init { setApi(Build.VERSION.SDK_INT) }

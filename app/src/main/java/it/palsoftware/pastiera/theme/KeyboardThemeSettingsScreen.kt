@@ -55,6 +55,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -160,7 +162,7 @@ fun KeyboardThemeScreen(
     }
     val previewPagerState = rememberPagerState(initialPage = initialPreviewPage, pageCount = { 2 })
     var customizationTab by remember {
-        mutableStateOf(if (initialTab == KeyboardThemeEditorTab.Keys) 1 else 0)
+        mutableIntStateOf(if (initialTab == KeyboardThemeEditorTab.Keys) 1 else 0)
     }
     // The theme in use now: in Follow system, the one for the phone's light or dark mode
     fun themeInUse(target: SettingsManager.KeyboardThemeTarget): KeyboardThemePreset =
@@ -181,7 +183,7 @@ fun KeyboardThemeScreen(
     var hardwareSelectionKey by remember { mutableStateOf(matchKeyboardThemeOption(hardwareThemeOptions, initialHardwarePreset) ?: "custom:hardware") }
     var softwareSelectionKey by remember { mutableStateOf(matchKeyboardThemeOption(softwareThemeOptions, initialSoftwarePreset) ?: "custom:software") }
     var softwarePreviewViewportScale by remember {
-        mutableStateOf(SettingsManager.getKeyboardThemePreviewViewportScale(context))
+        mutableFloatStateOf(SettingsManager.getKeyboardThemePreviewViewportScale(context))
     }
     var hardwareAssignmentMode by remember {
         mutableStateOf(SettingsManager.getKeyboardThemeAssignmentMode(context, SettingsManager.KeyboardThemeTarget.HARDWARE))
@@ -2745,7 +2747,7 @@ private fun KeyboardThemeSwatchButton(
     showColor: Boolean = true
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var pickerColor by remember(color) { mutableStateOf(color) }
+    var pickerColor by remember(color) { mutableIntStateOf(color) }
     val shape = MaterialTheme.shapes.small
     Box {
         Box(
@@ -2787,13 +2789,13 @@ internal fun KeyboardThemeColorPickerDialog(
     onColorSelected: (Int) -> Unit,
     onPreviewColorChanged: (Int) -> Unit
 ) {
-    var color by remember(initialColor) { mutableStateOf(initialColor) }
+    var color by remember(initialColor) { mutableIntStateOf(initialColor) }
     val hsv = remember(color) {
         FloatArray(3).also { AndroidColor.colorToHSV(color, it) }
     }
-    var hue by remember(initialColor) { mutableStateOf(hsv[0]) }
-    var saturation by remember(initialColor) { mutableStateOf(hsv[1]) }
-    var value by remember(initialColor) { mutableStateOf(hsv[2]) }
+    var hue by remember(initialColor) { mutableFloatStateOf(hsv[0]) }
+    var saturation by remember(initialColor) { mutableFloatStateOf(hsv[1]) }
+    var value by remember(initialColor) { mutableFloatStateOf(hsv[2]) }
     var hexValue by remember(initialColor) { mutableStateOf(initialColor.toHexColorLabel()) }
 
     fun updateColor(newHue: Float = hue, newSaturation: Float = saturation, newValue: Float = value) {

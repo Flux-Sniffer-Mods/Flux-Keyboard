@@ -44,6 +44,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -88,7 +89,7 @@ fun KeyboardLayoutViewerScreen(
     var isLoading by remember(layoutName) { mutableStateOf(true) }
     var loadFailed by remember(layoutName) { mutableStateOf(false) }
     var dirty by remember(layoutName) { mutableStateOf(false) }
-    var reloadKey by remember(layoutName) { mutableStateOf(0) }
+    var reloadKey by remember(layoutName) { mutableIntStateOf(0) }
     var editingKey by remember { mutableStateOf<Int?>(null) }
     var showMenu by remember { mutableStateOf(false) }
     var confirmDiscard by remember { mutableStateOf(false) }

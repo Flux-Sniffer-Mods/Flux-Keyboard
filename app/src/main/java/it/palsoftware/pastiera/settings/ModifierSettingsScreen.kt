@@ -33,6 +33,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -94,7 +96,7 @@ fun ModifierSettingsScreen(
 ) {
     val context = LocalContext.current
     var longPressModifier by remember { mutableStateOf(SettingsManager.getLongPressModifier(context)) }
-    var longPressThreshold by remember { mutableStateOf(SettingsManager.getLongPressThreshold(context)) }
+    var longPressThreshold by remember { mutableLongStateOf(SettingsManager.getLongPressThreshold(context)) }
     var altBinding by remember { mutableStateOf(SettingsManager.getAltModifierBinding(context)) }
     var symSticky by remember { mutableStateOf(SettingsManager.getSymStickyTap(context)) }
     var modifierIndicators by remember { mutableStateOf(SettingsManager.getModifierIndicators(context)) }
@@ -256,7 +258,7 @@ fun ModifierSettingsScreen(
                 SettingsManager.setSpeechKeepListening(context, it)
             }
             if (speechKeepListening) {
-                var pauseSeconds by remember { mutableStateOf(SettingsManager.getSpeechPauseTimeoutSeconds(context)) }
+                var pauseSeconds by remember { mutableIntStateOf(SettingsManager.getSpeechPauseTimeoutSeconds(context)) }
                 Surface(modifier = Modifier.fillMaxWidth().settingRow(SettingLinkIds.TEXT_INPUT_SPEECH_PAUSE_TIMEOUT)) {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),

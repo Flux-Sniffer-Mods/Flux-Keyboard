@@ -121,7 +121,7 @@ fun SymCustomizationScreen(
     var draggingPageId by remember { mutableStateOf<String?>(null) }
     var dragStartIndex by remember { mutableStateOf<Int?>(null) }
     var dropTargetIndex by remember { mutableStateOf<Int?>(null) }
-    var dragOffsetY by remember { mutableStateOf(0f) }
+    var dragOffsetY by remember { mutableFloatStateOf(0f) }
     val rowStepPx = with(LocalDensity.current) { 56.dp.toPx() }
 
     fun endPageOrderDrag() {
@@ -138,7 +138,7 @@ fun SymCustomizationScreen(
 
     // Selected tab (0 = Emoji, 1 = Characters)
     var selectedTab by remember {
-        mutableStateOf(if (initialPage == 2) 1 else 0)
+        mutableIntStateOf(if (initialPage == 2) 1 else 0)
     }
     var editingLayerPage by remember {
         mutableStateOf(settingsChild(context, "sym_editor")?.toIntOrNull() ?: initialPage.takeIf { it in 1..3 })

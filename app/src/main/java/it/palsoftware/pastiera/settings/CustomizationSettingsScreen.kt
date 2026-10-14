@@ -159,7 +159,7 @@ fun CustomizationSettingsScreen(
         mutableStateOf(SettingsManager.getQuickLauncherTypoTolerantRanking(context))
     }
     var quickLauncherWidthPercent by remember {
-        mutableStateOf(SettingsManager.getQuickLauncherWidthPercent(context))
+        mutableIntStateOf(SettingsManager.getQuickLauncherWidthPercent(context))
     }
     var quickLauncherPillMode by remember {
         mutableStateOf(SettingsManager.getQuickLauncherPillMode(context))
@@ -168,7 +168,7 @@ fun CustomizationSettingsScreen(
         mutableStateOf(SettingsManager.getQuickLauncherHighlightFavorites(context))
     }
     var quickLauncherFavoriteColor by remember {
-        mutableStateOf(SettingsManager.getQuickLauncherFavoriteColor(context))
+        mutableIntStateOf(SettingsManager.getQuickLauncherFavoriteColor(context))
     }
     var quickLauncherIconColors by remember {
         mutableStateOf(SettingsManager.getQuickLauncherIconColors(context))
@@ -180,13 +180,13 @@ fun CustomizationSettingsScreen(
         mutableStateOf(SettingsManager.getQuickLauncherStaticTopHighlight(context))
     }
     var quickLauncherStaticTopHighlightColor by remember {
-        mutableStateOf(SettingsManager.getQuickLauncherStaticTopHighlightColor(context))
+        mutableIntStateOf(SettingsManager.getQuickLauncherStaticTopHighlightColor(context))
     }
     var quickLauncherBehavior by remember {
         mutableStateOf(SettingsManager.getQuickLauncherBehavior(context))
     }
     var quickLauncherAnimationDurationMs by remember {
-        mutableStateOf(SettingsManager.getQuickLauncherAnimationDurationMs(context))
+        mutableIntStateOf(SettingsManager.getQuickLauncherAnimationDurationMs(context))
     }
     var commandSourceVisibility by remember {
         mutableStateOf(SettingsManager.getCommandSourceVisibility(context))

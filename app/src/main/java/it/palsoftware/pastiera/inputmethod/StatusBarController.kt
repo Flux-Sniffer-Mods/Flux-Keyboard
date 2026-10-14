@@ -4397,6 +4397,8 @@ class StatusBarController(
         var expandedPickerButtons: Pair<View, View>? = null
         var expandedKeyHeightPx: Int = (HARDWARE_SYM_KEY_HEIGHT_DP * resources.displayMetrics.density).toInt()
         private val cornerFillPaint = Paint()
+        /** A child's bounds while drawing (kept, not made each frame). */
+        private val drawBounds = android.graphics.Rect()
         private val calibrationPreviewListener: () -> Unit = { redrawForNewContour() }
 
         /** The contour changed: the corner buttons, LEDs and fills all redraw along it. */
@@ -4750,9 +4752,10 @@ class StatusBarController(
                         )
                     }
                     if (!contourIntegratedIndicators) expandedPickerButtons?.let { (leftButton, rightButton) ->
-                        listOf(leftButton, rightButton).forEach { button ->
-                            if (button.visibility != View.VISIBLE) return@forEach
-                            val bounds = android.graphics.Rect(0, 0, button.width, button.height)
+                        for (side in 0..1) {
+                            val button = if (side == 0) leftButton else rightButton
+                            if (button.visibility != View.VISIBLE) continue
+                            val bounds = drawBounds.apply { set(0, 0, button.width, button.height) }
                             offsetDescendantRectToMyCoords(button, bounds)
                             cornerFillPaint.color = expandedCloseColor
                             canvas.drawRect(

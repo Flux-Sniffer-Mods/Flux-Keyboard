@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -81,13 +82,13 @@ fun AccessibilitySettingsScreen(
         mutableStateOf(SettingsManager.getAccessibilityReadSecondRowEnabled(context))
     }
     var suggestionsAnnouncementDelayMs by remember {
-        mutableStateOf(SettingsManager.getAccessibilitySuggestionsAnnouncementDelayMs(context))
+        mutableLongStateOf(SettingsManager.getAccessibilitySuggestionsAnnouncementDelayMs(context))
     }
     var bounceKeysEnabled by remember {
         mutableStateOf(SettingsManager.getBounceKeysEnabled(context))
     }
     var bounceKeysDelayMs by remember {
-        mutableStateOf(SettingsManager.getBounceKeysDelayMs(context))
+        mutableLongStateOf(SettingsManager.getBounceKeysDelayMs(context))
     }
     var bounceCharacterKeysEnabled by remember {
         mutableStateOf(SettingsManager.getBounceKeysCharacterKeysEnabled(context))

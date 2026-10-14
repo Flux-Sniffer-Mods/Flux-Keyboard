@@ -3,6 +3,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +45,7 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         shellPaired = ShellSetup.paired(context)
     }
     var backlightSupported by remember { mutableStateOf(false) }
-    var backlightLevel by remember { mutableStateOf(100f) }
+    var backlightLevel by remember { mutableFloatStateOf(100f) }
     var backlightTimeout by remember { mutableStateOf<Float?>(null) }
     // Shizuku's answer to the permission request
     androidx.compose.runtime.DisposableEffect(Unit) {

@@ -1880,7 +1880,7 @@
     <string name="game_mode_advice_windows">Trong %1$s, phần cài đặt của game (hoặc container của nó): trình điều khiển đồ họa %2$s, DXVK cho game DirectX 9 đến 11 (WineD3D nếu game nào không chạy), VKD3D cho DirectX 12, kích thước màn hình 1280×720, preset Box64 Performance.</string>
     <string name="game_mode_advice_driver_turnip">Turnip (bản mới nhất)</string>
     <string name="game_mode_advice_driver_system">System (Turnip chỉ dành cho Adreno)</string>
-    <string name="game_mode_advice_game">Trong cài đặt của chính game: chất lượng đồ họa Trung bình hoặc Thấp, giới hạn 60 fps chỉ khi giữ ổn định (nếu không thì 30), và tỉ lệ kết xuất hoặc độ phân giải dưới 100% nếu có.</string>
+    <string name="game_mode_advice_game" formatted="false">Trong cài đặt của chính game: chất lượng đồ họa Trung bình hoặc Thấp, giới hạn 60 fps chỉ khi giữ ổn định (nếu không thì 30), và tỉ lệ kết xuất hoặc độ phân giải dưới 100% nếu có.</string>
     <string name="stream_resolution">Độ phân giải phát trực tuyến</string>
     <string name="stream_resolution_client">Theo yêu cầu của Moonlight</string>
     <string name="stream_resolution_description">Khi phát trực tuyến, màn hình điện thoại lấy hình dạng của Moonlight client. Tự động chạy đúng độ phân giải client yêu cầu (đặt trong cài đặt của Moonlight), kể cả 4K. Kích thước chọn ở đây cho game chạy ở kích thước đó, rồi phóng lên theo client: nhẹ hơn cho điện thoại.</string>

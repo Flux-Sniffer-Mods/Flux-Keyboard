@@ -42,6 +42,7 @@ class XboxPlayActivity : Activity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerBack()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         web = WebView(this)
         // Drawn on the GPU in a layer of its own: scrolling and typing stay smooth
@@ -185,11 +186,17 @@ class XboxPlayActivity : Activity() {
     }
 
     private fun immersive() {
-        window.insetsController?.let {
-            it.hide(WindowInsets.Type.systemBars())
-            it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            window.insetsController?.let {
+                it.hide(WindowInsets.Type.systemBars())
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            // Android 10 has no insets controller: the older flags
+            @Suppress("DEPRECATION")
+            web.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
-        web.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     }
 
     /** The page's controller, if it hasn't one yet, and word of text fields taking the focus. */
@@ -306,10 +313,20 @@ class XboxPlayActivity : Activity() {
         }
     }
 
-    @Deprecated("Back: the page's own back first")
-    override fun onBackPressed() {
-        if (web.canGoBack()) web.goBack() else @Suppress("DEPRECATION") super.onBackPressed()
+    /** Back: the page's own back first, then leaving the player. */
+    private fun back() {
+        if (web.canGoBack()) web.goBack() else finish()
     }
+
+    /** Where Android sends Back to callbacks (predictive back), the page goes back first too. */
+    private fun registerBack() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT) { back() }
+        }
+    }
+
+    @Deprecated("Back: the page's own back first")
+    override fun onBackPressed() = back()
 
     companion object {
         /**

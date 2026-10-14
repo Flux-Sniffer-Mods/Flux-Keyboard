@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,8 +43,8 @@ internal fun Titan2EliteRoundedCornerRows(onRoundedCornersChanged: (Boolean) -> 
     var titan2EliteRoundedCornerInsetsEnabled by remember {
         mutableStateOf(SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context))
     }
-    var topCornerMultiplier by remember { mutableStateOf(SettingsManager.getTitan2EliteTopCornerMultiplier(context)) }
-    var maxIconShrink by remember { mutableStateOf(SettingsManager.getTitan2EliteMaxIconShrink(context)) }
+    var topCornerMultiplier by remember { mutableIntStateOf(SettingsManager.getTitan2EliteTopCornerMultiplier(context)) }
+    var maxIconShrink by remember { mutableIntStateOf(SettingsManager.getTitan2EliteMaxIconShrink(context)) }
         Surface(modifier = Modifier.fillMaxWidth().settingRow("status_bar.rounded_corners")) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),

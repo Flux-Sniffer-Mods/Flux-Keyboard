@@ -527,12 +527,17 @@ object ExtraScreen {
         private val edge = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
             color = android.graphics.Color.BLACK; style = android.graphics.Paint.Style.STROKE; strokeWidth = 2f
         }
+        /** The arrow's outline, made again only when the view's size changes. */
+        private val path = android.graphics.Path()
+
+        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+            val fw = w.toFloat(); val fh = h.toFloat()
+            path.reset()
+            path.moveTo(1f, 1f); path.lineTo(1f, fh * 0.8f); path.lineTo(fw * 0.3f, fh * 0.6f); path.lineTo(fw * 0.5f, fh - 1f)
+            path.lineTo(fw * 0.65f, fh * 0.92f); path.lineTo(fw * 0.45f, fh * 0.55f); path.lineTo(fw - 1f, fh * 0.55f); path.close()
+        }
+
         override fun onDraw(canvas: android.graphics.Canvas) {
-            val w = width.toFloat(); val h = height.toFloat()
-            val path = android.graphics.Path().apply {
-                moveTo(1f, 1f); lineTo(1f, h * 0.8f); lineTo(w * 0.3f, h * 0.6f); lineTo(w * 0.5f, h - 1f)
-                lineTo(w * 0.65f, h * 0.92f); lineTo(w * 0.45f, h * 0.55f); lineTo(w - 1f, h * 0.55f); close()
-            }
             canvas.drawPath(path, fill)
             canvas.drawPath(path, edge)
         }

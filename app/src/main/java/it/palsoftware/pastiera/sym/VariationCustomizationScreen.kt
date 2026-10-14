@@ -829,7 +829,7 @@ private fun VariationRow(
     // Track which index is being dragged and the eventual drop slot for highlighting.
     var draggingIndex by remember { mutableStateOf<Int?>(null) }
     var dragStartIndex by remember { mutableStateOf<Int?>(null) }
-    var dragOffsetX by remember { mutableStateOf(0f) }
+    var dragOffsetX by remember { mutableFloatStateOf(0f) }
     var dropTargetIndex by remember { mutableStateOf<Int?>(null) }
     
     fun handleDrag(dragAmountX: Float) {

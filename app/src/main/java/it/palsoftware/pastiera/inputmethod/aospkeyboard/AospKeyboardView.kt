@@ -534,10 +534,13 @@ class AospKeyboardView @JvmOverloads constructor(
         rebuildKeys(w, h)
     }
 
+    /** The whole view, for its background (kept, not made each frame). */
+    private val viewRect = RectF()
+
     override fun onDraw(canvas: Canvas) {
         themeOverride?.let {
             canvas.drawColor(it.background)
-        } ?: drawDrawable(canvas, keyboardBackground, RectF(0f, 0f, width.toFloat(), height.toFloat()))
+        } ?: drawDrawable(canvas, keyboardBackground, viewRect.apply { set(0f, 0f, width.toFloat(), height.toFloat()) })
         keys.forEach { key ->
             drawDrawable(canvas, backgroundFor(key), key.visualRect)
             val previewIcon = previewIconFor(key)

@@ -6,6 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
@@ -31,7 +32,7 @@ class SymCustomizationActivity : LocalizedComponentActivity() {
     }
 
     private var settingId by mutableStateOf<String?>(null)
-    private var settingRequestSerial by mutableStateOf(0)
+    private var settingRequestSerial by mutableIntStateOf(0)
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

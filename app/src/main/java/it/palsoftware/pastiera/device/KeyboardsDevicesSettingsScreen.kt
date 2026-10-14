@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -105,7 +106,7 @@ private fun KeyboardsDevicesMainScreen(
     var configuredMode by remember { mutableStateOf(SettingsManager.getSoftwareKeyboardMode(context)) }
     var effectiveMode by remember { mutableStateOf(SettingsManager.resolveEffectiveSoftwareKeyboardMode(context)) }
     var showToggleToasts by remember { mutableStateOf(SettingsManager.getSoftwareKeyboardModeToggleToastsEnabled(context)) }
-    var inputDeviceRevision by remember { mutableStateOf(0) }
+    var inputDeviceRevision by remember { mutableIntStateOf(0) }
 
     DisposableEffect(context) {
         val prefs = SettingsManager.getPreferences(context)

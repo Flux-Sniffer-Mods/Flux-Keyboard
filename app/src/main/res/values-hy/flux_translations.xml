@@ -1886,7 +1886,7 @@
     <string name="game_mode_advice_windows">%1$s-ում՝ խաղի (կամ նրա կոնտեյների) կարգավորումներում. գրաֆիկական դրայվեր %2$s, DXVK DirectX 9–11 խաղերի համար (WineD3D, եթե որևէ մեկը չի մեկնարկում), VKD3D DirectX 12-ի համար, էկրանի չափ 1280×720, Box64 preset Performance։</string>
     <string name="game_mode_advice_driver_turnip">Turnip (ամենանորը)</string>
     <string name="game_mode_advice_driver_system">System (Turnip-ը միայն Adreno-ի համար է)</string>
-    <string name="game_mode_advice_game">Խաղի սեփական կարգավորումներում. գրաֆիկայի որակ Միջին կամ Ցածր, 60 fps սահմանաչափ միայն եթե կայուն է մնում (այլապես 30), և ռենդերի մասշտաբ կամ լուծաչափ 100%-ից ցածր, եթե առաջարկում է։</string>
+    <string name="game_mode_advice_game" formatted="false">Խաղի սեփական կարգավորումներում. գրաֆիկայի որակ Միջին կամ Ցածր, 60 fps սահմանաչափ միայն եթե կայուն է մնում (այլապես 30), և ռենդերի մասշտաբ կամ լուծաչափ 100%-ից ցածր, եթե առաջարկում է։</string>
     <string name="stream_resolution">Հեռարձակման լուծաչափ</string>
     <string name="stream_resolution_client">Ինչպես Moonlight-ն է խնդրում</string>
     <string name="stream_resolution_description">Հեռարձակման ժամանակ հեռախոսի էկրանը ստանում է Moonlight կլիենտի ձևը։ Ավտոմատը աշխատում է ճիշտ այն լուծաչափով, որ կլիենտը խնդրում է (Moonlight-ի կարգավորումներում), ներառյալ 4K։ Այստեղ ընտրված չափը խաղը աշխատեցնում է այդ չափով՝ մասշտաբավորված կլիենտինին. ավելի թեթև հեռախոսի համար։</string>

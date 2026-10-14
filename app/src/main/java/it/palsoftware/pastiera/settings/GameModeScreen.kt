@@ -39,6 +39,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -946,7 +948,7 @@ private fun ResolutionChoices(profile: GameProfile, onChange: (GameProfile) -> U
 internal fun GameArtworkRow(profile: GameProfile) {
     val context = LocalContext.current
     val scope = androidx.compose.runtime.rememberCoroutineScope()
-    var version by remember { mutableStateOf(it.palsoftware.pastiera.gaming.GameArt.version(context, profile)) }
+    var version by remember { mutableLongStateOf(it.palsoftware.pastiera.gaming.GameArt.version(context, profile)) }
     fun changed() {
         it.palsoftware.pastiera.gaming.GameArt.forget(context, profile)
         version = it.palsoftware.pastiera.gaming.GameArt.version(context, profile)
@@ -1185,6 +1187,7 @@ internal fun TrackpadRecordRow() {
  * where the shell can read them; null when there are none.
  */
 private fun anrTraces(context: android.content.Context): java.io.File? = runCatching {
+    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) return null
     val manager = context.getSystemService(android.app.ActivityManager::class.java) ?: return null
     val exits = manager.getHistoricalProcessExitReasons(context.packageName, 0, 10)
         .filter { it.reason == android.app.ApplicationExitInfo.REASON_ANR }.take(2)
@@ -1328,7 +1331,7 @@ private const val PHONE_GAME_MODE = "com.agui.game"
 internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
     val context = LocalContext.current
     var streaming by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHostService.enabled(context)) }
-    var paired by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamHost.pairedCount(context)) }
+    var paired by remember { mutableIntStateOf(it.palsoftware.pastiera.streaming.StreamHost.pairedCount(context)) }
     FluxSwitchRow(
         linkId = null,
         title = stringResource(R.string.stream_switch),

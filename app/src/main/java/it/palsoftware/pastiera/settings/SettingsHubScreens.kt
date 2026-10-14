@@ -43,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -323,7 +324,7 @@ internal fun SwipePadThresholdRow() {
     val context = LocalContext.current
     val prefs = remember { SettingsManager.getPreferences(context) }
     // Stored 3 to 25 (distance per step); the slider shows it inverted so right is more sensitive
-    var threshold by remember { mutableStateOf(SettingsManager.getSwipeIncrementalThreshold(context)) }
+    var threshold by remember { mutableFloatStateOf(SettingsManager.getSwipeIncrementalThreshold(context)) }
     DisposableEffect(prefs) {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == "swipe_incremental_threshold") {

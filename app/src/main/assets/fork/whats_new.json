@@ -717,6 +717,9 @@
     },
     {
       "text": "Gaming mode: keys handled one way per game. Dolphin reads the keyboard itself, so it gets every key untouched and the whole layout lives in its controls. Every other game has each of the layout's keys taken and the one key for its control sent, or a controller's buttons and sticks for a game that takes a controller. Keys outside the layout always reach the game as they are"
+    },
+    {
+      "text": "Lighter and quicker: settings read once instead of on every key, nothing made afresh each time the keyboard's bars and pointer are drawn, number settings kept without extra objects, settings saved in the background, unused code taken out"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1069,6 +1072,9 @@
     },
     {
       "text": "Gaming mode: a modifier pressed just before a key is always read with it, and the keyboard's typing stays out of the way of every key in a game"
+    },
+    {
+      "text": "Xbox Cloud Gaming: the player no longer closes straight away on Android 10, and Back goes back in the page on newer Android too"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

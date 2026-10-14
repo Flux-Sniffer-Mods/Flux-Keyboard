@@ -68,6 +68,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -129,26 +130,26 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
     private var query by mutableStateOf("")
     private var autoStartSingle by mutableStateOf(false)
     private var limitResults by mutableStateOf(false)
-    private var widthPercent by mutableStateOf(100)
+    private var widthPercent by mutableIntStateOf(100)
     private var pillMode by mutableStateOf(false)
     private var respectKeyboardLayout by mutableStateOf(true)
     private var typoTolerantRanking by mutableStateOf(false)
     private var filteredCommands by mutableStateOf(emptyList<CommandTarget>())
     private var commandCustomizations: Map<String, SettingsManager.QuickLauncherCommandCustomization> = emptyMap()
-    private var commandCustomizationRevision by mutableStateOf(0)
+    private var commandCustomizationRevision by mutableIntStateOf(0)
     private var highlightFavorites by mutableStateOf(true)
-    private var favoriteColor by mutableStateOf(SettingsManager.QUICK_LAUNCHER_DYNAMIC_FAVORITE_COLOR)
+    private var favoriteColor by mutableIntStateOf(SettingsManager.QUICK_LAUNCHER_DYNAMIC_FAVORITE_COLOR)
     private var iconColors by mutableStateOf(false)
     private var showAliasFirst by mutableStateOf(true)
     private var staticTopHighlight by mutableStateOf(false)
-    private var staticTopHighlightColor by mutableStateOf(0x7A4285F4)
-    private var animationDurationMs by mutableStateOf(120)
+    private var staticTopHighlightColor by mutableIntStateOf(0x7A4285F4)
+    private var animationDurationMs by mutableIntStateOf(120)
     private var loadingApps by mutableStateOf(false)
     private var launchedAutomatically = false
     private var keyboardLayout: Map<Int, LayoutMapping> = emptyMap()
     private var enterHandledOnKeyDown = false
     private var pendingDismissKeyCode: Int? = null
-    private var dismissRequestId by mutableStateOf(0)
+    private var dismissRequestId by mutableIntStateOf(0)
     private var dismissInProgress = false
     private var quickLauncherPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 

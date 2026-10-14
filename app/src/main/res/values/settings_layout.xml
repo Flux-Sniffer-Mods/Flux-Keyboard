@@ -495,9 +495,9 @@
     <string name="game_mode_xbox_add_to_games_description">Adds it to the Games app and Moonlight\'s list without playing it. Games you play are added by themselves.</string>
     <string name="game_mode_xbox_in_games">In your games: in the Games app and Moonlight.</string>
     <string name="game_mode_xbox_plan">Game Pass plan</string>
-    <string name="game_mode_xbox_plan_ultimate">Ultimate</string>
-    <string name="game_mode_xbox_plan_premium">Premium</string>
-    <string name="game_mode_xbox_plan_essential">Essential</string>
+    <string name="game_mode_xbox_plan_ultimate" translatable="false">Ultimate</string>
+    <string name="game_mode_xbox_plan_premium" translatable="false">Premium</string>
+    <string name="game_mode_xbox_plan_essential" translatable="false">Essential</string>
     <string name="game_mode_xbox_plan_description">The XCloud catalogue lists only the cloud games your plan includes, from Microsoft\'s own Game Pass lists.</string>
     <string name="game_mode_xbox_remove_from_games">Remove from Games</string>
     <string name="game_mode_xbox_added">%1$s added to Games</string>
@@ -546,7 +546,7 @@
     <string name="game_mode_advice_windows">In %1$s, the game\'s (or its container\'s) settings: Graphics driver %2$s, DXVK for DirectX 9 to 11 games (WineD3D if one won\'t start), VKD3D for DirectX 12, Screen size 1280×720, Box64 preset Performance.</string>
     <string name="game_mode_advice_driver_turnip">Turnip (the newest)</string>
     <string name="game_mode_advice_driver_system">System (Turnip is only for Adreno)</string>
-    <string name="game_mode_advice_game">In the game\'s own settings: graphics quality Medium or Low, a 60 fps limit only if it stays steady (else 30), and render scale or resolution below 100% if it offers one.</string>
+    <string name="game_mode_advice_game" formatted="false">In the game\'s own settings: graphics quality Medium or Low, a 60 fps limit only if it stays steady (else 30), and render scale or resolution below 100% if it offers one.</string>
     <string name="stream_resolution">Streaming resolution</string>
     <string name="stream_resolution_client">As Moonlight asks</string>
     <string name="stream_resolution_description">Automatic streams at the resolution set in Moonlight on the client, 4K included. Choosing a size runs the game at that size and lets the client scale it up, which is easier on the phone.</string>

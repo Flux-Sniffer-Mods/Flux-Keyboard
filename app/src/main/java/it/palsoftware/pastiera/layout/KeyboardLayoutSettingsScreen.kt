@@ -79,7 +79,7 @@ fun KeyboardLayoutSettingsScreen(
     }
 
     // Refresh trigger for custom layouts
-    var refreshTrigger by remember { mutableStateOf(0) }
+    var refreshTrigger by remember { mutableIntStateOf(0) }
     var showAddMenu by remember { mutableStateOf(false) }
 
     // Refresh list when returning from cloud screen (or any other screen)

@@ -1260,7 +1260,7 @@
     <string name="game_mode_advice_windows">Στο %1$s, στις ρυθμίσεις του παιχνιδιού (ή του container του): οδηγός γραφικών %2$s, DXVK για παιχνίδια DirectX 9 έως 11 (WineD3D αν κάποιο δεν ξεκινά), VKD3D για DirectX 12, μέγεθος οθόνης 1280×720, προεπιλογή Box64 Performance.</string>
     <string name="game_mode_advice_driver_turnip">Turnip (ο νεότερος)</string>
     <string name="game_mode_advice_driver_system">System (ο Turnip είναι μόνο για Adreno)</string>
-    <string name="game_mode_advice_game">Στις ρυθμίσεις του παιχνιδιού: ποιότητα γραφικών Μέτρια ή Χαμηλή, όριο 60 fps μόνο αν μένει σταθερό (αλλιώς 30), και κλίμακα απόδοσης ή ανάλυση κάτω από 100% αν υπάρχει.</string>
+    <string name="game_mode_advice_game" formatted="false">Στις ρυθμίσεις του παιχνιδιού: ποιότητα γραφικών Μέτρια ή Χαμηλή, όριο 60 fps μόνο αν μένει σταθερό (αλλιώς 30), και κλίμακα απόδοσης ή ανάλυση κάτω από 100% αν υπάρχει.</string>
     <string name="stream_resolution">Ανάλυση μετάδοσης</string>
     <string name="stream_resolution_client">Όπως ζητά το Moonlight</string>
     <string name="stream_resolution_description">Κατά τη μετάδοση, η οθόνη του τηλεφώνου παίρνει το σχήμα του Moonlight client. Το Αυτόματα τρέχει ακριβώς στην ανάλυση που ζητά ο client (ορίζεται στις ρυθμίσεις του Moonlight), μαζί και 4K. Ένα μέγεθος που επιλέγεις εδώ τρέχει το παιχνίδι σε αυτό, κλιμακωμένο στο μέγεθος του client: πιο ελαφρύ για το τηλέφωνο.</string>

@@ -503,19 +503,19 @@ private val FLUX_EMOJI_SEARCH_PAGE_IDS = setOf(
 fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val context = LocalContext.current
     var emojiPickerKey by remember {
-        mutableStateOf(SettingsManager.getEmojiPickerKey(context))
+        mutableIntStateOf(SettingsManager.getEmojiPickerKey(context))
     }
     var showEmojiPickerKeyDialog by remember { mutableStateOf(false) }
     var emojiKeyOpensLayer by remember { mutableStateOf(SettingsManager.getEmojiKeyOpensLayer(context)) }
     var emojiKeyAutoClose by remember { mutableStateOf(SettingsManager.getEmojiKeyAutoClose(context)) }
-    var emojiLayerRecentsKey by remember { mutableStateOf(SettingsManager.getEmojiLayerRecentsKey(context)) }
+    var emojiLayerRecentsKey by remember { mutableIntStateOf(SettingsManager.getEmojiLayerRecentsKey(context)) }
     var showRecentsKeyDialog by remember { mutableStateOf(false) }
     var gifsEnabled by remember { mutableStateOf(SettingsManager.getGifsEnabled(context)) }
     var klipyApiKey by remember { mutableStateOf(SettingsManager.getUserKlipyApiKey(context)) }
-    var emojiLayerGifKey by remember { mutableStateOf(SettingsManager.getEmojiLayerGifKey(context)) }
+    var emojiLayerGifKey by remember { mutableIntStateOf(SettingsManager.getEmojiLayerGifKey(context)) }
     var showGifKeyDialog by remember { mutableStateOf(false) }
     var recentsFirst by remember { mutableStateOf(SettingsManager.getRecentsFirstInSearch(context)) }
-    var searchKey by remember { mutableStateOf(SettingsManager.getSearchKey(context)) }
+    var searchKey by remember { mutableIntStateOf(SettingsManager.getSearchKey(context)) }
     var showSearchKeyDialog by remember { mutableStateOf(false) }
     var gifFavourites by remember { mutableStateOf(SettingsManager.getGifShowFavourites(context)) }
     var gifRecents by remember { mutableStateOf(SettingsManager.getGifShowRecents(context)) }
@@ -763,7 +763,7 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 )
             }
             // The default skin tone: the picker and the layer's pages show emoji in it
-            var skinTone by remember { mutableStateOf(it.palsoftware.pastiera.data.emoji.EmojiSkinTone.get(context)) }
+            var skinTone by remember { mutableIntStateOf(it.palsoftware.pastiera.data.emoji.EmojiSkinTone.get(context)) }
             Column(
                 modifier = Modifier.settingRow("flux_emoji.skin_tone")
                     .fillMaxWidth()
@@ -842,7 +842,7 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             if (!layerPages) {
                 // Recent emoji first on the layer, and how many keys they take
                 var layerRecentsFirst by remember { mutableStateOf(it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.enabled(context)) }
-                var layerRecentsCount by remember { mutableStateOf(it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.count(context)) }
+                var layerRecentsCount by remember { mutableIntStateOf(it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.count(context)) }
                 FluxSwitchRow(
                     linkId = "flux_emoji.layer_recents_first",
                     title = stringResource(R.string.emoji_layer_recents_first_title),

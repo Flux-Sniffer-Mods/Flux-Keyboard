@@ -69,10 +69,7 @@ internal class StreamSession(
     fun start() {
         wifiLock = runCatching {
             val wifi = context.applicationContext.getSystemService(android.net.wifi.WifiManager::class.java)
-            @Suppress("DEPRECATION")
-            val mode = if (android.os.Build.VERSION.SDK_INT >= 29) android.net.wifi.WifiManager.WIFI_MODE_FULL_LOW_LATENCY
-                else android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF
-            wifi?.createWifiLock(mode, "Flux:stream")?.apply { setReferenceCounted(false); acquire() }
+            wifi?.createWifiLock(android.net.wifi.WifiManager.WIFI_MODE_FULL_LOW_LATENCY, "Flux:stream")?.apply { setReferenceCounted(false); acquire() }
         }.onFailure { FluxLog.w(TAG, "no low-latency Wi-Fi: $it") }.getOrNull()
         videoPort = StreamPort(VIDEO_PORT, client)
         audioPort = StreamPort(AUDIO_PORT, client)

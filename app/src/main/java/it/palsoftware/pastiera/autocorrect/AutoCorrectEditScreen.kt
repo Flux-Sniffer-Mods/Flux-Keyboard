@@ -51,7 +51,7 @@ fun AutoCorrectEditScreen(
     // Load corrections (custom first, then default)
     // Use LinkedHashMap to maintain insertion order (newest first)
     var corrections by remember {
-        mutableStateOf(loadCorrectionsForLanguage(context, languageCode).toLinkedHashMap())
+        mutableStateOf<Map<String, String>>(loadCorrectionsForLanguage(context, languageCode).toLinkedHashMap())
     }
 
     // State for the add/edit dialog

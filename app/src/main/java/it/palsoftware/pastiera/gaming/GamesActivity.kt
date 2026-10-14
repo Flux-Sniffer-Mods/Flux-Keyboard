@@ -41,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -100,7 +101,7 @@ class GamesActivity : ComponentActivity() {
         // Keys move through the grid only while it's what's shown (not a game's settings, where they type)
         keyHandler = null
         var entries by remember { mutableStateOf<List<Entry>?>(null) }
-        var reload by remember { mutableStateOf(0) }
+        var reload by remember { mutableIntStateOf(0) }
         // Its settings, as in Flux Keyboard's Gaming mode (opened straight away when asked to)
         var editing by remember { mutableStateOf(editId?.let { id -> GameProfiles.all(this).firstOrNull { it.id == id } }) }
         // Adding a game, as in Gaming mode: a launcher's or folder's, one by hand, or an Xbox cloud game
@@ -263,7 +264,7 @@ class GamesActivity : ComponentActivity() {
             }
             val grid = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
             // The tile picked with keys (shown only once keys are used, not for touch)
-            var selected by remember(page) { mutableStateOf(0) }
+            var selected by remember(page) { mutableIntStateOf(0) }
             // On a TV, picked with a controller: the frame shows from the start
             var byKeys by remember { mutableStateOf(tv) }
             LaunchedEffect(selected, byKeys) { if (byKeys && selected in tiles.indices) grid.animateScrollToItem(selected) }

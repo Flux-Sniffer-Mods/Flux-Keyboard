@@ -76,7 +76,7 @@ fun OnlineLayoutsScreen(
     var manifestError by remember { mutableStateOf<String?>(null) }
     var downloadingItems by remember { mutableStateOf<Set<String>>(emptySet()) }
     var downloadProgress by remember { mutableStateOf<Map<String, Pair<Long, Long>>>(emptyMap()) }
-    var refreshTrigger by remember { mutableStateOf(0) }
+    var refreshTrigger by remember { mutableIntStateOf(0) }
     var layoutToDelete by remember { mutableStateOf<UnifiedLayoutItem?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()

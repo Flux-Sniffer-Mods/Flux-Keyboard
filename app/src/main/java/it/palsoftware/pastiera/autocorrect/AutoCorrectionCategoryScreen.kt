@@ -120,7 +120,7 @@ fun AutoCorrectionCategoryScreen(
         mutableStateOf(SettingsManager.getAutoReplaceOnSpaceEnter(context))
     }
     var maxAutoReplaceDistance by remember {
-        mutableStateOf(SettingsManager.getMaxAutoReplaceDistance(context))
+        mutableIntStateOf(SettingsManager.getMaxAutoReplaceDistance(context))
     }
     var useKeyboardProximity by remember {
         mutableStateOf(SettingsManager.getUseKeyboardProximity(context))
