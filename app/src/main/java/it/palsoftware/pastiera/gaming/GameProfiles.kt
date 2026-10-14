@@ -3,6 +3,8 @@ package it.palsoftware.pastiera.gaming
 import it.palsoftware.pastiera.apps.appLabel
 import android.content.Context
 import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.FluxLog
+import it.palsoftware.pastiera.R
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -318,6 +320,39 @@ object GameProfiles {
         val at = profiles.indexOfFirst { it.id == profile.id }
         if (at >= 0) profiles[at] = profile else profiles += profile
         saveAll(context, profiles)
+    }
+
+    /**
+     * A game gone from the phone: its app uninstalled, or its file (or launcher's export) no
+     * longer in the game folders it was found in ([seen] there before, not in [inFolders] now).
+     */
+    fun gone(context: Context, profile: GameProfile, inFolders: Set<String>, seen: Set<String>): Boolean {
+        if (!profile.isGame) return false
+        val pkg = profile.packages.firstOrNull() ?: return false
+        if (pkg != context.packageName && runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isFailure) return true
+        val launch = profile.launch ?: return false
+        return launch in seen && launch !in inFolders
+    }
+
+    /**
+     * Games gone from the phone ([gone]) out of the lists: found ones never set up deleted, set-up
+     * ones kept (hidden, back with their settings if the game comes back). Their home screen
+     * shortcuts turned off while they're gone, on again when they're back.
+     */
+    fun prune(context: Context, inFolders: Set<String>, seen: Set<String>) {
+        val profiles = all(context)
+        val (missing, present) = profiles.filter { it.isGame }.partition { gone(context, it, inFolders, seen) }
+        val dropped = missing.filter { it.pending }.map { it.id }.toSet()
+        if (dropped.isNotEmpty()) saveAll(context, profiles.filterNot { it.id in dropped })
+        if (missing.isNotEmpty()) FluxLog.w("GameProfiles",
+            "gone from the phone: ${missing.joinToString { it.name }} (${dropped.size} never set up, taken off the list)")
+        context.getSystemService(android.content.pm.ShortcutManager::class.java)?.let { shortcuts ->
+            runCatching {
+                if (missing.isNotEmpty()) shortcuts.disableShortcuts(missing.map { "game_${it.id}" },
+                    context.getString(R.string.game_gone))
+            }
+            runCatching { if (present.isNotEmpty()) shortcuts.enableShortcuts(present.map { "game_${it.id}" }) }
+        }
     }
 
     fun delete(context: Context, id: String) {

@@ -109,4 +109,17 @@ class GameProfilesTest {
         // Never larger than the screen
         assertEquals(1860 to 1080, GameMode.scaled(1860 to 1080, 1440))
     }
+
+    @Test
+    fun aGameOutOfTheFoldersOrUninstalledIsGone() {
+        val context = org.robolectric.RuntimeEnvironment.getApplication()
+        val game = GameProfiles.newProfile("Celeste", setOf(context.packageName)).copy(launch = "intent:#Intent;S.x=1;end")
+        // Still in the folders, or never found there (added by hand): here
+        assertEquals(false, GameProfiles.gone(context, game, setOf(game.launch!!), setOf(game.launch!!)))
+        assertEquals(false, GameProfiles.gone(context, game, emptySet(), emptySet()))
+        // Found there before, not now: gone
+        assertEquals(true, GameProfiles.gone(context, game, emptySet(), setOf(game.launch!!)))
+        // Its app uninstalled: gone
+        assertEquals(true, GameProfiles.gone(context, game.copy(packages = setOf("com.example.uninstalled")), emptySet(), emptySet()))
+    }
 }

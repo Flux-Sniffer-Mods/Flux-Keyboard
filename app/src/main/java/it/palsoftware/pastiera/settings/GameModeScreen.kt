@@ -191,12 +191,19 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) { picking = true }
         // The games: home screen shortcuts, art and detection, their app's settings unless their own
         SettingsSectionDivider(stringResource(R.string.game_mode_games_section))
+        // Games no longer on the phone (uninstalled, or out of the folders): still here, marked, to keep or delete
+        val goneIds = remember(profiles) {
+            val inFolders = it.palsoftware.pastiera.gaming.GameFolders.inFolders(context)
+            val seen = it.palsoftware.pastiera.gaming.GameFolders.seen(context)
+            profiles.filter { p -> GameProfiles.gone(context, p, inFolders, seen) }.map { p -> p.id }.toSet()
+        }
         profiles.filter { it.isGame }.forEach { profile ->
             val appName = profile.packages.firstOrNull()?.let { pkg -> context.appLabel(pkg) }.orEmpty()
             FluxActionRow(
                 linkId = null,
                 title = profile.name,
                 description = when {
+                    profile.id in goneIds -> stringResource(R.string.game_gone_short)
                     profile.pending -> stringResource(R.string.game_mode_found_short, appName)
                     profile.own -> stringResource(R.string.game_mode_own_settings_short)
                     else -> stringResource(R.string.game_mode_app_settings_short, appName)

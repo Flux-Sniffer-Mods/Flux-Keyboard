@@ -666,4 +666,6 @@
     <string name="tv_no_answer">%1$s didn\'t answer. Turn it on, or turn on Turn on via Wi-Fi (Mobile TV On) in its settings.</string>
     <string name="tv_refused">%1$s didn\'t allow Flux Keyboard. Accept it on the TV when asked.</string>
     <string name="tv_failed">Moonlight couldn\'t be opened on %1$s. Is Moonlight installed there?</string>
+    <string name="game_gone">This game isn\'t on the phone any more</string>
+    <string name="game_gone_short">Not on the phone any more: kept with its settings for if it comes back</string>
 </resources>

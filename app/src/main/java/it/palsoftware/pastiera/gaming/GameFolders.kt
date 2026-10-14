@@ -165,21 +165,35 @@ object GameFolders {
         }.getOrDefault(emptyList())
     }
 
+    private const val KEY_SEEN = "game_folders_seen"
+
+    /** Every game the folders have held (what starts it), so one they no longer hold is known gone. */
+    fun seen(context: Context): Set<String> =
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).getStringSet(KEY_SEEN, null)?.toSet().orEmpty()
+
+    /** What starts each game the folders hold now. */
+    fun inFolders(context: Context): Set<String> = scanned(context).mapNotNull { it.launch }.toSet()
+
     private fun remember(context: Context, games: List<GameLibrary.Game>): List<GameLibrary.Game> {
         val list = org.json.JSONArray()
         games.forEach { g -> list.put(org.json.JSONObject().put("name", g.name).put("package", g.packageName).put("launch", g.launch ?: "")) }
+        val launches = games.mapNotNull { it.launch }.toSet()
         it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit()
-            .putString(KEY_SCANNED, list.toString()).putLong(KEY_SCANNED_AT, System.currentTimeMillis()).apply()
+            .putString(KEY_SCANNED, list.toString()).putLong(KEY_SCANNED_AT, System.currentTimeMillis())
+            .putStringSet(KEY_SEEN, seen(context) + launches).apply()
         // Each one in the games list, not set up until asked (the Play Store's games too)
         GameProfiles.addDetected(context, games + GameLibrary.installedGames(context))
+        // Games uninstalled or taken out of the folders: gone from the lists
+        GameProfiles.prune(context, launches, seen(context))
         if (GamesActivity.enabled(context)) GamesActivity.sync(context.applicationContext)
         return games
     }
 
     /** Every game in the folders whose player is installed (blocking: reads the shell). */
-    fun games(context: Context): List<GameLibrary.Game> = scan(context).also { remember(context, it) }
+    fun games(context: Context): List<GameLibrary.Game> = scan(context)?.also { remember(context, it) } ?: scanned(context)
 
-    private fun scan(context: Context): List<GameLibrary.Game> {
+    /** The folders' games; null when they couldn't be read (no shell): not taken as every game gone. */
+    private fun scan(context: Context): List<GameLibrary.Game>? {
         val players = Player.entries.mapNotNull { player -> player.installed(context)?.let { player to it } }.toMap()
         if (players.isEmpty()) return emptyList()
         // Each file with its first line: an export file holds its game's ID
@@ -200,7 +214,7 @@ object GameFolders {
                 "*) s=\$(head -c 64 \"\$f\" 2>/dev/null | head -n 1 | tr -cd '[:alnum:]_-');; esac; " +
                 "printf '%s\\t%s\\n' \"\$f\" \"\$s\"; done; true",
             10_000
-        ) ?: return emptyList()
+        ) ?: return null
         return parse(listing, custom).map { found ->
             when {
                 // Steam games exported where GameNative's go, with only GameHub Lite to start them

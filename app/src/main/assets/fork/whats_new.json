@@ -1174,6 +1174,9 @@
     },
     {
       "text": "Gaming mode: a game started from Games has its screen made before its app opens, so a launcher resized as it opens a game (GameHub Lite, which closes and loses the game) no longer is"
+    },
+    {
+      "text": "Games: a game uninstalled (its app, or its file or export taken out of the game folders) leaves the Games app, Moonlight's list and the quick launcher; one never set up is taken off, one set up is kept with its settings (marked in gaming mode's settings) for if it comes back; its home screen shortcut is turned off meanwhile"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

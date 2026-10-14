@@ -152,7 +152,14 @@ class GamesActivity : ComponentActivity() {
                     ?.let { launch -> runCatching { startActivity(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
             },
             onAdded = { reload++ })
-        LaunchedEffect(reload) { entries = withContext(Dispatchers.IO) { GameProfiles.addDetected(this@GamesActivity, GameLibrary.installedGames(this@GamesActivity)); games(this@GamesActivity) }.map { (profile, intent) -> Entry(profile.name, profile, intent) } }
+        LaunchedEffect(reload) {
+            entries = withContext(Dispatchers.IO) {
+                val context = this@GamesActivity
+                GameProfiles.addDetected(context, GameLibrary.installedGames(context))
+                GameProfiles.prune(context, GameFolders.inFolders(context), GameFolders.seen(context))
+                games(context)
+            }.map { (profile, intent) -> Entry(profile.name, profile, intent) }
+        }
         editing?.let { profile ->
             androidx.activity.compose.BackHandler { editing = null }
             it.palsoftware.pastiera.settings.GameProfileEditor(profile, onDone = { saved ->
@@ -495,7 +502,10 @@ class GamesActivity : ComponentActivity() {
          * profile-less stand-in, for its art and app), each with what starts it, A to Z.
          */
         internal fun games(context: Context): List<Pair<GameProfile, Intent>> {
-            val profiles = GameProfiles.all(context).filter { it.isGame }
+            // Games uninstalled or taken out of the folders left out (kept, if set up, for their return)
+            val inFolders = GameFolders.inFolders(context)
+            val seen = GameFolders.seen(context)
+            val profiles = GameProfiles.all(context).filter { it.isGame && !GameProfiles.gone(context, it, inFolders, seen) }
             val known = profiles.mapNotNull { it.launch }.toSet()
             val found = GameFolders.scanned(context).filter { it.launch != null && it.launch !in known }.map { game ->
                 GameProfiles.newProfile(game.name, setOf(game.packageName)).copy(id = "found:" + game.launch.hashCode(), launch = game.launch) to
