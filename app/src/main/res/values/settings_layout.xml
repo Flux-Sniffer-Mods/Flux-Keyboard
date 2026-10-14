@@ -340,7 +340,7 @@
     <string name="game_mode_add_description">A launcher or emulator. Its games use these settings.</string>
     <string name="game_mode_folders">Create game folders</string>
     <string name="game_mode_folders_description">Creates Download/Flux Keyboard/Games with a folder for each launcher and emulator. ES-DE\'s ROMs folder is read too.</string>
-    <string name="game_mode_folders_made">Created in Download/Flux Keyboard/Games. For GameNative, go to Settings > Interface > Frontend Sync and choose the GameNative folder.</string>
+    <string name="game_mode_folders_made">Created in Download/Flux Keyboard/Games. For GameNative, go to Settings > Interface > Frontend Sync and choose the GameNative folder. For the official GameHub, set its Export for frontend to the GameHub folder.</string>
     <string name="game_mode_folder_add">Add your own folder</string>
     <string name="game_mode_folder_add_description">A folder you already use in a launcher or emulator.</string>
     <string name="game_mode_folder_games_of">Games in it are for</string>
@@ -352,7 +352,7 @@
     <string name="game_mode_own_game_id">Game ID (optional)</string>
     <string name="game_mode_own_game_store">Store</string>
     <string name="game_mode_own_game_custom_store">Custom game</string>
-    <string name="game_mode_own_game_none">None of the launchers or emulators Flux Keyboard can start games in is installed (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
+    <string name="game_mode_own_game_none">None of the launchers or emulators Flux Keyboard can start games in is installed (GameNative, GameHub, GameHub Lite, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Screen</string>
     <string name="game_mode_screen_app">Let the game decide</string>
     <string name="game_mode_screen_sideways">Landscape</string>

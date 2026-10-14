@@ -10,9 +10,11 @@ import it.palsoftware.pastiera.adb.AdbShell
 
 /**
  * Games from folders: Flux Keyboard's own (Download/Flux Keyboard/Games, a folder per launcher
- * and emulator) and ES-DE's ROMs folder. GameNative's Export for frontend writes a small file
- * per game there, holding its ID; a launcher's Steam library kept there (GameHub Lite's) lists
- * its games by their manifests; emulators' folders hold the games themselves. Each is started the way ES-DE starts it, straight into the game.
+ * and emulator) and ES-DE's ROMs folder. GameNative's and the official GameHub's Export for
+ * frontend write a small file per game there, holding its ID (GameHub's started in GameHub Lite,
+ * which has none of its own); a launcher's Steam library kept there lists its games by their
+ * manifests; emulators' folders hold the games themselves. Each is started the way ES-DE starts
+ * it, straight into the game.
  */
 object GameFolders {
     const val ROOT = "/storage/emulated/0/Download/Flux Keyboard/Games"
@@ -31,7 +33,8 @@ object GameFolders {
             setOf("steam", "epic", "gog", "amazon", "pcgame"),
             listOf("app.gamenative" to "app.gamenative.MainActivity")),
         // GameHub Lite's builds, those named as benchmark apps too (a trick for more speed on some
-        // phones), as ES-DE finds them: its exported games in a folder of their own
+        // phones), as ES-DE finds them. It has no Export for frontend: the official GameHub's
+        // exports (in GameHub's folder) start in it
         GAMEHUB_LITE("GameHub Lite", listOf("GameHub Lite", "GameHubLite", "GameHub-Lite"),
             setOf("steam", "local"),
             (listOf("gamehub.lite", "emuready.gamehub.lite") + GAMEHUB_LITE_DISGUISED)
@@ -166,8 +169,8 @@ object GameFolders {
         val dirs = Player.entries.joinToString(" ") { "\"$ROOT/${it.folders.first()}\"" }
         val note = "Flux Keyboard's game folders: gaming mode lists the games here and can put each on the home screen, " +
             "its profile on. GameNative: set Export for frontend (Settings > Interface > Frontend Sync) to its folder here. " +
-            "GameHub: set Export for frontend to its folder here; with GameHub Lite installed too, its games start in GameHub Lite. " +
-            "GameHub Lite: keep its Steam library (where it installs games) in its folder here. Emulators: keep your games in their folder and add the folder in the emulator too."
+            "GameHub: set Export for frontend to its folder here; with GameHub Lite installed too, its games start in GameHub Lite " +
+            "(which has no export of its own). Emulators: keep your games in their folder and add the folder in the emulator too."
         // .nomedia: the launchers' covers and icons there stay out of the gallery
         val noMedia = (listOf(ROOT) + Player.entries.map { "$ROOT/${it.folders.first()}" }).joinToString(" ") { "\"$it/.nomedia\"" }
         return AdbShell.run("mkdir -p $dirs && touch $noMedia && printf '%s\\n' '${note.replace("'", "")}' > \"$ROOT/About these folders.txt\"", 5_000) != null

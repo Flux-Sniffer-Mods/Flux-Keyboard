@@ -789,6 +789,9 @@
     },
     {
       "text": "Stream to Moonlight: the TV settings and prompts now say Moonlight client"
+    },
+    {
+      "text": "README, changelog and settings text brought up to date: streaming described as it works now, the official GameHub's Export for frontend explained where the game folders are made, and GameHub Lite named among the launchers"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
