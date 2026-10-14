@@ -302,7 +302,9 @@ object FluxLayout {
     fun volumeSeenFrom(context: android.content.Context, name: String?) {
         if (name.isNullOrBlank()) return
         val prefs = it.palsoftware.pastiera.SettingsManager.getPreferences(context)
-        if (prefs.getString(KEY_VOLUME_DEVICE, null) != name) prefs.edit().putString(KEY_VOLUME_DEVICE, name).apply()
+        if (prefs.getString(KEY_VOLUME_DEVICE, null) == name) return
+        prefs.edit().putString(KEY_VOLUME_DEVICE, name).apply()
+        it.palsoftware.pastiera.FluxLog.w("FluxLayout", "volume keys come from \"$name\"")
     }
 
     /**
@@ -480,6 +482,8 @@ object FluxLayout {
         AdbShell.run("am force-stop $pkg", 3_000)
         val gc = dolphinGameCube(keyboard, swap, volume)
         val wii = dolphinWii(keyboard, swap = swap, volume = volume)
+        it.palsoftware.pastiera.FluxLog.w("FluxLayout", "Dolphin controls written: keyboard \"$keyboard\", volume keys from $volume; " +
+            gc.firstOrNull { it.startsWith("Triggers/L = ") })
         val ok = write("$dir/Config/GCPadNew.ini", withSection(read("$dir/Config/GCPadNew.ini"), "GCPad1", gc)) &&
             write("$dir/Config/WiimoteNew.ini", withSection(read("$dir/Config/WiimoteNew.ini"), "Wiimote1", wii)) &&
             // Also as profiles, to load again after changing them
