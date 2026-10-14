@@ -1198,6 +1198,9 @@
     },
     {
       "text": "Gaming mode: after a stream ends, the key sender is started again straight away and when the next game opens, so a game opened after streaming (Infinity Nikki) gets its keys again; the crash log notes the first key in each game, when a game's text field has the keys, and which accessibility services are on"
+    },
+    {
+      "text": "Games: a game opened from the Games app, a home screen shortcut or the quick launcher starts once, not three times while the screen changes size (GameHub Lite could close before the game loaded)"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

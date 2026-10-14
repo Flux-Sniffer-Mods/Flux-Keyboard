@@ -19,6 +19,13 @@ import android.os.Bundle
 class GameLaunchActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Made again (the screen changed as the game's size was set): the first one starts the
+        // game, so this one doesn't start it a second time
+        if (savedInstanceState != null) {
+            FluxLog.w(TAG, "launch screen made again: not started twice")
+            finish()
+            return
+        }
         val launchUri = intent.getStringExtra(EXTRA_LAUNCH)
         val profile = intent.getStringExtra(EXTRA_PROFILE)?.let { id -> GameProfiles.all(this).firstOrNull { it.id == id } }
             ?: launchUri?.let { uri -> GameProfiles.all(this).firstOrNull { it.launch == uri } }

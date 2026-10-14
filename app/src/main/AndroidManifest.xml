@@ -262,6 +262,7 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|keyboard|keyboardHidden|navigation|uiMode"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Streaming games to Moonlight: the host, and the PIN typed to pair a device -->
         <service
