@@ -70,6 +70,9 @@ object StreamHost {
     /** The name Moonlight shows: the phone's. */
     fun hostname(): String = Build.MODEL.ifBlank { "Flux Keyboard" }
 
+    /** The phone's ID as Moonlight knows it (its uniqueid), for opening Moonlight at it on a TV. */
+    internal fun hostId(context: Context): String = id(context)
+
     private fun id(context: Context): String {
         val prefs = SettingsManager.getPreferences(context)
         return prefs.getString(KEY_ID, null) ?: UUID.randomUUID().toString().uppercase().also { prefs.edit().putString(KEY_ID, it).apply() }

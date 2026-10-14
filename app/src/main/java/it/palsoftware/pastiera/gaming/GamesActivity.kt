@@ -250,7 +250,13 @@ class GamesActivity : ComponentActivity() {
                     tiles += TileSpec(entry.profile.id, entry.name,
                         if (entry.profile.pending) stringResource(R.string.games_app_new) else null,
                         { GameCover(entry.profile) },
-                        { runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } },
+                        {
+                            // Streaming, with a TV set up and nothing streaming yet: started on the TV
+                            if (streaming && entry.profile.isGame && it.palsoftware.pastiera.streaming.TvRemote.ready(this@GamesActivity) &&
+                                it.palsoftware.pastiera.streaming.TvRemote.startsGames(this@GamesActivity) &&
+                                it.palsoftware.pastiera.streaming.StreamHost.session == null) playOnTv(entry.profile)
+                            else runCatching { startActivity(entry.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                        },
                         { editing = entry.profile })
                 }
                 // Xbox cloud games: signed in first, then picked; long-press to sign out
@@ -461,6 +467,23 @@ class GamesActivity : ComponentActivity() {
         ) else Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             profile.packages.firstOrNull()?.let { pkg -> it.palsoftware.pastiera.settings.FluxAppIcon(pkg, 48.dp) }
         }
+    }
+
+    /** [profile]'s game on the TV: woken, Moonlight opened there straight into it; how it goes in toasts. */
+    private fun playOnTv(profile: GameProfile) {
+        val tvName = it.palsoftware.pastiera.streaming.TvRemote.tv(this)?.name.orEmpty()
+        fun say(text: String) = runOnUiThread { android.widget.Toast.makeText(this, text, android.widget.Toast.LENGTH_LONG).show() }
+        say(getString(R.string.tv_starting, profile.name, tvName))
+        Thread {
+            val result = runCatching { it.palsoftware.pastiera.streaming.TvRemote.play(this, profile) { step -> say(step) } }
+                .getOrDefault(it.palsoftware.pastiera.streaming.TvRemote.Result.FAILED)
+            when (result) {
+                it.palsoftware.pastiera.streaming.TvRemote.Result.STARTED -> Unit
+                it.palsoftware.pastiera.streaming.TvRemote.Result.NO_TV -> say(getString(R.string.tv_no_answer, tvName))
+                it.palsoftware.pastiera.streaming.TvRemote.Result.REFUSED -> say(getString(R.string.tv_refused, tvName))
+                else -> say(getString(R.string.tv_failed, tvName))
+            }
+        }.start()
     }
 
     companion object {

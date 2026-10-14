@@ -1582,6 +1582,8 @@ internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
             }
             Text(stringResource(R.string.stream_quiet_description), style = MaterialTheme.typography.bodySmall)
         }
+        // A TV the phone turns on and opens Moonlight on, straight into a game picked on the phone
+        TvRows()
     }
     if (paired > 0) FluxActionRow(
         linkId = null,
@@ -1591,6 +1593,95 @@ internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
     ) {
         it.palsoftware.pastiera.streaming.StreamHost.unpairAll(context)
         paired = 0
+    }
+}
+
+/**
+ * The TV games picked on the phone start on: found on the Wi-Fi (LG's webOS TVs), set up once
+ * (the TV asks), then woken and opened at Moonlight straight into the game.
+ */
+@Composable
+private fun TvRows() {
+    val context = LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var tv by remember { mutableStateOf(it.palsoftware.pastiera.streaming.TvRemote.tv(context)) }
+    var ready by remember { mutableStateOf(it.palsoftware.pastiera.streaming.TvRemote.ready(context)) }
+    var finding by remember { mutableStateOf(false) }
+    var found by remember { mutableStateOf<List<it.palsoftware.pastiera.streaming.TvRemote.Tv>?>(null) }
+    var status by remember { mutableStateOf<String?>(null) }
+    var menu by remember { mutableStateOf(false) }
+
+    fun find() {
+        finding = true; found = null; status = context.getString(R.string.tv_finding)
+        scope.launch {
+            found = withContext(Dispatchers.IO) { it.palsoftware.pastiera.streaming.TvRemote.discover(context) }
+            status = if (found.isNullOrEmpty()) context.getString(R.string.tv_none_found) else null
+        }
+    }
+
+    fun setUp(picked: it.palsoftware.pastiera.streaming.TvRemote.Tv) {
+        found = null
+        status = context.getString(R.string.tv_connecting, picked.name)
+        scope.launch {
+            val ok = withContext(Dispatchers.IO) {
+                it.palsoftware.pastiera.streaming.TvRemote.pair(context, picked) {
+                    scope.launch { status = context.getString(R.string.tv_accept, picked.name) }
+                }
+            }
+            tv = it.palsoftware.pastiera.streaming.TvRemote.tv(context)
+            ready = it.palsoftware.pastiera.streaming.TvRemote.ready(context)
+            status = context.getString(if (ok) R.string.tv_set_up else R.string.tv_setup_failed, picked.name)
+            finding = false
+        }
+    }
+
+    FluxActionRow(
+        linkId = null,
+        icon = "\u25AD",
+        title = stringResource(R.string.tv_title),
+        description = status ?: if (ready && tv != null) stringResource(R.string.tv_description_set, tv!!.name) else stringResource(R.string.tv_description_none)
+    ) { if (ready) menu = true else find() }
+    if (ready) {
+        var onTv by remember { mutableStateOf(it.palsoftware.pastiera.streaming.TvRemote.startsGames(context)) }
+        FluxSwitchRow(
+            linkId = null,
+            title = stringResource(R.string.tv_games_on_tv),
+            description = stringResource(R.string.tv_games_on_tv_description),
+            checked = onTv
+        ) { on ->
+            onTv = on
+            it.palsoftware.pastiera.streaming.TvRemote.setStartsGames(context, on)
+        }
+    }
+    if (menu) AlertDialog(
+        onDismissRequest = { menu = false },
+        title = { Text(tv?.name.orEmpty()) },
+        text = { Text(stringResource(R.string.tv_menu_description)) },
+        confirmButton = { TextButton(onClick = { menu = false; find() }) { Text(stringResource(R.string.tv_find_again)) } },
+        dismissButton = {
+            TextButton(onClick = {
+                menu = false
+                it.palsoftware.pastiera.streaming.TvRemote.forget(context)
+                tv = null; ready = false; status = null
+            }) { Text(stringResource(R.string.tv_forget)) }
+        }
+    )
+    found?.takeIf { it.isNotEmpty() }?.let { list ->
+        AlertDialog(
+            onDismissRequest = { found = null; finding = false; status = null },
+            title = { Text(stringResource(R.string.tv_pick)) },
+            text = {
+                androidx.compose.foundation.layout.Column {
+                    list.forEach { each ->
+                        Text(
+                            "${each.name}  (${each.host})",
+                            modifier = Modifier.fillMaxWidth().clickable { setUp(each) }.padding(vertical = 12.dp)
+                        )
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { found = null; finding = false; status = null }) { Text(stringResource(R.string.cancel)) } }
+        )
     }
 }
 

@@ -771,6 +771,9 @@
     },
     {
       "text": "Stream to Moonlight: Phone's sound while streaming: the game's sound off on the phone (the default; the TV still gets it), or every sound of the phone's off too (calls and messages vibrate, alarms still sound), all put back when the stream ends"
+    },
+    {
+      "text": "Stream to Moonlight: an LG TV can be set up (found on the Wi-Fi, accepted once on the TV); with streaming on, picking a game in the Games app turns the TV on and opens Moonlight there straight into the game"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
