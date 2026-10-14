@@ -1431,6 +1431,8 @@ internal fun CrashLogRow() {
                         "echo '== launcher shortcuts =='; dumpsys shortcut | grep -E '^ *Package: |shortLabel=' | while IFS= read -r l; do case \"\$l\" in " +
                         "*'Package: '*) case \"\$l\" in *'Package: gamehub'*|*'Package: emuready'*|*'Package: com.antutu'*|*'Package: com.ludashi'*|*'Package: com.xiaoji'*|*'Package: app.gamenative'*) k=1; echo \"\$l\";; *) k=;; esac;; " +
                         "*) [ -n \"\$k\" ] && echo \"\$l\";; esac; done | head -n 80; " +
+                        // Gaming mode reads keys through Flux Keyboard's accessibility service: whether it's on
+                        "echo '== accessibility services =='; settings get secure enabled_accessibility_services | tr ':' '\\n'; " +
                         // Flux Keyboard's own record of gaming mode, streaming and game launches (the phone's turns over in seconds)
                         "echo '== gaming and streaming =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${it.palsoftware.pastiera.FluxLog.FILE_NAME}'; " +
                         (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +

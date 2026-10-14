@@ -1192,6 +1192,9 @@
     },
     {
       "text": "Games: a game uninstalled (its app, or its file or export taken out of the game folders) leaves the Games app, Moonlight's list and the quick launcher; one never set up is taken off, one set up is kept with its settings (marked in gaming mode's settings) for if it comes back; its home screen shortcut is turned off meanwhile"
+    },
+    {
+      "text": "Gaming mode: after a stream ends, the key sender is started again straight away and when the next game opens, so a game opened after streaming (Infinity Nikki) gets its keys again; the crash log notes the first key in each game, when a game's text field has the keys, and which accessibility services are on"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

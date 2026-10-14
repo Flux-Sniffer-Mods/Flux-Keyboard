@@ -4564,7 +4564,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (playerEditor) { super.onStartInputView(info, restarting); return }
         if (terminalModeActive) TerminalMode.apply(info)
         // A text field in a game: the keys type into it, not play
-        it.palsoftware.pastiera.gaming.GameMode.typing = (info?.inputType ?: 0) != 0
+        it.palsoftware.pastiera.gaming.GameMode.editorStarted(info)
         super.onStartInputView(info, restarting)
         hideSurfaceIfHiddenForApp()
         if (::textExpansionController.isInitialized) textExpansionController.clear()
@@ -4702,7 +4702,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
         if (playerEditor) return
-        it.palsoftware.pastiera.gaming.GameMode.typing = false
+        it.palsoftware.pastiera.gaming.GameMode.editorFinished()
         if (::textExpansionController.isInitialized) textExpansionController.clear()
         // Finishing a view does not finish the editor session (Back and backend transitions).
         isInputViewActive = !finishingInput && inputContextState.isEditable

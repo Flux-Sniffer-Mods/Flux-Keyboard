@@ -65,6 +65,24 @@ object GameMode {
 
     /** A text field of the game has the keyboard open: keys type, not play. */
     @Volatile var typing = false
+        private set
+
+    /** The keyboard opened on a field of the app in front: a text field (keys type) or not. Noted in the log while gaming. */
+    fun editorStarted(info: android.view.inputmethod.EditorInfo?) {
+        val on = (info?.inputType ?: 0) != 0
+        if (on != typing && profile != null) FluxLog.w(TAG, if (on) "text field open in ${info?.packageName} " +
+            "(type 0x${Integer.toHexString(info?.inputType ?: 0)}, field ${info?.fieldId}, hint ${info?.hintText}): keys type into it, not play"
+            else "no text field: keys play")
+        typing = on
+    }
+
+    fun editorFinished() {
+        if (typing && profile != null) FluxLog.w(TAG, "text field closed: keys play again")
+        typing = false
+    }
+
+    /** The first key in each game is noted in the log, with what gaming mode does with keys then. */
+    @Volatile private var keySeen = false
 
     fun active(): Boolean = profile != null
 
@@ -324,6 +342,12 @@ object GameMode {
      * sent, and any other key goes to the game as it is.
      */
     fun onKeyEvent(event: KeyEvent): Boolean {
+        if (profile != null && !keySeen && event.scanCode != 0 && event.action == KeyEvent.ACTION_DOWN) {
+            keySeen = true
+            FluxLog.w(TAG, "first key in ${profile?.name}: ${KeyEvent.keyCodeToString(event.keyCode)}, " +
+                "buttons by ${route()}, ${if (typing) "typing in a text field (left alone)" else if (GameTouchEditor.open) "placing keys (left alone)" else "played"}, " +
+                "input helper ${if (input != null) "running" else "not running"}")
+        }
         if (!passesKeys()) return false
         // What gaming mode sends comes back through here (it has no scan code): on to the game
         if (event.scanCode == 0) return false
@@ -560,7 +584,11 @@ object GameMode {
             }
             startInput(context)
             extra?.let { send("Z ${it.id}"); screenW = it.width.toFloat(); screenH = it.height.toFloat(); send("S ${it.width} ${it.height}") }
+        } else if (input == null && AdbShell.available()) {
+            // Another game with the input helper gone (it ended with a stream, say): started again
+            restartInput(context)
         }
+        if (activeId != chosen.id) keySeen = false
         activeId = chosen.id
         // A game plays with its app's settings unless it has its own (Dolphin: Wii or GameCube)
         val next = GameProfiles.effective(context, chosen)
@@ -616,11 +644,20 @@ object GameMode {
             inputProcess = process
             input = process.outputStream.bufferedWriter()
             // It ending by itself (the shell restarted): known straight away, so keys aren't lost
+            val startedAt = android.os.SystemClock.elapsedRealtime()
             Thread {
                 runCatching { process.waitFor() }
                 if (inputProcess === process) {
                     FluxLog.w(TAG, "input helper ended (exit ${runCatching { process.exitValue() }.getOrNull()})")
                     input = null
+                    // Still gaming: started again straight away (not over and over if it can't run)
+                    val app = appContext
+                    if (app != null && profile != null && android.os.SystemClock.elapsedRealtime() - startedAt > 5_000) {
+                        worker.execute {
+                            Thread.sleep(1_000)
+                            if (input == null && profile != null && AdbShell.available()) restartInput(app)
+                        }
+                    }
                 }
             }.apply { isDaemon = true; start() }
             val size = android.graphics.Point()
