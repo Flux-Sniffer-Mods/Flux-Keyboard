@@ -34,6 +34,7 @@ object TvRemote {
     private const val KEY_CLIENT = "tv_client_key"
     private const val KEY_MACS = "tv_macs"
     private const val KEY_GAMES_ON_TV = "tv_starts_games"
+    private const val KEY_GAMES = "tv_games"
     private const val MOONLIGHT = "com.limelight.webos"
 
     data class Tv(val host: String, val name: String)
@@ -47,10 +48,18 @@ object TvRemote {
     /** Set up (paired with the TV): picking a game while streaming can start it there. */
     fun ready(context: Context): Boolean = tv(context) != null && SettingsManager.getPreferences(context).contains(KEY_CLIENT)
 
-    fun startsGames(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_GAMES_ON_TV, true)
+    /** Where a game opened while streaming plays: asked each time, or always on the TV or the phone. */
+    enum class Games { ASK, TV, PHONE }
 
-    fun setStartsGames(context: Context, on: Boolean) {
-        SettingsManager.getPreferences(context).edit().putBoolean(KEY_GAMES_ON_TV, on).apply()
+    fun games(context: Context): Games {
+        val prefs = SettingsManager.getPreferences(context)
+        prefs.getString(KEY_GAMES, null)?.let { name -> Games.entries.firstOrNull { it.name == name } }?.let { return it }
+        // The earlier on/off switch: off kept as the phone
+        return if (prefs.getBoolean(KEY_GAMES_ON_TV, true)) Games.ASK else Games.PHONE
+    }
+
+    fun setGames(context: Context, games: Games) {
+        SettingsManager.getPreferences(context).edit().putString(KEY_GAMES, games.name).apply()
     }
 
     fun forget(context: Context) {

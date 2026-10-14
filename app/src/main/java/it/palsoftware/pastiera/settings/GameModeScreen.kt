@@ -1670,16 +1670,16 @@ private fun TvRows() {
         description = status ?: if (ready && tv != null) stringResource(R.string.tv_description_set, tv!!.name) else stringResource(R.string.tv_description_none)
     ) { if (ready) menu = true else find() }
     if (ready) {
-        var onTv by remember { mutableStateOf(it.palsoftware.pastiera.streaming.TvRemote.startsGames(context)) }
-        FluxSwitchRow(
-            linkId = null,
-            title = stringResource(R.string.tv_games_on_tv),
-            description = stringResource(R.string.tv_games_on_tv_description),
-            checked = onTv
-        ) { on ->
-            onTv = on
-            it.palsoftware.pastiera.streaming.TvRemote.setStartsGames(context, on)
+        // A game opened while streaming: asked each time, or always on the TV or the phone
+        var games by remember { mutableStateOf(it.palsoftware.pastiera.streaming.TvRemote.games(context)) }
+        val choices = it.palsoftware.pastiera.streaming.TvRemote.Games.entries
+        val labels = listOf(stringResource(R.string.tv_games_ask), stringResource(R.string.tv_play_on_tv), stringResource(R.string.tv_play_on_phone))
+        ChoiceRow(stringResource(R.string.tv_games_on_tv), labels[choices.indexOf(games)], labels) { index ->
+            games = choices[index]
+            it.palsoftware.pastiera.streaming.TvRemote.setGames(context, choices[index])
         }
+        Text(stringResource(R.string.tv_games_on_tv_description), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     if (menu) AlertDialog(
         onDismissRequest = { menu = false },

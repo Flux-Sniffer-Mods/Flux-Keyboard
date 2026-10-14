@@ -28,6 +28,15 @@ class GameLaunchActivity : Activity() {
             finish()
             return
         }
+        // Streaming, with a TV set up: played on the TV (turned on, Moonlight opened into the
+        // game) or on the phone, as asked (not when the stream itself opens it)
+        if (!intent.getBooleanExtra(EXTRA_TV_ASKED, false) && it.palsoftware.pastiera.streaming.TvPrompt.applies(this, profile)) {
+            it.palsoftware.pastiera.streaming.TvPrompt.open(this, profile,
+                onPhone = { startActivity(Intent(intent).putExtra(EXTRA_TV_ASKED, true)); finish() },
+                onTv = { profile?.let { p -> p.packages.forEach { GameProfiles.setActive(this, it, p.id) } }; finish() },
+                onCancel = { finish() })
+            return
+        }
         // A game found by itself, starting for the first time: set it up, or play it as it is
         if (profile != null && profile.pending && !intent.getBooleanExtra(EXTRA_ASKED, false)) {
             ask(profile)
@@ -165,6 +174,8 @@ class GameLaunchActivity : Activity() {
         private const val EXTRA_LAUNCH = "launch"
         private const val EXTRA_PACKAGE = "package"
         private const val EXTRA_ASKED = "asked"
+        /** Already played on the phone, not asked about the TV (picked so, or opened by the stream). */
+        const val EXTRA_TV_ASKED = "tv_asked"
 
         /** Starts a game found in the folders (or a launcher), through its profile when it has one. */
         /** The app [intent] (one of these shortcuts) opens a game in. */

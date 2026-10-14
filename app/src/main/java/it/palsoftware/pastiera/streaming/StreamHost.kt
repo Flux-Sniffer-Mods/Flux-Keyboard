@@ -406,7 +406,9 @@ object StreamHost {
                 .setData(android.net.Uri.parse(it.palsoftware.pastiera.gaming.XboxPlayActivity.HOME))
             launcher -> android.content.Intent(app, GamesActivity::class.java)
             game == null -> null
+            // Opened by the stream: on the phone, not asked about the TV
             else -> GamesActivity.games(app).firstOrNull { it.first.id == game.id }?.second
+                ?.putExtra(it.palsoftware.pastiera.gaming.GameLaunchActivity.EXTRA_TV_ASKED, true)
         }
         val separate = desktop || gameIntent != null && StreamHostService.screenMode(app) != StreamHostService.SCREEN_MIRROR &&
             it.palsoftware.pastiera.adb.AdbShell.available()

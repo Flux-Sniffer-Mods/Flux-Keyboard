@@ -783,6 +783,9 @@
     },
     {
       "text": "GameHub Lite with the official GameHub: Lite has no Export for frontend, so install both and export from the official GameHub; its games start in GameHub Lite, or in GameHub if you choose (Gaming mode > GameHub's games start in). Games already found move with the choice"
+    },
+    {
+      "text": "Stream to Moonlight: with an LG TV set up and streaming on, opening a game (from the Games app, the home screen or the quick launcher) asks whether to play it on the TV or the phone; Games opened while streaming can be set to always one instead"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
