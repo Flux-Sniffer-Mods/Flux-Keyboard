@@ -1466,4 +1466,5 @@
     <string name="game_mode_bottom_screen">Unterer Bildschirm</string>
     <string name="game_mode_swap_face">A/B und X/Y tauschen</string>
     <string name="game_mode_swap_face_description">Nintendos Anordnung: M drückt B, L drückt A, I drückt X und J drückt Y, sodass jede Taste den Knopf an ihrer Stelle drückt. Für Nintendo-Emulatoren standardmäßig an.</string>
+    <string name="game_mode_gamehub_lite_note">Das offizielle GameHub lässt sich nur öffnen, nicht mit einem bestimmten Spiel starten: Seine Spiele öffnen GameHub und du wählst dort aus. GameHub Lite startet jedes Spiel direkt, daher ist es die Wahl für Flux Keyboard.</string>
 </resources>

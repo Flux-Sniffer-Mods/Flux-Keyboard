@@ -2004,4 +2004,5 @@
     <string name="game_mode_bottom_screen">Écran du bas</string>
     <string name="game_mode_swap_face">Inverser A/B et X/Y</string>
     <string name="game_mode_swap_face_description">La disposition de Nintendo : M appuie sur B, L sur A, I sur X et J sur Y, pour que chaque touche appuie sur le bouton à sa place. Activé par défaut pour les émulateurs Nintendo.</string>
+    <string name="game_mode_gamehub_lite_note">Le GameHub officiel peut seulement être ouvert, pas lancé sur un jeu précis : ses jeux ouvrent GameHub et vous choisissez depuis là. GameHub Lite lance chaque jeu directement, c\'est donc celui à utiliser avec Flux Keyboard.</string>
 </resources>

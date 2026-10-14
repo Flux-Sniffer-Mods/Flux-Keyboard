@@ -1378,4 +1378,5 @@
     <string name="game_mode_bottom_screen">Κάτω οθόνη</string>
     <string name="game_mode_swap_face">Εναλλαγή A/B και X/Y</string>
     <string name="game_mode_swap_face_description">Η διάταξη της Nintendo: το M πατά B, το L πατά A, το I πατά X και το J πατά Y, ώστε κάθε πλήκτρο να πατά το κουμπί στη θέση του. Ενεργό από προεπιλογή για εξομοιωτές Nintendo.</string>
+    <string name="game_mode_gamehub_lite_note">Το επίσημο GameHub μπορεί μόνο να ανοίξει, όχι να ξεκινήσει συγκεκριμένο παιχνίδι: τα παιχνίδια του ανοίγουν το GameHub και επιλέγεις από εκεί. Το GameHub Lite ξεκινά κάθε παιχνίδι αμέσως, γι\' αυτό είναι αυτό που προτείνεται με το Flux Keyboard.</string>
 </resources>

@@ -2010,4 +2010,5 @@
     <string name="game_mode_bottom_screen">Нижний экран</string>
     <string name="game_mode_swap_face">Поменять A/B и X/Y</string>
     <string name="game_mode_swap_face_description">Раскладка Nintendo: M нажимает B, L — A, I — X, J — Y, так что каждая клавиша нажимает кнопку на своём месте. По умолчанию включено для эмуляторов Nintendo.</string>
+    <string name="game_mode_gamehub_lite_note">Официальный GameHub можно только открыть, но не запустить в нём конкретную игру: его игры открывают GameHub, и выбирать нужно там. GameHub Lite запускает каждую игру сразу, поэтому с Flux Keyboard лучше использовать его.</string>
 </resources>
