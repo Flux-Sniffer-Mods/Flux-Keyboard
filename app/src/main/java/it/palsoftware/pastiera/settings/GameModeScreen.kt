@@ -1407,6 +1407,13 @@ internal fun CrashLogRow() {
                         // The official GameHub's ways in (its activities, actions and links), to start its games directly
                         "for p in com.xiaoji.egggame gamehub.lite; do pm path \$p >/dev/null 2>&1 && { echo \"== \$p ==\"; " +
                         "dumpsys package \$p | grep -E 'Activity|Action:|Scheme:|Authority:|Path' | grep -v -i 'permission' | head -n 150; }; done; " +
+                        // Where games are found: the game folders, every Steam library on the phone's storage
+                        // and the launchers' own folders, and the launchers' home screen shortcuts
+                        "echo '== game folders =='; find '${it.palsoftware.pastiera.gaming.GameFolders.ROOT}' -maxdepth 4 ! -name '.nomedia' 2>/dev/null | head -n 200; " +
+                        "echo '== steam libraries =='; find /storage/emulated/0 -maxdepth 7 -name 'appmanifest_*.acf' 2>/dev/null | head -n 60; " +
+                        "for p in gamehub.lite emuready.gamehub.lite com.antutu.ABenchMark com.antutu.benchmark.full com.ludashi.aibench com.xiaoji.egggame app.gamenative; do " +
+                        "[ -d \"/storage/emulated/0/Android/data/\$p\" ] && { echo \"== \$p files ==\"; find \"/storage/emulated/0/Android/data/\$p\" -maxdepth 4 -type d 2>/dev/null | head -n 60; }; done; " +
+                        "echo '== launcher shortcuts =='; dumpsys shortcut | grep -E 'Package: (gamehub|emuready|com.antutu|com.ludashi|com.xiaoji|app.gamenative)|shortLabel=' | head -n 80; " +
                         // Flux Keyboard's own record of gaming mode, streaming and game launches (the phone's turns over in seconds)
                         "echo '== gaming and streaming =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${it.palsoftware.pastiera.FluxLog.FILE_NAME}'; " +
                         (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +

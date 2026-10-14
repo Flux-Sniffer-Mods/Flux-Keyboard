@@ -777,6 +777,9 @@
     },
     {
       "text": "Game folders: GameHub Lite has a folder of its own (Download/Flux Keyboard/Games/GameHub Lite) for its Steam library, apart from GameHub's; games already found in GameHub's folder still start in GameHub Lite when it's installed"
+    },
+    {
+      "text": "Crash logs show where games are found: the game folders, Steam libraries and launcher shortcuts, and how each game was matched to its app"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

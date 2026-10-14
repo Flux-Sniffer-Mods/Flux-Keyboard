@@ -71,6 +71,9 @@ object GameLibrary {
         )?.lines().orEmpty().map { it.trim() }
             .filter { it.isNotEmpty() && !it.startsWith(".") && it != "Steamworks Shared" }
         val known = shortcuts.map { it.name.lowercase() }.toSet()
+        it.palsoftware.pastiera.FluxLog.w("GameLibrary", "$packageName: ${shortcuts.size} shortcuts (" +
+            shortcuts.joinToString { it.name.take(40) }.take(400) + "), ${folders.size} installed folders (" +
+            folders.joinToString { it.take(40) }.take(400) + ")")
         return shortcuts + folders.distinct().filter { it.lowercase() !in known }.map { Game(it, packageName) }
     }
 

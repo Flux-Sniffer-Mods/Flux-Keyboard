@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.DocumentsContract
+import it.palsoftware.pastiera.FluxLog
 import it.palsoftware.pastiera.adb.AdbShell
 
 /**
@@ -214,8 +215,9 @@ object GameFolders {
                 "*) s=\$(head -c 64 \"\$f\" 2>/dev/null | head -n 1 | tr -cd '[:alnum:]_-');; esac; " +
                 "printf '%s\\t%s\\n' \"\$f\" \"\$s\"; done; true",
             10_000
-        ) ?: return null
-        return parse(listing, custom).map { found ->
+        ) ?: return null.also { FluxLog.w(TAG, "folders not read: no shell") }
+        val parsed = parse(listing, custom)
+        return parsed.map { found ->
             when {
                 // Steam games exported where GameNative's go, with only GameHub Lite to start them
                 found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB_LITE in players &&
@@ -230,7 +232,40 @@ object GameFolders {
             // An emulator's game by its real name (its ID looked up, or the name it carries), not its file's
             val name = if (isLauncher(found.player.label)) found.name else GameIds.title(context, found.player.label, found.path) ?: found.name
             GameLibrary.Game(name, pkg, launch = launchIntent(found, pkg, activity)?.toUri(Intent.URI_INTENT_SCHEME))
+        }.also { games -> logScan(listing, parsed, players, games) }
+    }
+
+    private const val TAG = "GameFolders"
+    @Volatile private var lastLogged: Int? = null
+
+    /**
+     * What the folders held and what was made of it, logged when it changed since the last
+     * scan: each file read, each game found (its player, any player it went to instead, the
+     * file it came from) and each left out for its player not being installed.
+     */
+    private fun logScan(listing: String, parsed: List<Found>, players: Map<Player, Pair<String, String>>, games: List<GameLibrary.Game>) {
+        val files = listing.lines().map { it.substringBefore('\t').trim() }.filter { it.isNotEmpty() }
+        val lines = buildList {
+            add("players installed: " + players.entries.joinToString { "${it.key.label} (${it.value.first})" })
+            add("${files.size} files in the folders")
+            files.take(150).forEach { add("  file ${it.removePrefix("$ROOT/").take(160)}") }
+            if (files.size > 150) add("  ...${files.size - 150} more")
+            parsed.forEach { found ->
+                val to = when {
+                    found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB_LITE in players &&
+                        found.path.endsWith(".steam", ignoreCase = true) -> " -> GameHub Lite"
+                    found.player == Player.GAMEHUB && Player.GAMEHUB_LITE in players -> " -> GameHub Lite"
+                    else -> ""
+                }
+                val left = if (found.player !in players && to.isEmpty()) " (left out: player not installed)" else ""
+                add("  game \"${found.name.take(60)}\" ${found.player.label}$to id ${found.content.take(40)} from ${found.path.removePrefix("$ROOT/").take(160)}$left")
+            }
+            add("${games.size} games listed")
         }
+        val signature = lines.hashCode()
+        if (signature == lastLogged) return
+        lastLogged = signature
+        lines.forEach { FluxLog.w(TAG, it) }
     }
 
     /** The games in a listing of "path<tab>first line" lines. */

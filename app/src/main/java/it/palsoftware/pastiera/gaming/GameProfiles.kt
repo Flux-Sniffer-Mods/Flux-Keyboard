@@ -449,6 +449,7 @@ object GameProfiles {
             newProfile(game.name, setOf(game.packageName)).copy(launch = launch, own = false, pending = true)
         }
         if (added.isNotEmpty()) saveAll(context, profiles + added)
+        added.forEach { FluxLog.w("GameProfiles", "found \"${it.name.take(60)}\" for ${it.packages.joinToString()}: ${it.launch?.take(200)}") }
     }
 
     /**
