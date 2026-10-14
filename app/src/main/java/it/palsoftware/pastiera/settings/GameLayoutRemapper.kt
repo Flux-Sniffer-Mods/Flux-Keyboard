@@ -1,6 +1,14 @@
 package it.palsoftware.pastiera.settings
 
 import android.view.KeyEvent
+import it.palsoftware.pastiera.gaming.GamepadDrawing
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -144,10 +152,21 @@ internal fun KeyLayoutEditor(
     var layer by remember { mutableStateOf(Layer.NONE) }
     var picking by remember { mutableStateOf<Int?>(null) }
     var showingList by remember { mutableStateOf(false) }
+    // The same keys seen from the controller's side: each button with the keys that press it
+    var controllerView by remember { mutableStateOf(false) }
+    var pickingButton by remember { mutableStateOf<GamepadDrawing.Spot?>(null) }
     fun save(changed: Map<Pair<Layer, Int>, Control?>) { overrides = changed; onChange(changed) }
     fun current(code: Int): Control? = (layer to code).let { if (it in overrides) overrides[it] else base(code, layer) }
 
     FluxScreenScaffold(title, onBack, modifier) {
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+            FilterChip(selected = !controllerView, onClick = { controllerView = false }, label = { Text(stringResource(R.string.game_remap_view_keyboard)) })
+            FilterChip(selected = controllerView, onClick = { controllerView = true }, label = { Text(stringResource(R.string.game_remap_view_controller)) })
+        }
+        if (controllerView) {
+            FluxNote(stringResource(R.string.game_remap_controller_description))
+            GamepadView(overrides, base) { pickingButton = it }
+        } else {
         FluxNote(note ?: stringResource(R.string.game_remap_description))
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -177,6 +196,7 @@ internal fun KeyLayoutEditor(
             }
         }
         FluxNote(stringResource(R.string.game_remap_hint))
+        }
         FluxActionRow(
             linkId = null,
             icon = "≡",
@@ -197,6 +217,57 @@ internal fun KeyLayoutEditor(
         text = { Text(stringResource(R.string.game_mode_layout), modifier = Modifier.verticalScroll(rememberScrollState())) },
         confirmButton = { TextButton(onClick = { showingList = false }) { Text(stringResource(android.R.string.ok)) } }
     )
+
+    pickingButton?.let { spot ->
+        var pickLayer by remember(spot) { mutableStateOf(Layer.NONE) }
+        val now = GamepadDrawing.keysFor(overrides, base, REMAP_KEYS, spot.control)
+        AlertDialog(
+            onDismissRequest = { pickingButton = null },
+            title = { Text(longName(spot.control)) },
+            text = {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    val defaults = GamepadDrawing.keysFor(emptyMap(), base, REMAP_KEYS, spot.control)
+                    val changed = now != defaults
+                    Text(
+                        (if (!changed) "✓ " else "") + stringResource(
+                            R.string.game_remap_default,
+                            defaults.map { pairName(it) }.joinToString(", ").ifEmpty { stringResource(R.string.dolphin_pad_no_key) }
+                        ),
+                        fontWeight = if (!changed) FontWeight.SemiBold else FontWeight.Normal,
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            save(GamepadDrawing.restore(overrides, base, spot.control)); pickingButton = null
+                        }.padding(vertical = 8.dp)
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                        Layer.entries.forEach { each ->
+                            FilterChip(selected = pickLayer == each, onClick = { pickLayer = each }, label = { Text(layerName(each), maxLines = 1) })
+                        }
+                    }
+                    REMAP_ROWS.forEach { row ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.fillMaxWidth()) {
+                            row.forEach { code ->
+                                val selected = (pickLayer to code) in now
+                                Surface(
+                                    shape = RoundedCornerShape(5.dp),
+                                    tonalElevation = if (selected) 8.dp else 2.dp,
+                                    color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+                                    modifier = Modifier.weight(if (code == KeyEvent.KEYCODE_SPACE) 4f else 1f).height(38.dp).clickable {
+                                        save(GamepadDrawing.assign(overrides, base, REMAP_KEYS, spot.control, pickLayer, code))
+                                        pickingButton = null
+                                    }
+                                ) {
+                                    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text(keyCap(code), fontSize = 11.sp, maxLines = 1)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { pickingButton = null }) { Text(stringResource(R.string.cancel)) } }
+        )
+    }
 
     picking?.let { code ->
         val key = layer to code
@@ -253,6 +324,56 @@ private fun RowScope.RemapKey(cap: String, label: String?, description: String, 
                 overflow = TextOverflow.Clip,
                 textAlign = TextAlign.Center
             )
+        }
+    }
+}
+
+/** Every key the drawings offer. */
+internal val REMAP_KEYS: List<Int> = REMAP_ROWS.flatten()
+
+/** A key and the modifier held with it, short: "Alt+Q". */
+@Composable
+private fun pairName(key: Pair<Layer, Int>): String =
+    (if (key.first == Layer.NONE) "" else layerName(key.first) + "+") + keyCap(key.second)
+
+/** A gamepad drawn as it's held, each button showing the keys that press it; tapped to change them. */
+@Composable
+private fun GamepadView(overrides: Map<Pair<Layer, Int>, Control?>, base: (Int, Layer) -> Control?, onPick: (GamepadDrawing.Spot) -> Unit) {
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 28.dp)) {
+        val width = maxWidth
+        val height = width / GamepadDrawing.ASPECT
+        val body = MaterialTheme.colorScheme.surfaceVariant
+        Canvas(modifier = Modifier.width(width).height(height)) {
+            val w = size.width
+            val h = size.height
+            drawRoundRect(body, Offset(w * 0.04f, h * 0.14f), Size(w * 0.92f, h * 0.56f), CornerRadius(w * 0.12f, w * 0.12f))
+            drawCircle(body, w * 0.17f, Offset(w * 0.22f, h * 0.72f))
+            drawCircle(body, w * 0.17f, Offset(w * 0.78f, h * 0.72f))
+        }
+        val chipW = 40.dp
+        val chipH = 30.dp
+        GamepadDrawing.SPOTS.forEach { spot ->
+            val keys = GamepadDrawing.keysFor(overrides, base, REMAP_KEYS, spot.control)
+            val text = keys.take(2).map { pairName(it) }.joinToString(" ")
+            val changed = keys != GamepadDrawing.keysFor(emptyMap(), base, REMAP_KEYS, spot.control)
+            val shape = RoundedCornerShape(8.dp)
+            Surface(
+                shape = shape,
+                tonalElevation = 4.dp,
+                shadowElevation = 1.dp,
+                modifier = Modifier
+                    .offset(x = width * spot.x - chipW / 2, y = height * spot.y - chipH / 2)
+                    .width(chipW).height(chipH)
+                    .then(if (changed) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, shape) else Modifier)
+                    .clickable { onPick(spot) }
+                    .semantics { contentDescription = spot.label + ": " + text }
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Text(spot.label, fontSize = 8.sp, maxLines = 1, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(text.ifEmpty { "—" }, fontSize = 9.sp, fontWeight = FontWeight.SemiBold, maxLines = 1,
+                        overflow = TextOverflow.Clip, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.primary)
+                }
+            }
         }
     }
 }

@@ -735,6 +735,9 @@
     },
     {
       "text": "Gaming mode: any game or app can have keys of its own, on top of Keyboard controls, changed on the keyboard drawing in its settings. They work in every emulator and launcher gaming mode sends buttons to (PPSSPP, RetroArch, GameHub and others)"
+    },
+    {
+      "text": "Gaming mode: the keys page shows the keyboard or a controller. On the controller, each button shows the keys that press it; tap one to give it a key"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
