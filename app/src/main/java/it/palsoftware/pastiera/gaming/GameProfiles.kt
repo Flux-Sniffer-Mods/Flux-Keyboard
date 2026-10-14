@@ -117,7 +117,12 @@ data class GameProfile(
      * Dolphin: the game's own keys for each controller ([FluxLayout.WiiPad]'s name to
      * [DolphinPads.format]'s text); a controller missing has the layout's.
      */
-    val padControls: Map<String, String> = emptyMap()
+    val padControls: Map<String, String> = emptyMap(),
+    /**
+     * Keys changed from the keyboard layout for this game or app alone ([FluxLayout.formatOverrides]'s
+     * text, on top of the layout as changed in Keyboard controls); null: none of its own.
+     */
+    val keyOverrides: String? = null
 ) {
     /** The game's own keys for Dolphin's [pad] (empty: the layout's). */
     fun padRemap(pad: FluxLayout.WiiPad): Map<String, List<DolphinPads.Binding>> = DolphinPads.parse(padControls[pad.name])
@@ -145,6 +150,7 @@ data class GameProfile(
         variant?.let { put("variant", it) }
         wiiPad?.let { put("wiiPad", it) }
         if (padControls.isNotEmpty()) put("padControls", JSONObject(padControls))
+        keyOverrides?.let { put("keyOverrides", it) }
         if (pending) put("pending", true)
         if (ownScreen) put("ownScreen", true)
         phoneHeight?.let { put("phoneHeight", it) }
@@ -218,6 +224,7 @@ data class GameProfile(
                 own = json.optBoolean("own", true),
                 variant = json.optString("variant").ifEmpty { null },
                 wiiPad = json.optString("wiiPad").ifEmpty { null },
+                keyOverrides = json.optString("keyOverrides").ifEmpty { null },
                 padControls = json.optJSONObject("padControls")?.let { o -> o.keys().asSequence().associateWith { o.optString(it) } }
                     ?.filterValues { it.isNotEmpty() }.orEmpty(),
                 pending = json.optBoolean("pending", false),
@@ -350,7 +357,9 @@ object GameProfiles {
         return appSettings(context, profile).let { app ->
             // The game's own screen and resolutions, whatever else comes from its app
             (if (profile.ownScreen) app.copy(screen = profile.screen) else app)
-                .copy(phoneHeight = profile.phoneHeight ?: app.phoneHeight, streamHeight = profile.streamHeight ?: app.streamHeight)
+                .copy(phoneHeight = profile.phoneHeight ?: app.phoneHeight, streamHeight = profile.streamHeight ?: app.streamHeight,
+                    // The game's own keys, whatever else comes from its app
+                    keyOverrides = profile.keyOverrides ?: app.keyOverrides)
         }
     }
 

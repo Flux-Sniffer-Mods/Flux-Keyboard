@@ -34,7 +34,12 @@ object GameMode {
 
     private val worker = Executors.newSingleThreadExecutor()
 
+    /** The game or app being played; its own changed keys apply while it is. */
     @Volatile private var profile: GameProfile? = null
+        set(value) {
+            field = value
+            FluxLayout.gameOverrides = FluxLayout.parseOverrides(value?.keyOverrides.orEmpty())
+        }
     @Volatile private var frontPackage: String? = null
 
     /**

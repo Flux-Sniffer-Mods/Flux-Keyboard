@@ -154,4 +154,19 @@ class FluxLayoutTest {
         val a = gc.first { it.startsWith("Buttons/A = ") }
         assertTrue(a, ":" !in a)
     }
+
+    @Test
+    fun aGamesOwnKeysApplyOnlyWhileItPlays() {
+        val none = FluxLayout.Modifiers()
+        try {
+            FluxLayout.gameOverrides = mapOf((FluxLayout.Layer.NONE to KeyEvent.KEYCODE_R) to FluxLayout.Control.R3)
+            assertEquals(FluxLayout.Control.R3, FluxLayout.controlFor(KeyEvent.KEYCODE_R, none))
+            assertTrue(FluxLayout.isLayoutKey(KeyEvent.KEYCODE_R))
+            // Dolphin's controls are written with the layout as everyone has it
+            assertEquals(null, FluxLayout.layoutControlFor(KeyEvent.KEYCODE_R, none))
+        } finally {
+            FluxLayout.gameOverrides = emptyMap()
+        }
+        assertEquals(null, FluxLayout.controlFor(KeyEvent.KEYCODE_R, none))
+    }
 }

@@ -114,15 +114,41 @@ internal fun layerName(layer: Layer): String = when (layer) {
 @Composable
 internal fun GameLayoutRemapper(modifier: Modifier, onBack: () -> Unit) {
     val context = LocalContext.current
-    var overrides by remember { FluxLayout.loadOverrides(context); mutableStateOf(FluxLayout.overrides) }
+    val initial = remember { FluxLayout.loadOverrides(context); FluxLayout.overrides }
+    KeyLayoutEditor(
+        title = stringResource(R.string.game_mode_layout_title),
+        initial = initial,
+        base = { code, layer -> FluxLayout.defaultControlFor(code, FluxLayout.modifiersOf(layer)) },
+        onChange = { FluxLayout.setOverrides(context, it) },
+        onBack = onBack,
+        modifier = modifier
+    )
+}
+
+/**
+ * The keyboard drawn as it is, each key showing the control it makes, alone or with the modifier
+ * chosen; tapping one changes it. [base] is what a key makes unchanged (the layout's, or for one
+ * game the layout as changed in Keyboard controls); [onChange] gets the keys changed from it.
+ */
+@Composable
+internal fun KeyLayoutEditor(
+    title: String,
+    initial: Map<Pair<Layer, Int>, Control?>,
+    base: (Int, Layer) -> Control?,
+    onChange: (Map<Pair<Layer, Int>, Control?>) -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier,
+    note: String? = null
+) {
+    var overrides by remember { mutableStateOf(initial) }
     var layer by remember { mutableStateOf(Layer.NONE) }
     var picking by remember { mutableStateOf<Int?>(null) }
     var showingList by remember { mutableStateOf(false) }
-    fun save(changed: Map<Pair<Layer, Int>, Control?>) { overrides = changed; FluxLayout.setOverrides(context, changed) }
-    fun current(code: Int): Control? = (layer to code).let { if (it in overrides) overrides[it] else FluxLayout.defaultControlFor(code, FluxLayout.modifiersOf(layer)) }
+    fun save(changed: Map<Pair<Layer, Int>, Control?>) { overrides = changed; onChange(changed) }
+    fun current(code: Int): Control? = (layer to code).let { if (it in overrides) overrides[it] else base(code, layer) }
 
-    FluxScreenScaffold(stringResource(R.string.game_mode_layout_title), onBack, modifier) {
-        FluxNote(stringResource(R.string.game_remap_description))
+    FluxScreenScaffold(title, onBack, modifier) {
+        FluxNote(note ?: stringResource(R.string.game_remap_description))
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp)
@@ -174,7 +200,7 @@ internal fun GameLayoutRemapper(modifier: Modifier, onBack: () -> Unit) {
 
     picking?.let { code ->
         val key = layer to code
-        val default = FluxLayout.defaultControlFor(code, FluxLayout.modifiersOf(layer))
+        val default = base(code, layer)
         val title = (if (layer == Layer.NONE) "" else layerName(layer) + " + ") + keyCap(code)
         AlertDialog(
             onDismissRequest = { picking = null },

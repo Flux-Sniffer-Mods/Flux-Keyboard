@@ -495,6 +495,8 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
             }
             // A Dolphin Wii game: the Wii controller that suits it, set in its own Dolphin settings
             if (current.isGame) DolphinControllerRows(current) { changed -> current = changed }
+            // Keys of its own, for anything gaming mode sends buttons to (Dolphin reads the keyboard itself: its own above)
+            if (current.packages.none { p -> GameApps.emulator(p) == "Dolphin" }) GameKeysRow(current) { changed -> current = changed }
             // A game plays with its app's settings, unless it needs its own (sticks elsewhere)
             if (current.isGame) {
                 val ownScope = androidx.compose.runtime.rememberCoroutineScope()
@@ -766,6 +768,35 @@ private fun DolphinControllerRows(profile: GameProfile, onChanged: (GameProfile)
         },
         onDismiss = { remapping = false }
     )
+}
+
+/** A game's or app's own keys, on top of Keyboard controls: drawn as the keyboard, changed there. */
+@Composable
+private fun GameKeysRow(profile: GameProfile, onChanged: (GameProfile) -> Unit) {
+    val context = LocalContext.current
+    var editing by remember { mutableStateOf(false) }
+    val own = remember(profile.keyOverrides) { FluxLayout.parseOverrides(profile.keyOverrides.orEmpty()) }
+    FluxActionRow(
+        linkId = null,
+        icon = "\u2328",
+        title = stringResource(if (profile.isGame) R.string.game_keys_row else R.string.game_keys_row_app),
+        description = stringResource(R.string.game_keys_description)
+    ) { editing = true }
+    if (editing) androidx.compose.ui.window.Dialog(
+        onDismissRequest = { editing = false },
+        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        val base = remember { FluxLayout.loadOverrides(context); true }
+        KeyLayoutEditor(
+            title = profile.name,
+            initial = own,
+            base = { code, layer -> if (base) FluxLayout.layoutControlFor(code, FluxLayout.modifiersOf(layer)) else null },
+            onChange = { changed -> onChanged(profile.copy(keyOverrides = FluxLayout.formatOverrides(changed).ifEmpty { null })) },
+            onBack = { editing = false },
+            modifier = Modifier.fillMaxSize(),
+            note = stringResource(R.string.game_keys_note)
+        )
+    }
 }
 
 /** Xbox Cloud Gaming's games, searched by name: one picked becomes a game of its own. */

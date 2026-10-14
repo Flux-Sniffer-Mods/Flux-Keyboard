@@ -102,8 +102,18 @@ object FluxLayout {
         (layer to code) to control
     }.toMap()
 
-    /** The control a key pressed makes with [mods] held, as changed; null: not one of the layout's keys. */
+    /** Keys changed for the game being played alone, on top of [overrides]. */
+    @Volatile var gameOverrides: Map<Pair<Layer, Int>, Control?> = emptyMap()
+
+    /** The control a key pressed makes with [mods] held, as changed (for the game being played too); null: not one of the layout's keys. */
     fun controlFor(code: Int, mods: Modifiers): Control? {
+        val key = layerOf(mods) to code
+        val game = gameOverrides
+        return if (key in game) game[key] else layoutControlFor(code, mods)
+    }
+
+    /** The control a key makes with [mods] held, as Keyboard controls has it (no game's own keys). */
+    fun layoutControlFor(code: Int, mods: Modifiers): Control? {
         val key = layerOf(mods) to code
         val changed = overrides
         return if (key in changed) changed[key] else defaultControlFor(code, mods)
@@ -272,7 +282,7 @@ object FluxLayout {
     internal fun defaultBindings(controls: List<Control>, swap: Boolean, exclude: Set<DolphinPads.Binding> = emptySet()) =
         Layer.entries.flatMap { layer ->
             val mods = modifiersOf(layer)
-            READ_KEYS.filter { key -> controlFor(key, mods).let { if (swap) swapped(it) else it } in controls }
+            READ_KEYS.filter { key -> layoutControlFor(key, mods).let { if (swap) swapped(it) else it } in controls }
                 .map { DolphinPads.Binding(layer, it) }
         }.filter { it !in exclude }
 
