@@ -94,10 +94,10 @@ class GameLaunchActivity : Activity() {
                     FluxLog.w("FluxGameLaunch", "controller $pad (${remap.size} changed) for game ${id ?: "(no ID read from $path)"}: $result; its Dolphin settings: " +
                         ini.orEmpty().replace("\n", " | "))
                 }
-                runOnUiThread { start(game, app) }
+                runOnUiThread { launch(profile, game, app) }
             }.start()
         } else {
-            start(game, app)
+            launch(profile, game, app)
         }
     }
 
@@ -123,6 +123,13 @@ class GameLaunchActivity : Activity() {
     }
 
     /** The game, or the app when the game can't be started. */
+    /** Started once its screen is made (a launcher resized as it opens a game closes it), else straight on. */
+    private fun launch(profile: GameProfile?, game: Intent?, app: Intent?) {
+        val pkg = (game ?: app)?.let { it.component?.packageName ?: it.`package` }
+        if (profile == null || pkg == null || pkg == packageName) start(game, app)
+        else GameMode.prepareLaunch(this, profile, pkg) { start(game, app) }
+    }
+
     private fun start(game: Intent?, app: Intent?) {
         val started = game?.let {
             runCatching { startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }

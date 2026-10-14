@@ -765,6 +765,9 @@
     },
     {
       "text": "Stream to Moonlight: with root on in Shell access, the Wake an LG TV's Moonlight sends (to port 9, which no app can open) is passed on to Flux Keyboard; without root, Always available keeps the phone listed instead"
+    },
+    {
+      "text": "Games app: Stream is a broadcast mark whose arcs show the phone's Wi-Fi strength while streaming is on (dimmed while it's off); tap to turn it on or off, long-press for its settings"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1159,6 +1162,9 @@
     },
     {
       "text": "Gaming mode: GameHub Lite starts a Steam game straight away instead of stopping at its page (its ID sent as both its Steam and its local game ID, as ES-DE does), and GameHub Lite built under a benchmark app's name is found too"
+    },
+    {
+      "text": "Gaming mode: a game started from Games has its screen made before its app opens, so a launcher resized as it opens a game (GameHub Lite, which closes and loses the game) no longer is"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

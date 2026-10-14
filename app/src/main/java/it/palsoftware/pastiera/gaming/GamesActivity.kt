@@ -21,6 +21,10 @@ import androidx.compose.foundation.focusable
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
@@ -229,10 +233,11 @@ class GamesActivity : ComponentActivity() {
                             onLongClick = { streamSettings = true }
                         )
                     ) {
-                        Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                            if (streaming) Text("\u2713 ", style = MaterialTheme.typography.labelLarge)
-                            Text(stringResource(R.string.games_app_stream), style = MaterialTheme.typography.labelLarge)
-                        }
+                        val label = stringResource(R.string.games_app_stream)
+                        Box(
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                                .semantics { contentDescription = label; stateDescription = if (streaming) "on" else "off" }
+                        ) { StreamSignal(streaming) }
                     }
                 }
             }
@@ -564,3 +569,57 @@ class GamesActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * Streaming's mark: a broadcast point with Wi-Fi's arcs, as many lit as the phone's Wi-Fi is
+ * strong while streaming is on; dimmed while it's off (or the phone isn't on Wi-Fi).
+ */
+@Composable
+private fun StreamSignal(on: Boolean) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var level by remember { mutableStateOf(wifiLevel(context)) }
+    LaunchedEffect(on) {
+        while (true) {
+            level = wifiLevel(context)
+            kotlinx.coroutines.delay(3_000)
+        }
+    }
+    val lit = if (on) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+    val dim = lit.copy(alpha = 0.25f)
+    androidx.compose.foundation.Canvas(modifier = Modifier.size(width = 26.dp, height = 22.dp)) {
+        val centre = androidx.compose.ui.geometry.Offset(size.width / 2, size.height * 0.92f)
+        val stroke = size.height * 0.11f
+        // The point streaming goes out from
+        drawCircle(if (on || level < 0) lit else dim, radius = stroke * 0.9f, center = centre)
+        // Three arcs, lit up to the signal's strength (all of them dim while streaming is off)
+        for (arc in 1..3) {
+            val radius = size.height * (0.28f + 0.26f * (arc - 1))
+            val shown = on && level >= arc
+            drawArc(
+                color = if (shown) lit else dim,
+                startAngle = 225f, sweepAngle = 90f, useCenter = false,
+                topLeft = androidx.compose.ui.geometry.Offset(centre.x - radius, centre.y - radius),
+                size = androidx.compose.ui.geometry.Size(radius * 2, radius * 2),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = stroke, cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            )
+        }
+    }
+}
+
+/** The phone's Wi-Fi strength, 0 (none) to 3 arcs; 0 when it isn't on Wi-Fi. */
+private fun wifiLevel(context: Context): Int = runCatching {
+    val connectivity = context.getSystemService(android.net.ConnectivityManager::class.java)
+    val caps = connectivity?.getNetworkCapabilities(connectivity.activeNetwork) ?: return 0
+    if (!caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) &&
+        !caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET)) return 0
+    // Ethernet (a USB adapter) is as good as it gets
+    if (caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET)) return 3
+    val rssi = caps.signalStrength
+    when {
+        rssi == android.net.NetworkCapabilities.SIGNAL_STRENGTH_UNSPECIFIED -> 2
+        rssi >= -60 -> 3
+        rssi >= -72 -> 2
+        else -> 1
+    }
+}.getOrDefault(0)
+

@@ -129,12 +129,15 @@ object GameMode {
             // Flux Keyboard's own player is a game; its other screens (Games, settings) aren't:
             // gaming mode ends there, as in any other app, rather than staying on until the game closes
             val player = stickSink != null || window?.let { it.first == app.packageName && it.second?.contains("XboxPlayActivity") == true } == true
+            // A game being started from Games: its screen already made for it, kept until it's in front
+            if (launchingNow() != null) return
             if (!player && profile != null) {
                 frontPackage = packageName
                 worker.execute { releaseControls(); stop(app); recover(app) }
             }
             return
         }
+        if (launchingNow() == packageName) launching = null
         val previous = frontPackage
         // Another app in front: keys and modifiers let go there were never seen, so nothing is
         // kept as held
@@ -421,6 +424,8 @@ object GameMode {
                 if (x != 0f && y != 0f) { x *= 0.7071f; y *= 0.7071f }
                 val at = stick * 2
                 if (keySticks[at] == x && keySticks[at + 1] == y) continue
+                if (keySticks[at] == 0f && keySticks[at + 1] == 0f) FluxLog.w(TAG,
+                    "stick ${stick} by keys to $x,$y: ${if (profile?.stickZones?.containsKey(stick) == true && !inMenus) "on its screen" else "as a controller's"}")
                 keySticks[at] = x; keySticks[at + 1] = y
                 sticks[at] = x; sticks[at + 1] = y
                 if (x == 0f && y == 0f) releaseStick(at) else pushStick(at)
@@ -706,6 +711,32 @@ object GameMode {
      * [action] on the main thread once the screen changes asked for so far are made, and a
      * moment more: a game opened as the screen changes size may restart into its menu (GameHub).
      */
+    /** The app a game is being started in from Games, and until when (uptime): its screen made already. */
+    @Volatile private var launching: Pair<String, Long>? = null
+
+    private fun launchingNow(): String? = launching?.takeIf { android.os.SystemClock.uptimeMillis() < it.second }?.first
+
+    /**
+     * [profile]'s screen made before its game starts in [pkg], then [then]: a launcher resized as
+     * it opens a game (GameHub Lite) closes it before it loads. Straight on when gaming mode is
+     * off or the screen stays as it is.
+     */
+    fun prepareLaunch(context: Context, profile: GameProfile, pkg: String, then: () -> Unit) {
+        val app = context.applicationContext
+        if (!GameProfiles.enabled(app) || !AdbShell.available()) { then(); return }
+        launching = pkg to android.os.SystemClock.uptimeMillis() + LAUNCH_HOLD_MS
+        worker.execute {
+            val next = GameProfiles.effective(app, profile)
+            if (next.screen != ScreenMode.APP) {
+                FluxLog.w(TAG, "${profile.name}: screen made before it starts (${next.screen})")
+                screen(app, next.screen, next.phoneHeight)
+            }
+        }
+        afterScreen(then)
+    }
+
+    private const val LAUNCH_HOLD_MS = 15_000L
+
     fun afterScreen(action: () -> Unit) = worker.execute {
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(action, 700)
     }
