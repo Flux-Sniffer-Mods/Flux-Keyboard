@@ -110,6 +110,7 @@ object StreamHost {
                     wantClientAuth = true
                 }.also { serve(it, secure = true) }
                 announce()
+                FluxLog.w(TAG, "answering Moonlight at ${localIp()}:$HTTP_PORT (${if (StreamHostService.enabled(app)) "streaming on" else "streaming off"})")
             }.onFailure {
                 FluxLog.w(TAG, "host couldn't start (try ${attempt + 1}): $it")
                 stop()
@@ -120,6 +121,7 @@ object StreamHost {
     }
 
     fun stop() {
+        if (running) FluxLog.w(TAG, "no longer answering Moonlight")
         running = false
         runCatching { nsd?.let { app.getSystemService(NsdManager::class.java)?.unregisterService(it) } }
         nsd = null
@@ -199,6 +201,10 @@ object StreamHost {
 
     // ---- Requests ----
 
+    /** When each client was last logged asking, and how often at most. */
+    private val asked = java.util.concurrent.ConcurrentHashMap<String, Long>()
+    private const val ASKED_LOG_MS = 10 * 60_000L
+
     private fun handle(socket: Socket, secure: Boolean) {
         socket.soTimeout = 15_000
         val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
@@ -211,6 +217,11 @@ object StreamHost {
         val client = if (secure) runCatching { (socket as SSLSocket).session.peerCertificates.firstOrNull() as? X509Certificate }.getOrNull() else null
         val paired = client != null && isPaired(client)
         val out = socket.getOutputStream()
+        // Who asks, now and then, so the crash log shows whether Moonlight reaches the phone
+        socket.inetAddress?.hostAddress?.let { from ->
+            val now = System.currentTimeMillis()
+            if (now - (asked[from] ?: 0L) > ASKED_LOG_MS) { asked[from] = now; FluxLog.w(TAG, "$path asked by $from${if (paired) " (paired)" else ""}") }
+        }
         when (path) {
             "/serverinfo" -> xml(out, serverInfo(paired, socket))
             "/pair" -> xml(out, pair(query, secure))

@@ -3,6 +3,7 @@ package it.palsoftware.pastiera.streaming
 import android.content.Context
 import it.palsoftware.pastiera.FluxLog
 import it.palsoftware.pastiera.adb.AdbShell
+import it.palsoftware.pastiera.adb.RootShell
 import android.util.Log
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -22,6 +23,8 @@ object StreamWake {
      * 47009 kept for older clients.
      */
     private val PORTS = listOf(48002, 48010, 47009)
+    /** Wake's ports below 1024, which only root can open: passed on to the last of [PORTS] with root. */
+    private val LOW_PORTS = listOf(7, 9)
     /** Broadcasts let through to the phone (Android drops them to save battery otherwise). */
     private var multicast: android.net.wifi.WifiManager.MulticastLock? = null
     @Volatile private var started = false
@@ -30,10 +33,21 @@ object StreamWake {
         if (started) return
         started = true
         val app = context.applicationContext
-        // Listed in Moonlight with streaming off, so its Wake isn't needed
-        if (StreamHostService.alwaysAvailable(app) && !StreamHostService.enabled(app)) {
-            FluxLog.w(TAG, "always available to Moonlight: answering with streaming off")
-            StreamHost.start(app)
+        when {
+            // Streaming was on when Flux Keyboard last stopped (updated, restarted, the phone
+            // turned off): on again, else Moonlight sees nothing until it's turned off and on
+            StreamHostService.enabled(app) -> {
+                FluxLog.w(TAG, "streaming was on: started again")
+                runCatching { app.startForegroundService(android.content.Intent(app, StreamHostService::class.java)) }.onFailure {
+                    FluxLog.w(TAG, "streaming's service couldn't start ($it): answering Moonlight from the keyboard")
+                    StreamHost.start(app)
+                }
+            }
+            // Listed in Moonlight with streaming off, so its Wake isn't needed
+            StreamHostService.alwaysAvailable(app) -> {
+                FluxLog.w(TAG, "always available to Moonlight: answering with streaming off")
+                StreamHost.start(app)
+            }
         }
         // Moonlight's wake is mostly a broadcast: let through while a Moonlight client is paired
         if (StreamHost.pairedCount(app) > 0) runCatching {
@@ -47,6 +61,16 @@ object StreamWake {
                 if (AdbShell.available()) {
                     val out = AdbShell.run("cmd deviceidle whitelist +${app.packageName} 2>&1", 5_000)
                     FluxLog.w(TAG, "kept on the network while the phone sleeps: ${out?.trim()?.ifEmpty { "done" } ?: "the shell didn't answer"}")
+                    // With root: the Wake sent to ports 7 and 9 (all an LG TV's Moonlight sends to),
+                    // which no app can open, passed on to one Flux Keyboard listens on
+                    if (RootShell.active) {
+                        val redirect = LOW_PORTS.joinToString("; ") { port ->
+                            "iptables -t nat -C PREROUTING -p udp --dport $port -j REDIRECT --to-ports ${PORTS.last()} 2>/dev/null || " +
+                                "iptables -t nat -I PREROUTING -p udp --dport $port -j REDIRECT --to-ports ${PORTS.last()}"
+                        }
+                        val result = AdbShell.run("$redirect 2>&1; echo done", 5_000)
+                        FluxLog.w(TAG, "Wake on ports ${LOW_PORTS.joinToString()} passed on to ${PORTS.last()} (root): ${result?.trim()?.replace("\n", " ") ?: "no answer"}")
+                    }
                     return@Thread
                 }
                 Thread.sleep(2_000)

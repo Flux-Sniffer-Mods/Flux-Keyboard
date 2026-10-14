@@ -762,6 +762,9 @@
     },
     {
       "text": "Gaming mode: the controller remappers show the keys on a button, each taken off with a tap, and Keyboard controls' button picker has No key"
+    },
+    {
+      "text": "Stream to Moonlight: with root on in Shell access, the Wake an LG TV's Moonlight sends (to port 9, which no app can open) is passed on to Flux Keyboard; without root, Always available keeps the phone listed instead"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1150,6 +1153,9 @@
     },
     {
       "text": "Gaming mode: a Play Store game, set up as a game or as an app, has W A Z D drag its on-screen stick (low on the left unless placed with Place keys on screen): without root, a controller's stick from the keyboard is ignored by games such as Infinity Nikki; the finger slides out from the stick's centre and keeps moving a hair while held, as joysticks that follow a finger (Unreal's) need"
+    },
+    {
+      "text": "Stream to Moonlight: streaming left on comes back on by itself after Flux Keyboard restarts (an update, the phone turned off), and Always available answers again then too; before, Moonlight saw the phone as offline until streaming was turned off and on"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
