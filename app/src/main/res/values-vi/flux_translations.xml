@@ -1971,6 +1971,7 @@
     <string name="game_remap_list">Hiện dạng danh sách</string>
     <string name="game_remap_reset">Đặt lại tất cả phím</string>
     <string name="game_remap_reset_description">Mỗi phím trở về nút của bố cục</string>
+    <string name="game_remap_press_key">Nhấn phím trên bàn phím (giữ phím bổ trợ nếu muốn), hoặc chạm vào nó bên dưới.</string>
     <string name="game_remap_view_keyboard">Bàn phím</string>
     <string name="game_remap_view_controller">Tay cầm</string>
     <string name="game_remap_controller_description">Mỗi nút hiện các phím bấm nó. Chạm vào một nút để chọn phím cho nó, riêng lẻ hoặc kèm phím bổ trợ: các phím từng bấm nó sẽ không bấm gì nữa.</string>

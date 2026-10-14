@@ -1489,6 +1489,7 @@
     <string name="game_remap_list">Mostra come elenco</string>
     <string name="game_remap_reset">Ripristina tutti i tasti</string>
     <string name="game_remap_reset_description">Ogni tasto torna al pulsante del layout</string>
+    <string name="game_remap_press_key">Premi il tasto sulla tastiera (con un modificatore tenuto premuto, se vuoi) oppure toccalo qui sotto.</string>
     <string name="game_remap_view_keyboard">Tastiera</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Ogni pulsante mostra i tasti che lo premono. Tocca un pulsante per sceglierne il tasto, da solo o con un modificatore: i tasti che lo premevano prima non premono più nulla.</string>

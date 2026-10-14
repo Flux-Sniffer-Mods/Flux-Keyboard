@@ -1977,6 +1977,7 @@
     <string name="game_remap_list">Ցույց տալ ցանկով</string>
     <string name="game_remap_reset">Վերակայել բոլոր ստեղները</string>
     <string name="game_remap_reset_description">Յուրաքանչյուր ստեղն վերադառնում է դասավորության կոճակին</string>
+    <string name="game_remap_press_key">Սեղմիր ստեղնը ստեղնաշարի վրա (ցանկության դեպքում՝ փոփոխիչը պահած) կամ հպիր այն ներքևում։</string>
     <string name="game_remap_view_keyboard">Ստեղնաշար</string>
     <string name="game_remap_view_controller">Կարգավար</string>
     <string name="game_remap_controller_description">Յուրաքանչյուր կոճակ ցույց է տալիս այն սեղմող ստեղները։ Հպիր կոճակին՝ նրա ստեղնն ընտրելու համար, միայնակ կամ փոփոխիչով․ նախկինում այն սեղմող ստեղներն այլևս ոչինչ չեն սեղմում։</string>

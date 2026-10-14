@@ -1357,6 +1357,7 @@
     <string name="game_remap_list">Εμφάνιση ως λίστα</string>
     <string name="game_remap_reset">Επαναφορά όλων των πλήκτρων</string>
     <string name="game_remap_reset_description">Κάθε πλήκτρο πίσω στο κουμπί της διάταξης</string>
+    <string name="game_remap_press_key">Πάτησε το πλήκτρο στο πληκτρολόγιο (με πλήκτρο τροποποίησης πατημένο αν θέλεις) ή άγγιξέ το παρακάτω.</string>
     <string name="game_remap_view_keyboard">Πληκτρολόγιο</string>
     <string name="game_remap_view_controller">Χειριστήριο</string>
     <string name="game_remap_controller_description">Κάθε κουμπί δείχνει τα πλήκτρα που το πατούν. Πάτησε ένα κουμπί για να διαλέξεις το πλήκτρο του, μόνο του ή με πλήκτρο τροποποίησης: τα πλήκτρα που το πατούσαν πριν δεν πατούν πια τίποτα.</string>

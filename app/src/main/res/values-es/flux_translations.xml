@@ -1983,6 +1983,7 @@
     <string name="game_remap_list">Ver como lista</string>
     <string name="game_remap_reset">Restablecer todas las teclas</string>
     <string name="game_remap_reset_description">Cada tecla vuelve al botón del diseño</string>
+    <string name="game_remap_press_key">Pulsa la tecla en el teclado (con un modificador pulsado si quieres) o tócala abajo.</string>
     <string name="game_remap_view_keyboard">Teclado</string>
     <string name="game_remap_view_controller">Mando</string>
     <string name="game_remap_controller_description">Cada botón muestra las teclas que lo pulsan. Toca un botón para elegir su tecla, sola o con un modificador: las teclas que lo pulsaban antes dejan de pulsar nada.</string>

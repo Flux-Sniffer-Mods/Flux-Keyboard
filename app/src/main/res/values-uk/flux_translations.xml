@@ -1989,6 +1989,7 @@
     <string name="game_remap_list">Показати списком</string>
     <string name="game_remap_reset">Скинути всі клавіші</string>
     <string name="game_remap_reset_description">Кожна клавіша повертається до кнопки розкладки</string>
+    <string name="game_remap_press_key">Натисніть клавішу на клавіатурі (за бажання утримуючи модифікатор) або торкніться її нижче.</string>
     <string name="game_remap_view_keyboard">Клавіатура</string>
     <string name="game_remap_view_controller">Контролер</string>
     <string name="game_remap_controller_description">Кожна кнопка показує клавіші, що її натискають. Торкніться кнопки, щоб вибрати її клавішу, окремо або з модифікатором: клавіші, що натискали її раніше, більше нічого не натискають.</string>

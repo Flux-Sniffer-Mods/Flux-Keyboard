@@ -1445,6 +1445,7 @@
     <string name="game_remap_list">Als Liste zeigen</string>
     <string name="game_remap_reset">Alle Tasten zurücksetzen</string>
     <string name="game_remap_reset_description">Jede Taste zurück auf den Knopf des Layouts</string>
+    <string name="game_remap_press_key">Drücke die Taste auf der Tastatur (wenn du willst, mit gehaltener Zusatztaste) oder tippe sie unten an.</string>
     <string name="game_remap_view_keyboard">Tastatur</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Jeder Knopf zeigt die Tasten, die ihn drücken. Tippe auf einen Knopf, um seine Taste zu wählen, allein oder mit einer Zusatztaste: Die Tasten, die ihn vorher gedrückt haben, drücken dann nichts mehr.</string>

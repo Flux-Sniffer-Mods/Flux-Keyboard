@@ -1983,6 +1983,7 @@
     <string name="game_remap_list">Afficher en liste</string>
     <string name="game_remap_reset">Réinitialiser toutes les touches</string>
     <string name="game_remap_reset_description">Chaque touche revient au bouton de la disposition</string>
+    <string name="game_remap_press_key">Appuie sur la touche du clavier (avec un modificateur maintenu si tu veux) ou touche-la ci-dessous.</string>
     <string name="game_remap_view_keyboard">Clavier</string>
     <string name="game_remap_view_controller">Manette</string>
     <string name="game_remap_controller_description">Chaque bouton montre les touches qui l’actionnent. Touche un bouton pour choisir sa touche, seule ou avec un modificateur : les touches qui l’actionnaient avant n’actionnent alors plus rien.</string>

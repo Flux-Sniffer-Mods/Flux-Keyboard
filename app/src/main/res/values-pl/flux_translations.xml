@@ -1989,6 +1989,7 @@
     <string name="game_remap_list">Pokaż jako listę</string>
     <string name="game_remap_reset">Przywróć wszystkie klawisze</string>
     <string name="game_remap_reset_description">Każdy klawisz wraca do przycisku z układu</string>
+    <string name="game_remap_press_key">Naciśnij klawisz na klawiaturze (jeśli chcesz, z przytrzymanym modyfikatorem) albo dotknij go poniżej.</string>
     <string name="game_remap_view_keyboard">Klawiatura</string>
     <string name="game_remap_view_controller">Kontroler</string>
     <string name="game_remap_controller_description">Każdy przycisk pokazuje klawisze, które go naciskają. Dotknij przycisku, aby wybrać jego klawisz, sam lub z modyfikatorem: klawisze, które naciskały go wcześniej, nie naciskają już niczego.</string>
