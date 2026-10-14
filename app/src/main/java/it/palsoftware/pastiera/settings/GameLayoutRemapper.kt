@@ -2,13 +2,9 @@ package it.palsoftware.pastiera.settings
 
 import android.view.KeyEvent
 import it.palsoftware.pastiera.gaming.GamepadDrawing
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -336,20 +332,14 @@ internal val REMAP_KEYS: List<Int> = REMAP_ROWS.flatten()
 private fun pairName(key: Pair<Layer, Int>): String =
     (if (key.first == Layer.NONE) "" else layerName(key.first) + "+") + keyCap(key.second)
 
-/** A gamepad drawn as it's held, each button showing the keys that press it; tapped to change them. */
+/** A gamepad's buttons where they sit as it's held, each showing the keys that press it; tapped to change them. */
 @Composable
 private fun GamepadView(overrides: Map<Pair<Layer, Int>, Control?>, base: (Int, Layer) -> Control?, onPick: (GamepadDrawing.Spot) -> Unit) {
     BoxWithConstraints(modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 28.dp)) {
         val width = maxWidth
         val height = width / GamepadDrawing.ASPECT
-        val body = MaterialTheme.colorScheme.surfaceVariant
-        Canvas(modifier = Modifier.width(width).height(height)) {
-            val w = size.width
-            val h = size.height
-            drawRoundRect(body, Offset(w * 0.04f, h * 0.14f), Size(w * 0.92f, h * 0.56f), CornerRadius(w * 0.12f, w * 0.12f))
-            drawCircle(body, w * 0.17f, Offset(w * 0.22f, h * 0.72f))
-            drawCircle(body, w * 0.17f, Offset(w * 0.78f, h * 0.72f))
-        }
+        // Only the buttons, where they sit on a controller
+        androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(width).height(height))
         val chipW = 40.dp
         val chipH = 30.dp
         GamepadDrawing.SPOTS.forEach { spot ->

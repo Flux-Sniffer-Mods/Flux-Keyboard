@@ -738,6 +738,9 @@
     },
     {
       "text": "Gaming mode: the keys page shows the keyboard or a controller. On the controller, each button shows the keys that press it; tap one to give it a key"
+    },
+    {
+      "text": "Gaming mode: the controller drawings show just the buttons where they sit, without the controller's outline"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

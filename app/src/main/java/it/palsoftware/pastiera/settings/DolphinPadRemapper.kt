@@ -1,6 +1,5 @@
 package it.palsoftware.pastiera.settings
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -30,10 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -84,8 +79,8 @@ internal fun DolphinPadRemapper(
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 28.dp)) {
                 val width = maxWidth
                 val height = width / DolphinPads.aspect(pad)
-                val body = MaterialTheme.colorScheme.surfaceVariant
-                Canvas(modifier = Modifier.width(width).height(height)) { drawBody(pad, body) }
+                // Only the buttons, where they sit on the controller
+                androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(width).height(height))
                 val chipW = 40.dp
                 val chipH = 30.dp
                 inputs.forEach { input ->
@@ -172,32 +167,5 @@ internal fun DolphinPadRemapper(
             },
             confirmButton = { TextButton(onClick = { picking = null }) { Text(stringResource(R.string.cancel)) } }
         )
-    }
-}
-
-/** The controller's outline, as it's held: grips and body, or a Nunchuk beside an upright Wii Remote. */
-private fun DrawScope.drawBody(pad: WiiPad, color: androidx.compose.ui.graphics.Color) {
-    val w = size.width
-    val h = size.height
-    fun box(l: Float, t: Float, r: Float, b: Float, radius: Float) =
-        drawRoundRect(color, Offset(w * l, h * t), Size(w * (r - l), h * (b - t)), CornerRadius(w * radius, w * radius))
-    when (pad) {
-        WiiPad.GAMECUBE, WiiPad.CLASSIC -> {
-            box(0.04f, 0.14f, 0.96f, 0.66f, 0.12f)
-            drawCircle(color, w * 0.16f, Offset(w * 0.2f, h * 0.72f))
-            drawCircle(color, w * 0.16f, Offset(w * 0.8f, h * 0.72f))
-            box(0.08f, 0.02f, 0.3f, 0.16f, 0.04f)
-            box(0.7f, 0.02f, 0.92f, 0.16f, 0.04f)
-        }
-        WiiPad.NUNCHUK -> {
-            box(0.1f, 0.06f, 0.34f, 0.8f, 0.1f)
-            box(0.56f, 0.04f, 0.78f, 0.8f, 0.06f)
-            box(0.8f, 0.2f, 0.92f, 0.4f, 0.03f)
-            box(0.02f, 0.8f, 0.98f, 0.98f, 0.03f)
-        }
-        WiiPad.SIDEWAYS -> {
-            box(0.04f, 0.18f, 0.96f, 0.66f, 0.06f)
-            box(0.02f, 0.8f, 0.98f, 0.99f, 0.02f)
-        }
     }
 }
