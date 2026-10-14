@@ -31,7 +31,10 @@ object GameFolders {
             listOf("app.gamenative" to "app.gamenative.MainActivity")),
         GAMEHUB("GameHub", listOf("GameHub"),
             setOf("steam", "local"),
-            listOf("gamehub.lite", "emuready.gamehub.lite", GAMEHUB_OFFICIAL).map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
+            // GameHub Lite's builds, those named as benchmark apps too (a trick for more speed on
+            // some phones), as ES-DE finds them
+            (listOf("gamehub.lite", "emuready.gamehub.lite") + GAMEHUB_LITE_DISGUISED + GAMEHUB_OFFICIAL)
+                .map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
         DOLPHIN("Dolphin", listOf("Dolphin", "gc", "wii"),
             setOf("iso", "gcm", "ciso", "rvz", "wbfs", "wia", "tgc", "gcz", "dol", "elf", "wad"),
             listOf("org.dolphinemu.dolphinemu", "org.dolphinemu.mmjr").map { it to "org.dolphinemu.dolphinemu.ui.main.TvMainActivity" }),
@@ -51,7 +54,10 @@ object GameFolders {
          */
         fun installed(context: Context): Pair<String, String>? {
             val pm = context.packageManager
-            activities.firstOrNull { (pkg, _) -> runCatching { pm.getPackageInfo(pkg, 0) }.isSuccess }?.let { return it }
+            // The app with the screen that starts its games (GameHub Lite under another app's name
+            // is only it when it has GameHub's game screen: the real app of that name isn't)
+            activities.firstOrNull { (pkg, activity) -> runCatching { pm.getActivityInfo(ComponentName(pkg, activity), 0) }.isSuccess }
+                ?.let { return it }
             if (this != GAMENATIVE && this != GAMEHUB) return null
             val key = label.lowercase()
             val app = GameLibrary.launchers(context).firstOrNull { it.appName.lowercase().replace(" ", "").contains(key) } ?: return null
@@ -65,10 +71,14 @@ object GameFolders {
     /** The official GameHub: no way in to start one of its games, so it's opened instead (GameHub Lite has one). */
     const val GAMEHUB_OFFICIAL = "com.xiaoji.egggame"
 
+    /** GameHub Lite built under benchmark apps' names, for the speed some phones give those. */
+    val GAMEHUB_LITE_DISGUISED = listOf("com.antutu.ABenchMark", "com.antutu.benchmark.full", "com.ludashi.aibench", "com.tencent.ig")
+
     /** The official GameHub is installed and GameHub Lite isn't: worth recommending Lite. */
     fun gameHubLiteMissing(context: Context): Boolean {
-        fun has(pkg: String) = runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
-        return has(GAMEHUB_OFFICIAL) && Player.GAMEHUB.activities.none { (pkg, _) -> pkg != GAMEHUB_OFFICIAL && has(pkg) }
+        fun has(pkg: String, activity: String) = runCatching { context.packageManager.getActivityInfo(ComponentName(pkg, activity), 0) }.isSuccess
+        return Player.GAMEHUB.activities.any { (pkg, activity) -> pkg == GAMEHUB_OFFICIAL && has(pkg, activity) } &&
+            Player.GAMEHUB.activities.none { (pkg, activity) -> pkg != GAMEHUB_OFFICIAL && has(pkg, activity) }
     }
 
     /** A folder of the user's own (the one set in a launcher or emulator), and who plays it (null: by its names). */
@@ -275,9 +285,13 @@ object GameFolders {
         val intent = when (player) {
             Player.GAMENATIVE -> Intent("app.gamenative.LAUNCH_GAME")
                 .putExtra("app_id", id?.toIntOrNull() ?: return null).putExtra("game_source", source ?: "STEAM")
+            // As ES-DE starts them: a Steam game's ID as both its Steam and its local game ID
+            // (GameHub Lite only opens the game's page given the Steam one alone), a game of
+            // GameHub's own by its local ID
             Player.GAMEHUB -> Intent("gamehub.lite.LAUNCH_GAME").putExtra("autoStartGame", true).apply {
                 if (id.isNullOrEmpty() || pkg == GAMEHUB_OFFICIAL) return null
-                if (source == "LOCAL") putExtra("localGameId", id) else putExtra("steamAppId", id)
+                if (source != "LOCAL") putExtra("steamAppId", id)
+                putExtra("localGameId", id)
             }
             Player.DOLPHIN -> Intent(Intent.ACTION_MAIN).addCategory("android.intent.category.LEANBACK_LAUNCHER")
                 .putExtra("AutoStartFile", data?.toString() ?: return null)

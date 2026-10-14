@@ -39,7 +39,7 @@ class GameLaunchActivity : Activity() {
             ?.takeIf { (it.`package` ?: it.component?.packageName) in packages }
             // An activity that isn't there (another GameHub build): the app itself instead
             ?.takeIf { packageManager.resolveActivity(it, 0) != null }
-            ?.let { withGameFile(it) }
+            ?.let { withGameFile(withGameHubIds(it)) }
         if (launch != null && game == null) FluxLog.w(TAG, when {
             parsed == null -> "game's launch couldn't be read: $launch"
             (parsed.`package` ?: parsed.component?.packageName) !in packages -> "game's launch is for another app ($packages): $launch"
@@ -134,6 +134,16 @@ class GameLaunchActivity : Activity() {
     }
 
     /** A game file you picked yourself: the emulator may read it, as Flux Keyboard may. */
+    /**
+     * A GameHub Lite game saved before its Steam ID was also sent as its local game ID: given
+     * both, as ES-DE sends them (with the Steam one alone, GameHub Lite stops at the game's page).
+     */
+    private fun withGameHubIds(intent: Intent): Intent {
+        if (intent.action != "gamehub.lite.LAUNCH_GAME" || intent.hasExtra("localGameId")) return intent
+        val steam = intent.getStringExtra("steamAppId") ?: return intent
+        return intent.putExtra("localGameId", steam)
+    }
+
     private fun withGameFile(intent: Intent): Intent {
         val file = intent.data ?: intent.getStringExtra("AutoStartFile")?.let { Uri.parse(it) } ?: return intent
         val held = contentResolver.persistedUriPermissions.any { it.uri == file && it.isReadPermission }

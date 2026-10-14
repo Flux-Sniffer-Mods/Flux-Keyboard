@@ -69,12 +69,16 @@ object GameApps {
 
     fun appFor(packageName: String): String? = when {
         packageName == GameNativeBridge.PACKAGE -> "GameNative"
-        packageName.contains("gamehub", true) || packageName == "com.xiaoji.egggame" -> "GameHub"
+        packageName.contains("gamehub", true) || packageName == "com.xiaoji.egggame" ||
+            // GameHub Lite named as a benchmark app (not com.tencent.ig, the real PUBG Mobile's name too)
+            packageName in GAMEHUB_BENCHMARK_NAMES -> "GameHub"
         packageName in XBOX || packageName == it.palsoftware.pastiera.BuildConfig.APPLICATION_ID -> XBOX_NAME
         else -> emulator(packageName)
     }
 
     const val XBOX_NAME = "Xbox Cloud Gaming"
+
+    private val GAMEHUB_BENCHMARK_NAMES = setOf("com.antutu.ABenchMark", "com.antutu.benchmark.full", "com.ludashi.aibench")
 
     /** An emulator's name, for one Flux Keyboard knows. */
     fun emulator(packageName: String): String? = when (packageName) {
