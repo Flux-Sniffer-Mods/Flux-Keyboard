@@ -8,7 +8,6 @@
     <string name="input_method_name_es">Español</string>
     <string name="input_method_name_uk">Українська</string>
     <string name="settings_title">Ustawienia</string>
-    <string name="back">Wstecz</string>
     <string name="settings_back_content_description">Wstecz</string>
     <string name="long_press_title">Długie Naciśnięcie</string>
     <string name="auto_capitalize_title">Auto-Wielka Litera Pierwsza</string>
@@ -349,9 +348,6 @@
     <string name="trackpad_tutorial_previous">Wstecz</string>
     <string name="status_bar_buttons_title">Przyciski Paska</string>
     <string name="status_bar_buttons_description">Solderina lub tryb minimalny oraz przyciski na pasku.</string>
-    <string name="status_bar_slot_left">Slot Lewy</string>
-    <string name="status_bar_slot_right_1">Slot Prawy 1</string>
-    <string name="status_bar_slot_right_2">Slot Prawy 2</string>
     <string name="status_bar_button_none">Brak</string>
     <string name="status_bar_button_none_description">Pusty</string>
     <string name="status_bar_button_clipboard">Schowek</string>
@@ -526,7 +522,6 @@
     <string name="quick_launcher_title">Pastiera-QuickLauncher</string>
     <string name="quick_launcher_close">Zamknij</string>
     <string name="quick_launcher_search_placeholder">Zacznij pisać...</string>
-    <string name="quick_launcher_auto_start_single">Uruchamiaj automatycznie, gdy zostanie tylko jeden wynik</string>
     <string name="quick_launcher_auto_start_single_title">Automatycznie otwieraj jedyne dopasowanie</string>
     <string name="quick_launcher_auto_start_single_description">Gdy wyszukiwanie QuickLauncher zostawi tylko jedną aplikację, uruchom ją bez naciskania Enter.</string>
     <string name="quick_launcher_limit_results_title">Pokazuj tylko najlepsze wyniki</string>
@@ -706,13 +701,6 @@ Każdy klawisz można skonfigurować jako Keycode, Akcja, Native Ctrl lub Brak. 
     <string name="status_bar_button_undo_description">Wyślij Ctrl+Z</string>
     <string name="status_bar_button_redo">Ponów</string>
     <string name="status_bar_button_redo_description">Wyślij Ctrl+Y</string>
-    <string name="status_bar_variations_visible_title">Pokaż wariacje</string>
-    <string name="status_bar_variations_visible_description">Pokaż skonfigurowany wiersz wariacji między przyciskami paska stanu. Gdy wyłączone, przyciski używają całego paska; sterowanie kursorem przez przesuwanie nadal działa.</string>
-    <string name="status_bar_swipe_cursor_info">Przesuń po pasku stanu, aby poruszyć kursorem.</string>
-    <string name="dynamic_variation_slot_count_title">Sloty wariacji dynamicznych</string>
-    <string name="dynamic_variation_slot_count_description">Staraj się pokazać %1$d dynamicznych pozycji między przyciskami paska stanu.</string>
-    <string name="dynamic_variation_resize_to_content_title">Zmieniaj rozmiar wariacji dynamicznych</string>
-    <string name="dynamic_variation_resize_to_content_description">Gdy włączone, dynamiczne pozycje wypełniają dostępny wiersz zależnie od liczby wyświetlanych elementów. Gdy wyłączone, zachowują rozmiar slotu z suwaka i pozostają wyrównane do lewej.</string>
     <string name="keyboard_theme_tab_colors">Kolory</string>
     <string name="keyboard_theme_tab_keys">Klawisze</string>
 

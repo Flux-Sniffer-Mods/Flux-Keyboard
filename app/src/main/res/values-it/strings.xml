@@ -14,7 +14,6 @@
     
     <!-- Settings Screen -->
     <string name="settings_title">Impostazioni</string>
-    <string name="back">Indietro</string>
     <string name="settings_back_content_description">Indietro</string>
     
     <!-- Long Press Section -->
@@ -259,7 +258,6 @@
     <string name="quick_launcher_title">Pastiera-QuickLauncher</string>
     <string name="quick_launcher_close">Chiudi</string>
     <string name="quick_launcher_search_placeholder">Inizia a digitare...</string>
-    <string name="quick_launcher_auto_start_single">Avvia automaticamente quando resta un solo risultato</string>
     <string name="quick_launcher_auto_start_single_title">Apri automaticamente la corrispondenza unica</string>
     <string name="quick_launcher_auto_start_single_description">Quando la ricerca del QuickLauncher lascia una sola app, avviala senza premere Invio.</string>
     <string name="quick_launcher_limit_results_title">Mostra solo i risultati migliori</string>
@@ -797,9 +795,6 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <!-- Status Bar Buttons Configuration -->
     <string name="status_bar_buttons_title">Pulsanti Barra</string>
     <string name="status_bar_buttons_description">Solderina o modalità minima, e i pulsanti della barra.</string>
-    <string name="status_bar_slot_left">Slot Sinistro</string>
-    <string name="status_bar_slot_right_1">Slot Destro 1</string>
-    <string name="status_bar_slot_right_2">Slot Destro 2</string>
     <string name="status_bar_slots_left">Pulsanti a sinistra</string>
     <string name="status_bar_slots_right">Pulsanti a destra</string>
     <string name="status_bar_slot_add">Aggiungi pulsante barra di stato</string>
@@ -828,13 +823,6 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="status_bar_button_undo_description">Invia Ctrl+Z</string>
     <string name="status_bar_button_redo">Ripeti</string>
     <string name="status_bar_button_redo_description">Invia Ctrl+Y</string>
-    <string name="status_bar_variations_visible_title">Mostra variazioni</string>
-    <string name="status_bar_variations_visible_description">Mostra la riga variazioni configurata tra i pulsanti della barra di stato. Se disattivato, i pulsanti usano tutta la barra; il controllo cursore con swipe resta attivo.</string>
-    <string name="status_bar_swipe_cursor_info">Scorri sulla barra di stato per spostare il cursore.</string>
-    <string name="dynamic_variation_slot_count_title">Slot variazioni dinamiche</string>
-    <string name="dynamic_variation_slot_count_description">Punta a mostrare %1$d voci dinamiche tra i pulsanti della barra di stato.</string>
-    <string name="dynamic_variation_resize_to_content_title">Ridimensiona variazioni dinamiche</string>
-    <string name="dynamic_variation_resize_to_content_description">Se attivo, le voci dinamiche riempiono la riga disponibile in base a quante sono mostrate. Se disattivato, mantengono la dimensione slot dello slider e restano allineate a sinistra.</string>
     <string name="status_bar_state_on">Attivo</string>
     <string name="status_bar_state_off">Disattivo</string>
     <string name="status_bar_button_clipboard_state_empty">Vuoto</string>

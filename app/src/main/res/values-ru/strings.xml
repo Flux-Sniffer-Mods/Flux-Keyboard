@@ -10,7 +10,6 @@
     <string name="input_method_name_ru">Русский</string>
     <string name="input_method_name_uk">Українська</string>
     <string name="settings_title">Настройки</string>
-    <string name="back">Назад</string>
     <string name="settings_back_content_description">Назад</string>
     <string name="long_press_title">Долгое нажатие</string>
     <string name="keyboard_timing_long_press_value">%1$dms</string>
@@ -398,9 +397,6 @@
     <string name="trackpad_tutorial_previous">Назад</string>
     <string name="status_bar_buttons_title">Кнопки Панели</string>
     <string name="status_bar_buttons_description">Solderina или минимальный режим, и кнопки на панели.</string>
-    <string name="status_bar_slot_left">Левый слот</string>
-    <string name="status_bar_slot_right_1">Правый слот 1</string>
-    <string name="status_bar_slot_right_2">Правый слот 2</string>
     <string name="status_bar_button_none">Нет</string>
     <string name="status_bar_button_none_description">Пусто</string>
     <string name="status_bar_button_clipboard">Буфер</string>
@@ -526,7 +522,6 @@
     <string name="quick_launcher_title">Pastiera-QuickLauncher</string>
     <string name="quick_launcher_close">Закрыть</string>
     <string name="quick_launcher_search_placeholder">Начните ввод...</string>
-    <string name="quick_launcher_auto_start_single">Запускать автоматически, когда остается один результат</string>
     <string name="quick_launcher_auto_start_single_title">Автоматически открывать единственное совпадение</string>
     <string name="quick_launcher_auto_start_single_description">Когда поиск QuickLauncher оставляет только одно приложение, запускайте его без нажатия Enter.</string>
     <string name="quick_launcher_limit_results_title">Показывать только лучшие результаты</string>
@@ -706,13 +701,6 @@ Nav Mode использует физическое положение клави
     <string name="status_bar_button_undo_description">Отправить Ctrl+Z</string>
     <string name="status_bar_button_redo">Повторить</string>
     <string name="status_bar_button_redo_description">Отправить Ctrl+Y</string>
-    <string name="status_bar_variations_visible_title">Показывать варианты</string>
-    <string name="status_bar_variations_visible_description">Показывать настроенную строку вариантов между кнопками панели состояния. Если выключено, кнопки используют всю панель; управление курсором свайпом продолжает работать.</string>
-    <string name="status_bar_swipe_cursor_info">Проведите по панели состояния, чтобы переместить курсор.</string>
-    <string name="dynamic_variation_slot_count_title">Слоты динамических вариантов</string>
-    <string name="dynamic_variation_slot_count_description">Стремиться показывать %1$d динамических элементов между кнопками панели состояния.</string>
-    <string name="dynamic_variation_resize_to_content_title">Изменять размер динамических вариантов</string>
-    <string name="dynamic_variation_resize_to_content_description">Если включено, динамические элементы заполняют доступную строку в зависимости от их количества. Если выключено, они сохраняют размер слота из ползунка и остаются выровненными слева.</string>
     <string name="keyboard_theme_tab_colors">Цвета</string>
     <string name="keyboard_theme_tab_keys">Клавиши</string>
 

@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.BuildConfig
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.ReleaseNoteRow
-import it.palsoftware.pastiera.SettingsManager
 
 /**
  * After an update: the recommended settings that differ from yours, each as "from X to Y",
@@ -106,7 +105,6 @@ internal fun recommendedValue(context: Context, key: String, value: Any?): Strin
         }
         key.endsWith("_punctuation") -> value.toCharArray().joinToString(" ")
             .ifEmpty { context.getString(R.string.recommended_value_off) }
-        key == "trackpad_provider" -> if (value == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU) "Shizuku" else "Android"
         value.startsWith("[") -> value.trim('[', ']').replace("\"", "").replace(",", ", ")
         else -> value.replace(",", ", ")
     }

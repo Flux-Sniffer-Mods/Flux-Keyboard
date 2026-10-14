@@ -159,7 +159,6 @@
     <string name="recommended_label_auto_shift_field_types">Automatisches Shift in</string>
     <string name="recommended_label_show_add_word_suggestion">Anbieten, neue Wörter hinzuzufügen</string>
     <string name="recommended_label_trackpad_gestures_enabled">Trackpad-Gesten</string>
-    <string name="recommended_label_trackpad_provider">Trackpad-Auslesung</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Wischrichtungen wählen Vorschläge</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Nach unten wischen löscht ein Wort</string>
     <string name="recommended_label_swipe_to_delete">Nach links wischen löscht ein Wort</string>
@@ -554,7 +553,6 @@
     <string name="recommended_settings_configure_text">Empfohlene Einstellungen übernommen. Deine Wahl (Autokorrektur, GIFs, Farben), die Extras mit Berechtigung und das Personalisieren durchgehen? Es dauert eine Minute, und du kannst es überspringen.</string>
     <string name="recommended_settings_configure_yes">Einrichten</string>
     <string name="recommended_settings_configure_no">Nicht jetzt</string>
-    <string name="recommended_settings_applied">Empfohlene Einstellungen übernommen</string>
     <string name="recommended_settings_failed">Die empfohlenen Einstellungen konnten nicht übernommen werden</string>
     <string name="auto_capitalize_respect_manual_shift_off_title">Manuell ausgeschaltetes Shift respektieren</string>
     <string name="auto_capitalize_respect_manual_shift_off_description">Automatisches Shift bleibt aus, solange du im selben Textfeld bleibst.</string>
@@ -689,14 +687,10 @@
     <string name="trackpad_provider_native_ime">Android: nur in Apps, die der Scroll-Assistent scrollt</string>
     <string name="trackpad_provider_native_ime_status">Tastatur-Wischgesten von Android in Verwendung</string>
     <string name="status_bar_style_section">Tastaturleiste</string>
-    <string name="extended_status_bar_title">Erweiterte Statusleiste</string>
-    <string name="extended_status_bar_features_section">Erweiterte Funktionen</string>
     <string name="status_bar_buttons_section">Schaltflächen</string>
     <string name="pastierina_preview_suggestions">Vorschläge</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Wähle, welche Tasten am linken und rechten Rand der kompakten Solderina-Leiste erscheinen.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina: linke Tasten</string>
-    <string name="pastierina_status_bar_slots_right">Solderina: rechte Tasten</string>
     <string name="status_bar_button_gif">GIFs</string>
     <string name="status_bar_button_gif_description">GIF-Suche</string>
     <string name="text_expansion_title">Textersetzung</string>
@@ -999,8 +993,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">Die Emoji-Ebene und die Symbole öffnen mit dem zuletzt Genutzten, mit Suche auf A. Q und P blättern durch alle Emoji nach Kategorie oder durch gängige Symbole, Pfeile, Mathe, Währungen und mehr. Alles Genutzte kommt zu den zuletzt genutzten.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Halte ein Emoji, auf seiner Taste oder auf dem Bildschirm, für seine Hauttöne. Wähle unten einen Standard-Hautton.</string>
     <string name="flux_tutorial_typing_bullet_private">Tastenkürzel für den privaten Modus (Inkognito-Tippen und Offline-Modus zusammen) und zum Auswählen ab dem Cursor: festlegen unter Tasten anpassen.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Tastaturlicht und Kürzel (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Mit laufendem Shizuku folgt das Tastaturlicht des Titan 2 dem Bildschirm und seiner Helligkeit oder blinkt bei Benachrichtigungen, und Kürzel können die App im Vordergrund beenden, den Energiesparmodus umschalten oder eine App vom Netz trennen. Kein Root nötig.</string>
     <string name="flux_tutorial_extras_shizuku_button">Shell-Zugriff öffnen</string>
     <string name="flux_tutorial_personalise_bullet_theme">Tastaturthemen: Die Themenseite zeigt, welches Thema im hellen und dunklen Modus verwendet wird, und setzt es mit einem Tippen.</string>
     <string name="root_backlight_brightness_not_kept">Dieses Telefon behält eine über Shizuku gesetzte Tastaturhelligkeit nicht: Das Licht geht weiterhin mit dem Bildschirm an und aus, in der Helligkeit aus den Telefoneinstellungen.</string>
@@ -1174,7 +1166,6 @@
     <string name="game_mode_import_reading">Suche nach Spielen</string>
     <string name="game_mode_left_half">Trackpad linke Hälfte</string>
     <string name="game_mode_next_profile">Nächstes Profil</string>
-    <string name="game_mode_no_apps">noch keine Apps</string>
     <string name="game_mode_disclaimer">Die Tastatur ist kein Controller: Sie hat keine echten Sticks, und ihre Tasten und die Lautstärketasten machen die ganze Arbeit, daher eignet sich der Spielmodus für Spiele, die mit Tasten gespielt werden. Wie gut es klappt, ist unterschiedlich. Am besten spielst du mit einem Controller über Bluetooth oder USB, idealerweise einem für aufrecht gehaltene Telefone oder einem mit Telefonhalterung.</string>
     <string name="game_mode_layout_title">Tastatursteuerung</string>
     <string name="game_mode_layout_description">Welche Taste welcher Knopf ist</string>
@@ -1355,7 +1346,6 @@
     <string name="stream_resolution">Streaming-Auflösung</string>
     <string name="stream_resolution_client">Wie Moonlight es verlangt</string>
     <string name="stream_resolution_description">Beim Streamen übernimmt der Handybildschirm die Form des Moonlight-Clients. Automatisch läuft genau in der Auflösung, die der Client verlangt (in Moonlights Einstellungen festgelegt), 4K eingeschlossen. Eine hier gewählte Größe lässt das Spiel stattdessen in dieser Größe laufen, auf die des Clients hochskaliert: schonender für das Handy.</string>
-    <string name="games_app_settings">Gaming-Einstellungen</string>
     <string name="stream_confirm_title">%1$s verbinden?</string>
     <string name="stream_confirm_text">Es möchte von diesem Handy streamen.</string>
     <string name="stream_confirm_text_game">Es möchte %1$s von diesem Handy spielen.</string>

@@ -24,7 +24,6 @@
     <string name="recommended_label_auto_shift_field_types">Automatic Shift in</string>
     <string name="recommended_label_show_add_word_suggestion">Offer to add new words</string>
     <string name="recommended_label_trackpad_gestures_enabled">Trackpad gestures</string>
-    <string name="recommended_label_trackpad_provider">Trackpad reading</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Swipe directions pick suggestions</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Swipe down deletes a word</string>
     <string name="recommended_label_swipe_to_delete">Swipe left deletes a word</string>

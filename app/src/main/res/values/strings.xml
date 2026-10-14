@@ -14,7 +14,6 @@
 
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>
-    <string name="back">Back</string>
     <string name="settings_back_content_description">Back</string>
     
     <!-- Long Press Section -->
@@ -584,7 +583,6 @@
     <string name="quick_launcher_title">Quick launcher</string>
     <string name="quick_launcher_close">Close</string>
     <string name="quick_launcher_search_placeholder">Start typing...</string>
-    <string name="quick_launcher_auto_start_single">Launch automatically when only one result remains</string>
     <string name="quick_launcher_auto_start_single_title">Open unique match automatically</string>
     <string name="quick_launcher_auto_start_single_description">When the quick launcher search leaves only one app, launch it without pressing Enter.</string>
     <string name="quick_launcher_limit_results_title">Show only top search results</string>
@@ -1367,21 +1365,14 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="status_bar_buttons_title">Status Bar</string>
     <string name="status_bar_buttons_description">Solderina or minimal mode, and the buttons on the bar.</string>
     <string name="status_bar_style_section">Keyboard bar</string>
-    <string name="extended_status_bar_title">Extended Status Bar</string>
-    <string name="extended_status_bar_features_section">Extended features</string>
     <string name="status_bar_buttons_section">Buttons</string>
     <string name="pastierina_preview_suggestions">Suggestions</string>
     <string name="titan2_elite_rounded_corners_title">Titan 2 Elite rounded corners</string>
     <string name="titan2_elite_rounded_corners_description">Round the bottom corners of the status bar to match the Elite’s rounded display corners.</string>
-    <string name="status_bar_slot_left">Left Slot</string>
-    <string name="status_bar_slot_right_1">Right Slot 1</string>
-    <string name="status_bar_slot_right_2">Right Slot 2</string>
     <string name="status_bar_slots_left">Left buttons</string>
     <string name="status_bar_slots_right">Right buttons</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Choose which buttons appear on the left and right edges of the compact Solderina row.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina left buttons</string>
-    <string name="pastierina_status_bar_slots_right">Solderina right buttons</string>
     <string name="status_bar_slot_add">Add status bar button</string>
     <string name="status_bar_slot_remove">Remove status bar button</string>
     <string name="status_bar_button_none">None</string>
@@ -1411,13 +1402,6 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="status_bar_button_undo_description">Send Ctrl+Z</string>
     <string name="status_bar_button_redo">Redo</string>
     <string name="status_bar_button_redo_description">Send Ctrl+Y</string>
-    <string name="status_bar_variations_visible_title">Show variations</string>
-    <string name="status_bar_variations_visible_description">Show the configured variation row between the status bar buttons. When off, buttons use the full status bar; swipe cursor control still works.</string>
-    <string name="status_bar_swipe_cursor_info">Swipe across the status bar to move the cursor.</string>
-    <string name="dynamic_variation_slot_count_title">Dynamic variation slots</string>
-    <string name="dynamic_variation_slot_count_description">Aim to show %1$d dynamic entries between the status bar buttons.</string>
-    <string name="dynamic_variation_resize_to_content_title">Resize dynamic variations</string>
-    <string name="dynamic_variation_resize_to_content_description">When enabled, dynamic entries fill the available row based on how many are shown. When off, entries keep the slot size from the slider and stay left-aligned.</string>
     <string name="modifier_indicators_title">Modifier indicators</string>
     <string name="modifier_indicators_description">Choose where Shift, Ctrl, Alt, and SYM state appears for the hardware keyboard.</string>
     <string name="modifier_indicators_bottom_strip">Bottom Strip LEDs</string>

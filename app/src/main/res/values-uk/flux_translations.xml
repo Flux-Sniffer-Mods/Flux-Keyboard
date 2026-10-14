@@ -115,8 +115,6 @@
     <string name="setting_link_haptic_duration">Тривалість вібрації під час натискання</string>
     <string name="setting_link_variation_mappings">Призначення варіантів</string>
     <string name="setting_link_max_icon_shrink">Максимальне зменшення значків</string>
-    <string name="setting_link_status_extended_left">Розширений рядок стану: кнопки ліворуч</string>
-    <string name="setting_link_status_extended_right">Розширений рядок стану: кнопки праворуч</string>
     <string name="setting_link_status_pastierina_left">Solderina: кнопки зліва</string>
     <string name="setting_link_status_pastierina_right">Solderina: кнопки справа</string>
     <string name="setting_link_theme_software_key_rounding">Екранна клавіатура: заокруглення клавіш</string>
@@ -202,7 +200,6 @@
     <string name="recommended_label_auto_shift_field_types">Автоматичний Shift у</string>
     <string name="recommended_label_show_add_word_suggestion">Пропонувати додати нові слова</string>
     <string name="recommended_label_trackpad_gestures_enabled">Жести трекпада</string>
-    <string name="recommended_label_trackpad_provider">Зчитування трекпада</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Напрямки свайпу вибирають підказки</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Свайп униз видаляє слово</string>
     <string name="recommended_label_swipe_to_delete">Свайп ліворуч видаляє слово</string>
@@ -605,7 +602,6 @@
     <string name="recommended_settings_configure_text">Рекомендовані налаштування застосовано. Пройтися вашим вибором (автовиправлення, GIF, кольори), доповненнями, яким потрібен дозвіл, і персоналізацією? Це займе хвилину, і це можна пропустити.</string>
     <string name="recommended_settings_configure_yes">Налаштувати</string>
     <string name="recommended_settings_configure_no">Не зараз</string>
-    <string name="recommended_settings_applied">Рекомендовані налаштування застосовано</string>
     <string name="recommended_settings_failed">Не вдалося застосувати рекомендовані налаштування</string>
     <string name="text_input_section_capitalization">Великі літери</string>
     <string name="text_input_section_spacing_punctuation">Пробіли й пунктуація</string>
@@ -1164,16 +1160,12 @@
     <string name="trackpad_delete_swipe_threshold_title">Свайп видалення</string>
     <string name="trackpad_delete_swipe_threshold_description">Відстань свайпу ліворуч, щоб видалити попереднє слово.</string>
     <string name="status_bar_style_section">Панель клавіатури</string>
-    <string name="extended_status_bar_title">Розширений рядок стану</string>
-    <string name="extended_status_bar_features_section">Розширені функції</string>
     <string name="status_bar_buttons_section">Кнопки</string>
     <string name="pastierina_preview_suggestions">Підказки</string>
     <string name="titan2_elite_rounded_corners_title">Заокруглені кути Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Заокруглювати нижні кути рядка стану під заокруглені кути екрана Elite.</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Виберіть кнопки біля лівого й правого країв компактної панелі Solderina.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina: кнопки зліва</string>
-    <string name="pastierina_status_bar_slots_right">Solderina: кнопки справа</string>
     <string name="status_bar_button_minimal_ui">Мінімальний режим</string>
     <string name="status_bar_button_software_keyboard_mode">Режим клавіатури</string>
     <string name="status_bar_button_software_keyboard_mode_description">Тимчасово відкрити / закрити екранну клавіатуру (Ctrl+B)</string>
@@ -1546,8 +1538,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">Шар емодзі та символи відкриваються на недавно використаному, з пошуком на A. Q і P гортають усі емодзі за категоріями або поширені символи, стрілки, математику, валюти та інше. Усе використане потрапляє до недавніх.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Утримуйте емодзі, на клавіші або на екрані, щоб вибрати відтінок шкіри. Нижче виберіть типовий відтінок.</string>
     <string name="flux_tutorial_typing_bullet_private">Сполучення клавіш для приватного режиму (інкогніто-введення та автономний режим разом) і виділення від курсора: задайте їх у Налаштуванні клавіш.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Підсвічування клавіатури та сполучення (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Коли Shizuku запущено, підсвічування клавіатури Titan 2 стежить за екраном і його яскравістю або блимає для сповіщень, а сполучення можуть зупинити застосунок на передньому плані, перемкнути енергозбереження чи відключити застосунок від мережі. Без root.</string>
     <string name="flux_tutorial_extras_shizuku_button">Відкрити доступ до оболонки</string>
     <string name="flux_tutorial_personalise_bullet_theme">Теми клавіатури: сторінка тем показує, яка тема використовується у світлому й темному режимі, і задає її одним дотиком.</string>
     <string name="root_backlight_brightness_not_kept">Цей телефон не зберігає яскравість клавіатури, задану через Shizuku: підсвічування все одно вмикається й вимикається з екраном, з яскравістю з налаштувань телефона.</string>
@@ -1721,7 +1711,6 @@
     <string name="game_mode_import_reading">Пошук ігор</string>
     <string name="game_mode_left_half">Ліва половина трекпада</string>
     <string name="game_mode_next_profile">Наступний профіль</string>
-    <string name="game_mode_no_apps">ще немає застосунків</string>
     <string name="game_mode_disclaimer">Клавіатура — не геймпад: у неї немає справжніх стиків, і всю роботу виконують її клавіші та клавіші гучності, тому ігровий режим пасує іграм, у які грають кнопками. Результат може відрізнятися. Для найкращого досвіду використовуйте геймпад через Bluetooth або USB, найкраще створений для телефона у вертикальному положенні або з тримачем для телефона.</string>
     <string name="game_mode_layout_title">Керування з клавіатури</string>
     <string name="game_mode_layout_description">Яка клавіша яка кнопка</string>
@@ -1902,7 +1891,6 @@
     <string name="stream_resolution">Роздільність трансляції</string>
     <string name="stream_resolution_client">Як просить Moonlight</string>
     <string name="stream_resolution_description">Під час трансляції екран телефона набуває форми клієнта Moonlight. Автоматично — рівно та роздільність, яку просить клієнт (задається в налаштуваннях Moonlight), включно з 4K. Вибраний тут розмір запускає гру в ньому з масштабуванням до розміру клієнта: легше для телефона.</string>
-    <string name="games_app_settings">Налаштування ігор</string>
     <string name="stream_confirm_title">Підключити %1$s?</string>
     <string name="stream_confirm_text">Воно хоче транслювати з цього телефона.</string>
     <string name="stream_confirm_text_game">Воно хоче грати в %1$s з цього телефона.</string>

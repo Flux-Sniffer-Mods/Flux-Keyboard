@@ -720,6 +720,9 @@
     },
     {
       "text": "Lighter and quicker: settings read once instead of on every key, nothing made afresh each time the keyboard's bars and pointer are drawn, number settings kept without extra objects, settings saved in the background, unused code taken out"
+    },
+    {
+      "text": "A smaller app: unused text, colours and icon images taken out, in every language"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

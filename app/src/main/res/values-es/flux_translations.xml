@@ -115,8 +115,6 @@
     <string name="setting_link_haptic_duration">Duración de la vibración al pulsar</string>
     <string name="setting_link_variation_mappings">Asignaciones de variantes</string>
     <string name="setting_link_max_icon_shrink">Reducción máxima de iconos</string>
-    <string name="setting_link_status_extended_left">Barra de estado ampliada: botones izquierdos</string>
-    <string name="setting_link_status_extended_right">Barra de estado ampliada: botones derechos</string>
     <string name="setting_link_status_pastierina_left">Solderina: botones izquierdos</string>
     <string name="setting_link_status_pastierina_right">Solderina: botones derechos</string>
     <string name="setting_link_theme_software_key_rounding">Teclado en pantalla: redondeo de teclas</string>
@@ -202,7 +200,6 @@
     <string name="recommended_label_auto_shift_field_types">Shift automático en</string>
     <string name="recommended_label_show_add_word_suggestion">Ofrecer añadir palabras nuevas</string>
     <string name="recommended_label_trackpad_gestures_enabled">Gestos del trackpad</string>
-    <string name="recommended_label_trackpad_provider">Lectura del trackpad</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Las direcciones de deslizamiento eligen sugerencias</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Deslizar hacia abajo borra una palabra</string>
     <string name="recommended_label_swipe_to_delete">Deslizar a la izquierda borra una palabra</string>
@@ -605,7 +602,6 @@
     <string name="recommended_settings_configure_text">Ajustes recomendados aplicados. ¿Repasar tus preferencias (autocorrección, GIF, colores), los extras que necesitan un permiso y la personalización? Lleva un minuto y puedes saltarlo.</string>
     <string name="recommended_settings_configure_yes">Configurar</string>
     <string name="recommended_settings_configure_no">Ahora no</string>
-    <string name="recommended_settings_applied">Ajustes recomendados aplicados</string>
     <string name="recommended_settings_failed">No se pudieron aplicar los ajustes recomendados</string>
     <string name="text_input_section_capitalization">Mayúsculas</string>
     <string name="text_input_section_spacing_punctuation">Espaciado y puntuación</string>
@@ -1164,16 +1160,12 @@
     <string name="trackpad_delete_swipe_threshold_title">Deslizamiento de borrado</string>
     <string name="trackpad_delete_swipe_threshold_description">Distancia necesaria al deslizar a la izquierda para borrar la palabra anterior.</string>
     <string name="status_bar_style_section">Barra del teclado</string>
-    <string name="extended_status_bar_title">Barra de estado ampliada</string>
-    <string name="extended_status_bar_features_section">Funciones ampliadas</string>
     <string name="status_bar_buttons_section">Botones</string>
     <string name="pastierina_preview_suggestions">Sugerencias</string>
     <string name="titan2_elite_rounded_corners_title">Esquinas redondeadas del Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Redondea las esquinas inferiores de la barra de estado para que coincidan con las esquinas redondeadas de la pantalla del Elite.</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Elige qué botones aparecen en los bordes izquierdo y derecho de la barra compacta Solderina.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina: botones izquierdos</string>
-    <string name="pastierina_status_bar_slots_right">Solderina: botones derechos</string>
     <string name="status_bar_button_minimal_ui">Modo mínimo</string>
     <string name="status_bar_button_software_keyboard_mode">Modo de teclado</string>
     <string name="status_bar_button_software_keyboard_mode_description">Abrir / cerrar temporalmente el teclado en pantalla (Ctrl+B)</string>
@@ -1540,8 +1532,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">La capa de emoji y los símbolos se abren en lo último que usaste, con búsqueda en A. Q y P pasan por todos los emoji por categoría, o por símbolos comunes, flechas, matemáticas, monedas y más. Lo que usas se suma a los recientes.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Mantén pulsado un emoji, en su tecla o en pantalla, para sus tonos de piel. Elige abajo un tono predeterminado.</string>
     <string name="flux_tutorial_typing_bullet_private">Atajos de teclado para el modo privado (escritura de incógnito y modo sin conexión a la vez) y para seleccionar desde el cursor: configúralos en Personalizar teclas.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Luz del teclado y atajos (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Con Shizuku en marcha, la luz del teclado del Titan 2 sigue la pantalla y su brillo, o parpadea con notificaciones, y los atajos pueden forzar el cierre de la app en primer plano, activar el ahorro de batería o desconectar una app de la red. Sin root.</string>
     <string name="flux_tutorial_extras_shizuku_button">Abrir Acceso al shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Temas del teclado: la página de temas muestra qué tema se usa en modo claro y oscuro, y lo cambia con un toque.</string>
     <string name="root_backlight_brightness_not_kept">Este teléfono no conserva un brillo del teclado fijado mediante Shizuku: la luz sigue encendiéndose y apagándose con la pantalla, con el brillo de los ajustes del teléfono.</string>
@@ -1715,7 +1705,6 @@
     <string name="game_mode_import_reading">Buscando juegos</string>
     <string name="game_mode_left_half">Mitad izquierda del trackpad</string>
     <string name="game_mode_next_profile">Siguiente perfil</string>
-    <string name="game_mode_no_apps">aún sin apps</string>
     <string name="game_mode_disclaimer">El teclado no es un mando: no tiene sticks de verdad, y sus teclas y las de volumen hacen todo el trabajo, así que el modo juego va bien con juegos que se juegan con botones. Los resultados pueden variar. Para la mejor experiencia, usa un mando por Bluetooth o USB, idealmente uno hecho para un teléfono en vertical o uno con pinza para el teléfono.</string>
     <string name="game_mode_layout_title">Controles del teclado</string>
     <string name="game_mode_layout_description">Qué tecla es cada botón</string>
@@ -1896,7 +1885,6 @@
     <string name="stream_resolution">Resolución de streaming</string>
     <string name="stream_resolution_client">La que pida Moonlight</string>
     <string name="stream_resolution_description">Al transmitir, la pantalla del teléfono toma la forma del cliente de Moonlight. Automática funciona exactamente a la resolución que pida el cliente (en los ajustes de Moonlight), 4K incluido. Un tamaño elegido aquí hace que el juego vaya a ese tamaño, escalado al del cliente: más ligero para el teléfono.</string>
-    <string name="games_app_settings">Ajustes de juego</string>
     <string name="stream_confirm_title">¿Conectar %1$s?</string>
     <string name="stream_confirm_text">Quiere transmitir desde este teléfono.</string>
     <string name="stream_confirm_text_game">Quiere jugar a %1$s desde este teléfono.</string>

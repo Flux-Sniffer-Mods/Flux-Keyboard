@@ -327,7 +327,6 @@
     <string name="game_remap_reset_description">Every key back to the layout\'s button</string>
     <string name="game_mode_layout">Left stick: W A Z D (S clicks it)\nD-pad: SYM + W A Z D\nRight stick: Alt + I J M L, or right Shift + W A Z D (K clicks it)\nFace buttons: I (Y), J (X), M (A), L (B)\nBumpers: Q and E\nTriggers: Volume Up and Volume Down (Alt + Volume: pressed all the way without the click, for a GameCube controller)\nStart: Space\nSelect: Shift + Space\nXbox / Home: Alt + Space\nVolume: SYM + Volume Up or Down\n\nKeys placed on a game\'s screen tap there instead.</string>
     <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Your keys play as a controller (see Keyboard controls). Typing into a game\'s text field works as usual.</string>
-    <string name="game_mode_no_apps">no apps yet</string>
     <string name="game_mode_add">Add an app</string>
     <string name="game_mode_add_description">A launcher or emulator. Its games use these settings.</string>
     <string name="game_mode_folders">Create game folders</string>
@@ -432,7 +431,6 @@
     <string name="recommended_settings_configure_text">Recommended settings applied. Go through your choices (auto-correct, GIFs, colours), the extras that need a permission, and making it yours? It takes a minute, and you can skip it.</string>
     <string name="recommended_settings_configure_yes">Set up</string>
     <string name="recommended_settings_configure_no">Not now</string>
-    <string name="recommended_settings_applied">Recommended settings applied</string>
     <string name="recommended_settings_failed">Couldn\'t apply the recommended settings</string>
     <plurals name="recommended_settings_differ">
         <item quantity="one">%d of your settings differs from the recommended ones. Applying replaces it, along with the recommended mappings and variations. Back up first if you might want yours back.</item>
@@ -550,7 +548,6 @@
     <string name="stream_resolution">Streaming resolution</string>
     <string name="stream_resolution_client">As Moonlight asks</string>
     <string name="stream_resolution_description">Automatic streams at the resolution set in Moonlight on the client, 4K included. Choosing a size runs the game at that size and lets the client scale it up, which is easier on the phone.</string>
-    <string name="games_app_settings">Gaming settings</string>
     <string name="stream_confirm_title">Connect %1$s?</string>
     <string name="stream_confirm_text">It wants to stream from this phone.</string>
     <string name="stream_confirm_text_game">It wants to play %1$s from this phone.</string>

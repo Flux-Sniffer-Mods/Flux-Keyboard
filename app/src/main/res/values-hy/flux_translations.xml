@@ -115,8 +115,6 @@
     <string name="setting_link_haptic_duration">Հպման թրթռոցի տևողություն</string>
     <string name="setting_link_variation_mappings">Տարբերակների նշանակումներ</string>
     <string name="setting_link_max_icon_shrink">Պատկերակների առավելագույն փոքրացում</string>
-    <string name="setting_link_status_extended_left">Ընդլայնված կարգավիճակի գոտի՝ ձախ կոճակներ</string>
-    <string name="setting_link_status_extended_right">Ընդլայնված կարգավիճակի գոտի՝ աջ կոճակներ</string>
     <string name="setting_link_status_pastierina_left">Solderina՝ ձախ կոճակներ</string>
     <string name="setting_link_status_pastierina_right">Solderina՝ աջ կոճակներ</string>
     <string name="setting_link_theme_software_key_rounding">Էկրանային ստեղնաշար՝ ստեղների կլորացում</string>
@@ -202,7 +200,6 @@
     <string name="recommended_label_auto_shift_field_types">Ինքնաշխատ Shift</string>
     <string name="recommended_label_show_add_word_suggestion">Առաջարկել ավելացնել նոր բառեր</string>
     <string name="recommended_label_trackpad_gestures_enabled">Թրեքփեդի ժեստեր</string>
-    <string name="recommended_label_trackpad_provider">Թրեքփեդի ընթերցում</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Սահեցման ուղղությունները ընտրում են առաջարկներ</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Ներքև սահեցնելը ջնջում է բառը</string>
     <string name="recommended_label_swipe_to_delete">Ձախ սահեցնելը ջնջում է բառը</string>
@@ -605,7 +602,6 @@
     <string name="recommended_settings_configure_text">Առաջարկվող կարգավորումները կիրառված են։ Անցնե՞լ ձեր ընտրությունների (ինքնաշտկում, GIF-եր, գույներ), թույլտվություն պահանջող լրացուցիչների և անհատականացման միջով։ Դա տևում է մեկ րոպե, և կարող եք բաց թողնել։</string>
     <string name="recommended_settings_configure_yes">Կարգավորել</string>
     <string name="recommended_settings_configure_no">Ոչ հիմա</string>
-    <string name="recommended_settings_applied">Առաջարկվող կարգավորումները կիրառված են</string>
     <string name="recommended_settings_failed">Չհաջողվեց կիրառել առաջարկվող կարգավորումները</string>
     <string name="text_input_section_capitalization">Մեծատառեր</string>
     <string name="text_input_section_spacing_punctuation">Բացատներ և կետադրություն</string>
@@ -1164,16 +1160,12 @@
     <string name="trackpad_delete_swipe_threshold_title">Ջնջման սահեցում</string>
     <string name="trackpad_delete_swipe_threshold_description">Ձախ սահեցնելու անհրաժեշտ հեռավորությունը՝ նախորդ բառը ջնջելու համար։</string>
     <string name="status_bar_style_section">Ստեղնաշարի վահանակ</string>
-    <string name="extended_status_bar_title">Ընդլայնված կարգավիճակի գոտի</string>
-    <string name="extended_status_bar_features_section">Ընդլայնված գործառույթներ</string>
     <string name="status_bar_buttons_section">Կոճակներ</string>
     <string name="pastierina_preview_suggestions">Առաջարկներ</string>
     <string name="titan2_elite_rounded_corners_title">Titan 2 Elite-ի կլորացված անկյուններ</string>
     <string name="titan2_elite_rounded_corners_description">Կլորացնել կարգավիճակի գոտու ներքևի անկյունները՝ Elite-ի էկրանի կլորացված անկյուններին համապատասխան։</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Ընտրեք, թե որ կոճակները հայտնվեն կոմպակտ Solderina վահանակի ձախ և աջ եզրերին։</string>
-    <string name="pastierina_status_bar_slots_left">Solderina՝ ձախ կոճակներ</string>
-    <string name="pastierina_status_bar_slots_right">Solderina՝ աջ կոճակներ</string>
     <string name="status_bar_button_minimal_ui">Նվազագույն ռեժիմ</string>
     <string name="status_bar_button_software_keyboard_mode">Ստեղնաշարի ռեժիմ</string>
     <string name="status_bar_button_software_keyboard_mode_description">Ժամանակավորապես բացել / փակել էկրանային ստեղնաշարը (Ctrl+B)</string>
@@ -1534,8 +1526,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">Էմոջիների շերտը և նշանները բացվում են վերջին օգտագործածով, որոնումը A-ի վրա։ Q-ն և P-ն թերթում են բոլոր էմոջիները ըստ կատեգորիայի կամ տարածված նշանները, սլաքները, մաթեմատիկան, արժույթները և այլն։ Օգտագործածը միանում է վերջիններին։</string>
     <string name="flux_tutorial_emoji_bullet_tones">Պահեք էմոջին՝ իր ստեղնի վրա կամ էկրանին, մաշկի երանգների համար։ Ներքևում ընտրեք լռելյայն երանգը։</string>
     <string name="flux_tutorial_typing_bullet_private">Ստեղնային դյուրանցումներ մասնավոր ռեժիմի (ինկոգնիտո մուտքագրում և անցանց ռեժիմ միասին) և կուրսորից ընտրելու համար՝ սահմանեք «Ստեղների կարգավորում»-ում։</string>
-    <string name="flux_tutorial_extras_shizuku_title">Ստեղնաշարի լույս և դյուրանցումներ (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Աշխատող Shizuku-ով Titan 2-ի ստեղնաշարի լույսը հետևում է էկրանին և նրա պայծառությանը կամ թարթում է ծանուցումների համար, իսկ դյուրանցումները կարող են կանգնեցնել առջևի հավելվածը, փոխել մարտկոցի խնայումը կամ կտրել հավելվածը ցանցից։ Առանց root-ի։</string>
     <string name="flux_tutorial_extras_shizuku_button">Բացել Shell-ի մուտքը</string>
     <string name="flux_tutorial_personalise_bullet_theme">Ստեղնաշարի թեմաներ՝ թեմաների էջը ցույց է տալիս, թե որ թեման է օգտագործվում լուսավոր և մուգ ռեժիմում, և սահմանում այն մեկ հպումով։</string>
     <string name="root_backlight_brightness_not_kept">Այս հեռախոսը չի պահում Shizuku-ով սահմանված ստեղնաշարի պայծառությունը. լույսը դեռ միանում և անջատվում է էկրանի հետ՝ հեռախոսի կարգավորումների պայծառությամբ։</string>
@@ -1709,7 +1699,6 @@
     <string name="game_mode_import_reading">Խաղերի որոնում</string>
     <string name="game_mode_left_half">Թաչփեդի ձախ կեսը</string>
     <string name="game_mode_next_profile">Հաջորդ պրոֆիլը</string>
-    <string name="game_mode_no_apps">դեռ հավելվածներ չկան</string>
     <string name="game_mode_disclaimer">Ստեղնաշարը կարգավարիչ չէ. այն իրական լծակներ չունի, և ամբողջ աշխատանքն անում են նրա ստեղներն ու ձայնի ստեղները, ուստի խաղի ռեժիմը հարմար է կոճակներով խաղացվող խաղերի համար։ Արդյունքը կարող է տարբեր լինել։ Լավագույն փորձի համար օգտագործիր կարգավարիչ Bluetooth-ով կամ USB-ով, իդեալում՝ ուղղահայաց պահվող հեռախոսի համար նախատեսված կամ հեռախոսի սեղմակով։</string>
     <string name="game_mode_layout_title">Ստեղնաշարի կառավարում</string>
     <string name="game_mode_layout_description">Որ ստեղնը որ կոճակն է</string>
@@ -1890,7 +1879,6 @@
     <string name="stream_resolution">Հեռարձակման լուծաչափ</string>
     <string name="stream_resolution_client">Ինչպես Moonlight-ն է խնդրում</string>
     <string name="stream_resolution_description">Հեռարձակման ժամանակ հեռախոսի էկրանը ստանում է Moonlight կլիենտի ձևը։ Ավտոմատը աշխատում է ճիշտ այն լուծաչափով, որ կլիենտը խնդրում է (Moonlight-ի կարգավորումներում), ներառյալ 4K։ Այստեղ ընտրված չափը խաղը աշխատեցնում է այդ չափով՝ մասշտաբավորված կլիենտինին. ավելի թեթև հեռախոսի համար։</string>
-    <string name="games_app_settings">Խաղային կարգավորումներ</string>
     <string name="stream_confirm_title">Միացնե՞լ %1$s-ը</string>
     <string name="stream_confirm_text">Այն ուզում է հեռարձակել այս հեռախոսից։</string>
     <string name="stream_confirm_text_game">Այն ուզում է խաղալ %1$s այս հեռախոսից։</string>

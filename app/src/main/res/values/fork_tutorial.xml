@@ -94,8 +94,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">The emoji layer and the symbols open on what you used last, with search on A. Q and P turn through every emoji by category, or common symbols, arrows, maths, currency and more. Whatever you use joins the recents.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Hold an emoji, on its key or on screen, for its skin tones. Choose a default skin tone below.</string>
     <string name="flux_tutorial_typing_bullet_private">Key shortcuts for private mode (Incognito typing and Offline mode together) and for selecting from the cursor: set them in Customize keys.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Keyboard light and shortcuts (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">With Shizuku running, the Titan 2\'s keyboard light follows the screen and its brightness, or flashes for notifications, and shortcuts can force-stop the app in front, toggle Battery Saver or cut an app off the network. No root needed.</string>
     <string name="flux_tutorial_extras_shizuku_button">Open Shell access</string>
     <string name="flux_tutorial_personalise_bullet_theme">Keyboard themes: the theme page shows which theme is in use in light and dark mode, and sets it with a tap.</string>
     <string name="trackpad_apps_section">Keyboard swipes per app</string>

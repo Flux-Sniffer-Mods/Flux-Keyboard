@@ -8,7 +8,6 @@
     <string name="input_method_name_es">Español</string>
     <string name="input_method_name_uk">Українська</string>
     <string name="settings_title">Configuración</string>
-    <string name="back">Atrás</string>
     <string name="settings_back_content_description">Atrás</string>
     <string name="long_press_title">Pulsación Larga</string>
     <string name="auto_capitalize_title">Auto-Mayúscula Primera Letra</string>
@@ -349,9 +348,6 @@
     <string name="trackpad_tutorial_previous">Anterior</string>
     <string name="status_bar_buttons_title">Botones de Barra</string>
     <string name="status_bar_buttons_description">Solderina o modo mínimo, y los botones de la barra.</string>
-    <string name="status_bar_slot_left">Ranura Izq.</string>
-    <string name="status_bar_slot_right_1">Ranura Der. 1</string>
-    <string name="status_bar_slot_right_2">Ranura Der. 2</string>
     <string name="status_bar_button_none">Ninguno</string>
     <string name="status_bar_button_none_description">Vacío</string>
     <string name="status_bar_button_clipboard">Portapapeles</string>
@@ -526,7 +522,6 @@
     <string name="quick_launcher_title">Pastiera-QuickLauncher</string>
     <string name="quick_launcher_close">Cerrar</string>
     <string name="quick_launcher_search_placeholder">Empieza a escribir...</string>
-    <string name="quick_launcher_auto_start_single">Iniciar automáticamente cuando solo quede un resultado</string>
     <string name="quick_launcher_auto_start_single_title">Abrir coincidencia única automáticamente</string>
     <string name="quick_launcher_auto_start_single_description">Cuando la búsqueda de QuickLauncher deje una sola app, ábrela sin pulsar Intro.</string>
     <string name="quick_launcher_limit_results_title">Mostrar solo los mejores resultados</string>
@@ -706,13 +701,6 @@ Cada tecla puede configurarse como Keycode, Acción, Native Ctrl o Ninguno. Usa 
     <string name="status_bar_button_undo_description">Enviar Ctrl+Z</string>
     <string name="status_bar_button_redo">Rehacer</string>
     <string name="status_bar_button_redo_description">Enviar Ctrl+Y</string>
-    <string name="status_bar_variations_visible_title">Mostrar variaciones</string>
-    <string name="status_bar_variations_visible_description">Muestra la fila de variaciones configurada entre los botones de la barra de estado. Si está desactivado, los botones usan toda la barra; el control del cursor por deslizamiento sigue funcionando.</string>
-    <string name="status_bar_swipe_cursor_info">Desliza por la barra de estado para mover el cursor.</string>
-    <string name="dynamic_variation_slot_count_title">Espacios de variación dinámica</string>
-    <string name="dynamic_variation_slot_count_description">Intenta mostrar %1$d entradas dinámicas entre los botones de la barra de estado.</string>
-    <string name="dynamic_variation_resize_to_content_title">Redimensionar variaciones dinámicas</string>
-    <string name="dynamic_variation_resize_to_content_description">Si está activado, las entradas dinámicas llenan la fila disponible según cuántas se muestren. Si está desactivado, conservan el tamaño de espacio del control deslizante y quedan alineadas a la izquierda.</string>
     <string name="keyboard_theme_tab_colors">Colores</string>
     <string name="keyboard_theme_tab_keys">Teclas</string>
 

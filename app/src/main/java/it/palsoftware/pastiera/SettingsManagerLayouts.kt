@@ -302,15 +302,7 @@ fun SettingsManager.getCustomInputStyles(context: Context): String {
 
     // Load default from predefined_subtypes resource
     return try {
-        val arrayResId = context.resources.getIdentifier(
-            "predefined_subtypes",
-            "array",
-            context.packageName
-        )
-        if (arrayResId == 0) {
-            return ""
-        }
-        val array = context.resources.getStringArray(arrayResId)
+        val array = context.resources.getStringArray(R.array.predefined_subtypes)
         array.joinToString(";")
     } catch (e: Exception) {
         Log.e(TAG, "Error loading predefined subtypes", e)

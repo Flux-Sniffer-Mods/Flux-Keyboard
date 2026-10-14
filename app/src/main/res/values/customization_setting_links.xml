@@ -14,8 +14,6 @@
     <string name="setting_link_haptic_duration">Tap haptic duration</string>
     <string name="setting_link_variation_mappings">Variation mappings</string>
     <string name="setting_link_max_icon_shrink">Maximum icon shrink</string>
-    <string name="setting_link_status_extended_left">Extended status bar: left buttons</string>
-    <string name="setting_link_status_extended_right">Extended status bar: right buttons</string>
     <string name="setting_link_status_pastierina_left">Solderina: left buttons</string>
     <string name="setting_link_status_pastierina_right">Solderina: right buttons</string>
     <string name="setting_link_theme_software_key_rounding">Software keyboard: key rounding</string>

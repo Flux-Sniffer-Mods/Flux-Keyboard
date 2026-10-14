@@ -115,8 +115,6 @@
     <string name="setting_link_haptic_duration">Διάρκεια απτικής απόκρισης</string>
     <string name="setting_link_variation_mappings">Αντιστοιχίσεις παραλλαγών</string>
     <string name="setting_link_max_icon_shrink">Μέγιστη σμίκρυνση εικονιδίων</string>
-    <string name="setting_link_status_extended_left">Εκτεταμένη γραμμή κατάστασης: αριστερά κουμπιά</string>
-    <string name="setting_link_status_extended_right">Εκτεταμένη γραμμή κατάστασης: δεξιά κουμπιά</string>
     <string name="setting_link_status_pastierina_left">Solderina: αριστερά κουμπιά</string>
     <string name="setting_link_status_pastierina_right">Solderina: δεξιά κουμπιά</string>
     <string name="setting_link_theme_software_key_rounding">Πληκτρολόγιο οθόνης: στρογγύλεμα πλήκτρων</string>
@@ -202,7 +200,6 @@
     <string name="recommended_label_auto_shift_field_types">Αυτόματο Shift σε</string>
     <string name="recommended_label_show_add_word_suggestion">Πρόταση προσθήκης νέων λέξεων</string>
     <string name="recommended_label_trackpad_gestures_enabled">Χειρονομίες trackpad</string>
-    <string name="recommended_label_trackpad_provider">Ανάγνωση trackpad</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Οι κατευθύνσεις σάρωσης επιλέγουν προτάσεις</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Σάρωση προς τα κάτω διαγράφει λέξη</string>
     <string name="recommended_label_swipe_to_delete">Σάρωση αριστερά διαγράφει λέξη</string>
@@ -605,7 +602,6 @@
     <string name="recommended_settings_configure_text">Οι προτεινόμενες ρυθμίσεις εφαρμόστηκαν. Να περάσετε από τις επιλογές σας (αυτόματη διόρθωση, GIF, χρώματα), τα επιπλέον που χρειάζονται άδεια και την εξατομίκευση; Παίρνει ένα λεπτό και μπορείτε να το παραλείψετε.</string>
     <string name="recommended_settings_configure_yes">Ρύθμιση</string>
     <string name="recommended_settings_configure_no">Όχι τώρα</string>
-    <string name="recommended_settings_applied">Οι προτεινόμενες ρυθμίσεις εφαρμόστηκαν</string>
     <string name="recommended_settings_failed">Δεν ήταν δυνατή η εφαρμογή των προτεινόμενων ρυθμίσεων</string>
     <string name="auto_correct_accent_matching_description">Οι προτάσεις και οι διορθώσεις θεωρούν τα γράμματα με και χωρίς τόνους ως το ίδιο γράμμα, οπότε το \"cafe\" μπορεί να προτείνει \"café\", το \"resume\" το \"résumé\" και το \"uber\" το \"über\". Όταν είναι ανενεργό, προτείνονται μόνο λέξεις γραμμένες ακριβώς με τα σημάδια που πληκτρολογήσατε.</string>
     <string name="emoji_picker_key_title">Πλήκτρο επιλογέα emoji</string>
@@ -908,8 +904,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">Το επίπεδο emoji και τα σύμβολα ανοίγουν σε ό,τι χρησιμοποιήσατε τελευταία, με αναζήτηση στο A. Τα Q και P γυρίζουν σε όλα τα emoji ανά κατηγορία ή σε συνηθισμένα σύμβολα, βέλη, μαθηματικά, νομίσματα και άλλα. Ό,τι χρησιμοποιείτε μπαίνει στα πρόσφατα.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Κρατήστε ένα emoji, στο πλήκτρο του ή στην οθόνη, για τους τόνους δέρματος. Επιλέξτε παρακάτω έναν προεπιλεγμένο τόνο.</string>
     <string name="flux_tutorial_typing_bullet_private">Συντομεύσεις πλήκτρων για ιδιωτική λειτουργία (Ανώνυμη πληκτρολόγηση και Λειτουργία εκτός σύνδεσης μαζί) και επιλογή από τον δρομέα: ορίστε τις στην Προσαρμογή πλήκτρων.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Φωτισμός πληκτρολογίου και συντομεύσεις (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Με το Shizuku σε λειτουργία, ο φωτισμός πληκτρολογίου του Titan 2 ακολουθεί την οθόνη και τη φωτεινότητά της ή αναβοσβήνει για ειδοποιήσεις, και οι συντομεύσεις τερματίζουν την εφαρμογή μπροστά, εναλλάσσουν την εξοικονόμηση μπαταρίας ή αποσυνδέουν μια εφαρμογή από το δίκτυο. Χωρίς root.</string>
     <string name="flux_tutorial_extras_shizuku_button">Άνοιγμα πρόσβασης στο shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Θέματα πληκτρολογίου: η σελίδα θεμάτων δείχνει ποιο θέμα χρησιμοποιείται σε φωτεινή και σκοτεινή λειτουργία και το ορίζει με ένα πάτημα.</string>
     <string name="root_backlight_brightness_not_kept">Αυτό το τηλέφωνο δεν κρατά φωτεινότητα πληκτρολογίου που ορίζεται μέσω Shizuku: ο φωτισμός ανάβει και σβήνει με την οθόνη, στη φωτεινότητα των ρυθμίσεων του τηλεφώνου.</string>
@@ -1083,7 +1077,6 @@
     <string name="game_mode_import_reading">Αναζήτηση παιχνιδιών</string>
     <string name="game_mode_left_half">Αριστερό μισό του trackpad</string>
     <string name="game_mode_next_profile">Επόμενο προφίλ</string>
-    <string name="game_mode_no_apps">δεν υπάρχουν ακόμη εφαρμογές</string>
     <string name="game_mode_disclaimer">Το πληκτρολόγιο δεν είναι χειριστήριο: δεν έχει πραγματικούς μοχλούς, και όλη τη δουλειά την κάνουν τα πλήκτρα του και τα πλήκτρα έντασης, οπότε η λειτουργία παιχνιδιού ταιριάζει σε παιχνίδια που παίζονται με κουμπιά. Τα αποτελέσματα μπορεί να διαφέρουν. Για την καλύτερη εμπειρία, χρησιμοποίησε χειριστήριο μέσω Bluetooth ή USB, ιδανικά ένα φτιαγμένο για τηλέφωνο σε όρθια θέση ή ένα με κλιπ τηλεφώνου.</string>
     <string name="game_mode_layout_title">Χειρισμός με πληκτρολόγιο</string>
     <string name="game_mode_layout_description">Ποιο πλήκτρο είναι ποιο κουμπί</string>
@@ -1264,7 +1257,6 @@
     <string name="stream_resolution">Ανάλυση μετάδοσης</string>
     <string name="stream_resolution_client">Όπως ζητά το Moonlight</string>
     <string name="stream_resolution_description">Κατά τη μετάδοση, η οθόνη του τηλεφώνου παίρνει το σχήμα του Moonlight client. Το Αυτόματα τρέχει ακριβώς στην ανάλυση που ζητά ο client (ορίζεται στις ρυθμίσεις του Moonlight), μαζί και 4K. Ένα μέγεθος που επιλέγεις εδώ τρέχει το παιχνίδι σε αυτό, κλιμακωμένο στο μέγεθος του client: πιο ελαφρύ για το τηλέφωνο.</string>
-    <string name="games_app_settings">Ρυθμίσεις gaming</string>
     <string name="stream_confirm_title">Σύνδεση με %1$s;</string>
     <string name="stream_confirm_text">Θέλει να κάνει μετάδοση από αυτό το τηλέφωνο.</string>
     <string name="stream_confirm_text_game">Θέλει να παίξει %1$s από αυτό το τηλέφωνο.</string>

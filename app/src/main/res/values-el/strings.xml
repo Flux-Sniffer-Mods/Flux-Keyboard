@@ -14,7 +14,6 @@
 
     <!-- Settings Screen -->
     <string name="settings_title">Ρυθμίσεις</string>
-    <string name="back">Πίσω</string>
     <string name="settings_back_content_description">Πίσω</string>
 
     <!-- Long Press Section -->
@@ -568,7 +567,6 @@
     <string name="quick_launcher_title">Pastiera-QuickLauncher</string>
     <string name="quick_launcher_close">Κλείσιμο</string>
     <string name="quick_launcher_search_placeholder">Αρχίστε να πληκτρολογείτε...</string>
-    <string name="quick_launcher_auto_start_single">Αυτόματη εκκίνηση όταν απομένει μόνο ένα αποτέλεσμα</string>
     <string name="quick_launcher_auto_start_single_title">Αυτόματο άνοιγμα μοναδικής αντιστοίχισης</string>
     <string name="quick_launcher_auto_start_single_description">Όταν η αναζήτηση quick launcher αφήνει μόνο μία εφαρμογή, την εκκινεί χωρίς να πατήσετε Enter.</string>
     <string name="quick_launcher_limit_results_title">Εμφάνιση μόνο κορυφαίων αποτελεσμάτων αναζήτησης</string>
@@ -1319,21 +1317,14 @@ QWERTZ σε φυσικό QWERTY
     <string name="status_bar_buttons_title">Γραμμή κατάστασης</string>
     <string name="status_bar_buttons_description">Solderina ή ελάχιστη λειτουργία, και τα κουμπιά της γραμμής.</string>
     <string name="status_bar_style_section">Γραμμή πληκτρολογίου</string>
-    <string name="extended_status_bar_title">Εκτεταμένη γραμμή κατάστασης</string>
-    <string name="extended_status_bar_features_section">Εκτεταμένες λειτουργίες</string>
     <string name="status_bar_buttons_section">Κουμπιά</string>
     <string name="pastierina_preview_suggestions">Προτάσεις</string>
     <string name="titan2_elite_rounded_corners_title">Στρογγυλεμένες γωνίες Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Κρατά τα στοιχεία ελέγχου Solderina και εκτεταμένης γραμμής κατάστασης μέσα στις στρογγυλεμένες γωνίες οθόνης του Elite.</string>
-    <string name="status_bar_slot_left">Αριστερό slot</string>
-    <string name="status_bar_slot_right_1">Δεξί slot 1</string>
-    <string name="status_bar_slot_right_2">Δεξί slot 2</string>
     <string name="status_bar_slots_left">Αριστερά κουμπιά</string>
     <string name="status_bar_slots_right">Δεξιά κουμπιά</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Επιλέξτε ποια κουμπιά εμφανίζονται στην αριστερή και δεξιά άκρη της συμπαγούς γραμμής Solderina.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina: αριστερά κουμπιά</string>
-    <string name="pastierina_status_bar_slots_right">Solderina: δεξιά κουμπιά</string>
     <string name="status_bar_slot_add">Προσθήκη κουμπιού γραμμής κατάστασης</string>
     <string name="status_bar_slot_remove">Αφαίρεση κουμπιού γραμμής κατάστασης</string>
     <string name="status_bar_button_none">Κανένα</string>
@@ -1361,13 +1352,6 @@ QWERTZ σε φυσικό QWERTY
     <string name="status_bar_button_undo_description">Αποστολή Ctrl+Z</string>
     <string name="status_bar_button_redo">Επανάληψη</string>
     <string name="status_bar_button_redo_description">Αποστολή Ctrl+Y</string>
-    <string name="status_bar_variations_visible_title">Εμφάνιση παραλλαγών</string>
-    <string name="status_bar_variations_visible_description">Εμφανίζει τη ρυθμισμένη γραμμή παραλλαγών ανάμεσα στα κουμπιά γραμμής κατάστασης. Όταν είναι ανενεργό, τα κουμπιά χρησιμοποιούν ολόκληρη τη γραμμή κατάστασης· ο έλεγχος δρομέα με σάρωση εξακολουθεί να λειτουργεί.</string>
-    <string name="status_bar_swipe_cursor_info">Σαρώστε πάνω στη γραμμή κατάστασης για να μετακινήσετε τον δρομέα.</string>
-    <string name="dynamic_variation_slot_count_title">Δυναμικά slot παραλλαγών</string>
-    <string name="dynamic_variation_slot_count_description">Στόχος εμφάνισης %1$d δυναμικών καταχωρίσεων ανάμεσα στα κουμπιά γραμμής κατάστασης.</string>
-    <string name="dynamic_variation_resize_to_content_title">Αλλαγή μεγέθους δυναμικών παραλλαγών</string>
-    <string name="dynamic_variation_resize_to_content_description">Όταν είναι ενεργό, οι δυναμικές καταχωρίσεις γεμίζουν τη διαθέσιμη γραμμή με βάση το πόσες εμφανίζονται. Όταν είναι ανενεργό, οι καταχωρίσεις κρατούν το μέγεθος slot από τον slider και μένουν στοιχισμένες αριστερά.</string>
     <string name="modifier_indicators_title">Ενδείξεις τροποποιητών</string>
     <string name="modifier_indicators_description">Επιλέξτε πού εμφανίζεται η κατάσταση Shift, Ctrl, Alt και SYM για το hardware πληκτρολόγιο.</string>
     <string name="modifier_indicators_bottom_strip">LED κάτω λωρίδας</string>

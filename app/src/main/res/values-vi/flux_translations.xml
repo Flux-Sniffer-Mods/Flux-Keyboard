@@ -115,8 +115,6 @@
     <string name="setting_link_haptic_duration">Thời lượng rung khi chạm</string>
     <string name="setting_link_variation_mappings">Gán biến thể</string>
     <string name="setting_link_max_icon_shrink">Mức thu nhỏ biểu tượng tối đa</string>
-    <string name="setting_link_status_extended_left">Thanh trạng thái mở rộng: nút bên trái</string>
-    <string name="setting_link_status_extended_right">Thanh trạng thái mở rộng: nút bên phải</string>
     <string name="setting_link_status_pastierina_left">Solderina: nút bên trái</string>
     <string name="setting_link_status_pastierina_right">Solderina: nút bên phải</string>
     <string name="setting_link_theme_software_key_rounding">Bàn phím ảo: bo tròn phím</string>
@@ -202,7 +200,6 @@
     <string name="recommended_label_auto_shift_field_types">Tự động Shift trong</string>
     <string name="recommended_label_show_add_word_suggestion">Đề xuất thêm từ mới</string>
     <string name="recommended_label_trackpad_gestures_enabled">Cử chỉ trackpad</string>
-    <string name="recommended_label_trackpad_provider">Đọc trackpad</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Hướng vuốt chọn gợi ý</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Vuốt xuống xóa một từ</string>
     <string name="recommended_label_swipe_to_delete">Vuốt sang trái xóa một từ</string>
@@ -605,7 +602,6 @@
     <string name="recommended_settings_configure_text">Đã áp dụng cài đặt đề xuất. Xem qua lựa chọn của bạn (tự sửa, GIF, màu sắc), các tiện ích cần quyền và phần cá nhân hóa? Mất khoảng một phút, và bạn có thể bỏ qua.</string>
     <string name="recommended_settings_configure_yes">Thiết lập</string>
     <string name="recommended_settings_configure_no">Để sau</string>
-    <string name="recommended_settings_applied">Đã áp dụng cài đặt đề xuất</string>
     <string name="recommended_settings_failed">Không thể áp dụng cài đặt đề xuất</string>
     <string name="text_input_section_capitalization">Viết hoa</string>
     <string name="text_input_section_spacing_punctuation">Khoảng cách &amp; dấu câu</string>
@@ -1164,16 +1160,12 @@
     <string name="trackpad_delete_swipe_threshold_title">Vuốt xóa</string>
     <string name="trackpad_delete_swipe_threshold_description">Khoảng cách cần vuốt sang trái để xóa từ trước đó.</string>
     <string name="status_bar_style_section">Thanh bàn phím</string>
-    <string name="extended_status_bar_title">Thanh trạng thái mở rộng</string>
-    <string name="extended_status_bar_features_section">Tính năng mở rộng</string>
     <string name="status_bar_buttons_section">Nút</string>
     <string name="pastierina_preview_suggestions">Gợi ý</string>
     <string name="titan2_elite_rounded_corners_title">Góc bo tròn Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Bo tròn các góc dưới của thanh trạng thái cho khớp với góc bo tròn màn hình của Elite.</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Chọn các nút xuất hiện ở mép trái và phải của thanh Solderina gọn.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina: nút bên trái</string>
-    <string name="pastierina_status_bar_slots_right">Solderina: nút bên phải</string>
     <string name="status_bar_button_minimal_ui">Chế độ tối giản</string>
     <string name="status_bar_button_software_keyboard_mode">Chế độ bàn phím</string>
     <string name="status_bar_button_software_keyboard_mode_description">Tạm mở / đóng bàn phím trên màn hình (Ctrl+B)</string>
@@ -1528,8 +1520,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">Lớp emoji và ký hiệu mở trên những gì bạn dùng gần nhất, tìm kiếm trên A. Q và P lật qua mọi emoji theo danh mục, hoặc ký hiệu thông dụng, mũi tên, toán học, tiền tệ và hơn nữa. Những gì bạn dùng được thêm vào gần đây.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Giữ một emoji, trên phím hoặc trên màn hình, để chọn tông da. Chọn tông da mặc định bên dưới.</string>
     <string name="flux_tutorial_typing_bullet_private">Phím tắt cho chế độ riêng tư (gõ ẩn danh và chế độ ngoại tuyến cùng lúc) và chọn từ con trỏ: đặt trong Tùy chỉnh phím.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Đèn bàn phím và lối tắt (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Khi Shizuku chạy, đèn bàn phím của Titan 2 theo màn hình và độ sáng của nó, hoặc nháy khi có thông báo, và lối tắt có thể buộc dừng ứng dụng đang mở, bật tắt Tiết kiệm pin hoặc ngắt mạng một ứng dụng. Không cần root.</string>
     <string name="flux_tutorial_extras_shizuku_button">Mở Truy cập shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Giao diện bàn phím: trang giao diện cho biết giao diện nào đang dùng ở chế độ sáng và tối, và đặt nó bằng một lần chạm.</string>
     <string name="root_backlight_brightness_not_kept">Điện thoại này không giữ độ sáng bàn phím đặt qua Shizuku: đèn vẫn bật và tắt cùng màn hình, theo độ sáng trong cài đặt của điện thoại.</string>
@@ -1703,7 +1693,6 @@
     <string name="game_mode_import_reading">Đang tìm trò chơi</string>
     <string name="game_mode_left_half">Nửa trái bàn di chuột</string>
     <string name="game_mode_next_profile">Hồ sơ tiếp theo</string>
-    <string name="game_mode_no_apps">chưa có ứng dụng</string>
     <string name="game_mode_disclaimer">Bàn phím không phải tay cầm: nó không có cần analog thật, và mọi việc đều do các phím và phím âm lượng đảm nhận, nên chế độ chơi game hợp với các game chơi bằng nút. Hiệu quả có thể khác nhau. Để có trải nghiệm tốt nhất, hãy dùng tay cầm qua Bluetooth hoặc USB, lý tưởng là loại làm cho điện thoại cầm dọc hoặc loại có kẹp điện thoại.</string>
     <string name="game_mode_layout_title">Điều khiển bằng bàn phím</string>
     <string name="game_mode_layout_description">Phím nào là nút nào</string>
@@ -1884,7 +1873,6 @@
     <string name="stream_resolution">Độ phân giải phát trực tuyến</string>
     <string name="stream_resolution_client">Theo yêu cầu của Moonlight</string>
     <string name="stream_resolution_description">Khi phát trực tuyến, màn hình điện thoại lấy hình dạng của Moonlight client. Tự động chạy đúng độ phân giải client yêu cầu (đặt trong cài đặt của Moonlight), kể cả 4K. Kích thước chọn ở đây cho game chạy ở kích thước đó, rồi phóng lên theo client: nhẹ hơn cho điện thoại.</string>
-    <string name="games_app_settings">Cài đặt chơi game</string>
     <string name="stream_confirm_title">Kết nối %1$s?</string>
     <string name="stream_confirm_text">Thiết bị muốn phát trực tuyến từ điện thoại này.</string>
     <string name="stream_confirm_text_game">Thiết bị muốn chơi %1$s từ điện thoại này.</string>

@@ -20,8 +20,6 @@
     <string name="setting_link_haptic_duration">Durata della vibrazione al tocco</string>
     <string name="setting_link_variation_mappings">Assegnazioni delle varianti</string>
     <string name="setting_link_max_icon_shrink">Riduzione massima delle icone</string>
-    <string name="setting_link_status_extended_left">Barra di stato estesa: pulsanti a sinistra</string>
-    <string name="setting_link_status_extended_right">Barra di stato estesa: pulsanti a destra</string>
     <string name="setting_link_status_pastierina_left">Solderina: pulsanti a sinistra</string>
     <string name="setting_link_status_pastierina_right">Solderina: pulsanti a destra</string>
     <string name="setting_link_theme_software_key_rounding">Tastiera su schermo: arrotondamento dei tasti</string>
@@ -107,7 +105,6 @@
     <string name="recommended_label_auto_shift_field_types">Shift automatico in</string>
     <string name="recommended_label_show_add_word_suggestion">Proponi di aggiungere parole nuove</string>
     <string name="recommended_label_trackpad_gestures_enabled">Gesti del trackpad</string>
-    <string name="recommended_label_trackpad_provider">Lettura del trackpad</string>
     <string name="recommended_label_trackpad_suggestion_swipe_directions">Le direzioni di scorrimento scelgono i suggerimenti</string>
     <string name="recommended_label_trackpad_swipe_down_deletes_word">Scorrere verso il basso cancella una parola</string>
     <string name="recommended_label_swipe_to_delete">Scorrere a sinistra cancella una parola</string>
@@ -846,16 +843,12 @@
     <string name="trackpad_delete_swipe_threshold_title">Scorrimento per cancellare</string>
     <string name="trackpad_delete_swipe_threshold_description">Distanza necessaria scorrendo a sinistra per cancellare la parola precedente.</string>
     <string name="status_bar_style_section">Barra della tastiera</string>
-    <string name="extended_status_bar_title">Barra di stato estesa</string>
-    <string name="extended_status_bar_features_section">Funzioni estese</string>
     <string name="status_bar_buttons_section">Pulsanti</string>
     <string name="pastierina_preview_suggestions">Suggerimenti</string>
     <string name="titan2_elite_rounded_corners_title">Angoli arrotondati del Titan 2 Elite</string>
     <string name="titan2_elite_rounded_corners_description">Arrotonda gli angoli inferiori della barra di stato per seguire gli angoli arrotondati dello schermo dell’Elite.</string>
     <string name="pastierina_status_bar_buttons_title">Solderina</string>
     <string name="pastierina_status_bar_buttons_description">Scegli quali pulsanti compaiono ai bordi sinistro e destro della barra compatta Solderina.</string>
-    <string name="pastierina_status_bar_slots_left">Solderina: pulsanti a sinistra</string>
-    <string name="pastierina_status_bar_slots_right">Solderina: pulsanti a destra</string>
     <string name="status_bar_button_minimal_ui">Modalità minima</string>
     <string name="status_bar_button_software_keyboard_mode">Modalità tastiera</string>
     <string name="status_bar_button_software_keyboard_mode_description">Apri / chiudi temporaneamente la tastiera su schermo (Ctrl+B)</string>
@@ -1045,8 +1038,6 @@
     <string name="flux_tutorial_emoji_bullet_pages">Il livello emoji e i simboli si aprono su ciò che hai usato per ultimo, con la ricerca su A. Q e P sfogliano tutte le emoji per categoria, o simboli comuni, frecce, matematica, valute e altro. Ciò che usi entra nei recenti.</string>
     <string name="flux_tutorial_emoji_bullet_tones">Tieni premuta un\'emoji, sul suo tasto o sullo schermo, per le tonalità della pelle. Scegli sotto una tonalità predefinita.</string>
     <string name="flux_tutorial_typing_bullet_private">Scorciatoie da tastiera per la modalità privata (digitazione in incognito e modalità offline insieme) e per selezionare dal cursore: impostale in Personalizza tasti.</string>
-    <string name="flux_tutorial_extras_shizuku_title">Luce della tastiera e scorciatoie (Shizuku)</string>
-    <string name="flux_tutorial_extras_shizuku_text">Con Shizuku attivo, la luce della tastiera del Titan 2 segue lo schermo e la sua luminosità, o lampeggia per le notifiche, e le scorciatoie possono forzare l\'arresto dell\'app in primo piano, attivare il risparmio energetico o scollegare un\'app dalla rete. Senza root.</string>
     <string name="flux_tutorial_extras_shizuku_button">Apri Accesso alla shell</string>
     <string name="flux_tutorial_personalise_bullet_theme">Temi della tastiera: la pagina dei temi mostra quale tema è in uso in modalità chiara e scura, e lo imposta con un tocco.</string>
     <string name="root_backlight_brightness_not_kept">Questo telefono non mantiene una luminosità della tastiera impostata tramite Shizuku: la luce si accende e si spegne comunque con lo schermo, alla luminosità delle impostazioni del telefono.</string>
@@ -1220,7 +1211,6 @@
     <string name="game_mode_import_reading">Ricerca dei giochi</string>
     <string name="game_mode_left_half">Metà sinistra del trackpad</string>
     <string name="game_mode_next_profile">Profilo successivo</string>
-    <string name="game_mode_no_apps">ancora nessuna app</string>
     <string name="game_mode_disclaimer">La tastiera non è un controller: non ha veri stick, e i suoi tasti e quelli del volume fanno tutto il lavoro, quindi la modalità gioco è adatta ai giochi che si giocano con i pulsanti. I risultati possono variare. Per un\'esperienza migliore, usa un controller via Bluetooth o USB, idealmente uno pensato per un telefono tenuto in verticale o uno con supporto a clip per il telefono.</string>
     <string name="game_mode_layout_title">Comandi da tastiera</string>
     <string name="game_mode_layout_description">Quale tasto è quale pulsante</string>
@@ -1401,7 +1391,6 @@
     <string name="stream_resolution">Risoluzione dello streaming</string>
     <string name="stream_resolution_client">Quella chiesta da Moonlight</string>
     <string name="stream_resolution_description">Durante lo streaming lo schermo del telefono prende la forma del client Moonlight. Automatica gira esattamente alla risoluzione chiesta dal client (nelle impostazioni di Moonlight), 4K compreso. Una dimensione scelta qui fa girare il gioco a quella dimensione, scalata a quella del client: più leggero per il telefono.</string>
-    <string name="games_app_settings">Impostazioni di gioco</string>
     <string name="stream_confirm_title">Collegare %1$s?</string>
     <string name="stream_confirm_text">Vuole trasmettere da questo telefono.</string>
     <string name="stream_confirm_text_game">Vuole giocare a %1$s da questo telefono.</string>
