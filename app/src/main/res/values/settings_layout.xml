@@ -326,6 +326,7 @@
     <string name="game_remap_reset">Reset all keys</string>
     <string name="game_remap_reset_description">Every key back to the layout\'s button</string>
     <string name="game_remap_press_key">Press the key on the keyboard (with a modifier held if you like), or tap it below.</string>
+    <string name="game_remap_dolphin_note">Dolphin reads the keys from its own settings: changes here are written there the next time a Dolphin game starts from Games or Gaming settings opens.</string>
     <string name="game_remap_view_keyboard">Keyboard</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Each button shows the keys that press it. Tap a button to pick its key, alone or with a modifier: the keys that pressed it before then press nothing.</string>
@@ -472,7 +473,8 @@
     <string name="dolphin_pad_row_description">Give the %1$s\'s buttons and movements keys of this game\'s own, such as a wheelie button. Kept as a Dolphin profile for this game.</string>
     <string name="dolphin_pad_hint">Tap a button to give it a key, alone or with a modifier. Buttons with this game\'s own key are outlined, and a key given here presses only that button.</string>
     <string name="dolphin_pad_no_key">No key</string>
-    <string name="dolphin_pad_saved">Saved in Dolphin for this game.</string>
+    <string name="dolphin_pad_saved">Saved. Dolphin uses it from the next time this game starts from Games.</string>
+    <string name="dolphin_game_applied_note">Applied each time this game starts from Games: its controller, keys and on-screen controls go into Dolphin then, with nothing to set in Dolphin. Opened from Dolphin itself, a game plays with the controls of the last game started from Games. Invisible on-screen controls are needed for sticks and keys placed on the screen.</string>
     <string name="dolphin_overlay_title">Dolphin\'s on-screen controls</string>
     <string name="dolphin_overlay_off">Hidden</string>
     <string name="dolphin_overlay_invisible">Invisible (for sticks and keys placed on them)</string>

@@ -128,7 +128,8 @@ internal fun GameLayoutRemapper(modifier: Modifier, onBack: () -> Unit) {
         base = { code, layer -> FluxLayout.defaultControlFor(code, FluxLayout.modifiersOf(layer)) },
         onChange = { FluxLayout.setOverrides(context, it) },
         onBack = onBack,
-        modifier = modifier
+        modifier = modifier,
+        footer = stringResource(R.string.game_remap_dolphin_note)
     )
 }
 
@@ -145,7 +146,9 @@ internal fun KeyLayoutEditor(
     onChange: (Map<Pair<Layer, Int>, Control?>) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier,
-    note: String? = null
+    note: String? = null,
+    /** A last note under the drawing (where the keys go, and when). */
+    footer: String? = null
 ) {
     var overrides by remember { mutableStateOf(initial) }
     var layer by remember { mutableStateOf(Layer.NONE) }
@@ -196,6 +199,7 @@ internal fun KeyLayoutEditor(
         }
         FluxNote(stringResource(R.string.game_remap_hint))
         }
+        footer?.let { FluxNote(it) }
         FluxActionRow(
             linkId = null,
             icon = "≡",

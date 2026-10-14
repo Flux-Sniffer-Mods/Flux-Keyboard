@@ -753,6 +753,8 @@ private fun DolphinControllerRows(profile: GameProfile, onChanged: (GameProfile)
         onChanged(changed)
         apply(changed, context.getString(R.string.game_mode_wii_set, names[index]))
     }
+    // When it all takes effect, and what doesn't follow
+    FluxNote(stringResource(R.string.dolphin_game_applied_note))
     // Dolphin's on-screen controls in this game, set as it starts from Games
     val overlays = listOf(
         stringResource(R.string.dolphin_overlay_off),
