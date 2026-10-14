@@ -36,15 +36,17 @@ class GameLaunchIntentTest {
 
     @Test
     fun gameHubGetsItsSteamIdAndAutoStart() {
-        val intent = roundTrip(GameFolders.intentFor(GameFolders.Player.GAMEHUB, "gamehub.lite", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "504230", "STEAM")!!)
+        val intent = roundTrip(GameFolders.intentFor(GameFolders.Player.GAMEHUB_LITE, "gamehub.lite", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "504230", "STEAM")!!)
         assertEquals("504230", intent.getStringExtra("steamAppId"))
         // As ES-DE sends it: the Steam ID as the local one too, or GameHub Lite stops at the game's page
         assertEquals("504230", intent.getStringExtra("localGameId"))
         assertTrue(intent.getBooleanExtra("autoStartGame", false))
         // A game of GameHub's own: its local ID alone
-        val own = roundTrip(GameFolders.intentFor(GameFolders.Player.GAMEHUB, "gamehub.lite", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "local_f724884f", "LOCAL")!!)
+        val own = roundTrip(GameFolders.intentFor(GameFolders.Player.GAMEHUB_LITE, "gamehub.lite", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "local_f724884f", "LOCAL")!!)
         assertEquals("local_f724884f", own.getStringExtra("localGameId"))
         assertEquals(null, own.getStringExtra("steamAppId"))
+        // The official GameHub: no way in, so its games open it
+        assertEquals(null, GameFolders.intentFor(GameFolders.Player.GAMEHUB, "com.xiaoji.egggame", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "504230", "STEAM"))
     }
 
     @Test

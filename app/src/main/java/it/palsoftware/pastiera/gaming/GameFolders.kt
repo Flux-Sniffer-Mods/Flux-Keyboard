@@ -29,12 +29,16 @@ object GameFolders {
         GAMENATIVE("GameNative", listOf("GameNative", "steam", "epic", "gog", "amazon", "windows"),
             setOf("steam", "epic", "gog", "amazon", "pcgame"),
             listOf("app.gamenative" to "app.gamenative.MainActivity")),
+        // GameHub Lite's builds, those named as benchmark apps too (a trick for more speed on some
+        // phones), as ES-DE finds them: its exported games in a folder of their own
+        GAMEHUB_LITE("GameHub Lite", listOf("GameHub Lite", "GameHubLite", "GameHub-Lite"),
+            setOf("steam", "local"),
+            (listOf("gamehub.lite", "emuready.gamehub.lite") + GAMEHUB_LITE_DISGUISED)
+                .map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
+        /** The official GameHub: its games open it (it has no way in to start one). */
         GAMEHUB("GameHub", listOf("GameHub"),
             setOf("steam", "local"),
-            // GameHub Lite's builds, those named as benchmark apps too (a trick for more speed on
-            // some phones), as ES-DE finds them
-            (listOf("gamehub.lite", "emuready.gamehub.lite") + GAMEHUB_LITE_DISGUISED + GAMEHUB_OFFICIAL)
-                .map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
+            listOf(GAMEHUB_OFFICIAL to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity")),
         DOLPHIN("Dolphin", listOf("Dolphin", "gc", "wii"),
             setOf("iso", "gcm", "ciso", "rvz", "wbfs", "wia", "tgc", "gcz", "dol", "elf", "wad"),
             listOf("org.dolphinemu.dolphinemu", "org.dolphinemu.mmjr").map { it to "org.dolphinemu.dolphinemu.ui.main.TvMainActivity" }),
@@ -52,13 +56,16 @@ object GameFolders {
          * The installed app that plays these, if any. A launcher installed under a package of its
          * own (a fork or another build) is found by its name, as the launchers list finds it.
          */
+        /** A game launcher (its games are IDs it knows), not an emulator (its games are files). */
+        val launcher: Boolean get() = this == GAMENATIVE || this == GAMEHUB || this == GAMEHUB_LITE
+
         fun installed(context: Context): Pair<String, String>? {
             val pm = context.packageManager
             // The app with the screen that starts its games (GameHub Lite under another app's name
             // is only it when it has GameHub's game screen: the real app of that name isn't)
             activities.firstOrNull { (pkg, activity) -> runCatching { pm.getActivityInfo(ComponentName(pkg, activity), 0) }.isSuccess }
                 ?.let { return it }
-            if (this != GAMENATIVE && this != GAMEHUB) return null
+            if (!launcher) return null
             val key = label.lowercase()
             val app = GameLibrary.launchers(context).firstOrNull { it.appName.lowercase().replace(" ", "").contains(key) } ?: return null
             val activity = activities.map { it.second }.firstOrNull { name ->
@@ -77,8 +84,8 @@ object GameFolders {
     /** The official GameHub is installed and GameHub Lite isn't: worth recommending Lite. */
     fun gameHubLiteMissing(context: Context): Boolean {
         fun has(pkg: String, activity: String) = runCatching { context.packageManager.getActivityInfo(ComponentName(pkg, activity), 0) }.isSuccess
-        return Player.GAMEHUB.activities.any { (pkg, activity) -> pkg == GAMEHUB_OFFICIAL && has(pkg, activity) } &&
-            Player.GAMEHUB.activities.none { (pkg, activity) -> pkg != GAMEHUB_OFFICIAL && has(pkg, activity) }
+        return Player.GAMEHUB.activities.any { (pkg, activity) -> has(pkg, activity) } &&
+            Player.GAMEHUB_LITE.activities.none { (pkg, activity) -> has(pkg, activity) }
     }
 
     /** A folder of the user's own (the one set in a launcher or emulator), and who plays it (null: by its names). */
@@ -114,7 +121,7 @@ object GameFolders {
     fun installedPlayers(context: Context): List<String> = Player.entries.filter { it.installed(context) != null }.map { it.label }
 
     /** A launcher (it starts games by ID), not an emulator (it starts a game's file). */
-    fun isLauncher(label: String): Boolean = label == Player.GAMENATIVE.label || label == Player.GAMEHUB.label
+    fun isLauncher(label: String): Boolean = Player.entries.any { it.label == label && it.launcher }
 
         /** The players a folder can be set to, by name. */
     val playerNames: List<String> get() = Player.entries.map { it.label }
@@ -179,8 +186,10 @@ object GameFolders {
         // Flux Keyboard's and ES-DE's folders hold a folder per player; your own may hold the games themselves
         val custom = custom(context)
         val ownRoots = custom.joinToString(" ") { "\"${it.path.replace("\"", "")}\"" }
-        // Folders made before .nomedia was: their covers and icons out of the gallery too
-        AdbShell.run("[ -d \"$ROOT\" ] && for d in \"$ROOT\" \"$ROOT\"/*/; do [ -f \"\${d%/}/.nomedia\" ] || touch \"\${d%/}/.nomedia\"; done; true", 3_000)
+        // Folders made before a player had one (GameHub Lite's own) made too, and folders made
+        // before .nomedia was: their covers and icons out of the gallery too
+        val dirs = Player.entries.joinToString(" ") { "\"$ROOT/${it.folders.first()}\"" }
+        AdbShell.run("[ -d \"$ROOT\" ] && { mkdir -p $dirs; for d in \"$ROOT\" \"$ROOT\"/*/; do [ -f \"\${d%/}/.nomedia\" ] || touch \"\${d%/}/.nomedia\"; done; }; true", 3_000)
         val listing = AdbShell.run(
             "{ for d in \"$ROOT\" \"$ES_DE_ROMS\"; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 2 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; " +
                 (if (custom.isEmpty()) "" else "for d in $ownRoots; do [ -d \"\$d\" ] && find \"\$d\" -mindepth 1 -maxdepth 3 -type f ! -name '.*' 2>/dev/null; done; ") +
@@ -193,10 +202,15 @@ object GameFolders {
             10_000
         ) ?: return emptyList()
         return parse(listing, custom).map { found ->
-            // Steam games exported where GameNative's go, with only GameHub Lite to start them
-            if (found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB in players &&
-                found.path.endsWith(".steam", ignoreCase = true)
-            ) found.copy(player = Player.GAMEHUB) else found
+            when {
+                // Steam games exported where GameNative's go, with only GameHub Lite to start them
+                found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB_LITE in players &&
+                    found.path.endsWith(".steam", ignoreCase = true) -> found.copy(player = Player.GAMEHUB_LITE)
+                // In GameHub's folder (where GameHub Lite's went before it had its own): only GameHub
+                // Lite exports games, so it starts them when it's installed
+                found.player == Player.GAMEHUB && Player.GAMEHUB_LITE in players -> found.copy(player = Player.GAMEHUB_LITE)
+                else -> found
+            }
         }.filter { it.player in players }.mapNotNull { found ->
             val (pkg, activity) = players[found.player] ?: return@mapNotNull null
             // An emulator's game by its real name (its ID looked up, or the name it carries), not its file's
@@ -230,10 +244,10 @@ object GameFolders {
             val player = assigned ?: folders.drop(folders.indexOf("steamapps") + 1).firstNotNullOfOrNull { folder ->
                 Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && "steam" in p.extensions }
             } ?: (if (top == null) Player.GAMENATIVE else return@mapNotNull null)
-            if (player != Player.GAMENATIVE && player != Player.GAMEHUB) return@mapNotNull null
+            if (!player.launcher) return@mapNotNull null
             return@mapNotNull Found(content.ifEmpty { id }, player, path.substringBeforeLast('.') + ".steam", id)
         }
-        fun takes(p: Player) = extension in p.extensions || p == Player.GAMEHUB
+        fun takes(p: Player) = extension in p.extensions || p == Player.GAMEHUB || p == Player.GAMEHUB_LITE
         val player = assigned?.takeIf { takes(it) } ?: folders.firstNotNullOfOrNull { folder ->
             Player.entries.firstOrNull { p -> p.folders.any { it.lowercase() == folder } && takes(p) }
         } ?: return@mapNotNull null
@@ -271,9 +285,9 @@ object GameFolders {
             "epic" -> "EPIC"; "gog" -> "GOG"; "amazon" -> "AMAZON"; "pcgame" -> "CUSTOM_GAME"
             "local" -> "LOCAL"
             // GameHub's own games have IDs of their own; a Steam game's is a number
-            else -> if (game.player == Player.GAMEHUB && game.content.any { !it.isDigit() }) "LOCAL" else "STEAM"
+            else -> if ((game.player == Player.GAMEHUB || game.player == Player.GAMEHUB_LITE) && game.content.any { !it.isDigit() }) "LOCAL" else "STEAM"
         }
-        val data = if (game.player == Player.GAMENATIVE || game.player == Player.GAMEHUB) null else documentUri(game.path) ?: return null
+        val data = if (game.player.launcher) null else documentUri(game.path) ?: return null
         return intentFor(game.player, pkg, activity, data, game.content, source)
     }
 
@@ -288,8 +302,10 @@ object GameFolders {
             // As ES-DE starts them: a Steam game's ID as both its Steam and its local game ID
             // (GameHub Lite only opens the game's page given the Steam one alone), a game of
             // GameHub's own by its local ID
-            Player.GAMEHUB -> Intent("gamehub.lite.LAUNCH_GAME").putExtra("autoStartGame", true).apply {
-                if (id.isNullOrEmpty() || pkg == GAMEHUB_OFFICIAL) return null
+            // The official GameHub: no way in to start a game (its game opens it)
+            Player.GAMEHUB -> return null
+            Player.GAMEHUB_LITE -> Intent("gamehub.lite.LAUNCH_GAME").putExtra("autoStartGame", true).apply {
+                if (id.isNullOrEmpty()) return null
                 if (source != "LOCAL") putExtra("steamAppId", id)
                 putExtra("localGameId", id)
             }
@@ -301,7 +317,7 @@ object GameFolders {
             Player.EDEN -> Intent("android.nfc.action.TECH_DISCOVERED").setData(data ?: return null)
         }
         // Emulators read the game as their screen is made: a fresh task, not one brought back
-        if (player != Player.GAMENATIVE && player != Player.GAMEHUB) {
+        if (!player.launcher) {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
         return intent.setComponent(ComponentName(pkg, activity)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -315,7 +331,7 @@ object GameFolders {
     fun customGame(context: Context, name: String, playerLabel: String, file: Uri?, id: String?, source: String?): GameLibrary.Game? {
         val player = Player.entries.firstOrNull { it.label == playerLabel } ?: return null
         val (pkg, activity) = player.installed(context) ?: return null
-        val launcher = player == Player.GAMENATIVE || player == Player.GAMEHUB
+        val launcher = player.launcher
         var gameId = id?.trim()?.takeIf { it.isNotEmpty() }
         var gameSource = source
         if (launcher && file != null) {

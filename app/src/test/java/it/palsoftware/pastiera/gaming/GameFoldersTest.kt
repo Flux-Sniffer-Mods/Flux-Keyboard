@@ -55,6 +55,19 @@ class GameFoldersTest {
     }
 
     @Test
+    fun gameHubLitesGamesHaveAFolderOfTheirOwn() {
+        val found = GameFolders.parse(listOf(
+            "$root/GameHub Lite/Celeste.steam\t504230",
+            "$root/GameHub Lite/steam/Hades.local\tlocal_f724884f",
+            "$root/GameHub/Hollow Knight.steam\t367520"
+        ).joinToString("\n"))
+        assertEquals(
+            listOf("Celeste" to GameFolders.Player.GAMEHUB_LITE, "Hades" to GameFolders.Player.GAMEHUB_LITE, "Hollow Knight" to GameFolders.Player.GAMEHUB),
+            found.map { it.name to it.player }
+        )
+    }
+
+    @Test
     fun gameHubsGamesAreItsOwnInFoldersOfTheirOwnAndWithoutAnId() {
         val listing = listOf(
             "$root/GameHub/steam/Hollow Knight.steam\t367520",
