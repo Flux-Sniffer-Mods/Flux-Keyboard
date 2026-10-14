@@ -453,6 +453,24 @@ object GameProfiles {
     }
 
     /**
+     * Games found started another way now (the official GameHub's moved to GameHub Lite or
+     * back): each profile with an old launch in [moved] takes its new one and app, set up or not.
+     */
+    fun relaunch(context: Context, moved: Map<String, GameLibrary.Game>) {
+        if (moved.isEmpty()) return
+        val profiles = all(context)
+        var changed = 0
+        val updated = profiles.map { profile ->
+            val game = profile.launch?.let { moved[it] } ?: return@map profile
+            changed++
+            if (!profile.pending && !profile.own) ensureApp(context, game.packageName, context.appLabel(game.packageName))
+            profile.copy(launch = game.launch, packages = setOf(game.packageName))
+        }
+        if (changed > 0) saveAll(context, updated)
+        FluxLog.w("GameProfiles", "$changed games moved to ${moved.values.firstOrNull()?.packageName}")
+    }
+
+    /**
      * The game [game] picked to add: the one found already, else a new one (not saved yet),
      * playing with its app's settings, made for the app if it has none (Flux Keyboard's own
      * player has none).

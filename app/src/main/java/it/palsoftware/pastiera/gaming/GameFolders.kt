@@ -36,7 +36,7 @@ object GameFolders {
             setOf("steam", "local"),
             (listOf("gamehub.lite", "emuready.gamehub.lite") + GAMEHUB_LITE_DISGUISED)
                 .map { it to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity" }),
-        /** The official GameHub: its games open it (it has no way in to start one). */
+        /** The official GameHub: its games open it (it has no way in to start one), or start in GameHub Lite. */
         GAMEHUB("GameHub", listOf("GameHub"),
             setOf("steam", "local"),
             listOf(GAMEHUB_OFFICIAL to "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity")),
@@ -66,7 +66,8 @@ object GameFolders {
             // is only it when it has GameHub's game screen: the real app of that name isn't)
             activities.firstOrNull { (pkg, activity) -> runCatching { pm.getActivityInfo(ComponentName(pkg, activity), 0) }.isSuccess }
                 ?.let { return it }
-            if (!launcher) return null
+            // The official GameHub by its package only: GameHub Lite's name holds "GameHub" too
+            if (!launcher || this == GAMEHUB) return null
             val key = label.lowercase()
             val app = GameLibrary.launchers(context).firstOrNull { it.appName.lowercase().replace(" ", "").contains(key) } ?: return null
             val activity = activities.map { it.second }.firstOrNull { name ->
@@ -81,6 +82,36 @@ object GameFolders {
 
     /** GameHub Lite built under benchmark apps' names, for the speed some phones give those. */
     val GAMEHUB_LITE_DISGUISED = listOf("com.antutu.ABenchMark", "com.antutu.benchmark.full", "com.ludashi.aibench", "com.tencent.ig")
+
+    private const val KEY_GAMEHUB_IN_LITE = "gamehub_games_in_lite"
+
+    /** The official GameHub's exported games start in GameHub Lite (when both are installed). */
+    fun gameHubInLite(context: Context): Boolean =
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).getBoolean(KEY_GAMEHUB_IN_LITE, true)
+
+    /**
+     * Where the official GameHub's exported games start: the games found already moved with
+     * them, set up or not. Blocking: reads the folders.
+     */
+    fun setGameHubInLite(context: Context, lite: Boolean) {
+        val before = scan(context, !lite)
+        it.palsoftware.pastiera.SettingsManager.getPreferences(context).edit().putBoolean(KEY_GAMEHUB_IN_LITE, lite).apply()
+        val after = scan(context, lite) ?: return
+        if (before != null && before.size == after.size) {
+            val moved = before.zip(after).filter { (old, new) -> old.launch != null && new.launch != null && old.launch != new.launch }
+                .associate { (old, new) -> old.launch!! to new }
+            GameProfiles.relaunch(context, moved)
+        }
+        remember(context, after)
+    }
+
+    /** Both GameHubs installed: the official one's exported games can start in either. */
+    fun bothGameHubs(context: Context): Boolean =
+        Player.GAMEHUB.installed(context) != null && Player.GAMEHUB_LITE.installed(context) != null
+
+    /** GameHub Lite is installed and the official GameHub isn't: it has the Export for frontend Lite lacks. */
+    fun gameHubOfficialMissing(context: Context): Boolean =
+        Player.GAMEHUB_LITE.installed(context) != null && Player.GAMEHUB.installed(context) == null
 
     /** The official GameHub is installed and GameHub Lite isn't: worth recommending Lite. */
     fun gameHubLiteMissing(context: Context): Boolean {
@@ -135,6 +166,7 @@ object GameFolders {
         val dirs = Player.entries.joinToString(" ") { "\"$ROOT/${it.folders.first()}\"" }
         val note = "Flux Keyboard's game folders: gaming mode lists the games here and can put each on the home screen, " +
             "its profile on. GameNative: set Export for frontend (Settings > Interface > Frontend Sync) to its folder here. " +
+            "GameHub: set Export for frontend to its folder here; with GameHub Lite installed too, its games start in GameHub Lite. " +
             "GameHub Lite: keep its Steam library (where it installs games) in its folder here. Emulators: keep your games in their folder and add the folder in the emulator too."
         // .nomedia: the launchers' covers and icons there stay out of the gallery
         val noMedia = (listOf(ROOT) + Player.entries.map { "$ROOT/${it.folders.first()}" }).joinToString(" ") { "\"$it/.nomedia\"" }
@@ -194,7 +226,7 @@ object GameFolders {
     fun games(context: Context): List<GameLibrary.Game> = scan(context)?.also { remember(context, it) } ?: scanned(context)
 
     /** The folders' games; null when they couldn't be read (no shell): not taken as every game gone. */
-    private fun scan(context: Context): List<GameLibrary.Game>? {
+    private fun scan(context: Context, inLite: Boolean = gameHubInLite(context)): List<GameLibrary.Game>? {
         val players = Player.entries.mapNotNull { player -> player.installed(context)?.let { player to it } }.toMap()
         if (players.isEmpty()) return emptyList()
         // Each file with its first line: an export file holds its game's ID
@@ -222,9 +254,10 @@ object GameFolders {
                 // Steam games exported where GameNative's go, with only GameHub Lite to start them
                 found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB_LITE in players &&
                     found.path.endsWith(".steam", ignoreCase = true) -> found.copy(player = Player.GAMEHUB_LITE)
-                // In GameHub's folder (where GameHub Lite's went before it had its own): only GameHub
-                // Lite exports games, so it starts them when it's installed
-                found.player == Player.GAMEHUB && Player.GAMEHUB_LITE in players -> found.copy(player = Player.GAMEHUB_LITE)
+                // In GameHub's folder (exported by the official GameHub): started in GameHub Lite,
+                // which goes straight into the game, unless set to open GameHub
+                found.player == Player.GAMEHUB && Player.GAMEHUB_LITE in players &&
+                    (inLite || Player.GAMEHUB !in players) -> found.copy(player = Player.GAMEHUB_LITE)
                 else -> found
             }
         }.filter { it.player in players }.mapNotNull { found ->
@@ -232,7 +265,7 @@ object GameFolders {
             // An emulator's game by its real name (its ID looked up, or the name it carries), not its file's
             val name = if (isLauncher(found.player.label)) found.name else GameIds.title(context, found.player.label, found.path) ?: found.name
             GameLibrary.Game(name, pkg, launch = launchIntent(found, pkg, activity)?.toUri(Intent.URI_INTENT_SCHEME))
-        }.also { games -> logScan(listing, parsed, players, games) }
+        }.also { games -> logScan(listing, parsed, players, games, inLite) }
     }
 
     private const val TAG = "GameFolders"
@@ -243,7 +276,7 @@ object GameFolders {
      * scan: each file read, each game found (its player, any player it went to instead, the
      * file it came from) and each left out for its player not being installed.
      */
-    private fun logScan(listing: String, parsed: List<Found>, players: Map<Player, Pair<String, String>>, games: List<GameLibrary.Game>) {
+    private fun logScan(listing: String, parsed: List<Found>, players: Map<Player, Pair<String, String>>, games: List<GameLibrary.Game>, inLite: Boolean) {
         val files = listing.lines().map { it.substringBefore('\t').trim() }.filter { it.isNotEmpty() }
         val lines = buildList {
             add("players installed: " + players.entries.joinToString { "${it.key.label} (${it.value.first})" })
@@ -254,7 +287,8 @@ object GameFolders {
                 val to = when {
                     found.player == Player.GAMENATIVE && found.player !in players && Player.GAMEHUB_LITE in players &&
                         found.path.endsWith(".steam", ignoreCase = true) -> " -> GameHub Lite"
-                    found.player == Player.GAMEHUB && Player.GAMEHUB_LITE in players -> " -> GameHub Lite"
+                    found.player == Player.GAMEHUB && Player.GAMEHUB_LITE in players &&
+                        (inLite || Player.GAMEHUB !in players) -> " -> GameHub Lite"
                     else -> ""
                 }
                 val left = if (found.player !in players && to.isEmpty()) " (left out: player not installed)" else ""
@@ -351,8 +385,13 @@ object GameFolders {
             // As ES-DE starts them: a Steam game's ID as both its Steam and its local game ID
             // (GameHub Lite only opens the game's page given the Steam one alone), a game of
             // GameHub's own by its local ID
-            // The official GameHub: no way in to start a game (its game opens it)
-            Player.GAMEHUB -> return null
+            // The official GameHub: no way in to start a game, so its game opens it (the ID kept
+            // with it, to tell its games apart and to move them to GameHub Lite)
+            Player.GAMEHUB -> return Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setPackage(pkg).apply {
+                if (id.isNullOrEmpty()) return null
+                if (source != "LOCAL") putExtra("steamAppId", id)
+                putExtra("localGameId", id)
+            }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             Player.GAMEHUB_LITE -> Intent("gamehub.lite.LAUNCH_GAME").putExtra("autoStartGame", true).apply {
                 if (id.isNullOrEmpty()) return null
                 if (source != "LOCAL") putExtra("steamAppId", id)

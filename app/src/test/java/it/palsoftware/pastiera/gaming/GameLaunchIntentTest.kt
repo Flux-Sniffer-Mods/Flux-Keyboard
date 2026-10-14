@@ -45,8 +45,12 @@ class GameLaunchIntentTest {
         val own = roundTrip(GameFolders.intentFor(GameFolders.Player.GAMEHUB_LITE, "gamehub.lite", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "local_f724884f", "LOCAL")!!)
         assertEquals("local_f724884f", own.getStringExtra("localGameId"))
         assertEquals(null, own.getStringExtra("steamAppId"))
-        // The official GameHub: no way in, so its games open it
-        assertEquals(null, GameFolders.intentFor(GameFolders.Player.GAMEHUB, "com.xiaoji.egggame", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "504230", "STEAM"))
+        // The official GameHub: no way in, so its games open it, each told apart by its ID
+        val official = roundTrip(GameFolders.intentFor(GameFolders.Player.GAMEHUB, "com.xiaoji.egggame", "com.xj.landscape.launcher.ui.gamedetail.GameDetailActivity", null, "504230", "STEAM")!!)
+        assertEquals(null, official.component)
+        assertEquals("com.xiaoji.egggame", official.`package`)
+        assertTrue(official.hasCategory(Intent.CATEGORY_LAUNCHER))
+        assertEquals("504230", official.getStringExtra("localGameId"))
     }
 
     @Test

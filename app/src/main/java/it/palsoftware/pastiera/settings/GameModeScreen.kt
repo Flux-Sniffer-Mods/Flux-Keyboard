@@ -221,6 +221,20 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         // The official GameHub can only be opened; GameHub Lite starts the game itself
         val gameHubLite = remember { it.palsoftware.pastiera.gaming.GameFolders.gameHubLiteMissing(context) }
         if (gameHubLite) FluxNote(stringResource(R.string.game_mode_gamehub_lite_note))
+        // GameHub Lite has no Export for frontend: the official GameHub's, its games started in Lite
+        val gameHubOfficial = remember { it.palsoftware.pastiera.gaming.GameFolders.gameHubOfficialMissing(context) }
+        if (gameHubOfficial) FluxNote(stringResource(R.string.game_mode_gamehub_official_note))
+        val bothGameHubs = remember { it.palsoftware.pastiera.gaming.GameFolders.bothGameHubs(context) }
+        if (bothGameHubs) {
+            var inLite by remember { mutableStateOf(it.palsoftware.pastiera.gaming.GameFolders.gameHubInLite(context)) }
+            val gameHubScope = androidx.compose.runtime.rememberCoroutineScope()
+            val options = listOf(stringResource(R.string.game_mode_gamehub_in_lite), stringResource(R.string.game_mode_gamehub_in_official))
+            ChoiceRow(stringResource(R.string.game_mode_gamehub_games_in), options[if (inLite) 0 else 1], options) { index ->
+                inLite = index == 0
+                val app = context.applicationContext
+                gameHubScope.launch(Dispatchers.IO) { it.palsoftware.pastiera.gaming.GameFolders.setGameHubInLite(app, index == 0) }
+            }
+        }
         // Xbox Cloud Gaming's games, from its catalogue, each a game of its own
         if (xboxApp != null) FluxActionRow(
             linkId = null,

@@ -780,6 +780,9 @@
     },
     {
       "text": "Crash logs show where games are found: the game folders, Steam libraries and launcher shortcuts, and how each game was matched to its app"
+    },
+    {
+      "text": "GameHub Lite with the official GameHub: Lite has no Export for frontend, so install both and export from the official GameHub; its games start in GameHub Lite, or in GameHub if you choose (Gaming mode > GameHub's games start in). Games already found move with the choice"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

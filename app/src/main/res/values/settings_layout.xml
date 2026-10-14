@@ -626,7 +626,11 @@
     <string name="game_mode_artwork_none">No artwork found online. Try searching for its title above.</string>
     <string name="games_app_launchers">Launchers and emulators</string>
     <string name="games_app_stream">Stream</string>
-    <string name="game_mode_gamehub_lite_note">The official GameHub can only be opened, not told which game to start: its games open GameHub and you pick from there. GameHub Lite starts each game straight away, so it\'s the one to use with Flux Keyboard.</string>
+    <string name="game_mode_gamehub_lite_note">The official GameHub can only be opened, not told which game to start. Install GameHub Lite alongside it: the games the official GameHub exports then start straight away in GameHub Lite.</string>
+    <string name="game_mode_gamehub_official_note">GameHub Lite has no Export for frontend. Install the official GameHub alongside it and set its Export for frontend to the GameHub folder in Download/Flux Keyboard/Games: its games are then listed here and start in GameHub Lite.</string>
+    <string name="game_mode_gamehub_games_in">GameHub\'s games start in</string>
+    <string name="game_mode_gamehub_in_lite">GameHub Lite</string>
+    <string name="game_mode_gamehub_in_official">GameHub (opens it)</string>
     <string name="dual_screens_title">Screens</string>
     <string name="dual_screens_as_set">As set in %1$s</string>
     <string name="dual_screens_stacked">Both, top screen first</string>
