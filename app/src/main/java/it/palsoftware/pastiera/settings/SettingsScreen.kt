@@ -519,7 +519,7 @@ private fun SettingsMainScreen(
                         icon = Icons.Filled.Tune,
                         title = stringResource(R.string.quick_settings_title),
                         description = stringResource(R.string.quick_settings_row_description),
-                        linkId = "main.quick",
+                        linkId = null,
                         onClick = { quick = true }
                     )
                     SettingsCategoryRow(
