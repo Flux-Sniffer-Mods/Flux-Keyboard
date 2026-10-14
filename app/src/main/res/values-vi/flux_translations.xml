@@ -1993,4 +1993,17 @@
     <string name="game_mode_swap_face">Đổi A/B và X/Y</string>
     <string name="game_mode_swap_face_description">Bố cục của Nintendo: M bấm B, L bấm A, I bấm X và J bấm Y, để mỗi phím bấm nút ở đúng vị trí của nó. Bật mặc định cho trình giả lập Nintendo.</string>
     <string name="game_mode_gamehub_lite_note">GameHub chính thức chỉ có thể mở, không thể chỉ định trò chơi để bắt đầu: các trò chơi của nó mở GameHub và bạn chọn từ đó. GameHub Lite bắt đầu từng trò chơi ngay lập tức, nên đó là bản nên dùng với Flux Keyboard.</string>
+    <string name="dual_screens_title">Màn hình</string>
+    <string name="dual_screens_as_set">Như trong %1$s</string>
+    <string name="dual_screens_stacked">Cả hai, màn trên trước</string>
+    <string name="dual_screens_stacked_bottom_first">Cả hai, màn dưới trước</string>
+    <string name="dual_screens_top_large">Màn trên lớn, màn dưới nhỏ</string>
+    <string name="dual_screens_bottom_large">Màn dưới lớn, màn trên nhỏ</string>
+    <string name="dual_screens_side_by_side">Cạnh nhau</string>
+    <string name="dual_screens_top_only">Chỉ màn hình trên</string>
+    <string name="dual_screens_bottom_only">Chỉ màn hình dưới</string>
+    <string name="dual_screens_note_written">Được ghi vào cài đặt của %1$s khi trò chơi bắt đầu từ Games (của ứng dụng thì ghi ngay, cho trò chơi bắt đầu trong chính %1$s). Màn hình được đặt cho phù hợp: Dọc khi xếp chồng, Ngang cho phần còn lại. Vùng màn hình dưới trên trackpad đi theo. Lưu ý: nếu bạn đã dùng Đổi màn hình trong %1$s, các màn hình sẽ ngược lại, hãy đổi lại ở đó.</string>
+    <string name="dual_screens_note_noods">Được ghi vào cài đặt của NooDS ngay bây giờ. NooDS đọc chúng khi mở, cho mọi trò chơi: nó không có cài đặt riêng cho từng trò chơi. Màn hình được đặt cho phù hợp.</string>
+    <string name="dual_screens_note_other">%1$s giữ bố cục màn hình trong cài đặt riêng tư của nó, mà Flux Keyboard không với tới được: hãy đặt trong cài đặt hoặc menu trong trò chơi của %1$s.</string>
+    <string name="dual_screens_note_cemu">Cemu hiển thị màn hình của Wii U GamePad từ menu trong trò chơi (Show pad), đặt ở vị trí theo cài đặt của nó (General). Nó giữ cả hai trong cài đặt riêng tư, nên Flux Keyboard không thể đặt theo từng trò chơi.</string>
 </resources>

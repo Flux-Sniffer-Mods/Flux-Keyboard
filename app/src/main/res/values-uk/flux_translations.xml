@@ -2011,4 +2011,17 @@
     <string name="game_mode_swap_face">Поміняти A/B і X/Y</string>
     <string name="game_mode_swap_face_description">Розкладка Nintendo: M натискає B, L — A, I — X, J — Y, тож кожна клавіша натискає кнопку на своєму місці. Типово увімкнено для емуляторів Nintendo.</string>
     <string name="game_mode_gamehub_lite_note">Офіційний GameHub можна лише відкрити, але не запустити в ньому конкретну гру: його ігри відкривають GameHub, і вибирати треба там. GameHub Lite запускає кожну гру одразу, тож із Flux Keyboard краще використовувати його.</string>
+    <string name="dual_screens_title">Екрани</string>
+    <string name="dual_screens_as_set">Як у %1$s</string>
+    <string name="dual_screens_stacked">Обидва, спершу верхній</string>
+    <string name="dual_screens_stacked_bottom_first">Обидва, спершу нижній</string>
+    <string name="dual_screens_top_large">Верхній великий, нижній малий</string>
+    <string name="dual_screens_bottom_large">Нижній великий, верхній малий</string>
+    <string name="dual_screens_side_by_side">Поруч</string>
+    <string name="dual_screens_top_only">Лише верхній екран</string>
+    <string name="dual_screens_bottom_only">Лише нижній екран</string>
+    <string name="dual_screens_note_written">Записується в налаштування %1$s під час запуску гри з Games (налаштування застосунку ще й одразу, для ігор, запущених у самому %1$s). Екран виставляється під це: Портретна для одного над іншим, Альбомна для решти. Область нижнього екрана на трекпаді йде за цим. Підступ: якщо ви користувалися зміною екранів у %1$s, екрани вийдуть навпаки, тож поміняйте їх назад там.</string>
+    <string name="dual_screens_note_noods">Записується в налаштування NooDS зараз. NooDS читає їх під час відкриття, для всіх ігор: окремих налаштувань для ігор у нього немає. Екран виставляється під це.</string>
+    <string name="dual_screens_note_other">%1$s зберігає розташування екранів у своїх закритих налаштуваннях, до яких Flux Keyboard не дістає: задайте його в налаштуваннях або ігровому меню %1$s.</string>
+    <string name="dual_screens_note_cemu">Cemu показує екран Wii U GamePad з ігрового меню (Show pad), там, де вказано в його налаштуваннях (General). Обидва параметри зберігаються в його закритих налаштуваннях, тож Flux Keyboard не може задати їх для кожної гри.</string>
 </resources>

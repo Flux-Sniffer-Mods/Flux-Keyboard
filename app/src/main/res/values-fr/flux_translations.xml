@@ -2005,4 +2005,17 @@
     <string name="game_mode_swap_face">Inverser A/B et X/Y</string>
     <string name="game_mode_swap_face_description">La disposition de Nintendo : M appuie sur B, L sur A, I sur X et J sur Y, pour que chaque touche appuie sur le bouton à sa place. Activé par défaut pour les émulateurs Nintendo.</string>
     <string name="game_mode_gamehub_lite_note">Le GameHub officiel peut seulement être ouvert, pas lancé sur un jeu précis : ses jeux ouvrent GameHub et vous choisissez depuis là. GameHub Lite lance chaque jeu directement, c\'est donc celui à utiliser avec Flux Keyboard.</string>
+    <string name="dual_screens_title">Écrans</string>
+    <string name="dual_screens_as_set">Comme dans %1$s</string>
+    <string name="dual_screens_stacked">Les deux, écran du haut d\'abord</string>
+    <string name="dual_screens_stacked_bottom_first">Les deux, écran du bas d\'abord</string>
+    <string name="dual_screens_top_large">Écran du haut grand, du bas petit</string>
+    <string name="dual_screens_bottom_large">Écran du bas grand, du haut petit</string>
+    <string name="dual_screens_side_by_side">Côte à côte</string>
+    <string name="dual_screens_top_only">Écran du haut seul</string>
+    <string name="dual_screens_bottom_only">Écran du bas seul</string>
+    <string name="dual_screens_note_written">Écrit dans les réglages de %1$s quand un jeu démarre depuis Games (ceux d\'une app aussi tout de suite, pour les jeux lancés dans %1$s lui-même). Écran est réglé en conséquence : Portrait pour l\'un au-dessus de l\'autre, Paysage pour le reste. La zone de l\'écran du bas sur le trackpad suit. Attention : si vous avez utilisé Inverser les écrans dans %1$s, ils apparaissent inversés, alors réinversez-les là-bas.</string>
+    <string name="dual_screens_note_noods">Écrit maintenant dans les réglages de NooDS. NooDS les lit à l\'ouverture, pour tous les jeux : il n\'a pas de réglages par jeu. Écran est réglé en conséquence.</string>
+    <string name="dual_screens_note_other">%1$s garde la disposition de ses écrans dans ses réglages privés, que Flux Keyboard ne peut pas atteindre : réglez-la dans les réglages ou le menu en jeu de %1$s.</string>
+    <string name="dual_screens_note_cemu">Cemu affiche l\'écran du Wii U GamePad depuis son menu en jeu (Show pad), placé selon ses réglages (General). Il garde les deux dans ses réglages privés, donc Flux Keyboard ne peut pas les régler par jeu.</string>
 </resources>

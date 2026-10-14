@@ -1467,4 +1467,17 @@
     <string name="game_mode_swap_face">A/B und X/Y tauschen</string>
     <string name="game_mode_swap_face_description">Nintendos Anordnung: M drückt B, L drückt A, I drückt X und J drückt Y, sodass jede Taste den Knopf an ihrer Stelle drückt. Für Nintendo-Emulatoren standardmäßig an.</string>
     <string name="game_mode_gamehub_lite_note">Das offizielle GameHub lässt sich nur öffnen, nicht mit einem bestimmten Spiel starten: Seine Spiele öffnen GameHub und du wählst dort aus. GameHub Lite startet jedes Spiel direkt, daher ist es die Wahl für Flux Keyboard.</string>
+    <string name="dual_screens_title">Bildschirme</string>
+    <string name="dual_screens_as_set">Wie in %1$s eingestellt</string>
+    <string name="dual_screens_stacked">Beide, oberer Bildschirm zuerst</string>
+    <string name="dual_screens_stacked_bottom_first">Beide, unterer Bildschirm zuerst</string>
+    <string name="dual_screens_top_large">Oberer Bildschirm groß, unterer klein</string>
+    <string name="dual_screens_bottom_large">Unterer Bildschirm groß, oberer klein</string>
+    <string name="dual_screens_side_by_side">Nebeneinander</string>
+    <string name="dual_screens_top_only">Nur oberer Bildschirm</string>
+    <string name="dual_screens_bottom_only">Nur unterer Bildschirm</string>
+    <string name="dual_screens_note_written">Wird in die Einstellungen von %1$s geschrieben, wenn ein Spiel aus Games startet (bei einer App auch sofort, für Spiele, die in %1$s selbst gestartet werden). Bildschirm wird passend gesetzt: Hochformat für übereinander, Querformat für den Rest. Der Bereich des unteren Bildschirms auf dem Trackpad folgt. Haken: Wenn du in %1$s Bildschirme tauschen genutzt hast, erscheinen sie andersherum, also tausche sie dort zurück.</string>
+    <string name="dual_screens_note_noods">Wird jetzt in die Einstellungen von NooDS geschrieben. NooDS liest sie beim Öffnen, für jedes Spiel: Es hat keine Einstellungen pro Spiel. Bildschirm wird passend gesetzt.</string>
+    <string name="dual_screens_note_other">%1$s speichert sein Bildschirmlayout in eigenen privaten Einstellungen, die Flux Keyboard nicht erreicht: Stelle es in den Einstellungen oder im Spielmenü von %1$s ein.</string>
+    <string name="dual_screens_note_cemu">Cemu zeigt den Bildschirm des Wii U GamePads über sein Spielmenü (Show pad), dort platziert, wo seine Einstellungen (General) es sagen. Beides liegt in seinen privaten Einstellungen, daher kann Flux Keyboard es nicht pro Spiel setzen.</string>
 </resources>

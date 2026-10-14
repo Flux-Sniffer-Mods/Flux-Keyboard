@@ -1999,4 +1999,17 @@
     <string name="game_mode_swap_face">Փոխանակել A/B և X/Y</string>
     <string name="game_mode_swap_face_description">Nintendo-ի դասավորությունը՝ M-ը սեղմում է B, L-ը՝ A, I-ն՝ X, J-ն՝ Y, որպեսզի ամեն ստեղն սեղմի իր տեղում գտնվող կոճակը։ Nintendo էմուլյատորների համար միացված է լռելյայն։</string>
     <string name="game_mode_gamehub_lite_note">Պաշտոնական GameHub-ը կարելի է միայն բացել, ոչ թե ասել, թե որ խաղը սկսել. դրա խաղերը բացում են GameHub-ը, և ընտրում եք այնտեղից։ GameHub Lite-ը յուրաքանչյուր խաղ սկսում է անմիջապես, ուստի հենց այն է պետք Flux Keyboard-ի հետ։</string>
+    <string name="dual_screens_title">Էկրաններ</string>
+    <string name="dual_screens_as_set">Ինչպես %1$s-ում</string>
+    <string name="dual_screens_stacked">Երկուսն էլ, վերևինը առաջինը</string>
+    <string name="dual_screens_stacked_bottom_first">Երկուսն էլ, ներքևինը առաջինը</string>
+    <string name="dual_screens_top_large">Վերևինը մեծ, ներքևինը փոքր</string>
+    <string name="dual_screens_bottom_large">Ներքևինը մեծ, վերևինը փոքր</string>
+    <string name="dual_screens_side_by_side">Կողք կողքի</string>
+    <string name="dual_screens_top_only">Միայն վերևի էկրանը</string>
+    <string name="dual_screens_bottom_only">Միայն ներքևի էկրանը</string>
+    <string name="dual_screens_note_written">Գրվում է %1$s-ի կարգավորումներում, երբ խաղը սկսվում է Games-ից (հավելվածինը՝ նաև անմիջապես, %1$s-ում սկսվող խաղերի համար)։ Էկրանը համապատասխանեցվում է՝ Ուղղահայաց՝ մեկը մյուսի վրա, Հորիզոնական՝ մնացածի համար։ Թրեքփեդի ներքևի էկրանի տարածքը հետևում է։ Ուշադրություն. եթե %1$s-ում օգտագործել եք էկրանների փոխանակումը, էկրանները կհայտնվեն հակառակ, ուստի այնտեղ հետ փոխեք։</string>
+    <string name="dual_screens_note_noods">Գրվում է հիմա NooDS-ի կարգավորումներում։ NooDS-ը դրանք կարդում է բացվելիս՝ բոլոր խաղերի համար. այն խաղի համար առանձին կարգավորումներ չունի։ Էկրանը համապատասխանեցվում է։</string>
+    <string name="dual_screens_note_other">%1$s-ը էկրանների դասավորությունը պահում է իր փակ կարգավորումներում, որոնց Flux Keyboard-ը չի հասնում. սահմանեք այն %1$s-ի կարգավորումներում կամ խաղի մենյուում։</string>
+    <string name="dual_screens_note_cemu">Cemu-ն Wii U GamePad-ի էկրանը ցույց է տալիս խաղի մենյուից (Show pad), այնտեղ, որտեղ ասում են իր կարգավորումները (General)։ Երկուսն էլ պահում է իր փակ կարգավորումներում, ուստի Flux Keyboard-ը չի կարող դրանք սահմանել ըստ խաղի։</string>
 </resources>
