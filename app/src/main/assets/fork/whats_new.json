@@ -768,6 +768,9 @@
     },
     {
       "text": "Games app: Stream is a broadcast mark whose arcs show the phone's Wi-Fi strength while streaming is on (dimmed while it's off); tap to turn it on or off, long-press for its settings"
+    },
+    {
+      "text": "Stream to Moonlight: Phone's sound while streaming: the game's sound off on the phone (the default; the TV still gets it), or every sound of the phone's off too (calls and messages vibrate, alarms still sound), all put back when the stream ends"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

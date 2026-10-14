@@ -33,6 +33,8 @@ object StreamWake {
         if (started) return
         started = true
         val app = context.applicationContext
+        // Stopped mid-stream before (updated, the phone turned off): the phone's sound put back
+        Thread({ runCatching { StreamQuiet.stop(app) } }, "StreamQuiet").apply { isDaemon = true; start() }
         when {
             // Streaming was on when Flux Keyboard last stopped (updated, restarted, the phone
             // turned off): on again, else Moonlight sees nothing until it's turned off and on

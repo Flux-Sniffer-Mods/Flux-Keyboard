@@ -1567,6 +1567,21 @@ internal fun StreamingSettings(onStreamingChanged: (Boolean) -> Unit = {}) {
                 it.palsoftware.pastiera.streaming.StreamHostService.setPassThrough(context, on)
             }
         }
+        // The phone quiet while the TV plays: the game's sound, or every sound of the phone's
+        val quietModes = it.palsoftware.pastiera.streaming.StreamQuiet.Mode.entries
+        val quietNames = listOf(
+            stringResource(R.string.stream_quiet_off),
+            stringResource(R.string.stream_quiet_game),
+            stringResource(R.string.stream_quiet_all)
+        )
+        var quiet by remember { mutableStateOf(it.palsoftware.pastiera.streaming.StreamQuiet.mode(context)) }
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            ChoiceRow(stringResource(R.string.stream_quiet), quietNames[quietModes.indexOf(quiet)], quietNames) { index ->
+                quiet = quietModes[index]
+                it.palsoftware.pastiera.streaming.StreamQuiet.setMode(context, quiet)
+            }
+            Text(stringResource(R.string.stream_quiet_description), style = MaterialTheme.typography.bodySmall)
+        }
     }
     if (paired > 0) FluxActionRow(
         linkId = null,

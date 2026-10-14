@@ -641,4 +641,9 @@
     <string name="dual_screens_note_other">%1$s keeps its screen layout in its own private settings, which Flux Keyboard can\'t reach: set it in %1$s\'s settings or in-game menu.</string>
     <string name="dual_screens_note_cemu">Cemu shows the Wii U GamePad\'s screen from its in-game menu (Show pad), placed where its settings say (General). It keeps both in its private settings, so Flux Keyboard can\'t set them per game.</string>
     <string name="game_remap_tap_to_clear">Keys on it now (tap one to take it off):</string>
+    <string name="stream_quiet">Phone\'s sound while streaming</string>
+    <string name="stream_quiet_off">Plays as usual</string>
+    <string name="stream_quiet_game">Game\'s sound off</string>
+    <string name="stream_quiet_all">All sounds off</string>
+    <string name="stream_quiet_description">The TV gets the game\'s sound whatever this is set to. Game\'s sound off turns the phone\'s media volume to nothing while a stream plays; All sounds off also silences notifications, the ringer and the phone\'s own sounds (calls and messages vibrate). Alarms still sound. Everything goes back as it was when the stream ends.</string>
 </resources>

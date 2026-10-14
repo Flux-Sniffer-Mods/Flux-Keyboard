@@ -116,6 +116,7 @@ internal class StreamSession(
             StreamHost.closeScreenPage()
         }
         runCatching { audio?.stop() }; audio = null
+        runCatching { StreamQuiet.stop(context) }
         runCatching { input?.stop() }; input = null
         runCatching { projection?.stop() }; projection = null
         runCatching { control?.stop() }; control = null
@@ -200,6 +201,8 @@ internal class StreamSession(
         runCatching {
             video = StreamVideo(capture, width, height, fps, bitrateKbps, packetSize, videoPort!!)
             audio = StreamAudio(capture, channels, packetMs, if (audioEncrypted) key else null, keyId, audioPort!!).also { it.start() }
+            // The phone quiet while the TV plays the sound, as set
+            StreamQuiet.start(context)
             input = StreamInput(context, width, height).also { it.start() }
             applyScreen()
         }.onFailure {
