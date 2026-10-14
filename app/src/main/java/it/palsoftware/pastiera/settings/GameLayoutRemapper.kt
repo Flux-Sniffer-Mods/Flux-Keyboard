@@ -43,7 +43,7 @@ import it.palsoftware.pastiera.gaming.FluxLayout.Control
 import it.palsoftware.pastiera.gaming.FluxLayout.Layer
 
 /** The keyboard as laid out, the keys gaming mode reads (modifiers aside). */
-private val REMAP_ROWS = listOf(
+internal val REMAP_ROWS = listOf(
     "QWERTYUIOP".map { KeyEvent.KEYCODE_A + (it - 'A') },
     "ASDFGHJKL".map { KeyEvent.KEYCODE_A + (it - 'A') } + KeyEvent.KEYCODE_DEL,
     "ZXCVBNM".map { KeyEvent.KEYCODE_A + (it - 'A') } + KeyEvent.KEYCODE_ENTER,
@@ -60,7 +60,7 @@ private val CONTROL_ORDER = listOf(
     Control.RS_UP, Control.RS_DOWN, Control.RS_LEFT, Control.RS_RIGHT
 )
 
-private fun keyCap(code: Int): String = when (code) {
+internal fun keyCap(code: Int): String = when (code) {
     in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z -> ('A' + (code - KeyEvent.KEYCODE_A)).toString()
     KeyEvent.KEYCODE_SPACE -> "Space"
     KeyEvent.KEYCODE_ENTER -> "⏎"
@@ -99,7 +99,7 @@ private fun longName(control: Control): String {
 }
 
 @Composable
-private fun layerName(layer: Layer): String = when (layer) {
+internal fun layerName(layer: Layer): String = when (layer) {
     Layer.NONE -> stringResource(R.string.game_remap_alone)
     Layer.SYM -> "SYM"
     Layer.RIGHT_SHIFT -> stringResource(R.string.game_remap_right_shift)

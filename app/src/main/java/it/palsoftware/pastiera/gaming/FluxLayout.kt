@@ -263,15 +263,24 @@ object FluxLayout {
      * controls, A and B swapped when [swap]). Dolphin only takes keys from the keyboard, not
      * ones sent for it, so every combination is its own.
      */
-    internal fun dolphinExpression(controls: List<Control>, swap: Boolean, volume: List<String> = emptyList()): String {
-        val parts = Layer.entries.mapNotNull { layer ->
+    internal fun dolphinExpression(
+        controls: List<Control>, swap: Boolean, volume: List<String> = emptyList(),
+        exclude: Set<DolphinPads.Binding> = emptySet()
+    ): String = bindingsExpression(defaultBindings(controls, swap, exclude), volume)
+
+    /** The keys (with their modifier) that press [controls], as the layout has them, but for [exclude]. */
+    internal fun defaultBindings(controls: List<Control>, swap: Boolean, exclude: Set<DolphinPads.Binding> = emptySet()) =
+        Layer.entries.flatMap { layer ->
             val mods = modifiersOf(layer)
-            val keys = READ_KEYS.filter { key -> controlFor(key, mods).let { if (swap) swapped(it) else it } in controls }
-            if (keys.isEmpty()) null
-            else "((" + LAYER_CONDITION.getValue(layer) + ") & (" + keys.joinToString(" | ") { dolphinKey(it, volume) } + "))"
+            READ_KEYS.filter { key -> controlFor(key, mods).let { if (swap) swapped(it) else it } in controls }
+                .map { DolphinPads.Binding(layer, it) }
+        }.filter { it !in exclude }
+
+    /** Keys pressed with their modifier, as an expression Dolphin reads from the keyboard. */
+    internal fun bindingsExpression(bindings: List<DolphinPads.Binding>, volume: List<String> = emptyList()): String =
+        bindings.groupBy { it.layer }.entries.sortedBy { it.key.ordinal }.joinToString(" | ") { (layer, keys) ->
+            "((" + LAYER_CONDITION.getValue(layer) + ") & (" + keys.joinToString(" | ") { dolphinKey(it.key, volume) } + "))"
         }
-        return parts.joinToString(" | ")
-    }
 
     /**
      * A key as Dolphin names it. The volume keys come from a device of their own (the phone's
@@ -284,17 +293,45 @@ object FluxLayout {
         return "(" + (listOf("`$name`") + volume.map { "`$it:$name`" }).joinToString(" | ") + ")"
     }
 
-    private fun dolphinLines(controls: List<Pair<String, List<Control>>>, swap: Boolean, volume: List<String>) =
-        controls.map { (name, wanted) -> "$name = " + dolphinExpression(wanted, swap, volume) }
+    /**
+     * Each control's line for Dolphin: the layout's keys, or a game's own ([remap], by
+     * [DolphinPads.Input] id; a key it gives one control no longer presses another).
+     */
+    private fun dolphinLines(
+        pad: WiiPad, controls: List<Pair<String, List<Control>>>, swap: Boolean, volume: List<String>,
+        remap: Map<String, List<DolphinPads.Binding>> = emptyMap()
+    ): List<String> {
+        val taken = remap.values.flatten().toSet()
+        val own = remap.flatMap { (id, keys) -> DolphinPads.keysOf(pad, id).map { it to keys } }.toMap()
+        val lines = controls.map { (name, wanted) ->
+            "$name = " + (own[name]?.let { bindingsExpression(it, volume) } ?: dolphinExpression(wanted, swap, volume, taken))
+        }
+        // A game's keys for what the layout leaves alone (tilting the Wii Remote, say)
+        val known = controls.map { it.first }.toSet()
+        return lines + own.filterKeys { it !in known }.map { (name, keys) -> "$name = " + bindingsExpression(keys, volume) }
+    }
 
-    internal fun dolphinGameCube(keyboard: String, swap: Boolean = false, volume: List<String> = emptyList()): List<String> =
-        listOf("Device = Android/0/$keyboard") + dolphinLines(GAMECUBE, swap, volume)
+    /** The layout's controls for each of Dolphin's names on [pad] (none for what it leaves alone). */
+    internal fun dolphinControls(pad: WiiPad): Map<String, List<Control>> = when (pad) {
+        WiiPad.GAMECUBE -> GAMECUBE
+        WiiPad.NUNCHUK -> WII
+        WiiPad.CLASSIC -> CLASSIC
+        WiiPad.SIDEWAYS -> SIDEWAYS
+    }.toMap()
 
-    internal fun dolphinWii(keyboard: String, pad: WiiPad = WiiPad.NUNCHUK, swap: Boolean = false, volume: List<String> = emptyList()): List<String> =
+    internal fun dolphinGameCube(
+        keyboard: String, swap: Boolean = false, volume: List<String> = emptyList(),
+        remap: Map<String, List<DolphinPads.Binding>> = emptyMap()
+    ): List<String> = listOf("Device = Android/0/$keyboard") + dolphinLines(WiiPad.GAMECUBE, GAMECUBE, swap, volume, remap)
+
+    internal fun dolphinWii(
+        keyboard: String, pad: WiiPad = WiiPad.NUNCHUK, swap: Boolean = false, volume: List<String> = emptyList(),
+        remap: Map<String, List<DolphinPads.Binding>> = emptyMap()
+    ): List<String> =
         listOf("Device = Android/0/$keyboard", "Source = 1") + when (pad) {
-            WiiPad.NUNCHUK, WiiPad.GAMECUBE -> listOf("Extension = Nunchuk") + dolphinLines(WII, swap, volume)
-            WiiPad.CLASSIC -> listOf("Extension = Classic") + dolphinLines(CLASSIC, swap, volume)
-            WiiPad.SIDEWAYS -> listOf("Extension = None", "Options/Sideways Wiimote = True") + dolphinLines(SIDEWAYS, swap, volume)
+            WiiPad.NUNCHUK, WiiPad.GAMECUBE -> listOf("Extension = Nunchuk") + dolphinLines(WiiPad.NUNCHUK, WII, swap, volume, remap.takeIf { pad == WiiPad.NUNCHUK }.orEmpty())
+            WiiPad.CLASSIC -> listOf("Extension = Classic") + dolphinLines(pad, CLASSIC, swap, volume, remap)
+            WiiPad.SIDEWAYS -> listOf("Extension = None", "Options/Sideways Wiimote = True") + dolphinLines(pad, SIDEWAYS, swap, volume, remap)
         }
 
     private const val KEY_VOLUME_DEVICE = "game_volume_device"
@@ -524,35 +561,45 @@ object FluxLayout {
     )?.trim()?.ifEmpty { null }
 
     /**
-     * One Wii game's controller: its own Dolphin settings (GameSettings/<game ID>.ini) load the
-     * matching profile as it starts; a Wii Remote with Nunchuk is everyone's, so nothing is kept.
+     * One game's controller in Dolphin, set in its own Dolphin settings (GameSettings/<game ID>.ini)
+     * to load as it starts: a Wii game's Wii Remote (with Nunchuk, Classic Controller or sideways)
+     * or GameCube controller; with keys of the game's own ([remap]), a profile of its own. A Wii
+     * Remote with Nunchuk, or a GameCube game, with no keys of its own is everyone's: nothing kept.
      */
-    fun setWiiPad(context: android.content.Context, pkg: String, gameId: String, pad: WiiPad): Result {
+    fun setGamePad(
+        context: android.content.Context, pkg: String, gameId: String, wii: Boolean, pad: WiiPad,
+        remap: Map<String, List<DolphinPads.Binding>> = emptyMap()
+    ): Result {
         val keyboard = keyboardName() ?: return Result.FAILED
         val dir = dolphinDir(pkg) ?: return Result.NOT_FOUND
         loadOverrides(context)
         val swap = swapFor(context, pkg)
         val volume = volumeDevices(context, keyboard)
-        val written = if (pad == WiiPad.GAMECUBE) {
-            write("$dir/Config/Profiles/GCPad/${pad.profile}.ini", withSection("", "Profile", dolphinGameCube(keyboard, swap, volume)))
+        val gc = pad == WiiPad.GAMECUBE || !wii
+        val profile = if (remap.isEmpty()) pad.profile else "${pad.profile} $gameId"
+        val written = if (gc) {
+            write("$dir/Config/Profiles/GCPad/$profile.ini", withSection("", "Profile", dolphinGameCube(keyboard, swap, volume, remap)))
         } else {
-            write("$dir/Config/Profiles/Wiimote/${pad.profile}.ini", withSection("", "Profile", dolphinWii(keyboard, pad, swap, volume)))
+            write("$dir/Config/Profiles/Wiimote/$profile.ini", withSection("", "Profile", dolphinWii(keyboard, pad, swap, volume, remap)))
         }
         if (!written) return Result.FAILED
         val file = "$dir/GameSettings/$gameId.ini"
-        return if (write(file, wiiPadSettings(read(file), pad))) Result.DONE else Result.FAILED
+        val ini = read(file)
+        val updated = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { remap.isNotEmpty() })
+        return if (write(file, updated)) Result.DONE else Result.FAILED
     }
 
     /**
      * A Wii game's [Controls]: its Wii Remote's profile; or for a GameCube controller, controller
      * port 1 plugged in with its profile and Wii Remote 1 taken away (0 is none, 6 a GameCube
-     * controller). A Wii Remote with Nunchuk is everyone's: nothing kept.
+     * controller). A Wii Remote with Nunchuk is everyone's unless it has its own [profile].
      */
-    internal fun wiiPadSettings(ini: String, pad: WiiPad): String {
+    internal fun wiiPadSettings(ini: String, pad: WiiPad, profile: String = pad.profile): String {
         val gc = pad == WiiPad.GAMECUBE
-        var out = withKey(ini, "Controls", "WiimoteProfile1", pad.profile.takeIf { pad == WiiPad.CLASSIC || pad == WiiPad.SIDEWAYS })
+        val remote = pad == WiiPad.CLASSIC || pad == WiiPad.SIDEWAYS || (pad == WiiPad.NUNCHUK && profile != pad.profile)
+        var out = withKey(ini, "Controls", "WiimoteProfile1", profile.takeIf { remote })
         out = withKey(out, "Controls", "PadType0", if (gc) "6" else null)
-        out = withKey(out, "Controls", "PadProfile1", if (gc) pad.profile else null)
+        out = withKey(out, "Controls", "PadProfile1", if (gc) profile else null)
         out = withKey(out, "Controls", "WiimoteSource0", if (gc) "0" else null)
         // Also as Dolphin's newer settings name the GameCube port and the Wii Remote
         out = withKey(out, "Core", "SIDevice0", if (gc) "6" else null)

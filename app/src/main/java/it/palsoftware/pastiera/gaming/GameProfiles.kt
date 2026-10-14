@@ -112,8 +112,15 @@ data class GameProfile(
      * A and B, and X and Y, the other way round (Nintendo's), so the key where a button sits
      * presses it; null: on for Nintendo emulators.
      */
-    val swapFace: Boolean? = null
+    val swapFace: Boolean? = null,
+    /**
+     * Dolphin: the game's own keys for each controller ([FluxLayout.WiiPad]'s name to
+     * [DolphinPads.format]'s text); a controller missing has the layout's.
+     */
+    val padControls: Map<String, String> = emptyMap()
 ) {
+    /** The game's own keys for Dolphin's [pad] (empty: the layout's). */
+    fun padRemap(pad: FluxLayout.WiiPad): Map<String, List<DolphinPads.Binding>> = DolphinPads.parse(padControls[pad.name])
     /** Whether A and B (X and Y) are swapped, as set or as suits its app. */
     val swapsFace: Boolean get() = swapFace ?: packages.any { GameApps.nintendo(it) }
 
@@ -137,6 +144,7 @@ data class GameProfile(
         put("own", own)
         variant?.let { put("variant", it) }
         wiiPad?.let { put("wiiPad", it) }
+        if (padControls.isNotEmpty()) put("padControls", JSONObject(padControls))
         if (pending) put("pending", true)
         if (ownScreen) put("ownScreen", true)
         phoneHeight?.let { put("phoneHeight", it) }
@@ -210,6 +218,8 @@ data class GameProfile(
                 own = json.optBoolean("own", true),
                 variant = json.optString("variant").ifEmpty { null },
                 wiiPad = json.optString("wiiPad").ifEmpty { null },
+                padControls = json.optJSONObject("padControls")?.let { o -> o.keys().asSequence().associateWith { o.optString(it) } }
+                    ?.filterValues { it.isNotEmpty() }.orEmpty(),
                 pending = json.optBoolean("pending", false),
                 ownScreen = json.optBoolean("ownScreen", false),
                 phoneHeight = json.optInt("phoneHeight", 0).takeIf { it > 0 },

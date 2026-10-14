@@ -66,16 +66,20 @@ class GameLaunchActivity : Activity() {
                         FluxLog.w("FluxGameLaunch", "Dolphin's controls: " + lines.orEmpty().replace("\n", " | "))
                     }
                 }
-                // A Wii game's own controller (a GameCube controller, say) set again as it starts
-                val wiiPad = profile?.wiiPad?.let { name -> FluxLayout.WiiPad.entries.firstOrNull { it.name == name } }
-                if (wiiPad != null && GameApps.emulator(pkg) == "Dolphin") runCatching {
+                // The game's own controller (a GameCube controller for a Wii game, say) and its
+                // own keys, set again as it starts
+                if (GameApps.emulator(pkg) == "Dolphin") runCatching {
                     val path = launch?.let { GameFiles.gameFile(it) }
-                    val id = path?.takeIf { GameFiles.isWii(it) }?.let { GameIds.id(this, "Dolphin", it) }
-                    val result = if (id != null) FluxLayout.setWiiPad(this, pkg, id, wiiPad) else null
+                    val id = path?.let { GameIds.id(this, "Dolphin", it) }
+                    val wii = path?.let { GameFiles.isWii(it) } == true
+                    val pad = profile?.wiiPad?.let { name -> FluxLayout.WiiPad.entries.firstOrNull { it.name == name } }
+                        ?: if (wii) FluxLayout.WiiPad.NUNCHUK else FluxLayout.WiiPad.GAMECUBE
+                    val remap = profile?.padRemap(pad).orEmpty()
+                    val result = if (id != null) FluxLayout.setGamePad(this, pkg, id, wii, pad, remap) else null
                     val ini = id?.let { gameId -> FluxLayout.dolphinDir(pkg)?.let { dir ->
                         it.palsoftware.pastiera.adb.AdbShell.run("cat \"$dir/GameSettings/$gameId.ini\" 2>&1 | head -n 20", 3_000)
                     } }
-                    FluxLog.w("FluxGameLaunch", "Wii controller $wiiPad for game ${id ?: "(no ID read from $path)"}: $result; its Dolphin settings: " +
+                    FluxLog.w("FluxGameLaunch", "controller $pad (${remap.size} changed) for game ${id ?: "(no ID read from $path)"}: $result; its Dolphin settings: " +
                         ini.orEmpty().replace("\n", " | "))
                 }
                 runOnUiThread { start(game, app) }

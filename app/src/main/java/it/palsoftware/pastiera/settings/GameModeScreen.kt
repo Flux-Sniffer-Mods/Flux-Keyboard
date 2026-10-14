@@ -56,6 +56,7 @@ import it.palsoftware.pastiera.gaming.GameProfile
 import it.palsoftware.pastiera.gaming.GameProfiles
 import it.palsoftware.pastiera.gaming.GameApps
 import it.palsoftware.pastiera.gaming.FluxLayout
+import it.palsoftware.pastiera.gaming.DolphinPads
 import it.palsoftware.pastiera.gaming.GameFiles
 import it.palsoftware.pastiera.gaming.GameIds
 import it.palsoftware.pastiera.gaming.TrackpadRole
@@ -493,7 +494,7 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
                 ResolutionChoices(current) { current = it }
             }
             // A Dolphin Wii game: the Wii controller that suits it, set in its own Dolphin settings
-            if (current.isGame) DolphinWiiPadRow(current) { pad -> current = current.copy(wiiPad = pad) }
+            if (current.isGame) DolphinControllerRows(current) { changed -> current = changed }
             // A game plays with its app's settings, unless it needs its own (sticks elsewhere)
             if (current.isGame) {
                 val ownScope = androidx.compose.runtime.rememberCoroutineScope()
@@ -694,21 +695,24 @@ internal fun GameProfileEditor(profile: GameProfile, onDone: (GameProfile?) -> U
 }
 
 /** A label and its value, the value picked from a menu. */
-/** A Dolphin Wii game's controller: Wii Remote and Nunchuk, Classic Controller or held sideways. */
+/**
+ * A Dolphin game's controller, set in its own Dolphin settings: for a Wii game, Wii Remote and
+ * Nunchuk, Classic Controller, held sideways or a GameCube controller; and for any game, keys of
+ * its own for that controller's buttons, drawn as the controller ([DolphinPadRemapper]).
+ */
 @Composable
-private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) {
+private fun DolphinControllerRows(profile: GameProfile, onChanged: (GameProfile) -> Unit) {
     val context = LocalContext.current
     val pkg = profile.packages.firstOrNull { p -> GameApps.emulator(p) == "Dolphin" } ?: return
-    // The game's ID, when it's a Wii game (read from its file through the shell)
-    var gameId by remember(profile.launch) { mutableStateOf<String?>(null) }
+    // The game's ID, and whether it's a Wii game (read from its file through the shell)
+    var game by remember(profile.launch) { mutableStateOf<Pair<String, Boolean>?>(null) }
     LaunchedEffect(profile.launch) {
-        gameId = withContext(Dispatchers.IO) {
+        game = withContext(Dispatchers.IO) {
             val path = profile.launch?.let { launch -> GameFiles.gameFile(launch) } ?: return@withContext null
-            if (!GameFiles.isWii(path)) return@withContext null
-            GameIds.id(context, "Dolphin", path)
+            GameIds.id(context, "Dolphin", path)?.let { it to GameFiles.isWii(path) }
         }
     }
-    val id = gameId ?: return
+    val (id, wii) = game ?: return
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     val names = listOf(
         stringResource(R.string.game_mode_wii_nunchuk),
@@ -716,16 +720,18 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
         stringResource(R.string.game_mode_wii_sideways),
         stringResource(R.string.game_mode_wii_gamecube)
     )
-    val current = FluxLayout.WiiPad.entries.firstOrNull { pad -> pad.name == profile.wiiPad } ?: FluxLayout.WiiPad.NUNCHUK
-    ChoiceRow(stringResource(R.string.game_mode_wii_controller), names[current.ordinal], names) { index ->
-        val pad = FluxLayout.WiiPad.entries[index]
-        onPicked(pad.name.takeIf { pad != FluxLayout.WiiPad.NUNCHUK })
+    val pad = if (!wii) FluxLayout.WiiPad.GAMECUBE
+        else FluxLayout.WiiPad.entries.firstOrNull { it.name == profile.wiiPad } ?: FluxLayout.WiiPad.NUNCHUK
+    /** Written into Dolphin now (it's also written again each time the game starts from Games). */
+    fun apply(changed: GameProfile, message: String) {
+        val chosen = if (!wii) FluxLayout.WiiPad.GAMECUBE
+            else FluxLayout.WiiPad.entries.firstOrNull { it.name == changed.wiiPad } ?: FluxLayout.WiiPad.NUNCHUK
         scope.launch {
-            val result = withContext(Dispatchers.IO) { FluxLayout.setWiiPad(context, pkg, id, pad) }
+            val result = withContext(Dispatchers.IO) { FluxLayout.setGamePad(context, pkg, id, wii, chosen, changed.padRemap(chosen)) }
             android.widget.Toast.makeText(
                 context,
                 when (result) {
-                    FluxLayout.Result.DONE -> context.getString(R.string.game_mode_wii_set, names[index])
+                    FluxLayout.Result.DONE -> message
                     FluxLayout.Result.NOT_FOUND -> context.getString(R.string.game_mode_setup_not_found, "Dolphin")
                     else -> context.getString(R.string.adb_not_running)
                 },
@@ -733,6 +739,33 @@ private fun DolphinWiiPadRow(profile: GameProfile, onPicked: (String?) -> Unit) 
             ).show()
         }
     }
+    if (wii) ChoiceRow(stringResource(R.string.game_mode_wii_controller), names[pad.ordinal], names) { index ->
+        val picked = FluxLayout.WiiPad.entries[index]
+        val changed = profile.copy(wiiPad = picked.name.takeIf { picked != FluxLayout.WiiPad.NUNCHUK })
+        onChanged(changed)
+        apply(changed, context.getString(R.string.game_mode_wii_set, names[index]))
+    }
+    var remapping by remember { mutableStateOf(false) }
+    FluxActionRow(
+        linkId = null,
+        icon = "\u271A",
+        title = stringResource(R.string.dolphin_pad_row),
+        description = stringResource(R.string.dolphin_pad_row_description, names[pad.ordinal])
+    ) { remapping = true }
+    if (remapping) DolphinPadRemapper(
+        pad = pad,
+        padName = names[pad.ordinal],
+        remap = profile.padRemap(pad),
+        swap = FluxLayout.swapFor(context, pkg),
+        onSave = { remap ->
+            if (remap == profile.padRemap(pad)) return@DolphinPadRemapper
+            val text = DolphinPads.format(remap)
+            val changed = profile.copy(padControls = if (remap.isEmpty()) profile.padControls - pad.name else profile.padControls + (pad.name to text))
+            onChanged(changed)
+            apply(changed, context.getString(R.string.dolphin_pad_saved))
+        },
+        onDismiss = { remapping = false }
+    )
 }
 
 /** Xbox Cloud Gaming's games, searched by name: one picked becomes a game of its own. */

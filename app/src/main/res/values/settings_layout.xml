@@ -464,6 +464,11 @@
     <string name="game_mode_wii_sideways">Wii Remote held sideways</string>
     <string name="game_mode_wii_set">This game now uses: %1$s.</string>
     <string name="game_mode_wii_gamecube">GameCube controller</string>
+    <string name="dolphin_pad_row">This game\'s buttons</string>
+    <string name="dolphin_pad_row_description">Give the %1$s\'s buttons and movements keys of this game\'s own, such as a wheelie button. Kept as a Dolphin profile for this game.</string>
+    <string name="dolphin_pad_hint">Tap a button to give it a key, alone or with a modifier. Buttons with this game\'s own key are outlined, and a key given here presses only that button.</string>
+    <string name="dolphin_pad_no_key">No key</string>
+    <string name="dolphin_pad_saved">Saved in Dolphin for this game.</string>
     <string name="games_app_title">Games</string>
     <string name="games_app_empty">No games yet. Add one with Add a game, or create the game folders in Gaming settings.</string>
     <string name="games_app_switch">Games in the app list</string>
