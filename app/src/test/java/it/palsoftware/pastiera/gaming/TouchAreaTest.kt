@@ -30,13 +30,13 @@ class TouchAreaTest {
     }
 
     @Test
-    fun gameAppsKeepTheGameUpright() {
+    fun gameAppsPlayLandscapeAndTwoScreensPortrait() {
         assertEquals(ScreenMode.UPRIGHT, ScreenMode.defaultFor("org.azahar_emu.azahar"))
         assertEquals(ScreenMode.UPRIGHT, ScreenMode.defaultFor("me.magnum.melonds"))
-        assertEquals(ScreenMode.UPRIGHT, ScreenMode.defaultFor("com.retroarch"))
-        assertEquals(ScreenMode.UPRIGHT, ScreenMode.defaultFor("app.gamenative"))
-        assertEquals(ScreenMode.UPRIGHT, ScreenMode.defaultFor("gamehub.lite"))
-        assertEquals(ScreenMode.UPRIGHT, ScreenMode.defaultFor("info.cemu.cemu"))
+        assertEquals(ScreenMode.SIDEWAYS, ScreenMode.defaultFor("com.retroarch"))
+        assertEquals(ScreenMode.SIDEWAYS, ScreenMode.defaultFor("app.gamenative"))
+        assertEquals(ScreenMode.SIDEWAYS, ScreenMode.defaultFor("gamehub.lite"))
+        assertEquals(ScreenMode.SIDEWAYS, ScreenMode.defaultFor("info.cemu.cemu"))
         assertEquals(ScreenMode.SIDEWAYS, ScreenMode.defaultFor("com.flycast.emulator"))
         assertEquals(ScreenMode.APP, ScreenMode.defaultFor("com.example.app"))
     }

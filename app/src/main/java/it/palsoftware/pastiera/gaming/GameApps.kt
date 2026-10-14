@@ -15,7 +15,7 @@ object GameApps {
 
     /**
      * Other emulators, by their name: known so their games are kept the right way up (a DS or
-     * 3DS's screens stacked, upright layouts upright, the rest sideways), with the keys bound in their own settings.
+     * 3DS's screens stacked, the rest landscape), with the keys bound in their own settings.
      */
     private val OTHERS = mapOf(
         "com.retroarch" to "RetroArch", "com.retroarch.aarch64" to "RetroArch", "com.retroarch.ra32" to "RetroArch",
@@ -45,18 +45,6 @@ object GameApps {
     /** Emulators of handhelds with two screens, one above the other: played upright. */
     private val TWO_SCREENS_3DS = setOf("Azahar", "Panda3DS", "Mandarine")
     private val TWO_SCREENS_DS = setOf("melonDS", "DraStic", "NooDS")
-
-    /**
-     * Apps that lay a game out on an upright screen themselves (a portrait layout: the game at the
-     * top, their controls below; GameNative and GameHub fit the game to the width): played upright.
-     */
-    private val PORTRAIT = setOf(
-        "GameNative", "GameHub", "Dolphin", "PPSSPP", "Eden", "RetroArch", "Lemuroid", "DuckStation", "ePSXe", "NetherSX2",
-        "Mupen64Plus", "My Boy!", "My OldBoy!", "Pizza Boy", "Snes9x EX+", "GBA.emu", "GBC.emu", "NES.emu", "MD.emu", "MAME4droid", "Cemu"
-    ) + TWO_SCREENS_3DS + TWO_SCREENS_DS
-
-    /** The game kept upright suits [packageName]'s app (else the phone upright, the game sideways). */
-    fun playsUpright(packageName: String): Boolean = appFor(packageName) in PORTRAIT
 
     /** Emulators of Nintendo's consoles: their A and B (X and Y) sit the other way round from Xbox's. */
     private val NINTENDO = setOf(

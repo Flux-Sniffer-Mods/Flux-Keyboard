@@ -355,11 +355,11 @@
     <string name="game_mode_own_game_none">None of the launchers or emulators Flux Keyboard can start games in is installed (GameNative, GameHub, Dolphin, PPSSPP, Azahar, Eden).</string>
     <string name="game_mode_screen">Screen</string>
     <string name="game_mode_screen_app">Let the game decide</string>
-    <string name="game_mode_screen_sideways">Keep the phone upright</string>
+    <string name="game_mode_screen_sideways">Landscape</string>
     <string name="game_mode_screen_app_description">The game rotates the screen as it likes. In GameNative, turn on Portrait mode in the game\'s settings (General) to play upright.</string>
-    <string name="game_mode_screen_sideways_description">Gives the game a landscape resolution so it draws sideways while you hold the phone upright, slightly shorter to stay clear of the camera.</string>
-    <string name="game_mode_screen_upright">Keep the game upright</string>
-    <string name="game_mode_screen_upright_description">Keeps the phone and the game upright, whatever the game asks for. For DS and 3DS emulators: their two screens one above the other.</string>
+    <string name="game_mode_screen_sideways_description">The game gets a landscape screen while you hold the phone upright, and the screen doesn\'t turn. Best for most games. It\'s slightly shorter, to stay clear of the camera.</string>
+    <string name="game_mode_screen_upright">Portrait</string>
+    <string name="game_mode_screen_upright_description">The game gets the whole upright screen, whatever it asks for. For DS and 3DS emulators (their two screens one above the other), phone games made for portrait, and vertical arcade games.</string>
     <string name="game_mode_swap_face">Swap A/B and X/Y</string>
     <string name="game_mode_swap_face_description">Nintendo\'s layout: M presses B, L presses A, I presses X and J presses Y, so each key presses the button in its place. On by default for Nintendo emulators.</string>
     <string name="game_mode_bottom_screen">Bottom screen</string>
