@@ -247,25 +247,16 @@ class CommandExecutor(
         }.getOrNull()
     }
 
+    /** Sends [keyCode] through the shell in the background: callers are the UI and the keyboard. */
     private fun sendShellKeyEvent(keyCode: Int): CommandExecutionResult {
-        return try {
-            if (!it.palsoftware.pastiera.adb.AdbShell.available()) {
-                // Without the shell: brightness through the system setting, when allowed
-                return brightnessWithoutShell(keyCode) ?: fail("Shizuku required")
-            }
-            val process = it.palsoftware.pastiera.adb.AdbShell.newProcess(
-                arrayOf("input", "keyevent", keyCode.toString())
-            )
-            val exitCode = process.waitFor()
-            if (exitCode == 0) {
-                CommandExecutionResult.Success
-            } else {
-                fail("Command failed")
-            }
-        } catch (error: Exception) {
-            Log.e(TAG, "Failed to send shell keyevent $keyCode", error)
-            fail("Command failed")
+        if (!it.palsoftware.pastiera.adb.AdbShell.available()) {
+            // Without the shell: brightness through the system setting, when allowed
+            return brightnessWithoutShell(keyCode) ?: fail("Shizuku required")
         }
+        it.palsoftware.pastiera.adb.AdbShell.runAsync("input keyevent $keyCode") { output ->
+            if (output == null) Log.w(TAG, "Shell keyevent $keyCode failed")
+        }
+        return CommandExecutionResult.Success
     }
 
     private fun executeNavAction(launch: CommandLaunchSpec.NavAction): CommandExecutionResult {

@@ -1075,6 +1075,9 @@
     },
     {
       "text": "Xbox Cloud Gaming: the player no longer closes straight away on Android 10, and Back goes back in the page on newer Android too"
+    },
+    {
+      "text": "Brightness shortcuts no longer freeze the screen or typing for a moment, and screen sizes or battery saver tapped twice in a row always end on the last one tapped"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

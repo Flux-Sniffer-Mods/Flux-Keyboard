@@ -1,7 +1,9 @@
 package it.palsoftware.pastiera.adb
 
 import android.content.pm.PackageManager
+import android.os.Looper
 import android.util.Log
+import it.palsoftware.pastiera.FluxLog
 import it.palsoftware.pastiera.adb.shell.BuiltInShell
 import rikka.shizuku.Shizuku
 import java.util.concurrent.TimeUnit
@@ -39,6 +41,10 @@ object AdbShell {
     /** Runs [command] in the ADB shell; its output, or null when it failed or took over [timeoutMs]. */
     fun run(command: String, timeoutMs: Long = 4_000): String? {
         if (!available()) return null
+        // It waits on another process: from the UI thread the screen or typing would freeze
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            FluxLog.w(TAG, "shell command on the main thread, from " + Throwable().stackTrace.drop(1).take(3).joinToString(" < "))
+        }
         return runCatching {
             val process = newProcess(arrayOf("sh", "-c", command))
             val output = StringBuilder()
@@ -115,8 +121,11 @@ object AdbShell {
         }.onFailure { Log.w(TAG, "loop couldn't start: $it") }.getOrNull()
     }
 
-    /** Runs [command] off the main thread. */
+    /** Background commands, one after another: a density or battery saver tapped twice lands in order. */
+    private val worker = java.util.concurrent.Executors.newSingleThreadExecutor()
+
+    /** Runs [command] off the main thread, after any asked for before it. */
     fun runAsync(command: String, onDone: (String?) -> Unit = {}) {
-        Thread { onDone(run(command)) }.start()
+        worker.execute { onDone(run(command)) }
     }
 }

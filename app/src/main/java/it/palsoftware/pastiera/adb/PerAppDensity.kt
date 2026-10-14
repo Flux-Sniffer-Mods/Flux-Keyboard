@@ -46,6 +46,8 @@ object PerAppDensity {
     @Volatile private var frontTask: Int? = null
 
     private val handler = Handler(Looper.getMainLooper())
+    /** Checks of the app in front, one at a time: a slow one can't land after a newer one. */
+    private val worker = java.util.concurrent.Executors.newSingleThreadExecutor()
     private var pending: Runnable? = null
     @Volatile private var applied: String? = null
     /** The app whose screen size is in use (null for the base, or not known). */
@@ -96,35 +98,35 @@ object PerAppDensity {
         if (perApp.isEmpty() && applied == null && !gaming) return
         pending?.let { handler.removeCallbacks(it) }
         pending = Runnable {
-            Thread {
-                if (!AdbShell.available()) return@Thread
+            worker.execute {
+                if (!AdbShell.available()) return@execute
                 // The app Android actually has in front: a widget updating on a home screen
                 // (a calendar or weather widget in Niagara or the stock launcher) reports the
                 // widget's own app, which isn't in front at all
                 val resumed = resumedActivity()
-                val front = resumed?.first ?: if (needsConfirming) return@Thread else packageName
-                if (front in IGNORED || front in quickstep(app)) return@Thread
+                val front = resumed?.first ?: if (needsConfirming) return@execute else packageName
+                if (front in IGNORED || front in quickstep(app)) return@execute
                 // Another app's screen opened inside the app in front's own task (a purchase in
                 // the Play Store, a sign-in, a share sheet): still that app, its screen kept
                 val task = resumed?.second
-                if (task != null && task == frontTask && front != frontApp) return@Thread
+                if (task != null && task == frontTask && front != frontApp) return@execute
                 frontTask = task; frontApp = front
                 // Gaming mode follows the same app in front (its upright or sideways screen
                 // mustn't flicker with widgets, floating windows or recents either)
                 it.palsoftware.pastiera.gaming.GameMode.onAppInFront(app, front)
-                if (apps(app).isEmpty() && applied == null) return@Thread
+                if (apps(app).isEmpty() && applied == null) return@execute
                 val want = apps(app)[front] ?: base(app)
                 appliedFor = front.takeIf { apps(app)[it] != null }
-                if (want == applied) return@Thread
+                if (want == applied) return@execute
                 val command = if (want == BASE_RESET) {
                     "wm density reset"
                 } else {
-                    val preset = ScreenDensity.Preset.byAction(want) ?: return@Thread
-                    "wm density ${ScreenDensity.dpiFor(app, preset) ?: return@Thread}"
+                    val preset = ScreenDensity.Preset.byAction(want) ?: return@execute
+                    "wm density ${ScreenDensity.dpiFor(app, preset) ?: return@execute}"
                 }
                 AdbShell.send(command)
                 applied = want
-            }.start()
+            }
         }.also { handler.postDelayed(it, SETTLE_MS) }
     }
 
@@ -141,21 +143,21 @@ object PerAppDensity {
         val check = object : Runnable {
             override fun run() {
                 val again = this
-                Thread {
-                    if (!AdbShell.available()) return@Thread
+                worker.execute {
+                    if (!AdbShell.available()) return@execute
                     val front = resumedPackage()
-                    if (front != null && front !in quickstep(app)) return@Thread
+                    if (front != null && front !in quickstep(app)) return@execute
                     val open = AdbShell.run(
                         "dumpsys activity recents | grep -c -F -e '$owner/' -e ':$owner' || true", 2_000
-                    )?.trim()?.toIntOrNull() ?: return@Thread
+                    )?.trim()?.toIntOrNull() ?: return@execute
                     if (open == 0) {
                         // Swiped away: gaming mode ends with it, its screen put back
                         it.palsoftware.pastiera.gaming.GameMode.gone(app, owner)
-                        if (appliedFor != owner) return@Thread
+                        if (appliedFor != owner) return@execute
                         val base = base(app)
                         val command = if (base == BASE_RESET) "wm density reset" else {
-                            val preset = ScreenDensity.Preset.byAction(base) ?: return@Thread
-                            "wm density ${ScreenDensity.dpiFor(app, preset) ?: return@Thread}"
+                            val preset = ScreenDensity.Preset.byAction(base) ?: return@execute
+                            "wm density ${ScreenDensity.dpiFor(app, preset) ?: return@execute}"
                         }
                         AdbShell.send(command)
                         applied = base
@@ -163,7 +165,7 @@ object PerAppDensity {
                     } else if (++checks < RECENTS_CHECKS) {
                         handler.postDelayed(again, RECENTS_CHECK_MS)
                     }
-                }.start()
+                }
             }
         }
         recentsWatch = check
