@@ -143,6 +143,20 @@ internal fun DolphinPadRemapper(
                     val defaultText = defaults.take(3).map { bindingName(it) }.joinToString(", ").ifEmpty { stringResource(R.string.dolphin_pad_no_key) }
                     choice(stringResource(R.string.game_remap_default, defaultText), input.id !in own) { own = own - input.id }
                     choice(stringResource(R.string.dolphin_pad_no_key), own[input.id]?.isEmpty() == true) { own = own + (input.id to emptyList()) }
+                    // Each key it has now, taken off on its own with a tap (the rest kept)
+                    val current = own[input.id] ?: defaults
+                    if (current.isNotEmpty()) {
+                        Text(stringResource(R.string.game_remap_tap_to_clear), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                            current.forEach { binding ->
+                                FilterChip(
+                                    selected = true,
+                                    onClick = { own = own + (input.id to (current - binding)) },
+                                    label = { Text(bindingName(binding) + "  \u2715", maxLines = 1) }
+                                )
+                            }
+                        }
+                    }
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
                         Layer.entries.forEach { each ->
                             FilterChip(selected = layer == each, onClick = { layer = each }, label = { Text(layerName(each), maxLines = 1) })

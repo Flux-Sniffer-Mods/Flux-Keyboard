@@ -547,6 +547,12 @@ object GameMode {
         FluxLayout.loadOverrides(context)
         if (profile == null) {
             if (!AdbShell.available()) return
+            // Dolphin opened: every game's controls named in its settings again, so one started
+            // from Dolphin's own list plays with Flux Keyboard's over a profile loaded by hand
+            chosen.packages.firstOrNull { GameApps.emulator(it) == "Dolphin" }?.let { pkg ->
+                val app = context.applicationContext
+                Thread { runCatching { FluxLayout.refreshGames(app, pkg) } }.start()
+            }
             startInput(context)
             extra?.let { send("Z ${it.id}"); screenW = it.width.toFloat(); screenH = it.height.toFloat(); send("S ${it.width} ${it.height}") }
         }

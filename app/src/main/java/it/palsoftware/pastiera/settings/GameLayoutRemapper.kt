@@ -248,6 +248,26 @@ internal fun KeyLayoutEditor(
                             save(GamepadDrawing.restore(overrides, base, spot.control)); pickingButton = null
                         }.padding(vertical = 8.dp)
                     )
+                    Text(
+                        (if (now.isEmpty()) "✓ " else "") + stringResource(R.string.dolphin_pad_no_key),
+                        fontWeight = if (now.isEmpty()) FontWeight.SemiBold else FontWeight.Normal,
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            save(GamepadDrawing.clear(overrides, base, REMAP_KEYS, spot.control)); pickingButton = null
+                        }.padding(vertical = 8.dp)
+                    )
+                    // Each key it has now, taken off on its own with a tap
+                    if (now.isNotEmpty()) {
+                        Text(stringResource(R.string.game_remap_tap_to_clear), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                            now.forEach { (keyLayer, code) ->
+                                FilterChip(
+                                    selected = true,
+                                    onClick = { save(GamepadDrawing.unbind(overrides, base, keyLayer, code)) },
+                                    label = { Text(pairName(keyLayer to code) + "  \u2715", maxLines = 1) }
+                                )
+                            }
+                        }
+                    }
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
                         Layer.entries.forEach { each ->
                             FilterChip(selected = pickLayer == each, onClick = { pickLayer = each }, label = { Text(layerName(each), maxLines = 1) })

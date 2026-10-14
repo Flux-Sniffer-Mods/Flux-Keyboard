@@ -45,7 +45,8 @@ class DolphinPadsTest {
     fun aRemoteWithItsOwnKeysIsLoadedForTheGame() {
         val own = FluxLayout.wiiPadSettings("", WiiPad.NUNCHUK, "Flux Keyboard RMCE01")
         assertTrue(own, "WiimoteProfile1 = Flux Keyboard RMCE01" in own)
-        assertEquals("", FluxLayout.wiiPadSettings("", WiiPad.NUNCHUK))
+        // Always named, so Dolphin loads it over whatever it had loaded
+        assertEquals("[Controls]\nWiimoteProfile1 = Flux Keyboard\n", FluxLayout.wiiPadSettings("", WiiPad.NUNCHUK))
     }
 
     @Test

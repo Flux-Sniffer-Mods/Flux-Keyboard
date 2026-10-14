@@ -22,6 +22,14 @@ class GamepadDrawingTest {
     }
 
     @Test
+    fun oneKeyComesOffAButtonAndTheOthersStay() {
+        val two = GamepadDrawing.assign(emptyMap(), base, keys, Control.A, Layer.NONE, KeyEvent.KEYCODE_R) + ((Layer.NONE to KeyEvent.KEYCODE_T) to Control.A)
+        val one = GamepadDrawing.unbind(two, base, Layer.NONE, KeyEvent.KEYCODE_R)
+        assertEquals(listOf(Layer.NONE to KeyEvent.KEYCODE_T), GamepadDrawing.keysFor(one, base, keys, Control.A))
+        assertTrue(GamepadDrawing.keysFor(GamepadDrawing.clear(two, base, keys, Control.A), base, keys, Control.A).isEmpty())
+    }
+
+    @Test
     fun buttonsDontOverlapOnAPhone() {
         val width = 336f
         val height = width / GamepadDrawing.ASPECT

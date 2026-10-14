@@ -54,6 +54,14 @@ object GamepadDrawing {
         return out.filter { (k, v) -> v != base(k.second, k.first) }
     }
 
+    /** [key] with [layer]'s modifier pressing nothing (its control keeps its other keys). */
+    fun unbind(overrides: Map<Pair<Layer, Int>, Control?>, base: (Int, Layer) -> Control?, layer: Layer, key: Int): Map<Pair<Layer, Int>, Control?> =
+        (overrides + ((layer to key) to null)).filter { (k, v) -> v != base(k.second, k.first) }
+
+    /** [control] pressed by none of [keys]. */
+    fun clear(overrides: Map<Pair<Layer, Int>, Control?>, base: (Int, Layer) -> Control?, keys: List<Int>, control: Control) =
+        keysFor(overrides, base, keys, control).fold(overrides) { out, (layer, key) -> unbind(out, base, layer, key) }
+
     /** [control] back on the keys [base] has for it, and no other. */
     fun restore(overrides: Map<Pair<Layer, Int>, Control?>, base: (Int, Layer) -> Control?, control: Control) =
         overrides.filter { (k, v) -> v != control && !(v == null && base(k.second, k.first) == control) }

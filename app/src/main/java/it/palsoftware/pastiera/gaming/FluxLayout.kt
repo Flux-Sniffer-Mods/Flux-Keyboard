@@ -640,7 +640,9 @@ object FluxLayout {
         }
         // The game's other profiles (another controller chosen, or its keys reset) taken away
         removeGameProfiles(dir, gameId, keep = "$folder/$profile.ini".takeIf { own })
-        val set = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { own })
+        // Always named for the game, so Dolphin loads it however the game starts (from Games or
+        // its own list) over whatever controller it had loaded
+        val set = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile)
         val kept = if (keepIt) withKey(set, "Controls", key, chosen) else set
         val updated = withoutOtherFluxProfiles(kept, keep = key)
         return if (updated == ini || write(file, updated)) Result.DONE else Result.FAILED
@@ -682,11 +684,11 @@ object FluxLayout {
     internal fun writeIfChanged(path: String, content: String): Boolean = read(path) == content || write(path, content)
 
     /**
-     * The games of [pkg] with a controller or keys of their own given the current layout again
-     * (it changed, or keys were changed in Keyboard controls). Blocking: through the shell.
+     * Every game of [pkg] given its controls again: the current layout (it changed, or keys were
+     * changed in Keyboard controls), named in the game's Dolphin settings. Blocking: through the shell.
      */
     fun refreshGames(context: android.content.Context, pkg: String) {
-        GameProfiles.all(context).filter { it.isGame && pkg in it.packages && (it.wiiPad != null || it.padControls.isNotEmpty()) }.forEach { game ->
+        GameProfiles.all(context).filter { it.isGame && pkg in it.packages }.forEach { game ->
             runCatching {
                 val path = game.launch?.let { GameFiles.gameFile(it) } ?: return@runCatching
                 val id = GameIds.id(context, "Dolphin", path) ?: return@runCatching
@@ -705,8 +707,7 @@ object FluxLayout {
      */
     internal fun wiiPadSettings(ini: String, pad: WiiPad, profile: String = pad.profile): String {
         val gc = pad == WiiPad.GAMECUBE
-        val remote = pad == WiiPad.CLASSIC || pad == WiiPad.SIDEWAYS || (pad == WiiPad.NUNCHUK && profile != pad.profile)
-        var out = withKey(ini, "Controls", "WiimoteProfile1", profile.takeIf { remote })
+        var out = withKey(ini, "Controls", "WiimoteProfile1", profile.takeIf { !gc })
         out = withKey(out, "Controls", "PadType0", if (gc) "6" else null)
         out = withKey(out, "Controls", "PadProfile1", if (gc) profile else null)
         out = withKey(out, "Controls", "WiimoteSource0", if (gc) "0" else null)
