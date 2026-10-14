@@ -1111,6 +1111,9 @@
     },
     {
       "text": "Dolphin: a game's own controller settings are tidier: its old profiles are taken away when its controller or keys change, nothing is rewritten when unchanged (quicker starts), and its profiles follow layout changes even when Dolphin is opened on its own"
+    },
+    {
+      "text": "Dolphin: no more \"No profiles found for game setting\" as a game starts: each game's own profile is named for its controller (GameCube or Wii Remote), and settings left by a controller chosen before are taken away"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

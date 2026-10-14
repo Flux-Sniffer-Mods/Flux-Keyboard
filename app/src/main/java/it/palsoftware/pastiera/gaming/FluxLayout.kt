@@ -620,6 +620,8 @@ object FluxLayout {
         val volume = volumeDevices(context, keyboard)
         val lines = if (gc) dolphinGameCube(keyboard, swap, volume, remap) else dolphinWii(keyboard, pad, swap, volume, remap)
         if ((own || read(path).isEmpty()) && !writeIfChanged(path, withSection("", "Profile", lines))) return Result.FAILED
+        // Dolphin says it can't find a profile a game names: never name one that isn't there
+        if (read(path).isEmpty()) return Result.FAILED
         // Also as the controller Dolphin starts with, so the game plays with it without loading
         // the profile in Dolphin (and the next game puts its own back)
         val active = if (gc) "$dir/Config/GCPadNew.ini" to "GCPad1" else "$dir/Config/WiimoteNew.ini" to "Wiimote1"
@@ -632,17 +634,38 @@ object FluxLayout {
         removeGameProfiles(dir, gameId, keep = "$folder/$profile.ini".takeIf { own })
         val file = "$dir/GameSettings/$gameId.ini"
         val ini = read(file)
-        val updated = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { own })
+        val set = if (wii) wiiPadSettings(ini, pad, profile) else withKey(ini, "Controls", "PadProfile1", profile.takeIf { own })
+        val updated = withoutOtherFluxProfiles(set, keep = if (gc) "PadProfile1" else "WiimoteProfile1")
         return if (updated == ini || write(file, updated)) Result.DONE else Result.FAILED
     }
 
-    /** A game's own profile in Dolphin's list: "Flux Keyboard RMCE01", "Flux Keyboard (sideways) RMCE01". */
-    internal fun gameProfileName(pad: WiiPad, gameId: String) = "${pad.profile} $gameId"
+    /**
+     * [ini] without the Flux Keyboard profiles it names for controllers other than [keep] (left by
+     * another controller chosen before, or set in Dolphin itself), so Dolphin never looks one up
+     * where it isn't.
+     */
+    internal fun withoutOtherFluxProfiles(ini: String, keep: String): String =
+        listOf("Pad", "Wiimote").flatMap { kind -> (1..4).map { "${kind}Profile$it" } }.filter { it != keep }.fold(ini) { text, key ->
+            val value = Regex("(?m)^\\s*" + Regex.escape(key) + "\\s*=\\s*(.*)$").find(text)?.groupValues?.get(1)?.trim()
+            if (value != null && value.startsWith("Flux Keyboard")) withKey(text, "Controls", key, null) else text
+        }
+
+    /**
+     * A game's own profile in Dolphin's list, named for its controller ("Flux Keyboard RMCE01
+     * GameCube"): Dolphin looks a GameCube controller's up among GameCube profiles and a Wii
+     * Remote's among Wii Remote ones, so the two never share a name.
+     */
+    internal fun gameProfileName(pad: WiiPad, gameId: String) = "Flux Keyboard $gameId " + when (pad) {
+        WiiPad.GAMECUBE -> "GameCube"
+        WiiPad.NUNCHUK -> "Wii Remote and Nunchuk"
+        WiiPad.CLASSIC -> "Classic Controller"
+        WiiPad.SIDEWAYS -> "Wii Remote sideways"
+    }
 
     /** [gameId]'s own Flux Keyboard profiles but [keep] ("GCPad/<name>.ini"), with their backup marks. */
     private fun removeGameProfiles(dir: String, gameId: String, keep: String?) {
         AdbShell.run(
-            "cd \"$dir/Config/Profiles\" 2>/dev/null || exit 0; for f in GCPad/'Flux Keyboard'*' $gameId.ini' Wiimote/'Flux Keyboard'*' $gameId.ini'; do " +
+            "cd \"$dir/Config/Profiles\" 2>/dev/null || exit 0; for f in GCPad/'Flux Keyboard'*'$gameId'*.ini Wiimote/'Flux Keyboard'*'$gameId'*.ini; do " +
                 "[ -e \"\$f\" ] || continue; [ \"\$f\" = \"${keep.orEmpty()}\" ] && continue; rm -f \"\$f\" \"\$f$BACKUP_NONE\"; " +
                 "[ -e \"\$f$BACKUP\" ] && mv -f \"\$f$BACKUP\" \"\$f\"; done; true", 3_000
         )

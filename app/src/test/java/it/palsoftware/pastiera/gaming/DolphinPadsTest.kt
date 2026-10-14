@@ -62,4 +62,18 @@ class DolphinPadsTest {
             }
         }
     }
+
+    @Test
+    fun aGameNamesOnlyItsOwnControllersProfile() {
+        val wii = FluxLayout.gameProfileName(WiiPad.NUNCHUK, "RMCE01")
+        val gc = FluxLayout.gameProfileName(WiiPad.GAMECUBE, "RMCE01")
+        assertTrue(wii != gc)
+        // A GameCube profile left from before, and one set in Dolphin itself, taken away
+        val before = "[Controls]\nPadProfile1 = Flux Keyboard RMCE01\nPadProfile2 = Mine\n"
+        val out = FluxLayout.withoutOtherFluxProfiles(FluxLayout.wiiPadSettings(before, WiiPad.NUNCHUK, wii), "WiimoteProfile1")
+        assertTrue(out, "WiimoteProfile1 = $wii" in out)
+        assertTrue(out, "Flux Keyboard RMCE01\n" !in out && "PadProfile1" !in out)
+        // The person's own profiles are left alone
+        assertTrue(out, "PadProfile2 = Mine" in out)
+    }
 }
