@@ -1329,7 +1329,8 @@
     <string name="dolphin_pad_row_description">Dai ai tasti e ai movimenti del %1$s tasti propri di questo gioco, come un tasto per l\'impennata. Salvato come profilo Dolphin per questo gioco.</string>
     <string name="dolphin_pad_hint">Tocca un tasto per assegnargli un tasto della tastiera, da solo o con un modificatore. I tasti con un tasto proprio di questo gioco sono evidenziati, e un tasto assegnato qui preme solo quel tasto.</string>
     <string name="dolphin_pad_no_key">Nessun tasto</string>
-    <string name="dolphin_pad_saved">Salvato in Dolphin per questo gioco.</string>
+    <string name="dolphin_pad_saved">Salvato. Dolphin lo usa dal prossimo avvio di questo gioco da Giochi.</string>
+    <string name="dolphin_game_applied_note">Applicato a ogni avvio di questo gioco da Giochi: controller, tasti e comandi a schermo passano allora in Dolphin, senza impostare nulla in Dolphin. Aperto da Dolphin stesso, un gioco usa i comandi dell\'ultimo gioco avviato da Giochi. Per stick e tasti posizionati sullo schermo, i comandi a schermo devono essere invisibili.</string>
     <string name="dolphin_overlay_title">Comandi a schermo di Dolphin</string>
     <string name="dolphin_overlay_off">Nascosti</string>
     <string name="dolphin_overlay_invisible">Invisibili (per stick e tasti posizionati sopra)</string>
@@ -1494,6 +1495,7 @@
     <string name="game_remap_reset">Ripristina tutti i tasti</string>
     <string name="game_remap_reset_description">Ogni tasto torna al pulsante del layout</string>
     <string name="game_remap_press_key">Premi il tasto sulla tastiera (con un modificatore tenuto premuto, se vuoi) oppure toccalo qui sotto.</string>
+    <string name="game_remap_dolphin_note">Dolphin legge i tasti dalle proprie impostazioni: le modifiche fatte qui vengono scritte lì al prossimo avvio di un gioco Dolphin da Giochi o all\'apertura delle impostazioni di gioco.</string>
     <string name="game_remap_view_keyboard">Tastiera</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Ogni pulsante mostra i tasti che lo premono. Tocca un pulsante per sceglierne il tasto, da solo o con un modificatore: i tasti che lo premevano prima non premono più nulla.</string>

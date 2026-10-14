@@ -1829,7 +1829,8 @@
     <string name="dolphin_pad_row_description">Призначте кнопкам і рухам %1$s власні клавіші для цієї гри, наприклад кнопку для віллі. Зберігається як профіль Dolphin для цієї гри.</string>
     <string name="dolphin_pad_hint">Торкніться кнопки, щоб призначити їй клавішу, окремо або з модифікатором. Кнопки з власною клавішею для цієї гри обведені, а призначена тут клавіша натискає лише цю кнопку.</string>
     <string name="dolphin_pad_no_key">Без клавіші</string>
-    <string name="dolphin_pad_saved">Збережено в Dolphin для цієї гри.</string>
+    <string name="dolphin_pad_saved">Збережено. Dolphin використає це з наступного запуску цієї гри з Ігор.</string>
+    <string name="dolphin_game_applied_note">Застосовується щоразу, коли ця гра запускається з Ігор: контролер, клавіші та екранне керування тоді переходять у Dolphin, нічого не треба налаштовувати в Dolphin. Відкрита з самого Dolphin гра використовує керування останньої гри, запущеної з Ігор. Для стіків і клавіш, розміщених на екрані, екранне керування має бути невидимим.</string>
     <string name="dolphin_overlay_title">Екранне керування Dolphin</string>
     <string name="dolphin_overlay_off">Приховано</string>
     <string name="dolphin_overlay_invisible">Невидиме (для розміщених на ньому стіків і клавіш)</string>
@@ -1994,6 +1995,7 @@
     <string name="game_remap_reset">Скинути всі клавіші</string>
     <string name="game_remap_reset_description">Кожна клавіша повертається до кнопки розкладки</string>
     <string name="game_remap_press_key">Натисніть клавішу на клавіатурі (за бажання утримуючи модифікатор) або торкніться її нижче.</string>
+    <string name="game_remap_dolphin_note">Dolphin читає клавіші з власних налаштувань: зміни тут записуються туди під час наступного запуску гри Dolphin з Ігор або відкриття ігрових налаштувань.</string>
     <string name="game_remap_view_keyboard">Клавіатура</string>
     <string name="game_remap_view_controller">Контролер</string>
     <string name="game_remap_controller_description">Кожна кнопка показує клавіші, що її натискають. Торкніться кнопки, щоб вибрати її клавішу, окремо або з модифікатором: клавіші, що натискали її раніше, більше нічого не натискають.</string>

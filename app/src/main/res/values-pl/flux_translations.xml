@@ -1829,7 +1829,8 @@
     <string name="dolphin_pad_row_description">Przypisz przyciskom i ruchom %1$s własne klawisze dla tej gry, na przykład przycisk do wheelie. Zapisywane jako profil Dolphin dla tej gry.</string>
     <string name="dolphin_pad_hint">Dotknij przycisku, aby przypisać mu klawisz, sam lub z modyfikatorem. Przyciski z własnym klawiszem dla tej gry są obramowane, a klawisz przypisany tutaj naciska tylko ten przycisk.</string>
     <string name="dolphin_pad_no_key">Brak klawisza</string>
-    <string name="dolphin_pad_saved">Zapisano w Dolphin dla tej gry.</string>
+    <string name="dolphin_pad_saved">Zapisano. Dolphin użyje tego od następnego uruchomienia tej gry z Gier.</string>
+    <string name="dolphin_game_applied_note">Stosowane przy każdym uruchomieniu tej gry z Gier: kontroler, klawisze i sterowanie ekranowe trafiają wtedy do Dolphin, bez ustawiania czegokolwiek w Dolphin. Otwarta z samego Dolphin gra używa sterowania ostatniej gry uruchomionej z Gier. Dla gałek i klawiszy umieszczonych na ekranie sterowanie ekranowe musi być niewidoczne.</string>
     <string name="dolphin_overlay_title">Sterowanie ekranowe Dolphin</string>
     <string name="dolphin_overlay_off">Ukryte</string>
     <string name="dolphin_overlay_invisible">Niewidoczne (dla umieszczonych na nim gałek i klawiszy)</string>
@@ -1994,6 +1995,7 @@
     <string name="game_remap_reset">Przywróć wszystkie klawisze</string>
     <string name="game_remap_reset_description">Każdy klawisz wraca do przycisku z układu</string>
     <string name="game_remap_press_key">Naciśnij klawisz na klawiaturze (jeśli chcesz, z przytrzymanym modyfikatorem) albo dotknij go poniżej.</string>
+    <string name="game_remap_dolphin_note">Dolphin odczytuje klawisze z własnych ustawień: zmiany wprowadzone tutaj są tam zapisywane przy następnym uruchomieniu gry Dolphin z Gier lub otwarciu ustawień gier.</string>
     <string name="game_remap_view_keyboard">Klawiatura</string>
     <string name="game_remap_view_controller">Kontroler</string>
     <string name="game_remap_controller_description">Każdy przycisk pokazuje klawisze, które go naciskają. Dotknij przycisku, aby wybrać jego klawisz, sam lub z modyfikatorem: klawisze, które naciskały go wcześniej, nie naciskają już niczego.</string>

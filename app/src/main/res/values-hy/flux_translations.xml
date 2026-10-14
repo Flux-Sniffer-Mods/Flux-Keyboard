@@ -1817,7 +1817,8 @@
     <string name="dolphin_pad_row_description">Տուր %1$s-ի կոճակներին և շարժումներին այս խաղի սեփական ստեղները, օրինակ՝ wheelie-ի կոճակ։ Պահվում է որպես Dolphin-ի պրոֆիլ այս խաղի համար։</string>
     <string name="dolphin_pad_hint">Հպիր կոճակին՝ նրան ստեղն տալու համար, միայնակ կամ փոփոխիչով։ Այս խաղի սեփական ստեղն ունեցող կոճակները եզրագծված են, և այստեղ տրված ստեղնը սեղմում է միայն այդ կոճակը։</string>
     <string name="dolphin_pad_no_key">Ստեղն չկա</string>
-    <string name="dolphin_pad_saved">Պահված է Dolphin-ում այս խաղի համար։</string>
+    <string name="dolphin_pad_saved">Պահված է։ Dolphin-ը կօգտագործի այն այս խաղը Խաղերից հաջորդ անգամ գործարկելիս։</string>
+    <string name="dolphin_game_applied_note">Կիրառվում է ամեն անգամ, երբ այս խաղը գործարկվում է Խաղերից․ նրա կարգավարը, ստեղները և էկրանային կառավարումներն այդ ժամանակ անցնում են Dolphin, առանց Dolphin-ում որևէ բան կարգավորելու։ Dolphin-ից բացելիս խաղը խաղում է Խաղերից վերջին գործարկված խաղի կառավարումներով։ Էկրանին տեղադրված լծակների և ստեղների համար էկրանային կառավարումները պետք է անտեսանելի լինեն։</string>
     <string name="dolphin_overlay_title">Dolphin-ի էկրանային կառավարումները</string>
     <string name="dolphin_overlay_off">Թաքցված</string>
     <string name="dolphin_overlay_invisible">Անտեսանելի (դրանց վրա տեղադրված լծակների և ստեղների համար)</string>
@@ -1982,6 +1983,7 @@
     <string name="game_remap_reset">Վերակայել բոլոր ստեղները</string>
     <string name="game_remap_reset_description">Յուրաքանչյուր ստեղն վերադառնում է դասավորության կոճակին</string>
     <string name="game_remap_press_key">Սեղմիր ստեղնը ստեղնաշարի վրա (ցանկության դեպքում՝ փոփոխիչը պահած) կամ հպիր այն ներքևում։</string>
+    <string name="game_remap_dolphin_note">Dolphin-ը ստեղները կարդում է իր կարգավորումներից․ այստեղի փոփոխությունները գրվում են այնտեղ, երբ հաջորդ անգամ Dolphin-ի խաղը գործարկվի Խաղերից կամ բացվեն խաղային կարգավորումները։</string>
     <string name="game_remap_view_keyboard">Ստեղնաշար</string>
     <string name="game_remap_view_controller">Կարգավար</string>
     <string name="game_remap_controller_description">Յուրաքանչյուր կոճակ ցույց է տալիս այն սեղմող ստեղները։ Հպիր կոճակին՝ նրա ստեղնն ընտրելու համար, միայնակ կամ փոփոխիչով․ նախկինում այն սեղմող ստեղներն այլևս ոչինչ չեն սեղմում։</string>

@@ -1823,7 +1823,8 @@
     <string name="dolphin_pad_row_description">Da a los botones y movimientos del %1$s teclas propias de este juego, como un botón para hacer caballito. Se guarda como un perfil de Dolphin para este juego.</string>
     <string name="dolphin_pad_hint">Toca un botón para darle una tecla, sola o con un modificador. Los botones con tecla propia de este juego aparecen remarcados, y una tecla asignada aquí solo pulsa ese botón.</string>
     <string name="dolphin_pad_no_key">Ninguna tecla</string>
-    <string name="dolphin_pad_saved">Guardado en Dolphin para este juego.</string>
+    <string name="dolphin_pad_saved">Guardado. Dolphin lo usa desde la próxima vez que este juego se inicie desde Juegos.</string>
+    <string name="dolphin_game_applied_note">Se aplica cada vez que este juego se inicia desde Juegos: su mando, teclas y controles en pantalla pasan entonces a Dolphin, sin nada que configurar en Dolphin. Abierto desde el propio Dolphin, un juego usa los controles del último juego iniciado desde Juegos. Para sticks y teclas colocados en la pantalla, los controles en pantalla deben ser invisibles.</string>
     <string name="dolphin_overlay_title">Controles en pantalla de Dolphin</string>
     <string name="dolphin_overlay_off">Ocultos</string>
     <string name="dolphin_overlay_invisible">Invisibles (para sticks y teclas colocados sobre ellos)</string>
@@ -1988,6 +1989,7 @@
     <string name="game_remap_reset">Restablecer todas las teclas</string>
     <string name="game_remap_reset_description">Cada tecla vuelve al botón del diseño</string>
     <string name="game_remap_press_key">Pulsa la tecla en el teclado (con un modificador pulsado si quieres) o tócala abajo.</string>
+    <string name="game_remap_dolphin_note">Dolphin lee las teclas de sus propios ajustes: los cambios de aquí se escriben allí la próxima vez que un juego de Dolphin se inicie desde Juegos o se abran los ajustes de juego.</string>
     <string name="game_remap_view_keyboard">Teclado</string>
     <string name="game_remap_view_controller">Mando</string>
     <string name="game_remap_controller_description">Cada botón muestra las teclas que lo pulsan. Toca un botón para elegir su tecla, sola o con un modificador: las teclas que lo pulsaban antes dejan de pulsar nada.</string>

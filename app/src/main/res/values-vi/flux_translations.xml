@@ -1811,7 +1811,8 @@
     <string name="dolphin_pad_row_description">Gán cho các nút và chuyển động của %1$s phím riêng cho trò chơi này, chẳng hạn một nút bốc đầu. Được lưu thành hồ sơ Dolphin cho trò chơi này.</string>
     <string name="dolphin_pad_hint">Chạm vào một nút để gán phím cho nó, riêng lẻ hoặc kèm phím bổ trợ. Các nút có phím riêng cho trò chơi này được viền, và phím gán ở đây chỉ bấm nút đó.</string>
     <string name="dolphin_pad_no_key">Không có phím</string>
-    <string name="dolphin_pad_saved">Đã lưu trong Dolphin cho trò chơi này.</string>
+    <string name="dolphin_pad_saved">Đã lưu. Dolphin dùng nó từ lần tới trò chơi này được mở từ Trò chơi.</string>
+    <string name="dolphin_game_applied_note">Được áp dụng mỗi khi trò chơi này được mở từ Trò chơi: tay cầm, phím và điều khiển trên màn hình được đưa vào Dolphin khi đó, không cần chỉnh gì trong Dolphin. Nếu mở từ chính Dolphin, trò chơi dùng điều khiển của trò chơi cuối cùng được mở từ Trò chơi. Với cần và phím đặt trên màn hình, điều khiển trên màn hình phải ở chế độ vô hình.</string>
     <string name="dolphin_overlay_title">Điều khiển trên màn hình của Dolphin</string>
     <string name="dolphin_overlay_off">Ẩn</string>
     <string name="dolphin_overlay_invisible">Vô hình (cho cần và phím đặt lên đó)</string>
@@ -1976,6 +1977,7 @@
     <string name="game_remap_reset">Đặt lại tất cả phím</string>
     <string name="game_remap_reset_description">Mỗi phím trở về nút của bố cục</string>
     <string name="game_remap_press_key">Nhấn phím trên bàn phím (giữ phím bổ trợ nếu muốn), hoặc chạm vào nó bên dưới.</string>
+    <string name="game_remap_dolphin_note">Dolphin đọc phím từ cài đặt riêng của nó: thay đổi ở đây được ghi vào đó lần tới một trò chơi Dolphin được mở từ Trò chơi hoặc khi mở cài đặt chơi game.</string>
     <string name="game_remap_view_keyboard">Bàn phím</string>
     <string name="game_remap_view_controller">Tay cầm</string>
     <string name="game_remap_controller_description">Mỗi nút hiện các phím bấm nó. Chạm vào một nút để chọn phím cho nó, riêng lẻ hoặc kèm phím bổ trợ: các phím từng bấm nó sẽ không bấm gì nữa.</string>

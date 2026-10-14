@@ -1284,7 +1284,8 @@
     <string name="dolphin_pad_row_description">Gib den Tasten und Bewegungen von %1$s eigene Tasten für dieses Spiel, etwa eine Wheelie-Taste. Gespeichert als eigenes Dolphin-Profil für dieses Spiel.</string>
     <string name="dolphin_pad_hint">Tippe auf eine Taste, um ihr eine Taste der Tastatur zu geben, allein oder mit einer Zusatztaste. Tasten mit eigener Belegung für dieses Spiel sind umrandet, und eine hier vergebene Taste drückt nur diese Taste.</string>
     <string name="dolphin_pad_no_key">Keine Taste</string>
-    <string name="dolphin_pad_saved">In Dolphin für dieses Spiel gespeichert.</string>
+    <string name="dolphin_pad_saved">Gespeichert. Dolphin verwendet es ab dem nächsten Start dieses Spiels über Spiele.</string>
+    <string name="dolphin_game_applied_note">Wird bei jedem Start dieses Spiels über Spiele angewendet: Controller, Tasten und Bildschirmsteuerung gehen dann in Dolphin, ohne dass in Dolphin etwas einzustellen ist. In Dolphin selbst geöffnet, spielt ein Spiel mit der Steuerung des zuletzt über Spiele gestarteten Spiels. Für auf dem Bildschirm platzierte Sticks und Tasten muss die Bildschirmsteuerung unsichtbar sein.</string>
     <string name="dolphin_overlay_title">Bildschirmsteuerung von Dolphin</string>
     <string name="dolphin_overlay_off">Ausgeblendet</string>
     <string name="dolphin_overlay_invisible">Unsichtbar (für darauf platzierte Sticks und Tasten)</string>
@@ -1450,6 +1451,7 @@
     <string name="game_remap_reset">Alle Tasten zurücksetzen</string>
     <string name="game_remap_reset_description">Jede Taste zurück auf den Knopf des Layouts</string>
     <string name="game_remap_press_key">Drücke die Taste auf der Tastatur (wenn du willst, mit gehaltener Zusatztaste) oder tippe sie unten an.</string>
+    <string name="game_remap_dolphin_note">Dolphin liest die Tasten aus seinen eigenen Einstellungen: Änderungen hier werden dort beim nächsten Start eines Dolphin-Spiels über Spiele oder beim Öffnen der Spielmodus-Einstellungen eingetragen.</string>
     <string name="game_remap_view_keyboard">Tastatur</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Jeder Knopf zeigt die Tasten, die ihn drücken. Tippe auf einen Knopf, um seine Taste zu wählen, allein oder mit einer Zusatztaste: Die Tasten, die ihn vorher gedrückt haben, drücken dann nichts mehr.</string>

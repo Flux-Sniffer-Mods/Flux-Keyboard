@@ -1829,7 +1829,8 @@
     <string name="dolphin_pad_row_description">Назначьте кнопкам и движениям %1$s собственные клавиши для этой игры, например кнопку для вилли. Сохраняется как профиль Dolphin для этой игры.</string>
     <string name="dolphin_pad_hint">Нажмите на кнопку, чтобы назначить ей клавишу, отдельно или с модификатором. Кнопки с собственной клавишей для этой игры обведены, а назначенная здесь клавиша нажимает только эту кнопку.</string>
     <string name="dolphin_pad_no_key">Без клавиши</string>
-    <string name="dolphin_pad_saved">Сохранено в Dolphin для этой игры.</string>
+    <string name="dolphin_pad_saved">Сохранено. Dolphin использует это со следующего запуска этой игры из Игр.</string>
+    <string name="dolphin_game_applied_note">Применяется при каждом запуске этой игры из Игр: контроллер, клавиши и экранное управление тогда передаются в Dolphin, ничего не нужно настраивать в Dolphin. Если открыть игру из самого Dolphin, она использует управление последней игры, запущенной из Игр. Для стиков и клавиш, размещённых на экране, экранное управление должно быть невидимым.</string>
     <string name="dolphin_overlay_title">Экранное управление Dolphin</string>
     <string name="dolphin_overlay_off">Скрыто</string>
     <string name="dolphin_overlay_invisible">Невидимо (для размещённых на нём стиков и клавиш)</string>
@@ -1994,6 +1995,7 @@
     <string name="game_remap_reset">Сбросить все клавиши</string>
     <string name="game_remap_reset_description">Каждая клавиша возвращается к кнопке раскладки</string>
     <string name="game_remap_press_key">Нажмите клавишу на клавиатуре (при желании удерживая модификатор) или коснитесь её ниже.</string>
+    <string name="game_remap_dolphin_note">Dolphin читает клавиши из собственных настроек: изменения здесь записываются туда при следующем запуске игры Dolphin из Игр или открытии игровых настроек.</string>
     <string name="game_remap_view_keyboard">Клавиатура</string>
     <string name="game_remap_view_controller">Контроллер</string>
     <string name="game_remap_controller_description">Каждая кнопка показывает клавиши, которые её нажимают. Нажмите на кнопку, чтобы выбрать её клавишу, отдельно или с модификатором: клавиши, которые нажимали её раньше, больше ничего не нажимают.</string>
