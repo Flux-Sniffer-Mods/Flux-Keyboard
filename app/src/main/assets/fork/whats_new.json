@@ -1146,10 +1146,10 @@
       "text": "Stream to Moonlight: Flux Keyboard is kept on the network while the phone sleeps (Android's battery saving cut it off), so Moonlight's Wake can reach it"
     },
     {
-      "text": "Gaming mode: a game from the Play Store takes W A Z D as a controller's stick, the way it takes the buttons (games such as Infinity Nikki hide their on-screen stick once a controller is used, so a finger dragged there did nothing); on-screen sticks are for games with keys placed on their screen, or placed by hand"
+      "text": "Stream to Moonlight: the phone starts answering again by itself when its Wi-Fi comes back or its address changes, when streaming is turned off with Always available on, and when Moonlight's Wake arrives, so it no longer shows offline until streaming is turned off and on"
     },
     {
-      "text": "Stream to Moonlight: the phone starts answering again by itself when its Wi-Fi comes back or its address changes, when streaming is turned off with Always available on, and when Moonlight's Wake arrives, so it no longer shows offline until streaming is turned off and on"
+      "text": "Gaming mode: a Play Store game, set up as a game or as an app, has W A Z D drag its on-screen stick (low on the left unless placed with Place keys on screen): without root, a controller's stick from the keyboard is ignored by games such as Infinity Nikki; the finger slides out from the stick's centre and keeps moving a hair while held, as joysticks that follow a finger (Unreal's) need"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

@@ -944,6 +944,11 @@ object GameMode {
     }
 
     private const val DEAD_ZONE = 0.33f
+    /** A stick's finger slides out from its centre in this many steps, this far apart. */
+    private const val GLIDE_STEPS = 6
+    private const val GLIDE_STEP_MS = 12L
+    /** ...and is moved a hair this often while held. */
+    private const val KEEP_MOVING_MS = 50L
     /** The Titan's trackpad reports one finger: moving to another, it lifts and touches again this soon. */
     private const val HANDOVER_MS = 30L
     /** ...and glides from the last finger's spot to the new one's over this long. */
@@ -964,6 +969,7 @@ object GameMode {
     private fun releaseStick(at: Int) {
         sticks[at] = 0f; sticks[at + 1] = 0f
         if (stickHeld[at / 2]) {
+            stickAt[at / 2] = null
             val finger = 1 + at / 2
             worker.execute { send("T u $finger") }
             stickHeld[at / 2] = false
@@ -995,10 +1001,38 @@ object GameMode {
         lastDrag = "stick ${at / 2} from ${cx.toInt()},${cy.toInt()} reach ${reach.toInt()} to ${x.toInt()},${y.toInt()} (bars ${barX.toInt()},${barY.toInt()})"
         // Each stick's first touch, so the crash log shows whether a touch game's stick is reached
         if (first) FluxLog.w(TAG, "on-screen $lastDrag on a ${screenW.toInt()}x${screenH.toInt()} screen")
-        worker.execute {
-            if (first) send("T d $finger $cx $cy")
-            send("T m $finger $x $y")
-        }
+        stickAt[at / 2] = x to y
+        if (first) {
+            // Put down on the stick, then slid out over a few frames: a joystick that follows
+            // the finger (Unreal's among them) takes a jump straight to the edge as nothing
+            worker.execute {
+                send("T d $finger $cx $cy")
+                for (step in 1..GLIDE_STEPS) {
+                    Thread.sleep(GLIDE_STEP_MS)
+                    val (tx, ty) = stickAt[at / 2] ?: return@execute
+                    send("T m $finger ${cx + (tx - cx) * step / GLIDE_STEPS} ${cy + (ty - cy) * step / GLIDE_STEPS}")
+                }
+            }
+            keepStickMoving(at / 2, finger)
+        } else worker.execute { send("T m $finger $x $y") }
+    }
+
+    /** Where each held on-screen stick's finger is, for keeping it moving. */
+    private val stickAt = arrayOfNulls<Pair<Float, Float>>(2)
+
+    /**
+     * A held stick's finger moved a hair back and forth while it's held: a joystick that reads
+     * the finger's movement, not where it rests, lets go of one that stops.
+     */
+    private fun keepStickMoving(stick: Int, finger: Int) {
+        var nudge = 1f
+        lateinit var task: java.util.concurrent.ScheduledFuture<*>
+        task = watcher.scheduleAtFixedRate({
+            val spot = stickAt[stick]
+            if (!stickHeld[stick] || spot == null) { task.cancel(false); return@scheduleAtFixedRate }
+            nudge = -nudge
+            worker.execute { send("T m $finger ${spot.first + nudge} ${spot.second}") }
+        }, KEEP_MOVING_MS * 2, KEEP_MOVING_MS, java.util.concurrent.TimeUnit.MILLISECONDS)
     }
 
     /**
