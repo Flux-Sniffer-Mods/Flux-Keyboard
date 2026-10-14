@@ -2,6 +2,7 @@ package it.palsoftware.pastiera.streaming
 
 import android.content.Context
 import it.palsoftware.pastiera.FluxLog
+import it.palsoftware.pastiera.adb.AdbShell
 import android.util.Log
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -39,6 +40,19 @@ object StreamWake {
             multicast = app.getSystemService(android.net.wifi.WifiManager::class.java)
                 ?.createMulticastLock("Flux:wake")?.apply { setReferenceCounted(false); acquire() }
         }.onFailure { FluxLog.w(TAG, "broadcasts can't be let through: $it") }
+        // Android's battery saving (Doze) cuts an app off the network while the phone sleeps, so a
+        // wake would never arrive: Flux Keyboard let through, once the shell is up
+        if (StreamHost.pairedCount(app) > 0) Thread({
+            repeat(30) {
+                if (AdbShell.available()) {
+                    val out = AdbShell.run("cmd deviceidle whitelist +${app.packageName} 2>&1", 5_000)
+                    FluxLog.w(TAG, "kept on the network while the phone sleeps: ${out?.trim()?.ifEmpty { "done" } ?: "the shell didn't answer"}")
+                    return@Thread
+                }
+                Thread.sleep(2_000)
+            }
+            FluxLog.w(TAG, "not kept on the network while the phone sleeps: no shell")
+        }, "StreamWakeIdle").apply { isDaemon = true; start() }
         for (port in PORTS) Thread({
             val socket = runCatching {
                 DatagramSocket(null).apply { reuseAddress = true; broadcast = true; bind(InetSocketAddress(port)) }

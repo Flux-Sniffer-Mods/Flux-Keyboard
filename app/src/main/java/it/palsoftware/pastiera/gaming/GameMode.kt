@@ -992,6 +992,8 @@ object GameMode {
         val x = (cx + sx * reach).coerceIn(1f - barX, screenW + barX - 2f)
         val y = (cy + sy * reach).coerceIn(1f - barY, screenH + barY - 2f)
         lastDrag = "stick ${at / 2} from ${cx.toInt()},${cy.toInt()} reach ${reach.toInt()} to ${x.toInt()},${y.toInt()} (bars ${barX.toInt()},${barY.toInt()})"
+        // Each stick's first touch, so the crash log shows whether a touch game's stick is reached
+        if (first) FluxLog.w(TAG, "on-screen $lastDrag on a ${screenW.toInt()}x${screenH.toInt()} screen")
         worker.execute {
             if (first) send("T d $finger $cx $cy")
             send("T m $finger $x $y")
