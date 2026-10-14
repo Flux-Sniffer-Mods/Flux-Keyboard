@@ -1992,7 +1992,11 @@
     <string name="game_mode_bottom_screen">Màn hình dưới</string>
     <string name="game_mode_swap_face">Đổi A/B và X/Y</string>
     <string name="game_mode_swap_face_description">Bố cục của Nintendo: M bấm B, L bấm A, I bấm X và J bấm Y, để mỗi phím bấm nút ở đúng vị trí của nó. Bật mặc định cho trình giả lập Nintendo.</string>
-    <string name="game_mode_gamehub_lite_note">GameHub chính thức chỉ có thể mở, không thể chỉ định trò chơi để bắt đầu: các trò chơi của nó mở GameHub và bạn chọn từ đó. GameHub Lite bắt đầu từng trò chơi ngay lập tức, nên đó là bản nên dùng với Flux Keyboard.</string>
+    <string name="game_mode_gamehub_lite_note">GameHub chính thức chỉ mở được, không thể chỉ định trò chơi để bắt đầu. Hãy cài thêm GameHub Lite: các trò chơi mà GameHub chính thức xuất ra sẽ bắt đầu ngay trong GameHub Lite.</string>
+    <string name="game_mode_gamehub_official_note">GameHub Lite không có tính năng xuất cho frontend. Hãy cài thêm GameHub chính thức và đặt tính năng xuất cho frontend của nó vào thư mục GameHub trong Download/Flux Keyboard/Games: các trò chơi của nó sẽ hiện ở đây và bắt đầu trong GameHub Lite.</string>
+    <string name="game_mode_gamehub_games_in">Trò chơi của GameHub bắt đầu trong</string>
+    <string name="game_mode_gamehub_in_lite">GameHub Lite</string>
+    <string name="game_mode_gamehub_in_official">GameHub (mở ứng dụng)</string>
     <string name="dual_screens_title">Màn hình</string>
     <string name="dual_screens_as_set">Như trong %1$s</string>
     <string name="dual_screens_stacked">Cả hai, màn trên trước</string>

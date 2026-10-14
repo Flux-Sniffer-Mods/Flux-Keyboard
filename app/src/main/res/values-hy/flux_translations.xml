@@ -1998,7 +1998,11 @@
     <string name="game_mode_bottom_screen">Ներքևի էկրան</string>
     <string name="game_mode_swap_face">Փոխանակել A/B և X/Y</string>
     <string name="game_mode_swap_face_description">Nintendo-ի դասավորությունը՝ M-ը սեղմում է B, L-ը՝ A, I-ն՝ X, J-ն՝ Y, որպեսզի ամեն ստեղն սեղմի իր տեղում գտնվող կոճակը։ Nintendo էմուլյատորների համար միացված է լռելյայն։</string>
-    <string name="game_mode_gamehub_lite_note">Պաշտոնական GameHub-ը կարելի է միայն բացել, ոչ թե ասել, թե որ խաղը սկսել. դրա խաղերը բացում են GameHub-ը, և ընտրում եք այնտեղից։ GameHub Lite-ը յուրաքանչյուր խաղ սկսում է անմիջապես, ուստի հենց այն է պետք Flux Keyboard-ի հետ։</string>
+    <string name="game_mode_gamehub_lite_note">Պաշտոնական GameHub-ը կարելի է միայն բացել, ոչ թե ասել, թե որ խաղը սկսի։ Տեղադրիր նաև GameHub Lite-ը․ պաշտոնական GameHub-ի արտահանած խաղերն այդ դեպքում անմիջապես կսկսվեն GameHub Lite-ում։</string>
+    <string name="game_mode_gamehub_official_note">GameHub Lite-ը frontend-ի համար արտահանում չունի։ Տեղադրիր նաև պաշտոնական GameHub-ը և դրա frontend-ի արտահանումը սահմանիր Download/Flux Keyboard/Games-ի GameHub թղթապանակին․ դրա խաղերն այդ դեպքում կերևան այստեղ և կսկսվեն GameHub Lite-ում։</string>
+    <string name="game_mode_gamehub_games_in">GameHub-ի խաղերը սկսվում են</string>
+    <string name="game_mode_gamehub_in_lite">GameHub Lite</string>
+    <string name="game_mode_gamehub_in_official">GameHub (բացում է այն)</string>
     <string name="dual_screens_title">Էկրաններ</string>
     <string name="dual_screens_as_set">Ինչպես %1$s-ում</string>
     <string name="dual_screens_stacked">Երկուսն էլ, վերևինը առաջինը</string>

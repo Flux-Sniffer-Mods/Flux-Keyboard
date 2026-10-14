@@ -1466,7 +1466,11 @@
     <string name="game_mode_bottom_screen">Unterer Bildschirm</string>
     <string name="game_mode_swap_face">A/B und X/Y tauschen</string>
     <string name="game_mode_swap_face_description">Nintendos Anordnung: M drückt B, L drückt A, I drückt X und J drückt Y, sodass jede Taste den Knopf an ihrer Stelle drückt. Für Nintendo-Emulatoren standardmäßig an.</string>
-    <string name="game_mode_gamehub_lite_note">Das offizielle GameHub lässt sich nur öffnen, nicht mit einem bestimmten Spiel starten: Seine Spiele öffnen GameHub und du wählst dort aus. GameHub Lite startet jedes Spiel direkt, daher ist es die Wahl für Flux Keyboard.</string>
+    <string name="game_mode_gamehub_lite_note">Das offizielle GameHub lässt sich nur öffnen, nicht mit einem bestimmten Spiel starten. Installiere GameHub Lite dazu: Die Spiele, die das offizielle GameHub exportiert, starten dann direkt in GameHub Lite.</string>
+    <string name="game_mode_gamehub_official_note">GameHub Lite hat keinen Export für Frontends. Installiere das offizielle GameHub dazu und stelle seinen Export für Frontends auf den Ordner GameHub in Download/Flux Keyboard/Games: Seine Spiele erscheinen dann hier und starten in GameHub Lite.</string>
+    <string name="game_mode_gamehub_games_in">GameHubs Spiele starten in</string>
+    <string name="game_mode_gamehub_in_lite">GameHub Lite</string>
+    <string name="game_mode_gamehub_in_official">GameHub (öffnet es)</string>
     <string name="dual_screens_title">Bildschirme</string>
     <string name="dual_screens_as_set">Wie in %1$s eingestellt</string>
     <string name="dual_screens_stacked">Beide, oberer Bildschirm zuerst</string>
