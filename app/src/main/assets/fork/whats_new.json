@@ -770,10 +770,10 @@
       "text": "Games app: Stream is a broadcast mark whose arcs show the phone's Wi-Fi strength while streaming is on (dimmed while it's off); tap to turn it on or off, long-press for its settings"
     },
     {
-      "text": "Stream to Moonlight: Phone's sound while streaming: the game's sound off on the phone (the default; the TV still gets it), or every sound of the phone's off too (calls and messages vibrate, alarms still sound), all put back when the stream ends"
+      "text": "Stream to Moonlight: Phone's sound while streaming: the game's sound off on the phone (the default; the Moonlight client still gets it), or every sound of the phone's off too (calls and messages vibrate, alarms still sound), all put back when the stream ends"
     },
     {
-      "text": "Stream to Moonlight: an LG TV can be set up (found on the Wi-Fi, accepted once on the TV); with streaming on, picking a game in the Games app turns the TV on and opens Moonlight there straight into the game"
+      "text": "Stream to Moonlight: a Moonlight client can be set up (LG webOS for now: found on the Wi-Fi, accepted once on it); with streaming on, picking a game in the Games app turns it on and opens Moonlight there straight into the game"
     },
     {
       "text": "Game folders: GameHub Lite has a folder of its own (Download/Flux Keyboard/Games/GameHub Lite) for its Steam library, apart from GameHub's; games already found in GameHub's folder still start in GameHub Lite when it's installed"
@@ -785,7 +785,10 @@
       "text": "GameHub Lite with the official GameHub: Lite has no Export for frontend, so install both and export from the official GameHub; its games start in GameHub Lite, or in GameHub if you choose (Gaming mode > GameHub's games start in). Games already found move with the choice"
     },
     {
-      "text": "Stream to Moonlight: with an LG TV set up and streaming on, opening a game (from the Games app, the home screen or the quick launcher) asks whether to play it on the TV or the phone; Games opened while streaming can be set to always one instead"
+      "text": "Stream to Moonlight: with a Moonlight client set up and streaming on, opening a game (from the Games app, the home screen or the quick launcher) asks whether to stream it to the Moonlight client or play it on the phone; Games opened while streaming can be set to always one instead"
+    },
+    {
+      "text": "Stream to Moonlight: the TV settings and prompts now say Moonlight client"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
