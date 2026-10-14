@@ -126,8 +126,9 @@ object FluxLayout {
         KeyEvent.KEYCODE_K -> Control.R3
         KeyEvent.KEYCODE_Q -> Control.L1
         KeyEvent.KEYCODE_E -> Control.R1
-        KeyEvent.KEYCODE_VOLUME_UP -> if (mods.alt) Control.L2_ANALOG else Control.L2
-        KeyEvent.KEYCODE_VOLUME_DOWN -> if (mods.alt) Control.R2_ANALOG else Control.R2
+        // As the phone is held sideways: Volume Down on the left, Volume Up on the right
+        KeyEvent.KEYCODE_VOLUME_DOWN -> if (mods.alt) Control.L2_ANALOG else Control.L2
+        KeyEvent.KEYCODE_VOLUME_UP -> if (mods.alt) Control.R2_ANALOG else Control.R2
         KeyEvent.KEYCODE_SPACE -> if (mods.alt) Control.HOME else if (mods.shift) Control.SELECT else Control.START
         else -> null
     }
@@ -415,7 +416,7 @@ object FluxLayout {
     internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
 
     /** The layout's version: written again into emulators given an older one. */
-    private const val LAYOUT_VERSION = 5
+    private const val LAYOUT_VERSION = 6
 
     /**
      * An emulator given Flux Keyboard's layout before it changed: given the current one, once

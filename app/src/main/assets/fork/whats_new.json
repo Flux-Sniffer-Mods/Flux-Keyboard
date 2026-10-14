@@ -726,6 +726,9 @@
     },
     {
       "text": "Typing and trackpad swipes do less work per key: your own corrections are read once until you change them, accents and swipe readings no longer rebuild their patterns each time, and the emoji layer opens straight away the first time"
+    },
+    {
+      "text": "Gaming mode: the volume keys are the triggers as the phone sits held sideways, Volume Down the left and Volume Up the right"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1084,6 +1087,9 @@
     },
     {
       "text": "Brightness shortcuts no longer freeze the screen or typing for a moment, and screen sizes or battery saver tapped twice in a row always end on the last one tapped"
+    },
+    {
+      "text": "Gaming mode: Recents opens again after a game changed the screen's size or turning, with another home app such as Niagara"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

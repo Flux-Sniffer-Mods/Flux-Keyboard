@@ -95,13 +95,14 @@ class FluxLayoutTest {
     @Test
     fun altVolumeIsTheTriggerWithoutItsClick() {
         val alt = FluxLayout.Modifiers(alt = true)
-        assertEquals(FluxLayout.Control.L2_ANALOG, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_UP, alt))
-        assertEquals(FluxLayout.Control.R2, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_DOWN, FluxLayout.Modifiers()))
+        assertEquals(FluxLayout.Control.L2_ANALOG, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_DOWN, alt))
+        // Held sideways, Volume Up is on the right
+        assertEquals(FluxLayout.Control.R2, FluxLayout.defaultControlFor(KeyEvent.KEYCODE_VOLUME_UP, FluxLayout.Modifiers()))
         val gc = FluxLayout.dolphinGameCube("Keys")
         val l = gc.first { it.startsWith("Triggers/L = ") }
         val analog = gc.first { it.startsWith("Triggers/L-Analog = ") }
         // The click only without Alt; all the way with or without
-        assertTrue(l, "`Volume Up`" in l && "(`Left Alt` | `Right Alt`)" !in l)
+        assertTrue(l, "`Volume Down`" in l && "(`Left Alt` | `Right Alt`)" !in l)
         assertTrue(analog, "(`Left Alt` | `Right Alt`)" in analog)
     }
 
@@ -132,7 +133,7 @@ class FluxLayoutTest {
         val start = gc.first { it.startsWith("Buttons/Start = ") }
         assertTrue(start, "`Space`" in start && "!`Left Shift`" in start)
         val l = gc.first { it.startsWith("Triggers/L = ") }
-        assertTrue(l, "`Volume Up`" in l)
+        assertTrue(l, "`Volume Down`" in l)
     }
 
     @Test
@@ -148,7 +149,7 @@ class FluxLayoutTest {
     fun dolphinReadsTheVolumeKeysFromTheirOwnDevice() {
         val gc = FluxLayout.dolphinGameCube("TitanKey", volume = listOf("Android/0/mtk-kpd"))
         val l = gc.first { it.startsWith("Triggers/L = ") }
-        assertTrue(l, "`Android/0/mtk-kpd:Volume Up`" in l)
+        assertTrue(l, "`Android/0/mtk-kpd:Volume Down`" in l)
         // The keyboard's own keys stay unnamed (its device is the profile's)
         val a = gc.first { it.startsWith("Buttons/A = ") }
         assertTrue(a, ":" !in a)

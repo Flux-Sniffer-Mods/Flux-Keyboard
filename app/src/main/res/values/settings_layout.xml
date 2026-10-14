@@ -325,7 +325,7 @@
     <string name="game_remap_list">Show as a list</string>
     <string name="game_remap_reset">Reset all keys</string>
     <string name="game_remap_reset_description">Every key back to the layout\'s button</string>
-    <string name="game_mode_layout">Left stick: W A Z D (S clicks it)\nD-pad: SYM + W A Z D\nRight stick: Alt + I J M L, or right Shift + W A Z D (K clicks it)\nFace buttons: I (Y), J (X), M (A), L (B)\nBumpers: Q and E\nTriggers: Volume Up and Volume Down (Alt + Volume: pressed all the way without the click, for a GameCube controller)\nStart: Space\nSelect: Shift + Space\nXbox / Home: Alt + Space\nVolume: SYM + Volume Up or Down\n\nKeys placed on a game\'s screen tap there instead.</string>
+    <string name="game_mode_layout">Left stick: W A Z D (S clicks it)\nD-pad: SYM + W A Z D\nRight stick: Alt + I J M L, or right Shift + W A Z D (K clicks it)\nFace buttons: I (Y), J (X), M (A), L (B)\nBumpers: Q and E\nTriggers: Volume Down (left) and Volume Up (right) (Alt + Volume: pressed all the way without the click, for a GameCube controller)\nStart: Space\nSelect: Shift + Space\nXbox / Home: Alt + Space\nVolume: SYM + Volume Up or Down\n\nKeys placed on a game\'s screen tap there instead.</string>
     <string name="game_mode_note">Gaming mode needs the built-in shell (or Shizuku) and the keyboard\'s accessibility helper. Your keys play as a controller (see Keyboard controls). Typing into a game\'s text field works as usual.</string>
     <string name="game_mode_add">Add an app</string>
     <string name="game_mode_add_description">A launcher or emulator. Its games use these settings.</string>

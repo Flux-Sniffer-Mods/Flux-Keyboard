@@ -639,6 +639,7 @@ object GameMode {
                     "settings put system accelerometer_rotation ${it.takeIf { r -> r == "0" || r == "1" } ?: "1"}"
             }
         ).joinToString("; "), 5_000)
+        refreshRecents(context)
         prefs.edit().remove(KEY_RESTORE_SIZE).remove(KEY_RESTORE_ROTATION).remove(KEY_RESTORE_DENSITY).apply()
         savedSize = null
         savedRotation = null
@@ -797,6 +798,7 @@ object GameMode {
         }
         if (commands.isEmpty()) return
         AdbShell.run(commands.joinToString("; "), 5_000)
+        refreshRecents(context)
         // Taps follow the screen's shape
         val shape = sideways
         val own = extra
@@ -815,6 +817,26 @@ object GameMode {
             }
         }
         if (shape != null || restoredSize != null) send("S ${screenW.toInt()} ${screenH.toInt()}")
+    }
+
+    /**
+     * Android's Recents started afresh after the screen's size, density or turning changed: with
+     * another home app (Niagara), Recents is the system launcher's own screen, which keeps the old
+     * screen and stops opening. Left alone when the system launcher is the home app (it's home).
+     */
+    private fun refreshRecents(context: Context) {
+        val recents = runCatching {
+            val system = android.content.res.Resources.getSystem()
+            val id = system.getIdentifier("config_recentsComponentName", "string", "android")
+            android.content.ComponentName.unflattenFromString(system.getString(id))?.packageName
+        }.getOrNull() ?: return
+        val home = context.packageManager.resolveActivity(
+            android.content.Intent(android.content.Intent.ACTION_MAIN).addCategory(android.content.Intent.CATEGORY_HOME),
+            android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
+        )?.activityInfo?.packageName
+        if (recents == home || recents == "android") return
+        AdbShell.run("am force-stop $recents", 3_000)
+        FluxLog.w(TAG, "Recents ($recents) started afresh after the screen changed")
     }
 
     /** The phone's screen (short side, long side) when gaming mode last changed its shape. */
