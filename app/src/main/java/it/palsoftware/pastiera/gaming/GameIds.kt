@@ -17,7 +17,8 @@ import java.io.File
 object GameIds {
     data class Found(val id: String?, val title: String?)
 
-    private const val PREFS = "game_titles_2"
+    // Version 3: IDs guessed from a file's name (US releases first) are no longer kept as read ones
+    private const val PREFS = "game_titles_3"
 
     /** The name to show for [path], played in [player]; null to keep the file's name. */
     fun title(context: Context, player: String, path: String): String? {
@@ -39,9 +40,11 @@ object GameIds {
             named != null -> Found(named.id, read?.title ?: named.title)
             read != null -> read
             // Nothing in the game or its name: the closest title in the list, by the file's name
-            else -> database?.let { guess(titles(context, it), cleanName(file)) }
+            else -> database?.let { guess(titles(context, it), cleanName(file), regionOf(file)) }
         }
-        found?.id?.let { prefs.edit().putString("id:$path", it).apply() }
+        // An ID read from the game or written in its name is the game's; a guess is only a guess:
+        // kept apart, and the game read again next time
+        found?.id?.let { id -> prefs.edit().putString(if (read?.id != null || named != null) "id:$path" else "guess:$path", id).apply() }
         val name = found?.id?.let { id -> database?.let { lookup(context, it, id) } } ?: found?.title?.let { cleanName(it) }
             ?: cleanName(file).takeIf { it.isNotEmpty() && it != file }
         // Not known yet (no list to look in): asked again next time
@@ -55,9 +58,14 @@ object GameIds {
     fun id(context: Context, player: String, path: String): String? {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         prefs.getString("id:$path", null)?.let { return it }
-        if (prefs.contains(path)) return null
-        title(context, player, path)
-        return prefs.getString("id:$path", null)
+        // Read from the game itself when it can be (its title may have been named before it could)
+        val read = when (player) { "Dolphin" -> disc(path); "Azahar" -> cartridge(path); "PPSSPP" -> psp(path); else -> null }?.id
+        if (read != null) {
+            prefs.edit().putString("id:$path", read).apply()
+            return read
+        }
+        if (!prefs.contains(path)) title(context, player, path)
+        return prefs.getString("id:$path", null) ?: prefs.getString("guess:$path", null)
     }
 
     /**
@@ -119,16 +127,24 @@ object GameIds {
         return maxOf(dice, words)
     }
 
-    /** The title in [titles] (ID to title) closest to [name], if close enough; US releases first. */
-    internal fun guess(titles: Map<String, String>, name: String): Found? {
+    /** The region a file's name gives (its ID's fourth letter: P Europe, E USA, J Japan), if any. */
+    internal fun regionOf(file: String): Char? = when {
+        Regex("(?i)\\b(europe|eur|pal|australia|uk)\\b").containsMatchIn(file) -> 'P'
+        Regex("(?i)\\b(usa|us|ntsc-u|america)\\b").containsMatchIn(file) -> 'E'
+        Regex("(?i)\\b(japan|jpn|ntsc-j)\\b").containsMatchIn(file) -> 'J'
+        else -> null
+    }
+
+    /** The title in [titles] (ID to title) closest to [name], if close enough; [region]'s release first, else US. */
+    internal fun guess(titles: Map<String, String>, name: String, region: Char? = null): Found? {
         val query = normalize(name)
         if (query.isEmpty()) return null
-        val region = "EPJ"
+        val order = (region?.toString() ?: "") + "EPJ"
         return titles.entries.asSequence()
             .map { (id, title) -> Triple(id, title, similarity(query, normalize(title))) }
             .filter { it.third >= 0.8 }
             .maxWithOrNull(compareBy<Triple<String, String, Double>> { it.third }
-                .thenBy { -(region.indexOf(it.first.getOrElse(3) { ' ' }).let { i -> if (i < 0) 9 else i }) })
+                .thenBy { -(order.indexOf(it.first.getOrElse(3) { ' ' }).let { i -> if (i < 0) 9 else i }) })
             ?.let { Found(it.first, it.second) }
     }
 

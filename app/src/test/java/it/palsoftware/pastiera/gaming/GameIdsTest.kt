@@ -88,4 +88,13 @@ class GameIdsTest {
         assertEquals("SB4E01", GameIds.guess(titles, "Super Mario Galaxy II")?.id)
         assertNull(GameIds.guess(titles, "Animal Crossing"))
     }
+
+    @Test
+    fun aGuessTakesTheRegionInTheFilesName() {
+        val titles = mapOf("RMCE01" to "Mario Kart Wii", "RMCP01" to "Mario Kart Wii", "RMCJ01" to "Mario Kart Wii")
+        val file = "Mario Kart Wii (Europe, Australia) (En,Fr,De,Es,It)"
+        assertEquals('P', GameIds.regionOf(file))
+        assertEquals("RMCP01", GameIds.guess(titles, GameIds.cleanName(file), GameIds.regionOf(file))?.id)
+        assertEquals("RMCE01", GameIds.guess(titles, "Mario Kart Wii", GameIds.regionOf("Mario Kart Wii"))?.id)
+    }
 }

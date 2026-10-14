@@ -1138,6 +1138,9 @@
     },
     {
       "text": "Gaming mode: Dolphin games always name Flux Keyboard's controls in their Dolphin settings, written again each time Dolphin opens, so a game started from Dolphin's own list no longer keeps a profile loaded by hand (unless the game is set to keep it)"
+    },
+    {
+      "text": "Gaming mode: a Dolphin game's ID is read from its disc again when it was only guessed from its name before (a European Mario Kart Wii was taken for the US one, so its settings went to the wrong game); a guess now takes the region in the file's name, and a game in the list twice no longer has its two entries take turns writing its settings"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",

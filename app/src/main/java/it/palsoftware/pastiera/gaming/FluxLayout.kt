@@ -688,7 +688,13 @@ object FluxLayout {
      * changed in Keyboard controls), named in the game's Dolphin settings. Blocking: through the shell.
      */
     fun refreshGames(context: android.content.Context, pkg: String) {
-        GameProfiles.all(context).filter { it.isGame && pkg in it.packages }.forEach { game ->
+        // One per game file: the one played last when a game is in the list twice, so the two
+        // never take turns writing its settings
+        val active = GameProfiles.active(context, pkg)?.id
+        GameProfiles.all(context).filter { it.isGame && pkg in it.packages }
+            .sortedByDescending { it.id == active }
+            .distinctBy { game -> game.launch?.let { GameFiles.gameFile(it) } ?: game.id }
+            .forEach { game ->
             runCatching {
                 val path = game.launch?.let { GameFiles.gameFile(it) } ?: return@runCatching
                 val id = GameIds.id(context, "Dolphin", path) ?: return@runCatching

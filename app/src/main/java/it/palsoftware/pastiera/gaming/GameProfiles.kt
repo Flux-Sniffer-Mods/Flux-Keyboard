@@ -405,9 +405,12 @@ object GameProfiles {
     fun addDetected(context: Context, games: List<GameLibrary.Game>) {
         val profiles = all(context)
         val known = profiles.mapNotNull { it.launch }.toMutableSet()
+        // The same game file found another way (a launch written differently) is the same game
+        val files = profiles.mapNotNull { profile -> profile.launch?.let { GameFiles.gameFile(it) } }.toMutableSet()
         val added = games.mapNotNull { game ->
             val launch = game.launch ?: GameLibrary.launchIntent(game)?.toUri(android.content.Intent.URI_INTENT_SCHEME) ?: return@mapNotNull null
             if (!known.add(launch)) return@mapNotNull null
+            if (GameFiles.gameFile(launch)?.let { !files.add(it) } == true) return@mapNotNull null
             newProfile(game.name, setOf(game.packageName)).copy(launch = launch, own = false, pending = true)
         }
         if (added.isNotEmpty()) saveAll(context, profiles + added)
