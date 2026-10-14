@@ -1813,6 +1813,11 @@
     <string name="game_mode_wii_sideways">Wii Remote՝ հորիզոնական</string>
     <string name="game_mode_wii_set">Այս խաղն այժմ սկսվում է՝ %1$s։</string>
     <string name="game_mode_wii_gamecube">GameCube կարգավորիչ</string>
+    <string name="dolphin_pad_row">Այս խաղի կոճակները</string>
+    <string name="dolphin_pad_row_description">Տուր %1$s-ի կոճակներին և շարժումներին այս խաղի սեփական ստեղները, օրինակ՝ wheelie-ի կոճակ։ Պահվում է որպես Dolphin-ի պրոֆիլ այս խաղի համար։</string>
+    <string name="dolphin_pad_hint">Հպիր կոճակին՝ նրան ստեղն տալու համար, միայնակ կամ փոփոխիչով։ Այս խաղի սեփական ստեղն ունեցող կոճակները եզրագծված են, և այստեղ տրված ստեղնը սեղմում է միայն այդ կոճակը։</string>
+    <string name="dolphin_pad_no_key">Ստեղն չկա</string>
+    <string name="dolphin_pad_saved">Պահված է Dolphin-ում այս խաղի համար։</string>
     <string name="games_app_title">Խաղեր</string>
     <string name="games_app_empty">Դեռ խաղեր չկան. ավելացրեք դրանք Flux Keyboard-ի խաղային ռեժիմում կամ ստեղծեք խաղերի պանակները։</string>
     <string name="games_app_switch">Խաղերը հավելվածների ցանկում</string>

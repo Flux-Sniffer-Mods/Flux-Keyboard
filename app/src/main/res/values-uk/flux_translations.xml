@@ -1825,6 +1825,11 @@
     <string name="game_mode_wii_sideways">Wii Remote горизонтально</string>
     <string name="game_mode_wii_set">Ця гра тепер запускається з: %1$s.</string>
     <string name="game_mode_wii_gamecube">Контролер GameCube</string>
+    <string name="dolphin_pad_row">Кнопки цієї гри</string>
+    <string name="dolphin_pad_row_description">Призначте кнопкам і рухам %1$s власні клавіші для цієї гри, наприклад кнопку для віллі. Зберігається як профіль Dolphin для цієї гри.</string>
+    <string name="dolphin_pad_hint">Торкніться кнопки, щоб призначити їй клавішу, окремо або з модифікатором. Кнопки з власною клавішею для цієї гри обведені, а призначена тут клавіша натискає лише цю кнопку.</string>
+    <string name="dolphin_pad_no_key">Без клавіші</string>
+    <string name="dolphin_pad_saved">Збережено в Dolphin для цієї гри.</string>
     <string name="games_app_title">Ігри</string>
     <string name="games_app_empty">Ігор ще немає: додайте їх в ігровому режимі Flux Keyboard або створіть теки ігор.</string>
     <string name="games_app_switch">Ігри у списку застосунків</string>

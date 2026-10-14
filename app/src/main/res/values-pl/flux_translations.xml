@@ -1825,6 +1825,11 @@
     <string name="game_mode_wii_sideways">Wii Remote trzymany poziomo</string>
     <string name="game_mode_wii_set">Ta gra startuje teraz z: %1$s.</string>
     <string name="game_mode_wii_gamecube">Kontroler GameCube</string>
+    <string name="dolphin_pad_row">Przyciski tej gry</string>
+    <string name="dolphin_pad_row_description">Przypisz przyciskom i ruchom %1$s własne klawisze dla tej gry, na przykład przycisk do wheelie. Zapisywane jako profil Dolphin dla tej gry.</string>
+    <string name="dolphin_pad_hint">Dotknij przycisku, aby przypisać mu klawisz, sam lub z modyfikatorem. Przyciski z własnym klawiszem dla tej gry są obramowane, a klawisz przypisany tutaj naciska tylko ten przycisk.</string>
+    <string name="dolphin_pad_no_key">Brak klawisza</string>
+    <string name="dolphin_pad_saved">Zapisano w Dolphin dla tej gry.</string>
     <string name="games_app_title">Gry</string>
     <string name="games_app_empty">Brak gier: dodaj je w trybie gry Flux Keyboard albo utwórz foldery gier.</string>
     <string name="games_app_switch">Gry na liście aplikacji</string>

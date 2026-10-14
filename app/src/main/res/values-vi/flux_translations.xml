@@ -1807,6 +1807,11 @@
     <string name="game_mode_wii_sideways">Wii Remote cầm ngang</string>
     <string name="game_mode_wii_set">Game này giờ khởi động với: %1$s.</string>
     <string name="game_mode_wii_gamecube">Tay cầm GameCube</string>
+    <string name="dolphin_pad_row">Nút của trò chơi này</string>
+    <string name="dolphin_pad_row_description">Gán cho các nút và chuyển động của %1$s phím riêng cho trò chơi này, chẳng hạn một nút bốc đầu. Được lưu thành hồ sơ Dolphin cho trò chơi này.</string>
+    <string name="dolphin_pad_hint">Chạm vào một nút để gán phím cho nó, riêng lẻ hoặc kèm phím bổ trợ. Các nút có phím riêng cho trò chơi này được viền, và phím gán ở đây chỉ bấm nút đó.</string>
+    <string name="dolphin_pad_no_key">Không có phím</string>
+    <string name="dolphin_pad_saved">Đã lưu trong Dolphin cho trò chơi này.</string>
     <string name="games_app_title">Game</string>
     <string name="games_app_empty">Chưa có game: thêm chúng trong chế độ chơi game của Flux Keyboard, hoặc tạo thư mục game.</string>
     <string name="games_app_switch">Game trong danh sách ứng dụng</string>

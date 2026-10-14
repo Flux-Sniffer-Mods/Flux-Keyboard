@@ -1325,6 +1325,11 @@
     <string name="game_mode_wii_sideways">Wii Remote in orizzontale</string>
     <string name="game_mode_wii_set">Questo gioco ora parte con: %1$s.</string>
     <string name="game_mode_wii_gamecube">Controller GameCube</string>
+    <string name="dolphin_pad_row">Tasti di questo gioco</string>
+    <string name="dolphin_pad_row_description">Dai ai tasti e ai movimenti del %1$s tasti propri di questo gioco, come un tasto per l\'impennata. Salvato come profilo Dolphin per questo gioco.</string>
+    <string name="dolphin_pad_hint">Tocca un tasto per assegnargli un tasto della tastiera, da solo o con un modificatore. I tasti con un tasto proprio di questo gioco sono evidenziati, e un tasto assegnato qui preme solo quel tasto.</string>
+    <string name="dolphin_pad_no_key">Nessun tasto</string>
+    <string name="dolphin_pad_saved">Salvato in Dolphin per questo gioco.</string>
     <string name="games_app_title">Giochi</string>
     <string name="games_app_empty">Ancora nessun gioco: aggiungili nella modalità gioco di Flux Keyboard, o crea le cartelle dei giochi.</string>
     <string name="games_app_switch">Giochi nell\'elenco app</string>

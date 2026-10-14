@@ -1280,6 +1280,11 @@
     <string name="game_mode_wii_sideways">Wii Remote quer gehalten</string>
     <string name="game_mode_wii_set">Dieses Spiel startet jetzt mit: %1$s.</string>
     <string name="game_mode_wii_gamecube">GameCube-Controller</string>
+    <string name="dolphin_pad_row">Tasten dieses Spiels</string>
+    <string name="dolphin_pad_row_description">Gib den Tasten und Bewegungen von %1$s eigene Tasten für dieses Spiel, etwa eine Wheelie-Taste. Gespeichert als eigenes Dolphin-Profil für dieses Spiel.</string>
+    <string name="dolphin_pad_hint">Tippe auf eine Taste, um ihr eine Taste der Tastatur zu geben, allein oder mit einer Zusatztaste. Tasten mit eigener Belegung für dieses Spiel sind umrandet, und eine hier vergebene Taste drückt nur diese Taste.</string>
+    <string name="dolphin_pad_no_key">Keine Taste</string>
+    <string name="dolphin_pad_saved">In Dolphin für dieses Spiel gespeichert.</string>
     <string name="games_app_title">Spiele</string>
     <string name="games_app_empty">Noch keine Spiele: füge sie im Spielmodus von Flux Keyboard hinzu oder lege die Spieleordner an.</string>
     <string name="games_app_switch">Spiele in der App-Liste</string>

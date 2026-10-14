@@ -1819,6 +1819,11 @@
     <string name="game_mode_wii_sideways">Wii Remote à l\'horizontale</string>
     <string name="game_mode_wii_set">Ce jeu démarre maintenant avec : %1$s.</string>
     <string name="game_mode_wii_gamecube">Manette GameCube</string>
+    <string name="dolphin_pad_row">Boutons de ce jeu</string>
+    <string name="dolphin_pad_row_description">Donne aux boutons et mouvements de la %1$s des touches propres à ce jeu, comme un bouton pour les wheelings. Enregistré comme profil Dolphin pour ce jeu.</string>
+    <string name="dolphin_pad_hint">Touche un bouton pour lui donner une touche, seule ou avec un modificateur. Les boutons ayant une touche propre à ce jeu sont entourés, et une touche donnée ici n’appuie que sur ce bouton.</string>
+    <string name="dolphin_pad_no_key">Aucune touche</string>
+    <string name="dolphin_pad_saved">Enregistré dans Dolphin pour ce jeu.</string>
     <string name="games_app_title">Jeux</string>
     <string name="games_app_empty">Pas encore de jeux : ajoutez-les dans le mode jeu de Flux Keyboard, ou créez les dossiers de jeux.</string>
     <string name="games_app_switch">Jeux dans la liste des applis</string>

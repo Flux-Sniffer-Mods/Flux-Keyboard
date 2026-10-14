@@ -1191,6 +1191,11 @@
     <string name="game_mode_wii_sideways">Wii Remote οριζόντια</string>
     <string name="game_mode_wii_set">Αυτό το παιχνίδι ξεκινά τώρα με: %1$s.</string>
     <string name="game_mode_wii_gamecube">Χειριστήριο GameCube</string>
+    <string name="dolphin_pad_row">Τα κουμπιά αυτού του παιχνιδιού</string>
+    <string name="dolphin_pad_row_description">Δώσε στα κουμπιά και τις κινήσεις του %1$s δικά τους πλήκτρα για αυτό το παιχνίδι, όπως ένα κουμπί για wheelie. Αποθηκεύεται ως προφίλ του Dolphin για αυτό το παιχνίδι.</string>
+    <string name="dolphin_pad_hint">Πάτησε ένα κουμπί για να του δώσεις πλήκτρο, μόνο του ή με πλήκτρο τροποποίησης. Τα κουμπιά με δικό τους πλήκτρο για αυτό το παιχνίδι έχουν περίγραμμα, και ένα πλήκτρο που δίνεται εδώ πατά μόνο εκείνο το κουμπί.</string>
+    <string name="dolphin_pad_no_key">Κανένα πλήκτρο</string>
+    <string name="dolphin_pad_saved">Αποθηκεύτηκε στο Dolphin για αυτό το παιχνίδι.</string>
     <string name="games_app_title">Παιχνίδια</string>
     <string name="games_app_empty">Κανένα παιχνίδι ακόμα: προσθέστε τα στη λειτουργία παιχνιδιού του Flux Keyboard ή φτιάξτε τους φακέλους παιχνιδιών.</string>
     <string name="games_app_switch">Παιχνίδια στη λίστα εφαρμογών</string>
