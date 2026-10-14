@@ -1331,6 +1331,8 @@
     <string name="dolphin_pad_no_key">Nessun tasto</string>
     <string name="dolphin_pad_saved">Salvato. Dolphin lo usa dal prossimo avvio di questo gioco da Giochi.</string>
     <string name="dolphin_game_applied_note">Applicato a ogni avvio di questo gioco da Giochi: controller, tasti e comandi a schermo passano allora in Dolphin, senza impostare nulla in Dolphin. Aperto da Dolphin stesso, un gioco usa i comandi dell\'ultimo gioco avviato da Giochi. Per stick e tasti posizionati sullo schermo, i comandi a schermo devono essere invisibili.</string>
+    <string name="dolphin_use_flux_title">Usa i comandi di Flux Keyboard</string>
+    <string name="dolphin_use_flux_description">Questo gioco usa i comandi impostati qui, anche se in Dolphin è stato scelto un profilo per lui. Disattivato: un profilo scelto in Dolphin viene mantenuto.</string>
     <string name="dolphin_overlay_title">Comandi a schermo di Dolphin</string>
     <string name="dolphin_overlay_off">Nascosti</string>
     <string name="dolphin_overlay_invisible">Invisibili (per stick e tasti posizionati sopra)</string>

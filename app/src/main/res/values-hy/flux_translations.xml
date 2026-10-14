@@ -1819,6 +1819,8 @@
     <string name="dolphin_pad_no_key">Ստեղն չկա</string>
     <string name="dolphin_pad_saved">Պահված է։ Dolphin-ը կօգտագործի այն այս խաղը Խաղերից հաջորդ անգամ գործարկելիս։</string>
     <string name="dolphin_game_applied_note">Կիրառվում է ամեն անգամ, երբ այս խաղը գործարկվում է Խաղերից․ նրա կարգավարը, ստեղները և էկրանային կառավարումներն այդ ժամանակ անցնում են Dolphin, առանց Dolphin-ում որևէ բան կարգավորելու։ Dolphin-ից բացելիս խաղը խաղում է Խաղերից վերջին գործարկված խաղի կառավարումներով։ Էկրանին տեղադրված լծակների և ստեղների համար էկրանային կառավարումները պետք է անտեսանելի լինեն։</string>
+    <string name="dolphin_use_flux_title">Օգտագործել Flux Keyboard-ի կառավարումները</string>
+    <string name="dolphin_use_flux_description">Այս խաղը խաղում է այստեղ սահմանված կառավարումներով, նույնիսկ եթե Dolphin-ում նրա համար պրոֆիլ է ընտրված։ Անջատված․ Dolphin-ում ընտրված պրոֆիլը պահվում է։</string>
     <string name="dolphin_overlay_title">Dolphin-ի էկրանային կառավարումները</string>
     <string name="dolphin_overlay_off">Թաքցված</string>
     <string name="dolphin_overlay_invisible">Անտեսանելի (դրանց վրա տեղադրված լծակների և ստեղների համար)</string>

@@ -1813,6 +1813,8 @@
     <string name="dolphin_pad_no_key">Không có phím</string>
     <string name="dolphin_pad_saved">Đã lưu. Dolphin dùng nó từ lần tới trò chơi này được mở từ Trò chơi.</string>
     <string name="dolphin_game_applied_note">Được áp dụng mỗi khi trò chơi này được mở từ Trò chơi: tay cầm, phím và điều khiển trên màn hình được đưa vào Dolphin khi đó, không cần chỉnh gì trong Dolphin. Nếu mở từ chính Dolphin, trò chơi dùng điều khiển của trò chơi cuối cùng được mở từ Trò chơi. Với cần và phím đặt trên màn hình, điều khiển trên màn hình phải ở chế độ vô hình.</string>
+    <string name="dolphin_use_flux_title">Dùng điều khiển của Flux Keyboard</string>
+    <string name="dolphin_use_flux_description">Trò chơi này dùng điều khiển được đặt ở đây, kể cả khi đã chọn hồ sơ cho nó trong Dolphin. Tắt: giữ hồ sơ đã chọn trong Dolphin.</string>
     <string name="dolphin_overlay_title">Điều khiển trên màn hình của Dolphin</string>
     <string name="dolphin_overlay_off">Ẩn</string>
     <string name="dolphin_overlay_invisible">Vô hình (cho cần và phím đặt lên đó)</string>

@@ -1197,6 +1197,8 @@
     <string name="dolphin_pad_no_key">Κανένα πλήκτρο</string>
     <string name="dolphin_pad_saved">Αποθηκεύτηκε. Το Dolphin το χρησιμοποιεί από την επόμενη φορά που αυτό το παιχνίδι ξεκινά από τα Παιχνίδια.</string>
     <string name="dolphin_game_applied_note">Εφαρμόζεται κάθε φορά που αυτό το παιχνίδι ξεκινά από τα Παιχνίδια: το χειριστήριο, τα πλήκτρα και τα χειριστήρια οθόνης περνούν τότε στο Dolphin, χωρίς ρυθμίσεις μέσα στο Dolphin. Αν ανοιχτεί από το ίδιο το Dolphin, ένα παιχνίδι παίζει με τα χειριστήρια του τελευταίου παιχνιδιού που ξεκίνησε από τα Παιχνίδια. Για μοχλούς και πλήκτρα που τοποθετούνται στην οθόνη, τα χειριστήρια οθόνης πρέπει να είναι αόρατα.</string>
+    <string name="dolphin_use_flux_title">Χρήση των χειριστηρίων του Flux Keyboard</string>
+    <string name="dolphin_use_flux_description">Αυτό το παιχνίδι παίζει με τα χειριστήρια που ορίζονται εδώ, ακόμη κι αν έχει επιλεγεί προφίλ γι’ αυτό στο Dolphin. Ανενεργό: ένα προφίλ που επιλέχθηκε στο Dolphin διατηρείται.</string>
     <string name="dolphin_overlay_title">Χειριστήρια οθόνης του Dolphin</string>
     <string name="dolphin_overlay_off">Κρυμμένα</string>
     <string name="dolphin_overlay_invisible">Αόρατα (για μοχλούς και πλήκτρα που τοποθετούνται πάνω τους)</string>

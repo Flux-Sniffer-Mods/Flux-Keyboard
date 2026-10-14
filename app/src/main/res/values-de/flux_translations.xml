@@ -1286,6 +1286,8 @@
     <string name="dolphin_pad_no_key">Keine Taste</string>
     <string name="dolphin_pad_saved">Gespeichert. Dolphin verwendet es ab dem nächsten Start dieses Spiels über Spiele.</string>
     <string name="dolphin_game_applied_note">Wird bei jedem Start dieses Spiels über Spiele angewendet: Controller, Tasten und Bildschirmsteuerung gehen dann in Dolphin, ohne dass in Dolphin etwas einzustellen ist. In Dolphin selbst geöffnet, spielt ein Spiel mit der Steuerung des zuletzt über Spiele gestarteten Spiels. Für auf dem Bildschirm platzierte Sticks und Tasten muss die Bildschirmsteuerung unsichtbar sein.</string>
+    <string name="dolphin_use_flux_title">Steuerung von Flux Keyboard verwenden</string>
+    <string name="dolphin_use_flux_description">Dieses Spiel spielt mit der hier eingestellten Steuerung, auch wenn in Dolphin ein Profil dafür gewählt wurde. Aus: ein in Dolphin gewähltes Profil bleibt.</string>
     <string name="dolphin_overlay_title">Bildschirmsteuerung von Dolphin</string>
     <string name="dolphin_overlay_off">Ausgeblendet</string>
     <string name="dolphin_overlay_invisible">Unsichtbar (für darauf platzierte Sticks und Tasten)</string>

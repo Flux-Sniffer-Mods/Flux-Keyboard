@@ -1825,6 +1825,8 @@
     <string name="dolphin_pad_no_key">Aucune touche</string>
     <string name="dolphin_pad_saved">Enregistré. Dolphin l’utilise dès le prochain lancement de ce jeu depuis Jeux.</string>
     <string name="dolphin_game_applied_note">Appliqué à chaque lancement de ce jeu depuis Jeux : sa manette, ses touches et ses commandes à l’écran passent alors dans Dolphin, sans rien régler dans Dolphin. Ouvert depuis Dolphin lui-même, un jeu utilise les commandes du dernier jeu lancé depuis Jeux. Pour les sticks et touches placés à l’écran, les commandes à l’écran doivent être invisibles.</string>
+    <string name="dolphin_use_flux_title">Utiliser les commandes de Flux Keyboard</string>
+    <string name="dolphin_use_flux_description">Ce jeu utilise les commandes réglées ici, même si un profil a été choisi pour lui dans Dolphin. Désactivé : un profil choisi dans Dolphin est conservé.</string>
     <string name="dolphin_overlay_title">Commandes à l’écran de Dolphin</string>
     <string name="dolphin_overlay_off">Masquées</string>
     <string name="dolphin_overlay_invisible">Invisibles (pour les sticks et touches placés dessus)</string>
