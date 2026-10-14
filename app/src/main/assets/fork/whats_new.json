@@ -741,6 +741,9 @@
     },
     {
       "text": "Gaming mode: the controller drawings show just the buttons where they sit, without the controller's outline"
+    },
+    {
+      "text": "Gaming mode: give a controller button its key by pressing the key itself (with a modifier held if you like), on the controller drawings and Dolphin's"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",

@@ -325,6 +325,7 @@
     <string name="game_remap_list">Show as a list</string>
     <string name="game_remap_reset">Reset all keys</string>
     <string name="game_remap_reset_description">Every key back to the layout\'s button</string>
+    <string name="game_remap_press_key">Press the key on the keyboard (with a modifier held if you like), or tap it below.</string>
     <string name="game_remap_view_keyboard">Keyboard</string>
     <string name="game_remap_view_controller">Controller</string>
     <string name="game_remap_controller_description">Each button shows the keys that press it. Tap a button to pick its key, alone or with a modifier: the keys that pressed it before then press nothing.</string>

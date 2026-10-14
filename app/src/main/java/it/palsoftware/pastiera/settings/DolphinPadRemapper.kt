@@ -125,7 +125,15 @@ internal fun DolphinPadRemapper(
             onDismissRequest = { picking = null },
             title = { Text(input.label) },
             text = {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()).pressedKey { pressedLayer, code ->
+                        val binding = Binding(pressedLayer, code)
+                        own = own.mapValues { (_, keys) -> keys - binding } + (input.id to listOf(binding))
+                        picking = null
+                    },
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(stringResource(R.string.game_remap_press_key), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     @Composable
                     fun choice(text: String, selected: Boolean, onPick: () -> Unit) = Text(
                         (if (selected) "✓ " else "") + text,

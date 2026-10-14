@@ -1,6 +1,9 @@
 package it.palsoftware.pastiera.settings
 
 import android.view.KeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.focus.focusRequester
 import it.palsoftware.pastiera.gaming.GamepadDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.offset
@@ -221,7 +224,14 @@ internal fun KeyLayoutEditor(
             onDismissRequest = { pickingButton = null },
             title = { Text(longName(spot.control)) },
             text = {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()).pressedKey { pressedLayer, code ->
+                        save(GamepadDrawing.assign(overrides, base, REMAP_KEYS, spot.control, pressedLayer, code))
+                        pickingButton = null
+                    },
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(stringResource(R.string.game_remap_press_key), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     val defaults = GamepadDrawing.keysFor(emptyMap(), base, REMAP_KEYS, spot.control)
                     val changed = now != defaults
                     Text(
@@ -366,4 +376,38 @@ private fun GamepadView(overrides: Map<Pair<Layer, Int>, Control?>, base: (Int, 
             }
         }
     }
+}
+
+/**
+ * A key pressed on the keyboard while this is shown: [onKey] gets it with the modifier held (SYM,
+ * right Shift, Alt or Shift, as gaming mode reads them). Only keys the drawings offer count; the
+ * modifiers on their own are held, not taken.
+ */
+@Composable
+internal fun Modifier.pressedKey(onKey: (Layer, Int) -> Unit): Modifier {
+    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    val held = remember { mutableSetOf<Int>() }
+    androidx.compose.runtime.LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+    return this
+        .focusRequester(focus)
+        .focusable()
+        .onPreviewKeyEvent { event ->
+            val native = event.nativeKeyEvent
+            val code = native.keyCode
+            if (code in FluxLayout.MODIFIER_KEYS) {
+                if (native.action == KeyEvent.ACTION_DOWN) held += code else if (native.action == KeyEvent.ACTION_UP) held -= code
+                return@onPreviewKeyEvent true
+            }
+            if (code !in REMAP_KEYS) return@onPreviewKeyEvent false
+            if (native.action == KeyEvent.ACTION_DOWN && native.repeatCount == 0) {
+                val mods = FluxLayout.Modifiers(
+                    sym = KeyEvent.KEYCODE_SYM in held || native.isSymPressed,
+                    rightShift = KeyEvent.KEYCODE_SHIFT_RIGHT in held || (native.metaState and KeyEvent.META_SHIFT_RIGHT_ON) != 0,
+                    shift = KeyEvent.KEYCODE_SHIFT_LEFT in held || KeyEvent.KEYCODE_SHIFT_RIGHT in held || native.isShiftPressed,
+                    alt = KeyEvent.KEYCODE_ALT_LEFT in held || KeyEvent.KEYCODE_ALT_RIGHT in held || native.isAltPressed
+                )
+                onKey(FluxLayout.layerOf(mods), code)
+            }
+            true
+        }
 }
