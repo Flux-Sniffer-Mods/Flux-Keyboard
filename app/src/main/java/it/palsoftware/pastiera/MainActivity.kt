@@ -52,6 +52,7 @@ import it.palsoftware.pastiera.BuildConfig
 import it.palsoftware.pastiera.update.UpdateCheckWorker
 import it.palsoftware.pastiera.update.shouldUseGithubUpdateChecks
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
@@ -68,6 +69,13 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import it.palsoftware.pastiera.settings.RecommendedSettingsUpdatePrompt
+import it.palsoftware.pastiera.modules.FluxModule
+import it.palsoftware.pastiera.settings.KeyboardSettingsRows
+import it.palsoftware.pastiera.settings.ModuleTiles
+import it.palsoftware.pastiera.settings.SettingsDestination
+import it.palsoftware.pastiera.settings.SettingsPage
+import it.palsoftware.pastiera.settings.SettingsSectionDivider
+import it.palsoftware.pastiera.settings.openSettingsPage
 
 class MainActivity : LocalizedComponentActivity() {
 
@@ -218,7 +226,7 @@ class MainActivity : LocalizedComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
                     ) { innerPadding ->
-                        KeyboardSetupScreen(
+                        FluxHomeScreen(
                             modifier = Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize(),
@@ -352,10 +360,103 @@ private fun debugReportLineColor(line: String, colors: ColorScheme): Color {
     }
 }
 
+/**
+ * The home screen: a tile per module under the header. The keyboard's tile opens its page here
+ * (turning it on, its settings, and testing it); gaming mode's and streaming's open their settings.
+ */
+@Composable
+fun FluxHomeScreen(
+    modifier: Modifier = Modifier,
+    activity: MainActivity
+) {
+    val context = LocalContext.current
+    var keyboardOpen by rememberSaveable { mutableStateOf(false) }
+    // Whether Flux Keyboard is on and chosen: its tile says what's still to do
+    var imeEnabled by remember { mutableStateOf(true) }
+    var imeSelected by remember { mutableStateOf(true) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            checkImeStatus(context) { enabled, selected ->
+                imeEnabled = enabled
+                imeSelected = selected
+            }
+            kotlinx.coroutines.delay(2000)
+        }
+    }
+
+    // Request notification permission (Android 13+)
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            android.util.Log.d("MainActivity", "Notification permission granted")
+        } else {
+            android.util.Log.w("MainActivity", "Notification permission denied")
+        }
+    }
+
+    // Request notification permission when the composable is created (Android 13+ only)
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!NotificationHelper.hasNotificationPermission(context)) {
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    // Automatic update check on screen open (only once, respecting dismissed releases)
+    if (shouldUseGithubUpdateChecks(context)) {
+        LaunchedEffect(Unit) {
+            it.palsoftware.pastiera.update.checkForUpdateNotices(
+                context = context,
+                releaseChannel = BuildConfig.RELEASE_CHANNEL,
+                ignoreDismissedReleases = true
+            ) { result ->
+                if (result.hasAnnouncement && result.releaseTag != null && result.displayName != null) {
+                    it.palsoftware.pastiera.update.showReleaseNotice(context, result)
+                }
+            }
+        }
+    }
+
+    if (keyboardOpen) {
+        androidx.activity.compose.BackHandler { keyboardOpen = false }
+        KeyboardSetupScreen(modifier = modifier, activity = activity, onBack = { keyboardOpen = false })
+        return
+    }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CustomTopBar(
+            onSettingsClick = { context.startActivity(Intent(context, SettingsActivity::class.java)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+        ModuleTiles(
+            keyboardNote = when {
+                !imeEnabled -> stringResource(R.string.enable_pastiera)
+                !imeSelected -> stringResource(R.string.choose_input_method)
+                else -> null
+            }
+        ) { module ->
+            when (module) {
+                FluxModule.KEYBOARD -> keyboardOpen = true
+                FluxModule.GAMING -> openSettingsPage(context, SettingsPage(SettingsDestination.GameMode))
+                FluxModule.STREAMING -> openSettingsPage(context, SettingsPage(SettingsDestination.Streaming))
+                FluxModule.DESKTOP -> Unit
+            }
+        }
+    }
+}
+
+/** The keyboard's page, from its tile: turning it on, its settings, and a field to test it in. */
 @Composable
 fun KeyboardSetupScreen(
     modifier: Modifier = Modifier,
-    activity: MainActivity
+    activity: MainActivity,
+    onBack: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -394,26 +495,6 @@ fun KeyboardSetupScreen(
             checkImeStatus(context) { enabled, selected ->
                 isPastieraEnabled = enabled
                 isPastieraSelected = selected
-            }
-        }
-    }
-
-    // Request notification permission (Android 13+)
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            android.util.Log.d("MainActivity", "Notification permission granted")
-        } else {
-            android.util.Log.w("MainActivity", "Notification permission denied")
-        }
-    }
-
-    // Request notification permission when the composable is created (Android 13+ only)
-    LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (!NotificationHelper.hasNotificationPermission(context)) {
-                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
     }
@@ -464,21 +545,6 @@ fun KeyboardSetupScreen(
         }
     }
 
-    // Automatic update check on screen open (only once, respecting dismissed releases)
-    if (shouldUseGithubUpdateChecks(context)) {
-        LaunchedEffect(Unit) {
-            it.palsoftware.pastiera.update.checkForUpdateNotices(
-                context = context,
-                releaseChannel = BuildConfig.RELEASE_CHANNEL,
-                ignoreDismissedReleases = true
-            ) { result ->
-                if (result.hasAnnouncement && result.releaseTag != null && result.displayName != null) {
-                    it.palsoftware.pastiera.update.showReleaseNotice(context, result)
-                }
-            }
-        }
-    }
-
     // Main screen
     val buildCurrentReport: () -> String = {
         buildKeyboardDebugReport(
@@ -518,8 +584,7 @@ fun KeyboardSetupScreen(
         )
     }
 
-    // The Titan 2 Elite's short screen fits the whole start page without scrolling (settings
-    // search lives in Settings, so the room goes to readable text and even gaps)
+    // Tighter rows and buttons on the Titan 2 Elite's short screen
     val compact = remember { DeviceSpecific.isTitan2EliteDevice() }
     val rowInset = if (compact) 4.dp else 10.dp
     Column(
@@ -529,15 +594,26 @@ fun KeyboardSetupScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(if (compact) 10.dp else 4.dp)
     ) {
-        // Custom top bar with personalized graphics
-        CustomTopBar(
-            onSettingsClick = {
-                val settingsIntent = Intent(context, SettingsActivity::class.java)
-                context.startActivity(settingsIntent)
-
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+        // Back to the tiles
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(horizontal = 4.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.settings_back_content_description)
+                )
+            }
+            Text(
+                text = stringResource(R.string.module_keyboard_title),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
 
         // Enable/select IME actions
         Row(
@@ -623,6 +699,12 @@ fun KeyboardSetupScreen(
                     )
                 }
             }
+        }
+
+        // The keyboard's settings, then a field to test it in
+        Column(modifier = Modifier.fillMaxWidth()) {
+            KeyboardSettingsRows { destination -> openSettingsPage(context, SettingsPage(destination)) }
+            SettingsSectionDivider(stringResource(R.string.keyboard_test_section))
         }
 
         // Test field

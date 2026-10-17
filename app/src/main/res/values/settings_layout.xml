@@ -686,4 +686,5 @@
     <string name="module_coming_soon">Coming soon</string>
     <string name="module_streaming_switch_description">Stream your games to a Moonlight client. Off, the phone no longer answers Moonlight; pairings are kept.</string>
     <string name="hub_shared_section">For every module</string>
+    <string name="keyboard_test_section">Test the keyboard</string>
 </resources>

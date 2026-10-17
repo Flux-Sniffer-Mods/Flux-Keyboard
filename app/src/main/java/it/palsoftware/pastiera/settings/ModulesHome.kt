@@ -43,37 +43,57 @@ import it.palsoftware.pastiera.modules.FluxModule
 import it.palsoftware.pastiera.modules.FluxModules
 
 /**
- * Flux Titan Hub's home: a tile per module, two to a row. A tile opens its module's settings; a
- * module that's off is switched on as it's opened. Gaming mode and streaming have a switch of
- * their own on the tile; the keyboard is always there; the desktop is still to come.
+ * Flux Titan Hub's home: a tile per module, two to a row, all as tall as the tallest. A tile opens
+ * its module; a module that's off is switched on as it's opened. Gaming mode and streaming have a
+ * switch of their own on the tile; the keyboard is always there ([keyboardNote], when set, says
+ * what it still needs); the desktop is still to come.
  */
 @Composable
-internal fun ModuleTiles(onOpen: (FluxModule) -> Unit) {
+internal fun ModuleTiles(keyboardNote: String? = null, onOpen: (FluxModule) -> Unit) {
     val context = LocalContext.current
     var states by remember { mutableStateOf(FluxModule.entries.associateWith { FluxModules.on(context, it) }) }
+    // Read again on coming back: a module's own page can switch it on or off
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    androidx.compose.runtime.DisposableEffect(lifecycle) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                states = FluxModule.entries.associateWith { FluxModules.on(context, it) }
+            }
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
     fun set(module: FluxModule, on: Boolean) {
         FluxModules.setOn(context, module, on)
         states = states + (module to on)
     }
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        FluxModule.entries.chunked(2).forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                row.forEach { module ->
-                    ModuleTile(
-                        module = module,
-                        on = states[module] == true,
-                        modifier = Modifier.weight(1f),
-                        onToggle = { on -> set(module, on) },
-                        onOpen = {
-                            if (FluxModules.switchable(module) && states[module] != true) set(module, true)
-                            onOpen(module)
-                        }
-                    )
+    TileGrid(gap = 12.dp, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+        FluxModule.entries.forEach { module ->
+            ModuleTile(
+                module = module,
+                on = states[module] == true,
+                note = keyboardNote.takeIf { module == FluxModule.KEYBOARD },
+                onToggle = { on -> set(module, on) },
+                onOpen = {
+                    if (FluxModules.switchable(module) && states[module] != true) set(module, true)
+                    onOpen(module)
                 }
-            }
+            )
+        }
+    }
+}
+
+/** Two tiles to a row, [gap] apart, every tile as tall as the tallest. */
+@Composable
+private fun TileGrid(gap: androidx.compose.ui.unit.Dp, modifier: Modifier, content: @Composable () -> Unit) {
+    androidx.compose.ui.layout.Layout(content = content, modifier = modifier) { measurables, constraints ->
+        val gapPx = gap.roundToPx()
+        val cell = ((constraints.maxWidth - gapPx) / 2).coerceAtLeast(0)
+        val height = measurables.maxOfOrNull { it.maxIntrinsicHeight(cell) } ?: 0
+        val tiles = measurables.map { it.measure(androidx.compose.ui.unit.Constraints.fixed(cell, height)) }
+        val rows = (tiles.size + 1) / 2
+        layout(constraints.maxWidth, rows * height + (rows - 1).coerceAtLeast(0) * gapPx) {
+            tiles.forEachIndexed { i, tile -> tile.placeRelative((i % 2) * (cell + gapPx), (i / 2) * (height + gapPx)) }
         }
     }
 }
@@ -94,16 +114,17 @@ private fun moduleTitle(module: FluxModule): String = stringResource(when (modul
 })
 
 @Composable
-private fun ModuleTile(module: FluxModule, on: Boolean, modifier: Modifier, onToggle: (Boolean) -> Unit, onOpen: () -> Unit) {
+private fun ModuleTile(module: FluxModule, on: Boolean, note: String?, onToggle: (Boolean) -> Unit, onOpen: () -> Unit) {
     val soon = FluxModules.comingSoon(module)
     val shape = RoundedCornerShape(16.dp)
     Surface(
         shape = shape,
         color = if (on) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier.heightIn(min = 136.dp).clip(shape).clickable(enabled = !soon, onClick = onOpen)
+        modifier = Modifier.heightIn(min = 136.dp).clip(shape).clickable(enabled = !soon, onClick = onOpen)
     ) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            // The same height with or without a switch, so every title lines up
+            Row(modifier = Modifier.height(48.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = moduleIcon(module),
                     contentDescription = null,
@@ -120,14 +141,14 @@ private fun ModuleTile(module: FluxModule, on: Boolean, modifier: Modifier, onTo
                 color = if (soon) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = stringResource(when (module) {
+                text = note ?: stringResource(when (module) {
                     FluxModule.KEYBOARD -> R.string.module_keyboard_description
                     FluxModule.GAMING -> R.string.module_gaming_description
                     FluxModule.STREAMING -> R.string.module_streaming_description
                     FluxModule.DESKTOP -> R.string.module_coming_soon
                 }),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (note != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -137,50 +158,56 @@ private fun ModuleTile(module: FluxModule, on: Boolean, modifier: Modifier, onTo
 @Composable
 internal fun KeyboardHomeScreen(modifier: Modifier, onBack: () -> Unit, onNavigate: (SettingsDestination) -> Unit) {
     FluxScreenScaffold(stringResource(R.string.module_keyboard_title), onBack, modifier) {
-        SettingsCategoryRow(
-            icon = Icons.Filled.TextFields,
-            title = stringResource(R.string.settings_typing_title),
-            description = stringResource(R.string.settings_typing_description),
-            linkId = SettingLinkIds.MAIN_TYPING,
-            onClick = { onNavigate(SettingsDestination.Typing) }
-        )
-        SettingsCategoryRow(
-            icon = Icons.Filled.Keyboard,
-            title = stringResource(R.string.settings_keyboards_layouts_title),
-            description = stringResource(R.string.settings_keyboards_layouts_description),
-            linkId = SettingLinkIds.MAIN_KEYBOARDS_LAYOUTS,
-            onClick = { onNavigate(SettingsDestination.KeyboardsLayouts) }
-        )
-        SettingsCategoryRow(
-            iconRes = R.drawable.modifier_keys_24,
-            title = stringResource(R.string.settings_modifiers_sym_title),
-            description = stringResource(R.string.settings_modifiers_sym_description),
-            linkId = SettingLinkIds.MAIN_MODIFIERS,
-            onClick = { onNavigate(SettingsDestination.Modifiers) }
-        )
-        SettingsCategoryRow(
-            icon = Icons.Filled.EmojiEmotions,
-            title = stringResource(R.string.settings_emoji_symbols_gifs_title),
-            description = stringResource(R.string.settings_emoji_symbols_gifs_description),
-            linkId = SettingLinkIds.MAIN_FLUX_EMOJI_GIFS,
-            onClick = { onNavigate(SettingsDestination.FluxEmojiGifs) }
-        )
-        SettingsCategoryRow(
-            icon = Icons.Filled.Apps,
-            title = stringResource(R.string.settings_apps_title),
-            description = stringResource(R.string.settings_apps_description),
-            linkId = SettingLinkIds.MAIN_APPS,
-            onClick = { onNavigate(SettingsDestination.Apps) }
-        )
-        SettingsCategoryRow(
-            icon = Icons.Filled.Palette,
-            title = stringResource(R.string.settings_look_sound_title),
-            description = stringResource(R.string.settings_look_sound_description),
-            linkId = SettingLinkIds.MAIN_LOOK_SOUND,
-            onClick = { onNavigate(SettingsDestination.LookSound) }
-        )
+        KeyboardSettingsRows(onNavigate)
         Spacer(modifier = Modifier.height(16.dp))
     }
+}
+
+/** The keyboard's settings, a row per section: on its settings page and its page on the home screen. */
+@Composable
+internal fun KeyboardSettingsRows(onNavigate: (SettingsDestination) -> Unit) {
+    SettingsCategoryRow(
+        icon = Icons.Filled.TextFields,
+        title = stringResource(R.string.settings_typing_title),
+        description = stringResource(R.string.settings_typing_description),
+        linkId = SettingLinkIds.MAIN_TYPING,
+        onClick = { onNavigate(SettingsDestination.Typing) }
+    )
+    SettingsCategoryRow(
+        icon = Icons.Filled.Keyboard,
+        title = stringResource(R.string.settings_keyboards_layouts_title),
+        description = stringResource(R.string.settings_keyboards_layouts_description),
+        linkId = SettingLinkIds.MAIN_KEYBOARDS_LAYOUTS,
+        onClick = { onNavigate(SettingsDestination.KeyboardsLayouts) }
+    )
+    SettingsCategoryRow(
+        iconRes = R.drawable.modifier_keys_24,
+        title = stringResource(R.string.settings_modifiers_sym_title),
+        description = stringResource(R.string.settings_modifiers_sym_description),
+        linkId = SettingLinkIds.MAIN_MODIFIERS,
+        onClick = { onNavigate(SettingsDestination.Modifiers) }
+    )
+    SettingsCategoryRow(
+        icon = Icons.Filled.EmojiEmotions,
+        title = stringResource(R.string.settings_emoji_symbols_gifs_title),
+        description = stringResource(R.string.settings_emoji_symbols_gifs_description),
+        linkId = SettingLinkIds.MAIN_FLUX_EMOJI_GIFS,
+        onClick = { onNavigate(SettingsDestination.FluxEmojiGifs) }
+    )
+    SettingsCategoryRow(
+        icon = Icons.Filled.Apps,
+        title = stringResource(R.string.settings_apps_title),
+        description = stringResource(R.string.settings_apps_description),
+        linkId = SettingLinkIds.MAIN_APPS,
+        onClick = { onNavigate(SettingsDestination.Apps) }
+    )
+    SettingsCategoryRow(
+        icon = Icons.Filled.Palette,
+        title = stringResource(R.string.settings_look_sound_title),
+        description = stringResource(R.string.settings_look_sound_description),
+        linkId = SettingLinkIds.MAIN_LOOK_SOUND,
+        onClick = { onNavigate(SettingsDestination.LookSound) }
+    )
 }
 
 /** Streaming's settings, under its tile: the module switched on or off, then its settings. */

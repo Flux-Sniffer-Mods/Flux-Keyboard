@@ -797,7 +797,7 @@
       "text": "Keyboard swipes' and the keyboard light's notes say Shell access rather than Shizuku, and Install Shizuku only shows when the built-in shell isn't set up"
     },
     {
-      "text": "The app is now Flux Titan Hub, with a tile per module on its home screen: Keyboard, Gaming mode, Streaming and Desktop (coming soon). Gaming mode and streaming switch on from their tile, and off takes their parts away too (the Games app in the app list, Moonlight's Wake, their quick settings and quick launcher entries). A fresh install starts with the keyboard alone; an update keeps on what you use"
+      "text": "The app is now Flux Titan Hub, with a tile per module on its home screen, all the same size: Keyboard, Gaming mode, Streaming and Desktop (coming soon). The Keyboard tile has turning the keyboard on, its settings and the test field; Settings (the gear) lists the modules that are on, then what they all share. Gaming mode and streaming switch on from their tile, and off takes their parts away too (the Games app in the app list, Moonlight's Wake, their quick settings and quick launcher entries). A fresh install starts with the keyboard alone; an update keeps on what you use"
     },
     {
       "text": "The keyboard keeps the name Flux Keyboard in Android's keyboard list; updates now come from the Flux-Titan-Hub repository"

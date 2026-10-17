@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.size
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cast
+import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Tune
@@ -48,6 +51,7 @@ import it.palsoftware.pastiera.device.KeyboardsDevicesSettingsScreen
 import it.palsoftware.pastiera.device.TrackpadGestureSettingsScreen
 import it.palsoftware.pastiera.layout.CustomInputStylesScreen
 import it.palsoftware.pastiera.modules.FluxModule
+import it.palsoftware.pastiera.modules.FluxModules
 import it.palsoftware.pastiera.sym.DeviceSymLayerEditorScreen
 import it.palsoftware.pastiera.sym.EmojiLayerProfilesScreen
 import it.palsoftware.pastiera.theme.LedColorsScreen
@@ -523,15 +527,29 @@ private fun SettingsMainScreen(
                         .fillMaxWidth()
                         .verticalScroll(categoriesScrollState)
                 ) {
-                    // A tile per module: the keyboard, gaming mode, streaming, the desktop to come
-                    ModuleTiles { module ->
-                        when (module) {
-                            FluxModule.KEYBOARD -> onNavigate(SettingsDestination.KeyboardHome)
-                            FluxModule.GAMING -> onNavigate(SettingsDestination.GameMode)
-                            FluxModule.STREAMING -> onNavigate(SettingsDestination.Streaming)
-                            FluxModule.DESKTOP -> Unit
-                        }
-                    }
+                    // The modules (their tiles, which switch them on, are on the home screen): the
+                    // keyboard, then gaming mode and streaming while they're on
+                    SettingsCategoryRow(
+                        icon = Icons.Filled.Keyboard,
+                        title = stringResource(R.string.module_keyboard_title),
+                        description = stringResource(R.string.module_keyboard_description),
+                        linkId = null,
+                        onClick = { onNavigate(SettingsDestination.KeyboardHome) }
+                    )
+                    if (FluxModules.on(context, FluxModule.GAMING)) SettingsCategoryRow(
+                        icon = Icons.Filled.SportsEsports,
+                        title = stringResource(R.string.game_mode_title),
+                        description = stringResource(R.string.module_gaming_description),
+                        linkId = null,
+                        onClick = { onNavigate(SettingsDestination.GameMode) }
+                    )
+                    if (FluxModules.on(context, FluxModule.STREAMING)) SettingsCategoryRow(
+                        icon = Icons.Filled.Cast,
+                        title = stringResource(R.string.module_streaming_title),
+                        description = stringResource(R.string.module_streaming_description),
+                        linkId = null,
+                        onClick = { onNavigate(SettingsDestination.Streaming) }
+                    )
                     // What every module uses
                     SettingsSectionDivider(stringResource(R.string.hub_shared_section))
                     SettingsCategoryRow(
