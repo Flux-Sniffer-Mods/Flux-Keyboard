@@ -1193,7 +1193,7 @@ object SettingLinkRegistry {
     val categories: List<SettingsDestination> = listOf(
         SettingsDestination.Typing, SettingsDestination.KeyboardsLayouts, SettingsDestination.Modifiers,
         SettingsDestination.FluxEmojiGifs, SettingsDestination.Apps, SettingsDestination.LookSound,
-        SettingsDestination.Advanced
+        SettingsDestination.GameMode, SettingsDestination.Streaming, SettingsDestination.Advanced
     )
 
     /** Which main category a settings page belongs to. */

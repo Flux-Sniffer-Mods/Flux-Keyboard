@@ -190,7 +190,7 @@ internal fun StreamingHomeScreen(modifier: Modifier, onBack: () -> Unit) {
     var on by remember { mutableStateOf(FluxModules.on(context, FluxModule.STREAMING)) }
     FluxScreenScaffold(stringResource(R.string.module_streaming_title), onBack, modifier) {
         FluxSwitchRow(
-            linkId = null,
+            linkId = "main.streaming",
             title = stringResource(R.string.module_streaming_title),
             description = stringResource(R.string.module_streaming_switch_description),
             checked = on
