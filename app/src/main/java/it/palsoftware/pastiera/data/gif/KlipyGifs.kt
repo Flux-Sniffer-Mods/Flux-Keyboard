@@ -426,7 +426,7 @@ object KlipyGifs {
     // KLIPY's network requirements ask for a browser-like User-Agent; keys can be tied to an app
     private fun request(context: Context, url: String): Request = Request.Builder()
         .url(url)
-        .header("User-Agent", "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; ${Build.MODEL}) ${it.palsoftware.pastiera.BuildConfig.APP_NAME.replace(" ", "")}")
+        .header("User-Agent", "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; ${Build.MODEL}) FluxKeyboard")
         .header("X-Android-Package", context.packageName)
         .build()
 

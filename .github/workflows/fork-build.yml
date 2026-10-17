@@ -1,6 +1,6 @@
-name: Flux Keyboard build
+name: Flux Titan Hub build
 # Each run is named by its version (or its kind, when the version is worked out), not a running number
-run-name: Flux Keyboard ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
+run-name: Flux Titan Hub ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
 
 # Pick the branch to pick the kind of build:
 #   flux-release -> a full release (0.92): the newest version in whats_new.json's "releases"
@@ -205,9 +205,9 @@ jobs:
             *-flux.*)
               stamp="${VERSION##*.}"
               when=$(date -u -d "${stamp:0:8} ${stamp:8:2}:${stamp:10:2}" "+%-d %b %Y, %H:%M" 2>/dev/null || echo "$stamp")
-              title="Flux Keyboard ${VERSION%%-*} dev · $when"
+              title="Flux Titan Hub ${VERSION%%-*} dev · $when"
               kind="--prerelease" ;;
-            *) title="Flux Keyboard $VERSION"
+            *) title="Flux Titan Hub $VERSION"
               kind="--latest"
               # A full release replaces the dev builds before it: their releases and tags go
               gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName --jq '.[].tagName' |

@@ -16,7 +16,7 @@
     <string name="user_shortcuts_website_title">Website</string>
     <string name="user_shortcuts_termux_title">Termux task</string>
     <string name="user_shortcuts_termux_description">A script in ~/.shortcuts, run as Termux:Widget runs it: those in tasks in the background, the others in a terminal.</string>
-    <string name="user_shortcuts_termux_setup">Termux needs allow-external-apps = true in ~/.termux/termux.properties (then restart Termux), and Flux Keyboard needs permission to run commands in Termux.</string>
+    <string name="user_shortcuts_termux_setup">Termux needs allow-external-apps = true in ~/.termux/termux.properties (then restart Termux), and Flux Titan Hub needs permission to run commands in Termux.</string>
     <string name="user_shortcuts_termux_none">No scripts found in ~/.shortcuts</string>
     <string name="user_shortcuts_call_label">Call %1$s</string>
     <string name="user_shortcuts_message_label">Message %1$s</string>

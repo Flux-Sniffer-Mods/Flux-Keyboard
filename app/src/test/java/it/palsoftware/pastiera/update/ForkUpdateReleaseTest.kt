@@ -99,7 +99,7 @@ class ForkUpdateReleaseTest {
         assertTrue(ForkUpdateInstaller.isTrustedApkUrl(stable.downloadUrl!!))
         val dev = requireNotNull(findNewerForkRelease(releases, "0.92", includeDev = true))
         assertEquals("flux/v0.93-flux.202609262047", dev.tagName)
-        assertTrue(dev.displayName, dev.displayName.startsWith("Flux Keyboard 0.93 dev · 26 "))
+        assertTrue(dev.displayName, dev.displayName.startsWith("Flux Titan Hub 0.93 dev · 26 "))
         assertTrue(dev.displayName, dev.displayName.endsWith(" 2026, 20:47"))
         assertTrue(dev.downloadUrl!!.endsWith("/flux-keyboard-0.93-flux.202609262047.apk"))
     }

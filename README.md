@@ -1,26 +1,30 @@
 <p align="center"><img src="docs/screenshots/hero.png" alt="Flux Keyboard on the Titan 2 Elite, with its emoji pages open in a chat" width="840"></p>
 
-# Flux Keyboard
+# Flux Titan Hub
 
 **The companion app for the Unihertz Titan 2 Elite.** A keyboard first, built around its physical
 keys and trackpad, and an app that makes the rest of the phone better too: the
 keyboard light, screen size per app and shortcuts for things the phone hides away, all without
 root. It works on any Android phone with a hardware keyboard, and is at its best on the Titan 2 Elite.
 
+Flux Titan Hub is one app with a tile per module: the keyboard (**Flux Keyboard**, in Android's
+keyboard list), **gaming mode** and **streaming** to Moonlight, each switched on when you want it.
+A fresh install starts with the keyboard alone. A Linux desktop is to come.
+
 <p align="center"><a href="https://ko-fi.com/fluxsniffermods"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi"></a></p>
 
-> **Flux Keyboard** is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera),
+> **Flux Titan Hub** is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera),
 > created by Andrea Palumbo (PalSoftware) and developed by Andrea Palumbo, Patrick Zauner and the
 > Pastiera contributors. Most of what makes it a keyboard is their work, credited
-> [below](#built-on-pastiera). Flux Keyboard is not affiliated with or endorsed by the Pastiera
-> team, so please report problems to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues),
+> [below](#built-on-pastiera). Flux Titan Hub is not affiliated with or endorsed by the Pastiera
+> team, so please report problems to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/issues),
 > not upstream.
 
 Flux Keyboard is up to date with **Pastiera 0.86**, Pastiera's final planned feature release, and
 merges Pastiera's later changes as they land. Pastiera keeps receiving security fixes, and its
 development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 
-## Only in Flux Keyboard
+## Only in Flux Titan Hub
 
 ### The trackpad picks your words
 - **Swipe on the keys to pick a suggestion**: left, up or right for each of the three, down to delete a word. It learns how far you swipe, and with Shell access it works in every app, not only the ones the phone's Scroll assistant scrolls.
@@ -208,11 +212,12 @@ The full list of what Pastiera 0.86 added over 0.85 is in the [changelog](FORK_C
 
 ## Installation
 
-1. Download the APK from the [latest release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases).
+1. Download the APK from the [latest release](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/releases).
 2. Android Settings → System → Languages & input → Virtual keyboard → Manage keyboards.
 3. Enable "Flux Keyboard" and pick it when typing.
+4. Open Flux Titan Hub and switch on the modules you want: gaming mode and streaming have a tile each.
 
-Flux Keyboard (app ID `io.github.fluxsniffermods.fluxkeyboard`) installs next to Pastiera and
+Flux Titan Hub (app ID `io.github.fluxsniffermods.fluxkeyboard`) installs next to Pastiera and
 doesn't replace or update it.
 
 ## Requirements
@@ -238,7 +243,7 @@ Pastiera's release, nightly and CI workflows aren't kept: Flux Keyboard builds o
 
 ## Contributing
 
-Issues and suggestions for Flux Keyboard go to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues).
+Issues and suggestions for Flux Titan Hub go to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/issues).
 Pastiera itself now accepts security, compatibility and maintenance changes, with feature work in
 Plektra.
 

@@ -82,7 +82,7 @@
     <string name="flux_tutorial_personalise_bullet_contour">On the Titan 2 Elite, the LEDs can follow the screen\'s rounded bottom corners on two rails, the same length on every page (Titan 2 Elite settings).</string>
     <string name="flux_tutorial_apps_bullet_updates">Updates download inside the app and install when you say so.</string>
     <string name="flux_tutorial_extras_termux_title">Termux scripts in the quick launcher</string>
-    <string name="flux_tutorial_extras_termux_text">Your Termux:Widget scripts and tasks (~/.shortcuts) run straight from the quick launcher. Allow Flux Keyboard to run commands in Termux, then set Termux up with the command below.</string>
+    <string name="flux_tutorial_extras_termux_text">Your Termux:Widget scripts and tasks (~/.shortcuts) run straight from the quick launcher. Allow Flux Titan Hub to run commands in Termux, then set Termux up with the command below.</string>
     <string name="trackpad_capture_title">Swipes go to the keyboard while you type</string>
     <string name="trackpad_capture_description">While a text field is being typed in, the keyboard takes the trackpad\'s swipes before the app, so they pick suggestions and don\'t scroll the page. Scroll assistant has to be on for the app in front, or the phone passes no swipes on at all. Needs the accessibility service and Android 14 or later.</string>
     <string name="termux_setup_title">Set up Termux for the keyboard</string>
@@ -114,7 +114,7 @@
 
     <!-- Permissions: restricted settings, then accessibility -->
     <string name="flux_tutorial_permissions_title">Permissions</string>
-    <string name="flux_tutorial_permissions_description">Flux Keyboard is installed from GitHub, not the Play Store, so Android holds back its accessibility service until you allow it once. Accessibility lets Flux Keyboard read keyboard swipes, follow the app in front for per-app screen size, and take keys that some apps read first. It can\'t read what\'s on screen.</string>
+    <string name="flux_tutorial_permissions_description">Flux Titan Hub is installed from GitHub, not the Play Store, so Android holds back its accessibility service until you allow it once. Accessibility lets Flux Titan Hub read keyboard swipes, follow the app in front for per-app screen size, and take keys that some apps read first. It can\'t read what\'s on screen.</string>
     <string name="flux_tutorial_permissions_step1_title">1. Try to switch it on</string>
     <string name="flux_tutorial_permissions_step1_text">Tap the button, then switch on Flux Keyboard. Android will refuse and call it a restricted setting. That\'s expected: the attempt is what makes step 2 appear.</string>
     <string name="flux_tutorial_permissions_step2_title">2. Allow restricted settings</string>
@@ -136,13 +136,13 @@
 
     <!-- Shizuku -->
     <string name="flux_tutorial_shizuku_title">Shell access</string>
-    <string name="flux_tutorial_shizuku_description">Flux Keyboard can use Android\'s developer shell without rooting the phone, through its own built-in shell or through Shizuku. With it:</string>
+    <string name="flux_tutorial_shizuku_description">Flux Titan Hub can use Android\'s developer shell without rooting the phone, through its own built-in shell or through Shizuku. With it:</string>
     <string name="flux_tutorial_shell_title">Built-in shell (recommended)</string>
-    <string name="flux_tutorial_shell_text">Pair it once with wireless debugging: tap Set up, then in Wireless debugging tap Pair device with pairing code, and type the code into Flux Keyboard\'s notification. After that it starts by itself after every restart, once Wi-Fi connects. No Shizuku or Termux needed.</string>
+    <string name="flux_tutorial_shell_text">Pair it once with wireless debugging: tap Set up, then in Wireless debugging tap Pair device with pairing code, and type the code into Flux Titan Hub\'s notification. After that it starts by itself after every restart, once Wi-Fi connects. No Shizuku or Termux needed.</string>
     <string name="flux_tutorial_shell_paired">Paired</string>
     <string name="flux_tutorial_shell_button">Set up</string>
     <string name="flux_tutorial_shell_or_shizuku_title">Or use Shizuku</string>
-    <string name="flux_tutorial_shell_or_shizuku_text">If you already use Shizuku, Flux Keyboard uses it whenever the built-in shell isn\'t running.</string>
+    <string name="flux_tutorial_shell_or_shizuku_text">If you already use Shizuku, Flux Titan Hub uses it whenever the built-in shell isn\'t running.</string>
     <string name="flux_tutorial_shizuku_bullet_swipes">Keyboard swipes work in every app, not only the ones the phone\'s Scroll assistant scrolls.</string>
     <string name="flux_tutorial_shizuku_bullet_light">The keyboard light follows the screen and its brightness, or flashes for notifications.</string>
     <string name="flux_tutorial_shizuku_bullet_shortcuts">Shortcuts can force-stop the app in front, toggle Battery Saver or cut an app off the network.</string>
@@ -152,8 +152,8 @@
     <string name="flux_tutorial_shizuku_start_title">2. Start Shizuku</string>
     <string name="flux_tutorial_shizuku_start_text">In Shizuku, choose Start via Wireless debugging and follow its pairing steps. It needs Wi-Fi.</string>
     <string name="flux_tutorial_shizuku_start_button">Open Shizuku</string>
-    <string name="flux_tutorial_shizuku_allow_title">3. Allow Flux Keyboard</string>
-    <string name="flux_tutorial_shizuku_allow_text">Shizuku asks once whether Flux Keyboard may use it.</string>
+    <string name="flux_tutorial_shizuku_allow_title">3. Allow Flux Titan Hub</string>
+    <string name="flux_tutorial_shizuku_allow_text">Shizuku asks once whether Flux Titan Hub may use it.</string>
     <string name="flux_tutorial_shizuku_allow_button">Allow</string>
     <string name="flux_tutorial_shizuku_installed">✓ Installed</string>
     <string name="flux_tutorial_shizuku_running">✓ Running</string>

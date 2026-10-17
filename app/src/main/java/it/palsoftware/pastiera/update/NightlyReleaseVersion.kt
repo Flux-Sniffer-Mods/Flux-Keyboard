@@ -62,8 +62,8 @@ internal fun forkReleasesFromTags(refs: List<String>, editionSuffix: String = ""
             val base = "https://github.com/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases"
             GitHubRelease(
                 tagName = tag,
-                // "Flux Keyboard 0.93 dev · 26 Sep 2026, 20:47", as the release is titled
-                name = "Flux Keyboard " + if (isForkDevRelease(tag)) friendlyVersion(version).replaceFirst(" · ", " dev · ") else version,
+                // "Flux Titan Hub 0.93 dev · 26 Sep 2026, 20:47", as the release is titled
+                name = "Flux Titan Hub " + if (isForkDevRelease(tag)) friendlyVersion(version).replaceFirst(" · ", " dev · ") else version,
                 prerelease = false,
                 draft = false,
                 htmlUrl = "$base/tag/$tag",

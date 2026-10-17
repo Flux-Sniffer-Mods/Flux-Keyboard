@@ -1,7 +1,7 @@
 {
-  "title": "Flux Keyboard",
-  "intro": "Flux Keyboard 1.0.0: everything it adds over Pastiera 0.86, Pastiera's final feature release, then what the Pastiera team built between 0.85 and 0.86, which Flux Keyboard includes.",
-  "sectionTitle": "Added by Flux Keyboard",
+  "title": "Flux Titan Hub",
+  "intro": "Flux Titan Hub 1.0.0: everything it adds over Pastiera 0.86, Pastiera's final feature release, then what the Pastiera team built between 0.85 and 0.86, which Flux Keyboard includes.",
+  "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
       "text": "Flux Keyboard: its own name, app ID, icon (a keyboard, in Niagara's icon packs too) and home screen fitted to the Titan 2 Elite, crediting and linking the original Pastiera. The compact mode is called Solderina.",
@@ -795,6 +795,15 @@
     },
     {
       "text": "Keyboard swipes' and the keyboard light's notes say Shell access rather than Shizuku, and Install Shizuku only shows when the built-in shell isn't set up"
+    },
+    {
+      "text": "The app is now Flux Titan Hub, with a tile per module on its home screen: Keyboard, Gaming mode, Streaming and Desktop (coming soon). Gaming mode and streaming switch on from their tile, and off takes their parts away too (the Games app in the app list, Moonlight's Wake, their quick settings and quick launcher entries). A fresh install starts with the keyboard alone; an update keeps on what you use"
+    },
+    {
+      "text": "The keyboard keeps the name Flux Keyboard in Android's keyboard list; updates now come from the Flux-Titan-Hub repository"
+    },
+    {
+      "text": "Emoji, symbol and kaomoji layer editors: hold a key and drag it onto another to swap them"
     }
   ],
   "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
@@ -1201,11 +1210,17 @@
     },
     {
       "text": "Games: a game opened from the Games app, a home screen shortcut or the quick launcher starts once, not three times while the screen changes size (GameHub Lite could close before the game loaded)"
+    },
+    {
+      "text": "Gaming mode: the volume keys still play (as the triggers, or the volume with SYM held) while a game's text field has the keys, and SYM is still tracked there, so SYM + volume and the keys' modifiers no longer stop working after typing"
+    },
+    {
+      "text": "Streaming: On the phone in the Moonlight client question starts the game on the phone, instead of nothing happening"
     }
   ],
-  "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
-  "docsLabel": "Full Flux Keyboard changelog",
-  "introSince": "What's new in Flux Keyboard since the version you had.",
+  "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/blob/flux-release/FORK_CHANGES.md",
+  "docsLabel": "Full Flux Titan Hub changelog",
+  "introSince": "What's new in Flux Titan Hub since the version you had.",
   "releases": {
     "1.0.0": "202610050800",
     "1.1.0": "202610051915"
