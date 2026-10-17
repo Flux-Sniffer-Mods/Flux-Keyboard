@@ -2070,4 +2070,5 @@
     <string name="module_coming_soon">Скоро</string>
     <string name="module_streaming_switch_description">Стриминг ваших игр в клиент Moonlight. Если выключено, телефон больше не отвечает Moonlight; сопряжения сохраняются.</string>
     <string name="hub_shared_section">Для всех модулей</string>
+    <string name="keyboard_test_section">Проверка клавиатуры</string>
 </resources>

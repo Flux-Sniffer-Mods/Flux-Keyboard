@@ -1526,4 +1526,5 @@
     <string name="module_coming_soon">Demnächst</string>
     <string name="module_streaming_switch_description">Streame deine Spiele zu einem Moonlight-Client. Aus antwortet das Handy Moonlight nicht mehr; Kopplungen bleiben erhalten.</string>
     <string name="hub_shared_section">Für alle Module</string>
+    <string name="keyboard_test_section">Tastatur testen</string>
 </resources>

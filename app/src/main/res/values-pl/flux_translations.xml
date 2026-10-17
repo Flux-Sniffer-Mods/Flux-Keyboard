@@ -2070,4 +2070,5 @@
     <string name="module_coming_soon">Wkrótce</string>
     <string name="module_streaming_switch_description">Streamuj swoje gry do klienta Moonlight. Po wyłączeniu telefon nie odpowiada już Moonlight; parowania zostają zachowane.</string>
     <string name="hub_shared_section">Dla wszystkich modułów</string>
+    <string name="keyboard_test_section">Przetestuj klawiaturę</string>
 </resources>

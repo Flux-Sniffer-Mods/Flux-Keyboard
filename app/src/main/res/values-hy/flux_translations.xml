@@ -2058,4 +2058,5 @@
     <string name="module_coming_soon">Շուտով</string>
     <string name="module_streaming_switch_description">Հեռարձակեք ձեր խաղերը Moonlight հաճախորդին։ Անջատված լինելիս հեռախոսն այլևս չի պատասխանում Moonlight-ին, իսկ զուգավորումները պահպանվում են։</string>
     <string name="hub_shared_section">Բոլոր մոդուլների համար</string>
+    <string name="keyboard_test_section">Փորձարկել ստեղնաշարը</string>
 </resources>

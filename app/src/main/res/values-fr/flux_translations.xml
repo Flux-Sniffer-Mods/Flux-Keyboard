@@ -2064,4 +2064,5 @@
     <string name="module_coming_soon">Bientôt disponible</string>
     <string name="module_streaming_switch_description">Diffusez vos jeux vers un client Moonlight. Désactivé, le téléphone ne répond plus à Moonlight ; les associations sont conservées.</string>
     <string name="hub_shared_section">Pour tous les modules</string>
+    <string name="keyboard_test_section">Tester le clavier</string>
 </resources>

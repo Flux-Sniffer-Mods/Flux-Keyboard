@@ -2052,4 +2052,5 @@
     <string name="module_coming_soon">Sắp ra mắt</string>
     <string name="module_streaming_switch_description">Phát game của bạn tới máy khách Moonlight. Khi tắt, điện thoại không còn trả lời Moonlight; các ghép nối vẫn được giữ.</string>
     <string name="hub_shared_section">Cho mọi mô-đun</string>
+    <string name="keyboard_test_section">Thử bàn phím</string>
 </resources>

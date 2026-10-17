@@ -1438,4 +1438,5 @@
     <string name="module_coming_soon">Σύντομα</string>
     <string name="module_streaming_switch_description">Ροή των παιχνιδιών σου σε πελάτη Moonlight. Όταν είναι ανενεργό, το τηλέφωνο δεν απαντά πια στο Moonlight· οι συζεύξεις διατηρούνται.</string>
     <string name="hub_shared_section">Για όλες τις ενότητες</string>
+    <string name="keyboard_test_section">Δοκιμή πληκτρολογίου</string>
 </resources>

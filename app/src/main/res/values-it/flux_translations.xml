@@ -1566,4 +1566,5 @@
     <string name="module_coming_soon">In arrivo</string>
     <string name="module_streaming_switch_description">Trasmetti i tuoi giochi a un client Moonlight. Disattivato, il telefono non risponde più a Moonlight; gli abbinamenti restano.</string>
     <string name="hub_shared_section">Per tutti i moduli</string>
+    <string name="keyboard_test_section">Prova la tastiera</string>
 </resources>
