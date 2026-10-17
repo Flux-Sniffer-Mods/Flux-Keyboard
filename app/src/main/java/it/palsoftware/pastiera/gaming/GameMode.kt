@@ -348,17 +348,24 @@ object GameMode {
                 "buttons by ${route()}, ${if (typing) "typing in a text field (left alone)" else if (GameTouchEditor.open) "placing keys (left alone)" else "played"}, " +
                 "input helper ${if (input != null) "running" else "not running"}")
         }
-        if (!passesKeys()) return false
+        if (profile == null || GameTouchEditor.open) return false
         // What gaming mode sends comes back through here (it has no scan code): on to the game
         if (event.scanCode == 0) return false
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
         val code = event.keyCode
+        // A text field of the game has the keys: they type there. The volume keys never type, so
+        // they still play (the triggers, or the volume with SYM held), and SYM is kept track of
+        val volumeKey = code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN
+        if (typing && !volumeKey) {
+            if (code == KeyEvent.KEYCODE_SYM) symVolume(event)
+            return false
+        }
         val down = event.action == KeyEvent.ACTION_DOWN
         val first = event.repeatCount == 0
         // A key pressed on the keyboard is no finger on the trackpad (it is the trackpad)
         if (first) trackpadReader?.let { if (down) it.keyPressed(code) else it.keyReleased(code) }
         // The volume keys' own device (the phone's side buttons), for writing Dolphin's controls
-        if (first && down && (code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+        if (first && down && volumeKey) {
             val device = event.device?.name
             appContext?.let { context -> worker.execute { FluxLayout.volumeSeenFrom(context, device) } }
         }

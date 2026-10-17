@@ -35,18 +35,31 @@ class GameLaunchActivity : Activity() {
             finish()
             return
         }
-        // Streaming, with a TV set up: played on the TV (turned on, Moonlight opened into the
-        // game) or on the phone, as asked (not when the stream itself opens it)
-        if (!intent.getBooleanExtra(EXTRA_TV_ASKED, false) && it.palsoftware.pastiera.streaming.TvPrompt.applies(this, profile)) {
+        proceed(profile, packages, launch,
+            tvAsked = intent.getBooleanExtra(EXTRA_TV_ASKED, false), asked = intent.getBooleanExtra(EXTRA_ASKED, false))
+    }
+
+    /**
+     * The game started, after the questions it needs: on the TV or the phone while streaming, and
+     * set up or played as it is the first time. Each answer carries on here, in this same screen
+     * (starting the screen again could start the game twice, or not at all).
+     */
+    private fun proceed(profile: GameProfile?, packages: Set<String>, launch: String?, tvAsked: Boolean, asked: Boolean) {
+        // Streaming, with a Moonlight client set up: played there (turned on, Moonlight opened into
+        // the game) or on the phone, as asked (not when the stream itself opens it)
+        if (!tvAsked && it.palsoftware.pastiera.streaming.TvPrompt.applies(this, profile)) {
             it.palsoftware.pastiera.streaming.TvPrompt.open(this, profile,
-                onPhone = { startActivity(Intent(intent).putExtra(EXTRA_TV_ASKED, true)); finish() },
+                onPhone = {
+                    FluxLog.w(TAG, "${profile?.name}: played on the phone, not the Moonlight client")
+                    proceed(profile, packages, launch, tvAsked = true, asked = asked)
+                },
                 onTv = { profile?.let { p -> p.packages.forEach { GameProfiles.setActive(this, it, p.id) } }; finish() },
                 onCancel = { finish() })
             return
         }
         // A game found by itself, starting for the first time: set it up, or play it as it is
-        if (profile != null && profile.pending && !intent.getBooleanExtra(EXTRA_ASKED, false)) {
-            ask(profile)
+        if (profile != null && profile.pending && !asked) {
+            ask(profile) { confirmed -> proceed(confirmed, packages, launch, tvAsked = true, asked = true) }
             return
         }
         profile?.let { p -> p.packages.forEach { GameProfiles.setActive(this, it, p.id) } }
@@ -118,7 +131,7 @@ class GameLaunchActivity : Activity() {
     }
 
     /** Set up first (Games, at its settings), or played with its app's settings from now on. */
-    private fun ask(profile: GameProfile) {
+    private fun ask(profile: GameProfile, onPlay: (GameProfile) -> Unit) {
         val app = profile.packages.firstOrNull()?.let { pkg ->
             appLabelOrNull(pkg)
         } ?: ""
@@ -130,9 +143,7 @@ class GameLaunchActivity : Activity() {
                 finish()
             }
             .setNegativeButton(it.palsoftware.pastiera.R.string.game_first_start_play) { _, _ ->
-                GameProfiles.confirm(this, profile)
-                startActivity(Intent(intent).putExtra(EXTRA_ASKED, true))
-                finish()
+                onPlay(GameProfiles.confirm(this, profile))
             }
             .setOnCancelListener { finish() }
             .show()
