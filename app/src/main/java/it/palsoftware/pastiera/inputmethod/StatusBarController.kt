@@ -3413,7 +3413,9 @@ class StatusBarController(
     fun createCustomizableEmojiKeyboard(
         symMappings: Map<Int, String>,
         onKeyClick: (Int, String) -> Unit,
-        page: Int = 1 // Default a pagina 1 (emoji)
+        page: Int = 1, // Default a pagina 1 (emoji)
+        // A key held and dragged onto another: the two swap what they type (from, to)
+        onSwap: ((Int, Int) -> Unit)? = null
     ): View {
         isTitan2Layout = SettingsManager.isTitan2LayoutEnabled(context)
         val container = LinearLayout(context).apply {
@@ -3533,19 +3535,19 @@ class StatusBarController(
                 when (rowIndex) {
                     0 -> { // Row 1: Q W E R T Y U I O P (10 keys)
                         for ((index, keyCode) in row.withIndex()) {
-                            addKeyToPreviewRow(rowLayout, keyCode, symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, index == row.size - 1)
+                            addKeyToPreviewRow(rowLayout, keyCode, symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, index == row.size - 1, onSwap)
                         }
                     }
                     1 -> { // Row 2: A S D F G H J K L (9 keys) -> Add placeholder at the end to make it 10
                         for ((index, keyCode) in row.withIndex()) {
-                            addKeyToPreviewRow(rowLayout, keyCode, symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, false)
+                            addKeyToPreviewRow(rowLayout, keyCode, symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, false, onSwap)
                         }
                         rowLayout.addView(View(context), LinearLayout.LayoutParams(fixedKeyWidth, keyHeight))
                     }
                     2 -> { // Row 3: Z X C V [Close Placeholder] [Globe Placeholder] B N M [Gap]
                         // Z X C V (4 keys)
                         for (i in 0..3) {
-                            addKeyToPreviewRow(rowLayout, row[i], symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, false)
+                            addKeyToPreviewRow(rowLayout, row[i], symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, false, onSwap)
                         }
                         
                         // Close Button Placeholder (no icon in customization preview)
@@ -3558,7 +3560,7 @@ class StatusBarController(
                         
                         // B N M (3 keys)
                         for (i in 4..6) {
-                            addKeyToPreviewRow(rowLayout, row[i], symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, false)
+                            addKeyToPreviewRow(rowLayout, row[i], symMappings, fixedKeyWidth, keyHeight, keySpacing, page, onKeyClick, false, onSwap)
                         }
 
                         // Right Gap (placeholder for the physical cutout/space at the end of row 3)
@@ -3586,8 +3588,9 @@ class StatusBarController(
                 val keyButton = createEmojiKeyButton(label, reserved ?: emoji, keyHeight, page)
                 
                 // The search, GIF and Recents keys aren't mapped: greyed, showing their job
-                if (reserved != null) greyOutReservedKey(keyButton) else keyButton.setOnClickListener {
-                    onKeyClick(keyCode, emoji)
+                if (reserved != null) greyOutReservedKey(keyButton) else {
+                    keyButton.setOnClickListener { onKeyClick(keyCode, emoji) }
+                    dragToSwap(keyButton, keyCode, onSwap)
                 }
                 
                 // Fixed width instead of weight (the same layout as the real keyboard)
@@ -3653,6 +3656,34 @@ class StatusBarController(
         keyButton.isEnabled = false
     }
 
+    /**
+     * A layer editor's key: held, it can be dragged onto another key, and the two swap what they
+     * type. Reserved keys (search, GIFs, recents) are neither dragged nor dropped on.
+     */
+    private fun dragToSwap(keyButton: View, keyCode: Int, onSwap: ((Int, Int) -> Unit)?) {
+        if (onSwap == null) return
+        keyButton.setOnLongClickListener { view ->
+            view.startDragAndDrop(android.content.ClipData.newPlainText("key", keyCode.toString()),
+                View.DragShadowBuilder(view), keyCode, 0)
+            view.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS)
+            true
+        }
+        keyButton.setOnDragListener { view, event ->
+            val from = event.localState as? Int
+            when (event.action) {
+                android.view.DragEvent.ACTION_DRAG_STARTED -> from != null
+                android.view.DragEvent.ACTION_DRAG_ENTERED -> { if (from != keyCode) view.alpha = 0.5f; true }
+                android.view.DragEvent.ACTION_DRAG_EXITED, android.view.DragEvent.ACTION_DRAG_ENDED -> { view.alpha = 1f; true }
+                android.view.DragEvent.ACTION_DROP -> {
+                    view.alpha = 1f
+                    if (from != null && from != keyCode) onSwap(from, keyCode)
+                    true
+                }
+                else -> true
+            }
+        }
+    }
+
     private fun addKeyToPreviewRow(
         rowLayout: LinearLayout,
         keyCode: Int,
@@ -3662,7 +3693,8 @@ class StatusBarController(
         spacing: Int,
         page: Int,
         onKeyClick: (Int, String) -> Unit,
-        isLast: Boolean
+        isLast: Boolean,
+        onSwap: ((Int, Int) -> Unit)? = null
     ) {
         val keyLabels = mapOf(
             android.view.KeyEvent.KEYCODE_Q to "Q", android.view.KeyEvent.KEYCODE_W to "W", android.view.KeyEvent.KEYCODE_E to "E",
@@ -3679,8 +3711,9 @@ class StatusBarController(
         val reserved = reservedLayerKeys(page)[keyCode]
         val emoji = symMappings[keyCode] ?: ""
         val keyButton = createEmojiKeyButton(label, reserved ?: emoji, height, page)
-        if (reserved != null) greyOutReservedKey(keyButton) else keyButton.setOnClickListener {
-            onKeyClick(keyCode, emoji)
+        if (reserved != null) greyOutReservedKey(keyButton) else {
+            keyButton.setOnClickListener { onKeyClick(keyCode, emoji) }
+            dragToSwap(keyButton, keyCode, onSwap)
         }
         rowLayout.addView(keyButton, LinearLayout.LayoutParams(width, height))
         if (!isLast) {

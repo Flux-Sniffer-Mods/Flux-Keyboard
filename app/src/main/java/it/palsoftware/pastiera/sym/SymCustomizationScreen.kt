@@ -536,7 +536,10 @@ fun SymCustomizationScreen(
                             statusBarController.createCustomizableEmojiKeyboard(symMappingsPage1, { keyCode, emoji ->
                                 selectedKeyCode = keyCode
                                 showEmojiPicker = true
-                            }, page = 1)
+                            }, page = 1, onSwap = { from, to ->
+                                symMappingsPage1 = swapKeys(symMappingsPage1, from, to)
+                                SettingsManager.saveSymMappings(context, symMappingsPage1)
+                            })
                         },
                         update = { _ ->
                             // The key(titan2LayoutEnabled) will trigger a full recomposition/re-factory
@@ -553,7 +556,10 @@ fun SymCustomizationScreen(
                             statusBarController.createCustomizableEmojiKeyboard(kaomojiHome, { keyCode, _ ->
                                 selectedKeyCode = keyCode
                                 showKaomojiPicker = true
-                            }, page = it.palsoftware.pastiera.inputmethod.StatusBarController.KAOMOJI_EDIT_PAGE)
+                            }, page = it.palsoftware.pastiera.inputmethod.StatusBarController.KAOMOJI_EDIT_PAGE, onSwap = { from, to ->
+                                kaomojiHome = swapKeys(kaomojiHome, from, to)
+                                SettingsManager.saveKaomojiHomePage(context, kaomojiHome)
+                            })
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -567,7 +573,10 @@ fun SymCustomizationScreen(
                             statusBarController.createCustomizableEmojiKeyboard(symMappingsPage2, { keyCode, character ->
                                 selectedKeyCode = keyCode
                                 showCharacterPicker = true
-                            }, page = 2)
+                            }, page = 2, onSwap = { from, to ->
+                                symMappingsPage2 = swapKeys(symMappingsPage2, from, to)
+                                SettingsManager.saveSymMappingsPage2(context, symMappingsPage2)
+                            })
                         },
                         update = { _ ->
                             // The key(titan2LayoutEnabled) will trigger a full recomposition/re-factory
@@ -800,6 +809,16 @@ private val DEFAULT_PAGE_SLOTS = listOf(
 )
 
 /** Your [recents] on the page's keys in order, then what was there that isn't among them. */
+/** What two keys type, swapped (a key with nothing on it takes the other's, leaving that one empty). */
+internal fun swapKeys(mappings: Map<Int, String>, from: Int, to: Int): Map<Int, String> {
+    val result = mappings.toMutableMap()
+    val a = mappings[from]
+    val b = mappings[to]
+    if (b != null) result[from] = b else result.remove(from)
+    if (a != null) result[to] = a else result.remove(to)
+    return result
+}
+
 internal fun startFromRecents(current: Map<Int, String>, recents: List<String>): Map<Int, String> {
     val items = (recents + DEFAULT_PAGE_SLOTS.mapNotNull { current[it] }).distinct()
     return current + DEFAULT_PAGE_SLOTS.zip(items).toMap()
