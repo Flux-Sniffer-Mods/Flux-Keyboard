@@ -1814,7 +1814,7 @@
     <string name="game_mode_quick_launcher">Jeux dans le lanceur rapide</string>
     <string name="game_mode_quick_launcher_description">Les jeux trouvés dans les dossiers de jeux et ceux qui ont un profil, lancés depuis le lanceur rapide comme depuis leur raccourci d\'écran d\'accueil.</string>
     <string name="game_mode_setup_controls">Configurer les commandes de %1$s</string>
-    <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant les commandes au clavier de Flux Titan Hub (voir Commandes au clavier).\n\nDolphin : la manette GameCube 1 (L et R sur les touches de volume, Z sur E) et la Wiimote 1 avec Nunchuk sont réglées, le pointeur suivant la moitié droite du pavé tactile (réglez le mode IR de l\'overlay de Dolphin sur Follow). PPSSPP : ses commandes sont réglées pour tous les jeux.</string>
+    <string name="game_mode_setup_done">Les commandes de %1$s suivent maintenant les commandes au clavier de Flux Titan Hub (voir Commandes au clavier).\n\nDolphin : la manette GameCube 1 (L et R sur les touches de volume, Z sur E) et la Wiimote 1 avec Nunchuk sont réglées, le pointeur suivant la moitié droite du pavé tactile. PPSSPP : ses commandes sont réglées pour tous les jeux.</string>
     <string name="game_mode_setup_not_found">Les réglages de %1$s sont introuvables : ouvrez-le une fois, puis réessayez.</string>
     <string name="game_mode_setup_by_hand">%1$s ne charge pas de commandes depuis un fichier : dans ses Paramètres, Entrée (Commandes), associez chaque bouton en appuyant sur sa touche quand il le demande :\n\n%2$s</string>
     <string name="game_mode_wii_controller">Manette Wii</string>

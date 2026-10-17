@@ -1275,7 +1275,7 @@
     <string name="game_mode_quick_launcher">Spiele im Schnellstarter</string>
     <string name="game_mode_quick_launcher_description">Die in den Spieleordnern gefundenen Spiele und die Spiele mit Profil, aus dem Schnellstarter gestartet wie über ihre Startbildschirm-Verknüpfung.</string>
     <string name="game_mode_setup_controls">Steuerung von %1$s einrichten</string>
-    <string name="game_mode_setup_done">Die Steuerung von %1$s folgt jetzt der Tastatursteuerung von Flux Titan Hub (siehe Tastatursteuerung).\n\nDolphin: GameCube-Controller 1 (L und R auf den Lautstärketasten, Z auf E) und Wii Remote 1 mit Nunchuk sind eingerichtet, der Zeiger folgt der rechten Trackpad-Hälfte (stelle den IR-Modus des Dolphin-Overlays auf Follow). PPSSPP: Die Steuerung ist für jedes Spiel eingerichtet.</string>
+    <string name="game_mode_setup_done">Die Steuerung von %1$s folgt jetzt der Tastatursteuerung von Flux Titan Hub (siehe Tastatursteuerung).\n\nDolphin: GameCube-Controller 1 (L und R auf den Lautstärketasten, Z auf E) und Wii Remote 1 mit Nunchuk sind eingerichtet, der Zeiger folgt der rechten Trackpad-Hälfte. PPSSPP: Die Steuerung ist für jedes Spiel eingerichtet.</string>
     <string name="game_mode_setup_not_found">Die Einstellungen von %1$s wurden nicht gefunden: einmal öffnen, dann erneut versuchen.</string>
     <string name="game_mode_setup_by_hand">%1$s kann keine Steuerung aus einer Datei laden: Belege in seinen Einstellungen unter Eingabe (Steuerung) jede Taste, indem du ihre Taste drückst:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Wii-Controller</string>

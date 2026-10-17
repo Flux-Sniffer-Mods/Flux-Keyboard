@@ -1316,7 +1316,7 @@
     <string name="game_mode_quick_launcher">Giochi nell\'avvio rapido</string>
     <string name="game_mode_quick_launcher_description">I giochi trovati nelle cartelle dei giochi e quelli con un profilo, avviati dall\'avvio rapido come dalla loro scorciatoia nella schermata Home.</string>
     <string name="game_mode_setup_controls">Configura i controlli di %1$s</string>
-    <string name="game_mode_setup_done">I comandi di %1$s ora seguono i comandi da tastiera di Flux Titan Hub (vedi Comandi da tastiera).\n\nDolphin: sono impostati il controller GameCube 1 (L e R sui tasti del volume, Z su E) e il Wii Remote 1 con Nunchuk, con il puntatore che segue la metà destra del trackpad (imposta la modalità IR dell\'overlay di Dolphin su Follow). PPSSPP: i suoi comandi sono impostati per tutti i giochi.</string>
+    <string name="game_mode_setup_done">I comandi di %1$s ora seguono i comandi da tastiera di Flux Titan Hub (vedi Comandi da tastiera).\n\nDolphin: sono impostati il controller GameCube 1 (L e R sui tasti del volume, Z su E) e il Wii Remote 1 con Nunchuk, con il puntatore che segue la metà destra del trackpad. PPSSPP: i suoi comandi sono impostati per tutti i giochi.</string>
     <string name="game_mode_setup_not_found">Impostazioni di %1$s non trovate: aprilo una volta, poi riprova.</string>
     <string name="game_mode_setup_by_hand">%1$s non carica i comandi da un file: nelle sue Impostazioni, Input (Comandi), assegna ogni pulsante premendo il suo tasto quando richiesto:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Controller Wii</string>

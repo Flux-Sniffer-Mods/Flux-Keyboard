@@ -1820,7 +1820,7 @@
     <string name="game_mode_quick_launcher">Ігри у швидкому запуску</string>
     <string name="game_mode_quick_launcher_description">Ігри з тек ігор та ігри з профілем запускаються зі швидкого запуску так само, як з ярлика на головному екрані.</string>
     <string name="game_mode_setup_controls">Налаштувати керування %1$s</string>
-    <string name="game_mode_setup_done">Керування %1$s тепер відповідає керуванню з клавіатури Flux Titan Hub (див. Керування з клавіатури).\n\nDolphin: налаштовано контролер GameCube 1 (L і R на клавішах гучності, Z на E) і Wii Remote 1 з Nunchuk, вказівник слідує за правою половиною трекпада (встановіть режим IR накладки Dolphin на Follow). PPSSPP: керування налаштовано для всіх ігор.</string>
+    <string name="game_mode_setup_done">Керування %1$s тепер відповідає керуванню з клавіатури Flux Titan Hub (див. Керування з клавіатури).\n\nDolphin: налаштовано контролер GameCube 1 (L і R на клавішах гучності, Z на E) і Wii Remote 1 з Nunchuk, вказівник слідує за правою половиною трекпада. PPSSPP: керування налаштовано для всіх ігор.</string>
     <string name="game_mode_setup_not_found">Налаштування %1$s не знайдено: відкрийте його один раз і спробуйте знову.</string>
     <string name="game_mode_setup_by_hand">%1$s не завантажує керування з файлу: у його Налаштуваннях, Введення (Керування), призначте кожну кнопку, натискаючи її клавішу на запит:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Контролер Wii</string>

@@ -1820,7 +1820,7 @@
     <string name="game_mode_quick_launcher">Gry w szybkim starcie</string>
     <string name="game_mode_quick_launcher_description">Gry znalezione w folderach gier i gry z profilem, uruchamiane z szybkiego startu tak jak ze skrótu na ekranie głównym.</string>
     <string name="game_mode_setup_controls">Skonfiguruj sterowanie %1$s</string>
-    <string name="game_mode_setup_done">Sterowanie %1$s odpowiada teraz sterowaniu z klawiatury Flux Titan Hub (zobacz Sterowanie z klawiatury).\n\nDolphin: ustawione są kontroler GameCube 1 (L i R na klawiszach głośności, Z na E) oraz Wii Remote 1 z Nunchukiem, a wskaźnik podąża za prawą połową gładzika (ustaw tryb IR nakładki Dolphin na Follow). PPSSPP: sterowanie jest ustawione dla każdej gry.</string>
+    <string name="game_mode_setup_done">Sterowanie %1$s odpowiada teraz sterowaniu z klawiatury Flux Titan Hub (zobacz Sterowanie z klawiatury).\n\nDolphin: ustawione są kontroler GameCube 1 (L i R na klawiszach głośności, Z na E) oraz Wii Remote 1 z Nunchukiem, a wskaźnik podąża za prawą połową gładzika. PPSSPP: sterowanie jest ustawione dla każdej gry.</string>
     <string name="game_mode_setup_not_found">Nie znaleziono ustawień %1$s: otwórz go raz, a potem spróbuj ponownie.</string>
     <string name="game_mode_setup_by_hand">%1$s nie wczytuje sterowania z pliku: w jego Ustawieniach, Wejście (Sterowanie), przypisz każdy przycisk, naciskając jego klawisz, gdy poprosi:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Kontroler Wii</string>

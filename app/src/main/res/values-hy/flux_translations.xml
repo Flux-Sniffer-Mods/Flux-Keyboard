@@ -1808,7 +1808,7 @@
     <string name="game_mode_quick_launcher">Խաղերը արագ գործարկիչում</string>
     <string name="game_mode_quick_launcher_description">Խաղերի պանակներում գտնված խաղերը և պրոֆիլ ունեցող խաղերը գործարկվում են արագ գործարկիչից այնպես, ինչպես գլխավոր էկրանի դյուրանցումից։</string>
     <string name="game_mode_setup_controls">Կարգավորել %1$s-ի կառավարումը</string>
-    <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Titan Hub-ի ստեղնաշարի կառավարմանը (տես Ստեղնաշարի կառավարում)։\n\nDolphin՝ կարգավորված են GameCube կարգավարիչ 1-ը (L և R ձայնի ստեղների վրա, Z-ը E-ի վրա) և Wii Remote 1-ը Nunchuk-ով, ցուցիչը հետևում է թաչփադի աջ կեսին (Dolphin-ի overlay-ի IR ռեժիմը դիր Follow)։ PPSSPP՝ կառավարումը կարգավորված է բոլոր խաղերի համար։</string>
+    <string name="game_mode_setup_done">%1$s-ի կառավարումն այժմ հետևում է Flux Titan Hub-ի ստեղնաշարի կառավարմանը (տես Ստեղնաշարի կառավարում)։\n\nDolphin՝ կարգավորված են GameCube կարգավարիչ 1-ը (L և R ձայնի ստեղների վրա, Z-ը E-ի վրա) և Wii Remote 1-ը Nunchuk-ով, ցուցիչը հետևում է թաչփադի աջ կեսին։ PPSSPP՝ կառավարումը կարգավորված է բոլոր խաղերի համար։</string>
     <string name="game_mode_setup_not_found">%1$s-ի կարգավորումները չգտնվեցին. բացեք այն մեկ անգամ, ապա կրկին փորձեք։</string>
     <string name="game_mode_setup_by_hand">%1$s-ը չի կարող կառավարումը բեռնել ֆայլից. նրա Կարգավորումներում, Մուտք (Կառավարում), կապեք յուրաքանչյուր կոճակ՝ սեղմելով դրա ստեղնը, երբ խնդրի.\n\n%2$s</string>
     <string name="game_mode_wii_controller">Wii կարգավորիչ</string>

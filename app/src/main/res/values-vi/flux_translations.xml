@@ -1802,7 +1802,7 @@
     <string name="game_mode_quick_launcher">Game trong trình khởi chạy nhanh</string>
     <string name="game_mode_quick_launcher_description">Các game tìm thấy trong thư mục game và các game có hồ sơ, mở từ trình khởi chạy nhanh giống như từ lối tắt trên màn hình chính.</string>
     <string name="game_mode_setup_controls">Thiết lập điều khiển cho %1$s</string>
-    <string name="game_mode_setup_done">Điều khiển của %1$s giờ theo điều khiển bằng bàn phím của Flux Titan Hub (xem Điều khiển bằng bàn phím).\n\nDolphin: đã thiết lập tay cầm GameCube 1 (L và R trên phím âm lượng, Z trên E) và Wii Remote 1 với Nunchuk, con trỏ theo nửa phải của bàn di chuột (đặt chế độ IR của lớp phủ Dolphin thành Follow). PPSSPP: điều khiển đã được thiết lập cho mọi game.</string>
+    <string name="game_mode_setup_done">Điều khiển của %1$s giờ theo điều khiển bằng bàn phím của Flux Titan Hub (xem Điều khiển bằng bàn phím).\n\nDolphin: đã thiết lập tay cầm GameCube 1 (L và R trên phím âm lượng, Z trên E) và Wii Remote 1 với Nunchuk, con trỏ theo nửa phải của bàn di chuột. PPSSPP: điều khiển đã được thiết lập cho mọi game.</string>
     <string name="game_mode_setup_not_found">Không tìm thấy cài đặt của %1$s: mở nó một lần rồi thử lại.</string>
     <string name="game_mode_setup_by_hand">%1$s không tải điều khiển từ tệp: trong Cài đặt của nó, Đầu vào (Điều khiển), gán từng nút bằng cách nhấn phím tương ứng khi được hỏi:\n\n%2$s</string>
     <string name="game_mode_wii_controller">Tay cầm Wii</string>
