@@ -28,13 +28,20 @@ object StreamWake {
     /** Broadcasts let through to the phone (Android drops them to save battery otherwise). */
     private var multicast: android.net.wifi.WifiManager.MulticastLock? = null
     @Volatile private var started = false
+    @Volatile private var quietChecked = false
+    /** The ports listened on, closed when streaming is switched off. */
+    private val sockets = java.util.Collections.synchronizedList(mutableListOf<DatagramSocket>())
 
     fun start(context: Context) {
-        if (started) return
-        started = true
         val app = context.applicationContext
         // Stopped mid-stream before (updated, the phone turned off): the phone's sound put back
-        Thread({ runCatching { StreamQuiet.stop(app) } }, "StreamQuiet").apply { isDaemon = true; start() }
+        if (!quietChecked) {
+            quietChecked = true
+            Thread({ runCatching { StreamQuiet.stop(app) } }, "StreamQuiet").apply { isDaemon = true; start() }
+        }
+        // Only with Streaming switched on in Flux Titan Hub
+        if (started || !it.palsoftware.pastiera.modules.FluxModules.on(app, it.palsoftware.pastiera.modules.FluxModule.STREAMING)) return
+        started = true
         when {
             // Streaming was on when Flux Keyboard last stopped (updated, restarted, the phone
             // turned off): on again, else Moonlight sees nothing until it's turned off and on
@@ -83,6 +90,7 @@ object StreamWake {
             val socket = runCatching {
                 DatagramSocket(null).apply { reuseAddress = true; broadcast = true; bind(InetSocketAddress(port)) }
             }.onFailure { FluxLog.w(TAG, "can't listen on $port: $it") }.getOrNull() ?: return@Thread
+            sockets += socket
             FluxLog.w(TAG, "listening for Moonlight's wake on $port (broadcasts ${if (multicast?.isHeld == true) "let through" else "not let through"})")
             val buffer = ByteArray(256)
             while (true) {
@@ -94,6 +102,16 @@ object StreamWake {
                 if (ours) wake(app)
             }
         }, "StreamWake$port").apply { isDaemon = true; start() }
+    }
+
+    /** Streaming switched off: Moonlight's wake no longer listened for, its broadcasts no longer let through. */
+    fun stop(context: Context) {
+        if (!started) return
+        started = false
+        synchronized(sockets) { sockets.forEach { runCatching { it.close() } }; sockets.clear() }
+        runCatching { multicast?.release() }
+        multicast = null
+        FluxLog.w(TAG, "streaming switched off: Moonlight's wake no longer listened for")
     }
 
     private fun wake(context: Context) {

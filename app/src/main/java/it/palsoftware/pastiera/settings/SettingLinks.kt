@@ -1165,7 +1165,9 @@ object SettingLinkRegistry {
         SettingsDestination.LedColors to R.string.led_colors_title,
         SettingsDestination.EmojiProfiles to R.string.emoji_profiles_title,
         SettingsDestination.TerminalMode to R.string.terminal_mode_title,
-        SettingsDestination.ExactTyping to R.string.exact_typing_title
+        SettingsDestination.ExactTyping to R.string.exact_typing_title,
+        SettingsDestination.KeyboardHome to R.string.module_keyboard_title,
+        SettingsDestination.Streaming to R.string.module_streaming_title
     )
 
     val keyboardsDevicesSubtitles: Map<KeyboardsDevicesDestination, Int> = mapOf(
@@ -1207,6 +1209,9 @@ object SettingLinkRegistry {
         SettingsDestination.TerminalMode, SettingsDestination.FluxHiddenApps, SettingsDestination.FluxLinuxDesktop,
         SettingsDestination.Customization -> SettingsDestination.Apps
         SettingsDestination.LookSound, SettingsDestination.LedColors -> SettingsDestination.LookSound
+        // Modules of their own: their settings under their own heading
+        SettingsDestination.GameMode -> SettingsDestination.GameMode
+        SettingsDestination.Streaming -> SettingsDestination.Streaming
         else -> SettingsDestination.Advanced
     }
 

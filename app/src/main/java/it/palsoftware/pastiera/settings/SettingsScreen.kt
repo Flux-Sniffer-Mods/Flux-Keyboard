@@ -20,12 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Keyboard
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.EmojiEmotions
-import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Shield
 import androidx.activity.ComponentActivity
@@ -52,6 +47,7 @@ import it.palsoftware.pastiera.device.KeyboardsDevicesDestination
 import it.palsoftware.pastiera.device.KeyboardsDevicesSettingsScreen
 import it.palsoftware.pastiera.device.TrackpadGestureSettingsScreen
 import it.palsoftware.pastiera.layout.CustomInputStylesScreen
+import it.palsoftware.pastiera.modules.FluxModule
 import it.palsoftware.pastiera.sym.DeviceSymLayerEditorScreen
 import it.palsoftware.pastiera.sym.EmojiLayerProfilesScreen
 import it.palsoftware.pastiera.theme.LedColorsScreen
@@ -93,7 +89,9 @@ enum class SettingsDestination {
     AppShortcuts,
     Developer,
     TerminalMode,
-    ExactTyping
+    ExactTyping,
+    KeyboardHome,
+    Streaming
 }
 
 /** The destination payload of one SettingsActivity, also used by deep links. */
@@ -361,6 +359,16 @@ fun SettingsScreen(
             SettingsDestination.GameMode -> {
                 GameModeScreen(modifier = modifier, onBack = { navigateBack() })
             }
+            SettingsDestination.KeyboardHome -> {
+                KeyboardHomeScreen(
+                    modifier = modifier,
+                    onBack = { navigateBack() },
+                    onNavigate = { destination -> navigateTo(destination) }
+                )
+            }
+            SettingsDestination.Streaming -> {
+                StreamingHomeScreen(modifier = modifier, onBack = { navigateBack() })
+            }
             SettingsDestination.Root -> {
                 AdbSettingsScreen(modifier = modifier, onBack = { navigateBack() })
             }
@@ -515,54 +523,23 @@ private fun SettingsMainScreen(
                         .fillMaxWidth()
                         .verticalScroll(categoriesScrollState)
                 ) {
+                    // A tile per module: the keyboard, gaming mode, streaming, the desktop to come
+                    ModuleTiles { module ->
+                        when (module) {
+                            FluxModule.KEYBOARD -> onNavigate(SettingsDestination.KeyboardHome)
+                            FluxModule.GAMING -> onNavigate(SettingsDestination.GameMode)
+                            FluxModule.STREAMING -> onNavigate(SettingsDestination.Streaming)
+                            FluxModule.DESKTOP -> Unit
+                        }
+                    }
+                    // What every module uses
+                    SettingsSectionDivider(stringResource(R.string.hub_shared_section))
                     SettingsCategoryRow(
                         icon = Icons.Filled.Tune,
                         title = stringResource(R.string.quick_settings_title),
                         description = stringResource(R.string.quick_settings_row_description),
                         linkId = null,
                         onClick = { quick = true }
-                    )
-                    SettingsCategoryRow(
-                        icon = Icons.Filled.TextFields,
-                        title = stringResource(R.string.settings_typing_title),
-                        description = stringResource(R.string.settings_typing_description),
-                        linkId = SettingLinkIds.MAIN_TYPING,
-                        onClick = { onNavigate(SettingsDestination.Typing) }
-                    )
-                    SettingsCategoryRow(
-                        icon = Icons.Filled.Keyboard,
-                        title = stringResource(R.string.settings_keyboards_layouts_title),
-                        description = stringResource(R.string.settings_keyboards_layouts_description),
-                        linkId = SettingLinkIds.MAIN_KEYBOARDS_LAYOUTS,
-                        onClick = { onNavigate(SettingsDestination.KeyboardsLayouts) }
-                    )
-                    SettingsCategoryRow(
-                        iconRes = R.drawable.modifier_keys_24,
-                        title = stringResource(R.string.settings_modifiers_sym_title),
-                        description = stringResource(R.string.settings_modifiers_sym_description),
-                        linkId = SettingLinkIds.MAIN_MODIFIERS,
-                        onClick = { onNavigate(SettingsDestination.Modifiers) }
-                    )
-                    SettingsCategoryRow(
-                        icon = Icons.Filled.EmojiEmotions,
-                        title = stringResource(R.string.settings_emoji_symbols_gifs_title),
-                        description = stringResource(R.string.settings_emoji_symbols_gifs_description),
-                        linkId = SettingLinkIds.MAIN_FLUX_EMOJI_GIFS,
-                        onClick = { onNavigate(SettingsDestination.FluxEmojiGifs) }
-                    )
-                    SettingsCategoryRow(
-                        icon = Icons.Filled.Apps,
-                        title = stringResource(R.string.settings_apps_title),
-                        description = stringResource(R.string.settings_apps_description),
-                        linkId = SettingLinkIds.MAIN_APPS,
-                        onClick = { onNavigate(SettingsDestination.Apps) }
-                    )
-                    SettingsCategoryRow(
-                        icon = Icons.Filled.Palette,
-                        title = stringResource(R.string.settings_look_sound_title),
-                        description = stringResource(R.string.settings_look_sound_description),
-                        linkId = SettingLinkIds.MAIN_LOOK_SOUND,
-                        onClick = { onNavigate(SettingsDestination.LookSound) }
                     )
                     SettingsCategoryRow(
                         icon = Icons.Filled.Shield,

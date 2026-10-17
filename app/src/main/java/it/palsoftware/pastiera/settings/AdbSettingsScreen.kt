@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import it.palsoftware.pastiera.modules.FluxModule
+import it.palsoftware.pastiera.modules.FluxModules
 import it.palsoftware.pastiera.adb.KeyboardBacklight
 import it.palsoftware.pastiera.adb.PerAppDensity
 import it.palsoftware.pastiera.adb.ScreenDensity
@@ -188,8 +190,8 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             }
         }
 
-        // Gaming mode plays games with the keys and trackpad, through the shell
-        FluxActionRow(
+        // Gaming mode plays games with the keys and trackpad, through the shell (with its module on)
+        if (FluxModules.on(context, FluxModule.GAMING)) FluxActionRow(
             linkId = null,
             icon = "\u271A",
             title = stringResource(R.string.game_mode_title),

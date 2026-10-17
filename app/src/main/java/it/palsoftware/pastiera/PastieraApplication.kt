@@ -23,6 +23,8 @@ class PastieraApplication : Application() {
             LanguageEdition.applyOnFreshInstall(this)
         }
         SettingsManager.keepDevBuildChoices(this)
+        // Which modules are on: a fresh install has the keyboard alone, an update keeps what's in use
+        it.palsoftware.pastiera.modules.FluxModules.setUp(this)
         OfflineMode.load(this)
         AppEnterStandards.installSystemCategoryLookup(this)
         it.palsoftware.pastiera.update.clearStaleForkUpdateNotice(this)

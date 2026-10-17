@@ -1,6 +1,8 @@
 package it.palsoftware.pastiera.settings
 
 import it.palsoftware.pastiera.apps.appLabel
+import it.palsoftware.pastiera.modules.FluxModule
+import it.palsoftware.pastiera.modules.FluxModules
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.border
@@ -139,9 +141,9 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.game_mode_title),
             description = stringResource(R.string.game_mode_switch_description),
             checked = enabled
-        ) {
-            enabled = it
-            GameProfiles.setEnabled(context, it)
+        ) { on ->
+            enabled = on
+            FluxModules.setOn(context, FluxModule.GAMING, on)
         }
         // The app a game last ran in: a launcher may play its games in a part of its own, which a
         // profile then needs as one of its apps
@@ -254,9 +256,6 @@ fun GameModeScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         XboxPlanRow()
         // The phone's own game mode, which can take over as the home screen
         PhoneGameModeRow()
-        // Streaming games to a Moonlight client
-        SettingsSectionDivider(stringResource(R.string.stream_section))
-        StreamingSettings()
         // Where games are found: Flux Keyboard's folders, ES-DE's, and your own
         SettingsSectionDivider(stringResource(R.string.game_mode_folders_section))
         FluxActionRow(

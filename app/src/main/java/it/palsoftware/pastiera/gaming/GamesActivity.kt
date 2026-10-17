@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.gaming
 
+import it.palsoftware.pastiera.modules.FluxModule
+import it.palsoftware.pastiera.modules.FluxModules
 import it.palsoftware.pastiera.apps.appLabel
 import android.content.ComponentName
 import android.content.Context
@@ -227,8 +229,9 @@ class GamesActivity : ComponentActivity() {
                     )
                     // Gaming settings, on the right with streaming, apart from the title
                     androidx.compose.material3.IconButton(onClick = { settings = true }) { Text("\u2699", style = MaterialTheme.typography.titleLarge) }
-                    // Streaming to Moonlight: on or off at a tap, its settings on a long-press
-                    androidx.compose.material3.Surface(
+                    // Streaming to Moonlight, with the streaming module on: on or off at a tap, its
+                    // settings on a long-press
+                    if (FluxModules.on(this@GamesActivity, FluxModule.STREAMING)) androidx.compose.material3.Surface(
                         shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
                         color = if (streaming) MaterialTheme.colorScheme.secondaryContainer else androidx.compose.ui.graphics.Color.Transparent,
                         border = if (streaming) null else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),

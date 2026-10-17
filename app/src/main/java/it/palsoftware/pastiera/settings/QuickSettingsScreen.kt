@@ -13,7 +13,8 @@ import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.adb.KeyboardBacklight
 import it.palsoftware.pastiera.commands.GameCommandSource
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
-import it.palsoftware.pastiera.gaming.GameProfiles
+import it.palsoftware.pastiera.modules.FluxModule
+import it.palsoftware.pastiera.modules.FluxModules
 import it.palsoftware.pastiera.gaming.GamesActivity
 import it.palsoftware.pastiera.getAutoCapitalizeFirstLetter
 import it.palsoftware.pastiera.getAutoCorrectEnabled
@@ -65,16 +66,29 @@ internal fun QuickSettingsScreen(modifier: Modifier, onBack: () -> Unit) {
         Switch(R.string.gif_settings_title, R.string.gif_settings_description,
             { SettingsManager.getGifsEnabled(context) }) { SettingsManager.setGifsEnabled(context, it) }
 
-        // Gaming: its own parts of the shell (screen size, the keys sent to games) come with it
-        SettingsSectionDivider(stringResource(R.string.game_mode_title))
-        Switch(R.string.game_mode_title, R.string.game_mode_switch_description,
-            { GameProfiles.enabled(context) }) { GameProfiles.setEnabled(context, it) }
-        Switch(R.string.games_app_switch, R.string.games_app_switch_description,
-            { GamesActivity.enabled(context) }) { GamesActivity.setEnabled(context, it) }
-        Switch(R.string.game_mode_quick_launcher, R.string.game_mode_quick_launcher_description,
-            { GameCommandSource.enabled(context) }) { GameCommandSource.setEnabled(context, it) }
-        Switch(R.string.stream_switch, R.string.stream_switch_description,
-            { StreamHostService.enabled(context) }) { StreamHostService.setEnabled(context, it) }
+        // Gaming and streaming, while their module is on (switched on from its tile): gaming's own
+        // parts of the shell (screen size, the keys sent to games) come with it
+        val gamingModule = remember { FluxModules.on(context, FluxModule.GAMING) }
+        if (gamingModule) {
+            SettingsSectionDivider(stringResource(R.string.game_mode_title))
+            var gaming by remember { mutableStateOf(true) }
+            FluxSwitchRow(linkId = null, title = stringResource(R.string.game_mode_title),
+                description = stringResource(R.string.game_mode_switch_description), checked = gaming) { on ->
+                gaming = on
+                FluxModules.setOn(context, FluxModule.GAMING, on)
+            }
+            if (gaming) {
+                Switch(R.string.games_app_switch, R.string.games_app_switch_description,
+                    { GamesActivity.enabled(context) }) { GamesActivity.setEnabled(context, it) }
+                Switch(R.string.game_mode_quick_launcher, R.string.game_mode_quick_launcher_description,
+                    { GameCommandSource.enabled(context) }) { GameCommandSource.setEnabled(context, it) }
+            }
+        }
+        if (remember { FluxModules.on(context, FluxModule.STREAMING) }) {
+            SettingsSectionDivider(stringResource(R.string.module_streaming_title))
+            Switch(R.string.stream_switch, R.string.stream_switch_description,
+                { StreamHostService.enabled(context) }) { StreamHostService.setEnabled(context, it) }
+        }
 
         // The keyboard light: the phones that have one Flux Keyboard can reach (through the shell)
         if (DeviceSpecific.isTitan2EliteDevice()) {
