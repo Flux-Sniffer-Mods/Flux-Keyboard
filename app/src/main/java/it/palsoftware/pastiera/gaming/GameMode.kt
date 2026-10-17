@@ -298,7 +298,11 @@ object GameMode {
      * any: it is given the layout in its own controls instead.
      */
     internal enum class Route {
-        /** It reads the keyboard itself, the layout written into its controls (Dolphin): every key goes to it untouched. */
+        /**
+         * It reads the keyboard itself, the layout written into its controls (Dolphin): every key
+         * goes to it untouched, and the modifiers are also sent as letters of their own
+         * ([FluxLayout.DOLPHIN_MARKERS]), as it can miss the keyboard's own.
+         */
         NATIVE,
         /** It reads keys from any keyboard (PPSSPP, the other emulators, Flux Keyboard's own player): each of the layout's keys is taken and its control's own key sent. */
         KEYS,
@@ -374,6 +378,7 @@ object GameMode {
         // A key placed on the screen touches its spot while held, whatever else it is
         val tap = if (inMenus) null else profile?.taps?.get(code)
         val isModifier = code in FluxLayout.MODIFIER_KEYS
+        if (isModifier && first && route() == Route.NATIVE) worker.execute { nativeModifier(code, down) }
         if (tap == null) {
             // A game reading the keyboard itself has the layout in its own controls
             if (route() == Route.NATIVE) return false
@@ -482,8 +487,26 @@ object GameMode {
         send(line)
     }
 
+    /** Dolphin's modifier keys held, and the letters sent for them now (on [worker]). */
+    private val nativeModifiers = mutableSetOf<Int>()
+    private val markersSent = mutableSetOf<Int>()
+
+    /** A modifier pressed or let go in Dolphin: its letter sent with it ([FluxLayout.DOLPHIN_MARKERS]). */
+    private fun nativeModifier(code: Int, down: Boolean) {
+        if (down) nativeModifiers += code else nativeModifiers -= code
+        val wanted = nativeModifiers.mapNotNull { FluxLayout.DOLPHIN_MARKERS[it] }.toSet()
+        if (wanted == markersSent) return
+        for (key in markersSent - wanted) send("K 0 $key k")
+        for (key in wanted - markersSent) send("K 1 $key k")
+        if (down && markersSent.isEmpty()) FluxLog.w(TAG, "${KeyEvent.keyCodeToString(code)} held in Dolphin: sent as " +
+            "${wanted.joinToString { KeyEvent.keyCodeToString(it) }} too (helper ${if (input != null) "running" else "not running"})")
+        markersSent.clear(); markersSent += wanted
+    }
+
     /** Every control let go (the game ended, or another app came in front). */
     private fun releaseControls() {
+        nativeModifiers.clear()
+        markersSent.forEach { send("K 0 $it k") }; markersSent.clear()
         modifiersHeld.clear(); layoutKeysHeld.clear()
         symHeld = false; volumeTaken.clear()
         controlsDown.keys.toList().forEach { sendControl(it, false, Route.KEYS) }

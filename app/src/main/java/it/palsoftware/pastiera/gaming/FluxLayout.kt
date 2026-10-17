@@ -252,13 +252,38 @@ object FluxLayout {
         KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN
     )
 
-    /** Each modifier layer as Dolphin reads it: the modifier keys held, as [layerOf] picks the layer. */
+    /**
+     * Each modifier as gaming mode also sends it to Dolphin while it's held: a letter from
+     * Android's virtual keyboard, where everything gaming mode sends comes from. Dolphin can
+     * miss the phone's own modifier keys (the keyboard needn't list them as its own), which left
+     * the layers' d-pad and C-stick dead; these it reads, alongside the keyboard.
+     */
+    internal val DOLPHIN_MARKERS = mapOf(
+        KeyEvent.KEYCODE_SYM to KeyEvent.KEYCODE_X,
+        KeyEvent.KEYCODE_SHIFT_RIGHT to KeyEvent.KEYCODE_Y,
+        KeyEvent.KEYCODE_ALT_LEFT to KeyEvent.KEYCODE_B, KeyEvent.KEYCODE_ALT_RIGHT to KeyEvent.KEYCODE_B,
+        KeyEvent.KEYCODE_SHIFT_LEFT to KeyEvent.KEYCODE_H
+    )
+
+    /** Android's virtual keyboard, as Dolphin names it. */
+    private const val VIRTUAL_KEYBOARD = "Android/0/Virtual"
+
+    /** A modifier held, as Dolphin reads it: one of its keys on the keyboard, or its letter from gaming mode. */
+    private fun held(modifier: Int, vararg names: String) = "(" + (names.map { "`$it`" } +
+        "`$VIRTUAL_KEYBOARD:${keyName(DOLPHIN_MARKERS.getValue(modifier))}`").joinToString(" | ") + ")"
+
+    internal val SYM_HELD = held(KeyEvent.KEYCODE_SYM, "Sym")
+    internal val RIGHT_SHIFT_HELD = held(KeyEvent.KEYCODE_SHIFT_RIGHT, "Right Shift")
+    internal val ALT_HELD = held(KeyEvent.KEYCODE_ALT_LEFT, "Left Alt", "Right Alt")
+    internal val SHIFT_HELD = held(KeyEvent.KEYCODE_SHIFT_LEFT, "Left Shift")
+
+    /** Each modifier layer as Dolphin reads it: the modifiers held, as [layerOf] picks the layer. */
     private val LAYER_CONDITION = mapOf(
-        Layer.NONE to "!`Sym` & !`Right Shift` & !`Left Alt` & !`Right Alt` & !`Left Shift`",
-        Layer.SYM to "`Sym`",
-        Layer.RIGHT_SHIFT to "`Right Shift` & !`Sym`",
-        Layer.ALT to "(`Left Alt` | `Right Alt`) & !`Sym` & !`Right Shift`",
-        Layer.SHIFT to "`Left Shift` & !`Sym` & !`Right Shift` & !`Left Alt` & !`Right Alt`"
+        Layer.NONE to "!$SYM_HELD & !$RIGHT_SHIFT_HELD & !$ALT_HELD & !$SHIFT_HELD",
+        Layer.SYM to SYM_HELD,
+        Layer.RIGHT_SHIFT to "$RIGHT_SHIFT_HELD & !$SYM_HELD",
+        Layer.ALT to "$ALT_HELD & !$SYM_HELD & !$RIGHT_SHIFT_HELD",
+        Layer.SHIFT to "$SHIFT_HELD & !$SYM_HELD & !$RIGHT_SHIFT_HELD & !$ALT_HELD"
     )
 
     /** A control with A and B (X and Y) the other way round, Nintendo's. */
@@ -463,7 +488,7 @@ object FluxLayout {
     internal fun read(path: String): String = AdbShell.run("cat \"$path\" 2>/dev/null; true", 3_000).orEmpty()
 
     /** The layout's version: written again into emulators given an older one. */
-    private const val LAYOUT_VERSION = 6
+    private const val LAYOUT_VERSION = 7
 
     /**
      * An emulator given Flux Keyboard's layout before it changed: given the current one, once
@@ -559,20 +584,51 @@ object FluxLayout {
      */
     enum class DolphinOverlay { OFF, INVISIBLE, SHOWN }
 
-    /** Writes [DOLPHIN_OVERLAY], and a game's [mode], into Dolphin's settings at [dir] (blocking; Dolphin not running). */
-    fun dolphinOverlay(dir: String, mode: DolphinOverlay? = null) {
+    /**
+     * Writes [DOLPHIN_OVERLAY], and a game's [mode], into Dolphin's settings at [dir] (blocking;
+     * Dolphin not running). [pointer]: the trackpad is the Wii Remote's pointer, which Dolphin
+     * reads from touches on its on-screen controls, so they're kept on for it (with no buttons
+     * when they're otherwise off, so the pointer never presses one).
+     */
+    fun dolphinOverlay(dir: String, mode: DolphinOverlay? = null, pointer: Boolean = false, context: android.content.Context? = null) {
         val path = "$dir/Config/Dolphin.ini"
         val ini = read(path)
-        val updated = dolphinOverlayIni(ini, mode)
+        // Buttons hidden for the pointer: shown again for a game that isn't played that way
+        val prefs = context?.let { ctx -> it.palsoftware.pastiera.SettingsManager.getPreferences(ctx) }
+        val hiddenKey = "dolphin_buttons_hidden_" + dir.hashCode()
+        val hide = mode == DolphinOverlay.OFF && pointer
+        val hidden = prefs?.getBoolean(hiddenKey, false) == true
+        val set = dolphinOverlayIni(ini, mode, pointer)
+        val updated = when {
+            mode == null -> set
+            hide -> overlayButtonsIni(set, hide = true)
+            hidden -> overlayButtonsIni(set, hide = false)
+            else -> set
+        }
         if (updated != ini) write(path, updated)
+        if (mode != null && hide != hidden) prefs?.edit()?.putBoolean(hiddenKey, hide)?.apply()
     }
 
-    /** [ini] with the on-screen controls as [mode] has them (null: only what isn't set yet). */
-    internal fun dolphinOverlayIni(ini: String, mode: DolphinOverlay?): String {
-        val base = dolphinOverlayIni(ini)
+    /** Each of Dolphin's on-screen buttons, as its Toggle Controls names them. */
+    private val OVERLAY_BUTTONS = (listOf("ButtonA", "ButtonB", "Button1", "Button2", "ButtonPlus", "ButtonMinus", "ButtonHome", "DPad").map { "Wiimote$it" } +
+        listOf("C", "Z", "Stick").map { "Nunchuk$it" } +
+        listOf("ButtonA", "ButtonB", "ButtonX", "ButtonY", "ButtonPlus", "ButtonMinus", "ButtonHome", "TriggerL", "TriggerR",
+            "ButtonZL", "ButtonZR", "DPad", "StickLeft", "StickRight").map { "Classic$it" } +
+        listOf("ButtonA", "ButtonB", "ButtonX", "ButtonY", "ButtonZ", "ButtonStart", "TriggerL", "TriggerR", "DPad", "StickMain", "StickC").map { "GC$it" }
+        ).map { "ButtonToggle$it" }
+
+    /** [ini] with every on-screen button hidden ([hide]), or as Dolphin has them by default again. */
+    internal fun overlayButtonsIni(ini: String, hide: Boolean): String =
+        OVERLAY_BUTTONS.fold(ini) { text, key -> withKey(text, "AndroidOverlayButtons", key, if (hide) "False" else null) }
+
+    /** [ini] with the on-screen controls as [mode] has them (null: only what isn't set yet), kept on for the [pointer]. */
+    internal fun dolphinOverlayIni(ini: String, mode: DolphinOverlay?, pointer: Boolean = false): String {
+        val base = dolphinOverlayIni(ini).let { if (pointer) withPointer(it) else it }
         return when (mode) {
             null -> base
-            DolphinOverlay.OFF -> withKey(base, "Android", "ShowInputOverlay", "False")
+            // Off, but the pointer still reads touches through them: on, invisible
+            DolphinOverlay.OFF -> if (pointer) withKey(withKey(base, "Android", "ShowInputOverlay", "True"), "Android", "ControlOpacity", "0")
+                else withKey(base, "Android", "ShowInputOverlay", "False")
             DolphinOverlay.INVISIBLE -> withKey(withKey(base, "Android", "ShowInputOverlay", "True"), "Android", "ControlOpacity", "0")
             DolphinOverlay.SHOWN -> {
                 val opacity = Regex("(?m)^\\s*ControlOpacity\\s*=\\s*(\\d+)").find(base)?.groupValues?.get(1)?.toIntOrNull()
@@ -581,6 +637,12 @@ object FluxLayout {
                 withKey(shown, "Android", "ShowInputOverlay", "True")
             }
         }
+    }
+
+    /** [ini] with the touch pointer on: its IR mode Follow if it was switched off (a finger's place is the pointer's). */
+    private fun withPointer(ini: String): String {
+        val section = Regex("(?ms)^\\[Android\\]\\R(.*?)(?=^\\[|\\z)").find(ini)?.groupValues?.get(1).orEmpty()
+        return if (Regex("(?m)^\\s*IRMode\\s*=\\s*0\\s*$").containsMatchIn(section)) withKey(ini, "Android", "IRMode", "1") else ini
     }
 
     internal fun dolphinOverlayIni(ini: String): String {

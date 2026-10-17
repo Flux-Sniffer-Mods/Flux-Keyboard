@@ -462,7 +462,7 @@
     <string name="game_mode_quick_launcher">Games in the quick launcher</string>
     <string name="game_mode_quick_launcher_description">Shows your games in the quick launcher, opening them the same way as their home screen shortcuts.</string>
     <string name="game_mode_setup_controls">Set up %1$s\'s controls</string>
-    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Titan Hub\'s keyboard controls (see Keyboard controls).\n\nDolphin: GameCube controller 1 (L and R on the volume keys, Z on E) and Wii Remote 1 with Nunchuk are set, the pointer following the trackpad\'s right half (set Dolphin\'s overlay IR mode to Follow). PPSSPP: its controls are set for every game.</string>
+    <string name="game_mode_setup_done">%1$s\'s controls now follow Flux Titan Hub\'s keyboard controls (see Keyboard controls).\n\nDolphin: GameCube controller 1 (L and R on the volume keys, Z on E) and Wii Remote 1 with Nunchuk are set, the pointer following the trackpad\'s right half. PPSSPP: its controls are set for every game.</string>
     <string name="game_mode_setup_not_found">Couldn\'t find %1$s\'s settings. Open it once, then try again.</string>
     <string name="game_mode_setup_by_hand">%1$s can\'t load controls from a file. In its Settings, under Input (Controls), bind each button by pressing its key when asked:
 

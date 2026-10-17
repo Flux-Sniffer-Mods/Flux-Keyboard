@@ -83,10 +83,15 @@ class GameLaunchActivity : Activity() {
             // as its screen is made, PPSSPP ignores a new one while running): stopped first
             Thread {
                 it.palsoftware.pastiera.adb.AdbShell.run("am force-stop $pkg", 3_000)
-                // Dolphin's on-screen controls set for gaming mode while it's stopped
-                // (a game's own: off, invisible or shown, as set for it)
+                // Dolphin's on-screen controls set for gaming mode while it's stopped (a game's own:
+                // off, invisible or shown, as set for it), kept on for the trackpad's Wii pointer
                 if (GameApps.emulator(pkg) == "Dolphin") runCatching {
-                    FluxLayout.dolphinDir(pkg)?.let { dir -> FluxLayout.dolphinOverlay(dir, profile?.takeIf { it.isGame }?.let { game -> GameProfiles.effective(this, game).copy(dolphinOverlay = game.dolphinOverlay).overlayMode }) }
+                    FluxLayout.dolphinDir(pkg)?.let { dir ->
+                        val played = profile?.takeIf { it.isGame }?.let { game -> GameProfiles.effective(this, game).copy(dolphinOverlay = game.dolphinOverlay) }
+                        FluxLayout.dolphinOverlay(dir, played?.overlayMode, pointer = played?.pointer == true, context = this)
+                        FluxLog.w(TAG, "${played?.name}: Dolphin's on-screen controls ${played?.overlayMode?.name?.lowercase() ?: "unchanged"}" +
+                            if (played?.pointer == true) ", the trackpad its pointer" else "")
+                    }
                 }
                 // A DS or 3DS game's screens, as set for it (Azahar reads them as the game starts)
                 if (DualScreens.layouts(pkg).isNotEmpty()) runCatching {

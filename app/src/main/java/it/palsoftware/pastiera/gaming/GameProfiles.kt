@@ -143,6 +143,9 @@ data class GameProfile(
         get() = FluxLayout.DolphinOverlay.entries.firstOrNull { it.name == dolphinOverlay }
             ?: if (stickZones.isNotEmpty() || taps.isNotEmpty()) FluxLayout.DolphinOverlay.INVISIBLE else FluxLayout.DolphinOverlay.OFF
 
+    /** The trackpad is the Wii Remote's pointer (a half of it set so). */
+    val pointer: Boolean get() = leftHalf == TrackpadRole.POINTER || rightHalf == TrackpadRole.POINTER
+
     /** The game's own keys for Dolphin's [pad] (empty: the layout's). */
     fun padRemap(pad: FluxLayout.WiiPad): Map<String, List<DolphinPads.Binding>> = DolphinPads.parse(padControls[pad.name])
     /** Whether A and B (X and Y) are swapped, as set or as suits its app. */

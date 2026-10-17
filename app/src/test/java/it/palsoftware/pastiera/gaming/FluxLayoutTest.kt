@@ -102,8 +102,9 @@ class FluxLayoutTest {
         val l = gc.first { it.startsWith("Triggers/L = ") }
         val analog = gc.first { it.startsWith("Triggers/L-Analog = ") }
         // The click only without Alt; all the way with or without
-        assertTrue(l, "`Volume Down`" in l && "(`Left Alt` | `Right Alt`)" !in l)
-        assertTrue(analog, "(`Left Alt` | `Right Alt`)" in analog)
+        val withAlt = "((" + FluxLayout.ALT_HELD + " &"
+        assertTrue(l, "`Volume Down`" in l && withAlt !in l)
+        assertTrue(analog, withAlt in analog)
     }
 
     @Test
@@ -131,9 +132,37 @@ class FluxLayoutTest {
         val up = gc.first { it.startsWith("D-Pad/Up = ") }
         assertTrue(up, "`Sym`" in up && "`W`" in up)
         val start = gc.first { it.startsWith("Buttons/Start = ") }
-        assertTrue(start, "`Space`" in start && "!`Left Shift`" in start)
+        assertTrue(start, "`Space`" in start && "!" + FluxLayout.SHIFT_HELD in start)
         val l = gc.first { it.startsWith("Triggers/L = ") }
         assertTrue(l, "`Volume Down`" in l)
+    }
+
+    @Test
+    fun dolphinReadsTheModifiersAlsoAsLettersFromTheVirtualKeyboard() {
+        // Each modifier held is also its own letter, sent by gaming mode: Dolphin can miss the keyboard's own
+        assertEquals("(`Sym` | `Android/0/Virtual:X`)", FluxLayout.SYM_HELD)
+        assertEquals("(`Left Alt` | `Right Alt` | `Android/0/Virtual:B`)", FluxLayout.ALT_HELD)
+        val markers = FluxLayout.DOLPHIN_MARKERS
+        assertEquals(markers[KeyEvent.KEYCODE_ALT_LEFT], markers[KeyEvent.KEYCODE_ALT_RIGHT])
+        assertEquals(4, markers.values.toSet().size)
+        val gc = FluxLayout.dolphinGameCube("Keys")
+        val up = gc.first { it.startsWith("D-Pad/Up = ") }
+        assertTrue(up, "((" + FluxLayout.SYM_HELD + ") & (`W`))" in up)
+        val c = gc.first { it.startsWith("C-Stick/Up = ") }
+        assertTrue(c, FluxLayout.RIGHT_SHIFT_HELD in c && "`Android/0/Virtual:Y`" in c)
+    }
+
+    @Test
+    fun theWiiPointerKeepsDolphinsControlsOnWithoutButtons() {
+        val off = FluxLayout.dolphinOverlayIni("", FluxLayout.DolphinOverlay.OFF, pointer = true)
+        assertTrue(off, "ShowInputOverlay = True" in off && "ControlOpacity = 0" in off)
+        assertTrue(FluxLayout.dolphinOverlayIni("", FluxLayout.DolphinOverlay.OFF).contains("ShowInputOverlay = False"))
+        // Its IR mode put back on Follow when it was switched off, otherwise left
+        assertTrue(FluxLayout.dolphinOverlayIni("[Android]\nIRMode = 0\n", null, pointer = true).contains("IRMode = 1"))
+        assertTrue(FluxLayout.dolphinOverlayIni("[Android]\nIRMode = 2\n", null, pointer = true).contains("IRMode = 2"))
+        val hidden = FluxLayout.overlayButtonsIni("", hide = true)
+        assertTrue(hidden, "[AndroidOverlayButtons]" in hidden && "ButtonToggleWiimoteButtonA = False" in hidden && "ButtonToggleNunchukStick = False" in hidden)
+        assertTrue(FluxLayout.overlayButtonsIni(hidden, hide = false).isBlank())
     }
 
     @Test
@@ -150,9 +179,10 @@ class FluxLayoutTest {
         val gc = FluxLayout.dolphinGameCube("TitanKey", volume = listOf("Android/0/mtk-kpd"))
         val l = gc.first { it.startsWith("Triggers/L = ") }
         assertTrue(l, "`Android/0/mtk-kpd:Volume Down`" in l)
-        // The keyboard's own keys stay unnamed (its device is the profile's)
+        // The keyboard's own keys stay unnamed (its device is the profile's); only the modifiers'
+        // letters name Android's virtual keyboard, where gaming mode sends them from
         val a = gc.first { it.startsWith("Buttons/A = ") }
-        assertTrue(a, ":" !in a)
+        assertTrue(a, "`M`" in a && "TitanKey:" !in a && a.split(":").size - 1 == a.split("Android/0/Virtual:").size - 1)
     }
 
     @Test

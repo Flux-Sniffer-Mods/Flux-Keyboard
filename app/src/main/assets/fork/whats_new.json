@@ -1216,6 +1216,12 @@
     },
     {
       "text": "Streaming: On the phone in the Moonlight client question starts the game on the phone, instead of nothing happening"
+    },
+    {
+      "text": "Dolphin: the d-pad (SYM + W A Z D) and C-stick (right Shift + W A Z D, Alt + I J M L) work: the modifiers are also sent as letters of their own while held, as Dolphin could miss the keyboard's own"
+    },
+    {
+      "text": "Dolphin: the trackpad works as the Wii Remote's pointer again: Dolphin's on-screen controls, which the pointer reads its touches through, stay on (invisible, with no buttons to press by mistake), and its IR mode is put back on Follow if it was off"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/blob/flux-release/FORK_CHANGES.md",
