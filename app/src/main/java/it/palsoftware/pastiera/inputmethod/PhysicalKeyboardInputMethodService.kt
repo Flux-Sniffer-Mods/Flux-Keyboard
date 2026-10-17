@@ -245,6 +245,8 @@ import it.palsoftware.pastiera.shouldApplyFrenchPunctuationSpacing
 class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibilityKeyBridge.Target {
 
     companion object {
+        /** How long after the keyboard asks to be shown itself a show request is still its own. */
+        private const val SELF_SHOW_MS = 1_000L
         /** Words in a field's hint, name or label that mark it as one for a one-time code. */
         private val ONE_TIME_CODE_WORDS = Regex("code|otp|one.?time|verif|2fa|pin|token|passcode|sms|codice|código|kod|код|mã")
         /** A terminal swipe: a character per half a key's width, a line per key's height or so. */
@@ -3533,6 +3535,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onShowInputRequested(flags: Int, configChange: Boolean): Boolean {
+        // The app asked for the keyboard (not the keyboard itself, bringing its bar back): in a
+        // game, its text field is being typed in
+        if (!configChange && android.os.SystemClock.uptimeMillis() - selfShowAt > SELF_SHOW_MS) {
+            it.palsoftware.pastiera.gaming.GameMode.keyboardRequested()
+        }
         val accepted = super.onShowInputRequested(flags, configChange)
         if (hiddenAppSurfaceBlocked()) return false
         if (::keyboardVisibilityController.isInitialized) {
@@ -3579,7 +3586,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         setExtractViewShown(true)
     }
 
-    private fun requestKeyboardInputView() = requestShowSelf(0)
+    /** When the keyboard last asked to be shown itself (its own bar brought back), not an app. */
+    @Volatile private var selfShowAt = 0L
+
+    private fun requestKeyboardInputView() {
+        selfShowAt = android.os.SystemClock.uptimeMillis()
+        requestShowSelf(0)
+    }
 
     /**
      * A GIF picked in the emoji picker. Fields that take GIF content get the file itself
@@ -4346,6 +4359,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
+        // A new field: a game's hidden one doesn't take the keys from it until it asks for the keyboard
+        if (!restarting) it.palsoftware.pastiera.gaming.GameMode.inputStarted()
         playerEditor = playerInFront() && info?.packageName == packageName
         if (playerEditor) { super.onStartInput(info, restarting); return }
         AutoCapitalizeHelper.debugPackage = info?.packageName

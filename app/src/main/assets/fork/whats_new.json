@@ -1222,6 +1222,9 @@
     },
     {
       "text": "Dolphin: the trackpad works as the Wii Remote's pointer again: Dolphin's on-screen controls, which the pointer reads its touches through, stay on (invisible, with no buttons to press by mistake), and its IR mode is put back on Follow if it was off"
+    },
+    {
+      "text": "Gaming mode: keys tap the game's screen and work its on-screen stick again in Infinity Nikki and other Unreal games, which keep a hidden text field focused: keys now type only once a game asks for the keyboard"
     }
   ],
   "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/blob/flux-release/FORK_CHANGES.md",

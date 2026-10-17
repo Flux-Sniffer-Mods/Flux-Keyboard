@@ -63,22 +63,52 @@ object GameMode {
      */
     @Volatile private var edges = 0f to 0f
 
-    /** A text field of the game has the keyboard open: keys type, not play. */
+    /** A text field of the game is being typed in: keys type, not play. */
     @Volatile var typing = false
         private set
+    /** The field that takes text with the keys' focus, if any (a game can keep one, hidden: Unreal's do). */
+    @Volatile private var field: android.view.inputmethod.EditorInfo? = null
+    /** The app asked for the keyboard since its field started (a text field tapped, a chat box opened). */
+    @Volatile private var keyboardAsked = false
 
-    /** The keyboard opened on a field of the app in front: a text field (keys type) or not. Noted in the log while gaming. */
+    /** A new field of the app in front started: not asked for the keyboard yet. */
+    fun inputStarted() {
+        keyboardAsked = false
+    }
+
+    /** The keyboard opened on a field of the app in front: one that takes text, or not. */
     fun editorStarted(info: android.view.inputmethod.EditorInfo?) {
-        val on = (info?.inputType ?: 0) != 0
-        if (on != typing && profile != null) FluxLog.w(TAG, if (on) "text field open in ${info?.packageName} " +
-            "(type 0x${Integer.toHexString(info?.inputType ?: 0)}, field ${info?.fieldId}, hint ${info?.hintText}): keys type into it, not play"
-            else "no text field: keys play")
-        typing = on
+        field = info?.takeIf { it.inputType != 0 }
+        decideTyping()
+    }
+
+    /** The app in front asked for the keyboard: its text field is being typed in. */
+    fun keyboardRequested() {
+        keyboardAsked = true
+        decideTyping()
     }
 
     fun editorFinished() {
-        if (typing && profile != null) FluxLog.w(TAG, "text field closed: keys play again")
-        typing = false
+        field = null
+        decideTyping()
+    }
+
+    /**
+     * Keys type into a text field only once the game asks for the keyboard for it; a field that
+     * merely has the focus (Unreal's games keep a hidden one all along) leaves them playing.
+     * Noted in the log while gaming.
+     */
+    private fun decideTyping() {
+        val open = field
+        val on = open != null && keyboardAsked
+        if (profile != null && (on != typing || (open != null && !on))) FluxLog.w(TAG, when {
+            on -> "text field open in ${open?.packageName} (type 0x${Integer.toHexString(open?.inputType ?: 0)}, " +
+                "field ${open?.fieldId}, hint ${open?.hintText}), the keyboard asked for: keys type into it, not play"
+            open != null -> "text field in ${open.packageName} (type 0x${Integer.toHexString(open.inputType)}, field ${open.fieldId}) " +
+                "has the focus, but the keyboard wasn't asked for: keys play"
+            else -> "no text field: keys play"
+        })
+        typing = on
     }
 
     /** The first key in each game is noted in the log, with what gaming mode does with keys then. */
