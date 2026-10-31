@@ -1657,4 +1657,11 @@
     <string name="linux_show_log">Δείξε τι έγινε</string>
     <string name="linux_gpu">Χρήση της GPU του τηλεφώνου</string>
     <string name="linux_gpu_hint">Από την επόμενη εκκίνηση. Τα προγράμματα σχεδιάζουν στη GPU του τηλεφώνου· η ίδια η επιφάνεια εργασίας μένει στη CPU. Απενεργοποίησέ το αν ένα πρόγραμμα φαίνεται μαύρο ή αλλοιωμένο.</string>
+    <string name="update_check_interval_title">Πόσο συχνά να ελέγχονται ενημερώσεις</string>
+    <string name="update_check_interval_description">%1$s, στο παρασκήνιο. Πάτησε για αλλαγή.</string>
+    <string name="update_check_interval_search">Πόσο συχνά αναζητούνται νέες εκδόσεις στο παρασκήνιο: κάθε ώρα, κάθε 2 ώρες, κάθε 6 ώρες ή μία φορά τη μέρα</string>
+    <string name="update_check_every_1">Κάθε ώρα</string>
+    <string name="update_check_every_2">Κάθε 2 ώρες</string>
+    <string name="update_check_every_6">Κάθε 6 ώρες</string>
+    <string name="update_check_every_24">Μία φορά τη μέρα</string>
 </resources>

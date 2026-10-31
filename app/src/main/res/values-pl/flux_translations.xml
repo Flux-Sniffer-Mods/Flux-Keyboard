@@ -2289,4 +2289,11 @@
     <string name="linux_show_log">Pokaż, co się stało</string>
     <string name="linux_gpu">Używaj GPU telefonu</string>
     <string name="linux_gpu_hint">Od następnego uruchomienia. Programy rysują na GPU telefonu, a sam pulpit zostaje na CPU. Wyłącz, jeśli program jest czarny lub zniekształcony.</string>
+    <string name="update_check_interval_title">Jak często szukać aktualizacji</string>
+    <string name="update_check_interval_description">%1$s, w tle. Dotknij, aby zmienić.</string>
+    <string name="update_check_interval_search">Jak często w tle szukane są nowe wersje: co godzinę, co 2 godziny, co 6 godzin lub raz dziennie</string>
+    <string name="update_check_every_1">Co godzinę</string>
+    <string name="update_check_every_2">Co 2 godziny</string>
+    <string name="update_check_every_6">Co 6 godzin</string>
+    <string name="update_check_every_24">Raz dziennie</string>
 </resources>

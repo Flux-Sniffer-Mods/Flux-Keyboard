@@ -1787,4 +1787,11 @@
     <string name="linux_show_log">Mostra cos’è successo</string>
     <string name="linux_gpu">Usa la GPU del telefono</string>
     <string name="linux_gpu_hint">Dal prossimo avvio. I programmi disegnano sulla GPU del telefono; il desktop resta sulla CPU. Disattivalo se un programma appare nero o distorto.</string>
+    <string name="update_check_interval_title">Ogni quanto cercare aggiornamenti</string>
+    <string name="update_check_interval_description">%1$s, in background. Tocca per cambiare.</string>
+    <string name="update_check_interval_search">Ogni quanto si cercano nuove versioni in background: ogni ora, ogni 2 ore, ogni 6 ore o una volta al giorno</string>
+    <string name="update_check_every_1">Ogni ora</string>
+    <string name="update_check_every_2">Ogni 2 ore</string>
+    <string name="update_check_every_6">Ogni 6 ore</string>
+    <string name="update_check_every_24">Una volta al giorno</string>
 </resources>
