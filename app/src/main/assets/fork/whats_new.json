@@ -4,6 +4,9 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Updates: looked for every 2 hours instead of every 15 minutes, at times Android picks so the phone isn't woken just for it. Every hour, 6 hours or once a day can be chosen in Settings (Check for updates how often), and Check for updates still looks at once."
+    },
+    {
       "text": "Desktop without root: fixed the desktop closing seconds after it appeared. Android doesn't let Linux make socket files without root, so its session bus and sound couldn't start; both now run over 127.0.0.1, proven by a cookie only Linux's user can read. If the desktop stops on its own, the viewer shows Linux's logs, and the crash log includes the desktop's last start."
     },
     {

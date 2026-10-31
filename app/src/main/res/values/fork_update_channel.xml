@@ -4,4 +4,11 @@
     <string name="fork_update_channel_title">Dev builds</string>
     <string name="fork_update_channel_stable">Off: updates offer full releases only. Dev builds start with this on, full releases with it off.</string>
     <string name="fork_update_channel_dev">On: updates also offer each dev build as it\'s made, with the newest changes and fewer checks.</string>
+    <string name="update_check_interval_title">Check for updates how often</string>
+    <string name="update_check_interval_description">%1$s, in the background. Tap to change.</string>
+    <string name="update_check_interval_search">How often new releases are looked for in the background: every hour, 2 hours, 6 hours or once a day</string>
+    <string name="update_check_every_1">Every hour</string>
+    <string name="update_check_every_2">Every 2 hours</string>
+    <string name="update_check_every_6">Every 6 hours</string>
+    <string name="update_check_every_24">Once a day</string>
 </resources>

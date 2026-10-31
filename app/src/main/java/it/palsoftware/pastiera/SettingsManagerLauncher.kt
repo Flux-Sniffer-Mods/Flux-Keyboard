@@ -524,6 +524,14 @@ fun SettingsManager.setForkUpdateChannel(context: Context, channel: String) {
     getPreferences(context).edit().putString(KEY_FORK_UPDATE_CHANNEL, channel).apply()
 }
 
+/** How often updates are looked for in the background, in hours: every 2 unless chosen. */
+fun SettingsManager.getUpdateCheckHours(context: Context): Int =
+    getPreferences(context).getInt(KEY_UPDATE_CHECK_HOURS, 2).takeIf { it in UPDATE_CHECK_HOURS } ?: 2
+
+fun SettingsManager.setUpdateCheckHours(context: Context, hours: Int) {
+    getPreferences(context).edit().putInt(KEY_UPDATE_CHECK_HOURS, hours).apply()
+}
+
 /** Flux Keyboard's own shortcuts (New message, Search) for the apps in its shortcut and Enter lists. */
 /** Apps whose Flux Keyboard shortcuts you turned off (from their long-press menu). */
 fun SettingsManager.getQuickLauncherListedAppsOff(context: Context): Set<String> =

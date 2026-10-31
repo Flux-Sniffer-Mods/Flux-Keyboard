@@ -307,6 +307,7 @@ internal object BackupPreferenceContract {
             "trackpad_swipe_down_deletes_word" to PreferenceValueType.BOOLEAN,
             "sym_sticky_tap" to PreferenceValueType.BOOLEAN,
             "fork_update_channel" to PreferenceValueType.STRING,
+            "update_check_hours" to PreferenceValueType.INT,
             "quick_launcher_app_shortcuts" to PreferenceValueType.BOOLEAN,
             "quick_launcher_termux_scripts" to PreferenceValueType.BOOLEAN,
             "quick_launcher_listed_app_shortcuts" to PreferenceValueType.BOOLEAN,
