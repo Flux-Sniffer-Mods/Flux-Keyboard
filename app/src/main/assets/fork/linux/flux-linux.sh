@@ -240,6 +240,8 @@ session() {
 
 # Ends the desktop: the VNC server first (the session follows it), then whatever's left
 stop() {
+    # So the session's log says it was asked to end
+    [ -f "$ROOTFS/tmp/flux-xvnc.pid" ] && : > "$ROOTFS/tmp/flux-stopping"
     for f in "$ROOTFS/tmp/flux-xvnc.pid" "$ROOTFS/tmp/flux-session.pid" "$ROOTFS/tmp/flux-pulse.pid"; do
         [ -f "$f" ] && kill "$(cat "$f")" 2>/dev/null
     done
