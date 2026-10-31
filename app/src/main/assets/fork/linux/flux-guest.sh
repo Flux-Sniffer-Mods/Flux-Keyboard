@@ -11,7 +11,7 @@ LOCALE=$(printf '%s' "${FLUX_LOCALE:-en_US}" | tr -cd 'A-Za-z_@')
 LANGUAGE_CODE=${LOCALE%%_*}
 # Raised whenever this script changes: flux-linux.sh runs it again on start. Its packages are
 # installed again only when FLUX_PACKAGES_VERSION is raised too
-FLUX_GUEST_VERSION=9
+FLUX_GUEST_VERSION=11
 FLUX_PACKAGES_VERSION=5
 export DEBIAN_FRONTEND=noninteractive
 
@@ -362,14 +362,31 @@ if [ "$(cat /etc/flux-desktop 2>/dev/null)" = kde ]; then
     KWIN_COMPOSE=N startplasma-x11 >/tmp/flux-session.log 2>&1 &
 else
     (/usr/local/bin/flux-tune-xfce >/tmp/flux-tune.log 2>&1 &)
-    startxfce4 >/tmp/flux-session.log 2>&1 &
+    # The session manager's own account of itself (~/.xfce4-session.verbose-log), for when it ends
+    XFSM_VERBOSE=1 startxfce4 >/tmp/flux-session.log 2>&1 &
 fi
 echo $! > /tmp/flux-session.pid
-wait $!
-echo "flux: the desktop ended ($?)" >> /tmp/flux-session.log
+# Ready once the desktop itself is drawing (its desktop or panel running), not merely the X
+# server: Xfce or Plasma can take most of a minute under PRoot, a black screen till then
+rm -f /tmp/flux-ready
+(
+    i=0
+    while [ $i -lt 180 ]; do
+        for c in /proc/[0-9]*/comm; do
+            case "$(cat "$c" 2>/dev/null)" in xfdesktop|xfce4-panel|plasmashell) sleep 2; touch /tmp/flux-ready; exit 0 ;; esac
+        done
+        sleep 1; i=$((i + 1))
+    done
+    touch /tmp/flux-ready
+) &
+wait "$(cat /tmp/flux-session.pid)"
+ended=$?
+# What was still up when it ended: which part went first
+alive() { kill -0 "$1" 2>/dev/null && echo up || echo gone; }
+echo "flux: the desktop ended ($ended); X server $(alive "$(cat /tmp/flux-xvnc.pid)"), bus $(alive "$DBUS_SESSION_BUS_PID")" >> /tmp/flux-session.log
 kill "$DBUS_SESSION_BUS_PID" "$(cat /tmp/flux-xvnc.pid)" "$(cat /tmp/flux-pulse.pid 2>/dev/null)" \
     "$(cat /tmp/flux-notify.pid 2>/dev/null)" 2>/dev/null
-rm -f /tmp/flux-xvnc.pid /tmp/flux-session.pid /tmp/flux-pulse.pid /tmp/flux-notify.pid /tmp/flux-env
+rm -f /tmp/flux-xvnc.pid /tmp/flux-session.pid /tmp/flux-pulse.pid /tmp/flux-notify.pid /tmp/flux-env /tmp/flux-ready
 SESSION
 chmod 755 /usr/local/bin/flux-session
 

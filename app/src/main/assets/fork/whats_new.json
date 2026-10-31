@@ -4,6 +4,9 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Desktop: shown once Xfce or Plasma is actually drawing, with \"starting\" until then, instead of a black screen for up to a minute. It keeps running when the app is in the background, restarted or updated, and programs open from the phone while it runs (they didn't without root). Its logs now say which part ended a session."
+    },
+    {
       "text": "Updates: looked for every 2 hours instead of every 15 minutes, at times Android picks so the phone isn't woken just for it. Every hour, 6 hours or once a day can be chosen in Settings (Check for updates how often), and Check for updates still looks at once."
     },
     {

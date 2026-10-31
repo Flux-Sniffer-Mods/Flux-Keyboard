@@ -63,6 +63,8 @@ class LinuxViewerActivity : Activity() {
             if (state == LinuxDesktop.State.Starting) until = System.currentTimeMillis() + 30_000
             if (state is LinuxDesktop.State.Failed) break
             progress(problem)
+            // Shown once the desktop is drawing: till then its screen is only black
+            if (state == LinuxDesktop.State.Starting) { Thread.sleep(1_000); continue }
             // The password of this run, read each time (a start may have made a new one)
             val password = LinuxDesktop.password(this)
             vnc = runCatching {

@@ -71,6 +71,8 @@ object LinuxDesktop {
     val log: StateFlow<List<String>> = mutableLog
 
     @Volatile private var session: Process? = null
+    /** The desktop said it's drawing (not merely its X server listening). */
+    @Volatile private var ready = false
 
     private fun set(value: State) { mutableState.value = value }
 
@@ -166,6 +168,7 @@ object LinuxDesktop {
             process.inputStream.bufferedReader().forEachLine { text ->
                 line(text)
                 if (text == "flux: starting") set(State.Starting)
+                if (text == "flux: desktop ready") ready = true
             }
             process.waitFor()
         }.onFailure { FluxLog.w(TAG, "$action: $it") }.getOrDefault(-1)
@@ -195,11 +198,14 @@ object LinuxDesktop {
     /** Looks again: installed, running or neither. */
     fun refresh(context: Context) {
         val app = context.applicationContext
+        // Mid-install, -start or -stop the work under way says how it went: not overruled by a look
+        if (busy()) return
         background {
             val mode = installedMode(app)
             if (mode == null) { set(State.NotInstalled); return@background }
             if (!canRun(mode)) { set(State.Failed(if (mode == Mode.CHROOT) Step.NO_ROOT else Step.NO_SHELL)); return@background }
             val out = AdbShell.run(command(app, mode, "status"), 8_000).orEmpty()
+            if (busy()) return@background
             set(when {
                 "not-installed" in out -> State.NotInstalled
                 "running" in out -> State.Running
@@ -207,6 +213,11 @@ object LinuxDesktop {
             })
             if (state.value == State.Running) LinuxNotifications.watch(app)
         }
+    }
+
+    private fun busy() = when (state.value) {
+        State.Installing, State.Starting, State.Stopping, is State.Downloading -> true
+        else -> false
     }
 
     /**
@@ -304,6 +315,7 @@ object LinuxDesktop {
         val password = String(CharArray(8) { alphabet[random.nextInt(alphabet.length)] })
         prefs(app).edit().putString(KEY_PASSWORD, password).apply()
         newLog(app)
+        ready = false
         set(State.Starting)
         LinuxService.start(app)
         background {
@@ -316,10 +328,15 @@ object LinuxDesktop {
             } else set(State.Stopped)
             LinuxService.idle(app)
         }
-        // Ready once the VNC server answers, however long an update first takes (a failed start ends it)
+        // Ready once the desktop says it's drawing, however long an update first takes (a failed
+        // start ends it); from an older setup that never says, once the VNC server has answered
+        // for three minutes
         background {
+            var since = 0L
             while (state.value == State.Starting) {
-                if (listening()) {
+                val answering = listening()
+                if (answering && since == 0L) since = System.currentTimeMillis()
+                if (ready || (answering && System.currentTimeMillis() - since > 180_000)) {
                     set(State.Running)
                     LinuxService.idle(app)
                     LinuxNotifications.watch(app)
