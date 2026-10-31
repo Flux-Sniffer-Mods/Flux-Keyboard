@@ -192,12 +192,20 @@ jobs:
 
       # The app checks this repository's "flux/" releases for updates. With a
       # RELEASE_TOKEN secret (a token of the repository owner's) the release is published
-      # as the owner; without it, as github-actions[bot].
+      # as the owner; without it, or when GitHub turns it down (expired, revoked), as
+      # github-actions[bot].
       - name: Publish release
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          BUILTIN_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.version.outputs.name }}
         run: |
+          GH_TOKEN="$RELEASE_TOKEN"
+          if [ -z "$GH_TOKEN" ] || ! GH_TOKEN="$GH_TOKEN" gh api "repos/$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            [ -n "$RELEASE_TOKEN" ] && echo "::warning::RELEASE_TOKEN was turned down (expired or revoked?): published as github-actions[bot] instead. Renew it in the repository's Actions secrets."
+            GH_TOKEN="$BUILTIN_TOKEN"
+          fi
+          export GH_TOKEN
           # Dev builds (0.93-flux.<yyyyMMddHHmm>) carry their build time; releases (0.91) don't.
           # Dev builds are pre-releases, so GitHub's "Latest" is always the latest full release;
           # the app finds both kinds by their tags, not by "Latest".
