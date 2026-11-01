@@ -200,6 +200,7 @@ What only Flux Keyboard does, on top of everything [Pastiera](#built-on-pastiera
   <img src="docs/cards/stream-app.webp" alt="Any app on the TV. Tap an app in the Streaming app and the TV turns on with it open in Moonlight, even an app Moonlight doesn't list. The phone's volume buttons turn the TV up and down." width="840">
 </p>
 
+- **Miracast too**: no Moonlight on the TV? The phone's screen goes to a TV or PC that takes Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), and an app tapped in the Streaming app goes there alone.
 - **The TV does the rest**: with an LG webOS TV set up, opening a game on the phone turns the TV on and opens Moonlight straight into it, the phone's volume buttons turn the TV up and down, and the TV turns off when the stream ends.
 
 ## Also here, all in one app

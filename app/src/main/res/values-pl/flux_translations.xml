@@ -2201,4 +2201,18 @@
     <string name="streaming_app_not_streaming_tv">Nic jeszcze nie jest streamowane: zacznij streaming w Moonlight albo skonfiguruj telewizor w ustawieniach streamingu, aby uruchamiać na nim aplikacje stąd</string>
     <string name="tv_volume_keys">Przyciski głośności zmieniają głośność telewizora</string>
     <string name="tv_volume_keys_description">Podczas streamowania na ten telewizor przyciski głośności telefonu go podgłaśniają lub ściszają, gdy pomocnik ułatwień dostępu jest włączony. W grze, gdzie są spustami, przytrzymaj z nimi SYM. Telewizor może raz poprosić o zgodę.</string>
+    <string name="miracast_title">Telewizor przez Miracast</string>
+    <string name="miracast_description">Ekran telefonu wraz z dźwiękiem na telewizorze lub komputerze z Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), bez aplikacji na telewizorze.</string>
+    <string name="miracast_needs_shell">Wymaga dostępu do powłoki.</string>
+    <string name="miracast_find">Szukaj ekranów</string>
+    <string name="miracast_casting_to">Przesyłanie do %1$s</string>
+    <string name="miracast_casting_description">Ekran telefonu jest na telewizorze wraz z dźwiękiem. Dotknij aplikacji poniżej, aby pokazać na telewizorze tylko ją.</string>
+    <string name="miracast_stop">Zatrzymaj</string>
+    <string name="miracast_dialog_title">Przesyłaj na ekran</string>
+    <string name="miracast_scanning">Szukanie ekranów…</string>
+    <string name="miracast_none_found">Nie znaleziono ekranów. Włącz Screen Share (lub Screen Mirroring) na telewizorze i wyszukaj ponownie.</string>
+    <string name="miracast_again">Szukaj ponownie</string>
+    <string name="miracast_connecting">Łączenie z %1$s… Zaakceptuj na telewizorze, jeśli zapyta.</string>
+    <string name="miracast_failed">Nie udało się połączyć z %1$s. Zaakceptuj prośbę na telewizorze, jeśli się pojawi, i spróbuj ponownie.</string>
+    <string name="miracast_unavailable">Android tego telefonu nie oferuje Miracast.</string>
 </resources>

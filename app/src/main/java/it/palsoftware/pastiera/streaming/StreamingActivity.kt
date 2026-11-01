@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.asImageBitmap
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.display.ExtraScreen
+import it.palsoftware.pastiera.display.Miracast
 import it.palsoftware.pastiera.gaming.StreamSignal
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
 import kotlinx.coroutines.Dispatchers
@@ -181,6 +183,8 @@ class StreamingActivity : ComponentActivity() {
                                 StreamHostService.setEnabled(this@StreamingActivity, true)
                                 listening = listening()
                             }
+                            // Miracast: the phone's screen on a TV that takes it, no app there
+                            MiracastBar()
                         }
                         Text(
                             stringResource(if (all) R.string.streaming_app_note_all else R.string.streaming_app_note),
@@ -274,7 +278,7 @@ class StreamingActivity : ComponentActivity() {
     /** An app on the TV: on the stream's own screen, or this one when shown there; nothing streaming, a word on how. */
     private fun open(app: StreamApps.App) {
         val launch = packageManager.getLaunchIntentForPackage(app.packageName) ?: return
-        val screen = ownScreen() ?: ExtraScreen.current?.id
+        val screen = ownScreen() ?: ExtraScreen.current?.id ?: Miracast.displayId(this)
         if (screen == null) {
             // Nothing streaming, with a TV set up: turned on and Moonlight opened there into the app, as a game is
             if (TvRemote.ready(this) && StreamHost.session == null) {
@@ -291,7 +295,7 @@ class StreamingActivity : ComponentActivity() {
     /** A Termux:Widget script run, Termux's terminal shown where the app would be. */
     private fun run(script: String) {
         val termux = packageManager.getLaunchIntentForPackage(it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_PACKAGE) ?: return
-        val screen = ownScreen() ?: ExtraScreen.current?.id
+        val screen = ownScreen() ?: ExtraScreen.current?.id ?: Miracast.displayId(this)
         if (screen == null) {
             if (TvRemote.ready(this) && StreamHost.session == null) {
                 StreamApps.requestedScript = script
@@ -306,6 +310,129 @@ class StreamingActivity : ComponentActivity() {
     }
 
     private fun hint(text: Int) = Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+    /**
+     * Miracast: casting to which screen, with Stop; else a way to find screens and connect. While
+     * casting the phone is mirrored, and an app tapped below goes on the TV alone.
+     */
+    @Composable
+    private fun MiracastBar() {
+        val context = this
+        // Casting: Android's Miracast display there, read again whenever displays change
+        var casting by remember { mutableStateOf(Miracast.display(context)?.name) }
+        androidx.compose.runtime.DisposableEffect(Unit) {
+            val manager = getSystemService(android.hardware.display.DisplayManager::class.java)
+            val listener = object : android.hardware.display.DisplayManager.DisplayListener {
+                override fun onDisplayAdded(displayId: Int) { casting = Miracast.display(context)?.name }
+                override fun onDisplayRemoved(displayId: Int) { casting = Miracast.display(context)?.name }
+                override fun onDisplayChanged(displayId: Int) = Unit
+            }
+            manager?.registerDisplayListener(listener, android.os.Handler(android.os.Looper.getMainLooper()))
+            onDispose { manager?.unregisterDisplayListener(listener) }
+        }
+        var picking by remember { mutableStateOf(false) }
+        val shell = it.palsoftware.pastiera.adb.AdbShell.available()
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = if (casting != null) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.padding(start = 16.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                val onColor = if (casting != null) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        casting?.let { stringResource(R.string.miracast_casting_to, it) } ?: stringResource(R.string.miracast_title),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                        color = onColor
+                    )
+                    Text(
+                        when {
+                            casting != null -> stringResource(R.string.miracast_casting_description)
+                            !shell -> stringResource(R.string.miracast_description) + " " + stringResource(R.string.miracast_needs_shell)
+                            else -> stringResource(R.string.miracast_description)
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = onColor
+                    )
+                }
+                if (casting != null) androidx.compose.material3.FilledTonalButton(onClick = {
+                    Thread { runCatching { Miracast.disconnect(context) } }.start()
+                }) { Text(stringResource(R.string.miracast_stop)) }
+                else androidx.compose.material3.Button(onClick = { picking = true }, enabled = shell) {
+                    Text(stringResource(R.string.miracast_find))
+                }
+            }
+        }
+        if (picking) MiracastPicker(onDone = { picking = false })
+    }
+
+    /** Screens found nearby, one tapped to cast to it; looked for again on asking. */
+    @Composable
+    private fun MiracastPicker(onDone: () -> Unit) {
+        val context = this
+        var status by remember { mutableStateOf<Miracast.Status?>(null) }
+        var scanning by remember { mutableStateOf(true) }
+        var scans by remember { mutableIntStateOf(0) }
+        var connecting by remember { mutableStateOf<Miracast.Screen?>(null) }
+        var failed by remember { mutableStateOf<String?>(null) }
+        LaunchedEffect(scans) {
+            scanning = true
+            status = withContext(Dispatchers.IO) { Miracast.scan(context) }
+            scanning = false
+        }
+        LaunchedEffect(connecting) {
+            val screen = connecting ?: return@LaunchedEffect
+            failed = null
+            val result = withContext(Dispatchers.IO) { Miracast.connect(context, screen.address) }
+            if (result?.connected == true) onDone() else {
+                failed = screen.name
+                connecting = null
+            }
+        }
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = onDone,
+            title = { Text(stringResource(R.string.miracast_dialog_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val screens = status?.offered.orEmpty()
+                    when {
+                        connecting != null -> Text(stringResource(R.string.miracast_connecting, connecting!!.name))
+                        status?.feature == Miracast.FEATURE_UNAVAILABLE -> Text(stringResource(R.string.miracast_unavailable))
+                        scanning && screens.isEmpty() -> Text(stringResource(R.string.miracast_scanning))
+                        screens.isEmpty() -> Text(stringResource(R.string.miracast_none_found))
+                    }
+                    failed?.let {
+                        Text(stringResource(R.string.miracast_failed, it), color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall)
+                    }
+                    if (connecting == null) screens.forEach { screen ->
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                                .clickable { connecting = screen }
+                        ) {
+                            Text("\u25AD  " + screen.name, modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+                                style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                if (connecting == null && !scanning && status?.feature != Miracast.FEATURE_UNAVAILABLE) {
+                    androidx.compose.material3.TextButton(onClick = { scans++ }) { Text(stringResource(R.string.miracast_again)) }
+                }
+            },
+            dismissButton = {
+                androidx.compose.material3.TextButton(onClick = onDone) { Text(stringResource(android.R.string.cancel)) }
+            }
+        )
+    }
 
     /** The top bar: clear of the status bar and the camera cutout. */
     @Composable

@@ -2189,4 +2189,18 @@
     <string name="streaming_app_not_streaming_tv">Դեռ ոչինչ չի հեռարձակվում․ սկսեք հեռարձակումը Moonlight-ից կամ կարգավորեք ձեր հեռուստացույցը հեռարձակման կարգավորումներում՝ այստեղից դրանում հավելվածներ գործարկելու համար</string>
     <string name="tv_volume_keys">Ձայնի կոճակները փոխում են հեռուստացույցի ձայնը</string>
     <string name="tv_volume_keys_description">Այս հեռուստացույցին հեռարձակելիս հեռախոսի ձայնի կոճակները բարձրացնում կամ իջեցնում են նրա ձայնը, երբ մատչելիության օգնականը միացված է։ Խաղում, որտեղ դրանք ձգաններն են, պահեք SYM-ը դրանց հետ։ Հեռուստացույցը կարող է մեկ անգամ թույլտվություն խնդրել։</string>
+    <string name="miracast_title">Հեռուստացույց Miracast-ով</string>
+    <string name="miracast_description">Հեռախոսի էկրանը՝ ձայնով, Miracast ընդունող հեռուստացույցի կամ համակարգչի վրա (LG Screen Share, Samsung Screen Mirroring, Windows), առանց հավելվածի հեռուստացույցում։</string>
+    <string name="miracast_needs_shell">Պահանջում է shell-ի հասանելիություն։</string>
+    <string name="miracast_find">Գտնել էկրաններ</string>
+    <string name="miracast_casting_to">Հեռարձակում դեպի %1$s</string>
+    <string name="miracast_casting_description">Հեռախոսի էկրանը հեռուստացույցում է՝ ձայնով։ Հպեք ստորև որևէ հավելվածի՝ այն միայնակ հեռուստացույցում ցույց տալու համար։</string>
+    <string name="miracast_stop">Կանգնեցնել</string>
+    <string name="miracast_dialog_title">Հեռարձակել էկրանին</string>
+    <string name="miracast_scanning">Էկրանների որոնում…</string>
+    <string name="miracast_none_found">Էկրաններ չգտնվեցին։ Միացրեք Screen Share-ը (կամ Screen Mirroring-ը) հեռուստացույցում, ապա փնտրեք կրկին։</string>
+    <string name="miracast_again">Փնտրել կրկին</string>
+    <string name="miracast_connecting">Միացում %1$s-ին… Հաստատեք հեռուստացույցում, եթե այն հարցնի։</string>
+    <string name="miracast_failed">Չհաջողվեց միանալ %1$s-ին։ Հաստատեք հարցումը հեռուստացույցում, եթե այն հարցնի, ապա փորձեք կրկին։</string>
+    <string name="miracast_unavailable">Այս հեռախոսի Android-ը Miracast չի առաջարկում։</string>
 </resources>

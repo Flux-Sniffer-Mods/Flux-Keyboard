@@ -186,7 +186,7 @@ object ExtraScreenServer {
 }
 
 /** The shell's own context, as Android expects of a caller with the shell's user. */
-private class ShellContext(base: Context) : ContextWrapper(base) {
+internal class ShellContext(base: Context) : ContextWrapper(base) {
     override fun getPackageName(): String = PACKAGE
     override fun getOpPackageName(): String = PACKAGE
     override fun getApplicationContext(): Context = this

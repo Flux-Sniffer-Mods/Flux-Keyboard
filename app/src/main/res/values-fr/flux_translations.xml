@@ -2195,4 +2195,18 @@
     <string name="streaming_app_not_streaming_tv">Aucun streaming pour l\'instant : lancez-le depuis Moonlight, ou configurez votre TV dans les paramètres du streaming pour y lancer des applis d\'ici</string>
     <string name="tv_volume_keys">Les touches de volume règlent le volume de la TV</string>
     <string name="tv_volume_keys_description">Pendant un stream vers cette TV, les touches de volume du téléphone la montent ou la baissent, avec l\'assistant d\'accessibilité activé. Dans un jeu, où ce sont les gâchettes, maintenez SYM avec elles. La TV peut demander une fois l\'autorisation.</string>
+    <string name="miracast_title">Téléviseur via Miracast</string>
+    <string name="miracast_description">L\'écran du téléphone, avec son son, sur un téléviseur ou un PC compatible Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), sans appli sur le téléviseur.</string>
+    <string name="miracast_needs_shell">Nécessite l\'accès au shell.</string>
+    <string name="miracast_find">Chercher des écrans</string>
+    <string name="miracast_casting_to">Diffusion vers %1$s</string>
+    <string name="miracast_casting_description">L\'écran du téléphone est sur le téléviseur, avec son son. Touchez une appli ci-dessous pour l\'afficher seule sur le téléviseur.</string>
+    <string name="miracast_stop">Arrêter</string>
+    <string name="miracast_dialog_title">Diffuser vers un écran</string>
+    <string name="miracast_scanning">Recherche d\'écrans…</string>
+    <string name="miracast_none_found">Aucun écran trouvé. Activez Screen Share (ou Screen Mirroring) sur le téléviseur, puis cherchez à nouveau.</string>
+    <string name="miracast_again">Chercher à nouveau</string>
+    <string name="miracast_connecting">Connexion à %1$s… Acceptez sur le téléviseur s\'il le demande.</string>
+    <string name="miracast_failed">Impossible de se connecter à %1$s. Acceptez la demande sur le téléviseur s\'il la pose, puis réessayez.</string>
+    <string name="miracast_unavailable">L\'Android de ce téléphone ne propose pas Miracast.</string>
 </resources>

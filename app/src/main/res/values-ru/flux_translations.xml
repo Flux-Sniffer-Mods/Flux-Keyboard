@@ -2201,4 +2201,18 @@
     <string name="streaming_app_not_streaming_tv">Трансляция ещё не идёт: начните её в Moonlight или настройте телевизор в настройках стриминга, чтобы запускать на нём приложения отсюда</string>
     <string name="tv_volume_keys">Кнопки громкости меняют громкость телевизора</string>
     <string name="tv_volume_keys_description">Во время трансляции на этот телевизор кнопки громкости телефона делают его громче или тише, если включён помощник специальных возможностей. В игре, где они служат курками, удерживайте с ними SYM. Телевизор может один раз запросить разрешение.</string>
+    <string name="miracast_title">Телевизор через Miracast</string>
+    <string name="miracast_description">Экран телефона со звуком на телевизоре или ПК с Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), без приложения на телевизоре.</string>
+    <string name="miracast_needs_shell">Нужен доступ к оболочке.</string>
+    <string name="miracast_find">Найти экраны</string>
+    <string name="miracast_casting_to">Трансляция на %1$s</string>
+    <string name="miracast_casting_description">Экран телефона на телевизоре, со звуком. Нажмите на приложение ниже, чтобы показать на телевизоре только его.</string>
+    <string name="miracast_stop">Остановить</string>
+    <string name="miracast_dialog_title">Трансляция на экран</string>
+    <string name="miracast_scanning">Поиск экранов…</string>
+    <string name="miracast_none_found">Экраны не найдены. Включите Screen Share (или Screen Mirroring) на телевизоре и поищите снова.</string>
+    <string name="miracast_again">Искать снова</string>
+    <string name="miracast_connecting">Подключение к %1$s… Подтвердите на телевизоре, если он спросит.</string>
+    <string name="miracast_failed">Не удалось подключиться к %1$s. Подтвердите запрос на телевизоре, если он появится, и попробуйте снова.</string>
+    <string name="miracast_unavailable">Android этого телефона не поддерживает Miracast.</string>
 </resources>

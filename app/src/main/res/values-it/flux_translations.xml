@@ -1699,4 +1699,18 @@
     <string name="streaming_app_not_streaming_tv">Ancora nessuno streaming: avvialo da Moonlight, oppure configura la TV nelle impostazioni dello streaming per avviarci le app da qui</string>
     <string name="tv_volume_keys">I tasti del volume cambiano il volume della TV</string>
     <string name="tv_volume_keys_description">Durante lo streaming su questa TV, i tasti del volume del telefono la alzano o abbassano, con l\'aiuto accessibilità attivo. In un gioco, dove sono i grilletti, tieni premuto SYM insieme. La TV potrebbe chiedere una volta il permesso.</string>
+    <string name="miracast_title">TV tramite Miracast</string>
+    <string name="miracast_description">Lo schermo del telefono, con il suo audio, su una TV o un PC con Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), senza app sulla TV.</string>
+    <string name="miracast_needs_shell">Richiede l\'accesso alla shell.</string>
+    <string name="miracast_find">Cerca schermi</string>
+    <string name="miracast_casting_to">Trasmissione su %1$s</string>
+    <string name="miracast_casting_description">Lo schermo del telefono è sulla TV, con il suo audio. Tocca un\'app qui sotto per metterla da sola sulla TV.</string>
+    <string name="miracast_stop">Interrompi</string>
+    <string name="miracast_dialog_title">Trasmetti su uno schermo</string>
+    <string name="miracast_scanning">Ricerca di schermi…</string>
+    <string name="miracast_none_found">Nessuno schermo trovato. Attiva Screen Share (o Screen Mirroring) sulla TV, poi cerca di nuovo.</string>
+    <string name="miracast_again">Cerca di nuovo</string>
+    <string name="miracast_connecting">Connessione a %1$s… Accetta sulla TV se lo chiede.</string>
+    <string name="miracast_failed">Impossibile connettersi a %1$s. Accetta la richiesta sulla TV se la mostra, poi riprova.</string>
+    <string name="miracast_unavailable">L\'Android di questo telefono non offre Miracast.</string>
 </resources>

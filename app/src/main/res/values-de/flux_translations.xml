@@ -1657,4 +1657,18 @@
     <string name="streaming_app_not_streaming_tv">Noch läuft kein Stream: Starte das Streaming in Moonlight, oder richte deinen Fernseher in den Streaming-Einstellungen ein, um Apps von hier darauf zu starten</string>
     <string name="tv_volume_keys">Lautstärketasten steuern den Fernseher</string>
     <string name="tv_volume_keys_description">Beim Streamen zu diesem Fernseher regeln die Lautstärketasten des Handys seine Lautstärke, wenn die Bedienungshilfe an ist. In einem Spiel, wo sie die Trigger sind, halte dazu SYM. Der Fernseher fragt eventuell einmal nach der Erlaubnis.</string>
+    <string name="miracast_title">Fernseher über Miracast</string>
+    <string name="miracast_description">Der Bildschirm des Telefons samt Ton auf einem Fernseher oder PC mit Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), ohne App auf dem Fernseher.</string>
+    <string name="miracast_needs_shell">Braucht Shell-Zugriff.</string>
+    <string name="miracast_find">Bildschirme suchen</string>
+    <string name="miracast_casting_to">Übertragung an %1$s</string>
+    <string name="miracast_casting_description">Der Bildschirm des Telefons ist samt Ton auf dem Fernseher. Tippe unten auf eine App, um nur sie auf dem Fernseher zu zeigen.</string>
+    <string name="miracast_stop">Beenden</string>
+    <string name="miracast_dialog_title">An einen Bildschirm übertragen</string>
+    <string name="miracast_scanning">Suche nach Bildschirmen…</string>
+    <string name="miracast_none_found">Keine Bildschirme gefunden. Schalte am Fernseher Screen Share (oder Screen Mirroring) ein und suche erneut.</string>
+    <string name="miracast_again">Erneut suchen</string>
+    <string name="miracast_connecting">Verbindung mit %1$s… Bestätige am Fernseher, falls er fragt.</string>
+    <string name="miracast_failed">Keine Verbindung mit %1$s. Bestätige die Anfrage am Fernseher, falls er fragt, und versuche es erneut.</string>
+    <string name="miracast_unavailable">Das Android dieses Telefons bietet kein Miracast.</string>
 </resources>

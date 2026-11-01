@@ -1569,4 +1569,18 @@
     <string name="streaming_app_not_streaming_tv">Δεν γίνεται ακόμη ροή: ξεκινήστε τη ροή από το Moonlight ή ρυθμίστε την τηλεόρασή σας στις ρυθμίσεις ροής για να ξεκινάτε εφαρμογές σε αυτήν από εδώ</string>
     <string name="tv_volume_keys">Τα πλήκτρα έντασης αλλάζουν την ένταση της τηλεόρασης</string>
     <string name="tv_volume_keys_description">Κατά τη ροή σε αυτή την τηλεόραση, τα πλήκτρα έντασης του τηλεφώνου την ανεβάζουν ή τη χαμηλώνουν, με τη βοήθεια προσβασιμότητας ενεργή. Σε ένα παιχνίδι, όπου είναι οι σκανδάλες, κράτα μαζί το SYM. Η τηλεόραση μπορεί να ζητήσει μία φορά άδεια.</string>
+    <string name="miracast_title">Τηλεόραση μέσω Miracast</string>
+    <string name="miracast_description">Η οθόνη του τηλεφώνου, με τον ήχο της, σε τηλεόραση ή υπολογιστή με Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), χωρίς εφαρμογή στην τηλεόραση.</string>
+    <string name="miracast_needs_shell">Χρειάζεται πρόσβαση στο shell.</string>
+    <string name="miracast_find">Εύρεση οθονών</string>
+    <string name="miracast_casting_to">Μετάδοση σε %1$s</string>
+    <string name="miracast_casting_description">Η οθόνη του τηλεφώνου είναι στην τηλεόραση, με τον ήχο της. Πατήστε μια εφαρμογή παρακάτω για να εμφανιστεί μόνη της στην τηλεόραση.</string>
+    <string name="miracast_stop">Διακοπή</string>
+    <string name="miracast_dialog_title">Μετάδοση σε οθόνη</string>
+    <string name="miracast_scanning">Αναζήτηση οθονών…</string>
+    <string name="miracast_none_found">Δεν βρέθηκαν οθόνες. Ενεργοποιήστε το Screen Share (ή Screen Mirroring) στην τηλεόραση και ψάξτε ξανά.</string>
+    <string name="miracast_again">Νέα αναζήτηση</string>
+    <string name="miracast_connecting">Σύνδεση με %1$s… Αποδεχτείτε στην τηλεόραση αν ρωτήσει.</string>
+    <string name="miracast_failed">Δεν ήταν δυνατή η σύνδεση με %1$s. Αποδεχτείτε το αίτημα στην τηλεόραση αν ρωτήσει και δοκιμάστε ξανά.</string>
+    <string name="miracast_unavailable">Το Android αυτού του τηλεφώνου δεν προσφέρει Miracast.</string>
 </resources>

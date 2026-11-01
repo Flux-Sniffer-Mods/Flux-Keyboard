@@ -2183,4 +2183,18 @@
     <string name="streaming_app_not_streaming_tv">Chưa có gì đang phát: hãy bắt đầu phát từ Moonlight, hoặc thiết lập TV trong cài đặt phát trực tuyến để mở ứng dụng trên TV từ đây</string>
     <string name="tv_volume_keys">Nút âm lượng chỉnh âm lượng TV</string>
     <string name="tv_volume_keys_description">Khi đang phát tới TV này, các nút âm lượng của điện thoại tăng hoặc giảm âm lượng TV, khi trình trợ giúp hỗ trợ tiếp cận đang bật. Trong trò chơi, nơi chúng là các cò, hãy giữ SYM cùng lúc. TV có thể hỏi cho phép một lần.</string>
+    <string name="miracast_title">TV qua Miracast</string>
+    <string name="miracast_description">Màn hình điện thoại, kèm âm thanh, trên TV hoặc máy tính hỗ trợ Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), không cần ứng dụng trên TV.</string>
+    <string name="miracast_needs_shell">Cần quyền truy cập shell.</string>
+    <string name="miracast_find">Tìm màn hình</string>
+    <string name="miracast_casting_to">Đang truyền tới %1$s</string>
+    <string name="miracast_casting_description">Màn hình điện thoại đang ở trên TV, kèm âm thanh. Chạm vào một ứng dụng bên dưới để chỉ hiện nó trên TV.</string>
+    <string name="miracast_stop">Dừng</string>
+    <string name="miracast_dialog_title">Truyền tới một màn hình</string>
+    <string name="miracast_scanning">Đang tìm màn hình…</string>
+    <string name="miracast_none_found">Không tìm thấy màn hình. Bật Screen Share (hoặc Screen Mirroring) trên TV, rồi tìm lại.</string>
+    <string name="miracast_again">Tìm lại</string>
+    <string name="miracast_connecting">Đang kết nối tới %1$s… Chấp nhận trên TV nếu được hỏi.</string>
+    <string name="miracast_failed">Không kết nối được tới %1$s. Chấp nhận yêu cầu trên TV nếu được hỏi, rồi thử lại.</string>
+    <string name="miracast_unavailable">Android của điện thoại này không hỗ trợ Miracast.</string>
 </resources>
