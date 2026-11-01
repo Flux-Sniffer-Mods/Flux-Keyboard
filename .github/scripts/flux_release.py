@@ -165,13 +165,16 @@ def notes_cmd(version, previous_tag, commit):
 
 def added_at(text):
     """yyyyMMddHHmm (UTC) of the first commit whose whats_new.json holds [text], or None."""
-    out = subprocess.run(
-        ["git", "log", "--reverse", "--format=%at", "-S", text, "--", WHATS_NEW],
-        capture_output=True, text=True, check=False
-    ).stdout.split()
-    if not out:
-        return None
-    return datetime.datetime.fromtimestamp(int(out[0]), datetime.timezone.utc).strftime("%Y%m%d%H%M")
+    # Looked for as the file holds it (a quote escaped), else as written: a note with quotes was
+    # never found, so every build stamped it as new
+    for held in dict.fromkeys((json.dumps(text, ensure_ascii=False)[1:-1], text)):
+        out = subprocess.run(
+            ["git", "log", "--reverse", "--format=%at", "-S", held, "--", WHATS_NEW],
+            capture_output=True, text=True, check=False
+        ).stdout.split()
+        if out:
+            return datetime.datetime.fromtimestamp(int(out[0]), datetime.timezone.utc).strftime("%Y%m%d%H%M")
+    return None
 
 
 def stamp_cmd():
