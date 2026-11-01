@@ -2289,4 +2289,11 @@
     <string name="linux_show_log">Показать, что произошло</string>
     <string name="linux_gpu">Использовать GPU телефона</string>
     <string name="linux_gpu_hint">Со следующего запуска. Программы рисуют на GPU телефона, а сам рабочий стол остаётся на CPU. Выключите, если программа выглядит чёрной или искажённой.</string>
+    <string name="update_check_interval_title">Как часто проверять обновления</string>
+    <string name="update_check_interval_description">%1$s, в фоне. Нажмите, чтобы изменить.</string>
+    <string name="update_check_interval_search">Как часто в фоне ищутся новые версии: каждый час, каждые 2 часа, каждые 6 часов или раз в день</string>
+    <string name="update_check_every_1">Каждый час</string>
+    <string name="update_check_every_2">Каждые 2 часа</string>
+    <string name="update_check_every_6">Каждые 6 часов</string>
+    <string name="update_check_every_24">Раз в день</string>
 </resources>

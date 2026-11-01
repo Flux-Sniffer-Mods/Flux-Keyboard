@@ -2277,4 +2277,11 @@
     <string name="linux_show_log">Ցույց տալ, թե ինչ եղավ</string>
     <string name="linux_gpu">Օգտագործել հեռախոսի GPU-ն</string>
     <string name="linux_gpu_hint">Հաջորդ մեկնարկից։ Ծրագրերը նկարում են հեռախոսի GPU-ով, իսկ աշխատասեղանն ինքը մնում է CPU-ի վրա։ Անջատեք, եթե որևէ ծրագիր սև կամ աղավաղված է երևում։</string>
+    <string name="update_check_interval_title">Որքան հաճախ ստուգել թարմացումները</string>
+    <string name="update_check_interval_description">%1$s, հետին պլանում։ Հպեք՝ փոխելու համար։</string>
+    <string name="update_check_interval_search">Որքան հաճախ են նոր տարբերակները փնտրվում հետին պլանում՝ ամեն ժամ, 2 ժամը մեկ, 6 ժամը մեկ կամ օրը մեկ անգամ</string>
+    <string name="update_check_every_1">Ամեն ժամ</string>
+    <string name="update_check_every_2">2 ժամը մեկ</string>
+    <string name="update_check_every_6">6 ժամը մեկ</string>
+    <string name="update_check_every_24">Օրը մեկ անգամ</string>
 </resources>

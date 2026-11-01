@@ -2283,4 +2283,11 @@
     <string name="linux_show_log">Voir ce qui s’est passé</string>
     <string name="linux_gpu">Utiliser le GPU du téléphone</string>
     <string name="linux_gpu_hint">Dès le prochain démarrage. Les programmes dessinent sur le GPU du téléphone ; le bureau lui-même reste sur le CPU. Désactive-le si un programme s’affiche noir ou brouillé.</string>
+    <string name="update_check_interval_title">Fréquence de recherche des mises à jour</string>
+    <string name="update_check_interval_description">%1$s, en arrière-plan. Touche pour changer.</string>
+    <string name="update_check_interval_search">À quelle fréquence les nouvelles versions sont recherchées en arrière-plan : toutes les heures, toutes les 2 heures, toutes les 6 heures ou une fois par jour</string>
+    <string name="update_check_every_1">Toutes les heures</string>
+    <string name="update_check_every_2">Toutes les 2 heures</string>
+    <string name="update_check_every_6">Toutes les 6 heures</string>
+    <string name="update_check_every_24">Une fois par jour</string>
 </resources>

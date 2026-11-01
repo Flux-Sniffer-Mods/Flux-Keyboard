@@ -214,7 +214,7 @@ open class MainActivity : LocalizedComponentActivity() {
         }
 
         if (shouldUseGithubUpdateChecks(this)) {
-            // Background update checks, every 15 minutes
+            // Background update checks, every few hours (Settings, Check for updates how often)
             UpdateCheckWorker.schedule(applicationContext)
         }
 

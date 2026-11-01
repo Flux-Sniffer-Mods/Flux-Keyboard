@@ -2271,4 +2271,11 @@
     <string name="linux_show_log">Xem chuyện gì đã xảy ra</string>
     <string name="linux_gpu">Dùng GPU của điện thoại</string>
     <string name="linux_gpu_hint">Từ lần khởi động sau. Các chương trình vẽ bằng GPU của điện thoại; bản thân màn hình nền vẫn dùng CPU. Tắt đi nếu một chương trình hiện đen hoặc méo.</string>
+    <string name="update_check_interval_title">Tần suất kiểm tra cập nhật</string>
+    <string name="update_check_interval_description">%1$s, chạy nền. Chạm để đổi.</string>
+    <string name="update_check_interval_search">Tần suất tìm phiên bản mới khi chạy nền: mỗi giờ, mỗi 2 giờ, mỗi 6 giờ hoặc mỗi ngày một lần</string>
+    <string name="update_check_every_1">Mỗi giờ</string>
+    <string name="update_check_every_2">Mỗi 2 giờ</string>
+    <string name="update_check_every_6">Mỗi 6 giờ</string>
+    <string name="update_check_every_24">Mỗi ngày một lần</string>
 </resources>

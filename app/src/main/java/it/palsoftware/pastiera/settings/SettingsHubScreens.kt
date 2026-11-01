@@ -80,6 +80,8 @@ import it.palsoftware.pastiera.getTitan2EliteRoundedCornerInsetsEnabled
 import it.palsoftware.pastiera.setExactTypingApps
 import it.palsoftware.pastiera.setExactTypingForNoSuggestionFields
 import it.palsoftware.pastiera.setForkUpdateChannel
+import it.palsoftware.pastiera.getUpdateCheckHours
+import it.palsoftware.pastiera.setUpdateCheckHours
 import it.palsoftware.pastiera.setSwipeIncrementalThreshold
 import it.palsoftware.pastiera.setTerminalModeApps
 import it.palsoftware.pastiera.setTerminalModeEmojiKeyAction
@@ -455,6 +457,30 @@ internal fun SettingsUpdateRows(context: android.content.Context) {
             }
         }
     )
+    UpdateIntervalRow(context)
+}
+
+/** How often updates are looked for in the background: a tap goes to the next choice. */
+@Composable
+internal fun UpdateIntervalRow(context: android.content.Context) {
+    var hours by remember { mutableStateOf(SettingsManager.getUpdateCheckHours(context)) }
+    val every = stringResource(when (hours) {
+        1 -> R.string.update_check_every_1
+        6 -> R.string.update_check_every_6
+        24 -> R.string.update_check_every_24
+        else -> R.string.update_check_every_2
+    })
+    FluxActionRow(
+        linkId = SettingLinkIds.UPDATE_CHECK_INTERVAL,
+        icon = "\u21BB",
+        title = stringResource(R.string.update_check_interval_title),
+        description = stringResource(R.string.update_check_interval_description, every)
+    ) {
+        val choices = SettingsManager.UPDATE_CHECK_HOURS
+        hours = choices[(choices.indexOf(hours) + 1) % choices.size]
+        SettingsManager.setUpdateCheckHours(context, hours)
+        it.palsoftware.pastiera.update.UpdateCheckWorker.schedule(context.applicationContext)
+    }
 }
 
 /** Which releases updates offer: full releases, or dev builds too. */

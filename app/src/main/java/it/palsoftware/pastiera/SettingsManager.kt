@@ -1008,6 +1008,9 @@ object SettingsManager {
     internal const val KEY_FORK_UPDATE_CHANNEL = "fork_update_channel"
     const val FORK_UPDATE_CHANNEL_STABLE = "stable"
     const val FORK_UPDATE_CHANNEL_DEV = "dev"
+    internal const val KEY_UPDATE_CHECK_HOURS = "update_check_hours"
+    /** How often updates may be looked for in the background, in hours. */
+    val UPDATE_CHECK_HOURS = listOf(1, 2, 6, 24)
 
     // Flux Keyboard: quick launcher extras
     internal const val KEY_QUICK_LAUNCHER_APP_SHORTCUTS = "quick_launcher_app_shortcuts"
