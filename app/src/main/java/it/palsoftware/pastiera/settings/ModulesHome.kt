@@ -30,6 +30,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -141,6 +142,8 @@ private fun tileLine(module: FluxModule, on: Boolean, status: ModuleReadiness.St
         FluxModule.STREAMING -> R.string.module_streaming_description
         FluxModule.DESKTOP -> R.string.module_desktop_description
     })
+    // Followed, so the tile changes as the desktop starts and stops
+    val desktop by it.palsoftware.pastiera.linux.LinuxDesktop.state.collectAsState()
     if (!on || status == null) return description to false
     val need = status.needs.firstOrNull()
     val streamingTo = status.streamingTo
@@ -165,7 +168,7 @@ private fun tileLine(module: FluxModule, on: Boolean, status: ModuleReadiness.St
             (if (status.listening) stringResource(R.string.tile_streaming_ready, status.paired) else stringResource(R.string.tile_streaming_off)) to false
         // Running, installed or not yet
         module == FluxModule.DESKTOP -> stringResource(when {
-            it.palsoftware.pastiera.linux.LinuxDesktop.state.value == it.palsoftware.pastiera.linux.LinuxDesktop.State.Running -> R.string.tile_desktop_running
+            desktop == it.palsoftware.pastiera.linux.LinuxDesktop.State.Running -> R.string.tile_desktop_running
             it.palsoftware.pastiera.linux.LinuxDesktop.installedMode(LocalContext.current) != null -> R.string.tile_desktop_installed
             else -> R.string.tile_desktop_not_installed
         }) to false

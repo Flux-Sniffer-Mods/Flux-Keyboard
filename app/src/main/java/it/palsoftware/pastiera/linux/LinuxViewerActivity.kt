@@ -6,8 +6,6 @@ import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.Gravity
 import android.view.KeyEvent
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -44,9 +42,10 @@ class LinuxViewerActivity : Activity() {
             addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
             addView(message, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         })
-        window.insetsController?.let {
-            it.hide(WindowInsets.Type.systemBars())
-            it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        // The whole screen the desktop's (on Android 10 too, which has no insetsController)
+        androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).let {
+            it.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            it.systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
         view.requestFocus()
         Thread({ connect() }, "LinuxViewer").apply { isDaemon = true; start() }
@@ -63,6 +62,8 @@ class LinuxViewerActivity : Activity() {
             if (state == LinuxDesktop.State.Starting) until = System.currentTimeMillis() + 30_000
             if (state is LinuxDesktop.State.Failed) break
             progress(problem)
+            // Shown once the desktop is drawing: till then its screen is only black
+            if (state == LinuxDesktop.State.Starting) { Thread.sleep(1_000); continue }
             // The password of this run, read each time (a start may have made a new one)
             val password = LinuxDesktop.password(this)
             vnc = runCatching {
@@ -75,28 +76,39 @@ class LinuxViewerActivity : Activity() {
                 .getOrNull()
             if (vnc == null) Thread.sleep(1_000)
         }
+        // Left while it was connecting: nothing kept open or playing behind it
+        if (!open) { vnc?.close(); return }
         if (vnc == null) {
             // Why, from Linux itself
             val logs = LinuxDesktop.guestLogs(this).orEmpty()
             FluxLog.w("FluxLinux", "viewer gave up: $problem\n$logs")
-            runOnUiThread {
-                message.gravity = Gravity.START or Gravity.CENTER_VERTICAL
-                message.textSize = 13f
-                message.text = listOf(getString(R.string.linux_viewer_unreachable), problem, logs)
-                    .filter { it.isNotBlank() }.joinToString("\n\n")
-                message.visibility = android.view.View.VISIBLE
-            }
+            explain(getString(R.string.linux_viewer_unreachable), problem, logs)
             return
         }
         vnc.live()
         client = vnc
         view.attach(vnc)
         sound.start()
+        // Closed just now (between the check above and here): what was just opened goes too
+        if (!open) { vnc.close(); sound.stop(); return }
         // The server says whether it can resize with its first picture: asked then
         view.postDelayed({ fit(view.width, view.height) }, 1_500)
         runOnUiThread { message.visibility = android.view.View.GONE }
         runCatching { vnc.run() }.onFailure { if (open) FluxLog.w("FluxLinux", "viewer: $it") }
-        if (open) show(R.string.linux_viewer_ended)
+        if (open) {
+            // Ended without being asked: why, from Linux itself
+            val logs = LinuxDesktop.guestLogs(this).orEmpty()
+            if (logs.isNotBlank()) FluxLog.w("FluxLinux", "desktop ended:\n$logs")
+            explain(getString(R.string.linux_viewer_ended), "", logs)
+        }
+    }
+
+    /** [text], then why: the problem seen and the ends of Linux's own logs, small and left-aligned. */
+    private fun explain(text: String, problem: String, logs: String) = runOnUiThread {
+        message.gravity = Gravity.START or Gravity.CENTER_VERTICAL
+        message.textSize = 13f
+        message.text = listOf(text, problem, logs).filter { it.isNotBlank() }.joinToString("\n\n")
+        message.visibility = android.view.View.VISIBLE
     }
 
     /** While connecting: what the desktop is doing (its last line), or why it isn't answering yet. */
@@ -116,7 +128,8 @@ class LinuxViewerActivity : Activity() {
 
     /** Text copied in Linux: the phone's clipboard too. */
     private fun copied(text: String) {
-        getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("Linux", text))
+        // Too big for Android's clipboard, or refused: Linux keeps it
+        runCatching { getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("Linux", text)) }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
@@ -154,7 +167,9 @@ class LinuxViewerActivity : Activity() {
     }
 
     private fun paste(vnc: VncClient) {
-        val text = getSystemService(ClipboardManager::class.java)?.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+        val text = runCatching {
+            getSystemService(ClipboardManager::class.java)?.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+        }.getOrNull()
         if (!text.isNullOrEmpty()) vnc.clipboard(text)
     }
 

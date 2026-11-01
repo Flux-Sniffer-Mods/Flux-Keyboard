@@ -71,11 +71,40 @@ object LinuxDesktop {
     val log: StateFlow<List<String>> = mutableLog
 
     @Volatile private var session: Process? = null
+    /** The desktop said it's drawing (not merely its X server listening). */
+    @Volatile private var ready = false
 
     private fun set(value: State) { mutableState.value = value }
 
+    /** Where the last install's or start's lines are kept, for the crash log after the app restarts. */
+    @Volatile private var logFile: java.io.File? = null
+
     private fun line(text: String) {
         mutableLog.value = (mutableLog.value + text).takeLast(200)
+        logFile?.let { file -> runCatching { file.appendText(text + "\n") } }
+    }
+
+    /** A fresh log for an install or a start. */
+    private fun newLog(context: Context) {
+        mutableLog.value = emptyList()
+        logFile = java.io.File(context.filesDir, "linux.log").also { runCatching { it.writeText("") } }
+    }
+
+    /**
+     * For the crash log: how it's set up, what the last install or start printed and the ends
+     * of Linux's own logs. Blocking, through the shell.
+     */
+    fun report(context: Context): String {
+        val app = context.applicationContext
+        val mode = installedMode(app) ?: return "not installed"
+        val last = runCatching { java.io.File(app.filesDir, "linux.log").readLines().takeLast(80) }.getOrDefault(emptyList())
+        return listOf(
+            "${distro(app).label}, ${desktop(app).label}, $mode, state ${state.value}, GPU ${gpu(app)}, scale ${scale(app)}",
+            "-- last install or start",
+            last.joinToString("\n"),
+            "-- Linux's logs",
+            guestLogs(app).orEmpty()
+        ).joinToString("\n")
     }
 
     private fun prefs(context: Context) = SettingsManager.getPreferences(context)
@@ -139,6 +168,7 @@ object LinuxDesktop {
             process.inputStream.bufferedReader().forEachLine { text ->
                 line(text)
                 if (text == "flux: starting") set(State.Starting)
+                if (text == "flux: desktop ready") ready = true
             }
             process.waitFor()
         }.onFailure { FluxLog.w(TAG, "$action: $it") }.getOrDefault(-1)
@@ -168,11 +198,14 @@ object LinuxDesktop {
     /** Looks again: installed, running or neither. */
     fun refresh(context: Context) {
         val app = context.applicationContext
+        // Mid-install, -start or -stop the work under way says how it went: not overruled by a look
+        if (busy()) return
         background {
             val mode = installedMode(app)
             if (mode == null) { set(State.NotInstalled); return@background }
             if (!canRun(mode)) { set(State.Failed(if (mode == Mode.CHROOT) Step.NO_ROOT else Step.NO_SHELL)); return@background }
             val out = AdbShell.run(command(app, mode, "status"), 8_000).orEmpty()
+            if (busy()) return@background
             set(when {
                 "not-installed" in out -> State.NotInstalled
                 "running" in out -> State.Running
@@ -182,21 +215,30 @@ object LinuxDesktop {
         }
     }
 
+    private fun busy() = when (state.value) {
+        State.Installing, State.Starting, State.Stopping, is State.Downloading -> true
+        else -> false
+    }
+
     /**
      * Downloads [distro] (once) and sets [desktop] up on it in [mode]: some minutes, most of it
      * downloading and installing packages.
      */
     fun install(context: Context, mode: Mode, distro: Distro = Distro.DEBIAN, desktop: Desktop = Desktop.XFCE) {
         val app = context.applicationContext
+        // Already under way (asked twice): the one install
+        if (busy()) return
         if (!canRun(mode)) { set(State.Failed(if (mode == Mode.CHROOT) Step.NO_ROOT else Step.NO_SHELL)); return }
         prefs(app).edit().putString(KEY_DISTRO, distro.name).putString(KEY_DESKTOP, desktop.name).apply()
-        mutableLog.value = emptyList()
+        newLog(app)
         LinuxService.start(app)
         background {
             try {
                 if (!download(app)) { set(State.Failed(Step.DOWNLOAD)); return@background }
                 set(State.Installing)
                 val result = run(app, mode, "install")
+                // It wouldn't unpack: the download's damaged, so the next try fetches it again
+                if (result == 3) tarball(app).delete()
                 if (result != 0) { set(State.Failed(Step.INSTALL)); return@background }
                 prefs(app).edit().putString(KEY_MODE, mode.name).apply()
                 // The download's no longer needed: Linux is unpacked
@@ -226,6 +268,8 @@ object LinuxDesktop {
             val have = if (part.isFile) part.length() else 0L
             val request = Request.Builder().url(url).apply { if (have > 0) header("Range", "bytes=$have-") }.build()
             client.newCall(request).execute().use { response ->
+                // Nothing left to fetch: the last download finished, the app ended before it was kept
+                if (response.code == 416 && have > 10_000_000) return@runCatching part.renameTo(target)
                 if (!response.isSuccessful) throw IllegalStateException("HTTP ${response.code}")
                 val resumed = response.code == 206
                 val body = response.body ?: throw IllegalStateException("empty")
@@ -270,13 +314,16 @@ object LinuxDesktop {
     /** Starts the desktop at [width] x [height]; [onReady] (on its own thread) once its picture can be seen. */
     fun start(context: Context, width: Int, height: Int, onReady: () -> Unit = {}) {
         val app = context.applicationContext
+        // Already starting or up (asked twice): starting again would end the desktop being started
+        if (busy() || state.value == State.Running) return
         val mode = installedMode(app) ?: return
         if (!canRun(mode)) { set(State.Failed(if (mode == Mode.CHROOT) Step.NO_ROOT else Step.NO_SHELL)); return }
         val alphabet = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
         val random = SecureRandom()
         val password = String(CharArray(8) { alphabet[random.nextInt(alphabet.length)] })
         prefs(app).edit().putString(KEY_PASSWORD, password).apply()
-        mutableLog.value = emptyList()
+        newLog(app)
+        ready = false
         set(State.Starting)
         LinuxService.start(app)
         background {
@@ -289,10 +336,15 @@ object LinuxDesktop {
             } else set(State.Stopped)
             LinuxService.idle(app)
         }
-        // Ready once the VNC server answers, however long an update first takes (a failed start ends it)
+        // Ready once the desktop says it's drawing, however long an update first takes (a failed
+        // start ends it); from an older setup that never says, once the VNC server has answered
+        // for three minutes
         background {
+            var since = 0L
             while (state.value == State.Starting) {
-                if (listening()) {
+                val answering = listening()
+                if (answering && since == 0L) since = System.currentTimeMillis()
+                if (ready || (answering && System.currentTimeMillis() - since > 180_000)) {
                     set(State.Running)
                     LinuxService.idle(app)
                     LinuxNotifications.watch(app)

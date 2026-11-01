@@ -11,7 +11,7 @@ LOCALE=$(printf '%s' "${FLUX_LOCALE:-en_US}" | tr -cd 'A-Za-z_@')
 LANGUAGE_CODE=${LOCALE%%_*}
 # Raised whenever this script changes: flux-linux.sh runs it again on start. Its packages are
 # installed again only when FLUX_PACKAGES_VERSION is raised too
-FLUX_GUEST_VERSION=6
+FLUX_GUEST_VERSION=12
 FLUX_PACKAGES_VERSION=5
 export DEBIAN_FRONTEND=noninteractive
 
@@ -101,6 +101,20 @@ echo 'flux ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/flux
 chmod 440 /etc/sudoers.d/flux
 # A machine ID: D-Bus wants one, and an image ships none
 dbus-uuidgen --ensure 2>/dev/null || true
+
+# ---- The session's bus: callers proven by a cookie in the user's home (DBUS_COOKIE_SHA1), as
+# it's reached over 127.0.0.1. Without root Android won't let Linux make socket files, and under
+# PRoot the kernel's account of who's calling never matches whom the bus believes it is ----
+base=/usr/share/dbus-1/session.conf
+[ -f "$base" ] || base=/etc/dbus-1/session.conf
+cat > /etc/flux-dbus-session.conf <<EOF
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+  <include>$base</include>
+  <auth>DBUS_COOKIE_SHA1</auth>
+</busconfig>
+EOF
 
 # ---- KDE: an applications menu (Plasma 6 on Debian ships none, leaving the launcher empty) ----
 if [ "$DESKTOP" = kde ] && [ ! -s /etc/xdg/menus/applications.menu ]; then
@@ -282,11 +296,13 @@ Xvnc :1 -geometry "$geometry" -depth 24 -dpi "$dpi" -rfbport 5901 -localhost -Se
     -PasswordFile "$HOME/.vnc/passwd" -AlwaysShared -AcceptSetDesktopSize >/tmp/flux-xvnc.log 2>&1 &
 echo $! > /tmp/flux-xvnc.pid
 # Sound: everything plays into a silent sink whose monitor goes out as raw 48 kHz stereo
+# Programs reach it over 127.0.0.1 too (no socket files without root), proven by its cookie
+export PULSE_SERVER=tcp:127.0.0.1:4713
 if command -v pulseaudio >/dev/null 2>&1; then
     pulseaudio --kill >/dev/null 2>&1
     pulseaudio --daemonize=no --exit-idle-time=-1 --disallow-exit -n --disable-shm=yes \
         -L "module-null-sink sink_name=flux rate=48000 channels=2" \
-        -L "module-native-protocol-unix" \
+        -L "module-native-protocol-tcp listen=127.0.0.1 port=4713" \
         -L "module-simple-protocol-tcp listen=127.0.0.1 port=5911 record=true playback=false source=flux.monitor format=s16le rate=48000 channels=2" \
         >/tmp/flux-pulse.log 2>&1 &
     echo $! > /tmp/flux-pulse.pid
@@ -295,8 +311,23 @@ if command -v pulseaudio >/dev/null 2>&1; then
 fi
 sleep 1
 export DISPLAY=:1
-# The session's bus, started here so the phone's shortcuts can open programs in this session
-eval "$(dbus-launch --sh-syntax)"
+# The session's bus on 127.0.0.1 (a free port), callers proven by the cookie only this user can
+# read: without root Android won't let Linux make socket files. Started here so the phone's
+# shortcuts can open programs in this session; dbus-launch the second try. Never an empty
+# address: every program refuses one, where with none the desktop starts a bus of its own
+conf=/etc/flux-dbus-session.conf
+if [ -f "$conf" ]; then
+    bus=$(dbus-daemon --config-file="$conf" --address="tcp:host=127.0.0.1,bind=127.0.0.1,port=0" \
+        --fork --print-address=1 --print-pid=1 2>/tmp/flux-dbus.log)
+    DBUS_SESSION_BUS_ADDRESS=$(printf '%s\n' "$bus" | sed -n 1p)
+    DBUS_SESSION_BUS_PID=$(printf '%s\n' "$bus" | sed -n 2p)
+fi
+if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
+    export DBUS_SESSION_BUS_ADDRESS
+else
+    eval "$(dbus-launch --sh-syntax 2>>/tmp/flux-dbus.log)"
+fi
+[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] || { unset DBUS_SESSION_BUS_ADDRESS; echo "flux: no session bus" >> /tmp/flux-dbus.log; }
 gdk_int=$(awk -v s="$scale" 'BEGIN { i = int(s); if (i < 1) i = 1; print i }')
 gdk_dpi=$(awk -v s="$scale" -v i="$gdk_int" 'BEGIN { printf "%.3f", s / i }')
 cursor=$(awk -v s="$scale" 'BEGIN { printf "%d", 24 * s + 0.5 }')
@@ -305,11 +336,13 @@ cursor=$(awk -v s="$scale" 'BEGIN { printf "%d", 24 * s + 0.5 }')
 {
     echo "export DISPLAY=:1 LANG='$LANG' XDG_SESSION_TYPE=x11 QT_QPA_PLATFORM=xcb"
     echo "export XDG_RUNTIME_DIR='$XDG_RUNTIME_DIR'"
-    echo "export DBUS_SESSION_BUS_ADDRESS='$DBUS_SESSION_BUS_ADDRESS'"
+    [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && echo "export DBUS_SESSION_BUS_ADDRESS='$DBUS_SESSION_BUS_ADDRESS'"
     echo "export QT_SCALE_FACTOR=$scale GDK_SCALE=$gdk_int GDK_DPI_SCALE=$gdk_dpi XCURSOR_SIZE=$cursor FLUX_SCALE=$scale"
     echo "export QT_QUICK_BACKEND=software QSG_RENDER_LOOP=basic LIBGL_ALWAYS_SOFTWARE=1 MESA_NO_ERROR=1"
     echo "export QT_LOGGING_RULES='kpipewire_logging=false;kf.kirigami.platform.warning=false'"
     echo "export GTK_CSD=0 MOZ_USE_XINPUT2=0"
+    # Sound over 127.0.0.1; no accessibility bus (it would want a socket file)
+    echo "export PULSE_SERVER=$PULSE_SERVER NO_AT_BRIDGE=1"
     # The phone's GPU, when the app started its server: Mesa's virpipe driver sends OpenGL there
     # (the desktop's own parts kept on the CPU by flux-linux.sh)
     [ -S /tmp/.virgl_test ] && [ -e /tmp/flux-gpu ] && echo "export GALLIUM_DRIVER=virpipe VTEST_SOCKET_NAME=/tmp/.virgl_test MESA_GL_VERSION_OVERRIDE=4.3 MESA_GLSL_VERSION_OVERRIDE=430"
@@ -323,19 +356,45 @@ if command -v dbus-monitor >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1
     python3 /usr/local/bin/flux-notify-bridge >/dev/null 2>&1 &
     echo $! > /tmp/flux-notify.pid
 fi
+# The desktop's output, appended (programs writing at their own offsets would overwrite the
+# lines added after them)
+: > /tmp/flux-session.log
 # The desktop chosen at install: KDE Plasma (tuned once, no compositing: no GPU behind VNC), or Xfce
 if [ "$(cat /etc/flux-desktop 2>/dev/null)" = kde ]; then
     /usr/local/bin/flux-tune-kde >/tmp/flux-tune.log 2>&1 || true
-    KWIN_COMPOSE=N startplasma-x11 >/tmp/flux-session.log 2>&1 &
+    KWIN_COMPOSE=N startplasma-x11 >>/tmp/flux-session.log 2>&1 &
 else
     (/usr/local/bin/flux-tune-xfce >/tmp/flux-tune.log 2>&1 &)
-    startxfce4 >/tmp/flux-session.log 2>&1 &
+    # The session manager's own account of itself (~/.xfce4-session.verbose-log), for when it ends
+    XFSM_VERBOSE=1 startxfce4 >>/tmp/flux-session.log 2>&1 &
 fi
 echo $! > /tmp/flux-session.pid
-wait $!
-kill "$DBUS_SESSION_BUS_PID" "$(cat /tmp/flux-xvnc.pid)" "$(cat /tmp/flux-pulse.pid 2>/dev/null)" \
+rm -f /tmp/flux-stopping
+# Ready once the desktop itself is drawing (its desktop or panel running), not merely the X
+# server: Xfce or Plasma can take most of a minute under PRoot, a black screen till then
+rm -f /tmp/flux-ready
+(
+    i=0
+    while [ $i -lt 180 ]; do
+        for c in /proc/[0-9]*/comm; do
+            case "$(cat "$c" 2>/dev/null)" in xfdesktop|xfce4-panel|plasmashell) sleep 2; touch /tmp/flux-ready; exit 0 ;; esac
+        done
+        sleep 1; i=$((i + 1))
+    done
+    touch /tmp/flux-ready
+) &
+wait "$(cat /tmp/flux-session.pid)"
+ended=$?
+# What was still up when it ended: which part went first
+alive() { kill -0 "$1" 2>/dev/null && echo up || echo gone; }
+if [ -e /tmp/flux-stopping ]; then
+    echo "flux: the desktop was stopped" >> /tmp/flux-session.log
+else
+    echo "flux: the desktop ended by itself ($ended); X server $(alive "$(cat /tmp/flux-xvnc.pid)"), bus $(alive "$DBUS_SESSION_BUS_PID")" >> /tmp/flux-session.log
+fi
+rm -f /tmp/flux-stoppingkill "$DBUS_SESSION_BUS_PID" "$(cat /tmp/flux-xvnc.pid)" "$(cat /tmp/flux-pulse.pid 2>/dev/null)" \
     "$(cat /tmp/flux-notify.pid 2>/dev/null)" 2>/dev/null
-rm -f /tmp/flux-xvnc.pid /tmp/flux-session.pid /tmp/flux-pulse.pid /tmp/flux-notify.pid /tmp/flux-env
+rm -f /tmp/flux-xvnc.pid /tmp/flux-session.pid /tmp/flux-pulse.pid /tmp/flux-notify.pid /tmp/flux-env /tmp/flux-ready
 SESSION
 chmod 755 /usr/local/bin/flux-session
 

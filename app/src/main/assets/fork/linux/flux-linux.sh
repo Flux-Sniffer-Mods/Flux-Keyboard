@@ -20,12 +20,17 @@ mkdir -p "$BASE" "$PIDS"
 
 say() { echo "flux: $*"; }
 
-# PRoot copied beside the system (the shell may run what's here, not from the app's folder)
+# PRoot copied beside the system (the shell may run what's here, not from the app's folder).
+# Only when it changed, and through a new file: the running desktop's copy can't be written over
 proot_ready() {
     mkdir -p "$BASE/bin" "$BASE/tmp"
-    cp "$LIBDIR/libproot.so" "$BASE/bin/proot" && cp "$LIBDIR/libproot-loader.so" "$BASE/bin/loader" || return 1
-    chmod 755 "$BASE/bin/proot" "$BASE/bin/loader"
+    install_bin "$LIBDIR/libproot.so" "$BASE/bin/proot" && install_bin "$LIBDIR/libproot-loader.so" "$BASE/bin/loader" || return 1
     export PROOT_LOADER="$BASE/bin/loader" PROOT_TMP_DIR="$BASE/tmp"
+}
+
+install_bin() {
+    cmp -s "$1" "$2" 2>/dev/null && return 0
+    cp "$1" "$2.new" && chmod 755 "$2.new" && mv -f "$2.new" "$2"
 }
 
 # A command inside Linux, as root
@@ -113,7 +118,7 @@ gpu_start() {
     [ "${GPU:-0}" = 1 ] || return 0
     sock="$ROOTFS/tmp/.virgl_test"
     mkdir -p "$BASE/bin"
-    if ! { cp "$LIBDIR/libvirgl.so" "$BASE/bin/virgl" && chmod 755 "$BASE/bin/virgl"; }; then
+    if ! install_bin "$LIBDIR/libvirgl.so" "$BASE/bin/virgl"; then
         say "no GPU server here: drawing on the CPU"
         return 0
     fi
@@ -206,21 +211,37 @@ start() {
     phone_settings
     gpu_start
     say "starting"
-    if [ "$MODE" = proot ]; then
-        guest /usr/bin/env FLUX_GEOMETRY="$GEOMETRY" FLUX_PASSWORD="$PASSWORD" FLUX_MODE=proot FLUX_SCALE="${SCALE:-1.5}" /usr/local/bin/flux-session
-    else
-        guest /usr/bin/env FLUX_GEOMETRY="$GEOMETRY" FLUX_PASSWORD="$PASSWORD" FLUX_MODE=chroot FLUX_SCALE="${SCALE:-1.5}" \
-            /bin/su - flux -w FLUX_GEOMETRY,FLUX_PASSWORD,FLUX_MODE,FLUX_SCALE -c /usr/local/bin/flux-session
-        kill_chroot_procs
-        chroot_unmount
-    fi
+    # The desktop in a session of its own, its output (PRoot's warnings among it) in a file: not
+    # through this shell's connection to the app, which a frozen app stops reading (stalling
+    # every program) and a restarted or updated one closes (ending them)
+    rm -f "$ROOTFS/tmp/flux-ready"
+    setsid sh "$0" session < /dev/null > "$ROOTFS/tmp/flux-proot.log" 2>&1 &
+    pid=$!
+    # Said once the desktop is drawing: the app shows it from then
+    ( while kill -0 $pid 2>/dev/null && [ ! -e "$ROOTFS/tmp/flux-ready" ]; do sleep 1; done
+      [ -e "$ROOTFS/tmp/flux-ready" ] && say "desktop ready" ) &
+    wait $pid
+    [ "$MODE" = chroot ] && { kill_chroot_procs; chroot_unmount; }
     gpu_stop
     rm -f "$PIDS/start.pid"
     say "stopped"
 }
 
+# The desktop itself, run apart by start
+session() {
+    if [ "$MODE" = proot ]; then
+        proot_ready || exit 2
+        guest /usr/bin/env FLUX_GEOMETRY="$GEOMETRY" FLUX_PASSWORD="$PASSWORD" FLUX_MODE=proot FLUX_SCALE="${SCALE:-1.5}" /usr/local/bin/flux-session
+    else
+        guest /usr/bin/env FLUX_GEOMETRY="$GEOMETRY" FLUX_PASSWORD="$PASSWORD" FLUX_MODE=chroot FLUX_SCALE="${SCALE:-1.5}" \
+            /bin/su - flux -w FLUX_GEOMETRY,FLUX_PASSWORD,FLUX_MODE,FLUX_SCALE -c /usr/local/bin/flux-session
+    fi
+}
+
 # Ends the desktop: the VNC server first (the session follows it), then whatever's left
 stop() {
+    # So the session's log says it was asked to end
+    [ -f "$ROOTFS/tmp/flux-xvnc.pid" ] && : > "$ROOTFS/tmp/flux-stopping"
     for f in "$ROOTFS/tmp/flux-xvnc.pid" "$ROOTFS/tmp/flux-session.pid" "$ROOTFS/tmp/flux-pulse.pid"; do
         [ -f "$f" ] && kill "$(cat "$f")" 2>/dev/null
     done
@@ -300,10 +321,16 @@ run_app() {
     fi
 }
 
-# The ends of Linux's own logs: the VNC server's, the session's, sound's, the tuning's, the GPU's
+# The ends of Linux's own logs: the VNC server's, the session's and its bus's, sound's, the tuning's, the GPU's
 logs() {
-    for f in flux-xvnc.log flux-session.log flux-pulse.log flux-tune.log flux-gpu.log; do
-        [ -s "$ROOTFS/tmp/$f" ] && { echo "== $f"; tail -n 12 "$ROOTFS/tmp/$f"; }
+    for f in flux-session.log flux-xvnc.log flux-dbus.log flux-pulse.log flux-tune.log flux-gpu.log flux-proot.log; do
+        n=12; [ "$f" = flux-session.log ] && n=40
+        # PRoot's harmless, constant warnings left out
+        [ -s "$ROOTFS/tmp/$f" ] && { echo "== $f"; grep -v 'ptrace(PEEKDATA)' "$ROOTFS/tmp/$f" | tail -n $n; }
+    done
+    # The session manager's own log (root's under PRoot, flux's in a chroot)
+    for f in "$ROOTFS/root/.xfce4-session.verbose-log" "$ROOTFS/home/flux/.xfce4-session.verbose-log"; do
+        [ -s "$f" ] && { echo "== xfce4-session"; tail -n 30 "$f"; }
     done
     return 0
 }
@@ -326,6 +353,7 @@ case "${1:-}" in
     apps) apps ;;
     icons) shift; icons "$@" ;;
     launch) launch ;;
+    session) session ;;
     run-app) run_app ;;
     notifications) notifications ;;
     logs) logs ;;

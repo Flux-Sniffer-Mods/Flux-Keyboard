@@ -51,6 +51,12 @@ internal fun CrashLogRow() {
                 val app = it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
                 // When the app stopped answering: where its threads were, which only the app can read
                 val traces = anrTraces(context)
+                // The Linux desktop: how it's set up, its last start and Linux's own logs
+                val desktop = context.getExternalFilesDir(null)?.let { dir ->
+                    runCatching {
+                        java.io.File(dir, "desktop.txt").apply { writeText(it.palsoftware.pastiera.linux.LinuxDesktop.report(context)) }
+                    }.getOrNull()
+                }
                 it.palsoftware.pastiera.adb.AdbShell.run(
                     "f='$file'; mkdir -p \"\${f%/*}\"; { " +
                         // Why Android last ended the app: a crash, its web page's renderer dying, memory running low
@@ -89,6 +95,7 @@ internal fun CrashLogRow() {
                         // Flux Keyboard's own record of gaming mode, streaming and game launches (the phone's turns over in seconds)
                         "echo '== gaming and streaming =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${it.palsoftware.pastiera.FluxLog.FILE_NAME}'; " +
                         (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +
+                        (if (desktop != null) "echo '== desktop =='; cat '${desktop.path}'; " else "") +
                         // Everything through a pipe: Android's services can't write into a file in Download
                         "} 2>&1 | cat > \"\$f\"; echo ok",
                     15_000

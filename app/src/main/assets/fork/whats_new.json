@@ -4,6 +4,18 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Desktop: shown once Xfce or Plasma is actually drawing, with \"starting\" until then, instead of a black screen for up to a minute. It keeps running when the app is in the background, restarted or updated, and programs open from the phone while it runs (they didn't without root). Its logs now say which part ended a session.",
+      "after": "202610311632"
+    },
+    {
+      "text": "Desktop without root: fixed the desktop closing seconds after it appeared. Android doesn't let Linux make socket files without root, so its session bus and sound couldn't start; both now run over 127.0.0.1, proven by a cookie only Linux's user can read. If the desktop stops on its own, the viewer shows Linux's logs, and the crash log includes the desktop's last start.",
+      "after": "202610230741"
+    },
+    {
+      "text": "Desktop: fixed a black desktop with \"Unable to contact settings server\": Linux's session bus is now started at a fixed address, and if it can't start, the desktop starts its own instead of being given an empty one.",
+      "after": "202610230403"
+    },
+    {
       "text": "Desktop: programs in Linux draw on the phone's GPU (virglrenderer built into the app, on Android's own graphics driver), with or without root; the desktop itself stays on the CPU, which suits it better. On the Desktop page, from the next start. Also, starting after an update no longer reinstalls the packages unless they changed.",
       "after": "202610230403"
     },
