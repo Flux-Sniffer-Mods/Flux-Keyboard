@@ -32,6 +32,8 @@ object RootShell {
     fun granted(): Boolean = runCatching {
         val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "id -u"))
         val finished = process.waitFor(15, TimeUnit.SECONDS)
+        // Unanswered (the root manager's prompt left alone): not left waiting behind
+        if (!finished) process.destroy()
         finished && process.exitValue() == 0 && process.inputStream.bufferedReader().readText().trim() == "0"
     }.getOrDefault(false)
 

@@ -13,6 +13,7 @@
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinazione inviata come scorciatoia dell’app</item>
         <item quantity="other">%d combinazioni inviate come scorciatoie dell’app</item>
+        <item quantity="many">%d combinazioni inviate come scorciatoie dell’app</item>
     </plurals>
     <string name="app_shortcuts_add_app">Aggiungi un’app</string>
     <string name="app_shortcuts_research_note">Le scorciatoie da tastiera vengono solo da ciò che ogni app documenta per Android (o include nel suo codice sorgente); la maggior parte non ne documenta, quindi i loro preset sono suggerimenti. Le app sono le prime 100 di Google Play in Social e le prime 10 di ogni altra categoria principale.</string>
@@ -61,10 +62,12 @@
     <plurals name="app_shortcuts_suggested_count">
         <item quantity="one">%d scorciatoia suggerita</item>
         <item quantity="other">%d scorciatoie suggerite</item>
+        <item quantity="many">%d scorciatoie suggerite</item>
     </plurals>
     <plurals name="app_shortcuts_not_installed_count">
         <item quantity="one">Ancora %d app con un preset</item>
         <item quantity="other">Ancora %d app con un preset</item>
+        <item quantity="many">Ancora %d app con un preset</item>
     </plurals>
     <string name="app_shortcuts_show_not_installed">Mostra le app non installate</string>
     <string name="app_shortcuts_app_suggested_only">Questa app non documenta scorciatoie da tastiera. Le scorciatoie suggerite aprono sue schermate; ognuna è usata solo se l’app la accetta.</string>

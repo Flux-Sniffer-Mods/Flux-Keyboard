@@ -107,10 +107,12 @@
     <plurals name="alt_key_editor_key_count">
         <item quantity="one">%d tasto</item>
         <item quantity="other">%d tasti</item>
+        <item quantity="many">%d tasti</item>
     </plurals>
     <plurals name="alt_key_editor_profile_count">
         <item quantity="one">%d profilo personalizzato</item>
         <item quantity="other">%d profili personalizzati</item>
+        <item quantity="many">%d profili personalizzati</item>
     </plurals>
     <string name="clicks_all_key_mappings_ready_description">I tuoi caratteri Alt e SYM per ogni tasto, in un profilo SYM del dispositivo personalizzato. Le scorciatoie Ctrl sono in Scorciatoie da tastiera.</string>
     <string name="alt_key_editor_no_profiles">Ancora nessun profilo. Creane uno qui sopra.</string>
@@ -220,5 +222,6 @@
     <plurals name="recommended_settings_differ">
         <item quantity="one">%d impostazione è diversa da quelle consigliate. Applicando la sostituisci, insieme a mappature e varianti consigliate. Fai prima un backup se potresti volerla recuperare.</item>
         <item quantity="other">%d impostazioni sono diverse da quelle consigliate. Applicando le sostituisci, insieme a mappature e varianti consigliate. Fai prima un backup se potresti volerle recuperare.</item>
+        <item quantity="many">%d impostazioni sono diverse da quelle consigliate. Applicando le sostituisci, insieme a mappature e varianti consigliate. Fai prima un backup se potresti volerle recuperare.</item>
     </plurals>
 </resources>

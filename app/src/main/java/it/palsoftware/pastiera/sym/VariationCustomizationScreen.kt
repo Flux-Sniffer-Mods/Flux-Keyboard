@@ -839,7 +839,7 @@ private fun VariationRow(
         val currentStartX = startIndex * (boxSizePx + boxSpacingPx) + dragOffsetX
         val targetIndex = ((currentStartX + boxSizePx / 2) / (boxSizePx + boxSpacingPx))
             .toInt()
-            .coerceIn(0, totalSlots - 1)
+            .coerceIn(0, maxOf(0, totalSlots - 1))
         
         dropTargetIndex = targetIndex
     }
