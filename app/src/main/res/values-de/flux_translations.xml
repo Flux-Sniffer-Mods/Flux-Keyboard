@@ -1737,7 +1737,7 @@
     <string name="linux_distro_debian_description">Stabil und leicht, mit Firefox ESR.</string>
     <string name="linux_distro_ubuntu_description">Neuere Pakete, mit dem Browser Falkon (Firefox braucht unter Ubuntu Snap, das hier nicht läuft).</string>
     <string name="linux_desktop_xfce_description">Leicht und schnell: am besten für PRoot.</string>
-    <string name="linux_desktop_kde_description">Umfangreicher und ausgefeilter, aber schwerer (etwa 1 GB mehr): am besten mit Root.</string>
+    <string name="linux_desktop_kde_description">Für Touch gemacht: große Bedienelemente, eine Leiste, die sich ausblendet, das Telefon-Widget, abgerundete Ecken. Schwerer (etwa 1 GB mehr): am besten mit Root.</string>
     <string name="linux_scale">Größe von allem</string>
     <string name="linux_scale_hint">Ab dem nächsten Start. Größer passt zum Telefon, 1× zu einem großen Bildschirm.</string>
     <string name="linux_notifications_channel">Linux-Benachrichtigungen</string>
@@ -1752,4 +1752,7 @@
     <string name="update_check_every_2">Alle 2 Stunden</string>
     <string name="update_check_every_6">Alle 6 Stunden</string>
     <string name="update_check_every_24">Einmal am Tag</string>
+    <string name="linux_desktop_switch_hint">Ab dem nächsten Start. Ein noch nicht genutzter Desktop wird zuerst neben dem anderen installiert, was einige Minuten dauert.</string>
+    <string name="linux_effects">Fenstereffekte</string>
+    <string name="linux_effects_hint">Ab dem nächsten Start. Abgerundete Ecken, sanftes Scrollen und Animationen, auf der CPU gezeichnet. Schalte sie aus, wenn der Desktop träge wirkt.</string>
 </resources>

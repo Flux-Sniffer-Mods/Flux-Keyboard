@@ -2281,7 +2281,7 @@
     <string name="linux_distro_debian_description">Стабильный и лёгкий, с Firefox ESR.</string>
     <string name="linux_distro_ubuntu_description">Более новые пакеты, с браузером Falkon (Firefox в Ubuntu требует Snap, который здесь не работает).</string>
     <string name="linux_desktop_xfce_description">Лёгкий и быстрый: лучше всего для PRoot.</string>
-    <string name="linux_desktop_kde_description">Полнее и аккуратнее, но тяжелее (примерно на 1 ГБ больше): лучше с root.</string>
+    <string name="linux_desktop_kde_description">Создан для касаний: крупные элементы управления, скрывающаяся панель, виджет «Телефон», скруглённые углы. Тяжелее (примерно на 1 ГБ больше): лучше всего с root.</string>
     <string name="linux_scale">Размер всего</string>
     <string name="linux_scale_hint">Со следующего запуска. Крупнее подходит телефону, 1× — большому экрану.</string>
     <string name="linux_notifications_channel">Уведомления Linux</string>
@@ -2296,4 +2296,7 @@
     <string name="update_check_every_2">Каждые 2 часа</string>
     <string name="update_check_every_6">Каждые 6 часов</string>
     <string name="update_check_every_24">Раз в день</string>
+    <string name="linux_desktop_switch_hint">Со следующего запуска. Рабочий стол, который ещё не использовался, сначала устанавливается рядом с другим, это занимает несколько минут.</string>
+    <string name="linux_effects">Эффекты окон</string>
+    <string name="linux_effects_hint">Со следующего запуска. Скруглённые углы, плавная прокрутка и анимации, отрисованные на CPU. Отключите их, если рабочий стол кажется медленным.</string>
 </resources>

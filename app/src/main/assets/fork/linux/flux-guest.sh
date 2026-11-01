@@ -255,6 +255,13 @@ echo "$version" > "$stamp"
 TUNE
 chmod 755 /usr/local/bin/flux-tune-kde
 
+# A menu entry's name and description in every language Linux's words have
+localise() {
+    n=$(sed -n 's/^Name=//p' "$1"); c=$(sed -n 's/^Comment=//p' "$1")
+    awk -F '\t' -v n="$n" -v c="$c" '$2 == n { print "Name[" $1 "]=" $3 } $2 == c { print "Comment[" $1 "]=" $3 }' \
+        /usr/local/share/flux/words.tsv >> "$1" 2>/dev/null || true
+}
+
 # ---- KDE fitted to the phone's screen and touch, after Titan-2-Elite-Debian-Chroot: the panel and
 # title bars clear the camera cutout and the rounded corners (sizes from /tmp/flux-display.conf,
 # which the session writes from what the app measured), the Phone widget, the phone's lock ----
@@ -637,6 +644,282 @@ mkdir -p /etc/xdg/autostart
 printf '[Desktop Entry]\nType=Application\nName=Flux panel\nExec=/usr/bin/python3 /usr/local/bin/flux-display\nOnlyShowIn=KDE;\nNoDisplay=true\n' \
     > /etc/xdg/autostart/flux-display.desktop
 
+# Linux's side in the phone's language: language, English, translation (the Phone widget, the reset
+# dialog and the menu's entries read it)
+mkdir -p /usr/local/share/flux
+cat > /usr/local/share/flux/words.tsv <<'WORDS'
+de	Phone	Telefon
+el	Phone	Τηλέφωνο
+es	Phone	Teléfono
+fr	Phone	Téléphone
+hy	Phone	Հեռախոս
+it	Phone	Telefono
+pl	Phone	Telefon
+ru	Phone	Телефон
+uk	Phone	Телефон
+vi	Phone	Điện thoại
+de	Battery	Akku
+el	Battery	Μπαταρία
+es	Battery	Batería
+fr	Battery	Batterie
+hy	Battery	Մարտկոց
+it	Battery	Batteria
+pl	Battery	Bateria
+ru	Battery	Батарея
+uk	Battery	Батарея
+vi	Battery	Pin
+de	charging	wird geladen
+el	charging	φορτίζει
+es	charging	cargando
+fr	charging	en charge
+hy	charging	լիցքավորվում է
+it	charging	in carica
+pl	charging	ładowanie
+ru	charging	заряжается
+uk	charging	заряджається
+vi	charging	đang sạc
+de	Connected to	Verbunden mit
+el	Connected to	Συνδέθηκε στο
+es	Connected to	Conectado a
+fr	Connected to	Connecté à
+hy	Connected to	Միացված է՝
+it	Connected to	Connesso a
+pl	Connected to	Połączono z
+ru	Connected to	Подключено к
+uk	Connected to	Підключено до
+vi	Connected to	Đã kết nối với
+de	Not connected	Nicht verbunden
+el	Not connected	Δεν έχει συνδεθεί
+es	Not connected	Sin conexión
+fr	Not connected	Non connecté
+hy	Not connected	Միացված չէ
+it	Not connected	Non connesso
+pl	Not connected	Brak połączenia
+ru	Not connected	Нет подключения
+uk	Not connected	Не підключено
+vi	Not connected	Chưa kết nối
+de	connected	verbunden
+el	connected	συνδέθηκε
+es	connected	conectado
+fr	connected	connecté
+hy	connected	միացված է
+it	connected	connesso
+pl	connected	połączono
+ru	connected	подключено
+uk	connected	підключено
+vi	connected	đã kết nối
+de	Password for	Passwort für
+el	Password for	Κωδικός για
+es	Password for	Contraseña de
+fr	Password for	Mot de passe pour
+hy	Password for	Գաղտնաբառ՝
+it	Password for	Password per
+pl	Password for	Hasło do
+ru	Password for	Пароль для
+uk	Password for	Пароль для
+vi	Password for	Mật khẩu cho
+de	Connect	Verbinden
+el	Connect	Σύνδεση
+es	Connect	Conectar
+fr	Connect	Se connecter
+hy	Connect	Միանալ
+it	Connect	Connetti
+pl	Connect	Połącz
+ru	Connect	Подключить
+uk	Connect	Підключити
+vi	Connect	Kết nối
+de	Forget	Entfernen
+el	Forget	Διαγραφή
+es	Forget	Olvidar
+fr	Forget	Oublier
+hy	Forget	Մոռանալ
+it	Forget	Dimentica
+pl	Forget	Zapomnij
+ru	Forget	Забыть
+uk	Forget	Забути
+vi	Forget	Quên
+de	Mobile	Mobilfunk
+el	Mobile	Κινητή
+es	Mobile	Móvil
+fr	Mobile	Mobile
+hy	Mobile	Բջջային
+it	Mobile	Rete mobile
+pl	Mobile	Sieć komórkowa
+ru	Mobile	Мобильная сеть
+uk	Mobile	Мобільна мережа
+vi	Mobile	Di động
+de	Mobile data	Mobile Daten
+el	Mobile data	Δεδομένα κινητής
+es	Mobile data	Datos móviles
+fr	Mobile data	Données mobiles
+hy	Mobile data	Բջջային ինտերնետ
+it	Mobile data	Dati mobili
+pl	Mobile data	Dane mobilne
+ru	Mobile data	Мобильные данные
+uk	Mobile data	Мобільні дані
+vi	Mobile data	Dữ liệu di động
+de	Airplane mode	Flugmodus
+el	Airplane mode	Λειτουργία πτήσης
+es	Airplane mode	Modo avión
+fr	Airplane mode	Mode avion
+hy	Airplane mode	Ավիառեժիմ
+it	Airplane mode	Modalità aereo
+pl	Airplane mode	Tryb samolotowy
+ru	Airplane mode	Режим полёта
+uk	Airplane mode	Режим польоту
+vi	Airplane mode	Chế độ máy bay
+de	Do not disturb	Bitte nicht stören
+el	Do not disturb	Μην ενοχλείτε
+es	Do not disturb	No molestar
+fr	Do not disturb	Ne pas déranger
+hy	Do not disturb	Չանհանգստացնել
+it	Do not disturb	Non disturbare
+pl	Do not disturb	Nie przeszkadzać
+ru	Do not disturb	Не беспокоить
+uk	Do not disturb	Не турбувати
+vi	Do not disturb	Không làm phiền
+de	Battery saver	Energiesparmodus
+el	Battery saver	Εξοικονόμηση μπαταρίας
+es	Battery saver	Ahorro de batería
+fr	Battery saver	Économiseur de batterie
+hy	Battery saver	Մարտկոցի տնտեսում
+it	Battery saver	Risparmio energetico
+pl	Battery saver	Oszczędzanie baterii
+ru	Battery saver	Экономия заряда
+uk	Battery saver	Економія заряду
+vi	Battery saver	Tiết kiệm pin
+de	Display and sound	Display und Ton
+el	Display and sound	Οθόνη και ήχος
+es	Display and sound	Pantalla y sonido
+fr	Display and sound	Affichage et son
+hy	Display and sound	Էկրան և ձայն
+it	Display and sound	Display e suono
+pl	Display and sound	Ekran i dźwięk
+ru	Display and sound	Экран и звук
+uk	Display and sound	Екран і звук
+vi	Display and sound	Màn hình và âm thanh
+de	Lock	Sperren
+el	Lock	Κλείδωμα
+es	Lock	Bloquear
+fr	Lock	Verrouiller
+hy	Lock	Կողպել
+it	Lock	Blocca
+pl	Lock	Zablokuj
+ru	Lock	Заблокировать
+uk	Lock	Заблокувати
+vi	Lock	Khóa
+de	Notifications	Benachrichtigungen
+el	Notifications	Ειδοποιήσεις
+es	Notifications	Notificaciones
+fr	Notifications	Notifications
+hy	Notifications	Ծանուցումներ
+it	Notifications	Notifiche
+pl	Notifications	Powiadomienia
+ru	Notifications	Уведомления
+uk	Notifications	Сповіщення
+vi	Notifications	Thông báo
+de	Android settings	Android-Einstellungen
+el	Android settings	Ρυθμίσεις Android
+es	Android settings	Ajustes de Android
+fr	Android settings	Paramètres Android
+hy	Android settings	Android-ի կարգավորումներ
+it	Android settings	Impostazioni Android
+pl	Android settings	Ustawienia Androida
+ru	Android settings	Настройки Android
+uk	Android settings	Налаштування Android
+vi	Android settings	Cài đặt Android
+de	Close desktop	Desktop schließen
+el	Close desktop	Κλείσιμο επιφάνειας εργασίας
+es	Close desktop	Cerrar el escritorio
+fr	Close desktop	Fermer le bureau
+hy	Close desktop	Փակել աշխատասեղանը
+it	Close desktop	Chiudi il desktop
+pl	Close desktop	Zamknij pulpit
+ru	Close desktop	Закрыть рабочий стол
+uk	Close desktop	Закрити робочий стіл
+vi	Close desktop	Đóng màn hình nền
+de	End the desktop and go back to the phone	Den Desktop beenden und zum Telefon zurückkehren
+el	End the desktop and go back to the phone	Τερματισμός της επιφάνειας εργασίας και επιστροφή στο τηλέφωνο
+es	End the desktop and go back to the phone	Terminar el escritorio y volver al teléfono
+fr	End the desktop and go back to the phone	Terminer le bureau et revenir au téléphone
+hy	End the desktop and go back to the phone	Ավարտել աշխատասեղանը և վերադառնալ հեռախոսին
+it	End the desktop and go back to the phone	Termina il desktop e torna al telefono
+pl	End the desktop and go back to the phone	Zakończ pulpit i wróć do telefonu
+ru	End the desktop and go back to the phone	Завершить рабочий стол и вернуться к телефону
+uk	End the desktop and go back to the phone	Завершити робочий стіл і повернутися до телефона
+vi	End the desktop and go back to the phone	Kết thúc màn hình nền và quay lại điện thoại
+de	Reset desktop settings	Desktop-Einstellungen zurücksetzen
+el	Reset desktop settings	Επαναφορά ρυθμίσεων επιφάνειας εργασίας
+es	Reset desktop settings	Restablecer los ajustes del escritorio
+fr	Reset desktop settings	Réinitialiser les réglages du bureau
+hy	Reset desktop settings	Վերակայել աշխատասեղանի կարգավորումները
+it	Reset desktop settings	Ripristina le impostazioni del desktop
+pl	Reset desktop settings	Przywróć ustawienia pulpitu
+ru	Reset desktop settings	Сбросить настройки рабочего стола
+uk	Reset desktop settings	Скинути налаштування робочого столу
+vi	Reset desktop settings	Đặt lại cài đặt màn hình nền
+de	Panel layout, window look, touch tuning	Leistenaufbau, Fensteroptik, Touch-Anpassung
+el	Panel layout, window look, touch tuning	Διάταξη πίνακα, εμφάνιση παραθύρων, ρύθμιση αφής
+es	Panel layout, window look, touch tuning	Disposición del panel, aspecto de las ventanas, ajuste táctil
+fr	Panel layout, window look, touch tuning	Disposition du panneau, apparence des fenêtres, réglage tactile
+hy	Panel layout, window look, touch tuning	Վահանակի դասավորություն, պատուհանների տեսք, հպման կարգավորում
+it	Panel layout, window look, touch tuning	Disposizione del pannello, aspetto delle finestre, regolazione touch
+pl	Panel layout, window look, touch tuning	Układ panelu, wygląd okien, dostrojenie dotyku
+ru	Panel layout, window look, touch tuning	Расположение панели, вид окон, настройка касаний
+uk	Panel layout, window look, touch tuning	Розташування панелі, вигляд вікон, налаштування дотику
+vi	Panel layout, window look, touch tuning	Bố cục bảng, giao diện cửa sổ, tinh chỉnh cảm ứng
+de	What should be put back?	Was soll zurückgesetzt werden?
+el	What should be put back?	Τι να επαναφερθεί;
+es	What should be put back?	¿Qué hay que restablecer?
+fr	What should be put back?	Que faut-il rétablir ?
+hy	What should be put back?	Ի՞նչը վերականգնել
+it	What should be put back?	Cosa va ripristinato?
+pl	What should be put back?	Co przywrócić?
+ru	What should be put back?	Что вернуть?
+uk	What should be put back?	Що повернути?
+vi	What should be put back?	Khôi phục những gì?
+de	Panel layout	Leistenaufbau
+el	Panel layout	Διάταξη πίνακα
+es	Panel layout	Disposición del panel
+fr	Panel layout	Disposition du panneau
+hy	Panel layout	Վահանակի դասավորություն
+it	Panel layout	Disposizione del pannello
+pl	Panel layout	Układ panelu
+ru	Panel layout	Расположение панели
+uk	Panel layout	Розташування панелі
+vi	Panel layout	Bố cục bảng
+de	Window look and buttons	Fensteroptik und Schaltflächen
+el	Window look and buttons	Εμφάνιση και κουμπιά παραθύρων
+es	Window look and buttons	Aspecto y botones de las ventanas
+fr	Window look and buttons	Apparence et boutons des fenêtres
+hy	Window look and buttons	Պատուհանների տեսք և կոճակներ
+it	Window look and buttons	Aspetto e pulsanti delle finestre
+pl	Window look and buttons	Wygląd i przyciski okien
+ru	Window look and buttons	Вид и кнопки окон
+uk	Window look and buttons	Вигляд і кнопки вікон
+vi	Window look and buttons	Giao diện và nút cửa sổ
+de	Touch tuning (next start)	Touch-Anpassung (beim nächsten Start)
+el	Touch tuning (next start)	Ρύθμιση αφής (στην επόμενη εκκίνηση)
+es	Touch tuning (next start)	Ajuste táctil (en el próximo inicio)
+fr	Touch tuning (next start)	Réglage tactile (au prochain démarrage)
+hy	Touch tuning (next start)	Հպման կարգավորում (հաջորդ մեկնարկից)
+it	Touch tuning (next start)	Regolazione touch (al prossimo avvio)
+pl	Touch tuning (next start)	Dostrojenie dotyku (przy następnym uruchomieniu)
+ru	Touch tuning (next start)	Настройка касаний (со следующего запуска)
+uk	Touch tuning (next start)	Налаштування дотику (з наступного запуску)
+vi	Touch tuning (next start)	Tinh chỉnh cảm ứng (từ lần khởi động sau)
+de	Restart Plasma	Plasma neu starten
+el	Restart Plasma	Επανεκκίνηση του Plasma
+es	Restart Plasma	Reiniciar Plasma
+fr	Restart Plasma	Redémarrer Plasma
+hy	Restart Plasma	Վերագործարկել Plasma-ն
+it	Restart Plasma	Riavvia Plasma
+pl	Restart Plasma	Uruchom ponownie Plasmę
+ru	Restart Plasma	Перезапустить Plasma
+uk	Restart Plasma	Перезапустити Plasma
+vi	Restart Plasma	Khởi động lại Plasma
+WORDS
+
 # The Phone widget, and its way of asking the phone (the app's shell does it)
 cat > /usr/local/bin/flux-android <<'ASK'
 #!/bin/sh
@@ -653,6 +936,16 @@ cat > "$widget/metadata.json" <<'META'
     "KPlugin": {
         "Id": "org.flux.phonestatus",
         "Name": "Phone",
+        "Name[de]": "Telefon",
+        "Name[el]": "Τηλέφωνο",
+        "Name[es]": "Teléfono",
+        "Name[fr]": "Téléphone",
+        "Name[hy]": "Հեռախոս",
+        "Name[it]": "Telefono",
+        "Name[pl]": "Telefon",
+        "Name[ru]": "Телефон",
+        "Name[uk]": "Телефон",
+        "Name[vi]": "Điện thoại",
         "Description": "The phone's battery, Wi-Fi, signal and notifications, and its switches",
         "Icon": "phone",
         "Category": "System Information",
@@ -689,12 +982,21 @@ PlasmoidItem {
     property int brightLocal: -1
     Timer { id: settle; interval: 2500; onTriggered: { root.volLocal = -1; root.brightLocal = -1; } }
 
-    // The phone's language where there's a translation, else English
-    readonly property var words: ({})
-    function t(s) {
-        var lang = Qt.locale().name.split("_")[0];
-        var w = words[lang];
-        return (w && w[s]) ? w[s] : s;
+    // The phone's language where there's a translation (/usr/local/share/flux/words.tsv), else English
+    property var words: ({})
+    function t(s) { return words[s] || s; }
+    P5Support.DataSource {
+        engine: "executable"
+        connectedSources: ["cat /usr/local/share/flux/words.tsv 2>/dev/null"]
+        onNewData: (source, data) => {
+            var lang = Qt.locale().name.split("_")[0], w = {};
+            (data.stdout || "").split("\n").forEach(function (l) {
+                var p = l.split("\t");
+                if (p.length == 3 && p[0] == lang) w[p[1]] = p[2];
+            });
+            root.words = w;
+            disconnectSource(source);
+        }
     }
 
     // Networks nearby looked for afresh each time it opens
@@ -896,6 +1198,8 @@ cat > /usr/local/bin/flux-reset <<'RESET'
 #!/bin/sh
 # flux-reset [panel|windows|tuning|session ...]: with none, ticked in a list
 [ -f /tmp/flux-display.conf ] && . /tmp/flux-display.conf
+# In the phone's language where there's a translation
+word() { awk -F '\t' -v l="${LANG%%_*}" -v w="$1" '$1 == l && $2 == w { print $3; f = 1; exit } END { if (!f) print w }' /usr/local/share/flux/words.tsv 2>/dev/null || echo "$1"; }
 S=${DISPLAY_SCALE:-1.5}; W=${SCREEN_W:-1080}; H=${SCREEN_H:-1200}
 sel="$*"
 if [ -z "$sel" ]; then
@@ -904,9 +1208,9 @@ if [ -z "$sel" ]; then
     dh=$(awk -v h="$H" -v s="$S" 'BEGIN { printf "%d", h / s * 0.62 }')
     dx=$(awk -v w="$W" -v s="$S" -v d="$dw" 'BEGIN { x = (w / s - d) / 2; if (x < 0) x = 0; printf "%d", x }')
     dy=$(awk -v i="${TOP_INSET:-0}" -v s="$S" 'BEGIN { printf "%d", i / s + 24 }')
-    sel=$(kdialog --geometry "${dw}x${dh}+${dx}+${dy}" --title "Reset desktop settings" --checklist "What should be put back?" \
-        panel "Panel layout" off windows "Window look and buttons" off tuning "Touch tuning (next start)" off \
-        session "Restart Plasma" off 2>/dev/null) || exit 0
+    sel=$(kdialog --geometry "${dw}x${dh}+${dx}+${dy}" --title "$(word 'Reset desktop settings')" --checklist "$(word 'What should be put back?')" \
+        panel "$(word 'Panel layout')" off windows "$(word 'Window look and buttons')" off \
+        tuning "$(word 'Touch tuning (next start)')" off session "$(word 'Restart Plasma')" off 2>/dev/null) || exit 0
 fi
 restart=
 for w in $(printf '%s' "$sel" | tr -d '"'); do
@@ -925,6 +1229,7 @@ RESET
 chmod 755 /usr/local/bin/flux-reset
 printf '[Desktop Entry]\nType=Application\nName=Reset desktop settings\nComment=Panel layout, window look, touch tuning\nExec=/usr/local/bin/flux-reset\nIcon=view-refresh\nCategories=System;Settings;\nOnlyShowIn=KDE;\n' \
     > /usr/share/applications/flux-reset.desktop
+localise /usr/share/applications/flux-reset.desktop
 
 # Firefox: touch scrolling arrives as wheel steps, so each moves a fair way, smoothly; and
 # userChrome.css allowed (the tab bar's margins)
@@ -951,6 +1256,7 @@ CLOSE
 chmod 755 /usr/local/bin/flux-close
 printf '[Desktop Entry]\nType=Application\nName=Close desktop\nComment=End the desktop and go back to the phone\nExec=/usr/local/bin/flux-close\nIcon=system-log-out\nCategories=System;\n' \
     > /usr/share/applications/flux-close.desktop
+localise /usr/share/applications/flux-close.desktop
 
 # ---- Xfce tuning: window borders and panel to touch, once, as the session starts ----
 cat > /usr/local/bin/flux-tune-xfce <<'TUNE'

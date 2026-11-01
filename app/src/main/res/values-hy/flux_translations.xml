@@ -2269,7 +2269,7 @@
     <string name="linux_distro_debian_description">Կայուն և թեթև, Firefox ESR-ով։</string>
     <string name="linux_distro_ubuntu_description">Ավելի նոր փաթեթներ, Falkon դիտարկիչով (Ubuntu-ի Firefox-ին Snap է պետք, որն այստեղ չի աշխատում)։</string>
     <string name="linux_desktop_xfce_description">Թեթև և արագ․ լավագույնը PRoot-ի համար։</string>
-    <string name="linux_desktop_kde_description">Ավելի ամբողջական և մշակված, բայց ավելի ծանր (մոտ 1 ԳԲ ավելի)․ լավագույնը root-ով։</string>
+    <string name="linux_desktop_kde_description">Ստեղծված է հպման համար՝ մեծ կառավարներ, թաքնվող վահանակ, Հեռախոս վիջեթը, կլորացված անկյուններ։ Ավելի ծանր է (մոտ 1 ԳԲ ավելի)՝ լավագույնը root-ով։</string>
     <string name="linux_scale">Ամեն ինչի չափը</string>
     <string name="linux_scale_hint">Հաջորդ մեկնարկից։ Ավելի մեծը հարմար է հեռախոսին, 1×-ը՝ մեծ էկրանին։</string>
     <string name="linux_notifications_channel">Linux-ի ծանուցումներ</string>
@@ -2284,4 +2284,7 @@
     <string name="update_check_every_2">2 ժամը մեկ</string>
     <string name="update_check_every_6">6 ժամը մեկ</string>
     <string name="update_check_every_24">Օրը մեկ անգամ</string>
+    <string name="linux_desktop_switch_hint">Հաջորդ մեկնարկից։ Դեռ չօգտագործված աշխատասեղանը նախ տեղադրվում է մյուսի կողքին, ինչը մի քանի րոպե է տևում։</string>
+    <string name="linux_effects">Պատուհանների էֆեկտներ</string>
+    <string name="linux_effects_hint">Հաջորդ մեկնարկից։ Կլորացված անկյուններ, սահուն ոլորում և անիմացիաներ՝ գծված CPU-ով։ Անջատեք դրանք, եթե աշխատասեղանը դանդաղ է թվում։</string>
 </resources>

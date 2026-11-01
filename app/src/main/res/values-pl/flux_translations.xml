@@ -2281,7 +2281,7 @@
     <string name="linux_distro_debian_description">Stabilny i lekki, z Firefoksem ESR.</string>
     <string name="linux_distro_ubuntu_description">Nowsze pakiety, z przeglądarką Falkon (Firefox w Ubuntu wymaga Snapa, który tu nie działa).</string>
     <string name="linux_desktop_xfce_description">Lekki i szybki: najlepszy dla PRoot.</string>
-    <string name="linux_desktop_kde_description">Pełniejszy i bardziej dopracowany, ale cięższy (około 1 GB więcej): najlepszy z rootem.</string>
+    <string name="linux_desktop_kde_description">Stworzony do dotyku: duże elementy sterujące, chowający się panel, widżet Telefon, zaokrąglone rogi. Cięższy (około 1 GB więcej): najlepiej z rootem.</string>
     <string name="linux_scale">Rozmiar wszystkiego</string>
     <string name="linux_scale_hint">Od następnego uruchomienia. Większy pasuje do telefonu, 1× do dużego ekranu.</string>
     <string name="linux_notifications_channel">Powiadomienia Linuksa</string>
@@ -2296,4 +2296,7 @@
     <string name="update_check_every_2">Co 2 godziny</string>
     <string name="update_check_every_6">Co 6 godzin</string>
     <string name="update_check_every_24">Raz dziennie</string>
+    <string name="linux_desktop_switch_hint">Od następnego uruchomienia. Pulpit, którego jeszcze nie używano, najpierw instaluje się obok drugiego, co trwa kilka minut.</string>
+    <string name="linux_effects">Efekty okien</string>
+    <string name="linux_effects_hint">Od następnego uruchomienia. Zaokrąglone rogi, płynne przewijanie i animacje, rysowane na CPU. Wyłącz je, jeśli pulpit działa wolno.</string>
 </resources>

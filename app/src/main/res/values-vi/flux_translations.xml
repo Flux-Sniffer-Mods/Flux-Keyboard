@@ -2263,7 +2263,7 @@
     <string name="linux_distro_debian_description">Ổn định và nhẹ, có Firefox ESR.</string>
     <string name="linux_distro_ubuntu_description">Gói mới hơn, có trình duyệt Falkon (Firefox của Ubuntu cần Snap, thứ không chạy được ở đây).</string>
     <string name="linux_desktop_xfce_description">Nhẹ và nhanh: hợp nhất với PRoot.</string>
-    <string name="linux_desktop_kde_description">Đầy đủ và trau chuốt hơn nhưng nặng hơn (thêm khoảng 1 GB): tốt nhất khi có root.</string>
+    <string name="linux_desktop_kde_description">Dành cho cảm ứng: điều khiển lớn, bảng tự ẩn, tiện ích Điện thoại, góc bo tròn. Nặng hơn (thêm khoảng 1 GB): tốt nhất khi có root.</string>
     <string name="linux_scale">Kích thước mọi thứ</string>
     <string name="linux_scale_hint">Từ lần khởi động sau. Lớn hơn hợp với điện thoại; 1× hợp với màn hình lớn.</string>
     <string name="linux_notifications_channel">Thông báo Linux</string>
@@ -2278,4 +2278,7 @@
     <string name="update_check_every_2">Mỗi 2 giờ</string>
     <string name="update_check_every_6">Mỗi 6 giờ</string>
     <string name="update_check_every_24">Mỗi ngày một lần</string>
+    <string name="linux_desktop_switch_hint">Từ lần khởi động sau. Màn hình nền chưa dùng trước đó sẽ được cài đặt bên cạnh cái kia trước, mất vài phút.</string>
+    <string name="linux_effects">Hiệu ứng cửa sổ</string>
+    <string name="linux_effects_hint">Từ lần khởi động sau. Góc bo tròn, cuộn mượt và hiệu ứng chuyển động, vẽ bằng CPU. Tắt chúng nếu màn hình nền có vẻ chậm.</string>
 </resources>

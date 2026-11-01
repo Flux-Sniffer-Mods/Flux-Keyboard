@@ -1649,7 +1649,7 @@
     <string name="linux_distro_debian_description">Σταθερό και ελαφρύ, με Firefox ESR.</string>
     <string name="linux_distro_ubuntu_description">Νεότερα πακέτα, με το πρόγραμμα περιήγησης Falkon (ο Firefox του Ubuntu θέλει Snap, που δεν τρέχει εδώ).</string>
     <string name="linux_desktop_xfce_description">Ελαφρύ και γρήγορο: το καλύτερο για PRoot.</string>
-    <string name="linux_desktop_kde_description">Πληρέστερο και πιο φροντισμένο, αλλά βαρύτερο (περίπου 1 GB παραπάνω): καλύτερο με root.</string>
+    <string name="linux_desktop_kde_description">Φτιαγμένο για αφή: μεγάλα στοιχεία ελέγχου, πίνακας που κρύβεται, το widget Τηλέφωνο, στρογγυλεμένες γωνίες. Βαρύτερο (περίπου 1 GB επιπλέον): καλύτερα με root.</string>
     <string name="linux_scale">Μέγεθος όλων</string>
     <string name="linux_scale_hint">Από την επόμενη εκκίνηση. Μεγαλύτερο ταιριάζει στο τηλέφωνο, 1× σε μεγάλη οθόνη.</string>
     <string name="linux_notifications_channel">Ειδοποιήσεις Linux</string>
@@ -1664,4 +1664,7 @@
     <string name="update_check_every_2">Κάθε 2 ώρες</string>
     <string name="update_check_every_6">Κάθε 6 ώρες</string>
     <string name="update_check_every_24">Μία φορά τη μέρα</string>
+    <string name="linux_desktop_switch_hint">Από την επόμενη εκκίνηση. Μια επιφάνεια εργασίας που δεν έχει χρησιμοποιηθεί ακόμη εγκαθίσταται πρώτα δίπλα στην άλλη, κάτι που διαρκεί λίγα λεπτά.</string>
+    <string name="linux_effects">Εφέ παραθύρων</string>
+    <string name="linux_effects_hint">Από την επόμενη εκκίνηση. Στρογγυλεμένες γωνίες, ομαλή κύλιση και κινούμενα εφέ, σχεδιασμένα στην CPU. Απενεργοποίησέ τα αν η επιφάνεια εργασίας είναι αργή.</string>
 </resources>

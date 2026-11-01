@@ -2275,7 +2275,7 @@
     <string name="linux_distro_debian_description">Estable y ligero, con Firefox ESR.</string>
     <string name="linux_distro_ubuntu_description">Paquetes más nuevos, con el navegador Falkon (el Firefox de Ubuntu necesita Snap, que aquí no funciona).</string>
     <string name="linux_desktop_xfce_description">Ligero y rápido: lo mejor para PRoot.</string>
-    <string name="linux_desktop_kde_description">Más completo y pulido, pero más pesado (alrededor de 1 GB más): mejor con root.</string>
+    <string name="linux_desktop_kde_description">Hecho para el tacto: controles grandes, un panel que se oculta, el widget Teléfono y esquinas redondeadas. Más pesado (alrededor de 1 GB más): mejor con root.</string>
     <string name="linux_scale">Tamaño de todo</string>
     <string name="linux_scale_hint">A partir del próximo inicio. Más grande va mejor en el teléfono; 1× en una pantalla grande.</string>
     <string name="linux_notifications_channel">Notificaciones de Linux</string>
@@ -2290,4 +2290,7 @@
     <string name="update_check_every_2">Cada 2 horas</string>
     <string name="update_check_every_6">Cada 6 horas</string>
     <string name="update_check_every_24">Una vez al día</string>
+    <string name="linux_desktop_switch_hint">Desde el próximo inicio. Un escritorio que no se haya usado antes se instala primero junto al otro, lo que tarda unos minutos.</string>
+    <string name="linux_effects">Efectos de ventana</string>
+    <string name="linux_effects_hint">Desde el próximo inicio. Esquinas redondeadas, desplazamiento suave y animaciones, dibujados en la CPU. Desactívalos si el escritorio va lento.</string>
 </resources>
