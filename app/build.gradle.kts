@@ -460,6 +460,8 @@ dependencies {
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
     // Opus in plain Java, for streaming sound to Moonlight in its short packets
     implementation("io.github.jaredmdobson:concentus:1.0.2")
+    // AirPlay pairing: X25519, Ed25519, ChaCha20-Poly1305 and HKDF on every Android version
+    implementation("org.bouncycastle:bcprov-jdk15to18:1.81")
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation("org.mockito:mockito-core:5.11.0")

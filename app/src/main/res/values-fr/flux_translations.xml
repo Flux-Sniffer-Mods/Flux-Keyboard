@@ -2209,4 +2209,19 @@
     <string name="miracast_connecting">Connexion à %1$s… Acceptez sur le téléviseur s\'il le demande.</string>
     <string name="miracast_failed">Impossible de se connecter à %1$s. Acceptez la demande sur le téléviseur s\'il la pose, puis réessayez.</string>
     <string name="miracast_unavailable">L\'Android de ce téléphone ne propose pas Miracast.</string>
+    <string name="airplay_title">Téléviseur via AirPlay</string>
+    <string name="airplay_description">L\'écran du téléphone, avec son son, sur une Apple TV ou un téléviseur AirPlay. Quelques secondes de retard : bien pour les applis et la vidéo, pas pour les jeux rapides.</string>
+    <string name="airplay_find">Chercher des téléviseurs</string>
+    <string name="airplay_casting_to">AirPlay vers %1$s</string>
+    <string name="airplay_casting_description">L\'écran du téléphone est sur le téléviseur, avec son son, quelques secondes en retard.</string>
+    <string name="airplay_dialog_title">AirPlay vers un téléviseur</string>
+    <string name="airplay_searching">Recherche de téléviseurs sur ce Wi-Fi…</string>
+    <string name="airplay_none_found">Aucun téléviseur AirPlay trouvé. Vérifiez qu\'il est allumé et sur le même Wi-Fi.</string>
+    <string name="airplay_connecting">Connexion à %1$s…</string>
+    <string name="airplay_pin_prompt">Saisissez le code affiché par %1$s.</string>
+    <string name="airplay_pin_wrong">Ce code ne correspond pas. Saisissez le nouveau.</string>
+    <string name="airplay_pin_ok">Associer</string>
+    <string name="airplay_starting">Démarrage sur %1$s… Autorisez le partage d\'écran si demandé.</string>
+    <string name="airplay_failed">Impossible de lire sur %1$s. Réessayez.</string>
+    <string name="airplay_refused">%1$s ne l\'a pas permis. Sur une Apple TV, ouvrez l\'accès AirPlay à tous sur le même réseau, puis réessayez.</string>
 </resources>

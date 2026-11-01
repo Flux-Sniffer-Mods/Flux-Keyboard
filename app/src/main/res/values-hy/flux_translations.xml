@@ -2203,4 +2203,19 @@
     <string name="miracast_connecting">Միացում %1$s-ին… Հաստատեք հեռուստացույցում, եթե այն հարցնի։</string>
     <string name="miracast_failed">Չհաջողվեց միանալ %1$s-ին։ Հաստատեք հարցումը հեռուստացույցում, եթե այն հարցնի, ապա փորձեք կրկին։</string>
     <string name="miracast_unavailable">Այս հեռախոսի Android-ը Miracast չի առաջարկում։</string>
+    <string name="airplay_title">Հեռուստացույց AirPlay-ով</string>
+    <string name="airplay_description">Հեռախոսի էկրանը՝ ձայնով, Apple TV-ի կամ AirPlay-ով հեռուստացույցի վրա։ Մի քանի վայրկյան ուշացումով․ լավ է հավելվածների և տեսանյութերի, ոչ արագ խաղերի համար։</string>
+    <string name="airplay_find">Գտնել հեռուստացույցներ</string>
+    <string name="airplay_casting_to">AirPlay՝ %1$s</string>
+    <string name="airplay_casting_description">Հեռախոսի էկրանը հեռուստացույցում է՝ ձայնով, մի քանի վայրկյան ուշացումով։</string>
+    <string name="airplay_dialog_title">AirPlay հեռուստացույցին</string>
+    <string name="airplay_searching">Հեռուստացույցների որոնում այս Wi-Fi-ում…</string>
+    <string name="airplay_none_found">AirPlay հեռուստացույցներ չգտնվեցին։ Ստուգեք, որ հեռուստացույցը միացված է և նույն Wi-Fi-ում է։</string>
+    <string name="airplay_connecting">Միացում %1$s-ին…</string>
+    <string name="airplay_pin_prompt">Մուտքագրեք %1$s-ի ցույց տված կոդը։</string>
+    <string name="airplay_pin_wrong">Կոդը չհամընկավ։ Մուտքագրեք նորը։</string>
+    <string name="airplay_pin_ok">Զուգակցել</string>
+    <string name="airplay_starting">Մեկնարկ %1$s-ում… Թույլատրեք էկրանի տարածումը, եթե հարցնի։</string>
+    <string name="airplay_failed">Չհաջողվեց նվագարկել %1$s-ում։ Փորձեք կրկին։</string>
+    <string name="airplay_refused">%1$s-ը թույլ չտվեց։ Apple TV-ում AirPlay-ի մուտքը բացեք նույն ցանցի բոլորի համար, ապա փորձեք կրկին։</string>
 </resources>

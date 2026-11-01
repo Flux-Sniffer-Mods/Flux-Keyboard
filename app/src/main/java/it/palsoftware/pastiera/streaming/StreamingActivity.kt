@@ -32,6 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -50,6 +51,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.display.ExtraScreen
 import it.palsoftware.pastiera.display.Miracast
+import it.palsoftware.pastiera.airplay.AirPlay
+import it.palsoftware.pastiera.airplay.AirPlayReceiver
+import it.palsoftware.pastiera.airplay.AirPlayReceivers
 import it.palsoftware.pastiera.gaming.StreamSignal
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
 import kotlinx.coroutines.Dispatchers
@@ -185,6 +189,8 @@ class StreamingActivity : ComponentActivity() {
                             }
                             // Miracast: the phone's screen on a TV that takes it, no app there
                             MiracastBar()
+                            // AirPlay: the same on an Apple TV, a few seconds behind
+                            AirPlayBar()
                         }
                         Text(
                             stringResource(if (all) R.string.streaming_app_note_all else R.string.streaming_app_note),
@@ -279,6 +285,11 @@ class StreamingActivity : ComponentActivity() {
     private fun open(app: StreamApps.App) {
         val launch = packageManager.getLaunchIntentForPackage(app.packageName) ?: return
         val screen = ownScreen() ?: ExtraScreen.current?.id ?: Miracast.displayId(this)
+        if (screen == null && AirPlay.casting) {
+            // AirPlay shows the phone's screen: the app opens here, and so there
+            startActivity(launch.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+            return
+        }
         if (screen == null) {
             // Nothing streaming, with a TV set up: turned on and Moonlight opened there into the app, as a game is
             if (TvRemote.ready(this) && StreamHost.session == null) {
@@ -296,6 +307,11 @@ class StreamingActivity : ComponentActivity() {
     private fun run(script: String) {
         val termux = packageManager.getLaunchIntentForPackage(it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_PACKAGE) ?: return
         val screen = ownScreen() ?: ExtraScreen.current?.id ?: Miracast.displayId(this)
+        if (screen == null && AirPlay.casting) {
+            runCatching { startForegroundService(it.palsoftware.pastiera.shortcuts.TermuxScripts.command(script)) }
+            startActivity(termux.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+            return
+        }
         if (screen == null) {
             if (TvRemote.ready(this) && StreamHost.session == null) {
                 StreamApps.requestedScript = script
@@ -432,6 +448,139 @@ class StreamingActivity : ComponentActivity() {
                 androidx.compose.material3.TextButton(onClick = onDone) { Text(stringResource(android.R.string.cancel)) }
             }
         )
+    }
+
+    /**
+     * AirPlay: casting to which TV, with Stop; else a way to find TVs. The phone's screen goes
+     * there with its sound, a few seconds behind.
+     */
+    @Composable
+    private fun AirPlayBar() {
+        val context = this
+        val state by AirPlay.state.collectAsState()
+        var picking by remember { mutableStateOf(false) }
+        val active = state is AirPlay.State.Casting
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = if (active) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.padding(start = 16.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                val onColor = if (active) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        (state as? AirPlay.State.Casting)?.let { stringResource(R.string.airplay_casting_to, it.name) }
+                            ?: stringResource(R.string.airplay_title),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                        color = onColor
+                    )
+                    Text(
+                        stringResource(if (active) R.string.airplay_casting_description else R.string.airplay_description),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = onColor
+                    )
+                }
+                if (active) androidx.compose.material3.FilledTonalButton(onClick = { AirPlay.stop(context) }) {
+                    Text(stringResource(R.string.miracast_stop))
+                } else androidx.compose.material3.Button(onClick = { picking = true }) {
+                    Text(stringResource(R.string.airplay_find))
+                }
+            }
+        }
+        // Shown while it connects, pairs or starts, as well as to pick
+        val busy = state is AirPlay.State.Connecting || state is AirPlay.State.Pin || state is AirPlay.State.Starting || state is AirPlay.State.Failed
+        if (picking || busy) AirPlayPicker(state, onDone = {
+            picking = false
+            AirPlay.dismiss()
+        })
+    }
+
+    /** TVs found on the Wi-Fi, one tapped to cast to it; its PIN typed when it shows one. */
+    @Composable
+    private fun AirPlayPicker(state: AirPlay.State, onDone: () -> Unit) {
+        val context = this
+        val found = remember { androidx.compose.runtime.mutableStateListOf<AirPlayReceiver>() }
+        var searched by remember { mutableStateOf(false) }
+        androidx.compose.runtime.DisposableEffect(Unit) {
+            val main = android.os.Handler(android.os.Looper.getMainLooper())
+            val receivers = AirPlayReceivers(context) { receiver ->
+                main.post {
+                    // Video TVs only (speakers take sound alone), each once
+                    if (receiver.video && found.none { it.id == receiver.id }) found += receiver
+                }
+            }
+            receivers.start()
+            main.postDelayed({ searched = true }, 6_000)
+            onDispose { receivers.stop(); main.removeCallbacksAndMessages(null) }
+        }
+        var pin by remember { mutableStateOf("") }
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = {
+                if (state !is AirPlay.State.Casting && state !is AirPlay.State.Idle && state !is AirPlay.State.Failed) AirPlay.stop(context)
+                onDone()
+            },
+            title = { Text(stringResource(R.string.airplay_dialog_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    when (state) {
+                        is AirPlay.State.Connecting -> Text(stringResource(R.string.airplay_connecting, state.name))
+                        is AirPlay.State.Starting -> Text(stringResource(R.string.airplay_starting, state.name))
+                        is AirPlay.State.Pin -> {
+                            Text(stringResource(R.string.airplay_pin_prompt, state.name))
+                            if (state.wrong) Text(stringResource(R.string.airplay_pin_wrong), color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodySmall)
+                            androidx.compose.material3.OutlinedTextField(
+                                value = pin,
+                                onValueChange = { pin = it.filter(Char::isDigit).take(8) },
+                                singleLine = true,
+                                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                                    keyboardType = androidx.compose.ui.text.input.KeyboardType.NumberPassword
+                                )
+                            )
+                        }
+                        else -> {
+                            if (state is AirPlay.State.Failed) Text(
+                                stringResource(if (state.refused) R.string.airplay_refused else R.string.airplay_failed, state.name),
+                                color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall
+                            )
+                            when {
+                                found.isEmpty() && !searched -> Text(stringResource(R.string.airplay_searching))
+                                found.isEmpty() -> Text(stringResource(R.string.airplay_none_found))
+                            }
+                            found.sortedBy { it.name.lowercase() }.forEach { receiver ->
+                                Surface(
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                                        .clickable { pin = ""; AirPlay.cast(context, receiver) }
+                                ) {
+                                    Text("\u25AD  " + receiver.name, modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+                                        style = MaterialTheme.typography.bodyLarge)
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                if (state is AirPlay.State.Pin) androidx.compose.material3.TextButton(
+                    onClick = { AirPlay.pin(context, pin); pin = "" }, enabled = pin.length >= 4
+                ) { Text(stringResource(R.string.airplay_pin_ok)) }
+            },
+            dismissButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    if (state !is AirPlay.State.Idle && state !is AirPlay.State.Failed) AirPlay.stop(context)
+                    onDone()
+                }) { Text(stringResource(android.R.string.cancel)) }
+            }
+        )
+        // Playing: the picker's done
+        if (state is AirPlay.State.Casting) androidx.compose.runtime.LaunchedEffect(Unit) { onDone() }
     }
 
     /** The top bar: clear of the status bar and the camera cutout. */

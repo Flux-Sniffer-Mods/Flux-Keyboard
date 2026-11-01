@@ -2215,4 +2215,19 @@
     <string name="miracast_connecting">Підключення до %1$s… Підтвердьте на телевізорі, якщо він запитає.</string>
     <string name="miracast_failed">Не вдалося підключитися до %1$s. Підтвердьте запит на телевізорі, якщо він з\'явиться, і спробуйте знову.</string>
     <string name="miracast_unavailable">Android цього телефона не підтримує Miracast.</string>
+    <string name="airplay_title">Телевізор через AirPlay</string>
+    <string name="airplay_description">Екран телефона зі звуком на Apple TV або телевізорі з AirPlay. Затримка в кілька секунд: добре для застосунків і відео, не для швидких ігор.</string>
+    <string name="airplay_find">Знайти телевізори</string>
+    <string name="airplay_casting_to">AirPlay на %1$s</string>
+    <string name="airplay_casting_description">Екран телефона на телевізорі, зі звуком, із затримкою в кілька секунд.</string>
+    <string name="airplay_dialog_title">AirPlay на телевізор</string>
+    <string name="airplay_searching">Пошук телевізорів у цій мережі Wi-Fi…</string>
+    <string name="airplay_none_found">Телевізорів з AirPlay не знайдено. Перевірте, що телевізор увімкнено і він у тій самій мережі Wi-Fi.</string>
+    <string name="airplay_connecting">Підключення до %1$s…</string>
+    <string name="airplay_pin_prompt">Введіть код, який показує %1$s.</string>
+    <string name="airplay_pin_wrong">Код не підійшов. Введіть новий.</string>
+    <string name="airplay_pin_ok">Пов\'язати</string>
+    <string name="airplay_starting">Запуск на %1$s… Дозвольте показ екрана, якщо запитають.</string>
+    <string name="airplay_failed">Не вдалося відтворити на %1$s. Спробуйте ще раз.</string>
+    <string name="airplay_refused">%1$s не дозволив. На Apple TV відкрийте доступ до AirPlay для всіх у тій самій мережі й спробуйте ще раз.</string>
 </resources>

@@ -361,6 +361,17 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- AirPlay: casting to an Apple TV or AirPlay TV, and what it asks for first -->
+        <service
+            android:name=".airplay.AirPlayService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+        <activity
+            android:name=".airplay.AirPlayCapture"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Xbox Cloud Gaming in Flux Keyboard's own player (sizes change while it plays: kept) -->
         <activity
             android:name=".gaming.ExtraScreenActivity"

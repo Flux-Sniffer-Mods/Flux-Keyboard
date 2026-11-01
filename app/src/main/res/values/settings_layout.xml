@@ -831,4 +831,19 @@
     <string name="miracast_connecting">Connecting to %1$s… Accept on the TV if it asks.</string>
     <string name="miracast_failed">Couldn\'t connect to %1$s. Accept the request on the TV if it asks, then try again.</string>
     <string name="miracast_unavailable">This phone\'s Android doesn\'t offer Miracast.</string>
+    <string name="airplay_title">TV over AirPlay</string>
+    <string name="airplay_description">The phone\'s screen, with its sound, on an Apple TV or a TV with AirPlay. A few seconds behind: good for apps and video, not fast games.</string>
+    <string name="airplay_find">Find TVs</string>
+    <string name="airplay_casting_to">AirPlay to %1$s</string>
+    <string name="airplay_casting_description">The phone\'s screen is on the TV, with its sound, a few seconds behind.</string>
+    <string name="airplay_dialog_title">AirPlay to a TV</string>
+    <string name="airplay_searching">Looking for TVs on this Wi-Fi…</string>
+    <string name="airplay_none_found">No AirPlay TVs found. Check the TV is on and on the same Wi-Fi.</string>
+    <string name="airplay_connecting">Connecting to %1$s…</string>
+    <string name="airplay_pin_prompt">Type the code %1$s shows.</string>
+    <string name="airplay_pin_wrong">That code didn\'t match. Type the new one.</string>
+    <string name="airplay_pin_ok">Pair</string>
+    <string name="airplay_starting">Starting on %1$s… Allow the screen to be shared if asked.</string>
+    <string name="airplay_failed">Couldn\'t play on %1$s. Try again.</string>
+    <string name="airplay_refused">%1$s didn\'t allow it. On an Apple TV, set AirPlay\'s Allow Access to everyone on the same network, then try again.</string>
 </resources>

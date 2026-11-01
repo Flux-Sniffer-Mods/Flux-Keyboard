@@ -1583,4 +1583,19 @@
     <string name="miracast_connecting">Σύνδεση με %1$s… Αποδεχτείτε στην τηλεόραση αν ρωτήσει.</string>
     <string name="miracast_failed">Δεν ήταν δυνατή η σύνδεση με %1$s. Αποδεχτείτε το αίτημα στην τηλεόραση αν ρωτήσει και δοκιμάστε ξανά.</string>
     <string name="miracast_unavailable">Το Android αυτού του τηλεφώνου δεν προσφέρει Miracast.</string>
+    <string name="airplay_title">Τηλεόραση μέσω AirPlay</string>
+    <string name="airplay_description">Η οθόνη του τηλεφώνου, με τον ήχο της, σε Apple TV ή τηλεόραση με AirPlay. Λίγα δευτερόλεπτα καθυστέρηση: καλό για εφαρμογές και βίντεο, όχι για γρήγορα παιχνίδια.</string>
+    <string name="airplay_find">Εύρεση τηλεοράσεων</string>
+    <string name="airplay_casting_to">AirPlay σε %1$s</string>
+    <string name="airplay_casting_description">Η οθόνη του τηλεφώνου είναι στην τηλεόραση, με τον ήχο της, λίγα δευτερόλεπτα πίσω.</string>
+    <string name="airplay_dialog_title">AirPlay σε τηλεόραση</string>
+    <string name="airplay_searching">Αναζήτηση τηλεοράσεων σε αυτό το Wi-Fi…</string>
+    <string name="airplay_none_found">Δεν βρέθηκαν τηλεοράσεις AirPlay. Ελέγξτε ότι η τηλεόραση είναι ανοιχτή και στο ίδιο Wi-Fi.</string>
+    <string name="airplay_connecting">Σύνδεση με %1$s…</string>
+    <string name="airplay_pin_prompt">Πληκτρολογήστε τον κωδικό που δείχνει η %1$s.</string>
+    <string name="airplay_pin_wrong">Ο κωδικός δεν ταίριαξε. Πληκτρολογήστε τον νέο.</string>
+    <string name="airplay_pin_ok">Σύζευξη</string>
+    <string name="airplay_starting">Έναρξη στην %1$s… Επιτρέψτε την κοινή χρήση οθόνης αν ζητηθεί.</string>
+    <string name="airplay_failed">Δεν ήταν δυνατή η αναπαραγωγή στην %1$s. Δοκιμάστε ξανά.</string>
+    <string name="airplay_refused">Η %1$s δεν το επέτρεψε. Σε Apple TV, ορίστε την πρόσβαση AirPlay σε όλους στο ίδιο δίκτυο και δοκιμάστε ξανά.</string>
 </resources>

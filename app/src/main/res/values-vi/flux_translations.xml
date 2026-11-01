@@ -2197,4 +2197,19 @@
     <string name="miracast_connecting">Đang kết nối tới %1$s… Chấp nhận trên TV nếu được hỏi.</string>
     <string name="miracast_failed">Không kết nối được tới %1$s. Chấp nhận yêu cầu trên TV nếu được hỏi, rồi thử lại.</string>
     <string name="miracast_unavailable">Android của điện thoại này không hỗ trợ Miracast.</string>
+    <string name="airplay_title">TV qua AirPlay</string>
+    <string name="airplay_description">Màn hình điện thoại, kèm âm thanh, trên Apple TV hoặc TV có AirPlay. Trễ vài giây: hợp với ứng dụng và video, không hợp game nhanh.</string>
+    <string name="airplay_find">Tìm TV</string>
+    <string name="airplay_casting_to">AirPlay tới %1$s</string>
+    <string name="airplay_casting_description">Màn hình điện thoại đang ở trên TV, kèm âm thanh, trễ vài giây.</string>
+    <string name="airplay_dialog_title">AirPlay tới TV</string>
+    <string name="airplay_searching">Đang tìm TV trên Wi-Fi này…</string>
+    <string name="airplay_none_found">Không tìm thấy TV AirPlay. Kiểm tra TV đang bật và cùng Wi-Fi.</string>
+    <string name="airplay_connecting">Đang kết nối với %1$s…</string>
+    <string name="airplay_pin_prompt">Nhập mã %1$s đang hiện.</string>
+    <string name="airplay_pin_wrong">Mã không khớp. Nhập mã mới.</string>
+    <string name="airplay_pin_ok">Ghép nối</string>
+    <string name="airplay_starting">Đang bắt đầu trên %1$s… Cho phép chia sẻ màn hình nếu được hỏi.</string>
+    <string name="airplay_failed">Không phát được trên %1$s. Hãy thử lại.</string>
+    <string name="airplay_refused">%1$s không cho phép. Trên Apple TV, mở quyền truy cập AirPlay cho mọi người cùng mạng rồi thử lại.</string>
 </resources>
