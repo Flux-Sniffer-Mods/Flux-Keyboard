@@ -121,21 +121,25 @@ object XboxCloud {
     /** The cloud list's game IDs (its first entry describes the list itself). */
     internal fun parseIds(json: String): List<String> {
         val list = JSONArray(json)
-        return (0 until list.length()).mapNotNull { list.getJSONObject(it).optString("id").ifEmpty { null } }
+        return (0 until list.length()).mapNotNull { list.optJSONObject(it)?.optString("id")?.ifEmpty { null } }
     }
 
-    /** Each product's title and box art (the poster, else the box art), from the catalogue's answer. */
+    /**
+     * Each product's title and box art (the poster, else the box art), from the catalogue's
+     * answer; one without an ID or a title left out rather than the whole answer lost.
+     */
     internal fun parseProducts(json: String): List<CloudGame> {
         val products = JSONObject(json).optJSONArray("Products") ?: return emptyList()
         return (0 until products.length()).mapNotNull { i ->
-            val product = products.getJSONObject(i)
+            val product = products.optJSONObject(i) ?: return@mapNotNull null
+            val id = product.optString("ProductId").ifEmpty { return@mapNotNull null }
             val props = product.optJSONArray("LocalizedProperties")?.optJSONObject(0) ?: return@mapNotNull null
             val images = props.optJSONArray("Images")
             val art = listOf("Poster", "BoxArt").firstNotNullOfOrNull { purpose ->
-                images?.let { list -> (0 until list.length()).map { list.getJSONObject(it) }.firstOrNull { it.optString("ImagePurpose") == purpose } }
+                images?.let { list -> (0 until list.length()).mapNotNull { list.optJSONObject(it) }.firstOrNull { it.optString("ImagePurpose") == purpose } }
                     ?.optString("Uri")?.let { if (it.startsWith("//")) "https:$it" else it }
             }
-            CloudGame(product.getString("ProductId"), props.optString("ProductTitle").ifEmpty { return@mapNotNull null }, art)
+            CloudGame(id, props.optString("ProductTitle").ifEmpty { return@mapNotNull null }, art)
         }
     }
 

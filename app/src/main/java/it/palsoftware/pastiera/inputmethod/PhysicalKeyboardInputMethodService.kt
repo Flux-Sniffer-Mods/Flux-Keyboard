@@ -484,7 +484,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     // Trackpad gesture detection
     private val trackpadScope = CoroutineScope(Dispatchers.IO)
     // Sends GIFs picked in the emoji picker (download, then rich content or a link)
-    private val gifScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    // A GIF that can't be fetched or sent is logged, never the keyboard's end
+    private val gifScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.Main + kotlinx.coroutines.CoroutineExceptionHandler { _, e -> Log.w(TAG, "GIF: $e", e) }
+    )
     private lateinit var trackpadGestureDetector: TrackpadGestureDetector
     private var modifierStateBeforeHold: it.palsoftware.pastiera.core.ModifierStateController.LogicalState? = null
     private var variationInteractedDuringHold: Boolean = false
@@ -3629,17 +3632,20 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 connection.commitText(gif.gifUrl, 1)
                 return@launch
             }
-            val uri = FileProvider.getUriForFile(
-                this@PhysicalKeyboardInputMethodService, "$packageName.fileprovider", file
-            )
-            val content = InputContentInfoCompat(
-                uri,
-                ClipDescription(gif.description.ifBlank { "GIF" }, arrayOf("image/gif")),
-                null
-            )
-            val sent = InputConnectionCompat.commitContent(
-                connection, info, content, InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION, null
-            )
+            // The app turning the picture down (or not taking it at all): its link instead
+            val sent = runCatching {
+                val uri = FileProvider.getUriForFile(
+                    this@PhysicalKeyboardInputMethodService, "$packageName.fileprovider", file
+                )
+                val content = InputContentInfoCompat(
+                    uri,
+                    ClipDescription(gif.description.ifBlank { "GIF" }, arrayOf("image/gif")),
+                    null
+                )
+                InputConnectionCompat.commitContent(
+                    connection, info, content, InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION, null
+                )
+            }.onFailure { Log.w(TAG, "GIF not sent as a picture", it) }.getOrDefault(false)
             if (!sent) connection.commitText(gif.gifUrl, 1)
         }
     }
@@ -4358,7 +4364,25 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         traceImeVisibility("onBindInput")
     }
 
+    // A new field: a fault in setting up for one is logged and that field typed in plainly,
+    // never the keyboard ending (and ending again each time the field is touched)
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
+        try {
+            receiveStartInput(info, restarting)
+        } catch (e: Exception) {
+            it.palsoftware.pastiera.FluxLog.w(TAG, "field start in ${info?.packageName}: ${Log.getStackTraceString(e)}")
+        }
+    }
+
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        try {
+            receiveStartInputView(info, restarting)
+        } catch (e: Exception) {
+            it.palsoftware.pastiera.FluxLog.w(TAG, "keyboard start in ${info?.packageName}: ${Log.getStackTraceString(e)}")
+        }
+    }
+
+    private fun receiveStartInput(info: EditorInfo?, restarting: Boolean) {
         // A new field: a game's hidden one doesn't take the keys from it until it asks for the keyboard
         if (!restarting) it.palsoftware.pastiera.gaming.GameMode.inputStarted()
         playerEditor = playerInFront() && info?.packageName == packageName
@@ -4575,7 +4599,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         startClipboardCleanupTimer()
     }
 
-    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+    private fun receiveStartInputView(info: EditorInfo?, restarting: Boolean) {
         if (playerEditor) { super.onStartInputView(info, restarting); return }
         if (terminalModeActive) TerminalMode.apply(info)
         // A text field in a game: the keys type into it, not play
@@ -4937,8 +4961,24 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         candidatesStart: Int,
         candidatesEnd: Int
     ) {
-        val perfStart = ImePerfLogger.mark()
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        // Every move of the cursor comes here: a fault in following one is logged, never the keyboard's end
+        try {
+            receiveSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        } catch (e: Exception) {
+            it.palsoftware.pastiera.FluxLog.w(TAG, "selection $newSelStart-$newSelEnd: ${Log.getStackTraceString(e)}")
+        }
+    }
+
+    private fun receiveSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) {
+        val perfStart = ImePerfLogger.mark()
         if (playerOwnsInput()) return
         if (contactChips.isNotEmpty() || contactFieldKind() != null) refreshContactSuggestions()
         
@@ -5908,7 +5948,28 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         updateStatusBarText()
     }
 
-    override fun onKeyLongPress(keyCode_: Int, event_: KeyEvent?): Boolean {
+    /**
+     * The keys' way in. Typing must survive a fault in handling one key: it's logged, here and
+     * in the crash log, and the key goes to the app as a plain key, instead of the keyboard
+     * ending (and ending again at the next press of it).
+     */
+    private inline fun keySafely(what: String, keyCode: Int, fallback: () -> Boolean, handle: () -> Boolean): Boolean = try {
+        handle()
+    } catch (e: Exception) {
+        it.palsoftware.pastiera.FluxLog.w(TAG, "$what $keyCode: ${Log.getStackTraceString(e)}")
+        runCatching(fallback).getOrDefault(false)
+    }
+
+    override fun onKeyLongPress(keyCode_: Int, event_: KeyEvent?): Boolean =
+        keySafely("long press", keyCode_, { super.onKeyLongPress(keyCode_, event_) }) { receiveKeyLongPress(keyCode_, event_) }
+
+    override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean =
+        keySafely("key down", keyCode_, { super.onKeyDown(keyCode_, event_) }) { receiveKeyDown(keyCode_, event_) }
+
+    override fun onKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean =
+        keySafely("key up", keyCode_, { super.onKeyUp(keyCode_, event_) }) { receiveKeyUp(keyCode_, event_) }
+
+    private fun receiveKeyLongPress(keyCode_: Int, event_: KeyEvent?): Boolean {
         if (playerOwnsInput()) return false
         if (keyboardHiddenForApp && !hiddenAppKeyGoesToPastiera(keyCode_)) return super.onKeyLongPress(keyCode_, event_)
         if (!replayingProtectedNumberKey) {
@@ -5979,7 +6040,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun playerInFront(): Boolean =
         it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront || it.palsoftware.pastiera.gaming.ExtraScreenActivity.inFront
 
-    override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
+    private fun receiveKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         // Keycode 0 types nothing: the keyboard light's wake-up key, passed straight on
         if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyDown(keyCode_, event_)
         if (playerOwnsInput()) return false
@@ -6953,7 +7014,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
-    override fun onKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
+    private fun receiveKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
         if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyUp(keyCode_, event_)
         if (playerOwnsInput()) return false
         if (QuickLauncherActivity.ownsKey(event_)) return false

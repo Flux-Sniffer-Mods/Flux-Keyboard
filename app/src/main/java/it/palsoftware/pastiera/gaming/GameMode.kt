@@ -1331,9 +1331,10 @@ object GameMode {
     private fun keepStickMoving(stick: Int, finger: Int) {
         var nudge = 1f
         lateinit var task: java.util.concurrent.ScheduledFuture<*>
-        task = watcher.scheduleAtFixedRate({
+        // A fixed delay, so a stall (the phone busy, or asleep) never sends a burst of nudges after
+        task = watcher.scheduleWithFixedDelay({
             val spot = stickAt[stick]
-            if (!stickHeld[stick] || spot == null) { task.cancel(false); return@scheduleAtFixedRate }
+            if (!stickHeld[stick] || spot == null) { task.cancel(false); return@scheduleWithFixedDelay }
             nudge = -nudge
             keys.execute { send("T m $finger ${spot.first + nudge} ${spot.second}") }
         }, KEEP_MOVING_MS * 2, KEEP_MOVING_MS, java.util.concurrent.TimeUnit.MILLISECONDS)

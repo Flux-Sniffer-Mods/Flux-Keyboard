@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Stability: the keyboard keeps working through faults that used to end it: a key, a cursor move or a field it can't handle is logged and passed on as usual, and a failure in a stream, a cast, the desktop or a download ends only that. Fixed: long-pressing a key with many alternates on a narrow screen, next-word and clipboard history storage failing (full or damaged), GIFs an app turns down, the desktop on Android 10, keys and touches not reaching the Linux desktop, AirPlay stuck on Starting when the encoder fails, a stream left capturing after Moonlight left, and Back behaving differently on Android 16.",
+      "after": "202611011704"
+    },
+    {
       "text": "Desktop: shown once Xfce or Plasma is actually drawing, with \"starting\" until then, instead of a black screen for up to a minute. It keeps running when the app is in the background, restarted or updated, and programs open from the phone while it runs (they didn't without root). Its logs now say which part ended a session.",
       "after": "202610311632"
     },

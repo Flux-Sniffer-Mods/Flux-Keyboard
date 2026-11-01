@@ -52,7 +52,21 @@ class UserNGramStore(context: Context) : SQLiteOpenHelper(
         }
     }
 
-    override fun learn(locale: String, prefix: String, nextWord: String, nowMs: Long) {
+    /**
+     * A database failure (storage full, the file locked or damaged) costs what's learned, never
+     * the keyboard: typing goes on without next-word suggestions from it.
+     */
+    private inline fun <T> guarded(fallback: T, block: () -> T): T = try {
+        block()
+    } catch (e: android.database.SQLException) {
+        android.util.Log.w(TAG, "next-word store: $e")
+        fallback
+    } catch (e: IllegalStateException) {
+        android.util.Log.w(TAG, "next-word store: $e")
+        fallback
+    }
+
+    override fun learn(locale: String, prefix: String, nextWord: String, nowMs: Long) = guarded(Unit) {
         val db = writableDatabase
         db.beginTransaction()
         try {
@@ -85,7 +99,7 @@ class UserNGramStore(context: Context) : SQLiteOpenHelper(
         }
     }
 
-    override fun predict(locale: String, prefix: String, limit: Int): List<Prediction> {
+    override fun predict(locale: String, prefix: String, limit: Int): List<Prediction> = guarded(emptyList()) {
         if (limit <= 0) return emptyList()
         val cursor = readableDatabase.query(
             TABLE_BIGRAMS,
@@ -115,27 +129,29 @@ class UserNGramStore(context: Context) : SQLiteOpenHelper(
         }
     }
 
-    override fun delete(locale: String, prefix: String, nextWord: String): Int {
-        return writableDatabase.delete(
+    override fun delete(locale: String, prefix: String, nextWord: String): Int = guarded(0) {
+        writableDatabase.delete(
             TABLE_BIGRAMS,
             "$COL_LOCALE = ? AND $COL_PREFIX = ? AND $COL_NEXT_WORD = ? COLLATE NOCASE",
             arrayOf(locale, prefix, nextWord)
         )
     }
 
-    override fun deleteNextWord(locale: String, nextWord: String): Int {
-        return writableDatabase.delete(
+    override fun deleteNextWord(locale: String, nextWord: String): Int = guarded(0) {
+        writableDatabase.delete(
             TABLE_BIGRAMS,
             "$COL_LOCALE = ? AND $COL_NEXT_WORD = ? COLLATE NOCASE",
             arrayOf(locale, nextWord)
         )
     }
 
-    override fun clearAll() {
+    override fun clearAll() = guarded(Unit) {
         writableDatabase.delete(TABLE_BIGRAMS, null, null)
+        Unit
     }
 
     companion object {
+        private const val TAG = "UserNGramStore"
         private const val DATABASE_NAME = "user_ngrams.db"
         private const val DATABASE_VERSION = 1
         private const val TABLE_BIGRAMS = "bigrams"

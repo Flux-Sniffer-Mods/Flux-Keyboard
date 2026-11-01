@@ -23,6 +23,14 @@ class XboxCloudTest {
     }
 
     @Test
+    fun aMalformedProductIsLeftOutNotTheWholeAnswer() {
+        val json = """{"Products":["not a product",{"LocalizedProperties":[{"ProductTitle":"No ID"}]},
+            {"ProductId":"9P8LR42PTRGJ","LocalizedProperties":[{"ProductTitle":"Kept","Images":["odd"]}]}]}"""
+        assertEquals(listOf(XboxCloud.CloudGame("9P8LR42PTRGJ", "Kept", null)), XboxCloud.parseProducts(json))
+        assertEquals(listOf("9NPDN9R45JX4"), XboxCloud.parseIds("""["odd",{"id":"9NPDN9R45JX4"}]"""))
+    }
+
+    @Test
     fun aGamesPlayLinkStartsItInTheXboxApp() {
         val launch = XboxCloud.launchFor(XboxCloud.CloudGame("9NPDN9R45JX4", "1000xRESIST", null), "com.gamepass")
         assertEquals("9NPDN9R45JX4", XboxCloud.idOf(launch))
