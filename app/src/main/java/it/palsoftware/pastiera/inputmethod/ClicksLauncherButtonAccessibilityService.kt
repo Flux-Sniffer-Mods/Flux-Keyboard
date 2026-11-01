@@ -24,7 +24,27 @@ import it.palsoftware.pastiera.trackpadBlockedIn
 class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
     private val mapper = ClicksLauncherAccessibilityKeyMapper()
 
-    override fun onKeyEvent(event: KeyEvent): Boolean {
+    /**
+     * Every key comes through here while the service is on: a failure in handling one lets the
+     * key through to the app as it is (and is logged), rather than ending the service and the
+     * keyboard with it.
+     */
+    override fun onKeyEvent(event: KeyEvent): Boolean = try {
+        handleKey(event)
+    } catch (e: Exception) {
+        it.palsoftware.pastiera.FluxLog.w("FluxA11y", "key ${event.keyCode}: ${android.util.Log.getStackTraceString(e)}")
+        false
+    }
+
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        try {
+            handleEvent(event)
+        } catch (e: Exception) {
+            it.palsoftware.pastiera.FluxLog.w("FluxA11y", "event ${event?.eventType}: ${android.util.Log.getStackTraceString(e)}")
+        }
+    }
+
+    private fun handleKey(event: KeyEvent): Boolean {
         // Gaming mode: a real controller's button, or else the key goes to the game as it is
         if (it.palsoftware.pastiera.gaming.GameMode.onKeyEvent(event)) return true
         // The Games app's page for a game's own screen in front: the keys go to that screen
@@ -58,7 +78,7 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
         return result.consume
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+    private fun handleEvent(event: AccessibilityEvent?) {
         // An app's window in front: screen size per app follows it, keyboard or not
         if (event?.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             val pkg = event.packageName?.toString() ?: return

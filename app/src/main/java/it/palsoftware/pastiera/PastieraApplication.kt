@@ -17,6 +17,7 @@ class PastieraApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         FluxLog.init(this)
+        keepBackgroundFailuresApart()
         // A fresh install starts from the default configuration, before anything writes settings
         if (RecommendedSettings.applyIfFreshInstall(this)) {
             // A language edition opens in its language
@@ -39,6 +40,22 @@ class PastieraApplication : Application() {
         publishSoftwareKeyboardModeShortcut()
         Handler(Looper.getMainLooper()).post {
             AdditionalSubtypeUtils.registerAdditionalSubtypes(this)
+        }
+    }
+
+    /**
+     * A failure on a background thread (a stream, a cast, the desktop, a download) is logged,
+     * here and in the crash log, and ends that thread alone: the keyboard, in the same process,
+     * stays up. The main thread's failures, and running out of memory, end the app as before.
+     */
+    private fun keepBackgroundFailuresApart() {
+        val previous = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, error ->
+            if (thread === Looper.getMainLooper().thread || error is OutOfMemoryError || previous == null) {
+                previous?.uncaughtException(thread, error)
+            } else {
+                runCatching { FluxLog.w("FluxCrash", "thread ${thread.name}: ${android.util.Log.getStackTraceString(error)}") }
+            }
         }
     }
 

@@ -56,7 +56,9 @@ class TextExpansionPopup(
         window.height = popupHeight
         val top = popupOffsetY(popupHeight)
         if (!window.isShowing) {
-            window.showAtLocation(anchor.rootView, Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, top)
+            // The keyboard's window gone (hidden mid-word): nothing to show over
+            if (!anchor.isAttachedToWindow) return
+            runCatching { window.showAtLocation(anchor.rootView, Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, top) }
         } else {
             window.update(0, top, dp(300), popupHeight)
         }

@@ -99,33 +99,53 @@ class ClipboardHistoryManager internal constructor(
     }
 
     private fun recordRecentCopy() {
-        recentCopy = null
-        val clipData = runCatching { clipboardManager.primaryClip }.getOrNull() ?: return
-        if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) return
-        val text = clipData.getItemAt(0)?.coerceToText(context)?.toString()
-        if (text.isNullOrBlank()) return
-        // Passwords and codes copied from password managers: only for password fields, masked
-        recentCopy = RecentCopy(System.currentTimeMillis(), text, sensitive = isSensitive(clipData))
+        guarded("read a copy") {
+            recentCopy = null
+            val clipData = runCatching { clipboardManager.primaryClip }.getOrNull() ?: return
+            if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) return
+            val text = clipData.getItemAt(0)?.coerceToText(context)?.toString()
+            if (text.isNullOrBlank()) return
+            // Passwords and codes copied from password managers: only for password fields, masked
+            recentCopy = RecentCopy(System.currentTimeMillis(), text, sensitive = isSensitive(clipData))
+        }
+    }
+
+    /**
+     * The history's storage failing (full, locked, damaged) or a clip that can't be read costs
+     * that clip, never the keyboard, which shares this process.
+     */
+    private inline fun guarded(what: String, block: () -> Unit) {
+        try {
+            block()
+        } catch (e: android.database.SQLException) {
+            Log.w(TAG, "clipboard history couldn't $what", e)
+        } catch (e: IllegalStateException) {
+            Log.w(TAG, "clipboard history couldn't $what", e)
+        } catch (e: SecurityException) {
+            Log.w(TAG, "clipboard history couldn't $what", e)
+        }
     }
 
     private fun fetchPrimaryClip() {
-        if (!isHistoryAccessible()) return
-        val clipData = clipboardManager.primaryClip ?: return
-        if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) {
-            return
-        }
-
-        // Passwords and codes copied from password managers never go into the history
-        if (isSensitive(clipData)) return
-
-        clipData.getItemAt(0)?.let { clipItem ->
-            val timeStamp = System.currentTimeMillis() // TODO: Get actual clip timestamp if available
-            val content = clipItem.coerceToText(context)
-            if (TextUtils.isEmpty(content)) return
+        guarded("keep a clip") {
             if (!isHistoryAccessible()) return
+            val clipData = clipboardManager.primaryClip ?: return
+            if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) {
+                return
+            }
 
-            val retentionMinutes = getClipboardRetentionTime()
-            clipboardDao?.addClip(timeStamp, false, content.toString(), retentionMinutes)
+            // Passwords and codes copied from password managers never go into the history
+            if (isSensitive(clipData)) return
+
+            clipData.getItemAt(0)?.let { clipItem ->
+                val timeStamp = System.currentTimeMillis() // TODO: Get actual clip timestamp if available
+                val content = clipItem.coerceToText(context)
+                if (TextUtils.isEmpty(content)) return
+                if (!isHistoryAccessible()) return
+
+                val retentionMinutes = getClipboardRetentionTime()
+                clipboardDao?.addClip(timeStamp, false, content.toString(), retentionMinutes)
+            }
         }
     }
 
@@ -134,12 +154,12 @@ class ClipboardHistoryManager internal constructor(
 
     fun toggleClipPinned(id: Long) {
         if (!isHistoryAccessible()) return
-        clipboardDao?.togglePinned(id)
+        guarded("pin a clip") { clipboardDao?.togglePinned(id) }
     }
 
     fun clearHistory() {
         if (!isHistoryAccessible()) return
-        clipboardDao?.clearNonPinned()
+        guarded("clear") { clipboardDao?.clearNonPinned() }
         try {
             // Clear system clipboard (API 28+)
             clipboardManager.clearPrimaryClip()
@@ -163,9 +183,9 @@ class ClipboardHistoryManager internal constructor(
             val updatedIndex = (0 until getHistorySize()).firstOrNull { idx ->
                 getHistoryEntry(idx)?.id == entry.id
             }
-            updatedIndex?.let { clipboardDao?.deleteClipAt(it) }
+            updatedIndex?.let { guarded("remove a clip") { clipboardDao?.deleteClipAt(it) } }
         } else {
-            clipboardDao?.deleteClipAt(index)
+            guarded("remove a clip") { clipboardDao?.deleteClipAt(index) }
         }
     }
 
@@ -173,7 +193,7 @@ class ClipboardHistoryManager internal constructor(
         if (!isHistoryAccessible()) return
         // Clear old clips before showing history
         val retentionMinutes = getClipboardRetentionTime()
-        clipboardDao?.clearOldClips(true, retentionMinutes)
+        guarded("clear old clips") { clipboardDao?.clearOldClips(true, retentionMinutes) }
     }
 
     fun getHistorySize() = if (isHistoryAccessible()) clipboardDao?.count() ?: 0 else 0

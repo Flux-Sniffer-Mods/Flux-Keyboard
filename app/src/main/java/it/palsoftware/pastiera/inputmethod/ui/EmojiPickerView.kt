@@ -102,7 +102,7 @@ class EmojiPickerView(
     private var roundedIconSize = 0f
     val edgeControls: Pair<View, View> get() = searchToggleButton to closeButton
 
-    private var coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private var coroutineScope = newScope()
     private var loadingJob: Job? = null
 
     private val compactHeight = dpToPx(COMPACT_HEIGHT_DP)
@@ -1229,7 +1229,7 @@ class EmojiPickerView(
     private fun liveScope(): CoroutineScope {
         if (!coroutineScope.isActive && isAttachedToWindow) {
             log("scope was cancelled while on screen: recreating it")
-            coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+            coroutineScope = newScope()
         }
         return coroutineScope
     }
@@ -1996,12 +1996,15 @@ class EmojiPickerView(
         val anchorX = location[0]
         val anchorY = location[1]
         val desiredX = anchorX + (anchor.width - popupWidth) / 2
-        val clampedX = desiredX.coerceIn(0, windowWidth - popupWidth)
+        // A popup wider than the window starts at its left edge (an empty range can't be clamped to)
+        val clampedX = desiredX.coerceIn(0, maxOf(0, windowWidth - popupWidth))
         val xOffset = clampedX - anchorX
         val desiredYOffset = -(popupHeight + anchor.height)
         val minYOffset = -(anchorY + anchor.height)
         val yOffset = maxOf(desiredYOffset, minYOffset)
-        popup.showAsDropDown(anchor, xOffset, yOffset)
+        // The keyboard's window gone meanwhile (closed mid-press): no popup, no crash
+        if (!anchor.isAttachedToWindow) return
+        runCatching { popup.showAsDropDown(anchor, xOffset, yOffset) }
     }
 
     private fun dpToPx(dp: Float): Int {
@@ -2017,7 +2020,7 @@ class EmojiPickerView(
         log("attached (scope=${coroutineScope.isActive}, gif=$gifMode, symbol=$symbolMode)")
         // Recreate coroutine scope if it was cancelled
         if (!coroutineScope.isActive) {
-            coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+            coroutineScope = newScope()
             // A GIF or symbol search that was running in the old scope died with it
             if (gifMode) loadGifs(searchQuery)
             if (symbolMode) loadSymbols(searchQuery)
@@ -2408,6 +2411,11 @@ class EmojiPickerView(
             is SectionItem.Emoji -> categoryId
         }
     }
+
+    /** The picker's work on the main thread: a failure in it is logged, never the keyboard's end. */
+    private fun newScope() = CoroutineScope(
+        SupervisorJob() + Dispatchers.Main + kotlinx.coroutines.CoroutineExceptionHandler { _, e -> Log.w(LOG_TAG, "emoji picker: $e", e) }
+    )
 
     companion object {
         private const val COMPACT_HEIGHT_DP = 177f
