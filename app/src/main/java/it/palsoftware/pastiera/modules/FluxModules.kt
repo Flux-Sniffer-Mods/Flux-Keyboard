@@ -17,7 +17,7 @@ enum class FluxModule { KEYBOARD, GAMING, STREAMING, DESKTOP }
  * Which modules are on. The keyboard, gaming mode and streaming are switched on when wanted
  * (their code comes with the app: switching one on adds its parts, such as the keyboard itself,
  * the Games and Streaming apps in the app list and streaming's services, and off takes them
- * away); the keyboard is on unless switched off. The desktop is still to come. Everything else
+ * away); the keyboard is on unless switched off. Everything else
  * asks here before doing a module's work.
  */
 object FluxModules {
@@ -25,6 +25,7 @@ object FluxModules {
     private const val KEY_GAMING = "module_gaming"
     private const val KEY_STREAMING = "module_streaming"
     private const val KEY_KEYBOARD = "module_keyboard"
+    private const val KEY_DESKTOP = "module_desktop"
     /** Once: the Streaming app in the app list for streaming already on before it existed. */
     private const val KEY_STREAMING_APP_SET_UP = "module_streaming_app_set_up"
     /** The keyboard itself, offered to Android as a keyboard while the module is on. */
@@ -33,21 +34,21 @@ object FluxModules {
 
     fun on(context: Context, module: FluxModule): Boolean = when (module) {
         FluxModule.KEYBOARD -> SettingsManager.getPreferences(context).getBoolean(KEY_KEYBOARD, true)
-        FluxModule.DESKTOP -> false
+        FluxModule.DESKTOP -> SettingsManager.getPreferences(context).getBoolean(KEY_DESKTOP, false)
         FluxModule.GAMING -> SettingsManager.getPreferences(context).getBoolean(KEY_GAMING, false)
         FluxModule.STREAMING -> SettingsManager.getPreferences(context).getBoolean(KEY_STREAMING, false)
     }
 
-    /** Switched on and off from its tile: not the desktop (to come). */
-    fun switchable(module: FluxModule): Boolean = module != FluxModule.DESKTOP
+    /** Switched on and off from its tile. */
+    fun switchable(module: FluxModule): Boolean = true
 
-    /** Coming in a later version: shown, not opened. */
-    fun comingSoon(module: FluxModule): Boolean = module == FluxModule.DESKTOP
+    /** Coming in a later version: shown, not opened. None now. */
+    fun comingSoon(module: FluxModule): Boolean = false
 
     fun setOn(context: Context, module: FluxModule, on: Boolean) {
         if (!switchable(module)) return
         val app = context.applicationContext
-        val key = when (module) { FluxModule.GAMING -> KEY_GAMING; FluxModule.STREAMING -> KEY_STREAMING; else -> KEY_KEYBOARD }
+        val key = when (module) { FluxModule.GAMING -> KEY_GAMING; FluxModule.STREAMING -> KEY_STREAMING; FluxModule.DESKTOP -> KEY_DESKTOP; else -> KEY_KEYBOARD }
         SettingsManager.getPreferences(app).edit().putBoolean(key, on).apply()
         when (module) {
             // Gaming mode itself, and the Games app in the app list, come and go with it
@@ -75,6 +76,10 @@ object FluxModules {
                     android.content.pm.PackageManager.DONT_KILL_APP
                 )
                 if (!on && it.palsoftware.pastiera.KeyboardActivity.inAppList(app)) it.palsoftware.pastiera.KeyboardActivity.setInAppList(app, false)
+            }
+            // Off: the desktop ends if it's running (Debian stays installed for when it's back)
+            FluxModule.DESKTOP -> if (!on && it.palsoftware.pastiera.linux.LinuxDesktop.state.value == it.palsoftware.pastiera.linux.LinuxDesktop.State.Running) {
+                it.palsoftware.pastiera.linux.LinuxDesktop.stop(app)
             }
             else -> Unit
         }

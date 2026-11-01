@@ -111,3 +111,33 @@ The AirPlay client in `app/src/main/java/it/palsoftware/pastiera/airplay/` follo
 - License: MIT-style Bouncy Castle licence, used unmodified as a library dependency
 
 Used for AirPlay pairing: X25519, Ed25519, ChaCha20-Poly1305 and HKDF.
+
+## PRoot
+
+- Project: PRoot, as patched for Android by Termux (`termux/proot` at `fa47780ce5576eb22d2f779d700a44640d957529`)
+- Source repository: https://github.com/termux/proot (upstream https://github.com/proot-me/proot)
+- License: GNU General Public License, version 2 or later
+- Source and license text: `third_party/proot/` (`COPYING`); how it's built: `third_party/proot/FLUX.md` and `scripts/build-proot.sh`
+
+Built into `app/src/main/jniLibs/arm64-v8a/libproot.so` and `libproot-loader.so`, to run the Linux desktop without root. One change: a missing `#include <string.h>`.
+
+## talloc
+
+- Project: talloc 2.4.2, from the Samba project
+- Source: https://www.samba.org/ftp/talloc/talloc-2.4.2.tar.gz
+- License: GNU Lesser General Public License, version 3 or later
+- Source and license text: `third_party/talloc/`, `third_party/licenses/LGPL-3.0.txt`
+
+Linked into PRoot. `replace.h` is a small stand-in for Samba's lib/replace.
+
+## Debian and Ubuntu
+
+The Linux desktop downloads Debian's official arm64 image (debuerreotype, https://github.com/debuerreotype/docker-debian-artifacts) or Ubuntu's (Ubuntu Base, https://cdimage.ubuntu.com/ubuntu-base/) when it's installed, and its packages from their servers; none of it is in the app. Each package keeps its own license, listed inside Linux under `/usr/share/doc`.
+
+## Titan-2-Elite-Debian-Chroot
+
+- Project: Titan-2-Elite-Debian-Chroot, by Flux-Sniffer-Mods (the same author)
+- Source repository: https://github.com/Flux-Sniffer-Mods/Titan-2-Elite-Debian-Chroot
+- License: GNU General Public License, version 3 or later
+
+The Linux desktop's chroot mounts, apt and dpkg settings, systemctl stand-in, KDE touch tuning, applications menu and notification bridge (`app/src/main/assets/fork/linux/`) are adapted from it.

@@ -361,6 +361,37 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- The Linux desktop: its page, its picture (on the phone or a TV screen), and what keeps it going -->
+        <activity
+            android:name=".linux.LinuxActivity"
+            android:exported="false"
+            android:label="@string/module_desktop_title"
+            android:taskAffinity="it.palsoftware.pastiera.linux"
+            android:theme="@style/Theme.Pastiera" />
+        <activity
+            android:name=".linux.LinuxViewerActivity"
+            android:exported="false"
+            android:label="@string/module_desktop_title"
+            android:taskAffinity="it.palsoftware.pastiera.linux.viewer"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden|navigation|density|uiMode"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <!-- A Linux program's home-screen shortcut: opens it in the desktop -->
+        <activity
+            android:name=".linux.LinuxLaunchActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <service
+            android:name=".linux.LinuxService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Keeps a Linux desktop the user started (installing or running) going on the phone" />
+        </service>
         <!-- AirPlay: casting to an Apple TV or AirPlay TV, and what it asks for first -->
         <service
             android:name=".airplay.AirPlayService"

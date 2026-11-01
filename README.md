@@ -202,6 +202,7 @@ What only Flux Keyboard does, on top of everything [Pastiera](#built-on-pastiera
 
 - **Miracast too**: no Moonlight on the TV? The phone's screen goes to a TV or PC that takes Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), and an app tapped in the Streaming app goes there alone.
 - **AirPlay too**: an Apple TV, or a TV with AirPlay, shows the phone's screen with its sound, a few seconds behind: good for apps and video.
+- **Linux desktop**: Debian or Ubuntu, with Xfce or KDE Plasma, on the phone or a TV, through the built-in shell: a chroot with root, PRoot without. No Termux needed.
 - **The TV does the rest**: with an LG webOS TV set up, opening a game on the phone turns the TV on and opens Moonlight straight into it, the phone's volume buttons turn the TV up and down, and the TV turns off when the stream ends.
 
 ## Also here, all in one app

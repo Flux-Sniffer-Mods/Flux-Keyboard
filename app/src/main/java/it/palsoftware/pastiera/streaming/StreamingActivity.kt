@@ -81,6 +81,7 @@ class StreamingActivity : ComponentActivity() {
     private sealed class Tile(val key: String) {
         class App(val app: StreamApps.App) : Tile(app.packageName)
         class Script(val script: String) : Tile("termux:$script")
+        object Linux : Tile("flux:linux")
     }
 
     private fun openSettings() = it.palsoftware.pastiera.settings.openSettingsPage(this,
@@ -167,7 +168,11 @@ class StreamingActivity : ComponentActivity() {
             val scripts = remember(reload) { StreamApps.scripts(this@StreamingActivity) }
             val shown = apps.orEmpty().filter { matches(it.label) }
             val (inMoonlight, rest) = if (all) shown to emptyList() else shown.partition { it.packageName in listed }
-            val tiles = inMoonlight.map { Tile.App(it) } +
+            // The Linux desktop first, once it's installed (with its module on)
+            val linux = it.palsoftware.pastiera.modules.FluxModules.on(this@StreamingActivity, it.palsoftware.pastiera.modules.FluxModule.DESKTOP) &&
+                it.palsoftware.pastiera.linux.LinuxDesktop.installedMode(this@StreamingActivity) != null &&
+                matches(stringResource(R.string.linux_tile))
+            val tiles = (if (linux) listOf<Tile>(Tile.Linux) else emptyList()) + inMoonlight.map { Tile.App(it) } +
                 scripts.filter { script -> matches(it.palsoftware.pastiera.shortcuts.TermuxScripts.label(script)) }.map { Tile.Script(it) } +
                 rest.map { Tile.App(it) }
             LazyVerticalGrid(
@@ -201,6 +206,8 @@ class StreamingActivity : ComponentActivity() {
                 }
                 items(tiles.size, key = { tiles[it].key }) { index ->
                     when (val tile = tiles[index]) {
+                        is Tile.Linux -> AppTile(stringResource(R.string.linux_tile), it.palsoftware.pastiera.linux.LinuxDesktop.distro(this@StreamingActivity).label,
+                            { Symbol("\u25A4") }, onClick = { linux() }, onLongClick = { linux() })
                         is Tile.Script -> AppTile(it.palsoftware.pastiera.shortcuts.TermuxScripts.label(tile.script), "Termux",
                             { Symbol("\u276F") }, onClick = { run(tile.script) }, onLongClick = { run(tile.script) })
                         is Tile.App -> {
@@ -301,6 +308,27 @@ class StreamingActivity : ComponentActivity() {
         val context = applicationContext
         Thread { runCatching { ExtraScreen.bring(context, launch, screen) } }.start()
         Toast.makeText(this, getString(R.string.streaming_app_opened, app.label), Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * The Linux desktop on the TV (the stream's screen, or Miracast's; AirPlay shows the phone's),
+     * started first if it isn't running; with nothing on a TV, on the phone.
+     */
+    private fun linux() {
+        val screen = ownScreen() ?: ExtraScreen.current?.id ?: Miracast.displayId(this)
+        val desktop = it.palsoftware.pastiera.linux.LinuxDesktop
+        val context = applicationContext
+        when (desktop.state.value) {
+            it.palsoftware.pastiera.linux.LinuxDesktop.State.Running -> desktop.show(this, screen)
+            it.palsoftware.pastiera.linux.LinuxDesktop.State.Starting -> hint(R.string.linux_starting)
+            else -> {
+                @Suppress("DEPRECATION")
+                val metrics = android.util.DisplayMetrics().also { windowManager.defaultDisplay.getRealMetrics(it) }
+                val (w, h) = if (screen != null) 1920 to 1080 else metrics.widthPixels to metrics.heightPixels
+                Toast.makeText(this, R.string.linux_starting, Toast.LENGTH_SHORT).show()
+                desktop.start(this, w, h) { desktop.show(context, screen) }
+            }
+        }
     }
 
     /** A Termux:Widget script run, Termux's terminal shown where the app would be. */

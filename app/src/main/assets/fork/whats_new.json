@@ -4,6 +4,18 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Desktop: says what it's doing while it connects (an update after installing a new version can take minutes), and why when it can't, with Linux's own logs (also under Show what happened). It no longer stops waiting for a slow first start.",
+      "after": "202610230355"
+    },
+    {
+      "text": "Desktop, tuned for the phone (from Titan-2-Elite-Debian-Chroot): Debian 13 and Ubuntu 26.04, drawn at the screen's full sharpness and sized up 1.5 times (or 1, 1.25 or 2), in the phone's language and time zone; KDE Plasma in tablet mode with bigger text and icons and a working launcher menu; quicker, smaller installs; Linux's notifications in the phone's shade; and with root, a tidier chroot that leaves /data as it is and stops cleanly.",
+      "after": "202610230331"
+    },
+    {
+      "text": "Desktop: a Linux desktop (Debian 13 or Ubuntu 26.04, with Xfce or KDE Plasma, a browser and a terminal) on the phone or a TV, through the built-in shell. With root it runs as a chroot at full speed (any root manager's su); without, through PRoot. Shown in the app's own viewer, sized to whichever screen shows it: touch, mouse, the keyboard and its sound all work. Also in the Streaming app, to start it on the TV. Every program in Linux is on the Desktop page (a tap opens it, a long press puts it on the home screen) and on the Xfce desktop as an icon.",
+      "after": "202610230331"
+    },
+    {
       "text": "AirPlay: the phone's screen, with its sound, on an Apple TV or a TV with AirPlay, with no app on the TV. Find TVs in the Streaming app; type the code the TV shows the first time if it asks. A few seconds behind: good for apps and video, not fast games.",
       "after": "202610222027"
     },

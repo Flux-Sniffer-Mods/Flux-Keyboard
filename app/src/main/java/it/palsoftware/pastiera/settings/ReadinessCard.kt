@@ -108,7 +108,11 @@ private fun NeedRow(module: FluxModule, need: Need, onDone: () -> Unit) {
         Need.KEYBOARD_ON -> stringResource(R.string.readiness_keyboard_on_description)
         Need.KEYBOARD_CHOSEN -> stringResource(R.string.readiness_keyboard_chosen_description)
         Need.ACCESSIBILITY -> stringResource(R.string.readiness_accessibility_description)
-        Need.SHELL -> stringResource(if (module == FluxModule.STREAMING) R.string.shell_access_for_streaming else R.string.shell_access_for_gaming) +
+        Need.SHELL -> stringResource(when (module) {
+            FluxModule.STREAMING -> R.string.shell_access_for_streaming
+            FluxModule.DESKTOP -> R.string.shell_access_for_desktop
+            else -> R.string.shell_access_for_gaming
+        }) +
             " " + stringResource(if (shellPaired) R.string.shell_access_paired else R.string.shell_access_off)
         Need.OVERLAY -> stringResource(R.string.readiness_overlay_description)
         Need.NOTIFICATIONS -> stringResource(if (module == FluxModule.STREAMING) R.string.readiness_notifications_streaming else R.string.readiness_notifications_gaming)

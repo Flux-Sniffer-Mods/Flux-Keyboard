@@ -442,7 +442,7 @@ fun FluxHomeScreen(
                         FluxModule.KEYBOARD -> keyboardOpen = true
                         FluxModule.GAMING -> openSettingsPage(context, SettingsPage(SettingsDestination.GameMode))
                         FluxModule.STREAMING -> openSettingsPage(context, SettingsPage(SettingsDestination.Streaming))
-                        FluxModule.DESKTOP -> Unit
+                        FluxModule.DESKTOP -> context.startActivity(Intent(context, it.palsoftware.pastiera.linux.LinuxActivity::class.java))
                     }
                 }
             ) { module ->
@@ -451,7 +451,7 @@ fun FluxHomeScreen(
                     FluxModule.KEYBOARD -> keyboardOpen = true
                     FluxModule.GAMING -> context.startActivity(Intent(context, it.palsoftware.pastiera.gaming.GamesActivity::class.java))
                     FluxModule.STREAMING -> context.startActivity(Intent(context, it.palsoftware.pastiera.streaming.StreamingActivity::class.java))
-                    FluxModule.DESKTOP -> Unit
+                    FluxModule.DESKTOP -> context.startActivity(Intent(context, it.palsoftware.pastiera.linux.LinuxActivity::class.java))
                 }
             }
         }

@@ -338,6 +338,12 @@ android {
             // Exclude legacy JSON base dictionaries; keep serialized .dict and user_defaults.json
             excludes += "assets/common/dictionaries/*_base.json"
         }
+        jniLibs {
+            // PRoot (scripts/build-proot.sh) is run, not loaded: unpacked to disk, as built
+            useLegacyPackaging = true
+            keepDebugSymbols += "**/libproot.so"
+            keepDebugSymbols += "**/libproot-loader.so"
+        }
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true

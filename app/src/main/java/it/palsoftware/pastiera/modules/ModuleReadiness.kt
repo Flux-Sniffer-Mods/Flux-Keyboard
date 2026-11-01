@@ -103,6 +103,6 @@ object ModuleReadiness {
             Need.NOTIFICATIONS.takeIf { !notificationsOn(context) },
             Need.PAIRED.takeIf { runCatching { StreamHost.pairedCount(context) == 0 }.getOrDefault(false) }
         )
-        FluxModule.DESKTOP -> emptyList()
+        FluxModule.DESKTOP -> listOfNotNull(Need.SHELL.takeIf { !shellOn() })
     }
 }
