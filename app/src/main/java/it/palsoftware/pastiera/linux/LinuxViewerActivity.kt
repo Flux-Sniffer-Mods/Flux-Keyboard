@@ -11,6 +11,12 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import it.palsoftware.pastiera.FluxLog
 import it.palsoftware.pastiera.R
+import it.palsoftware.pastiera.SettingsManager
+import it.palsoftware.pastiera.data.mappings.AltModifierMappingResolver
+import it.palsoftware.pastiera.data.mappings.KeyMappingLoader
+import it.palsoftware.pastiera.getSymMappingsPage2
+import it.palsoftware.pastiera.inputmethod.DeviceSpecific
+import it.palsoftware.pastiera.personaliseSymbolsDefaults
 
 /**
  * The Linux desktop, full screen: its picture from the VNC server on this phone, the keyboard,
@@ -25,6 +31,21 @@ class LinuxViewerActivity : Activity() {
     @Volatile private var open = true
     /** Each key's keysym as it went down, so it's let go as the same. */
     private val held = HashMap<Int, Int>()
+    /** The built-in keyboard's Alt and Sym layers and sticky Shift, from Flux Keyboard's own maps (your edits too). */
+    private val layers by lazy {
+        val custom = runCatching { SettingsManager.getSymMappingsPage2(this) }.getOrDefault(emptyMap())
+        KeyLayers(
+            alt = runCatching { AltModifierMappingResolver.resolve(assets, this) }.getOrDefault(emptyMap()),
+            sym = custom.ifEmpty {
+                runCatching { SettingsManager.personaliseSymbolsDefaults(this, KeyMappingLoader.loadSymKeyMappingsPage2(assets)) }.getOrDefault(emptyMap())
+            },
+            symShifted = if (custom.isEmpty()) runCatching { KeyMappingLoader.loadSymKeyMappingsPage2Uppercase(assets) }.getOrDefault(emptyMap()) else emptyMap()
+        )
+    }
+    /** Keys that typed a layer's character, by key: typed again as they repeat, their release spent. */
+    private val typed = HashMap<Int, String>()
+    /** Modifiers held around a key for a layer or Shift tapped before it, let go with it. */
+    private val wrapped = HashMap<Int, List<Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +63,20 @@ class LinuxViewerActivity : Activity() {
             addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
             addView(message, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         })
+        // KDE lays itself out around the camera cutout and the screen's rounded corners (its panel
+        // and title bars clear them), so it has the whole screen; Xfce doesn't, so it's kept below
+        // the cutout
+        window.attributes = window.attributes.apply {
+            layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
+        if (LinuxDesktop.desktop(this) != LinuxDesktop.Desktop.KDE) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+                val band = insets.displayCutout?.safeInsetTop ?: 0
+                val params = v.layoutParams as FrameLayout.LayoutParams
+                if (params.topMargin != band) { params.topMargin = band; v.layoutParams = params }
+                insets
+            }
+        }
         // The whole screen the desktop's (on Android 10 too, which has no insetsController)
         androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).let {
             it.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
@@ -96,8 +131,13 @@ class LinuxViewerActivity : Activity() {
         runOnUiThread { message.visibility = android.view.View.GONE }
         runCatching { vnc.run() }.onFailure { if (open) FluxLog.w("FluxLinux", "viewer: $it") }
         if (open) {
-            // Ended without being asked: why, from Linux itself
+            // The session's last word comes once it has wound down
+            val until = System.currentTimeMillis() + 8_000
+            while (LinuxDesktop.state.value == LinuxDesktop.State.Running && System.currentTimeMillis() < until) Thread.sleep(250)
             val logs = LinuxDesktop.guestLogs(this).orEmpty()
+            // Ended from inside it (its Close desktop, or signing out): the picture goes with it
+            if ("flux: the desktop was stopped" in logs) { runOnUiThread { finish() }; return }
+            // Ended without being asked: why, from Linux itself
             if (logs.isNotBlank()) FluxLog.w("FluxLinux", "desktop ended:\n$logs")
             explain(getString(R.string.linux_viewer_ended), "", logs)
         }
@@ -137,6 +177,7 @@ class LinuxViewerActivity : Activity() {
         if (event.keyCode == KeyEvent.KEYCODE_BACK) return super.dispatchKeyEvent(event)
         // Volume stays the phone's
         if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP || event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) return super.dispatchKeyEvent(event)
+        if (builtIn(event) && layered(vnc, event)) return true
         when (event.action) {
             KeyEvent.ACTION_DOWN -> {
                 // Ctrl+V pastes the phone's clipboard into Linux's first
@@ -150,6 +191,7 @@ class LinuxViewerActivity : Activity() {
                 val keysym = held.remove(event.keyCode) ?: keysymOf(event)
                 if (keysym == 0) return super.dispatchKeyEvent(event)
                 vnc.key(keysym, false)
+                wrapped.remove(event.keyCode)?.asReversed()?.forEach { vnc.key(it, false) }
             }
             KeyEvent.ACTION_MULTIPLE -> event.characters?.codePoints()?.forEach { char ->
                 val keysym = Keysyms.of(char)
@@ -157,6 +199,60 @@ class LinuxViewerActivity : Activity() {
             }
         }
         return true
+    }
+
+    /** The phone's own keyboard (not one plugged in or paired, nor keys an app sends). */
+    private fun builtIn(event: KeyEvent): Boolean = event.device?.let { !it.isVirtual && !it.isExternal } == true
+
+    /**
+     * The built-in keyboard as Flux Keyboard has it: Alt and Sym are layers, not keys Linux sees
+     * (held, tapped for the next key, or locked with two taps), Shift tapped capitalises the next
+     * key. True when the key was dealt with here; the rest goes the usual way, a tapped Alt or
+     * Shift held around it where it has nothing on a layer (Alt+Tab, Shift+arrows).
+     */
+    private fun layered(vnc: VncClient, event: KeyEvent): Boolean {
+        val down = when (event.action) { KeyEvent.ACTION_DOWN -> true; KeyEvent.ACTION_UP -> false; else -> return false }
+        val code = runCatching { DeviceSpecific.remapHardwareKeyEvent(event.keyCode, event).keyCode }.getOrDefault(event.keyCode)
+        val sticky = when (code) {
+            KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT -> layers.altKey
+            KeyEvent.KEYCODE_SYM -> layers.symKey
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> layers.shift
+            else -> null
+        }
+        if (sticky != null) {
+            if (down) { if (event.repeatCount == 0) sticky.down() } else sticky.up(event.eventTime)
+            // Shift is Shift in Linux too while held (a selection, Shift+Tab): sent the usual way
+            return sticky !== layers.shift
+        }
+        if (!down) return typed.remove(event.keyCode) != null
+        // A layer's character, typed again as the key repeats
+        val chars = typed[event.keyCode]?.takeIf { event.repeatCount > 0 }
+            ?: layers.characters(code, event.isShiftPressed || layers.shift.on)?.also {
+                typed[event.keyCode] = it
+                if (!event.isShiftPressed) layers.shift.used()
+            }
+        if (chars != null) {
+            chars.codePoints().forEach { c -> Keysyms.of(c).takeIf { it != 0 }?.let { vnc.key(it, true); vnc.key(it, false) } }
+            return true
+        }
+        if (event.repeatCount > 0) return false
+        val wrap = mutableListOf<Int>()
+        if (layers.altKey.on) { wrap += ALT; layers.altKey.used() }
+        if (layers.symKey.on) layers.symKey.used()
+        if (layers.shift.on && !event.isShiftPressed) {
+            val upper = event.getUnicodeChar(event.metaState or KeyEvent.META_SHIFT_ON)
+            // Capitals locked: letters only; a tap: the next key's shifted character
+            val letter = upper > 0 && Character.isLetter(upper)
+            if (upper > 0 && wrap.isEmpty() && !event.isCtrlPressed && (letter || layers.shift.latched)) {
+                layers.shift.used()
+                val keysym = Keysyms.of(event.keyCode, upper)
+                if (keysym != 0) { held[event.keyCode] = keysym; vnc.key(keysym, true); return true }
+            } else if (!layers.shift.locked) {
+                wrap += SHIFT; layers.shift.used()
+            }
+        }
+        if (wrap.isNotEmpty()) { wrap.forEach { vnc.key(it, true) }; wrapped[event.keyCode] = wrap }
+        return false
     }
 
     private fun keysymOf(event: KeyEvent): Int {
@@ -184,6 +280,11 @@ class LinuxViewerActivity : Activity() {
         val height = (h and 1.inv()).coerceIn(480, 2160)
         if (kotlin.math.abs(width - vnc.width) < 8 && kotlin.math.abs(height - vnc.height) < 8) return
         Thread { vnc.setSize(width, height) }.start()
+    }
+
+    private companion object {
+        const val ALT = 0xFFE9
+        const val SHIFT = 0xFFE1
     }
 
     override fun onDestroy() {

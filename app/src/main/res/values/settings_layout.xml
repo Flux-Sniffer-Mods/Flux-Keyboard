@@ -897,7 +897,7 @@
     <string name="linux_distro_debian_description">Stable and light, with Firefox ESR.</string>
     <string name="linux_distro_ubuntu_description">Newer packages, with the Falkon browser (Ubuntu\'s Firefox needs Snap, which can\'t run here).</string>
     <string name="linux_desktop_xfce_description">Light and quick: the best fit for PRoot.</string>
-    <string name="linux_desktop_kde_description">Fuller and more polished, but heavier (about 1 GB more): best with root.</string>
+    <string name="linux_desktop_kde_description">Made for touch: big controls, a panel that hides, the Phone widget, rounded corners. Heavier (about 1 GB more): best with root.</string>
     <string name="linux_scale">Size of everything</string>
     <string name="linux_scale_hint">From the next start. Bigger suits the phone; 1× suits a large screen.</string>
     <string name="linux_notifications_channel">Linux notifications</string>
@@ -905,4 +905,7 @@
     <string name="linux_show_log">Show what happened</string>
     <string name="linux_gpu">Use the phone\'s GPU</string>
     <string name="linux_gpu_hint">From the next start. Programs draw on the phone\'s GPU; the desktop itself stays on the CPU. Turn it off if a program shows black or garbled.</string>
+    <string name="linux_desktop_switch_hint">From the next start. A desktop not used before is installed beside the other first, which takes a few minutes.</string>
+    <string name="linux_effects">Window effects</string>
+    <string name="linux_effects_hint">From the next start. Rounded corners, smooth scrolling and animations, drawn on the CPU. Turn them off if the desktop feels slow.</string>
 </resources>

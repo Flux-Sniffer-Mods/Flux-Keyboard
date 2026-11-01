@@ -7,16 +7,18 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.SystemClock
+import android.view.HapticFeedbackConstants
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
-import kotlin.math.abs
 
 /**
- * The desktop's picture, fitted to the view, and touch and mouse turned into the pointer: a tap
- * clicks, a long press right-clicks, a drag holds the button, two fingers scroll. A mouse (or the
- * phone's trackpad acting as one) moves, clicks and scrolls as itself.
+ * The desktop's picture, fitted to the view, and touch and mouse turned into the pointer: touch
+ * the way a phone has it ([TouchGestures]: a tap clicks, a drag scrolls, a long-press right-clicks
+ * or, moved, drags), a mouse (or the phone's trackpad acting as one) moving, clicking and
+ * scrolling as itself.
  */
 @SuppressLint("ViewConstructor")
 internal class DesktopView(context: Context) : View(context) {
@@ -98,78 +100,61 @@ internal class DesktopView(context: Context) : View(context) {
 
     // ---- Touch ----
 
-    private val slop = ViewConfiguration.get(context).scaledTouchSlop
-    private var downX = 0f
-    private var downY = 0f
-    private var dragging = false
-    private var pressed = false
-    private var longPressed = false
-    private var scrollY = 0f
-    private val longPress = Runnable {
-        val vnc = client ?: return@Runnable
-        longPressed = true
-        vnc.pointer(desktopX(downX), desktopY(downY), RIGHT)
-        vnc.pointer(desktopX(downX), desktopY(downY), 0)
+    /** Touch the way a phone has it (a drag scrolls, a long-press right-clicks or drags): [TouchGestures]. */
+    private val gestures = TouchGestures(object : TouchGestures.Desk {
+        override val left get() = this@DesktopView.left
+        override val top get() = this@DesktopView.top
+        override val right get() = this@DesktopView.left + (bitmap?.width ?: 0) * scale
+        override val bottom get() = this@DesktopView.top + (bitmap?.height ?: 0) * scale
+        override fun pointer(x: Float, y: Float, buttons: Int) {
+            val vnc = client ?: return
+            val picture = bitmap ?: return
+            vnc.pointer(desktopX(x).coerceIn(0, picture.width - 1), desktopY(y).coerceIn(0, picture.height - 1), buttons)
+        }
+        override fun longPressed() {
+            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        }
+    }, resources.displayMetrics.density, ViewConfiguration.getLongPressTimeout().toLong())
+
+    /** Each frame while the gestures want it: the long-press timer, a glide, the bottom edge's hold. */
+    private var ticking = false
+    private val ticker = object : Runnable {
+        override fun run() {
+            val now = SystemClock.uptimeMillis()
+            gestures.tick(now)
+            if (gestures.ticking(now)) postOnAnimation(this) else ticking = false
+        }
+    }
+
+    private fun tickWhileNeeded() {
+        if (!ticking && gestures.ticking(SystemClock.uptimeMillis())) {
+            ticking = true
+            postOnAnimation(ticker)
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        removeCallbacks(ticker)
+        ticking = false
+        super.onDetachedFromWindow()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val vnc = client ?: return true
         if (event.isFromSource(InputDevice.SOURCE_MOUSE)) return mouse(event, vnc)
-        val x = event.x
-        val y = event.y
-        when (event.actionMasked) {
-            MotionEvent.ACTION_DOWN -> {
-                downX = x; downY = y
-                dragging = false; pressed = false; longPressed = false
-                vnc.pointer(desktopX(x), desktopY(y), 0)
-                postDelayed(longPress, ViewConfiguration.getLongPressTimeout().toLong())
+        if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
+            gestures.cancel()
+        } else {
+            // The fingers still down: the one lifting now left out
+            val lifting = when (event.actionMasked) {
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> event.actionIndex
+                else -> -1
             }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                removeCallbacks(longPress)
-                if (pressed) { vnc.pointer(desktopX(x), desktopY(y), 0); pressed = false }
-                scrollY = (event.getY(0) + event.getY(1)) / 2
-            }
-            MotionEvent.ACTION_MOVE -> {
-                if (event.pointerCount >= 2) {
-                    // Two fingers: the wheel, a step every so far moved
-                    val middle = (event.getY(0) + event.getY(1)) / 2
-                    val step = slop * 3
-                    while (abs(middle - scrollY) >= step) {
-                        val button = if (middle < scrollY) WHEEL_DOWN else WHEEL_UP
-                        vnc.pointer(desktopX(downX), desktopY(downY), button)
-                        vnc.pointer(desktopX(downX), desktopY(downY), 0)
-                        scrollY += if (middle < scrollY) -step else step
-                    }
-                    return true
-                }
-                if (longPressed) return true
-                if (!dragging && (abs(x - downX) > slop || abs(y - downY) > slop)) {
-                    removeCallbacks(longPress)
-                    dragging = true
-                    pressed = true
-                    vnc.pointer(desktopX(downX), desktopY(downY), LEFT)
-                }
-                if (dragging) vnc.pointer(desktopX(x), desktopY(y), LEFT)
-            }
-            MotionEvent.ACTION_UP -> {
-                removeCallbacks(longPress)
-                when {
-                    longPressed -> Unit
-                    pressed -> vnc.pointer(desktopX(x), desktopY(y), 0)
-                    !dragging -> {
-                        vnc.pointer(desktopX(x), desktopY(y), LEFT)
-                        vnc.pointer(desktopX(x), desktopY(y), 0)
-                    }
-                }
-                pressed = false
-            }
-            MotionEvent.ACTION_CANCEL -> {
-                removeCallbacks(longPress)
-                if (pressed) vnc.pointer(desktopX(x), desktopY(y), 0)
-                pressed = false
-            }
+            val fingers = (0 until event.pointerCount).filter { it != lifting }.map { floatArrayOf(event.getX(it), event.getY(it)) }
+            gestures.frame(fingers, event.eventTime)
         }
+        tickWhileNeeded()
         return true
     }
 
@@ -197,9 +182,10 @@ internal class DesktopView(context: Context) : View(context) {
             MotionEvent.ACTION_HOVER_MOVE, MotionEvent.ACTION_HOVER_ENTER -> vnc.pointer(x, y, buttons(event))
             MotionEvent.ACTION_BUTTON_PRESS, MotionEvent.ACTION_BUTTON_RELEASE -> vnc.pointer(x, y, buttons(event))
             MotionEvent.ACTION_SCROLL -> {
-                val amount = event.getAxisValue(MotionEvent.AXIS_VSCROLL)
-                if (amount != 0f) {
-                    val button = if (amount > 0) WHEEL_UP else WHEEL_DOWN
+                val down = event.getAxisValue(MotionEvent.AXIS_VSCROLL)
+                val across = event.getAxisValue(MotionEvent.AXIS_HSCROLL)
+                for ((amount, button) in listOf(down to (if (down > 0) WHEEL_UP else WHEEL_DOWN), across to (if (across > 0) WHEEL_RIGHT else WHEEL_LEFT))) {
+                    if (amount == 0f) continue
                     vnc.pointer(x, y, buttons(event) or button)
                     vnc.pointer(x, y, buttons(event))
                 }
@@ -215,5 +201,7 @@ internal class DesktopView(context: Context) : View(context) {
         const val RIGHT = 4
         const val WHEEL_UP = 8
         const val WHEEL_DOWN = 16
+        const val WHEEL_LEFT = 32
+        const val WHEEL_RIGHT = 64
     }
 }

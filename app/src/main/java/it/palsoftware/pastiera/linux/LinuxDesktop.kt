@@ -2,6 +2,11 @@ package it.palsoftware.pastiera.linux
 
 import android.content.Context
 import android.content.Intent
+import android.hardware.display.DisplayManager
+import android.os.Build
+import android.util.DisplayMetrics
+import android.view.Display
+import android.view.RoundedCorner
 import it.palsoftware.pastiera.FluxLog
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.adb.AdbShell
@@ -44,6 +49,9 @@ object LinuxDesktop {
     /** The Linux chosen (or installed): Debian unless Ubuntu was picked. */
     fun distro(context: Context): Distro =
         prefs(context).getString(KEY_DISTRO, null)?.let { runCatching { Distro.valueOf(it) }.getOrNull() } ?: Distro.DEBIAN
+
+    /** Changes the desktop: the next start installs it beside the other (the first time) and runs it. */
+    fun setDesktop(context: Context, desktop: Desktop) = prefs(context).edit().putString(KEY_DESKTOP, desktop.name).apply()
 
     fun desktop(context: Context): Desktop =
         prefs(context).getString(KEY_DESKTOP, null)?.let { runCatching { Desktop.valueOf(it) }.getOrNull() } ?: Desktop.XFCE
@@ -153,7 +161,8 @@ object LinuxDesktop {
             "LOCALE" to java.util.Locale.getDefault().let { if (it.country.isNotEmpty()) "${it.language}_${it.country}" else it.language },
             "TZNAME" to java.util.TimeZone.getDefault().id,
             "SCALE" to scale(context).toString(),
-            "GPU" to if (gpu(context)) "1" else "0"
+            "GPU" to if (gpu(context)) "1" else "0",
+            "EFFECTS" to if (effects(context)) "1" else "0"
         ) + extra
         return env.entries.joinToString(" ") { "${it.key}=${quote(it.value)}" } + " sh ${quote(reach(script, mode))} $action 2>&1"
     }
@@ -306,6 +315,34 @@ object LinuxDesktop {
 
     fun setGpu(context: Context, on: Boolean) = prefs(context).edit().putBoolean(KEY_GPU, on).apply()
 
+    private const val KEY_EFFECTS = "linux_effects"
+
+    /** KDE's window effects (rounded corners, smooth scrolling and animations), from the next start. */
+    fun effects(context: Context): Boolean = prefs(context).getBoolean(KEY_EFFECTS, true)
+
+    fun setEffects(context: Context, on: Boolean) = prefs(context).edit().putBoolean(KEY_EFFECTS, on).apply()
+
+    /**
+     * The phone screen's shape, for KDE to lay itself out around: its size, its corners' radius, the
+     * camera cutout's band (how tall) and how far right the cutout reaches, in pixels, as
+     * "1080 1200 100 100 160" (0 where the screen has none).
+     */
+    fun screenShape(context: Context): String {
+        val display = context.getSystemService(DisplayManager::class.java)?.getDisplay(Display.DEFAULT_DISPLAY) ?: return "0 0 0 0 0"
+        val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
+        display.getRealMetrics(metrics)
+        val cutout = runCatching { display.cutout }.getOrNull()
+        val band = cutout?.safeInsetTop ?: 0
+        val hole = cutout?.boundingRectTop?.takeIf { !it.isEmpty }?.right ?: 0
+        val radius = if (Build.VERSION.SDK_INT >= 31) {
+            listOf(RoundedCorner.POSITION_TOP_LEFT, RoundedCorner.POSITION_TOP_RIGHT,
+                RoundedCorner.POSITION_BOTTOM_LEFT, RoundedCorner.POSITION_BOTTOM_RIGHT)
+                .maxOf { runCatching { display.getRoundedCorner(it)?.radius }.getOrNull() ?: 0 }
+        } else 0
+        return "${metrics.widthPixels} ${metrics.heightPixels} $radius $band $hole"
+    }
+
     /** The VNC password for this run (new each start). */
     fun password(context: Context): String = prefs(context).getString(KEY_PASSWORD, null).orEmpty()
 
@@ -325,7 +362,9 @@ object LinuxDesktop {
         set(State.Starting)
         LinuxService.start(app)
         background {
-            run(app, mode, "start", mapOf("GEOMETRY" to "${width and 1.inv()}x${height and 1.inv()}", "PASSWORD" to password), keep = true)
+            // The phone screen's shape when it's for the phone (a TV has no cutout or corners)
+            val shape = screenShape(app).takeIf { it.startsWith("$width $height ") } ?: "$width $height 0 0 0"
+            run(app, mode, "start", mapOf("GEOMETRY" to "${width and 1.inv()}x${height and 1.inv()}", "PASSWORD" to password, "SCREEN" to shape), keep = true)
             session = null
             // Ended before its picture ever came: it couldn't start (the log says why, Linux's own too)
             if (state.value == State.Starting) {

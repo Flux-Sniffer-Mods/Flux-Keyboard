@@ -4,6 +4,12 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "KDE Plasma fitted to the phone: the whole screen, with the panel and title bars clear of the camera cutout and the rounded corners, a launcher of big icons, and the Phone widget (battery, Wi-Fi, signal and the phone's switches, brightness and volume). On Debian, Klassy's touch-sized title bars and rounded windows; KDE's lock is the phone's. The Desktop page switches between Xfce and KDE Plasma without reinstalling, and turns window effects off."
+    },
+    {
+      "text": "Desktop, made for touch (from Titan-2-Elite-Debian-Chroot): a drag scrolls and a flick glides on, a long press right-clicks (or, moved, drags), two fingers scroll or, tapped, right-click, and the bottom edge shows a hidden panel. On the phone's keyboard, Alt and Sym type as in Flux Keyboard: held, tapped for the next key or locked with two taps."
+    },
+    {
       "text": "Desktop: fixed it not showing after a slow start, with Linux's logs in its place. While the desktop started, the app kept checking on its VNC server, which took each check for a failed sign-in and then turned the app's own viewer away for longer each time."
     },
     {

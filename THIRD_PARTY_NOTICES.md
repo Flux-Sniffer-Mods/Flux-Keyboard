@@ -119,7 +119,7 @@ Used for AirPlay pairing: X25519, Ed25519, ChaCha20-Poly1305 and HKDF.
 - License: GNU General Public License, version 2 or later
 - Source and license text: `third_party/proot/` (`COPYING`); how it's built: `third_party/proot/FLUX.md` and `scripts/build-proot.sh`
 
-Built into `app/src/main/jniLibs/arm64-v8a/libproot.so` and `libproot-loader.so`, to run the Linux desktop without root. One change: a missing `#include <string.h>`.
+Built into `app/src/main/jniLibs/arm64-v8a/libproot.so` and `libproot-loader.so`, to run the Linux desktop without root. Two changes: a missing `#include <string.h>`, and a comment in `src/syscall/enter.c` shortened.
 
 ## virglrenderer and libepoxy
 
@@ -142,10 +142,17 @@ Linked into PRoot. `replace.h` is a small stand-in for Samba's lib/replace.
 
 The Linux desktop downloads Debian's official arm64 image (debuerreotype, https://github.com/debuerreotype/docker-debian-artifacts) or Ubuntu's (Ubuntu Base, https://cdimage.ubuntu.com/ubuntu-base/) when it's installed, and its packages from their servers; none of it is in the app. Each package keeps its own license, listed inside Linux under `/usr/share/doc`.
 
+## Klassy and KDE Rounded Corners
+
+- Projects: Klassy, by Paul McAuley and its contributors (https://github.com/paulmcauley/klassy), and KDE Rounded Corners, by Matin Lotfali and its contributors (https://github.com/matinlotfali/KDE-Rounded-Corners)
+- Licenses: Klassy, a mix of GPL-2.0-only, GPL-3.0-only, GPL-2.0-or-later, LGPL-2.1-or-later and MIT (its `LICENSES` folder and file headers); KDE Rounded Corners, GPL-3.0
+
+With KDE Plasma on Debian 13 (arm64), the Linux desktop downloads Titan-2-Elite-Debian-Chroot's build of both, made from their unmodified sources for that KWin (`titan-addons-bundle.tar.gz`, whose `THIRD-PARTY.md` says how to rebuild it), and installs it inside Linux; none of it is in the app.
+
 ## Titan-2-Elite-Debian-Chroot
 
 - Project: Titan-2-Elite-Debian-Chroot, by Flux-Sniffer-Mods (the same author)
 - Source repository: https://github.com/Flux-Sniffer-Mods/Titan-2-Elite-Debian-Chroot
 - License: GNU General Public License, version 3 or later
 
-The Linux desktop's chroot mounts, apt and dpkg settings, systemctl stand-in, KDE touch tuning, applications menu and notification bridge (`app/src/main/assets/fork/linux/`) are adapted from it.
+The Linux desktop's chroot mounts, apt and dpkg settings, systemctl stand-in, KDE touch tuning, applications menu, notification bridge, touch panel, window look, Phone widget and the phone's side of it (`app/src/main/assets/fork/linux/`), and its touch gestures and keyboard layers (`TouchGestures.kt`, `KeyLayers.kt`), are adapted from it.

@@ -300,6 +300,7 @@ class LinuxActivity : ComponentActivity() {
         }
         ScaleChoice()
         GpuChoice()
+        DesktopChoice()
         TextButton(onClick = { removing = true }) { Text(stringResource(R.string.linux_remove)) }
         if (removing) AlertDialog(
             onDismissRequest = { removing = false },
@@ -340,6 +341,35 @@ class LinuxActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             androidx.compose.material3.Switch(checked = on, onCheckedChange = { on = it; LinuxDesktop.setGpu(this@LinuxActivity, it) })
+        }
+    }
+
+    /** The desktop: the other one installed beside it at the next start (once), with KDE its effects. */
+    @Composable
+    private fun DesktopChoice() {
+        var desktop by remember { mutableStateOf(LinuxDesktop.desktop(this)) }
+        val pick = { it: LinuxDesktop.Desktop -> desktop = it; LinuxDesktop.setDesktop(this, it) }
+        Heading(stringResource(R.string.linux_choose_desktop))
+        Choice(desktop == LinuxDesktop.Desktop.XFCE, true, LinuxDesktop.Desktop.XFCE.label,
+            stringResource(R.string.linux_desktop_xfce_description)) { pick(LinuxDesktop.Desktop.XFCE) }
+        Choice(desktop == LinuxDesktop.Desktop.KDE, true, LinuxDesktop.Desktop.KDE.label,
+            stringResource(R.string.linux_desktop_kde_description)) { pick(LinuxDesktop.Desktop.KDE) }
+        Text(stringResource(R.string.linux_desktop_switch_hint), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (desktop == LinuxDesktop.Desktop.KDE) EffectsChoice()
+    }
+
+    /** KDE's window effects (rounded corners, smooth scrolling, animations): from its next start. */
+    @Composable
+    private fun EffectsChoice() {
+        var on by remember { mutableStateOf(LinuxDesktop.effects(this)) }
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.linux_effects), style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.linux_effects_hint), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            androidx.compose.material3.Switch(checked = on, onCheckedChange = { on = it; LinuxDesktop.setEffects(this@LinuxActivity, it) })
         }
     }
 
