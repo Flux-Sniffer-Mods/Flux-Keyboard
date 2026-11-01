@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
-import java.net.InetSocketAddress
-import java.net.Socket
 import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
 
@@ -336,15 +334,13 @@ object LinuxDesktop {
             } else set(State.Stopped)
             LinuxService.idle(app)
         }
-        // Ready once the desktop says it's drawing, however long an update first takes (a failed
-        // start ends it); from an older setup that never says, once the VNC server has answered
-        // for three minutes
+        // Ready once the desktop says it's drawing (it always does, within three minutes), however
+        // long an update first takes; a failed start ends it. Never by knocking on the VNC server:
+        // it counts each connection that doesn't sign in as a failed one and, after five, turned
+        // 127.0.0.1 away, the viewer included, for longer each time
         background {
-            var since = 0L
             while (state.value == State.Starting) {
-                val answering = listening()
-                if (answering && since == 0L) since = System.currentTimeMillis()
-                if (ready || (answering && System.currentTimeMillis() - since > 180_000)) {
+                if (ready) {
                     set(State.Running)
                     LinuxService.idle(app)
                     LinuxNotifications.watch(app)
@@ -355,11 +351,6 @@ object LinuxDesktop {
             }
         }
     }
-
-    /** The desktop's VNC server answers. */
-    fun listening(): Boolean = runCatching {
-        Socket().use { it.connect(InetSocketAddress("127.0.0.1", PORT), 500); true }
-    }.getOrDefault(false)
 
     fun stop(context: Context) {
         val app = context.applicationContext

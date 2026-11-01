@@ -4,6 +4,9 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Desktop: fixed it not showing after a slow start, with Linux's logs in its place. While the desktop started, the app kept checking on its VNC server, which took each check for a failed sign-in and then turned the app's own viewer away for longer each time."
+    },
+    {
       "text": "Stability: the keyboard keeps working through faults that used to end it: a key, a cursor move or a field it can't handle is logged and passed on as usual, and a failure in a stream, a cast, the desktop or a download ends only that. Fixed: long-pressing a key with many alternates on a narrow screen, next-word and clipboard history storage failing (full or damaged), GIFs an app turns down, the desktop on Android 10, keys and touches not reaching the Linux desktop, AirPlay stuck on Starting when the encoder fails, a stream left capturing after Moonlight left, and Back behaving differently on Android 16.",
       "after": "202611011704"
     },

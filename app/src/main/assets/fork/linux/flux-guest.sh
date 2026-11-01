@@ -11,7 +11,7 @@ LOCALE=$(printf '%s' "${FLUX_LOCALE:-en_US}" | tr -cd 'A-Za-z_@')
 LANGUAGE_CODE=${LOCALE%%_*}
 # Raised whenever this script changes: flux-linux.sh runs it again on start. Its packages are
 # installed again only when FLUX_PACKAGES_VERSION is raised too
-FLUX_GUEST_VERSION=12
+FLUX_GUEST_VERSION=13
 FLUX_PACKAGES_VERSION=5
 export DEBIAN_FRONTEND=noninteractive
 
@@ -292,8 +292,11 @@ rm -f /tmp/.X1-lock /tmp/.X11-unix/X1
 mkdir -p /tmp/.X11-unix
 chmod 1777 /tmp/.X11-unix 2>/dev/null
 dpi=$(awk -v s="$scale" 'BEGIN { printf "%d", 96 * s + 0.5 }')
+# Never turns an address away after failed sign-ins: it answers only this phone, with a new
+# password each run, and the one address it would shut out is the app's own viewer
 Xvnc :1 -geometry "$geometry" -depth 24 -dpi "$dpi" -rfbport 5901 -localhost -SecurityTypes VncAuth \
-    -PasswordFile "$HOME/.vnc/passwd" -AlwaysShared -AcceptSetDesktopSize >/tmp/flux-xvnc.log 2>&1 &
+    -PasswordFile "$HOME/.vnc/passwd" -AlwaysShared -AcceptSetDesktopSize -BlacklistThreshold 1000000 \
+    >/tmp/flux-xvnc.log 2>&1 &
 echo $! > /tmp/flux-xvnc.pid
 # Sound: everything plays into a silent sink whose monitor goes out as raw 48 kHz stereo
 # Programs reach it over 127.0.0.1 too (no socket files without root), proven by its cookie
