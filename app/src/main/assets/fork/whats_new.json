@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Titan Hub",
   "highlights": [
     {
+      "text": "Desktop: programs in Linux draw on the phone's GPU (virglrenderer built into the app, on Android's own graphics driver), with or without root; the desktop itself stays on the CPU, which suits it better. On the Desktop page, from the next start. Also, starting after an update no longer reinstalls the packages unless they changed.",
+      "after": "202610230403"
+    },
+    {
       "text": "Desktop: says what it's doing while it connects (an update after installing a new version can take minutes), and why when it can't, with Linux's own logs (also under Show what happened). It no longer stops waiting for a slow first start.",
       "after": "202610230355"
     },

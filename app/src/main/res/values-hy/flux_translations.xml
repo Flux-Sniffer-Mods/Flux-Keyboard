@@ -2275,4 +2275,6 @@
     <string name="linux_notifications_channel">Linux-ի ծանուցումներ</string>
     <string name="linux_viewer_refused">Աշխատասեղանը մերժեց գաղտնաբառը։</string>
     <string name="linux_show_log">Ցույց տալ, թե ինչ եղավ</string>
+    <string name="linux_gpu">Օգտագործել հեռախոսի GPU-ն</string>
+    <string name="linux_gpu_hint">Հաջորդ մեկնարկից։ Ծրագրերը նկարում են հեռախոսի GPU-ով, իսկ աշխատասեղանն ինքը մնում է CPU-ի վրա։ Անջատեք, եթե որևէ ծրագիր սև կամ աղավաղված է երևում։</string>
 </resources>

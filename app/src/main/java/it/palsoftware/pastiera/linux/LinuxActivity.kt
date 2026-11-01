@@ -299,6 +299,7 @@ class LinuxActivity : ComponentActivity() {
             if (tvThere) FilledTonalButton(onClick = { startOn(tv = true) }) { Text(stringResource(R.string.linux_start_tv)) }
         }
         ScaleChoice()
+        GpuChoice()
         TextButton(onClick = { removing = true }) { Text(stringResource(R.string.linux_remove)) }
         if (removing) AlertDialog(
             onDismissRequest = { removing = false },
@@ -326,6 +327,20 @@ class LinuxActivity : ComponentActivity() {
         }
         Text(stringResource(R.string.linux_scale_hint), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+
+    /** Programs on the phone's GPU or the CPU: from the next start. */
+    @Composable
+    private fun GpuChoice() {
+        var on by remember { mutableStateOf(LinuxDesktop.gpu(this)) }
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.linux_gpu), style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.linux_gpu_hint), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            androidx.compose.material3.Switch(checked = on, onCheckedChange = { on = it; LinuxDesktop.setGpu(this@LinuxActivity, it) })
+        }
     }
 
     @Composable

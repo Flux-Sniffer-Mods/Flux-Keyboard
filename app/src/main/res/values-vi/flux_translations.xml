@@ -2269,4 +2269,6 @@
     <string name="linux_notifications_channel">Thông báo Linux</string>
     <string name="linux_viewer_refused">Màn hình nền đã từ chối mật khẩu.</string>
     <string name="linux_show_log">Xem chuyện gì đã xảy ra</string>
+    <string name="linux_gpu">Dùng GPU của điện thoại</string>
+    <string name="linux_gpu_hint">Từ lần khởi động sau. Các chương trình vẽ bằng GPU của điện thoại; bản thân màn hình nền vẫn dùng CPU. Tắt đi nếu một chương trình hiện đen hoặc méo.</string>
 </resources>

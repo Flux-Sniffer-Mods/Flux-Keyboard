@@ -339,10 +339,11 @@ android {
             excludes += "assets/common/dictionaries/*_base.json"
         }
         jniLibs {
-            // PRoot (scripts/build-proot.sh) is run, not loaded: unpacked to disk, as built
+            // PRoot and the GPU server (scripts/build-proot.sh, build-virgl.sh) are run, not loaded: unpacked to disk, as built
             useLegacyPackaging = true
             keepDebugSymbols += "**/libproot.so"
             keepDebugSymbols += "**/libproot-loader.so"
+            keepDebugSymbols += "**/libvirgl.so"
         }
     }
     testOptions {

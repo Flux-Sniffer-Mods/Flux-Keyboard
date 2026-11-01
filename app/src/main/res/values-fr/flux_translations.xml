@@ -2281,4 +2281,6 @@
     <string name="linux_notifications_channel">Notifications Linux</string>
     <string name="linux_viewer_refused">Le bureau a refusé le mot de passe.</string>
     <string name="linux_show_log">Voir ce qui s’est passé</string>
+    <string name="linux_gpu">Utiliser le GPU du téléphone</string>
+    <string name="linux_gpu_hint">Dès le prochain démarrage. Les programmes dessinent sur le GPU du téléphone ; le bureau lui-même reste sur le CPU. Désactive-le si un programme s’affiche noir ou brouillé.</string>
 </resources>

@@ -2287,4 +2287,6 @@
     <string name="linux_notifications_channel">Уведомления Linux</string>
     <string name="linux_viewer_refused">Рабочий стол отклонил пароль.</string>
     <string name="linux_show_log">Показать, что произошло</string>
+    <string name="linux_gpu">Использовать GPU телефона</string>
+    <string name="linux_gpu_hint">Со следующего запуска. Программы рисуют на GPU телефона, а сам рабочий стол остаётся на CPU. Выключите, если программа выглядит чёрной или искажённой.</string>
 </resources>

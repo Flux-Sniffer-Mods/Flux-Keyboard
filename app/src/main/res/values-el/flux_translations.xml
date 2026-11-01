@@ -1655,4 +1655,6 @@
     <string name="linux_notifications_channel">Ειδοποιήσεις Linux</string>
     <string name="linux_viewer_refused">Η επιφάνεια εργασίας απέρριψε τον κωδικό.</string>
     <string name="linux_show_log">Δείξε τι έγινε</string>
+    <string name="linux_gpu">Χρήση της GPU του τηλεφώνου</string>
+    <string name="linux_gpu_hint">Από την επόμενη εκκίνηση. Τα προγράμματα σχεδιάζουν στη GPU του τηλεφώνου· η ίδια η επιφάνεια εργασίας μένει στη CPU. Απενεργοποίησέ το αν ένα πρόγραμμα φαίνεται μαύρο ή αλλοιωμένο.</string>
 </resources>

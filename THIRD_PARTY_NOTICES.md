@@ -121,6 +121,14 @@ Used for AirPlay pairing: X25519, Ed25519, ChaCha20-Poly1305 and HKDF.
 
 Built into `app/src/main/jniLibs/arm64-v8a/libproot.so` and `libproot-loader.so`, to run the Linux desktop without root. One change: a missing `#include <string.h>`.
 
+## virglrenderer and libepoxy
+
+- Projects: virglrenderer 1.3.0 (https://gitlab.freedesktop.org/virgl/virglrenderer) and libepoxy 1.5.10 (https://github.com/anholt/libepoxy), with patches from Termux's virglrenderer-android (https://github.com/termux/termux-packages), including texture decoding from gl4es
+- License: MIT (each)
+- License texts: `third_party/virglrenderer/` (`COPYING`, `COPYING-libepoxy`, `COPYING-gl4es`); how it's built: `third_party/virglrenderer/FLUX.md` and `scripts/build-virgl.sh`
+
+Built into `app/src/main/jniLibs/arm64-v8a/libvirgl.so`, so the Linux desktop's programs can draw on the phone's GPU.
+
 ## talloc
 
 - Project: talloc 2.4.2, from the Samba project

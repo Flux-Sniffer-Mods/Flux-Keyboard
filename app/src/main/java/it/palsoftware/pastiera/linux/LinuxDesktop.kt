@@ -125,7 +125,8 @@ object LinuxDesktop {
             // The phone's language and time zone, carried into Linux
             "LOCALE" to java.util.Locale.getDefault().let { if (it.country.isNotEmpty()) "${it.language}_${it.country}" else it.language },
             "TZNAME" to java.util.TimeZone.getDefault().id,
-            "SCALE" to scale(context).toString()
+            "SCALE" to scale(context).toString(),
+            "GPU" to if (gpu(context)) "1" else "0"
         ) + extra
         return env.entries.joinToString(" ") { "${it.key}=${quote(it.value)}" } + " sh ${quote(reach(script, mode))} $action 2>&1"
     }
@@ -255,6 +256,13 @@ object LinuxDesktop {
     fun scale(context: Context): Float = prefs(context).getFloat(KEY_SCALE, 1.5f).takeIf { it in SCALES } ?: 1.5f
 
     fun setScale(context: Context, value: Float) = prefs(context).edit().putFloat(KEY_SCALE, value).apply()
+
+    private const val KEY_GPU = "linux_gpu"
+
+    /** Programs in Linux draw on the phone's GPU (through virglrenderer), from the next start. */
+    fun gpu(context: Context): Boolean = prefs(context).getBoolean(KEY_GPU, true)
+
+    fun setGpu(context: Context, on: Boolean) = prefs(context).edit().putBoolean(KEY_GPU, on).apply()
 
     /** The VNC password for this run (new each start). */
     fun password(context: Context): String = prefs(context).getString(KEY_PASSWORD, null).orEmpty()

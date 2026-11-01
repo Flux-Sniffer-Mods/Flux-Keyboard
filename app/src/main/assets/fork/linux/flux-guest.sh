@@ -9,8 +9,10 @@ DESKTOP=${3:-xfce}
 LOCALE=$(printf '%s' "${FLUX_LOCALE:-en_US}" | tr -cd 'A-Za-z_@')
 [ -n "$LOCALE" ] || LOCALE=en_US
 LANGUAGE_CODE=${LOCALE%%_*}
-# Raised whenever this script changes what's installed: flux-linux.sh runs it again on start
-FLUX_GUEST_VERSION=5
+# Raised whenever this script changes: flux-linux.sh runs it again on start. Its packages are
+# installed again only when FLUX_PACKAGES_VERSION is raised too
+FLUX_GUEST_VERSION=6
+FLUX_PACKAGES_VERSION=5
 export DEBIAN_FRONTEND=noninteractive
 
 # ---- apt and dpkg, quicker and smaller on a phone ----
@@ -39,42 +41,46 @@ if [ "$MODE" = chroot ]; then
     groupadd -g 3004 aid_net_raw 2>/dev/null || true
     usermod -a -G aid_inet,aid_net_raw root || true
 fi
-apt-get update
-apt-get -y upgrade || true
+# Set up before with these packages: apt left alone, only this script's own files renewed
+had=$(cat /etc/flux-packages-version 2>/dev/null || cat /etc/flux-guest-version 2>/dev/null || true)
+if [ "$had" != "$FLUX_PACKAGES_VERSION" ] || [ ! -f /etc/flux-desktop ]; then
+    apt-get update
+    apt-get -y upgrade || true
 
-# systemd isn't running here: package scripts calling systemctl get a quiet stand-in
-# (questions answered "not active", the rest done as nothing) instead of failing
-if [ -e /usr/bin/systemctl ] && [ ! -f /usr/bin/systemctl.real ]; then
-    dpkg-divert --local --rename --divert /usr/bin/systemctl.real --add /usr/bin/systemctl >/dev/null
-    printf '%s\n' '#!/bin/sh' '# Stand-in: systemd is not running here. The real one: systemctl.real' \
-        'for a in "$@"; do case "$a" in is-active|is-enabled|is-failed|is-system-running) exit 1 ;; esac; done' \
-        'exit 0' > /usr/bin/systemctl
-    chmod 755 /usr/bin/systemctl
-fi
+    # systemd isn't running here: package scripts calling systemctl get a quiet stand-in
+    # (questions answered "not active", the rest done as nothing) instead of failing
+    if [ -e /usr/bin/systemctl ] && [ ! -f /usr/bin/systemctl.real ]; then
+        dpkg-divert --local --rename --divert /usr/bin/systemctl.real --add /usr/bin/systemctl >/dev/null
+        printf '%s\n' '#!/bin/sh' '# Stand-in: systemd is not running here. The real one: systemctl.real' \
+            'for a in "$@"; do case "$a" in is-active|is-enabled|is-failed|is-system-running) exit 1 ;; esac; done' \
+            'exit 0' > /usr/bin/systemctl
+        chmod 755 /usr/bin/systemctl
+    fi
 
-# Packages one release has and another doesn't (or has renamed) are left out, not fatal
-pick() {
-    out=""
-    for p in "$@"; do
-        if apt-cache show "$p" >/dev/null 2>&1; then out="$out $p"; else echo "flux: no package $p here (skipped)" >&2; fi
-    done
-    echo "$out"
-}
-if [ "$DESKTOP" = kde ]; then
-    desktop=$(pick plasma-desktop plasma-workspace plasma-workspace-x11 plasma-session-x11 kwin-x11 \
-        konsole dolphin kate systemsettings breeze breeze-icon-theme breeze-gtk-theme kde-config-gtk-style \
-        plasma-pa plasma-integration kde-cli-tools kio-extras fonts-noto-core fonts-noto-mono)
-else
-    desktop=$(pick xfce4 xfce4-terminal thunar mousepad adwaita-icon-theme xfce4-whiskermenu-plugin)
+    # Packages one release has and another doesn't (or has renamed) are left out, not fatal
+    pick() {
+        out=""
+        for p in "$@"; do
+            if apt-cache show "$p" >/dev/null 2>&1; then out="$out $p"; else echo "flux: no package $p here (skipped)" >&2; fi
+        done
+        echo "$out"
+    }
+    if [ "$DESKTOP" = kde ]; then
+        desktop=$(pick plasma-desktop plasma-workspace plasma-workspace-x11 plasma-session-x11 kwin-x11 \
+            konsole dolphin kate systemsettings breeze breeze-icon-theme breeze-gtk-theme kde-config-gtk-style \
+            plasma-pa plasma-integration kde-cli-tools kio-extras fonts-noto-core fonts-noto-mono)
+    else
+        desktop=$(pick xfce4 xfce4-terminal thunar mousepad adwaita-icon-theme xfce4-whiskermenu-plugin)
+    fi
+    # A browser that runs here: Ubuntu's Firefox is a Snap, which can't
+    if [ "$DISTRO" = ubuntu ]; then browser=$(pick falkon); else browser=$(pick firefox-esr); fi
+    extras=$(pick tigervnc-tools dbus-bin pulseaudio pulseaudio-utils gvfs libglib2.0-bin libgl1-mesa-dri \
+        libnotify-bin xdg-user-dirs fonts-dejavu-core)
+    apt-get install -y --no-install-recommends $desktop $browser $extras \
+        dbus dbus-x11 tigervnc-standalone-server xfonts-base sudo ca-certificates locales tzdata python3
+    apt-get clean
+    echo "$DESKTOP" > /etc/flux-desktop
 fi
-# A browser that runs here: Ubuntu's Firefox is a Snap, which can't
-if [ "$DISTRO" = ubuntu ]; then browser=$(pick falkon); else browser=$(pick firefox-esr); fi
-extras=$(pick tigervnc-tools dbus-bin pulseaudio pulseaudio-utils gvfs libglib2.0-bin libgl1-mesa-dri \
-    libnotify-bin xdg-user-dirs fonts-dejavu-core)
-apt-get install -y --no-install-recommends $desktop $browser $extras \
-    dbus dbus-x11 tigervnc-standalone-server xfonts-base sudo ca-certificates locales tzdata python3
-apt-get clean
-echo "$DESKTOP" > /etc/flux-desktop
 
 # ---- The phone's language, English beside it ----
 full="$LOCALE.UTF-8"
@@ -304,6 +310,9 @@ cursor=$(awk -v s="$scale" 'BEGIN { printf "%d", 24 * s + 0.5 }')
     echo "export QT_QUICK_BACKEND=software QSG_RENDER_LOOP=basic LIBGL_ALWAYS_SOFTWARE=1 MESA_NO_ERROR=1"
     echo "export QT_LOGGING_RULES='kpipewire_logging=false;kf.kirigami.platform.warning=false'"
     echo "export GTK_CSD=0 MOZ_USE_XINPUT2=0"
+    # The phone's GPU, when the app started its server: Mesa's virpipe driver sends OpenGL there
+    # (the desktop's own parts kept on the CPU by flux-linux.sh)
+    [ -S /tmp/.virgl_test ] && [ -e /tmp/flux-gpu ] && echo "export GALLIUM_DRIVER=virpipe VTEST_SOCKET_NAME=/tmp/.virgl_test MESA_GL_VERSION_OVERRIDE=4.3 MESA_GLSL_VERSION_OVERRIDE=430"
     # PRoot can't give Firefox its sandbox: without it, rather than not at all
     [ "$FLUX_MODE" = proot ] && echo "export MOZ_DISABLE_CONTENT_SANDBOX=1 MOZ_DISABLE_GMP_SANDBOX=1 MOZ_DISABLE_RDD_SANDBOX=1 MOZ_DISABLE_SOCKET_PROCESS_SANDBOX=1"
 } > /tmp/flux-env
@@ -368,5 +377,6 @@ ICONS
 chmod 755 /usr/local/bin/flux-desktop-icons
 mkdir -p /etc/xdg/autostart
 printf '[Desktop Entry]\nType=Application\nName=Flux desktop icons\nExec=/usr/local/bin/flux-desktop-icons\nNoDisplay=true\n' > /etc/xdg/autostart/flux-desktop-icons.desktop
+echo "$FLUX_PACKAGES_VERSION" > /etc/flux-packages-version
 echo "$FLUX_GUEST_VERSION" > /etc/flux-guest-version
 echo "flux: guest ready"

@@ -903,4 +903,6 @@
     <string name="linux_notifications_channel">Linux notifications</string>
     <string name="linux_viewer_refused">The desktop turned the password down.</string>
     <string name="linux_show_log">Show what happened</string>
+    <string name="linux_gpu">Use the phone\'s GPU</string>
+    <string name="linux_gpu_hint">From the next start. Programs draw on the phone\'s GPU; the desktop itself stays on the CPU. Turn it off if a program shows black or garbled.</string>
 </resources>

@@ -1743,4 +1743,6 @@
     <string name="linux_notifications_channel">Linux-Benachrichtigungen</string>
     <string name="linux_viewer_refused">Der Desktop hat das Passwort abgelehnt.</string>
     <string name="linux_show_log">Zeigen, was passiert ist</string>
+    <string name="linux_gpu">GPU des Telefons nutzen</string>
+    <string name="linux_gpu_hint">Ab dem nächsten Start. Programme zeichnen auf der GPU des Telefons, der Desktop selbst bleibt auf der CPU. Schalte es aus, wenn ein Programm schwarz oder verzerrt erscheint.</string>
 </resources>

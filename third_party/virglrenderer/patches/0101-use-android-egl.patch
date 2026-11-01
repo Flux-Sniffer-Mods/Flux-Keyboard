@@ -1,0 +1,28 @@
+Uses Android's own EGL (the phone's GPU driver) rather than ANGLE: its default display,
+with pbuffers for surfaceless contexts, as Android has no EGL_MESA_platform_surfaceless.
+
+--- a/src/vrend/vrend_winsys_egl.c
++++ b/src/vrend/vrend_winsys_egl.c
+@@ -152,7 +152,11 @@
+       egl->funcs.eglGetPlatformDisplay =
+          (PFNEGLGETPLATFORMDISPLAYEXTPROC) eglGetProcAddress("eglGetPlatformDisplayEXT");
+       if (!egl->funcs.eglGetPlatformDisplay)
++#ifdef __ANDROID__
++         egl->extension_bits &= ~EGL_EXT_PLATFORM_BASE;
++#else
+          return false;
++#endif
+    }
+ 
+    if (has_bit(egl->extension_bits, EGL_EXT_DEVICE_QUERY)) {
+@@ -325,6 +329,10 @@
+ 
+    const char *client_extensions = eglQueryString (NULL, EGL_EXTENSIONS);
+    bool has_egl_base = virgl_egl_has_extension_in_string(client_extensions, "EGL_EXT_platform_base");
++#ifdef __ANDROID__
++   /* Android's own EGL (the phone's GPU driver): its default display, pbuffers for surfaceless */
++   has_egl_base = false;
++#endif
+ 
+    egl = calloc(1, sizeof(struct virgl_egl));
+    if (!egl)

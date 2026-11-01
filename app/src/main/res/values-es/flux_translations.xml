@@ -2281,4 +2281,6 @@
     <string name="linux_notifications_channel">Notificaciones de Linux</string>
     <string name="linux_viewer_refused">El escritorio rechazó la contraseña.</string>
     <string name="linux_show_log">Mostrar qué pasó</string>
+    <string name="linux_gpu">Usar la GPU del teléfono</string>
+    <string name="linux_gpu_hint">Desde el próximo inicio. Los programas dibujan en la GPU del teléfono; el escritorio en sí sigue en la CPU. Desactívalo si un programa se ve negro o deformado.</string>
 </resources>

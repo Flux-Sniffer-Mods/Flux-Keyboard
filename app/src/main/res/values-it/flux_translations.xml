@@ -1785,4 +1785,6 @@
     <string name="linux_notifications_channel">Notifiche di Linux</string>
     <string name="linux_viewer_refused">Il desktop ha rifiutato la password.</string>
     <string name="linux_show_log">Mostra cos’è successo</string>
+    <string name="linux_gpu">Usa la GPU del telefono</string>
+    <string name="linux_gpu_hint">Dal prossimo avvio. I programmi disegnano sulla GPU del telefono; il desktop resta sulla CPU. Disattivalo se un programma appare nero o distorto.</string>
 </resources>

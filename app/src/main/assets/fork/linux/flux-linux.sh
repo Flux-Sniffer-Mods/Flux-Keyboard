@@ -6,9 +6,10 @@
 #   BASE     where it lives (/data/local/tmp/flux-linux, or /data/local/flux-linux with root)
 #   TARBALL  the distribution's root file system (a .tar.gz), for install
 #   DISTRO   debian or ubuntu, DESKTOP xfce or kde, for install and start
-#   LIBDIR   the app's native libraries: libproot.so and libproot-loader.so (proot)
+#   LIBDIR   the app's native libraries: libproot.so and libproot-loader.so (proot), libvirgl.so (GPU)
 #   GUEST    the script that sets Linux up (flux-guest.sh), for install and start
 #   GEOMETRY the desktop's size (1920x1080), PASSWORD its VNC password, SCALE its size-up (1.5), for start
+#   GPU      1 to lend Linux's programs the phone's GPU, for start
 #   LOCALE   the phone's language (de_DE), TZNAME its time zone (Europe/Berlin), for install and start
 #   EXEC     a program's command line, TERMINAL 1 to run it in a terminal, for launch
 
@@ -99,6 +100,53 @@ kill_chroot_procs() {
     return 0
 }
 
+# The desktop's parts that draw better on the CPU while programs use the GPU (after
+# Titan-2-Elite-Debian-Chroot: KWin, the Plasma shell, its splash and search flicker or lose
+# compositing on virgl)
+CPU_ONLY="kwin_x11 plasmashell ksplashqml krunner"
+
+# The phone's GPU lent to Linux's programs: virglrenderer's server, outside Linux on Android's
+# own GPU driver, its socket in Linux's /tmp where Mesa's virpipe driver finds it. Without it
+# (turned off, or it won't start) everything draws on the CPU as before
+gpu_start() {
+    gpu_stop
+    [ "${GPU:-0}" = 1 ] || return 0
+    sock="$ROOTFS/tmp/.virgl_test"
+    mkdir -p "$BASE/bin"
+    if ! { cp "$LIBDIR/libvirgl.so" "$BASE/bin/virgl" && chmod 755 "$BASE/bin/virgl"; }; then
+        say "no GPU server here: drawing on the CPU"
+        return 0
+    fi
+    "$BASE/bin/virgl" --use-egl-surfaceless --use-gles --socket-path "$sock" > "$ROOTFS/tmp/flux-gpu.log" 2>&1 &
+    echo $! > "$PIDS/virgl.pid"
+    i=0
+    while [ $i -lt 20 ] && [ ! -S "$sock" ]; do sleep 0.25; i=$((i + 1)); done
+    if [ ! -S "$sock" ]; then
+        say "the GPU server didn't start: drawing on the CPU"
+        gpu_stop
+        return 0
+    fi
+    # Reachable by Linux's own user too (chroot)
+    chmod 666 "$sock"
+    for prog in $CPU_ONLY; do
+        [ -x "$ROOTFS/usr/bin/$prog" ] || continue
+        printf '%s\n' '#!/bin/sh' "# $prog on the CPU while programs draw on the GPU (flux-linux.sh)" \
+            'export GALLIUM_DRIVER=llvmpipe; unset VTEST_SOCKET_NAME' "exec /usr/bin/$prog \"\$@\"" > "$ROOTFS/usr/local/bin/$prog"
+        chmod 755 "$ROOTFS/usr/local/bin/$prog"
+    done
+    touch "$ROOTFS/tmp/flux-gpu"
+    say "programs draw on the phone's GPU"
+}
+
+gpu_stop() {
+    [ -f "$PIDS/virgl.pid" ] && kill "$(cat "$PIDS/virgl.pid")" 2>/dev/null
+    rm -f "$PIDS/virgl.pid" "$ROOTFS/tmp/.virgl_test" "$ROOTFS/tmp/flux-gpu"
+    for prog in $CPU_ONLY; do
+        grep -q 'flux-linux.sh' "$ROOTFS/usr/local/bin/$prog" 2>/dev/null && rm -f "$ROOTFS/usr/local/bin/$prog"
+    done
+    return 0
+}
+
 # The phone's time zone (and language, for the setup) carried into Linux
 phone_settings() {
     zone=$(printf '%s' "${TZNAME:-}" | tr -cd 'A-Za-z0-9_/+-')
@@ -156,6 +204,7 @@ start() {
         guest /usr/bin/env FLUX_LOCALE="${LOCALE:-en_US}" /bin/sh /root/flux-guest.sh "$MODE" "${DISTRO:-debian}" "${DESKTOP:-xfce}" || say "update failed, starting anyway"
     fi
     phone_settings
+    gpu_start
     say "starting"
     if [ "$MODE" = proot ]; then
         guest /usr/bin/env FLUX_GEOMETRY="$GEOMETRY" FLUX_PASSWORD="$PASSWORD" FLUX_MODE=proot FLUX_SCALE="${SCALE:-1.5}" /usr/local/bin/flux-session
@@ -165,6 +214,7 @@ start() {
         kill_chroot_procs
         chroot_unmount
     fi
+    gpu_stop
     rm -f "$PIDS/start.pid"
     say "stopped"
 }
@@ -177,6 +227,7 @@ stop() {
     sleep 1
     [ -f "$PIDS/start.pid" ] && kill "$(cat "$PIDS/start.pid")" 2>/dev/null
     rm -f "$ROOTFS/tmp/flux-xvnc.pid" "$ROOTFS/tmp/flux-session.pid" "$ROOTFS/tmp/flux-pulse.pid" "$ROOTFS/tmp/flux-env" "$PIDS/start.pid"
+    gpu_stop
     [ "$MODE" = chroot ] && { kill_chroot_procs; chroot_unmount; }
     say "stopped"
 }
@@ -249,9 +300,9 @@ run_app() {
     fi
 }
 
-# The ends of Linux's own logs: the VNC server's, the session's, sound's, the tuning's
+# The ends of Linux's own logs: the VNC server's, the session's, sound's, the tuning's, the GPU's
 logs() {
-    for f in flux-xvnc.log flux-session.log flux-pulse.log flux-tune.log; do
+    for f in flux-xvnc.log flux-session.log flux-pulse.log flux-tune.log flux-gpu.log; do
         [ -s "$ROOTFS/tmp/$f" ] && { echo "== $f"; tail -n 12 "$ROOTFS/tmp/$f"; }
     done
     return 0

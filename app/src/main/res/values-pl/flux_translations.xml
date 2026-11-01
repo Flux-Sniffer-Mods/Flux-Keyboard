@@ -2287,4 +2287,6 @@
     <string name="linux_notifications_channel">Powiadomienia Linuksa</string>
     <string name="linux_viewer_refused">Pulpit odrzucił hasło.</string>
     <string name="linux_show_log">Pokaż, co się stało</string>
+    <string name="linux_gpu">Używaj GPU telefonu</string>
+    <string name="linux_gpu_hint">Od następnego uruchomienia. Programy rysują na GPU telefonu, a sam pulpit zostaje na CPU. Wyłącz, jeśli program jest czarny lub zniekształcony.</string>
 </resources>
