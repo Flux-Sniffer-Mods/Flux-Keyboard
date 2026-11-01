@@ -33,6 +33,8 @@ internal class LinuxSound {
             runCatching { play(connected.getInputStream()) }
             runCatching { connected.close() }
             socket = null
+            // A moment before trying again (the sound ended, or Android had no track to give)
+            if (running) runCatching { Thread.sleep(500) }
         }
     }
 

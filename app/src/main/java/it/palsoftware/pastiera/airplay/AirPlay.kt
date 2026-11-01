@@ -150,21 +150,27 @@ object AirPlay {
         projection = capture
         val run = generation
         background {
-            val dpi = app.resources.displayMetrics.densityDpi
-            val started = AirPlayMedia(capture, dpi)
-            media = started
-            val stream = started.start()
-            val hls = HlsServer(stream, paired.remoteAddress)
-            server = hls
-            // The TV starts from what's there: a few segments first
-            val until = System.currentTimeMillis() + 10_000
-            while (!stream.ready() && System.currentTimeMillis() < until && run == generation) Thread.sleep(100)
-            if (run != generation) return@background
-            val url = "http://${AirPlaySession.host(paired.localAddress)}:${hls.port}/flux.m3u8"
-            if (!stream.ready() || !paired.play(url, deviceName(app))) { fail(app, false); return@background }
-            set(State.Casting(target.name))
-            AirPlayService.refresh(app)
-            watch(app, paired, run)
+            try {
+                val dpi = app.resources.displayMetrics.densityDpi
+                val started = AirPlayMedia(capture, dpi)
+                media = started
+                val stream = started.start()
+                val hls = HlsServer(stream, paired.remoteAddress)
+                server = hls
+                // The TV starts from what's there: a few segments first
+                val until = System.currentTimeMillis() + 10_000
+                while (!stream.ready() && System.currentTimeMillis() < until && run == generation) Thread.sleep(100)
+                if (run != generation) return@background
+                val url = "http://${AirPlaySession.host(paired.localAddress)}:${hls.port}/flux.m3u8"
+                if (!stream.ready() || !paired.play(url, deviceName(app))) { fail(app, false); return@background }
+                set(State.Casting(target.name))
+                AirPlayService.refresh(app)
+                watch(app, paired, run)
+            } catch (e: Exception) {
+                // The encoder or the stream wouldn't start: the capture (and its notification) ends too
+                FluxLog.w(TAG, "cast: $e")
+                if (run == generation) fail(app, false)
+            }
         }
     }
 
@@ -200,9 +206,9 @@ object AirPlay {
         session = null
         pinPairing?.first?.let { runCatching { it.close() } }
         pinPairing = null
-        media?.stop()
+        media?.let { runCatching { it.stop() } }
         media = null
-        server?.close()
+        server?.let { runCatching { it.close() } }
         server = null
         // Cleared first: stopping it calls back here
         val capture = projection

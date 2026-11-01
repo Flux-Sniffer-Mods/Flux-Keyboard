@@ -34,7 +34,14 @@ internal class AirPlayMedia(private val projection: MediaProjection, private val
         running = true
         val recorder = audioRecorder()
         stream = HlsStream(withAudio = recorder != null) { keyframe() }
-        startVideo()
+        try {
+            startVideo()
+        } catch (e: Exception) {
+            // No picture, no cast: the sound capture (and Android's microphone sign) ends with it
+            runCatching { recorder?.release() }
+            stop()
+            throw e
+        }
         if (recorder != null) startAudio(recorder)
         return stream
     }
@@ -82,20 +89,24 @@ internal class AirPlayMedia(private val projection: MediaProjection, private val
         runCatching { video?.setParameters(Bundle().apply { putInt(MediaCodec.PARAMETER_KEY_REQUEST_SYNC_FRAME, 0) }) }
     }
 
+    // The codecs are let go by stop() while these loops may be mid-call: any call then ends them
     private fun drainVideo(encoder: MediaCodec) {
         val info = MediaCodec.BufferInfo()
-        while (running) {
-            val index = try { encoder.dequeueOutputBuffer(info, 100_000) } catch (e: IllegalStateException) { break }
-            if (index < 0) continue
-            val buffer = encoder.getOutputBuffer(index)
-            if (buffer != null && info.size > 0) {
-                val data = ByteArray(info.size)
-                buffer.position(info.offset); buffer.get(data)
-                stream.video(data, info.presentationTimeUs,
-                    key = info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
-                    isConfig = info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0)
+        try {
+            while (running) {
+                val index = encoder.dequeueOutputBuffer(info, 100_000)
+                if (index < 0) continue
+                val buffer = encoder.getOutputBuffer(index)
+                if (buffer != null && info.size > 0) {
+                    val data = ByteArray(info.size)
+                    buffer.position(info.offset); buffer.get(data)
+                    stream.video(data, info.presentationTimeUs,
+                        key = info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
+                        isConfig = info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0)
+                }
+                encoder.releaseOutputBuffer(index, false)
             }
-            runCatching { encoder.releaseOutputBuffer(index, false) }
+        } catch (_: IllegalStateException) {
         }
     }
 
@@ -138,36 +149,42 @@ internal class AirPlayMedia(private val projection: MediaProjection, private val
         val chunk = ByteArray(RATE / 50 * 4)
         var samples = 0L
         var startUs = -1L
-        while (running) {
-            val n = recorder.read(chunk, 0, chunk.size)
-            if (n <= 0) { if (n < 0) break else continue }
-            // Timed by the samples counted from the first, on the clock the pictures use
-            if (startUs < 0) startUs = System.nanoTime() / 1000 - n / 4 * 1_000_000L / RATE
-            val ptsUs = startUs + samples * 1_000_000L / RATE
-            samples += n / 4
-            val index = try { encoder.dequeueInputBuffer(20_000) } catch (e: IllegalStateException) { break }
-            if (index < 0) continue
-            val buffer = encoder.getInputBuffer(index) ?: continue
-            buffer.clear()
-            val size = minOf(n, buffer.remaining())
-            buffer.put(chunk, 0, size)
-            runCatching { encoder.queueInputBuffer(index, 0, size, ptsUs, 0) }
+        try {
+            while (running) {
+                val n = recorder.read(chunk, 0, chunk.size)
+                if (n <= 0) { if (n < 0) break else continue }
+                // Timed by the samples counted from the first, on the clock the pictures use
+                if (startUs < 0) startUs = System.nanoTime() / 1000 - n / 4 * 1_000_000L / RATE
+                val ptsUs = startUs + samples * 1_000_000L / RATE
+                samples += n / 4
+                val index = encoder.dequeueInputBuffer(20_000)
+                if (index < 0) continue
+                val buffer = encoder.getInputBuffer(index) ?: continue
+                buffer.clear()
+                val size = minOf(n, buffer.remaining())
+                buffer.put(chunk, 0, size)
+                encoder.queueInputBuffer(index, 0, size, ptsUs, 0)
+            }
+        } catch (_: IllegalStateException) {
         }
     }
 
     private fun drainAudio(encoder: MediaCodec) {
         val info = MediaCodec.BufferInfo()
-        while (running) {
-            val index = try { encoder.dequeueOutputBuffer(info, 100_000) } catch (e: IllegalStateException) { break }
-            if (index < 0) continue
-            val buffer = encoder.getOutputBuffer(index)
-            if (buffer != null && info.size > 0 && info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0) {
-                val frame = ByteArray(7 + info.size)
-                TsMuxer.adts(info.size, RATE, 2).copyInto(frame)
-                buffer.position(info.offset); buffer.get(frame, 7, info.size)
-                stream.audio(frame, info.presentationTimeUs)
+        try {
+            while (running) {
+                val index = encoder.dequeueOutputBuffer(info, 100_000)
+                if (index < 0) continue
+                val buffer = encoder.getOutputBuffer(index)
+                if (buffer != null && info.size > 0 && info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0) {
+                    val frame = ByteArray(7 + info.size)
+                    TsMuxer.adts(info.size, RATE, 2).copyInto(frame)
+                    buffer.position(info.offset); buffer.get(frame, 7, info.size)
+                    stream.audio(frame, info.presentationTimeUs)
+                }
+                encoder.releaseOutputBuffer(index, false)
             }
-            runCatching { encoder.releaseOutputBuffer(index, false) }
+        } catch (_: IllegalStateException) {
         }
     }
 

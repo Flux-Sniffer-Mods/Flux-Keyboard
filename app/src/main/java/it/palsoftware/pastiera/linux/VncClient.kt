@@ -209,8 +209,16 @@ internal class VncClient(
         writeByte(6); write(ByteArray(3)); writeInt(bytes.size); write(bytes)
     }
 
+    /**
+     * Everything sent goes out in order from a thread of its own: keys and touches come from the
+     * main thread, where Android refuses to write to the network (each would be lost).
+     */
+    private val writer = java.util.concurrent.Executors.newSingleThreadExecutor { work ->
+        Thread(work, "VncSend").apply { isDaemon = true }
+    }
+
     private fun send(write: DataOutputStream.() -> Unit) {
-        runCatching { synchronized(output) { output.write(); output.flush() } }
+        runCatching { writer.execute { runCatching { synchronized(output) { output.write(); output.flush() } } } }
     }
 
     /** Logged in: the picture may now go quiet for as long as nothing changes. */
@@ -218,6 +226,7 @@ internal class VncClient(
 
     fun close() {
         open = false
+        writer.shutdown()
         runCatching { socket?.close() }
     }
 

@@ -137,17 +137,21 @@ internal class StreamVideo(
 
     private fun drain(encoder: MediaCodec) {
         val info = MediaCodec.BufferInfo()
-        while (running && codec === encoder) {
-            val index = try { encoder.dequeueOutputBuffer(info, 100_000) } catch (e: IllegalStateException) { break }
-            if (index < 0) continue
-            val buffer = encoder.getOutputBuffer(index)
-            if (buffer != null && info.size > 0) {
-                val data = ByteArray(info.size)
-                buffer.position(info.offset); buffer.get(data)
-                send(info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0,
-                    info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0, data, info.presentationTimeUs)
+        // The encoder let go (the stream ended, or restarted at another size) mid-call: this ends
+        try {
+            while (running && codec === encoder) {
+                val index = encoder.dequeueOutputBuffer(info, 100_000)
+                if (index < 0) continue
+                val buffer = encoder.getOutputBuffer(index)
+                if (buffer != null && info.size > 0) {
+                    val data = ByteArray(info.size)
+                    buffer.position(info.offset); buffer.get(data)
+                    send(info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0,
+                        info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0, data, info.presentationTimeUs)
+                }
+                encoder.releaseOutputBuffer(index, false)
             }
-            runCatching { encoder.releaseOutputBuffer(index, false) }
+        } catch (_: IllegalStateException) {
         }
     }
 

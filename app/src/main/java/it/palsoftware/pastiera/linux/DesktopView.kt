@@ -76,7 +76,7 @@ internal class DesktopView(context: Context) : View(context) {
             Rect(dirty).also { dirty.setEmpty() }
         }
         if (area.isEmpty || target.width != vnc.width || target.height != vnc.height) return
-        area.intersect(0, 0, target.width, target.height)
+        if (!area.intersect(0, 0, target.width, target.height)) return
         runCatching { target.setPixels(vnc.pixels, area.top * vnc.width + area.left, vnc.width, area.left, area.top, area.width(), area.height()) }
         invalidate()
     }

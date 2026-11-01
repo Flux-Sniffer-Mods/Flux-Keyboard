@@ -204,6 +204,19 @@ internal class StreamSession(
             StreamQuiet.start(context)
             input = StreamInput(context, width, height).also { it.start() }
             applyScreen()
+            // Ended while it was being started (Moonlight left): what was just started goes too,
+            // or the screen would go on being captured for no one
+            if (ended) {
+                if (separate) runCatching {
+                    ExtraScreen.close()
+                    GameMode.extraScreen(context, null)
+                    StreamHost.closeScreenPage()
+                }
+                runCatching { video?.stop() }; video = null
+                runCatching { audio?.stop() }; audio = null
+                runCatching { input?.stop() }; input = null
+                runCatching { StreamQuiet.stop(context) }
+            }
         }.onFailure {
             FluxLog.w(TAG, "stream couldn't start: $it")
             end()

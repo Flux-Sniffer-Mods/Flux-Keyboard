@@ -6,8 +6,6 @@ import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.Gravity
 import android.view.KeyEvent
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -44,9 +42,10 @@ class LinuxViewerActivity : Activity() {
             addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
             addView(message, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         })
-        window.insetsController?.let {
-            it.hide(WindowInsets.Type.systemBars())
-            it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        // The whole screen the desktop's (on Android 10 too, which has no insetsController)
+        androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).let {
+            it.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            it.systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
         view.requestFocus()
         Thread({ connect() }, "LinuxViewer").apply { isDaemon = true; start() }
@@ -77,6 +76,8 @@ class LinuxViewerActivity : Activity() {
                 .getOrNull()
             if (vnc == null) Thread.sleep(1_000)
         }
+        // Left while it was connecting: nothing kept open or playing behind it
+        if (!open) { vnc?.close(); return }
         if (vnc == null) {
             // Why, from Linux itself
             val logs = LinuxDesktop.guestLogs(this).orEmpty()
@@ -88,6 +89,8 @@ class LinuxViewerActivity : Activity() {
         client = vnc
         view.attach(vnc)
         sound.start()
+        // Closed just now (between the check above and here): what was just opened goes too
+        if (!open) { vnc.close(); sound.stop(); return }
         // The server says whether it can resize with its first picture: asked then
         view.postDelayed({ fit(view.width, view.height) }, 1_500)
         runOnUiThread { message.visibility = android.view.View.GONE }
@@ -125,7 +128,8 @@ class LinuxViewerActivity : Activity() {
 
     /** Text copied in Linux: the phone's clipboard too. */
     private fun copied(text: String) {
-        getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("Linux", text))
+        // Too big for Android's clipboard, or refused: Linux keeps it
+        runCatching { getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("Linux", text)) }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
@@ -163,7 +167,9 @@ class LinuxViewerActivity : Activity() {
     }
 
     private fun paste(vnc: VncClient) {
-        val text = getSystemService(ClipboardManager::class.java)?.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+        val text = runCatching {
+            getSystemService(ClipboardManager::class.java)?.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+        }.getOrNull()
         if (!text.isNullOrEmpty()) vnc.clipboard(text)
     }
 

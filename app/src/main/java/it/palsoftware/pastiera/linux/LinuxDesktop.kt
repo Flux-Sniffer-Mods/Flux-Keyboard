@@ -226,6 +226,8 @@ object LinuxDesktop {
      */
     fun install(context: Context, mode: Mode, distro: Distro = Distro.DEBIAN, desktop: Desktop = Desktop.XFCE) {
         val app = context.applicationContext
+        // Already under way (asked twice): the one install
+        if (busy()) return
         if (!canRun(mode)) { set(State.Failed(if (mode == Mode.CHROOT) Step.NO_ROOT else Step.NO_SHELL)); return }
         prefs(app).edit().putString(KEY_DISTRO, distro.name).putString(KEY_DESKTOP, desktop.name).apply()
         newLog(app)
@@ -235,6 +237,8 @@ object LinuxDesktop {
                 if (!download(app)) { set(State.Failed(Step.DOWNLOAD)); return@background }
                 set(State.Installing)
                 val result = run(app, mode, "install")
+                // It wouldn't unpack: the download's damaged, so the next try fetches it again
+                if (result == 3) tarball(app).delete()
                 if (result != 0) { set(State.Failed(Step.INSTALL)); return@background }
                 prefs(app).edit().putString(KEY_MODE, mode.name).apply()
                 // The download's no longer needed: Linux is unpacked
@@ -264,6 +268,8 @@ object LinuxDesktop {
             val have = if (part.isFile) part.length() else 0L
             val request = Request.Builder().url(url).apply { if (have > 0) header("Range", "bytes=$have-") }.build()
             client.newCall(request).execute().use { response ->
+                // Nothing left to fetch: the last download finished, the app ended before it was kept
+                if (response.code == 416 && have > 10_000_000) return@runCatching part.renameTo(target)
                 if (!response.isSuccessful) throw IllegalStateException("HTTP ${response.code}")
                 val resumed = response.code == 206
                 val body = response.body ?: throw IllegalStateException("empty")
@@ -308,6 +314,8 @@ object LinuxDesktop {
     /** Starts the desktop at [width] x [height]; [onReady] (on its own thread) once its picture can be seen. */
     fun start(context: Context, width: Int, height: Int, onReady: () -> Unit = {}) {
         val app = context.applicationContext
+        // Already starting or up (asked twice): starting again would end the desktop being started
+        if (busy() || state.value == State.Running) return
         val mode = installedMode(app) ?: return
         if (!canRun(mode)) { set(State.Failed(if (mode == Mode.CHROOT) Step.NO_ROOT else Step.NO_SHELL)); return }
         val alphabet = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
