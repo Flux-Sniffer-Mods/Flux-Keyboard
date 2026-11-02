@@ -19,10 +19,7 @@ class PastieraApplication : Application() {
         FluxLog.init(this)
         keepBackgroundFailuresApart()
         // A fresh install starts from the default configuration, before anything writes settings
-        if (RecommendedSettings.applyIfFreshInstall(this)) {
-            // A language edition opens in its language
-            LanguageEdition.applyOnFreshInstall(this)
-        }
+        RecommendedSettings.applyIfFreshInstall(this)
         SettingsManager.keepDevBuildChoices(this)
         // Which modules are on: a fresh install has the keyboard alone, an update keeps what's in use
         it.palsoftware.pastiera.modules.FluxModules.setUp(this)

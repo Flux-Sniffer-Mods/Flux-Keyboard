@@ -88,8 +88,8 @@ fun SettingsManager.getPhysicalKeyboardCurrencySymbol(context: Context): String 
 private fun SettingsManager.localCurrencySymbol(context: Context): String {
     val code = runCatching { java.util.Currency.getInstance(java.util.Locale.getDefault()).currencyCode }.getOrNull()
     return currencySymbolForCode(code)
-        // A region without its own (or none set): the language version's usual currency
-        ?: EDITION_CURRENCY[LanguageEdition.language(context)]
+        // A region without its own (or none set): the phone's language's usual currency
+        ?: LANGUAGE_CURRENCY[context.resources.configuration.locales[0]?.language]
         ?: DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
 }
 
@@ -116,8 +116,8 @@ private fun currencySymbolForCode(code: String?): String? = when (code) {
     else -> null
 }
 
-/** Each language version's usual currency, for a phone whose region doesn't say. */
-private val EDITION_CURRENCY = mapOf(
+/** Each language's usual currency, for a phone whose region doesn't say. */
+private val LANGUAGE_CURRENCY = mapOf(
     "de" to "€", "fr" to "€", "it" to "€", "es" to "€", "nl" to "€", "pt" to "€", "el" to "€",
     "fi" to "€", "pl" to "zł", "ru" to "₽", "uk" to "₴", "da" to "kr", "no" to "kr", "sv" to "kr",
     "hu" to "Ft", "cs" to "Kč", "tr" to "₺", "hy" to "֏", "vi" to "₫", "en" to "$"

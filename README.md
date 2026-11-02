@@ -226,7 +226,7 @@ Things you'd otherwise need a different fork for, side by side with everything a
   <img src="docs/cards/two-sizes.webp" alt="The same app at two sizes. Instagram at the phone's own size, then at Desktop, with more on the screen." width="840">
 </p>
 
-- **One language per download**: each full release comes as an APK per language, opening in its translation and its usual layout. Other languages' dictionaries download when you add them.
+- **One download for every language**: English is built in; any other language's dictionary downloads the first time you add it.
 - **Undo that steps back** through what you typed, one chunk at a time.
 - **Voice input that keeps listening**, from the bar or a key.
 - **Exact typing per app** (no corrections or capitals where they get in the way) and languages remembered per app.

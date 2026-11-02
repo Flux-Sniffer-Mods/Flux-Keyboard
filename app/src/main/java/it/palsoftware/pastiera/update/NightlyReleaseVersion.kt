@@ -54,7 +54,7 @@ internal fun forkReleasesApiUrl(): String =
  * publishes each one's APK as flux-keyboard-<version>.apk, so its page and download follow
  * from the tag.
  */
-internal fun forkReleasesFromTags(refs: List<String>, editionSuffix: String = ""): List<GitHubRelease> =
+internal fun forkReleasesFromTags(refs: List<String>): List<GitHubRelease> =
     refs.map { it.removePrefix("refs/tags/") }
         .filter { it.startsWith("flux/v") }
         .map { tag ->
@@ -67,10 +67,7 @@ internal fun forkReleasesFromTags(refs: List<String>, editionSuffix: String = ""
                 prerelease = false,
                 draft = false,
                 htmlUrl = "$base/tag/$tag",
-                // A language edition updates to the same edition's APK (full releases have one per
-                // language; dev builds come as the plain APK only)
-                downloadUrl = "$base/download/$tag/flux-keyboard-$version" +
-                    (if (isForkDevRelease(tag)) "" else editionSuffix) + ".apk"
+                downloadUrl = "$base/download/$tag/flux-keyboard-$version.apk"
             )
         }
 

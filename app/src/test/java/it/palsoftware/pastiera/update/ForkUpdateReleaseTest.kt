@@ -105,13 +105,10 @@ class ForkUpdateReleaseTest {
     }
 
     @Test
-    fun languageEdition_updatesToItsOwnApk_devBuildsToThePlainOne() {
-        val releases = forkReleasesFromTags(
-            listOf("refs/tags/flux/v1.2.0", "refs/tags/flux/v1.2.1-flux.202610061700"),
-            editionSuffix = "-de"
-        )
+    fun aReleaseAndADevBuildBothUpdateToThePlainApk() {
+        val releases = forkReleasesFromTags(listOf("refs/tags/flux/v1.2.0", "refs/tags/flux/v1.2.1-flux.202610061700"))
         org.junit.Assert.assertEquals(
-            "https://github.com/${it.palsoftware.pastiera.BuildConfig.FORK_GITHUB_REPOSITORY}/releases/download/flux/v1.2.0/flux-keyboard-1.2.0-de.apk",
+            "https://github.com/${it.palsoftware.pastiera.BuildConfig.FORK_GITHUB_REPOSITORY}/releases/download/flux/v1.2.0/flux-keyboard-1.2.0.apk",
             releases[0].downloadUrl
         )
         org.junit.Assert.assertTrue(releases[1].downloadUrl!!.endsWith("/flux-keyboard-1.2.1-flux.202610061700.apk"))
