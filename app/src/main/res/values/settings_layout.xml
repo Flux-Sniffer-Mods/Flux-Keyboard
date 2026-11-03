@@ -374,4 +374,6 @@
     <string name="home_search_hint">Search every setting</string>
     <!-- The Flux apps, on the keyboard's page -->
     <string name="flux_apps_moved">Gaming mode, streaming and the Linux desktop are apps of their own now. Your settings carry over the first time you open each one.</string>
+    <string name="flux_shortcut_moved_gaming">Now in Flux Gaming: pin it again from there.</string>
+    <string name="flux_shortcut_moved_desktop">Now in Flux Desktop: pin it again from there.</string>
 </resources>

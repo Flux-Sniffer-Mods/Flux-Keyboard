@@ -34,6 +34,8 @@ class PastieraApplication : Application() {
         publishSoftwareKeyboardModeShortcut()
         Handler(Looper.getMainLooper()).post {
             AdditionalSubtypeUtils.registerAdditionalSubtypes(this)
+            // Once, after the update that moved them out: what the hub's modules left behind
+            it.palsoftware.pastiera.flux.MovedModules.tidy(this)
         }
     }
 
