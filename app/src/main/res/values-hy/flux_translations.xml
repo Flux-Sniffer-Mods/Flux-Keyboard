@@ -1756,4 +1756,5 @@
     <string name="update_check_every_2">2 ժամը մեկ</string>
     <string name="update_check_every_6">6 ժամը մեկ</string>
     <string name="update_check_every_24">Օրը մեկ անգամ</string>
+    <string name="flux_apps_moved">Խաղային ռեժիմը, հեռարձակումը և Linux աշխատասեղանն այժմ առանձին հավելվածներ են։ Քո կարգավորումները տեղափոխվում են, երբ առաջին անգամ բացում ես դրանցից յուրաքանչյուրը։</string>
 </resources>

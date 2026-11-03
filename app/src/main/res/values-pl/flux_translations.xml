@@ -1768,4 +1768,5 @@
     <string name="update_check_every_2">Co 2 godziny</string>
     <string name="update_check_every_6">Co 6 godzin</string>
     <string name="update_check_every_24">Raz dziennie</string>
+    <string name="flux_apps_moved">Tryb gry, streaming i pulpit Linuksa to teraz osobne aplikacje. Twoje ustawienia przechodzą do każdej z nich, gdy otworzysz ją po raz pierwszy.</string>
 </resources>

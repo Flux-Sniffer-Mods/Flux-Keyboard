@@ -1762,4 +1762,5 @@
     <string name="update_check_every_2">Toutes les 2 heures</string>
     <string name="update_check_every_6">Toutes les 6 heures</string>
     <string name="update_check_every_24">Une fois par jour</string>
+    <string name="flux_apps_moved">Le mode jeu, le streaming et le bureau Linux sont désormais des applis à part. Tes réglages les suivent la première fois que tu ouvres chacune d’elles.</string>
 </resources>

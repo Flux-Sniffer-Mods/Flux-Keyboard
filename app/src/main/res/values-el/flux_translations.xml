@@ -1136,4 +1136,5 @@
     <string name="update_check_every_2">Κάθε 2 ώρες</string>
     <string name="update_check_every_6">Κάθε 6 ώρες</string>
     <string name="update_check_every_24">Μία φορά τη μέρα</string>
+    <string name="flux_apps_moved">Η λειτουργία παιχνιδιού, η ροή και η επιφάνεια εργασίας Linux είναι πλέον ξεχωριστές εφαρμογές. Οι ρυθμίσεις σου μεταφέρονται την πρώτη φορά που ανοίγεις την καθεμία.</string>
 </resources>

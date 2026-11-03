@@ -1266,4 +1266,5 @@
     <string name="update_check_every_2">Ogni 2 ore</string>
     <string name="update_check_every_6">Ogni 6 ore</string>
     <string name="update_check_every_24">Una volta al giorno</string>
+    <string name="flux_apps_moved">Modalità gioco, streaming e desktop Linux ora sono app a sé. Le tue impostazioni passano a ciascuna la prima volta che la apri.</string>
 </resources>

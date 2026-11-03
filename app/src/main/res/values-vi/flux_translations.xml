@@ -1750,4 +1750,5 @@
     <string name="update_check_every_2">Mỗi 2 giờ</string>
     <string name="update_check_every_6">Mỗi 6 giờ</string>
     <string name="update_check_every_24">Mỗi ngày một lần</string>
+    <string name="flux_apps_moved">Chế độ chơi game, phát trực tuyến và màn hình nền Linux giờ là các ứng dụng riêng. Cài đặt của bạn được chuyển sang khi bạn mở từng ứng dụng lần đầu.</string>
 </resources>

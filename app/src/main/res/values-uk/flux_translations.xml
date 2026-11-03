@@ -1768,4 +1768,5 @@
     <string name="update_check_every_2">Кожні 2 години</string>
     <string name="update_check_every_6">Кожні 6 годин</string>
     <string name="update_check_every_24">Раз на день</string>
+    <string name="flux_apps_moved">Ігровий режим, стримінг і робочий стіл Linux тепер окремі застосунки. Твої налаштування переносяться в кожен під час першого відкриття.</string>
 </resources>
