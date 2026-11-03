@@ -1137,4 +1137,6 @@
     <string name="update_check_every_6">Κάθε 6 ώρες</string>
     <string name="update_check_every_24">Μία φορά τη μέρα</string>
     <string name="flux_apps_moved">Η λειτουργία παιχνιδιού, η ροή και η επιφάνεια εργασίας Linux είναι πλέον ξεχωριστές εφαρμογές. Οι ρυθμίσεις σου μεταφέρονται την πρώτη φορά που ανοίγεις την καθεμία.</string>
+    <string name="flux_shortcut_moved_gaming">Τώρα στο Flux Gaming: καρφίτσωσέ το ξανά από εκεί.</string>
+    <string name="flux_shortcut_moved_desktop">Τώρα στο Flux Desktop: καρφίτσωσέ το ξανά από εκεί.</string>
 </resources>

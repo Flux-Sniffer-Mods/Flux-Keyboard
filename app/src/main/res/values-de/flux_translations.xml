@@ -1225,4 +1225,6 @@
     <string name="update_check_every_6">Alle 6 Stunden</string>
     <string name="update_check_every_24">Einmal am Tag</string>
     <string name="flux_apps_moved">Spielmodus, Streaming und der Linux-Desktop sind jetzt eigene Apps. Deine Einstellungen werden übernommen, wenn du sie zum ersten Mal öffnest.</string>
+    <string name="flux_shortcut_moved_gaming">Jetzt in Flux Gaming: Pinne es von dort erneut an.</string>
+    <string name="flux_shortcut_moved_desktop">Jetzt in Flux Desktop: Pinne es von dort erneut an.</string>
 </resources>

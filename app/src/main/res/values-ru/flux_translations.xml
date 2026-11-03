@@ -1769,4 +1769,6 @@
     <string name="update_check_every_6">Каждые 6 часов</string>
     <string name="update_check_every_24">Раз в день</string>
     <string name="flux_apps_moved">Игровой режим, стриминг и рабочий стол Linux теперь отдельные приложения. Твои настройки переносятся в каждое при первом открытии.</string>
+    <string name="flux_shortcut_moved_gaming">Теперь в Flux Gaming: закрепи заново оттуда.</string>
+    <string name="flux_shortcut_moved_desktop">Теперь в Flux Desktop: закрепи заново оттуда.</string>
 </resources>
