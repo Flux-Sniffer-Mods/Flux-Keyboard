@@ -62,17 +62,12 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import it.palsoftware.pastiera.settings.RecommendedSettingsUpdatePrompt
-import it.palsoftware.pastiera.modules.FluxModule
 import it.palsoftware.pastiera.settings.SettingsSearchArea
-import it.palsoftware.pastiera.settings.ModuleTiles
 import it.palsoftware.pastiera.settings.SettingsDestination
 import it.palsoftware.pastiera.settings.SettingsPage
 import it.palsoftware.pastiera.settings.openSettingsPage
 
-open class MainActivity : LocalizedComponentActivity() {
-    /** Opened as the keyboard's own entry in the app list: its page alone, Back leaving it. */
-    open val keyboardOnly: Boolean get() = false
-
+class MainActivity : LocalizedComponentActivity() {
     companion object {
         /** Opens the key event tester (from Developer options) instead of the home screen. */
         const val EXTRA_KEY_TESTER = "key_tester"
@@ -376,7 +371,6 @@ fun FluxHomeScreen(
         KeyTesterScreen(modifier = modifier, activity = activity, onBack = { activity.finish() })
         return
     }
-    var keyboardOpen by rememberSaveable { mutableStateOf(activity.keyboardOnly) }
 
     // Request notification permission (Android 13+)
     val requestPermissionLauncher = rememberLauncherForActivityResult(
@@ -413,48 +407,19 @@ fun FluxHomeScreen(
         }
     }
 
-    if (keyboardOpen) {
-        val back: () -> Unit = { if (activity.keyboardOnly) activity.finish() else { keyboardOpen = false } }
-        androidx.activity.compose.BackHandler { back() }
-        it.palsoftware.pastiera.settings.KeyboardPage(modifier = modifier, onBack = back)
-        return
-    }
     Column(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // The gear: what every module shares
+        // The gear: Settings, for everything else
         CustomTopBar(
             onSettingsClick = { openSettingsPage(context, SettingsPage(SettingsDestination.Main)) },
             modifier = Modifier.fillMaxWidth()
         )
-        // Every module's settings searched from here, the matches in place of the tiles
-        SettingsSearchArea(
-            fieldModifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 12.dp),
-            hint = stringResource(R.string.home_search_hint)
-        ) {
-            ModuleTiles(
-                // A long-press or the tile's ⚙: the module's settings (in its app too, behind its ⚙)
-                onSettings = { module ->
-                    when (module) {
-                        FluxModule.KEYBOARD -> keyboardOpen = true
-                        FluxModule.GAMING -> openSettingsPage(context, SettingsPage(SettingsDestination.GameMode))
-                        FluxModule.STREAMING -> openSettingsPage(context, SettingsPage(SettingsDestination.Streaming))
-                        FluxModule.DESKTOP -> context.startActivity(Intent(context, it.palsoftware.pastiera.linux.LinuxActivity::class.java))
-                    }
-                }
-            ) { module ->
-                // A tap: the module's own page, as its entry in the app list opens it
-                when (module) {
-                    FluxModule.KEYBOARD -> keyboardOpen = true
-                    FluxModule.GAMING -> context.startActivity(Intent(context, it.palsoftware.pastiera.gaming.GamesActivity::class.java))
-                    FluxModule.STREAMING -> context.startActivity(Intent(context, it.palsoftware.pastiera.streaming.StreamingActivity::class.java))
-                    FluxModule.DESKTOP -> context.startActivity(Intent(context, it.palsoftware.pastiera.linux.LinuxActivity::class.java))
-                }
-            }
-        }
+        // The keyboard: whether it's ready, every setting searched from here, a row per section, and the other Flux apps
+        it.palsoftware.pastiera.settings.KeyboardHomeContent(stringResource(R.string.home_search_hint))
     }
 }
 
@@ -1305,26 +1270,4 @@ private fun buildKeyboardDebugReport(
     val payload = "$header$eventLines\n"
     val hash = sha256Hex(payload)
     return payload + "\nsha256=$hash\n"
-}
-
-/** The keyboard's own entry in the app list (Keyboard in the app list): its page, in a task of its own. */
-class KeyboardActivity : MainActivity() {
-    override val keyboardOnly: Boolean get() = true
-
-    companion object {
-        private const val KEY_IN_APP_LIST = "keyboard_app_enabled"
-        private const val LAUNCHER_ALIAS = "it.palsoftware.pastiera.KeyboardLauncher"
-
-        fun inAppList(context: Context): Boolean = SettingsManager.getPreferences(context).getBoolean(KEY_IN_APP_LIST, false)
-
-        fun setInAppList(context: Context, on: Boolean) {
-            SettingsManager.getPreferences(context).edit().putBoolean(KEY_IN_APP_LIST, on).apply()
-            context.packageManager.setComponentEnabledSetting(
-                android.content.ComponentName(context, LAUNCHER_ALIAS),
-                if (on) android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                else android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                android.content.pm.PackageManager.DONT_KILL_APP
-            )
-        }
-    }
 }

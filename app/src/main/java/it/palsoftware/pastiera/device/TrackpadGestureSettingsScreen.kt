@@ -1,6 +1,6 @@
 package it.palsoftware.pastiera.device
-import it.palsoftware.pastiera.adb.RootShell
-import it.palsoftware.pastiera.adb.shell.ShellSetup
+import io.github.fluxsniffermods.core.shell.RootShell
+import io.github.fluxsniffermods.core.shell.ShellSetup
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background

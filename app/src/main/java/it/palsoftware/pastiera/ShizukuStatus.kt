@@ -14,7 +14,7 @@ enum class ShizukuStatus {
 
 fun resolveShizukuStatus(): ShizukuStatus {
     return try {
-        if (it.palsoftware.pastiera.adb.RootShell.active || it.palsoftware.pastiera.adb.shell.BuiltInShell.running()) {
+        if (io.github.fluxsniffermods.core.shell.RootShell.active || io.github.fluxsniffermods.core.shell.BuiltInShell.running()) {
             ShizukuStatus.Connected
         } else if (!Shizuku.pingBinder()) {
             ShizukuStatus.NotConnected

@@ -76,7 +76,7 @@ class SettingsLayoutTest {
         val apps = body("SettingsHubScreens.kt", "AppsHubScreen")
         val privacy = read("AdvancedSettingsScreen.kt")
         val general = read("GeneralSettingsScreen.kt")
-        val keyboard = body("ModulesHome.kt", "KeyboardSettingsRows")
+        val keyboard = body("KeyboardHome.kt", "KeyboardSettingsRows")
         val trackpad = read("TrackpadGestureSettingsScreen.kt")
 
         assertTrue(keyboards.contains("SettingLinkIds.TEXT_INPUT_AUTO_SHOW_KEYBOARD"))

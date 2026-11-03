@@ -1,63 +1,21 @@
 {
-  "title": "Flux Titan Hub",
-  "intro": "Flux Titan Hub 1.0.0: everything it adds over Pastiera 0.86, Pastiera's final feature release, then what the Pastiera team built between 0.85 and 0.86, which Flux Keyboard includes.",
-  "sectionTitle": "Added by Flux Titan Hub",
+  "title": "Flux Keyboard",
+  "intro": "Flux Keyboard: everything it adds over Pastiera 0.86, Pastiera's final feature release, then what the Pastiera team built between 0.85 and 0.86, which Flux Keyboard includes.",
+  "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Flux Keyboard again: gaming mode, streaming and the Linux desktop are apps of their own now, Flux Gaming, Flux Streaming and Flux Desktop, each updating by itself. The keyboard's page lists them, a tap opening one or getting it from GitHub. Their settings, games and pairings move over the first time each opens, the Linux desktop carries on as it was, and one Shell access serves them all."
+    },
+    {
       "text": "One APK for every language: English is built in and any other language's dictionary downloads the first time you add it, as before. A language version installed from an earlier release updates onto it by itself."
-    },
-    {
-      "text": "KDE Plasma fitted to the phone: the whole screen, with the panel and title bars clear of the camera cutout and the rounded corners, a launcher of big icons, and the Phone widget (battery, Wi-Fi, signal and the phone's switches, brightness and volume). On Debian, Klassy's touch-sized title bars and rounded windows; KDE's lock is the phone's. The Desktop page switches between Xfce and KDE Plasma without reinstalling, and turns window effects off."
-    },
-    {
-      "text": "Desktop, made for touch (from Titan-2-Elite-Debian-Chroot): a drag scrolls and a flick glides on, a long press right-clicks (or, moved, drags), two fingers scroll or, tapped, right-click, and the bottom edge shows a hidden panel. On the phone's keyboard, Alt and Sym type as in Flux Keyboard: held, tapped for the next key or locked with two taps."
-    },
-    {
-      "text": "Desktop: fixed it not showing after a slow start, with Linux's logs in its place. While the desktop started, the app kept checking on its VNC server, which took each check for a failed sign-in and then turned the app's own viewer away for longer each time."
     },
     {
       "text": "Stability: the keyboard keeps working through faults that used to end it: a key, a cursor move or a field it can't handle is logged and passed on as usual, and a failure in a stream, a cast, the desktop or a download ends only that. Fixed: long-pressing a key with many alternates on a narrow screen, next-word and clipboard history storage failing (full or damaged), GIFs an app turns down, the desktop on Android 10, keys and touches not reaching the Linux desktop, AirPlay stuck on Starting when the encoder fails, a stream left capturing after Moonlight left, and Back behaving differently on Android 16.",
       "after": "202611011704"
     },
     {
-      "text": "Desktop: shown once Xfce or Plasma is actually drawing, with \"starting\" until then, instead of a black screen for up to a minute. It keeps running when the app is in the background, restarted or updated, and programs open from the phone while it runs (they didn't without root). Its logs now say which part ended a session.",
-      "after": "202610311632"
-    },
-    {
       "text": "Updates: looked for every 2 hours instead of every 15 minutes, at times Android picks so the phone isn't woken just for it. Every hour, 6 hours or once a day can be chosen in Settings (Check for updates how often), and Check for updates still looks at once.",
       "after": "202610311617"
-    },
-    {
-      "text": "Desktop without root: fixed the desktop closing seconds after it appeared. Android doesn't let Linux make socket files without root, so its session bus and sound couldn't start; both now run over 127.0.0.1, proven by a cookie only Linux's user can read. If the desktop stops on its own, the viewer shows Linux's logs, and the crash log includes the desktop's last start.",
-      "after": "202610230741"
-    },
-    {
-      "text": "Desktop: fixed a black desktop with \"Unable to contact settings server\": Linux's session bus is now started at a fixed address, and if it can't start, the desktop starts its own instead of being given an empty one.",
-      "after": "202610230403"
-    },
-    {
-      "text": "Desktop: programs in Linux draw on the phone's GPU (virglrenderer built into the app, on Android's own graphics driver), with or without root; the desktop itself stays on the CPU, which suits it better. On the Desktop page, from the next start. Also, starting after an update no longer reinstalls the packages unless they changed.",
-      "after": "202610230403"
-    },
-    {
-      "text": "Desktop: says what it's doing while it connects (an update after installing a new version can take minutes), and why when it can't, with Linux's own logs (also under Show what happened). It no longer stops waiting for a slow first start.",
-      "after": "202610230355"
-    },
-    {
-      "text": "Desktop, tuned for the phone (from Titan-2-Elite-Debian-Chroot): Debian 13 and Ubuntu 26.04, drawn at the screen's full sharpness and sized up 1.5 times (or 1, 1.25 or 2), in the phone's language and time zone; KDE Plasma in tablet mode with bigger text and icons and a working launcher menu; quicker, smaller installs; Linux's notifications in the phone's shade; and with root, a tidier chroot that leaves /data as it is and stops cleanly.",
-      "after": "202610230331"
-    },
-    {
-      "text": "Desktop: a Linux desktop (Debian 13 or Ubuntu 26.04, with Xfce or KDE Plasma, a browser and a terminal) on the phone or a TV, through the built-in shell. With root it runs as a chroot at full speed (any root manager's su); without, through PRoot. Shown in the app's own viewer, sized to whichever screen shows it: touch, mouse, the keyboard and its sound all work. Also in the Streaming app, to start it on the TV. Every program in Linux is on the Desktop page (a tap opens it, a long press puts it on the home screen) and on the Xfce desktop as an icon.",
-      "after": "202610230331"
-    },
-    {
-      "text": "AirPlay: the phone's screen, with its sound, on an Apple TV or a TV with AirPlay, with no app on the TV. Find TVs in the Streaming app; type the code the TV shows the first time if it asks. A few seconds behind: good for apps and video, not fast games.",
-      "after": "202610222027"
-    },
-    {
-      "text": "Miracast: the phone's screen, with its sound, on a TV or PC that takes Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), with no app on the TV. Find screens in the Streaming app; while casting, an app tapped there goes on the TV alone.",
-      "after": "202610221958"
     },
     {
       "text": "Flux Keyboard: its own name, app ID, icon (a keyboard, in Niagara's icon packs too) and home screen fitted to the Titan 2 Elite, crediting and linking the original Pastiera. The compact mode is called Solderina.",
@@ -128,35 +86,11 @@
       "after": "202610051748"
     },
     {
-      "text": "Flux Titan Hub: Flux Keyboard is now one module of an app made for the Titan 2 Elite, with a tile per module on its home screen (Keyboard, Gaming mode, Streaming, and Desktop to come). Each tile says how its module is doing or, in red, what it still needs, a tap from the fix; each module switches on when you want it and takes its parts with it when it's off. The first run asks which ones you'll use.",
+      "text": "Built-in shell (Shell access): pair once with wireless debugging, typing the code into the notification, and the app runs its own developer shell for the keyboard light, screen sizes and keyboard swipes in every app. No Shizuku or Termux needed (Shizuku still works); it starts by itself after a restart, and a rooted phone can use root instead.",
       "after": "202610051916"
     },
     {
-      "text": "Built-in shell (Shell access): pair once with wireless debugging, typing the code into the notification, and the app runs its own developer shell for the keyboard light, screen sizes, keyboard swipes in every app, gaming and streaming. No Shizuku or Termux needed (Shizuku still works); it starts by itself after a restart, and a rooted phone can use root instead.",
-      "after": "202610051916"
-    },
-    {
-      "text": "Gaming mode: the keyboard as a controller (W A Z D the left stick, I J M L the face buttons, Q E the bumpers, the volume keys the triggers, Space Start), every key changeable on a drawing of the keyboard or of a controller, for every game or one at a time. Touch games are played on keys too: place keys on a game's own buttons and sticks.",
-      "after": "202610051916"
-    },
-    {
-      "text": "Emulators set up for you: the layout written into Dolphin's and PPSSPP's own controls, with graphics settings suited to the phone; Dolphin's GameCube controller, Wii Remote with Nunchuk, Classic Controller or sideways Wii Remote per game, moved by moving the phone, with its pointer on the trackpad; DS and 3DS games' two screens laid out as you like.",
-      "after": "202610051916"
-    },
-    {
-      "text": "The Games app: every game with its art, from GameNative, GameHub, the Play Store and your emulator folders, plus Xbox Cloud Gaming in its own player. Search it, move through it with the keys, and long-press a game for its settings: its screen, resolution, controls and home screen shortcut.",
-      "after": "202610051916"
-    },
-    {
-      "text": "Streaming: the phone as a Moonlight host. Moonlight on a TV or PC lists your games, apps, the phone's screen and Android's desktop; a game can play on a screen of its own, leaving the phone free, with the phone's sound off while the TV plays. The Streaming app opens any app on the TV.",
-      "after": "202610051916"
-    },
-    {
-      "text": "The TV does the rest: with an LG webOS TV set up, opening a game or an app turns the TV on and opens Moonlight straight into it, the phone's volume buttons turn the TV up and down, and the TV can turn off when the stream ends.",
-      "after": "202610051916"
-    },
-    {
-      "text": "A much smaller app: English comes built in and other languages' dictionaries download the first time they're used. Full releases also come as one APK per language, each opening in its translation.",
+      "text": "A much smaller app: English comes built in and other languages' dictionaries download the first time they're used.",
       "after": "202610051916"
     }
   ],
@@ -458,15 +392,7 @@
       "after": "202610051748"
     },
     {
-      "text": "Quick Settings tiles for Gaming mode and Streaming: a tap switches it on or off, a long-press opens its settings.",
-      "after": "202610051916"
-    },
-    {
-      "text": "Settings rearranged around the modules: the home screen's search finds every setting, each module's settings search only their own, and Settings (\u2699) holds what every module shares. Screen size has a page of its own in Settings.",
-      "after": "202610051916"
-    },
-    {
-      "text": "One page for the keyboard, from its tile, its app-list entry or the keyboard's own Settings button: what it still needs, its settings and Recommended settings. Keyboard, Games and Streaming can each join the app list.",
+      "text": "Settings rearranged: the home screen's search finds every setting, and Screen size has a page of its own in Settings (\u2699).",
       "after": "202610051916"
     },
     {
@@ -522,7 +448,7 @@
       "after": "202610051916"
     },
     {
-      "text": "A new tutorial: pick the modules you'll use, then allow restricted settings step by step, choose Solderina or minimal mode, and set up Shell access.",
+      "text": "A new tutorial: allow restricted settings step by step, choose Solderina or minimal mode, and set up Shell access.",
       "after": "202610051916"
     },
     {
@@ -663,9 +589,9 @@
       "after": "202610051916"
     }
   ],
-  "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/blob/flux-release/FORK_CHANGES.md",
-  "docsLabel": "Full Flux Titan Hub changelog",
-  "introSince": "What's new in Flux Titan Hub since the version you had.",
+  "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
+  "docsLabel": "Full Flux Keyboard changelog",
+  "introSince": "What's new in Flux Keyboard since the version you had.",
   "releases": {
     "1.0.0": "202610050800",
     "1.1.0": "202610051915", "2.0.0": "202610200537"

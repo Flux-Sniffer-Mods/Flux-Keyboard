@@ -1,6 +1,6 @@
-name: Flux Titan Hub build
+name: Flux Keyboard build
 # Each run is named by its version (or its kind, when the version is worked out), not a running number
-run-name: Flux Titan Hub ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
+run-name: Flux Keyboard ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
 
 # Pick the branch to pick the kind of build:
 #   flux-release -> a full release (0.92): the newest version in whats_new.json's "releases"
@@ -78,14 +78,14 @@ jobs:
       GRADLE_ARGS: --build-cache -PPASTIERA_VERSION_CODE=${{ needs.version.outputs.code }} -PPASTIERA_VERSION_NAME=${{ needs.version.outputs.name }}
       # Built-in KLIPY key for GIF search (empty when the secret isn't set)
       KLIPY_API_KEY: ${{ secrets.KLIPY_API_KEY }}
-      # SteamGridDB key for gaming mode's game art (empty when the secret isn't set)
-      STEAMGRIDDB_API_KEY: ${{ secrets.STEAMGRIDDB_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           # What's new: each entry's time comes from the commit that added it
           fetch-depth: 0
+          # Flux Core, what the Flux apps share
+          submodules: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -201,9 +201,9 @@ jobs:
             *-flux.*)
               stamp="${VERSION##*.}"
               when=$(date -u -d "${stamp:0:8} ${stamp:8:2}:${stamp:10:2}" "+%-d %b %Y, %H:%M" 2>/dev/null || echo "$stamp")
-              title="Flux Titan Hub ${VERSION%%-*} dev · $when"
+              title="Flux Keyboard ${VERSION%%-*} dev · $when"
               kind="--prerelease" ;;
-            *) title="Flux Titan Hub $VERSION"
+            *) title="Flux Keyboard $VERSION"
               kind="--latest"
               # A full release replaces the dev builds before it: their releases and tags go
               gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName --jq '.[].tagName' |
@@ -237,6 +237,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4

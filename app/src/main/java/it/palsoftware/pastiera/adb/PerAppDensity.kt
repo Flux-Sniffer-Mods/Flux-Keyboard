@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.adb
 
+import io.github.fluxsniffermods.core.shell.AdbShell
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -93,9 +94,8 @@ object PerAppDensity {
         }
         stopRecentsWatch()
         val perApp = apps(app)
-        val gaming = it.palsoftware.pastiera.gaming.GameProfiles.enabled(app)
-        // Nothing set per app and no gaming mode: leave the screen as it is
-        if (perApp.isEmpty() && applied == null && !gaming) return
+        // Nothing set per app: leave the screen as it is
+        if (perApp.isEmpty() && applied == null) return
         pending?.let { handler.removeCallbacks(it) }
         pending = Runnable {
             worker.execute {
@@ -111,9 +111,6 @@ object PerAppDensity {
                 val task = resumed?.second
                 if (task != null && task == frontTask && front != frontApp) return@execute
                 frontTask = task; frontApp = front
-                // Gaming mode follows the same app in front (its upright or sideways screen
-                // mustn't flicker with widgets, floating windows or recents either)
-                it.palsoftware.pastiera.gaming.GameMode.onAppInFront(app, front)
                 if (apps(app).isEmpty() && applied == null) return@execute
                 val want = apps(app)[front] ?: base(app)
                 appliedFor = front.takeIf { apps(app)[it] != null }
@@ -137,8 +134,8 @@ object PerAppDensity {
      */
     private fun watchRecents(app: Context) {
         stopRecentsWatch()
-        // The app whose screen size is in use, or the game gaming mode is playing
-        val owner = appliedFor ?: it.palsoftware.pastiera.gaming.GameMode.playing() ?: return
+        // The app whose screen size is in use
+        val owner = appliedFor ?: return
         var checks = 0
         val check = object : Runnable {
             override fun run() {
@@ -151,8 +148,7 @@ object PerAppDensity {
                         "dumpsys activity recents | grep -c -F -e '$owner/' -e ':$owner' || true", 2_000
                     )?.trim()?.toIntOrNull() ?: return@execute
                     if (open == 0) {
-                        // Swiped away: gaming mode ends with it, its screen put back
-                        it.palsoftware.pastiera.gaming.GameMode.gone(app, owner)
+                        // Swiped away: its screen size put back
                         if (appliedFor != owner) return@execute
                         val base = base(app)
                         val command = if (base == BASE_RESET) "wm density reset" else {

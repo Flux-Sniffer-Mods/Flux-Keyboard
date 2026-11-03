@@ -130,8 +130,8 @@
     <string name="power_shortcuts_press_key">Нажмите клавишу ярлыка для запуска</string>
     <string name="notification_nav_mode_channel_name">Режим навигации</string>
     <string name="notification_nav_mode_channel_description">Уведомления для режима навигации</string>
-    <string name="notification_update_channel_name">Обновления Flux Titan Hub</string>
-    <string name="notification_update_channel_description">Уведомления о новых версиях Flux Titan Hub</string>
+    <string name="notification_update_channel_name">Обновления Flux Keyboard</string>
+    <string name="notification_update_channel_description">Уведомления о новых версиях Flux Keyboard</string>
     <string name="notification_successor_release_title">Доступен выпуск Plektra</string>
     <string name="notification_successor_release_text">%1$s доступен как преемник Pastiera.</string>
     <string name="speech_recognition_prompt">Говорите...</string>
@@ -257,7 +257,7 @@
     <string name="tutorial_previous">Предыдущий</string>
     <string name="tutorial_next">Далее</string>
     <string name="tutorial_finish">Закончить</string>
-    <string name="tutorial_page_welcome_title">Добро пожаловать в Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Добро пожаловать в Flux Keyboard</string>
     <string name="tutorial_page_enable_title">Включить Flux Keyboard</string>
     <string name="tutorial_page_enable_description">Для начала вам нужно включить Flux Keyboard как метод ввода в настройках Android. Нажмите кнопку ниже, чтобы открыть настройки.</string>
     <string name="tutorial_page_select_title">Выбрать Flux Keyboard</string>
@@ -654,7 +654,7 @@ Nav Mode использует физическое положение клави
     <string name="tutorial_whats_new_title">Новое в этой версии: %1$s</string>
     <string name="tutorial_whats_new_description">Перед продолжением стоит знать о нескольких изменениях.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Исправления ошибок</string>
-    <string name="tutorial_whats_new_docs_button">Открыть документацию Flux Titan Hub</string>
+    <string name="tutorial_whats_new_docs_button">Открыть документацию Flux Keyboard</string>
     <string name="tutorial_whats_new_continue_hint">Продолжите руководство, чтобы просмотреть самые полезные настройки этой версии.</string>
     <string name="tutorial_devs_choice_button">Выбор разработчика</string>
     <string name="tutorial_devs_choice_applied">Настройки Выбор разработчика применены.</string>

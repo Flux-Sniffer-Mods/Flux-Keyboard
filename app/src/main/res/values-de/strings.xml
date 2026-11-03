@@ -490,8 +490,8 @@ Jede Taste kann als Keycode, Aktion, Native Ctrl oder Keine konfiguriert werden.
     <string name="clicks_button_mode_native_description">Das ursprüngliche Android-Tastenereignis unverändert beibehalten.</string>
     <string name="clicks_button_mode_quick_launcher">QuickLauncher</string>
     <string name="clicks_button_mode_quick_launcher_description">Flux Keyboards QuickLauncher direkt öffnen und das Tastenereignis nicht an die App weitergeben.</string>
-    <string name="clicks_button_mode_open_pastiera">Flux Titan Hub öffnen</string>
-    <string name="clicks_button_mode_open_pastiera_description">Flux Titan Hubs Einstellungen direkt öffnen und das Tastenereignis nicht an die App weitergeben.</string>
+    <string name="clicks_button_mode_open_pastiera">Flux Keyboard öffnen</string>
+    <string name="clicks_button_mode_open_pastiera_description">Flux Keyboards Einstellungen direkt öffnen und das Tastenereignis nicht an die App weitergeben.</string>
     <string name="clicks_button_mode_toggle_keyboard_mode">Tastaturmodus umschalten</string>
     <string name="clicks_button_mode_toggle_keyboard_mode_description">Die Bildschirmtastatur bis zum nächsten Hardware-Verbindungswechsel vorübergehend auf- oder zuklappen.</string>
     <string name="clicks_button_mode_toggle_emoji_picker">Emoji-Auswahl umschalten</string>
@@ -570,13 +570,13 @@ Jede Taste kann als Keycode, Aktion, Native Ctrl oder Keine konfiguriert werden.
     <string name="alt_key_editor_clone_profile_description">Jedes BlackBerry-, Unihertz-, Minimal- oder Clicks-Profil als editierbare Vorlage verwenden.</string>
     <string name="alt_key_editor_mappings_title">Geräte-SYM- und Tastenbelegungen</string>
     <string name="alt_key_editor_transfer_title">Import und Export</string>
-    <string name="alt_key_editor_transfer_description">Eigene Profile teilen und über Flux Titan Hub-Backups wiederherstellen.</string>
+    <string name="alt_key_editor_transfer_description">Eigene Profile teilen und über Flux Keyboard-Backups wiederherstellen.</string>
     <string name="feature_status_construction_content_description">In Entwicklung</string>
     <string name="feature_status_construction_hint">Diese Funktion ist in Arbeit oder geplant. Sie kann unvollständig oder noch nicht verfügbar sein und sich weiterhin ändern.</string>
     <string name="feature_status_experimental_content_description">Experimentelle Funktion</string>
     <string name="feature_status_experimental_hint">Die Funktion kann bereits funktionieren, ist aber neu und wird möglicherweise bald noch angepasst oder nachgebessert. Bugreports sind ausdrücklich erwünscht.</string>
     <string name="tutorial_feature_status_title">Statussymbole für Funktionen</string>
-    <string name="tutorial_feature_status_description">Flux Titan Hub kennzeichnet laufende Arbeiten direkt in der App. Du musst dafür nicht sämtliche GitHub-Issues durchsuchen.</string>
+    <string name="tutorial_feature_status_description">Flux Keyboard kennzeichnet laufende Arbeiten direkt in der App. Du musst dafür nicht sämtliche GitHub-Issues durchsuchen.</string>
     <string name="tutorial_feature_status_experimental_title">Experimentell</string>
     <string name="tutorial_feature_status_experimental_description">Die Funktion kann bereits funktionieren, ist aber neu und wird möglicherweise bald noch angepasst oder nachgebessert. Bugreports sind ausdrücklich erwünscht.</string>
     <string name="tutorial_feature_status_footer">Tippe in den Einstellungen auf eines der Symbole, um eine kurze Erklärung zu öffnen. Eine Roadmap-Markierung ist keine Zusage für eine bestimmte Version.</string>
@@ -670,7 +670,7 @@ Jede Taste kann als Keycode, Aktion, Native Ctrl oder Keine konfiguriert werden.
     <string name="tutorial_previous">Zurück</string>
     <string name="tutorial_next">Weiter</string>
     <string name="tutorial_finish">Fertig</string>
-    <string name="tutorial_page_welcome_title">Willkommen bei Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Willkommen bei Flux Keyboard</string>
     <string name="tutorial_devs_choice_button">Dev\'s Choice</string>
     <string name="tutorial_devs_choice_applied">Dev\'s Choice übernommen.</string>
     <string name="tutorial_page_enable_title">Flux Keyboard aktivieren</string>
@@ -723,7 +723,7 @@ Jede Taste kann als Keycode, Aktion, Native Ctrl oder Keine konfiguriert werden.
     <string name="backup_now">Jetzt sichern</string>
     <string name="backup_now_description">Alle Einstellungen und benutzerdefinierten Layouts in eine ZIP-Datei exportieren</string>
     <string name="restore_from_file">Von Datei wiederherstellen</string>
-    <string name="restore_from_file_description">Eine Flux Titan Hub-Sicherungsdatei ZIP importieren</string>
+    <string name="restore_from_file_description">Eine Flux Keyboard-Sicherungsdatei ZIP importieren</string>
     <string name="backup_completed">Sicherung abgeschlossen</string>
     <string name="restore_completed">Wiederherstellung abgeschlossen</string>
     <string name="backup_failed">Sicherung fehlgeschlagen: %1$s</string>
@@ -990,8 +990,8 @@ Jede Taste kann als Keycode, Aktion, Native Ctrl oder Keine konfiguriert werden.
     <string name="sym_shortcuts_compatibility_title">Kompatibilität der SYM-Taste</string>
     <string name="sym_shortcuts_compatibility_description">SYM-Tasten-Shortcuts benötigen eine Tastatur, die SYM gegenüber Android als Modifier bereitstellt. Sie funktionieren derzeit nicht mit Tastaturen, deren Firmware SYM-Kombinationen bereits in fertige Zeichen oder Navigationseingaben umwandelt, bevor Flux Keyboard sie empfängt. Dazu gehört das aktuelle SYM-Verhalten des Clicks Power Keyboard.</string>
     <string name="power_shortcuts_press_key">Zum Starten die Shortcut-Taste drücken</string>
-    <string name="notification_update_channel_name">Flux Titan Hub-Updates</string>
-    <string name="notification_update_channel_description">Benachrichtigungen über neue Flux Titan Hub-Versionen</string>
+    <string name="notification_update_channel_name">Flux Keyboard-Updates</string>
+    <string name="notification_update_channel_description">Benachrichtigungen über neue Flux Keyboard-Versionen</string>
     <string name="notification_successor_release_title">Plektra-Veröffentlichung verfügbar</string>
     <string name="notification_successor_release_text">%1$s ist als Nachfolger von Pastiera verfügbar.</string>
     <string name="notification_pastiera_stable_update_title">Pastiera-Sicherheitsupdate verfügbar</string>
@@ -1127,7 +1127,7 @@ Jede Taste kann als Keycode, Aktion, Native Ctrl oder Keine konfiguriert werden.
     <string name="tutorial_whats_new_title">Neu in dieser Version: %1$s</string>
     <string name="tutorial_whats_new_description">Ein paar Änderungen solltest du kennen, bevor du weitermachst.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Fehlerbehebungen</string>
-    <string name="tutorial_whats_new_docs_button">Flux Titan Hub-Dokumentation öffnen</string>
+    <string name="tutorial_whats_new_docs_button">Flux Keyboard-Dokumentation öffnen</string>
     <string name="tutorial_whats_new_continue_hint">Fahre mit dem Tutorial fort, um die wichtigsten Einstellungen dieser Version durchzugehen.</string>
 
     <!-- Settings search and shareable setting links -->

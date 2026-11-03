@@ -249,11 +249,11 @@ class CommandExecutor(
 
     /** Sends [keyCode] through the shell in the background: callers are the UI and the keyboard. */
     private fun sendShellKeyEvent(keyCode: Int): CommandExecutionResult {
-        if (!it.palsoftware.pastiera.adb.AdbShell.available()) {
+        if (!io.github.fluxsniffermods.core.shell.AdbShell.available()) {
             // Without the shell: brightness through the system setting, when allowed
             return brightnessWithoutShell(keyCode) ?: fail("Shizuku required")
         }
-        it.palsoftware.pastiera.adb.AdbShell.runAsync("input keyevent $keyCode") { output ->
+        io.github.fluxsniffermods.core.shell.AdbShell.runAsync("input keyevent $keyCode") { output ->
             if (output == null) android.os.Handler(android.os.Looper.getMainLooper()).post { fail("Command failed") }
         }
         return CommandExecutionResult.Success

@@ -216,7 +216,7 @@
     <string name="tutorial_previous">Anterior</string>
     <string name="tutorial_next">Siguiente</string>
     <string name="tutorial_finish">Finalizar</string>
-    <string name="tutorial_page_welcome_title">Bienvenido a Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Bienvenido a Flux Keyboard</string>
     <string name="tutorial_page_enable_title">Activar Flux Keyboard</string>
     <string name="tutorial_page_enable_description">Para comenzar, debes activar Flux Keyboard como método de entrada en la Configuración de Android. Toca el botón a continuación para abrir la configuración.</string>
     <string name="tutorial_page_select_title">Seleccionar Flux Keyboard</string>
@@ -254,7 +254,7 @@
     <string name="backup_now">Hacer copia de seguridad ahora</string>
     <string name="backup_now_description">Exportar todas las configuraciones y diseños personalizados a un ZIP</string>
     <string name="restore_from_file">Restaurar desde archivo</string>
-    <string name="restore_from_file_description">Importar un archivo ZIP de copia de seguridad de Flux Titan Hub</string>
+    <string name="restore_from_file_description">Importar un archivo ZIP de copia de seguridad de Flux Keyboard</string>
     <string name="backup_completed">Copia de seguridad completada</string>
     <string name="restore_completed">Restauración completada</string>
     <string name="backup_failed">Copia de seguridad fallida: %1$s</string>
@@ -424,8 +424,8 @@
     <string name="power_shortcuts_title">Atajos rápidos</string>
     <string name="power_shortcuts_description">Pulsa SYM y luego una tecla para abrir atajos cuando no estés en un campo de texto</string>
     <string name="power_shortcuts_press_key">Pulsa una tecla de atajo para abrir</string>
-    <string name="notification_update_channel_name">Actualizaciones de Flux Titan Hub</string>
-    <string name="notification_update_channel_description">Notificaciones sobre nuevas versiones de Flux Titan Hub</string>
+    <string name="notification_update_channel_name">Actualizaciones de Flux Keyboard</string>
+    <string name="notification_update_channel_description">Notificaciones sobre nuevas versiones de Flux Keyboard</string>
     <string name="notification_successor_release_title">Versión de Plektra disponible</string>
     <string name="notification_successor_release_text">%1$s está disponible como sucesor de Pastiera.</string>
     <string name="speech_recognition_error_no_match">No se reconoció ningún texto. Inténtalo de nuevo.</string>
@@ -684,7 +684,7 @@ Cada tecla puede configurarse como Keycode, Acción, Native Ctrl o Ninguno. Usa 
     <string name="tutorial_whats_new_title">Nuevo en esta versión: %1$s</string>
     <string name="tutorial_whats_new_description">Hay algunos cambios útiles que conviene conocer antes de continuar.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Correcciones de errores</string>
-    <string name="tutorial_whats_new_docs_button">Abrir documentación de Flux Titan Hub</string>
+    <string name="tutorial_whats_new_docs_button">Abrir documentación de Flux Keyboard</string>
     <string name="tutorial_whats_new_continue_hint">Continúa el tutorial para revisar los ajustes más útiles de esta versión.</string>
     <string name="app_language_title">Idioma de la app</string>
     <string name="app_language_description">Elige el idioma usado para los textos de la interfaz de la app.</string>

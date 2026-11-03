@@ -56,8 +56,7 @@ import it.palsoftware.pastiera.setSymbolsPages
  */
 
 /** The settings the tutorial's buttons open. */
-internal val fluxTutorialSettingIds = listOf("flux_emoji.picker_key", "auto_correction.spell_checker", "main.app_shortcuts", "hidden_apps.apps", "led_colors.individual", "main.typing", "main.root",
-    "main.root.game_mode", "main.streaming")
+internal val fluxTutorialSettingIds = listOf("flux_emoji.picker_key", "auto_correction.spell_checker", "main.app_shortcuts", "hidden_apps.apps", "led_colors.individual", "main.typing", "main.root")
 
 /** Opens a setting by its link ID, as search and deep links do. */
 internal fun openTutorialSettingById(context: Context, id: String) = openTutorialSetting(context, id)

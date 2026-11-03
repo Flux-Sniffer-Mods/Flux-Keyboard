@@ -189,7 +189,7 @@ data class InputContextState(
             }
 
             // The built-in shell's pairing code, typed into its notification: digits only
-            val inputType = if (it.palsoftware.pastiera.adb.shell.ShellSetup.isPairingCodeField(info)) {
+            val inputType = if (io.github.fluxsniffermods.core.shell.ShellSetup.isPairingCodeField(info)) {
                 InputType.TYPE_CLASS_NUMBER
             } else info.inputType
             val inputClass = inputType and InputType.TYPE_MASK_CLASS

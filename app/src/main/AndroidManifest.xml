@@ -8,26 +8,18 @@
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Gaming mode: placing keys over a game's own on-screen controls -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     
     <!-- Vibration, for haptic feedback -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Restarts the screen timeout after a key press -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     
     <!-- Voice input -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     
     <!-- Internet: update checks, GIF search, online layouts and dictionaries -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Streaming games to Moonlight: the host runs while it's on -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <!-- Streaming to Moonlight: the screen and what's playing -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <!-- Reads the Clicks Power Keyboard's details over Bluetooth LE -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -100,30 +92,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- The keyboard's page as an app of its own in the app list (Keyboard in the app list) -->
-        <activity
-            android:name=".KeyboardActivity"
-            android:configChanges="keyboard|keyboardHidden|navigation"
-            android:exported="false"
-            android:label="@string/module_keyboard_title"
-            android:icon="@mipmap/ic_keyboard_entry"
-            android:roundIcon="@mipmap/ic_keyboard_entry"
-            android:taskAffinity="it.palsoftware.pastiera.keyboard"
-            android:theme="@style/Theme.Pastiera" />
-        <activity-alias
-            android:name=".KeyboardLauncher"
-            android:targetActivity=".KeyboardActivity"
-            android:exported="true"
-            android:enabled="false"
-            android:label="@string/module_keyboard_title"
-            android:icon="@mipmap/ic_keyboard_entry"
-            android:roundIcon="@mipmap/ic_keyboard_entry">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
 
         <activity
             android:name=".SoftwareKeyboardModeActionActivity"
@@ -279,212 +247,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false"
             android:excludeFromRecents="true" />
-        <!-- A game's home screen shortcut: its profile on, then the game -->
-        <activity
-            android:name=".gaming.GameLaunchActivity"
-            android:exported="true"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|keyboard|keyboardHidden|navigation|uiMode"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- Quick Settings: gaming mode and streaming on or off; a long-press opens their settings -->
-        <service
-            android:name=".modules.GamingTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_qs_gaming"
-            android:label="@string/game_mode_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
-                android:value="true" />
-        </service>
-        <service
-            android:name=".modules.StreamingTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_qs_streaming"
-            android:label="@string/module_streaming_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
-                android:value="true" />
-        </service>
-        <activity
-            android:name=".modules.QuickTileSettingsActivity"
-            android:exported="true"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:theme="@android:style/Theme.NoDisplay">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
-            </intent-filter>
-        </activity>
 
-        <!-- Streaming games to Moonlight: the host, and the PIN typed to pair a device -->
-        <service
-            android:name=".streaming.StreamHostService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse|mediaProjection">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Game streaming host that Moonlight clients on the local network pair with" />
-        </service>
-        <activity
-            android:name=".streaming.StreamPin"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- The streaming notification tapped: end the stream or keep it -->
-        <activity
-            android:name=".streaming.StreamStop"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- A Moonlight client asking to stream, confirmed on the phone (started by the shell too: nothing without a request) -->
-        <activity
-            android:name=".streaming.StreamConfirm"
-            android:exported="true"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- Started by the shell when Moonlight launches a game: does nothing without a session -->
-        <activity
-            android:name=".streaming.StreamCapture"
-            android:exported="true"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- The Linux desktop: its page, its picture (on the phone or a TV screen), and what keeps it going -->
-        <activity
-            android:name=".linux.LinuxActivity"
-            android:exported="false"
-            android:label="@string/module_desktop_title"
-            android:taskAffinity="it.palsoftware.pastiera.linux"
-            android:theme="@style/Theme.Pastiera" />
-        <activity
-            android:name=".linux.LinuxViewerActivity"
-            android:exported="false"
-            android:label="@string/module_desktop_title"
-            android:taskAffinity="it.palsoftware.pastiera.linux.viewer"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden|navigation|density|uiMode"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <!-- A Linux program's home-screen shortcut: opens it in the desktop -->
-        <activity
-            android:name=".linux.LinuxLaunchActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:noHistory="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <service
-            android:name=".linux.LinuxService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Keeps a Linux desktop the user started (installing or running) going on the phone" />
-        </service>
-        <!-- AirPlay: casting to an Apple TV or AirPlay TV, and what it asks for first -->
-        <service
-            android:name=".airplay.AirPlayService"
-            android:exported="false"
-            android:foregroundServiceType="mediaProjection" />
-        <activity
-            android:name=".airplay.AirPlayCapture"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- Xbox Cloud Gaming in Flux Keyboard's own player (sizes change while it plays: kept) -->
-        <activity
-            android:name=".gaming.ExtraScreenActivity"
-            android:exported="false"
-            android:label="@string/extra_screen_title"
-            android:taskAffinity="it.palsoftware.pastiera.screen"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|navigation"
-            android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen" />
-
-        <activity
-            android:name=".gaming.XboxPlayActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            android:taskAffinity="it.palsoftware.pastiera.xbox"
-            android:label="Xbox Cloud Gaming"
-            android:hardwareAccelerated="true"
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|keyboard|keyboardHidden|navigation|uiMode"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <!-- One game's or app's gaming mode settings, on their own -->
-        <activity
-            android:name=".gaming.GameEditActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:taskAffinity="it.palsoftware.pastiera.games"
-            android:theme="@style/Theme.Pastiera" />
-        <!-- Games: an app of its own in the app list, every game in it (off until turned on) -->
-        <activity
-            android:name=".gaming.GamesActivity"
-            android:exported="true"
-            android:label="@string/games_app_title"
-            android:icon="@mipmap/ic_games"
-            android:roundIcon="@mipmap/ic_games"
-            android:taskAffinity="it.palsoftware.pastiera.games"
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density"
-            android:theme="@style/Theme.Pastiera" />
-        <!-- Its entry in the app list (Games in the app list): it opens from Moonlight either way -->
-        <activity-alias
-            android:name=".gaming.GamesLauncher"
-            android:targetActivity=".gaming.GamesActivity"
-            android:exported="true"
-            android:enabled="false"
-            android:label="@string/games_app_title"
-            android:icon="@mipmap/ic_games"
-            android:roundIcon="@mipmap/ic_games">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <!-- Streaming: an app of its own in the app list, every app to open on the TV (on with streaming) -->
-        <activity
-            android:name=".streaming.StreamingActivity"
-            android:exported="true"
-            android:label="@string/module_streaming_title"
-            android:icon="@mipmap/ic_streaming"
-            android:roundIcon="@mipmap/ic_streaming"
-            android:taskAffinity="it.palsoftware.pastiera.streaming"
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density"
-            android:theme="@style/Theme.Pastiera" />
-        <activity-alias
-            android:name=".streaming.StreamingLauncher"
-            android:targetActivity=".streaming.StreamingActivity"
-            android:exported="true"
-            android:enabled="false"
-            android:label="@string/module_streaming_title"
-            android:icon="@mipmap/ic_streaming"
-            android:roundIcon="@mipmap/ic_streaming">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <!-- Gaming mode's notification: the next profile -->
-        <receiver
-            android:name=".gaming.GameMode$Receiver"
-            android:exported="false" />
-        <!-- The pairing code typed into the built-in shell's notification -->
-        <receiver
-            android:name=".adb.shell.ShellSetup$PairReceiver"
-            android:exported="false" />
         <!-- Termux's answer when the quick launcher asks for Termux:Widget's scripts -->
         <receiver
             android:name=".shortcuts.TermuxScripts$Receiver"
@@ -513,14 +276,12 @@
             </intent-filter>
         </activity-alias>
 
-        <!-- Shizuku provider -->
+        <!-- Flux Gaming, Streaming and Desktop: the keyboard's layers, settings brought over -->
         <provider
-            android:name="rikka.shizuku.ShizukuProvider"
-            android:authorities="${applicationId}.shizuku"
-            android:multiprocess="false"
-            android:enabled="true"
+            android:name=".flux.KeyboardLink"
+            android:authorities="${applicationId}.link"
             android:exported="true"
-            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+            android:permission="io.github.fluxsniffermods.permission.LINK" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

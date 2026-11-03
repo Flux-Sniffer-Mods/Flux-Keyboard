@@ -2,7 +2,7 @@ package it.palsoftware.pastiera.commands
 
 import android.content.Context
 import it.palsoftware.pastiera.R
-import it.palsoftware.pastiera.adb.AdbShell
+import io.github.fluxsniffermods.core.shell.AdbShell
 
 /**
  * ADB shortcuts through Shizuku (no root), for keys (Customize keys) and the quick launcher:

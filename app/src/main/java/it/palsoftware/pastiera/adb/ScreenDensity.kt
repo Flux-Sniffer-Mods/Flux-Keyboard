@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.adb
 
+import io.github.fluxsniffermods.core.shell.AdbShell
 import android.content.Context
 import android.graphics.Point
 import android.hardware.display.DisplayManager

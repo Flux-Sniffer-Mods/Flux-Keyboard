@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.adb
 
+import io.github.fluxsniffermods.core.shell.RootShell
+import io.github.fluxsniffermods.core.shell.AdbShell
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -324,12 +326,12 @@ object KeyboardBacklight {
                 }
                 waitingForShizuku = listener
                 runCatching { rikka.shizuku.Shizuku.addBinderReceivedListenerSticky(listener) }
-                it.palsoftware.pastiera.adb.shell.BuiltInShell.addStartListener(shellStarted)
+                io.github.fluxsniffermods.core.shell.BuiltInShell.addStartListener(shellStarted)
             }
             return
         }
         waitingForShizuku?.let { runCatching { rikka.shizuku.Shizuku.removeBinderReceivedListener(it) } }
-        it.palsoftware.pastiera.adb.shell.BuiltInShell.removeStartListener(shellStarted)
+        io.github.fluxsniffermods.core.shell.BuiltInShell.removeStartListener(shellStarted)
         waitingForShizuku = null
         worker.execute { keepLit(app, following) }
         if (!following) return

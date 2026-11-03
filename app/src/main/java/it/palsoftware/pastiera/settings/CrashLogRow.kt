@@ -51,20 +51,14 @@ internal fun CrashLogRow() {
                 val app = it.palsoftware.pastiera.BuildConfig.APPLICATION_ID
                 // When the app stopped answering: where its threads were, which only the app can read
                 val traces = anrTraces(context)
-                // The Linux desktop: how it's set up, its last start and Linux's own logs
-                val desktop = context.getExternalFilesDir(null)?.let { dir ->
-                    runCatching {
-                        java.io.File(dir, "desktop.txt").apply { writeText(it.palsoftware.pastiera.linux.LinuxDesktop.report(context)) }
-                    }.getOrNull()
-                }
-                it.palsoftware.pastiera.adb.AdbShell.run(
+                io.github.fluxsniffermods.core.shell.AdbShell.run(
                     "f='$file'; mkdir -p \"\${f%/*}\"; { " +
                         // Why Android last ended the app: a crash, its web page's renderer dying, memory running low
                         "echo '== why it stopped =='; dumpsys activity exit-info $app | head -n 120; " +
                         "echo '== crashes =='; logcat -d -b crash -t 400; " +
                         "echo '== warnings and errors =='; logcat -d -b main,system '*:W' 'ActivityTaskManager:I' | " +
-                        "grep -i -E '$app|gamehub|egggame|Permission Denial|quickstep|launcher3|Recents|OverviewProxy|FluxGameMode|FluxGameLaunch|FluxExtraScreen|Stream(Wake|Host|Session|Input|Audio|Control)|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | grep -v 'Changing focus' | tail -n 400; " +
-                        // The screen and window settings gaming mode and the desktop change
+                        "grep -i -E '$app|Permission Denial|quickstep|launcher3|Recents|OverviewProxy|Flux|AndroidRuntime|chromium|cr_|webview|lowmemorykiller|has died|Killing' | grep -v 'Changing focus' | tail -n 400; " +
+                        // The screen and window settings (screen sizes per app change them)
                         // (through a pipe: Android's services can't write into a file in Download)
                         // The input devices (the keyboard, the side buttons): which one each key comes from
                         "echo '== input devices =='; dumpsys input | grep -E '^ +Device -?[0-9]+:' | head -30; " +
@@ -77,25 +71,11 @@ internal fun CrashLogRow() {
                         "echo \"ignore orientation=\$(cmd window get-ignore-orientation-request | cat)\"; " +
                         "echo '== recents =='; dumpsys activity recents | head -n 12; " +
                         "dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity|RecentsActivity|quickstep' | head -n 10; " +
-                        // The official GameHub's ways in (its activities, actions and links), to start its games directly
-                        "for p in com.xiaoji.egggame gamehub.lite; do pm path \$p >/dev/null 2>&1 && { echo \"== \$p ==\"; " +
-                        "dumpsys package \$p | grep -E 'Activity|Action:|Scheme:|Authority:|Path' | grep -v -i 'permission' | head -n 150; }; done; " +
-                        // Where games are found: the game folders, every Steam library on the phone's storage
-                        // and the launchers' own folders, and the launchers' home screen shortcuts
-                        "echo '== game folders =='; find '${it.palsoftware.pastiera.gaming.GameFolders.ROOT}' -maxdepth 4 ! -name '.nomedia' 2>/dev/null | head -n 200; " +
-                        "echo '== steam libraries =='; find /storage/emulated/0 -maxdepth 7 -name 'appmanifest_*.acf' 2>/dev/null | head -n 60; " +
-                        "for p in gamehub.lite emuready.gamehub.lite com.antutu.ABenchMark com.antutu.benchmark.full com.ludashi.aibench com.xiaoji.egggame app.gamenative; do " +
-                        "[ -d \"/storage/emulated/0/Android/data/\$p\" ] && { echo \"== \$p files ==\"; find \"/storage/emulated/0/Android/data/\$p\" -maxdepth 4 -type d 2>/dev/null | head -n 60; }; done; " +
-                        // Only the game launchers' own shortcuts: other apps' hold contacts and chats
-                        "echo '== launcher shortcuts =='; dumpsys shortcut | grep -E '^ *Package: |shortLabel=' | while IFS= read -r l; do case \"\$l\" in " +
-                        "*'Package: '*) case \"\$l\" in *'Package: gamehub'*|*'Package: emuready'*|*'Package: com.antutu'*|*'Package: com.ludashi'*|*'Package: com.xiaoji'*|*'Package: app.gamenative'*) k=1; echo \"\$l\";; *) k=;; esac;; " +
-                        "*) [ -n \"\$k\" ] && echo \"\$l\";; esac; done | head -n 80; " +
-                        // Gaming mode reads keys through Flux Keyboard's accessibility service: whether it's on
+                        // The accessibility services that are on (the keyboard's helper among them)
                         "echo '== accessibility services =='; settings get secure enabled_accessibility_services | tr ':' '\\n'; " +
-                        // Flux Keyboard's own record of gaming mode, streaming and game launches (the phone's turns over in seconds)
-                        "echo '== gaming and streaming =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${it.palsoftware.pastiera.FluxLog.FILE_NAME}'; " +
+                        // Flux Keyboard's own record (the phone's log turns over in seconds)
+                        "echo '== the keyboard\'s own log =='; tail -c 120000 '${context.getExternalFilesDir(null)?.path}/${io.github.fluxsniffermods.core.FluxLog.FILE_NAME}'; " +
                         (if (traces != null) "echo '== not responding: threads =='; cat '${traces.path}'; " else "") +
-                        (if (desktop != null) "echo '== desktop =='; cat '${desktop.path}'; " else "") +
                         // Everything through a pipe: Android's services can't write into a file in Download
                         "} 2>&1 | cat > \"\$f\"; echo ok",
                     15_000
@@ -117,9 +97,9 @@ internal fun CrashLogRow() {
         scope.launch {
             val cleared = withContext(Dispatchers.IO) {
                 runCatching {
-                    java.io.File(context.getExternalFilesDir(null), it.palsoftware.pastiera.FluxLog.FILE_NAME).delete()
+                    java.io.File(context.getExternalFilesDir(null), io.github.fluxsniffermods.core.FluxLog.FILE_NAME).delete()
                 }
-                it.palsoftware.pastiera.adb.AdbShell.run("logcat -c -b main -b system -b crash; echo ok", 10_000)?.contains("ok") == true
+                io.github.fluxsniffermods.core.shell.AdbShell.run("logcat -c -b main -b system -b crash; echo ok", 10_000)?.contains("ok") == true
             }
             android.widget.Toast.makeText(
                 context, if (cleared) R.string.crash_log_cleared else R.string.adb_not_running, android.widget.Toast.LENGTH_SHORT

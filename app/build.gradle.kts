@@ -76,9 +76,6 @@ fun shouldValidateStableSigning(taskNames: List<String>): Boolean {
 // Every string resource that names Pastiera is regenerated for the stable flavor with the fork's
 // name, so Pastiera's own string files stay untouched; credits in assets still name Pastiera.
 val forkAppName = "Flux Keyboard"
-// Flux Titan Hub: the app holding the keyboard, gaming mode and streaming, a module each (its
-// launcher name; the keyboard keeps the name Flux Keyboard in Android's keyboard list)
-val hubAppName = "Flux Titan Hub"
 val forkCompactModeName = "Solderina" // Pastiera's compact mode, Pastierina
 val forkNamesDir = layout.buildDirectory.dir("generated/forkNames/res")
 val generateForkNames = tasks.register("generateForkNames") {
@@ -128,9 +125,6 @@ android {
     val nightlyVersionNameSuffix = providers.gradleProperty("PASTIERA_NIGHTLY_VERSION_SUFFIX").orNull ?: "-nightly"
     val isFdroidBuild = gradleBooleanProperty("PASTIERA_FDROID_BUILD")
     val isUnsignedReleaseBuild = gradleBooleanProperty("PASTIERA_UNSIGNED_RELEASE_BUILD")
-    // SteamGridDB key for gaming mode's game art: likewise from a CI secret, empty without one
-    val steamGridDbKey = (providers.environmentVariable("STEAMGRIDDB_API_KEY").orNull ?: "").trim()
-        .takeIf { key -> key.matches(Regex("[A-Za-z0-9]+")) } ?: ""
     // Built-in KLIPY key for GIF search: from the build environment (a CI secret), never the source
     val klipyApiKey = (providers.environmentVariable("KLIPY_API_KEY").orNull
         ?: providers.gradleProperty("KLIPY_API_KEY").orNull ?: "").trim().let { key ->
@@ -147,10 +141,10 @@ android {
         )
     }
 
-    // Stable builds update from Flux Titan Hub's "flux/" GitHub releases (the repository was
-    // Flux-Keyboard before)
+    // Stable builds update from Flux Keyboard's "flux/" GitHub releases (the repository was
+    // Flux-Titan-Hub for a while; GitHub forwards the old name)
     val forkGithubRepository = providers.gradleProperty("PASTIERA_FORK_GITHUB_REPOSITORY")
-        .orNull ?: "Flux-Sniffer-Mods/Flux-Titan-Hub"
+        .orNull ?: "Flux-Sniffer-Mods/Flux-Keyboard"
     if (forkGithubRepository.isNotEmpty() && !forkGithubRepository.matches(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+"))) {
         throw GradleException(
             "PASTIERA_FORK_GITHUB_REPOSITORY must be empty or have the form owner/repository"
@@ -170,7 +164,6 @@ android {
         buildConfigField("String", "SUCCESSOR_GITHUB_REPOSITORY", "\"$successorGithubRepository\"")
         buildConfigField("String", "FORK_GITHUB_REPOSITORY", "\"$forkGithubRepository\"")
         buildConfigField("String", "KLIPY_API_KEY", "\"$klipyApiKey\"")
-        buildConfigField("String", "STEAMGRIDDB_API_KEY", "\"$steamGridDbKey\"")
     }
 
     signingConfigs {
@@ -214,9 +207,9 @@ android {
             // Flux Keyboard (Flux-Sniffer-Mods fork): its own name and app ID, so it installs next
             // to official Pastiera and never presents itself as Pastiera
             applicationId = "io.github.fluxsniffermods.fluxkeyboard"
-            manifestPlaceholders["appLabel"] = hubAppName
+            manifestPlaceholders["appLabel"] = forkAppName
             manifestPlaceholders["imeLabel"] = forkAppName
-            buildConfigField("String", "APP_NAME", "\"$hubAppName\"")
+            buildConfigField("String", "APP_NAME", "\"$forkAppName\"")
             buildConfigField("String", "COMPACT_MODE_NAME", "\"$forkCompactModeName\"")
             buildConfigField("String", "RELEASE_CHANNEL", "\"stable\"")
             buildConfigField("boolean", "IS_FDROID_BUILD", if (isFdroidBuild) "true" else "false")
@@ -338,13 +331,6 @@ android {
             // Exclude legacy JSON base dictionaries; keep serialized .dict and user_defaults.json
             excludes += "assets/common/dictionaries/*_base.json"
         }
-        jniLibs {
-            // PRoot and the GPU server (scripts/build-proot.sh, build-virgl.sh) are run, not loaded: unpacked to disk, as built
-            useLegacyPackaging = true
-            keepDebugSymbols += "**/libproot.so"
-            keepDebugSymbols += "**/libproot-loader.so"
-            keepDebugSymbols += "**/libvirgl.so"
-        }
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
@@ -360,9 +346,18 @@ android {
 // dependencies and the third-party assets documented in third_party_notices.md.
 val stableSbomAssets = layout.buildDirectory.dir("generated/sbom/stableRelease/assets")
 android.sourceSets.getByName("stable").assets.srcDir(stableSbomAssets)
-val stableRuntimeClasspath = provider { configurations.getByName("stableReleaseRuntimeClasspath") }
+// The libraries as resolved, not their files: a project dependency (Flux Core) offers its build in
+// several forms, and asking for files without saying which is ambiguous
+val stableRuntimeModules = provider {
+    configurations.getByName("stableReleaseRuntimeClasspath").incoming.resolutionResult.allComponents
+        .map { it.id }
+        .filterIsInstance<org.gradle.api.artifacts.component.ModuleComponentIdentifier>()
+        .map { "${it.group}:${it.module}:${it.version}" }
+        .distinct()
+        .sorted()
+}
 val generateStableReleaseSbom = tasks.register("generateStableReleaseSbom") {
-    inputs.files(stableRuntimeClasspath)
+    inputs.property("modules", stableRuntimeModules)
     inputs.property("versionName", android.defaultConfig.versionName ?: "")
     inputs.property("versionCode", android.defaultConfig.versionCode ?: 0)
     inputs.property("appName", forkAppName)
@@ -370,20 +365,28 @@ val generateStableReleaseSbom = tasks.register("generateStableReleaseSbom") {
     doLast {
         val versionName = android.defaultConfig.versionName ?: "unknown"
         val appRef = "pkg:generic/${forkAppName.lowercase().replace(' ', '-')}@$versionName"
-        val libraries = stableRuntimeClasspath.get().resolvedConfiguration.resolvedArtifacts
-            .map { artifact ->
-                val id = artifact.moduleVersion.id
+        val libraries = stableRuntimeModules.get()
+            .map { coordinates ->
+                val (group, name, version) = coordinates.split(":")
                 linkedMapOf<String, Any>(
                     "type" to "library",
-                    "group" to id.group,
-                    "name" to id.name,
-                    "version" to id.version,
-                    "bom-ref" to "pkg:maven/${id.group}/${id.name}@${id.version}",
-                    "purl" to "pkg:maven/${id.group}/${id.name}@${id.version}"
+                    "group" to group,
+                    "name" to name,
+                    "version" to version,
+                    "bom-ref" to "pkg:maven/$group/$name@$version",
+                    "purl" to "pkg:maven/$group/$name@$version"
                 )
             }
-            .distinctBy { it["bom-ref"] }
-            .sortedBy { it["bom-ref"].toString() }
+            .sortedBy { it["bom-ref"].toString() } +
+            // What the Flux apps share, built in from the core/ submodule
+            linkedMapOf<String, Any>(
+                "type" to "library",
+                "name" to "Flux Core",
+                "bom-ref" to "pkg:github/Flux-Sniffer-Mods/Flux-Core",
+                "purl" to "pkg:github/Flux-Sniffer-Mods/Flux-Core",
+                "externalReferences" to listOf(mapOf("type" to "vcs", "url" to "https://github.com/Flux-Sniffer-Mods/Flux-Core")),
+                "licenses" to listOf(mapOf("license" to mapOf("id" to "GPL-3.0-only")))
+            )
         fun bundled(name: String, ref: String, source: String, license: String) =
             linkedMapOf<String, Any>(
                 "type" to "data",
@@ -435,6 +438,8 @@ tasks.matching { it.name == "mergeStableReleaseAssets" }.configureEach {
 
 dependencies {
 
+    // What the Flux apps share: the shell, the link between them
+    implementation(project(":core"))
     implementation(libs.androidx.core.ktx)
     // Inline autofill chips (passwords, one-time codes) in the suggestion bar
     implementation(libs.androidx.autofill)
@@ -462,13 +467,8 @@ dependencies {
     // Shizuku for ADB shell access
     implementation("dev.rikka.shizuku:api:13.1.5")
     implementation("dev.rikka.shizuku:provider:13.1.5")
-    // The built-in shell: pairs with wireless debugging and starts the shell helper
-    implementation("com.github.MuntashirAkon:libadb-android:3.1.1")
+    // The keyboard light reads the display's brightness through hidden APIs
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
-    // Opus in plain Java, for streaming sound to Moonlight in its short packets
-    implementation("io.github.jaredmdobson:concentus:1.0.2")
-    // AirPlay pairing: X25519, Ed25519, ChaCha20-Poly1305 and HKDF on every Android version
-    implementation("org.bouncycastle:bcprov-jdk15to18:1.81")
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation("org.mockito:mockito-core:5.11.0")

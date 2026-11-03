@@ -293,8 +293,8 @@
     <string name="notification_nav_mode_channel_description">Notifiche per il nav mode di Flux Keyboard</string>
     
     <!-- Update Notifications -->
-    <string name="notification_update_channel_name">Aggiornamenti Flux Titan Hub</string>
-    <string name="notification_update_channel_description">Notifiche sui nuovi aggiornamenti di Flux Titan Hub</string>
+    <string name="notification_update_channel_name">Aggiornamenti Flux Keyboard</string>
+    <string name="notification_update_channel_description">Notifiche sui nuovi aggiornamenti di Flux Keyboard</string>
     <string name="notification_successor_release_title">Release di Plektra disponibile</string>
     <string name="notification_successor_release_text">%1$s è disponibile come successore di Pastiera.</string>
     
@@ -593,7 +593,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="tutorial_previous">Precedente</string>
     <string name="tutorial_next">Successivo</string>
     <string name="tutorial_finish">Fine</string>
-    <string name="tutorial_page_welcome_title">Benvenuto in Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Benvenuto in Flux Keyboard</string>
     <string name="tutorial_devs_choice_button">Scelta dello sviluppatore</string>
     <string name="tutorial_devs_choice_applied">Impostazioni Scelta dello sviluppatore applicate.</string>
     <string name="tutorial_page_enable_title">Abilita Flux Keyboard</string>
@@ -652,7 +652,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="tutorial_whats_new_title">Novità in questa versione: %1$s</string>
     <string name="tutorial_whats_new_description">Alcune modifiche sono utili da conoscere prima di continuare.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Correzioni bug</string>
-    <string name="tutorial_whats_new_docs_button">Apri documentazione Flux Titan Hub</string>
+    <string name="tutorial_whats_new_docs_button">Apri documentazione Flux Keyboard</string>
     <string name="tutorial_whats_new_continue_hint">Continua il tutorial per rivedere le impostazioni più utili di questa versione.</string>
     <string name="tutorial_page_ready_title">Pronto per Iniziare</string>
     <string name="tutorial_page_ready_description">Tutto pronto. Il riquadro di ogni modulo nella schermata Home dice cosa manca ancora, e una pressione prolungata (o il suo ⚙) apre le sue impostazioni.</string>
@@ -669,7 +669,7 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="backup_now">Backup ora</string>
     <string name="backup_now_description">Esporta tutte le impostazioni e i layout personalizzati in un file ZIP</string>
     <string name="restore_from_file">Ripristina da file</string>
-    <string name="restore_from_file_description">Importa un backup ZIP di Flux Titan Hub</string>
+    <string name="restore_from_file_description">Importa un backup ZIP di Flux Keyboard</string>
     <string name="backup_completed">Backup completato</string>
     <string name="restore_completed">Ripristino completato</string>
     <string name="backup_failed">Backup fallito: %1$s</string>
@@ -995,11 +995,11 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="flux_gif_recents_title">GIF recenti</string>
     <string name="flux_gif_recents_description">Le GIF inviate di recente, dopo le preferite nella ricerca GIF.</string>
     <string name="flux_offline_title">Modalità offline</string>
-    <string name="flux_offline_description">Tieni Flux Titan Hub lontano da internet</string>
+    <string name="flux_offline_description">Tieni Flux Keyboard lontano da internet</string>
     <string name="flux_offline_on">Attiva: nulla va online</string>
-    <string name="flux_offline_note">Flux Titan Hub non ha analisi né telemetria. Queste sono le sole cose che vanno online, e la modalità offline le spegne tutte.</string>
+    <string name="flux_offline_note">Flux Keyboard non ha analisi né telemetria. Queste sono le sole cose che vanno online, e la modalità offline le spegne tutte.</string>
     <string name="flux_offline_switch_title">Modalità offline</string>
-    <string name="flux_offline_switch_description">Nulla in Flux Titan Hub va online.</string>
+    <string name="flux_offline_switch_description">Nulla in Flux Keyboard va online.</string>
     <string name="flux_section_offline_affects">Mentre è attiva</string>
     <string name="flux_offline_affects">• La ricerca GIF sparisce, con la sua scheda e il tasto GIF del livello emoji\n• Dizionari e layout non si possono scaricare\n• Nessun controllo degli aggiornamenti né note di rilascio\n• Le emoji vengono solo dal font di sistema, senza il font emoji scaricabile (dal prossimo avvio della tastiera)</string>
     <string name="flux_gifs_offline_note">La modalità offline è attiva, quindi la ricerca GIF è spenta (Impostazioni → Modalità offline).</string>

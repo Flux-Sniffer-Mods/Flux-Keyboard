@@ -12,13 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import it.palsoftware.pastiera.modules.FluxModule
-import it.palsoftware.pastiera.modules.FluxModules
 import it.palsoftware.pastiera.adb.KeyboardBacklight
 import it.palsoftware.pastiera.adb.PerAppDensity
 import it.palsoftware.pastiera.adb.ScreenDensity
-import it.palsoftware.pastiera.adb.shell.BuiltInShell
-import it.palsoftware.pastiera.adb.shell.ShellSetup
+import io.github.fluxsniffermods.core.shell.BuiltInShell
+import io.github.fluxsniffermods.core.shell.ShellSetup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -108,7 +106,7 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             }
         }
         // Root, on rooted phones: every shell command through su instead
-        var rootOn by remember { mutableStateOf(it.palsoftware.pastiera.adb.RootShell.enabled(context)) }
+        var rootOn by remember { mutableStateOf(io.github.fluxsniffermods.core.shell.RootShell.enabled(context)) }
         val rootScope = androidx.compose.runtime.rememberCoroutineScope()
         FluxSwitchRow(
             linkId = "main.root.use_root",
@@ -118,8 +116,8 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) { on ->
             rootScope.launch {
                 val granted = withContext(Dispatchers.IO) {
-                    it.palsoftware.pastiera.adb.RootShell.setEnabled(context, on)
-                    it.palsoftware.pastiera.adb.RootShell.active
+                    io.github.fluxsniffermods.core.shell.RootShell.setEnabled(context, on)
+                    io.github.fluxsniffermods.core.shell.RootShell.active
                 }
                 rootOn = on
                 if (on && !granted) {
@@ -143,13 +141,13 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 title = stringResource(R.string.adb_allow_title),
                 description = stringResource(R.string.adb_allow_description)
             ) {
-                it.palsoftware.pastiera.adb.ShizukuPermission.request(context) { status = resolveShizukuStatus() }
+                io.github.fluxsniffermods.core.shell.ShizukuPermission.request(context) { status = resolveShizukuStatus() }
             }
         }
         // Shizuku starting itself at boot (no root): it needs WRITE_SECURE_SETTINGS, granted here.
         // Not needed once the built-in shell is set up
-        if (status == ShizukuStatus.Connected && !shellPaired && remember { it.palsoftware.pastiera.adb.ShizukuBoot.installed(context) }) {
-            var bootReady by remember { mutableStateOf(it.palsoftware.pastiera.adb.ShizukuBoot.granted(context)) }
+        if (status == ShizukuStatus.Connected && !shellPaired && remember { io.github.fluxsniffermods.core.shell.ShizukuBoot.installed(context) }) {
+            var bootReady by remember { mutableStateOf(io.github.fluxsniffermods.core.shell.ShizukuBoot.granted(context)) }
             FluxActionRow(
                 linkId = "main.root.shizuku_boot",
                 title = stringResource(R.string.shizuku_boot_title),
@@ -157,7 +155,7 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     if (bootReady) R.string.shizuku_boot_ready else R.string.shizuku_boot_description
                 )
             ) {
-                it.palsoftware.pastiera.adb.ShizukuBoot.setUp(context) { ok -> bootReady = ok }
+                io.github.fluxsniffermods.core.shell.ShizukuBoot.setUp(context) { ok -> bootReady = ok }
             }
         }
 
@@ -174,17 +172,6 @@ fun AdbSettingsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             title = stringResource(R.string.density_section),
             description = stringResource(R.string.screen_size_row_description)
         ) { openSettingsPage(context, SettingsPage(SettingsDestination.ScreenSize)) }
-        if (FluxModules.on(context, FluxModule.GAMING)) FluxActionRow(
-            linkId = null,
-            icon = "\u271A",
-            title = stringResource(R.string.game_mode_title),
-            description = stringResource(R.string.shell_access_for_gaming)
-        ) { openSettingsPage(context, SettingsPage(SettingsDestination.GameMode)) }
-        if (FluxModules.on(context, FluxModule.STREAMING)) FluxActionRow(
-            linkId = null,
-            title = stringResource(R.string.module_streaming_title),
-            description = stringResource(R.string.shell_access_for_streaming)
-        ) { openSettingsPage(context, SettingsPage(SettingsDestination.Streaming)) }
         FluxActionRow(
             linkId = null,
             title = stringResource(R.string.trackpad_provider_title),
@@ -208,7 +195,7 @@ internal fun ShellExtrasScreen(modifier: Modifier = Modifier, onBack: () -> Unit
     val prefs = SettingsManager.getPreferences(context)
     val shell = rememberShellState()
     val status by shell.status
-    val rootOn = remember(status) { it.palsoftware.pastiera.adb.RootShell.enabled(context) }
+    val rootOn = remember(status) { io.github.fluxsniffermods.core.shell.RootShell.enabled(context) }
     var backlightSupported by remember { mutableStateOf(false) }
     var backlightLevel by remember { mutableFloatStateOf(100f) }
     var backlightTimeout by remember { mutableStateOf<Float?>(null) }

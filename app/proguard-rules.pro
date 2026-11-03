@@ -34,9 +34,4 @@
 }
 -keep class rikka.shizuku.ShizukuRemoteProcess { *; }
 
-# The shell helper is started by name with app_process
--keep class it.palsoftware.pastiera.adb.shell.ShellServer { public static void main(java.lang.String[]); }
--keep class io.github.muntashirakon.adb.** { *; }
--keep class it.palsoftware.pastiera.gaming.GameInputServer { public static void main(java.lang.String[]); }
--keep class it.palsoftware.pastiera.display.ExtraScreenServer { public static void main(java.lang.String[]); }
--keep class it.palsoftware.pastiera.display.WifiDisplayServer { public static void main(java.lang.String[]); }
+# The built-in shell's helpers are kept by Flux Core's own rules

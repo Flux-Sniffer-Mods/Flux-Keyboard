@@ -212,7 +212,7 @@
     <string name="tutorial_previous">Précédent</string>
     <string name="tutorial_next">Suivant</string>
     <string name="tutorial_finish">Terminer</string>
-    <string name="tutorial_page_welcome_title">Bienvenue dans Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Bienvenue dans Flux Keyboard</string>
     <string name="tutorial_page_enable_title">Activer Flux Keyboard</string>
     <string name="tutorial_page_enable_description">Pour commencer, vous devez activer Flux Keyboard comme méthode de saisie dans les Paramètres Android. Appuyez sur le bouton ci-dessous pour ouvrir les paramètres.</string>
     <string name="tutorial_page_select_title">Sélectionner Flux Keyboard</string>
@@ -250,7 +250,7 @@
     <string name="backup_now">Sauvegarder maintenant</string>
     <string name="backup_now_description">Exporter tous les paramètres et les dispositions personnalisées vers un fichier ZIP</string>
     <string name="restore_from_file">Restaurer depuis un fichier</string>
-    <string name="restore_from_file_description">Importer un fichier ZIP de sauvegarde Flux Titan Hub</string>
+    <string name="restore_from_file_description">Importer un fichier ZIP de sauvegarde Flux Keyboard</string>
     <string name="backup_completed">Sauvegarde terminée</string>
     <string name="restore_completed">Restauration terminée</string>
     <string name="backup_failed">Échec de la sauvegarde : %1$s</string>
@@ -361,8 +361,8 @@
     <string name="settings_update_checking">Recherche des mises à jour de sécurité de Pastiera et des versions Nightly de Plektra…</string>
     <string name="settings_update_up_to_date">Aucune mise à jour de sécurité de Pastiera ni version Nightly de Plektra trouvée.</string>
     <string name="settings_update_check_failed">Impossible de joindre GitHub.</string>
-    <string name="notification_update_channel_name">Mises à jour Flux Titan Hub</string>
-    <string name="notification_update_channel_description">Notifications des nouvelles versions de Flux Titan Hub</string>
+    <string name="notification_update_channel_name">Mises à jour Flux Keyboard</string>
+    <string name="notification_update_channel_description">Notifications des nouvelles versions de Flux Keyboard</string>
     <string name="notification_successor_release_title">Version de Plektra disponible</string>
     <string name="notification_successor_release_text">%1$s est disponible comme successeur de Pastiera.</string>
     <string name="speech_recognition_error_no_match">Aucun texte reconnu. Réessayez.</string>
@@ -654,7 +654,7 @@ Chaque touche peut être configurée comme Keycode, Action, Native Ctrl ou Aucun
     <string name="tutorial_whats_new_title">Nouveau dans cette version : %1$s</string>
     <string name="tutorial_whats_new_description">Quelques changements utiles méritent d’être connus avant de continuer.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Corrections de bugs</string>
-    <string name="tutorial_whats_new_docs_button">Ouvrir la documentation Flux Titan Hub</string>
+    <string name="tutorial_whats_new_docs_button">Ouvrir la documentation Flux Keyboard</string>
     <string name="tutorial_whats_new_continue_hint">Continuez le tutoriel pour revoir les paramètres les plus utiles de cette version.</string>
     <string name="tutorial_devs_choice_button">Choix du développeur</string>
     <string name="tutorial_devs_choice_applied">Paramètres Choix du développeur appliqués.</string>

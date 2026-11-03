@@ -24,8 +24,8 @@ class OneTimeCodeListener : NotificationListenerService() {
          */
         fun allowSensitive(context: android.content.Context) {
             if (Build.VERSION.SDK_INT < 35 || !SettingsManager.getOneTimeCodesEnabled(context)) return
-            if (!it.palsoftware.pastiera.adb.AdbShell.available()) return
-            it.palsoftware.pastiera.adb.AdbShell.runAsync("appops set ${context.packageName} RECEIVE_SENSITIVE_NOTIFICATIONS allow")
+            if (!io.github.fluxsniffermods.core.shell.AdbShell.available()) return
+            io.github.fluxsniffermods.core.shell.AdbShell.runAsync("appops set ${context.packageName} RECEIVE_SENSITIVE_NOTIFICATIONS allow")
         }
     }
 

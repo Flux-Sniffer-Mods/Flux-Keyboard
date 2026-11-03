@@ -138,8 +138,8 @@
     <string name="power_shortcuts_press_key">Nhấn phím tắt để mở</string>
     <string name="notification_nav_mode_channel_name">Flux Keyboard Nav Mode</string>
     <string name="notification_nav_mode_channel_description">Thông báo cho chế độ điều hướng Flux Keyboard</string>
-    <string name="notification_update_channel_name">Cập nhật Flux Titan Hub</string>
-    <string name="notification_update_channel_description">Thông báo về các phiên bản Flux Titan Hub mới</string>
+    <string name="notification_update_channel_name">Cập nhật Flux Keyboard</string>
+    <string name="notification_update_channel_description">Thông báo về các phiên bản Flux Keyboard mới</string>
     <string name="notification_successor_release_title">Đã có bản phát hành Plektra</string>
     <string name="notification_successor_release_text">%1$s hiện có với vai trò kế nhiệm Pastiera.</string>
     <string name="speech_recognition_prompt">Hãy nói...</string>
@@ -279,7 +279,7 @@
     <string name="tutorial_previous">Trước</string>
     <string name="tutorial_next">Tiếp</string>
     <string name="tutorial_finish">Hoàn tất</string>
-    <string name="tutorial_page_welcome_title">Chào mừng đến với Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Chào mừng đến với Flux Keyboard</string>
     <string name="tutorial_page_enable_title">Bật Flux Keyboard</string>
     <string name="tutorial_page_enable_description">Để bắt đầu, bạn cần bật Flux Keyboard làm phương thức nhập trong Cài đặt Android. Nhấn nút bên dưới để mở cài đặt.</string>
     <string name="tutorial_page_select_title">Chọn Flux Keyboard</string>
@@ -319,7 +319,7 @@
     <string name="backup_now">Sao lưu ngay</string>
     <string name="backup_now_description">Xuất tất cả cài đặt và bố cục tùy chỉnh thành tệp ZIP</string>
     <string name="restore_from_file">Khôi phục từ tệp</string>
-    <string name="restore_from_file_description">Nhập tệp sao lưu ZIP của Flux Titan Hub</string>
+    <string name="restore_from_file_description">Nhập tệp sao lưu ZIP của Flux Keyboard</string>
     <string name="backup_completed">Sao lưu hoàn tất</string>
     <string name="restore_completed">Khôi phục hoàn tất</string>
     <string name="backup_failed">Sao lưu thất bại: %1$s</string>
@@ -654,7 +654,7 @@ Mỗi phím có thể cấu hình là Keycode, Action, Native Ctrl hoặc None. 
     <string name="tutorial_whats_new_title">Mới trong phiên bản này: %1$s</string>
     <string name="tutorial_whats_new_description">Có vài thay đổi đáng biết trước khi tiếp tục.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Sửa lỗi</string>
-    <string name="tutorial_whats_new_docs_button">Mở tài liệu Flux Titan Hub</string>
+    <string name="tutorial_whats_new_docs_button">Mở tài liệu Flux Keyboard</string>
     <string name="tutorial_whats_new_continue_hint">Tiếp tục hướng dẫn để xem lại các cài đặt hữu ích nhất cho bản này.</string>
     <string name="tutorial_devs_choice_button">Lựa chọn của nhà phát triển</string>
     <string name="tutorial_devs_choice_applied">Đã áp dụng cài đặt Lựa chọn của nhà phát triển.</string>

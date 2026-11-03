@@ -17,6 +17,8 @@ import it.palsoftware.pastiera.sym.SymPagesConfig
 object SettingsManager {
     internal const val TAG = "SettingsManager"
     private const val PREFS_NAME = "pastiera_prefs"
+    /** The settings file, for what keeps its settings beside the keyboard's (Flux Core's shell). */
+    const val PREFS_FILE = PREFS_NAME
     
     // Settings keys
     internal const val KEY_LONG_PRESS_THRESHOLD = "long_press_threshold"

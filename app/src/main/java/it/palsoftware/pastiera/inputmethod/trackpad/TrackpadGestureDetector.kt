@@ -56,7 +56,7 @@ class TrackpadGestureDetector(
         }
 
         // The built-in shell helper counts as Shizuku here
-        val builtIn = it.palsoftware.pastiera.adb.shell.BuiltInShell.running()
+        val builtIn = io.github.fluxsniffermods.core.shell.BuiltInShell.running()
         val shizukuRunning = builtIn || try { Shizuku.pingBinder() } catch (e: Exception) { false }
         val shizukuAuthorized = builtIn || try {
             Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED

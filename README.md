@@ -1,56 +1,43 @@
-<p align="center"><img src="docs/screenshots/hero.png" alt="Flux Titan Hub on the Titan 2 Elite: the keyboard's emoji pages open in a chat, beside the Games app and the Streaming app's list" width="100%"></p>
+<p align="center"><img src="docs/screenshots/hero.png" alt="Flux Keyboard on the Titan 2 Elite: the keyboard's emoji pages open in a chat" width="100%"></p>
 
-# Flux Titan Hub
+# Flux Keyboard
 
-**The companion app for the Unihertz Titan 2 Elite.** One app with a tile for each thing it does:
-**Flux Keyboard**, a keyboard built around the phone's physical keys and trackpad; **gaming mode**,
-which turns those keys into a controller; and **streaming**, which makes the phone a Moonlight host
-for its screen, your apps and your games. A Linux desktop is to come. Everything works without
-root, through the app's own built-in shell, and it runs on any Android phone with a hardware
-keyboard, at its best on the Titan 2 Elite.
+**A keyboard built around the Unihertz Titan 2 Elite's physical keys and trackpad.** Suggestions
+picked with a swipe on the keys, emoji, symbols, kaomoji and GIFs as pages on the keys, a quick
+launcher that does more, and everything that needs Android's shell without root, through the app's
+own built-in shell. It runs on any Android phone with a hardware keyboard, at its best on the
+Titan 2 Elite.
 
 <p align="center"><a href="https://ko-fi.com/fluxsniffermods"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi"></a></p>
 
-> **Flux Titan Hub** is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera),
+> **Flux Keyboard** is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera),
 > created by Andrea Palumbo (PalSoftware) and developed by Andrea Palumbo, Patrick Zauner and the
 > Pastiera contributors. Most of what makes it a keyboard is their work, credited
-> [below](#built-on-pastiera). Flux Titan Hub is not affiliated with or endorsed by the Pastiera
-> team, so please report problems to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/issues),
+> [below](#built-on-pastiera). Flux Keyboard is not affiliated with or endorsed by the Pastiera
+> team, so please report problems to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues),
 > not upstream.
 
 Flux Keyboard is up to date with **Pastiera 0.86**, Pastiera's final planned feature release, and
 merges Pastiera's later changes as they land. Pastiera keeps receiving security fixes, and its
 development continues as [Plektra](https://github.com/pkb-rocks/plektra).
 
-## The hub
+## The Flux apps
 
-- **A tile per module**, each saying how it's doing (the keyboard on and in use, gaming mode ready with your games, who you're streaming to) or, in red, what it still needs, a tap from the fix. A tap opens the module, a long-press or its ⚙ its settings.
-- **Search that knows where it is**: the home screen's search finds every setting; each module's settings, and Settings itself, search only their own.
+Gaming mode, streaming and the Linux desktop, once modules of Flux Titan Hub, are apps of their own:
 
-<p align="center">
-  <img src="docs/cards/hub.webp" alt="One app, a tile per module. Each tile says how its module is doing, or what it still needs. The search finds every setting, whichever module it's in." width="840">
-</p>
+- **[Flux Gaming](https://github.com/Flux-Sniffer-Mods/Flux-Gaming)**: the keyboard as a controller, keys placed on touch games' buttons, emulators set up for you, and a Games app with every game's art.
+- **[Flux Streaming](https://github.com/Flux-Sniffer-Mods/Flux-Streaming)**: the phone as a Moonlight host for its screen, your apps and games, with Miracast, AirPlay and the TV turned on for you.
+- **[Flux Desktop](https://github.com/Flux-Sniffer-Mods/Flux-Desktop)**: Debian or Ubuntu with Xfce or KDE Plasma, on the phone or a TV, with or without root.
 
-- **Switched on only when you want it**: a fresh install starts with the keyboard alone, and the first-run tutorial asks which modules you'll use, showing only their pages. A module that's off takes its parts with it.
-
-<p align="center">
-  <img src="docs/cards/tutorial-modules.webp" alt="Pick what you'll use. The first-run tutorial asks which modules you want, switches them on, and shows only their pages." width="840">
-</p>
-
-- **Quick Settings tiles** for gaming mode and streaming: a tap switches them on or off, a long-press opens their settings.
-
-<p align="center">
-  <img src="docs/cards/quick-settings.webp" alt="Quick Settings tiles. Gaming mode and streaming on or off from anywhere; a long-press opens their settings." width="840">
-</p>
-
-- **Apps of their own**: Keyboard, Games and Streaming can each join the app list (Niagara's too).
+The keyboard's page lists them, a tap opening one or getting it from GitHub. Each takes its
+settings over from Flux Keyboard the first time it opens, and one Shell access serves them all.
 
 ## Flux Keyboard
 
 What only Flux Keyboard does, on top of everything [Pastiera](#built-on-pastiera) gives it.
 
 <p align="center">
-  <img src="docs/cards/keyboard-page.webp" alt="One page for the keyboard. From its tile, its app-list entry or the keyboard's own Settings button: what it still needs, its settings with a search of their own, and recommended settings in one tap." width="840">
+  <img src="docs/cards/keyboard-page.webp" alt="One page for the keyboard. What it still needs, its settings with a search of their own, and recommended settings in one tap." width="840">
 </p>
 
 ### The trackpad picks your words
@@ -153,58 +140,6 @@ What only Flux Keyboard does, on top of everything [Pastiera](#built-on-pastiera
   <img src="docs/cards/recommended.webp" alt="Recommended settings. The setup it's tuned with on the Titan 2 Elite, applied in one step and offered again after updates." width="840">
 </p>
 
-<p align="center">
-  <img src="docs/cards/tutorial.webp" alt="A tutorial that sets things up. Pick what you'll use, and only those pages follow: the keyboard, gaming mode and streaming, each set up as you go." width="840">
-</p>
-
-## Gaming mode
-
-- **Your keys as a controller**: W A Z D the left stick, I J M L the face buttons, Q E the bumpers, the volume keys the triggers and Space Start, with right Shift for the d-pad, SYM for the right stick and left Shift for the right stick on I J M L. Every key can be changed on a picture of the keyboard, for every game or one at a time.
-
-<p align="center">
-  <img src="docs/cards/keyboard-controls.webp" alt="Your keys as a controller. Every key's button on a picture of the keyboard, or every button's keys on a picture of the controller, alone or with a modifier held." width="840">
-</p>
-
-- **Touch games played on keys**: place keys on a game's own on-screen buttons from gaming mode's notification, holding a key holds the button, with its sticks found and sized for you. Keys placed for the phone and for a stream are kept apart.
-
-<p align="center">
-  <img src="docs/cards/place-keys.webp" alt="Touch games played on keys. Place keys on a game's own buttons and circles on its sticks, sized and snapped for you." width="840">
-</p>
-
-- **Emulators set up for you**: the layout written into Dolphin's and PPSSPP's own controller settings, Dolphin's GameCube controller, Wii Remote with Nunchuk, Classic Controller or sideways Wii Remote per game (the Wii Remote moved by moving the phone, and its pointer on the trackpad), and DS and 3DS games' two screens laid out as you like.
-
-<p align="center">
-  <img src="docs/cards/game-settings.webp" alt="Settings for every game. Its art, screen, resolution and controls, and for a Dolphin game its Wii controller, moved by moving the phone." width="840">
-</p>
-
-- **A Games app** with every game's art: GameNative's, GameHub's, the Play Store's and your emulator folders' games, found by themselves and named by their game IDs, plus Xbox Cloud Gaming in its own player. It has a search, plays with the keyboard's controls, and long-pressing a game opens its settings: its screen (landscape-shaped or upright, clear of the camera cutout), its resolution, its controls and its home screen shortcut.
-
-<p align="center">
-  <img src="docs/cards/games-app.webp" alt="The Games app. Every game with its art, from GameNative, GameHub, the Play Store and your emulator folders, plus Xbox Cloud Gaming. Search it, and move through it with the keys." width="840">
-</p>
-
-- **Honest about the keyboard**: it has no real sticks, so it suits games played on buttons; for the rest, a controller made for a phone held upright, or one with a clip, is recommended.
-
-## Streaming
-
-- **The phone as a Moonlight host**: Moonlight on a TV or PC finds it on the Wi-Fi and pairs with a PIN, then lists your games with their art, the phone's screen, Android's desktop as a second screen for any app, your apps and Termux scripts.
-
-<p align="center">
-  <img src="docs/cards/streaming.webp" alt="The phone as a Moonlight host. Your games, apps, the phone's screen and Android's desktop in Moonlight on the TV, the stream a notification away." width="840">
-</p>
-
-- **Played your way**: a game mirrored or on a screen of its own, leaving the phone free, at the client's resolution or yours, played with the keyboard, touch or the Moonlight device's controller, with the phone quiet while the TV plays.
-- **The Streaming app**: what's streaming and to whom with End stream, and every app to open on the TV, the ones Moonlight lists first.
-
-<p align="center">
-  <img src="docs/cards/stream-app.webp" alt="Any app on the TV. Tap an app in the Streaming app and the TV turns on with it open in Moonlight, even an app Moonlight doesn't list. The phone's volume buttons turn the TV up and down." width="840">
-</p>
-
-- **Miracast too**: no Moonlight on the TV? The phone's screen goes to a TV or PC that takes Miracast (LG Screen Share, Samsung Screen Mirroring, Windows), and an app tapped in the Streaming app goes there alone.
-- **AirPlay too**: an Apple TV, or a TV with AirPlay, shows the phone's screen with its sound, a few seconds behind: good for apps and video.
-- **Linux desktop**: Debian or Ubuntu, with Xfce or KDE Plasma, on the phone or a TV, through the built-in shell: a chroot with root, PRoot without. No Termux needed.
-- **The TV does the rest**: with an LG webOS TV set up, opening a game on the phone turns the TV on and opens Moonlight straight into it, the phone's volume buttons turn the TV up and down, and the TV turns off when the stream ends.
-
 ## Also here, all in one app
 
 Things you'd otherwise need a different fork for, side by side with everything above:
@@ -286,12 +221,12 @@ The full list of what Pastiera 0.86 added over 0.85 is in the [changelog](FORK_C
 
 ## Installation
 
-1. Download the APK from the [latest release](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/releases).
+1. Download the APK from the [latest release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases).
 2. Android Settings → System → Languages & input → Virtual keyboard → Manage keyboards.
 3. Enable "Flux Keyboard" and pick it when typing.
-4. Open Flux Titan Hub: the tutorial asks which modules you'll use and sets each one up. Any module can be switched on or off later from its tile.
+4. Open Flux Keyboard: the tutorial sets it up, a step at a time.
 
-Flux Titan Hub (app ID `io.github.fluxsniffermods.fluxkeyboard`) installs next to Pastiera and
+Flux Keyboard (app ID `io.github.fluxsniffermods.fluxkeyboard`) installs next to Pastiera and
 doesn't replace or update it.
 
 ## Requirements
@@ -317,7 +252,7 @@ Pastiera's release, nightly and CI workflows aren't kept: Flux Keyboard builds o
 
 ## Contributing
 
-Issues and suggestions for Flux Titan Hub go to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Titan-Hub/issues).
+Issues and suggestions for Flux Keyboard go to [this repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues).
 Pastiera itself now accepts security, compatibility and maintenance changes, with feature work in
 Plektra.
 
@@ -342,12 +277,6 @@ phone. Thank you to brobata.
 Minimal mode and the single-language versions were inspired by
 [Numen](https://github.com/jlo-aug/numen) by jlo-aug, a Pastiera-based keyboard for the Titan 2
 Elite with a hidden bar and a build tuned for one language. Thank you to jlo-aug.
-
-Gaming mode names Wii, GameCube and 3DS games from [GameTDB](https://www.gametdb.com)'s
-lists of game titles, fetched when a game folder is first read, and shows their covers from
-GameTDB too, or box art from [libretro-thumbnails](https://github.com/libretro-thumbnails)
-for other emulator games. Builds given a SteamGridDB API key (the `STEAMGRIDDB_API_KEY` Actions
-secret) look on [SteamGridDB](https://www.steamgriddb.com) first.
 
 If you enjoy Flux Keyboard, you can [support me on Ko-fi](https://ko-fi.com/fluxsniffermods),
 and the people it's built on:

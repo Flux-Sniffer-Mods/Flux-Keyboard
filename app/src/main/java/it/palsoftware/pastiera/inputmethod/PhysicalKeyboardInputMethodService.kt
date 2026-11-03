@@ -2075,15 +2075,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     override fun onCreate() {
         super.onCreate()
         ClicksAccessibilityKeyBridge.register(this)
-        // Moonlight's Wake starts streaming when it isn't running
-        it.palsoftware.pastiera.streaming.StreamWake.start(this)
-        // A stream that ended with the app (a crash): the phone's screen put back, now and once the shell answers
-        Thread { runCatching { it.palsoftware.pastiera.streaming.StreamHost.recover(this) } }.start()
-        it.palsoftware.pastiera.adb.shell.BuiltInShell.addStartListener {
-            runCatching { it.palsoftware.pastiera.streaming.StreamHost.recover(this) }
-        }
-        // The Games app's entry in the app list as its setting says
-        Thread { runCatching { it.palsoftware.pastiera.gaming.GamesActivity.syncLauncher(this) } }.start()
+        // Flux Gaming: told when a game's field is typed in, and telling when gaming mode has a game's keys
+        it.palsoftware.pastiera.flux.GamingBridge.start(this)
         // Root: the keyboard backlight follows the screen, when set (the Root page)
         it.palsoftware.pastiera.adb.KeyboardBacklight.start(this)
         // A code arriving while typing is offered straight away
@@ -2091,7 +2084,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = { if (isInputViewShown || isInputViewActive || pasteSuggestionShown) offerOneTimeCode() }
         // One-time codes: Android 15 hides them from the listener unless allowed through the shell
         it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(this)
-        it.palsoftware.pastiera.adb.shell.BuiltInShell.addStartListener {
+        io.github.fluxsniffermods.core.shell.BuiltInShell.addStartListener {
             it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(this)
         }
         EmojiCompatSupport.ensureLoaded(this)
@@ -3541,7 +3534,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // The app asked for the keyboard (not the keyboard itself, bringing its bar back): in a
         // game, its text field is being typed in
         if (!configChange && android.os.SystemClock.uptimeMillis() - selfShowAt > SELF_SHOW_MS) {
-            it.palsoftware.pastiera.gaming.GameMode.keyboardRequested()
+            it.palsoftware.pastiera.flux.GamingBridge.editor(this, "keyboard_requested")
         }
         val accepted = super.onShowInputRequested(flags, configChange)
         if (hiddenAppSurfaceBlocked()) return false
@@ -4370,7 +4363,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         try {
             receiveStartInput(info, restarting)
         } catch (e: Exception) {
-            it.palsoftware.pastiera.FluxLog.w(TAG, "field start in ${info?.packageName}: ${Log.getStackTraceString(e)}")
+            io.github.fluxsniffermods.core.FluxLog.w(TAG, "field start in ${info?.packageName}: ${Log.getStackTraceString(e)}")
         }
     }
 
@@ -4378,14 +4371,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         try {
             receiveStartInputView(info, restarting)
         } catch (e: Exception) {
-            it.palsoftware.pastiera.FluxLog.w(TAG, "keyboard start in ${info?.packageName}: ${Log.getStackTraceString(e)}")
+            io.github.fluxsniffermods.core.FluxLog.w(TAG, "keyboard start in ${info?.packageName}: ${Log.getStackTraceString(e)}")
         }
     }
 
     private fun receiveStartInput(info: EditorInfo?, restarting: Boolean) {
         // A new field: a game's hidden one doesn't take the keys from it until it asks for the keyboard
-        if (!restarting) it.palsoftware.pastiera.gaming.GameMode.inputStarted()
-        playerEditor = playerInFront() && info?.packageName == packageName
+        if (!restarting) it.palsoftware.pastiera.flux.GamingBridge.editor(this, "input_started")
+        playerEditor = it.palsoftware.pastiera.flux.GamingBridge.playerInFront && info?.packageName == io.github.fluxsniffermods.core.FluxApp.GAMING.packageName
         if (playerEditor) { super.onStartInput(info, restarting); return }
         AutoCapitalizeHelper.debugPackage = info?.packageName
         info?.let {
@@ -4603,7 +4596,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (playerEditor) { super.onStartInputView(info, restarting); return }
         if (terminalModeActive) TerminalMode.apply(info)
         // A text field in a game: the keys type into it, not play
-        it.palsoftware.pastiera.gaming.GameMode.editorStarted(info)
+        it.palsoftware.pastiera.flux.GamingBridge.editor(this, "editor_started", info)
         super.onStartInputView(info, restarting)
         hideSurfaceIfHiddenForApp()
         if (::textExpansionController.isInitialized) textExpansionController.clear()
@@ -4664,7 +4657,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (::trackpadGestureDetector.isInitialized) {
             val gesturesEnabled = SettingsManager.getTrackpadGesturesEnabled(this)
             if (shouldStartShizukuTrackpadDetector() && !trackpadGestureDetector.isRunning()) {
-                val builtIn = it.palsoftware.pastiera.adb.shell.BuiltInShell.running()
+                val builtIn = io.github.fluxsniffermods.core.shell.BuiltInShell.running()
                 val shizukuRunning = builtIn || try { Shizuku.pingBinder() } catch (e: Exception) { false }
                 val shizukuAuthorized = builtIn || try {
                     Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
@@ -4741,7 +4734,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
         if (playerEditor) return
-        it.palsoftware.pastiera.gaming.GameMode.editorFinished()
+        it.palsoftware.pastiera.flux.GamingBridge.editor(this, "editor_finished")
         if (::textExpansionController.isInitialized) textExpansionController.clear()
         // Finishing a view does not finish the editor session (Back and backend transitions).
         isInputViewActive = !finishingInput && inputContextState.isEditable
@@ -4796,7 +4789,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Shizuku chosen but not running yet (no Wi-Fi at boot): Android's swipes meanwhile
         return provider == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU &&
             SettingsManager.getPreferences(this).getBoolean(SettingsManager.KEY_TRACKPAD_SHIZUKU_FALLBACK, true) &&
-            !it.palsoftware.pastiera.adb.AdbShell.available()
+            !io.github.fluxsniffermods.core.shell.AdbShell.available()
     }
 
     private fun attachTrackpadDecorViewMotionHook(reason: String) {
@@ -4966,7 +4959,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         try {
             receiveSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         } catch (e: Exception) {
-            it.palsoftware.pastiera.FluxLog.w(TAG, "selection $newSelStart-$newSelEnd: ${Log.getStackTraceString(e)}")
+            io.github.fluxsniffermods.core.FluxLog.w(TAG, "selection $newSelStart-$newSelEnd: ${Log.getStackTraceString(e)}")
         }
     }
 
@@ -5956,7 +5949,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private inline fun keySafely(what: String, keyCode: Int, fallback: () -> Boolean, handle: () -> Boolean): Boolean = try {
         handle()
     } catch (e: Exception) {
-        it.palsoftware.pastiera.FluxLog.w(TAG, "$what $keyCode: ${Log.getStackTraceString(e)}")
+        io.github.fluxsniffermods.core.FluxLog.w(TAG, "$what $keyCode: ${Log.getStackTraceString(e)}")
         runCatching(fallback).getOrDefault(false)
     }
 
@@ -6032,13 +6025,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (playerEditor) null else super.getCurrentInputConnection()
 
     private fun playerOwnsInput(info: EditorInfo? = currentInputEditorInfo): Boolean =
-        playerEditor || (playerInFront() && info?.packageName == packageName) ||
+        playerEditor ||
             // In a game (nothing being typed): its keys are gaming mode's, the typing leaves them alone
-            it.palsoftware.pastiera.gaming.GameMode.passesKeys()
-
-    /** Flux Keyboard's own player, or its page for a game's own screen, is in front. */
-    private fun playerInFront(): Boolean =
-        it.palsoftware.pastiera.gaming.XboxPlayActivity.inFront || it.palsoftware.pastiera.gaming.ExtraScreenActivity.inFront
+            it.palsoftware.pastiera.flux.GamingBridge.passesKeys(info?.packageName, field = (info?.inputType ?: 0) != 0)
 
     private fun receiveKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         // Keycode 0 types nothing: the keyboard light's wake-up key, passed straight on
@@ -6046,8 +6035,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (playerOwnsInput()) return false
         // The quick launcher in front: its keys go to it, not to the app's field beneath
         if (QuickLauncherActivity.ownsKey(event_)) return false
-        // The Games app moved through with keys: its keys
-        if ((currentInputEditorInfo?.inputType ?: 0) == 0 && it.palsoftware.pastiera.gaming.GamesActivity.ownsKey(this, event_)) return false
+        // A Flux app's own screen with no field (the Games app, the TV's screen): its keys
+        if ((currentInputEditorInfo?.inputType ?: 0) == 0 && it.palsoftware.pastiera.flux.GamingBridge.fluxAppInFront(currentInputEditorInfo?.packageName)) return false
         // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
         if ((event_?.repeatCount ?: 0) == 0 && !KeyEvent.isModifierKey(keyCode_)) {
             if (keyCode_ == KeyEvent.KEYCODE_DEL) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
@@ -7018,8 +7007,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (keyCode_ == KeyEvent.KEYCODE_UNKNOWN) return super.onKeyUp(keyCode_, event_)
         if (playerOwnsInput()) return false
         if (QuickLauncherActivity.ownsKey(event_)) return false
-        // The Games app moved through with keys: its keys
-        if ((currentInputEditorInfo?.inputType ?: 0) == 0 && it.palsoftware.pastiera.gaming.GamesActivity.ownsKey(this, event_)) return false
+        // A Flux app's own screen with no field (the Games app, the TV's screen): its keys
+        if ((currentInputEditorInfo?.inputType ?: 0) == 0 && it.palsoftware.pastiera.flux.GamingBridge.fluxAppInFront(currentInputEditorInfo?.packageName)) return false
         if (keyCode_ == KEYCODE_SYM) {
             symKeyHeld = false
             // Released after a chord in a hidden app: no panel

@@ -39,8 +39,12 @@ enabled), and:
 | `autocorrect`, `layout`, `tutorial` | Their settings screens |
 | `commands`, `shortcuts` | Quick launcher commands and app shortcuts |
 | `adb` | Features run through Shizuku or ADB (keyboard light, screen size) |
+| `flux` | The other Flux apps: the link they call (the keyboard's layers, settings brought over) and gaming mode's state as Flux Gaming reports it |
 | `backup`, `clipboard`, `dictionaries`, `otp`, `spellcheck`, `update` | As named |
 | `legacy` | Code kept only to read what earlier versions saved; see below |
+
+What the Flux apps share (the built-in shell, update plumbing, settings widgets) is Flux Core, the
+`core/` submodule (`io.github.fluxsniffermods.core`).
 
 ## Legacy
 

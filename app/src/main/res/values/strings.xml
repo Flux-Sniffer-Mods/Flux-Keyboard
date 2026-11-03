@@ -458,8 +458,8 @@
     <string name="clicks_button_mode_native_description">Keep the button’s original Android key event.</string>
     <string name="clicks_button_mode_quick_launcher">Quick launcher</string>
     <string name="clicks_button_mode_quick_launcher_description">Open the built-in quick launcher directly and do not pass the key event to the app.</string>
-    <string name="clicks_button_mode_open_pastiera">Open Flux Titan Hub</string>
-    <string name="clicks_button_mode_open_pastiera_description">Open the Flux Titan Hub settings directly and do not pass the key event to the app.</string>
+    <string name="clicks_button_mode_open_pastiera">Open Flux Keyboard</string>
+    <string name="clicks_button_mode_open_pastiera_description">Open the Flux Keyboard settings directly and do not pass the key event to the app.</string>
     <string name="clicks_button_mode_toggle_keyboard_mode">Toggle keyboard mode</string>
     <string name="clicks_button_mode_toggle_keyboard_mode_description">Temporarily open or close the on-screen keyboard until the next hardware connection change.</string>
     <string name="clicks_button_mode_toggle_emoji_picker">Toggle emoji picker</string>
@@ -538,13 +538,13 @@
     <string name="alt_key_editor_clone_profile_description">Use any BlackBerry, Unihertz, Minimal, or Clicks profile as an editable template.</string>
     <string name="alt_key_editor_mappings_title">Device SYM and key mappings</string>
     <string name="alt_key_editor_transfer_title">Import and export</string>
-    <string name="alt_key_editor_transfer_description">Share custom profiles and restore them with Flux Titan Hub backups.</string>
+    <string name="alt_key_editor_transfer_description">Share custom profiles and restore them with Flux Keyboard backups.</string>
     <string name="feature_status_construction_content_description">Under construction</string>
     <string name="feature_status_construction_hint">This feature is work in progress or planned. It may be incomplete, unavailable, or still change.</string>
     <string name="feature_status_experimental_content_description">Experimental feature</string>
     <string name="feature_status_experimental_hint">This may already work, but it is new and may soon be changed or improved. Bug reports are welcome.</string>
     <string name="tutorial_feature_status_title">Feature status symbols</string>
-    <string name="tutorial_feature_status_description">Flux Titan Hub marks work in progress directly in the app, so you do not need to search through every GitHub issue.</string>
+    <string name="tutorial_feature_status_description">Flux Keyboard marks work in progress directly in the app, so you do not need to search through every GitHub issue.</string>
     <string name="tutorial_feature_status_experimental_title">Experimental</string>
     <string name="tutorial_feature_status_experimental_description">The feature can work already, but it is new and may be adjusted or improved soon. Bug reports are welcome.</string>
     <string name="tutorial_feature_status_footer">Tap either symbol in Settings for a short explanation. A roadmap marker is not a promise for a particular release.</string>
@@ -721,8 +721,8 @@
     <string name="notification_nav_mode_channel_description">Notifications for Flux Keyboard nav mode</string>
     
     <!-- Update Notifications -->
-    <string name="notification_update_channel_name">Flux Titan Hub Updates</string>
-    <string name="notification_update_channel_description">Notifications about new Flux Titan Hub versions</string>
+    <string name="notification_update_channel_name">Flux Keyboard Updates</string>
+    <string name="notification_update_channel_description">Notifications about new Flux Keyboard versions</string>
     <string name="notification_successor_release_title">Plektra release available</string>
     <string name="notification_successor_release_text">%1$s is available as the successor to Pastiera.</string>
     <string name="notification_pastiera_stable_update_title">Pastiera security update available</string>
@@ -1054,9 +1054,9 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="tutorial_whats_new_title">New in this version: %1$s</string>
     <string name="tutorial_whats_new_description">A few changes are worth knowing before you continue.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Bug fixes</string>
-    <string name="tutorial_whats_new_docs_button">Open Flux Titan Hub docs</string>
+    <string name="tutorial_whats_new_docs_button">Open Flux Keyboard docs</string>
     <string name="tutorial_whats_new_continue_hint">Continue through the tutorial to review the most useful settings for this release.</string>
-    <string name="tutorial_page_welcome_title">Welcome to Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Welcome to Flux Keyboard</string>
     <string name="tutorial_devs_choice_button">Dev\'s Choice</string>
     <string name="tutorial_devs_choice_applied">Dev\'s Choice settings applied.</string>
     <string name="tutorial_page_enable_title">Enable Flux Keyboard</string>
@@ -1168,7 +1168,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="backup_now">Backup now</string>
     <string name="backup_now_description">Export all settings and custom layouts to a ZIP</string>
     <string name="restore_from_file">Restore from file</string>
-    <string name="restore_from_file_description">Import a Flux Titan Hub backup ZIP</string>
+    <string name="restore_from_file_description">Import a Flux Keyboard backup ZIP</string>
     <string name="backup_completed">Backup completed</string>
     <string name="restore_completed">Restore completed</string>
     <string name="backup_failed">Backup failed: %1$s</string>
@@ -1632,11 +1632,11 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="flux_gif_recents_title">Recent GIFs</string>
     <string name="flux_gif_recents_description">The GIFs you’ve sent lately, after your favourites in GIF search.</string>
     <string name="flux_offline_title">Offline mode</string>
-    <string name="flux_offline_description">Keep Flux Titan Hub off the internet</string>
+    <string name="flux_offline_description">Keep Flux Keyboard off the internet</string>
     <string name="flux_offline_on">On: nothing goes online</string>
-    <string name="flux_offline_note">Flux Titan Hub has no analytics or telemetry. These are the only things that go online, and offline mode turns them all off.</string>
+    <string name="flux_offline_note">Flux Keyboard has no analytics or telemetry. These are the only things that go online, and offline mode turns them all off.</string>
     <string name="flux_offline_switch_title">Offline mode</string>
-    <string name="flux_offline_switch_description">Nothing in Flux Titan Hub goes online.</string>
+    <string name="flux_offline_switch_description">Nothing in Flux Keyboard goes online.</string>
     <string name="flux_section_offline_affects">While it’s on</string>
     <string name="flux_offline_affects">• GIF search is gone, with its tab and the emoji layer’s GIF key\n• Dictionaries and layouts can’t be downloaded\n• No update checks or release notes\n• Emoji come from the system font only, without the downloadable emoji font (from the next start of the keyboard)</string>
     <string name="flux_gifs_offline_note">Offline mode is on, so GIF search is off (Settings → Offline mode).</string>

@@ -61,7 +61,6 @@ enum class SettingsDestination {
     FluxHiddenApps,
     FluxLinuxDesktop,
     FluxOffline,
-    GameMode,
     Root,
     KeyboardsLayouts,
     Typing,
@@ -75,15 +74,9 @@ enum class SettingsDestination {
     TerminalMode,
     ExactTyping,
     KeyboardHome,
-    Streaming,
     QuickSettings,
     ShellExtras,
-    ScreenSize,
-    // Gaming mode's groups, each a page of its own
-    GameControls,
-    GameSources,
-    GamesApp,
-    GamePhone
+    ScreenSize
 }
 
 /** The destination payload of one SettingsActivity, also used by deep links. */
@@ -351,19 +344,9 @@ fun SettingsScreen(
             SettingsDestination.FluxOffline -> {
                 FluxOfflineScreen(modifier = modifier, onBack = { navigateBack() })
             }
-            SettingsDestination.GameMode -> {
-                GameModeScreen(modifier = modifier, onBack = { navigateBack() })
-            }
-            SettingsDestination.GameControls -> GameControlsScreen(modifier = modifier, onBack = { navigateBack() })
-            SettingsDestination.GameSources -> GameSourcesScreen(modifier = modifier, onBack = { navigateBack() })
-            SettingsDestination.GamesApp -> GamesAppSettingsScreen(modifier = modifier, onBack = { navigateBack() })
-            SettingsDestination.GamePhone -> GamePhoneScreen(modifier = modifier, onBack = { navigateBack() })
             // The keyboard's page, as its tile and its entry in the app list open it
             SettingsDestination.KeyboardHome -> {
                 KeyboardPage(modifier = modifier, onBack = { navigateBack() })
-            }
-            SettingsDestination.Streaming -> {
-                StreamingHomeScreen(modifier = modifier, onBack = { navigateBack() })
             }
             SettingsDestination.Root -> {
                 AdbSettingsScreen(modifier = modifier, onBack = { navigateBack() })

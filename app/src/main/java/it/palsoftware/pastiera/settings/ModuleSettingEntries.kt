@@ -2,33 +2,10 @@ package it.palsoftware.pastiera.settings
 
 import it.palsoftware.pastiera.R
 
-/** The rows of gaming mode, streaming and the smaller pages, so the search finds them too. */
+/** The rows of the smaller pages, so the search finds them too. */
 internal fun moduleSettingEntries(): List<SettingEntry> = listOf(
-    SettingEntry("game_mode.layout", R.string.game_mode_layout_title, summaryRes = R.string.game_remap_row_description, route = SettingRoute(SettingsDestination.GameControls)),
-    SettingEntry("game_mode.open_games", R.string.games_app_open, summaryRes = R.string.games_app_open_description, route = SettingRoute(SettingsDestination.GamesApp)),
-    SettingEntry("game_mode.add_game", R.string.game_mode_import, summaryRes = R.string.game_mode_import_description, route = SettingRoute(SettingsDestination.GameSources)),
-    SettingEntry("game_mode.xbox_add", R.string.game_mode_xbox_add, summaryRes = R.string.game_mode_xbox_add_description, route = SettingRoute(SettingsDestination.GameSources)),
-    SettingEntry("game_mode.folders", R.string.game_mode_folders, summaryRes = R.string.game_mode_folders_description, route = SettingRoute(SettingsDestination.GameSources)),
-    SettingEntry("game_mode.quick_launcher", R.string.game_mode_quick_launcher, summaryRes = R.string.game_mode_quick_launcher_description, route = SettingRoute(SettingsDestination.GamesApp)),
-    SettingEntry("game_mode.games_app", R.string.games_app_switch, summaryRes = R.string.games_app_switch_description, route = SettingRoute(SettingsDestination.GamesApp)),
-    SettingEntry("game_mode.games_app_controller_keys", R.string.games_app_controller_keys, summaryRes = R.string.games_app_controller_keys_description, route = SettingRoute(SettingsDestination.GamesApp)),
-    SettingEntry("game_mode.pin_all", R.string.games_pin_all, summaryRes = R.string.games_pin_all_description, route = SettingRoute(SettingsDestination.GamesApp)),
-    SettingEntry("game_mode.folder_add", R.string.game_mode_folder_add, summaryRes = R.string.game_mode_folder_add_description, route = SettingRoute(SettingsDestination.GameSources)),
-    SettingEntry("game_mode.phone_game_mode", R.string.phone_game_mode, summaryRes = R.string.phone_game_mode_description, route = SettingRoute(SettingsDestination.GamePhone)),
     SettingEntry("system.crash_log", R.string.crash_log, summaryRes = R.string.crash_log_description, route = SettingRoute(SettingsDestination.Main)),
     SettingEntry("system.clear_logs", R.string.crash_log_clear, summaryRes = R.string.crash_log_clear_description, route = SettingRoute(SettingsDestination.Main)),
-    SettingEntry("streaming.app", R.string.streaming_app_switch, summaryRes = R.string.streaming_app_switch_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("main.keyboard_app", R.string.keyboard_app_switch, summaryRes = R.string.keyboard_app_switch_description, route = SettingRoute(SettingsDestination.KeyboardHome)),
-    SettingEntry("streaming.all_apps", R.string.stream_all_apps, summaryRes = R.string.stream_all_apps_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.termux", R.string.stream_termux, summaryRes = R.string.stream_termux_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.host", R.string.stream_switch, summaryRes = R.string.stream_switch_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.always", R.string.stream_always, summaryRes = R.string.stream_always_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.phone_screen", R.string.stream_phone_screen_switch, summaryRes = R.string.stream_phone_screen_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.pass_through", R.string.stream_pass_through, summaryRes = R.string.stream_pass_through_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.unpair", R.string.stream_unpair, summaryRes = R.string.stream_unpair_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.tv_off", R.string.tv_off_after, summaryRes = R.string.tv_off_after_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.tv_volume", R.string.tv_volume_keys, summaryRes = R.string.tv_volume_keys_description, route = SettingRoute(SettingsDestination.Streaming)),
-    SettingEntry("streaming.tv", R.string.tv_title, route = SettingRoute(SettingsDestination.Streaming)),
     SettingEntry("shell_extras.density_per_app", R.string.density_per_app_add, summaryRes = R.string.density_per_app_add_description, route = SettingRoute(SettingsDestination.ScreenSize)),
     SettingEntry("main.shell_access", R.string.root_title, summaryRes = R.string.settings_shell_access_description, route = SettingRoute(SettingsDestination.Main)),
     SettingEntry("main.screen_size", R.string.density_section, summaryRes = R.string.screen_size_row_description, route = SettingRoute(SettingsDestination.ScreenSize)),

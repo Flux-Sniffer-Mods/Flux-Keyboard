@@ -40,8 +40,8 @@ object TermuxSetup {
     /** Copies [command] and opens Termux, ready to paste it with Ctrl+Alt+V or a long press. */
     fun copyAndOpen(context: Context, shizuku: Boolean = false) {
         // Shizuku running: Termux may switch wireless debugging on at boot, to start Shizuku
-        if (shizuku && it.palsoftware.pastiera.adb.AdbShell.available()) {
-            it.palsoftware.pastiera.adb.AdbShell.runAsync("pm grant ${UserShortcuts.TERMUX_PACKAGE} $WRITE_SECURE_SETTINGS")
+        if (shizuku && io.github.fluxsniffermods.core.shell.AdbShell.available()) {
+            io.github.fluxsniffermods.core.shell.AdbShell.runAsync("pm grant ${UserShortcuts.TERMUX_PACKAGE} $WRITE_SECURE_SETTINGS")
         }
         val clipboard = context.getSystemService(ClipboardManager::class.java)
         clipboard?.setPrimaryClip(ClipData.newPlainText("Termux setup", command(context, shizuku)))

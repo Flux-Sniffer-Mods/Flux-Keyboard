@@ -24,4 +24,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Pastiera"
 include(":app")
+// Flux Core: what the Flux apps share (the Flux-Core repository, a submodule)
+include(":core")
+project(":core").projectDir = file("core")
  

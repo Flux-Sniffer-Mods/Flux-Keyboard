@@ -128,8 +128,8 @@
     <string name="power_shortcuts_press_key">Натисніть клавішу ярлика для запуску</string>
     <string name="notification_nav_mode_channel_name">Режим навігації Flux Keyboard</string>
     <string name="notification_nav_mode_channel_description">Сповіщення для режиму навігації</string>
-    <string name="notification_update_channel_name">Оновлення Flux Titan Hub</string>
-    <string name="notification_update_channel_description">Сповіщення про нові версії Flux Titan Hub</string>
+    <string name="notification_update_channel_name">Оновлення Flux Keyboard</string>
+    <string name="notification_update_channel_description">Сповіщення про нові версії Flux Keyboard</string>
     <string name="notification_successor_release_title">Доступний випуск Plektra</string>
     <string name="notification_successor_release_text">%1$s доступний як наступник Pastiera.</string>
     <string name="speech_recognition_prompt">Говоріть…</string>
@@ -248,7 +248,7 @@
     <string name="tutorial_previous">Назад</string>
     <string name="tutorial_next">Далі</string>
     <string name="tutorial_finish">Завершити</string>
-    <string name="tutorial_page_welcome_title">Ласкаво просимо до Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Ласкаво просимо до Flux Keyboard</string>
     <string name="tutorial_page_enable_title">Увімкнути Flux Keyboard</string>
     <string name="tutorial_page_enable_description">Для початку потрібно увімкнути Flux Keyboard як метод введення в налаштуваннях Android. Натисніть кнопку нижче щоб відкрити налаштування.</string>
     <string name="tutorial_page_select_title">Обрати Flux Keyboard</string>
@@ -654,7 +654,7 @@ Ctrl-ярлики застосунків із урахуванням розкл�
     <string name="tutorial_whats_new_title">Нове в цій версії: %1$s</string>
     <string name="tutorial_whats_new_description">Перед продовженням варто знати про кілька змін.</string>
     <string name="tutorial_whats_new_bug_fixes_title">Виправлення помилок</string>
-    <string name="tutorial_whats_new_docs_button">Відкрити документацію Flux Titan Hub</string>
+    <string name="tutorial_whats_new_docs_button">Відкрити документацію Flux Keyboard</string>
     <string name="tutorial_whats_new_continue_hint">Продовжте посібник, щоб переглянути найкорисніші налаштування цієї версії.</string>
     <string name="tutorial_devs_choice_button">Вибір розробника</string>
     <string name="tutorial_devs_choice_applied">Налаштування Вибір розробника застосовано.</string>

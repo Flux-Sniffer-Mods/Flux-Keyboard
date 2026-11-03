@@ -4,7 +4,7 @@ import org.json.JSONObject
 
 /** The changelog, in the repository this build updates from: where release notes send you for more, never Pastiera's website */
 val FORK_CHANGELOG_URL = "https://github.com/" +
-    it.palsoftware.pastiera.BuildConfig.FORK_GITHUB_REPOSITORY.ifBlank { "Flux-Sniffer-Mods/Flux-Titan-Hub" } + "/blob/flux-release/FORK_CHANGES.md"
+    it.palsoftware.pastiera.BuildConfig.FORK_GITHUB_REPOSITORY.ifBlank { "Flux-Sniffer-Mods/Flux-Keyboard" } + "/blob/flux-release/FORK_CHANGES.md"
 
 data class ReleaseNotesSummary(
     val version: String,

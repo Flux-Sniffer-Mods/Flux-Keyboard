@@ -16,13 +16,14 @@ import it.palsoftware.pastiera.settings.RecommendedSettings
 class PastieraApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        FluxLog.init(this)
-        keepBackgroundFailuresApart()
+        // Flux Core's parts (the shell, root) keep their settings in the keyboard's own, as before
+        io.github.fluxsniffermods.core.FluxPrefs.fileName = SettingsManager.PREFS_FILE
+        // Its log, background failures kept apart, the shell started (now or once Wi-Fi connects)
+        // and root asked for when switched on; the keyboard checks for its own updates
+        io.github.fluxsniffermods.core.FluxCore.init(this, BuildConfig.VERSION_NAME, checksUpdates = false)
         // A fresh install starts from the default configuration, before anything writes settings
         RecommendedSettings.applyIfFreshInstall(this)
         SettingsManager.keepDevBuildChoices(this)
-        // Which modules are on: a fresh install has the keyboard alone, an update keeps what's in use
-        it.palsoftware.pastiera.modules.FluxModules.setUp(this)
         OfflineMode.load(this)
         AppEnterStandards.installSystemCategoryLookup(this)
         it.palsoftware.pastiera.update.clearStaleForkUpdateNotice(this)
@@ -30,29 +31,9 @@ class PastieraApplication : Application() {
         SettingsManager.enforceTitan2EliteRoundedCornersOnce(this)
         AppPackageChangeMonitor.register(this)
         ClicksPowerKeyboardController.initialize(this)
-        // The built-in shell: started now, or once Wi-Fi connects after a restart
-        it.palsoftware.pastiera.adb.shell.ShellSetup.ensureStarted(this)
-        // Root, when switched on: asked off the main thread, as su may wait for the user
-        Thread { it.palsoftware.pastiera.adb.RootShell.init(this) }.start()
         publishSoftwareKeyboardModeShortcut()
         Handler(Looper.getMainLooper()).post {
             AdditionalSubtypeUtils.registerAdditionalSubtypes(this)
-        }
-    }
-
-    /**
-     * A failure on a background thread (a stream, a cast, the desktop, a download) is logged,
-     * here and in the crash log, and ends that thread alone: the keyboard, in the same process,
-     * stays up. The main thread's failures, and running out of memory, end the app as before.
-     */
-    private fun keepBackgroundFailuresApart() {
-        val previous = Thread.getDefaultUncaughtExceptionHandler()
-        Thread.setDefaultUncaughtExceptionHandler { thread, error ->
-            if (thread === Looper.getMainLooper().thread || error is OutOfMemoryError || previous == null) {
-                previous?.uncaughtException(thread, error)
-            } else {
-                runCatching { FluxLog.w("FluxCrash", "thread ${thread.name}: ${android.util.Log.getStackTraceString(error)}") }
-            }
         }
     }
 

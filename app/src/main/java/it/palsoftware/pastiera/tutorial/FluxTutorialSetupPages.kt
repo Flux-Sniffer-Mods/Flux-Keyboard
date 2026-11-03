@@ -42,7 +42,7 @@ import it.palsoftware.pastiera.RestrictedSettings
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.ShizukuStatus
 import it.palsoftware.pastiera.TutorialFeaturePageContent
-import it.palsoftware.pastiera.adb.ShizukuBoot
+import io.github.fluxsniffermods.core.shell.ShizukuBoot
 import it.palsoftware.pastiera.apps.isPastieraAccessibilityServiceEnabled
 import it.palsoftware.pastiera.getMinimalMode
 import it.palsoftware.pastiera.getMinimalModeShowLeds
@@ -290,8 +290,8 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
     var refresh by remember { mutableIntStateOf(0) }
     val installed = remember(resumes, refresh) { ShizukuBoot.installed(context) }
     val status = remember(resumes, refresh) { resolveShizukuStatus() }
-    val shellRunning = remember(resumes, refresh) { it.palsoftware.pastiera.adb.shell.BuiltInShell.running() }
-    val shellPaired = remember(resumes, refresh) { it.palsoftware.pastiera.adb.shell.ShellSetup.paired(context) }
+    val shellRunning = remember(resumes, refresh) { io.github.fluxsniffermods.core.shell.BuiltInShell.running() }
+    val shellPaired = remember(resumes, refresh) { io.github.fluxsniffermods.core.shell.ShellSetup.paired(context) }
     val bootGranted = remember(resumes, refresh) { installed && ShizukuBoot.granted(context) }
     val termuxInstalled = remember(resumes) {
         runCatching { context.packageManager.getApplicationInfo("com.termux", 0) }.isSuccess
@@ -317,7 +317,7 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(top = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                if (it.palsoftware.pastiera.adb.shell.ShellSetup.supported()) {
+                if (io.github.fluxsniffermods.core.shell.ShellSetup.supported()) {
                     TutorialStep(
                         title = stringResource(R.string.flux_tutorial_shell_title),
                         text = stringResource(R.string.flux_tutorial_shell_text),
@@ -361,7 +361,7 @@ fun FluxTutorialShizukuPageContent(modifier: Modifier = Modifier) {
                     done = if (status == ShizukuStatus.Connected) stringResource(R.string.flux_tutorial_shizuku_allowed) else null,
                     buttons = if (status != ShizukuStatus.NotAuthorized) emptyList() else listOf(
                         stringResource(R.string.flux_tutorial_shizuku_allow_button) to {
-                            it.palsoftware.pastiera.adb.ShizukuPermission.request(context) { refresh++ }
+                            io.github.fluxsniffermods.core.shell.ShizukuPermission.request(context) { refresh++ }
                         }
                     )
                 )

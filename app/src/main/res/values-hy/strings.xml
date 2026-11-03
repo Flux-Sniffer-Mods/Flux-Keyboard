@@ -125,8 +125,8 @@
     <string name="power_shortcuts_press_key">Գործարկելու համար սեղմեք դյուրանցման ստեղնը</string>
     <string name="notification_nav_mode_channel_name">Նավիգացիայի ռեժիմ</string>
     <string name="notification_nav_mode_channel_description">Նավիգացիայի ռեժիմի ծանուցումներ</string>
-    <string name="notification_update_channel_name">Flux Titan Hub թարմացումներ</string>
-    <string name="notification_update_channel_description">Ծանուցումներ Flux Titan Hub-ի նոր տարբերակների մասին</string>
+    <string name="notification_update_channel_name">Flux Keyboard թարմացումներ</string>
+    <string name="notification_update_channel_description">Ծանուցումներ Flux Keyboard-ի նոր տարբերակների մասին</string>
     <string name="notification_successor_release_title">Plektra-ի թողարկումը հասանելի է</string>
     <string name="notification_successor_release_text">%1$s-ը հասանելի է որպես Pastiera-ի հաջորդ։</string>
     <string name="speech_recognition_prompt">Խոսեք…</string>
@@ -391,7 +391,7 @@
     <string name="tutorial_previous">Previous</string>
     <string name="tutorial_next">Next</string>
     <string name="tutorial_finish">Finish</string>
-    <string name="tutorial_page_welcome_title">Բարի գալուստ Flux Titan Hub</string>
+    <string name="tutorial_page_welcome_title">Բարի գալուստ Flux Keyboard</string>
     <string name="tutorial_page_enable_title">Enable Flux Keyboard</string>
     <string name="tutorial_page_enable_description">Սկսելու համար միացրեք Flux Keyboard-ը որպես ներածման եղանակ Android-ի Կարգավորումներում։ Հպեք ներքևի կոճակին՝ կարգավորումները բացելու համար։</string>
     <string name="tutorial_page_select_title">Select Flux Keyboard</string>
@@ -654,7 +654,7 @@ Nav Mode-ը օգտագործում է ստեղնի ֆիզիկական դիրքը
     <string name="tutorial_whats_new_title">Նորը այս տարբերակում՝ %1$s</string>
     <string name="tutorial_whats_new_description">Շարունակելուց առաջ արժե իմանալ մի քանի փոփոխության մասին։</string>
     <string name="tutorial_whats_new_bug_fixes_title">Սխալների ուղղումներ</string>
-    <string name="tutorial_whats_new_docs_button">Բացել Flux Titan Hub փաստաթղթերը</string>
+    <string name="tutorial_whats_new_docs_button">Բացել Flux Keyboard փաստաթղթերը</string>
     <string name="tutorial_whats_new_continue_hint">Շարունակեք ուղեցույցը՝ այս տարբերակի ամենաօգտակար կարգավորումները վերանայելու համար։</string>
     <string name="tutorial_devs_choice_button">Մշակողի ընտրություն</string>
     <string name="tutorial_devs_choice_applied">Մշակողի ընտրության կարգավորումները կիրառվեցին։</string>

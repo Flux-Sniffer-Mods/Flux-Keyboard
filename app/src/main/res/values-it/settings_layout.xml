@@ -77,7 +77,7 @@
     <string name="spell_checker_name">Controllo ortografico Flux Keyboard</string>
     <string name="spell_checker_title">Controllo ortografico</string>
     <string name="spell_checker_description">Sottolinea le parole sbagliate in ogni app con i dizionari di Flux Keyboard, comprese le parole che hai aggiunto. Tocca per scegliere Flux Keyboard nelle impostazioni del controllo ortografico di Android.</string>
-    <string name="alt_key_editor_intro">Crea il tuo livello SYM del dispositivo: cosa scrive ogni tasto con SYM, e con Alt quando Alt usa il livello SYM del dispositivo. Un profilo può sostituire automaticamente quello di una tastiera, e il backup di Flux Titan Hub lo include.</string>
+    <string name="alt_key_editor_intro">Crea il tuo livello SYM del dispositivo: cosa scrive ogni tasto con SYM, e con Alt quando Alt usa il livello SYM del dispositivo. Un profilo può sostituire automaticamente quello di una tastiera, e il backup di Flux Keyboard lo include.</string>
     <string name="alt_key_editor_keys_description">Tocca un tasto per scegliere cosa scrive. Lascialo vuoto per non scrivere nulla.</string>
     <string name="alt_key_editor_import_title">Importa un profilo</string>
     <string name="alt_key_editor_import_failed">Quel file non è un profilo SYM del dispositivo.</string>
@@ -145,7 +145,7 @@
     <string name="emoji_profiles_save_current_title">Salva il livello emoji come profilo</string>
     <string name="emoji_profiles_save_current_description">Tieni il livello emoji com\'è ora, per tornarci più tardi.</string>
     <string name="emoji_profiles_import_title">Importa un profilo</string>
-    <string name="emoji_profiles_import_description">Da un profilo condiviso da Flux Titan Hub.</string>
+    <string name="emoji_profiles_import_description">Da un profilo condiviso da Flux Keyboard.</string>
     <string name="emoji_profiles_import_failed">Quel file non è un profilo del livello emoji.</string>
     <string name="emoji_profiles_applied">%1$s è ora il tuo livello emoji</string>
     <string name="emoji_profiles_new_name">Le mie emoji %1$d</string>

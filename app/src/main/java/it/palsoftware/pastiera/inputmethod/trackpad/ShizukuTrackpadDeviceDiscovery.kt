@@ -26,5 +26,5 @@ object ShizukuTrackpadDeviceDiscovery {
     }
 
     internal fun startProcess(command: Array<String>): Process =
-        it.palsoftware.pastiera.adb.AdbShell.newProcess(command)
+        io.github.fluxsniffermods.core.shell.AdbShell.newProcess(command)
 }

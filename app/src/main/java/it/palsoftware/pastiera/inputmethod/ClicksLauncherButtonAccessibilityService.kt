@@ -32,7 +32,7 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
     override fun onKeyEvent(event: KeyEvent): Boolean = try {
         handleKey(event)
     } catch (e: Exception) {
-        it.palsoftware.pastiera.FluxLog.w("FluxA11y", "key ${event.keyCode}: ${android.util.Log.getStackTraceString(e)}")
+        io.github.fluxsniffermods.core.FluxLog.w("FluxA11y", "key ${event.keyCode}: ${android.util.Log.getStackTraceString(e)}")
         false
     }
 
@@ -40,18 +40,13 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
         try {
             handleEvent(event)
         } catch (e: Exception) {
-            it.palsoftware.pastiera.FluxLog.w("FluxA11y", "event ${event?.eventType}: ${android.util.Log.getStackTraceString(e)}")
+            io.github.fluxsniffermods.core.FluxLog.w("FluxA11y", "event ${event?.eventType}: ${android.util.Log.getStackTraceString(e)}")
         }
     }
 
     private fun handleKey(event: KeyEvent): Boolean {
-        // Gaming mode: a real controller's button, or else the key goes to the game as it is
-        if (it.palsoftware.pastiera.gaming.GameMode.onKeyEvent(event)) return true
-        // The Games app's page for a game's own screen in front: the keys go to that screen
-        if (it.palsoftware.pastiera.display.ExtraScreen.key(event)) return true
-        // Streaming to the TV: the volume keys are the TV's (in a game, with SYM, through gaming mode)
-        if (it.palsoftware.pastiera.streaming.TvRemote.volumeKey(this, event)) return true
-        if (it.palsoftware.pastiera.gaming.GameMode.passesKeys()) return false
+        // In a game (Flux Gaming's gaming mode playing it): its keys are gaming mode's
+        if (it.palsoftware.pastiera.flux.GamingBridge.passesKeys(frontPackage, field = false)) return false
         // Hidden apps: keys for Pastiera's emoji/symbols panels go to Pastiera, not the app
         val taken = HiddenAppKeyObserver.intercept(event)
         HiddenAppKeyObserver.logKey(event, if (taken) "accessibility, to the keyboard" else "accessibility, to the app")
@@ -91,10 +86,6 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
             // dialog-style screen) keeps the screen size of the app beneath: switching would
             // flicker the app between the two
             val floating = confirmed && isFloating(pkg, event.className?.toString())
-            // Gaming mode's Back confirmation is for the game's own screen, not its app's menus or dialogs
-            // (a dialog over it isn't followed: Android doesn't always say when one closes)
-            if (!overlay && confirmed && !floating) it.palsoftware.pastiera.gaming.GameMode.onWindow(pkg, event.className?.toString())
-            // Gaming mode goes the same way, once the app in front has settled
             if (!overlay && !floating) it.palsoftware.pastiera.adb.PerAppDensity.onAppInFront(this, pkg, needsConfirming = !confirmed)
             // Keyboard swipes per app follow the app's own screens (the quick launcher, over
             // another app, keeps that app's choice)
@@ -136,14 +127,9 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        // A stream that ended with the app (a crash): the phone's screen put back
-        val app = applicationContext
-        Thread { runCatching { it.palsoftware.pastiera.streaming.StreamHost.recover(app) } }.start()
         // Keyboard swipes: taken from apps while a field is typed in, handed to the keyboard
         ClicksAccessibilityKeyBridge.onTrackpadCaptureChanged = { captured -> claimTrackpad(captured) }
         claimTrackpad(ClicksAccessibilityKeyBridge.trackpadCaptured)
-        // Gaming mode's double Back, in a game that ignores Back: the home screen
-        it.palsoftware.pastiera.gaming.GameMode.goHome = { performGlobalAction(GLOBAL_ACTION_HOME) }
         // Started with an app already in front (after an update, or the service turned on): ask
         // Android which, through Shizuku, rather than wait for the next app to open
         Thread {
@@ -199,7 +185,6 @@ class ClicksLauncherButtonAccessibilityService : AccessibilityService() {
 
     override fun onDestroy() {
         ClicksAccessibilityKeyBridge.onTrackpadCaptureChanged = null
-        it.palsoftware.pastiera.gaming.GameMode.goHome = null
         mapper.reset()
         super.onDestroy()
     }

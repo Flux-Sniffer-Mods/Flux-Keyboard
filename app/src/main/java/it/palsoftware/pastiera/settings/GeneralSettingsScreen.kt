@@ -80,7 +80,7 @@ internal fun GeneralSettingsScreen(
     var pendingDeviceChangeRestore by remember { mutableStateOf<Pair<Uri, RestoreManager.DeviceChange>?>(null) }
 
     fun defaultBackupName(): String =
-        "flux-titan-hub-backup-${SimpleDateFormat("yyyyMMdd-HHmm", Locale.US).format(Date())}.zip"
+        "flux-keyboard-backup-${SimpleDateFormat("yyyyMMdd-HHmm", Locale.US).format(Date())}.zip"
 
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
