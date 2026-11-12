@@ -324,7 +324,22 @@ class SuggestionController(
 
     var suggestionsListener: ((List<SuggestionResult>) -> Unit)? = onSuggestionsUpdated
 
+    /**
+     * Something was typed. What a replacement's undo keeps follows it: typing accepts the last
+     * replacement, and a letter lets a word whose replacement was undone be replaced again.
+     * Called for typing the word tracker hears of another way too (a letter on a key with a
+     * long-press layer, which is nearly every letter), and with the suggestion engine off, when
+     * text replacements and their undo still work.
+     */
+    fun onTypingContinued(text: CharSequence) {
+        autoReplaceController.clearLastReplacement()
+        if (text.any { it.isLetterOrDigit() }) {
+            autoReplaceController.clearRejectedWords()
+        }
+    }
+
     fun onCharacterCommitted(text: CharSequence, inputConnection: InputConnection?) {
+        onTypingContinued(text)
         if (!isEnabled()) return
         if (debugLogging) {
             val caller = Throwable().stackTrace.getOrNull(1)?.let { "${it.className}#${it.methodName}:${it.lineNumber}" }
@@ -339,12 +354,8 @@ class SuggestionController(
             .replace("'", "'")
             .replace("ʼ", "'")
         
-        // Clear last replacement if user types new characters
-        autoReplaceController.clearLastReplacement()
-        
-        // Clear rejected words when user types a new letter (allows re-correction)
-        if (normalizedText.isNotEmpty() && normalizedText.any { it.isLetterOrDigit() }) {
-            autoReplaceController.clearRejectedWords()
+        // A new letter also withdraws the offer to add the word before it
+        if (normalizedText.any { it.isLetterOrDigit() }) {
             pendingAddUserWord = null
         }
         

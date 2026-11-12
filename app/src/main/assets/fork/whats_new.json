@@ -10,6 +10,9 @@
       "text": "One APK for every language: English is built in and any other language's dictionary downloads the first time you add it, as before. A language version installed from an earlier release updates onto it by itself."
     },
     {
+      "text": "Text replacements keep applying: once Backspace had undone one (i for I, im for I'm), that word was left as typed from then on, until the keyboard restarted. It's replaced again as soon as you type on, and Backspace only undoes a replacement straight after it, not one made earlier."
+    },
+    {
       "text": "Stability: the keyboard keeps working through faults that used to end it: a key, a cursor move or a field it can't handle is logged and passed on as usual, and a failure in a stream, a cast, the desktop or a download ends only that. Fixed: long-pressing a key with many alternates on a narrow screen, next-word and clipboard history storage failing (full or damaged), GIFs an app turns down, the desktop on Android 10, keys and touches not reaching the Linux desktop, AirPlay stuck on Starting when the encoder fails, a stream left capturing after Moonlight left, and Back behaving differently on Android 16.",
       "after": "202611011704"
     },

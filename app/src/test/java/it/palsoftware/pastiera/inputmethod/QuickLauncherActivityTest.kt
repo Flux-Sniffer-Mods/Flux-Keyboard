@@ -2,6 +2,7 @@ package it.palsoftware.pastiera.inputmethod
 
 import android.view.KeyEvent
 import it.palsoftware.pastiera.SettingsManager
+import org.junit.After
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -17,6 +18,13 @@ import it.palsoftware.pastiera.setQuickLauncherShortcut
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
 class QuickLauncherActivityTest {
+
+    // The launchers opened here are never paused: left "in front", they would own the keys
+    // pressed in every test class after this one
+    @After
+    fun launcherLeavesTheFront() {
+        QuickLauncherActivity.frontSince = 0L
+    }
 
     @Test
     fun backClosesOnKeyUpSoReleaseIsNotForwardedToUnderlyingApp() {
