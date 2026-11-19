@@ -972,6 +972,7 @@ class SuggestionController(
      * Should be called during initialization to have dictionary ready when user focuses a field.
      */
     fun preloadDictionary() {
+        if (!isEnabled()) return
         schedulePrimaryDictionaryLoad(refreshAfterLoad = false)
         activeExtraSuggestionEngines().forEach { scheduleRepositoryLoad(it.repository, refreshAfterLoad = false) }
     }
