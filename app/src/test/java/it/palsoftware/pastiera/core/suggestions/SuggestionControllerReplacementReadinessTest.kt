@@ -293,11 +293,30 @@ class SuggestionControllerReplacementReadinessTest {
         assertFalse(repository.isReady)
     }
 
+    @Test
+    fun destroyingControllerCancelsSecondaryDictionaryLoad() {
+        val secondary = BlockingDictionaryRepository()
+        val controller = newController(
+            repository = FakeDictionaryRepository(),
+            experimentalSuggestionsEnabled = true,
+            suggestionsEnabled = true,
+            secondaryDictionary = secondary
+        )
+
+        controller.preloadDictionary()
+        assertTrue(secondary.awaitLoadStarted())
+
+        controller.destroy()
+        assertTrue(secondary.awaitLoadCancellation())
+        assertFalse(secondary.isReady)
+    }
+
     private fun newController(
         repository: DictionaryRepository,
         experimentalSuggestionsEnabled: Boolean,
         suggestionsEnabled: Boolean,
-        autoReplaceOnSpaceEnter: Boolean = false
+        autoReplaceOnSpaceEnter: Boolean = false,
+        secondaryDictionary: DictionaryRepository? = null
     ): SuggestionController {
         return SuggestionController(
             context = context,
@@ -312,7 +331,12 @@ class SuggestionControllerReplacementReadinessTest {
             isEnabled = { experimentalSuggestionsEnabled },
             onSuggestionsUpdated = {},
             currentLocale = Locale.ENGLISH,
-            dictionaryRepositoryFactory = { _, _, _, _, _ -> repository }
+            dictionaryRepositoryFactory = { _, _, _, locale, _ ->
+                if (locale == Locale.FRENCH) secondaryDictionary ?: repository else repository
+            },
+            activeSuggestionLocalesProvider = {
+                if (secondaryDictionary != null) listOf(Locale.FRENCH) else emptyList()
+            }
         ).also { controllers += it }
     }
 

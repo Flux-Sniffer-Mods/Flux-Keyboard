@@ -15,6 +15,7 @@ import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import it.palsoftware.pastiera.inputmethod.AutoCorrector
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
@@ -637,9 +638,9 @@ class SuggestionController(
     }
 
     fun destroy() {
-        currentLoadJob?.cancel()
-        suggestionJob?.cancel()
-        cursorRunnable?.let { cursorHandler.removeCallbacks(it) }
+        loadScope.cancel()
+        suggestionScope.cancel()
+        cursorHandler.removeCallbacksAndMessages(null)
         nextWordPredictor.destroy()
     }
 
