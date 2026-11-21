@@ -205,16 +205,14 @@ class AndroidDictionaryRepository(
                 synchronized(this) { loadStarted = false }
                 throw ce
             } catch (oom: OutOfMemoryError) {
-                Log.e(tag, "OutOfMemory while loading dictionary; clearing and falling back", oom)
-                synchronized(this) { loadStarted = false }
                 prefixCache.clear()
                 normalizedIndex.clear()
                 topCommonEntriesCache = null
                 symSpell = null
                 symSpellBuilt = false
                 isReady = false
-                // Rethrow to let caller handle failure
-                throw oom
+                // Keep loadStarted set so later input events do not retry this dictionary.
+                Log.e(tag, "Dictionary exceeded the heap limit; continuing without it", oom)
             }
         }
     }

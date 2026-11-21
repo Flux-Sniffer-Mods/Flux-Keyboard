@@ -296,6 +296,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     // SharedPreferences for settings
     private lateinit var prefs: SharedPreferences
     private var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+    private var shellStartListener: (() -> Unit)? = null
     private var lastSystemLocalesSignature: String = ""
 
     private lateinit var alternateCharacterManager: AlternateCharacterManager
@@ -2083,10 +2084,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // A newer code replaces the chip too when the bar shows one already
         it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = { if (isInputViewShown || isInputViewActive || pasteSuggestionShown) offerOneTimeCode() }
         // One-time codes: Android 15 hides them from the listener unless allowed through the shell
-        it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(this)
-        io.github.fluxsniffermods.core.shell.BuiltInShell.addStartListener {
-            it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(this)
-        }
+        val appContext = applicationContext
+        it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(appContext)
+        val onShellStarted = { it.palsoftware.pastiera.otp.OneTimeCodeListener.allowSensitive(appContext) }
+        shellStartListener = onShellStarted
+        io.github.fluxsniffermods.core.shell.BuiltInShell.addStartListener(onShellStarted)
         EmojiCompatSupport.ensureLoaded(this)
         lastSystemLocalesSignature = resources.configuration.locales.toLanguageTags()
         prefs = getSharedPreferences("pastiera_prefs", Context.MODE_PRIVATE)
@@ -3404,6 +3406,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
     
     override fun onDestroy() {
+        shellStartListener?.let(io.github.fluxsniffermods.core.shell.BuiltInShell::removeStartListener)
+        shellStartListener = null
         it.palsoftware.pastiera.inputmethod.extrakeys.ExtraKeysToggle.handler = null
         it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = null
         it.palsoftware.pastiera.spellcheck.PastieraSpellCheckerService.keyboardController = null
